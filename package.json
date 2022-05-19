@@ -1,0 +1,22 @@
+{
+  "name": "gagu",
+  "version": "0.0.1",
+  "description": "A cool web file management system",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Chisw/gagu.git"
+  },
+  "keywords": [
+    "gagu"
+  ],
+  "author": "Chisw",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Chisw/gagu/issues"
+  },
+  "homepage": "https://github.com/Chisw/gagu#readme"
+}
