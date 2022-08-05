@@ -1,10 +1,9 @@
 {
   "name": "gagu",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A cool web file management system",
-  "main": "index.js",
-  "scripts": {
-    "test": "test"
+  "bin": {
+    "gagu": "./bin/gagu"
   },
   "repository": {
     "type": "git",
@@ -18,5 +17,6 @@
   "bugs": {
     "url": "https://github.com/Chisw/gagu/issues"
   },
-  "homepage": "https://github.com/Chisw/gagu#readme"
+  "homepage": "https://github.com/Chisw/gagu#readme",
+  "dependencies": {}
 }
