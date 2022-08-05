@@ -1,3 +1,102 @@
 #!/usr/bin/env node
 
-console.log('test bin')
+const http = require('http')
+const fs = require('fs')
+const os = require('os')
+const url = require('url')
+const path = require('path')
+
+
+const deviceName = os.hostname()
+const cwd = process.cwd()
+
+const PORT = 9293
+
+const server = http.createServer((req, res) => {
+  const { pathname, search } = url.parse(req.url)
+
+  if (search) {
+    const params = new URLSearchParams(search)
+    const paramData = Object.fromEntries(Array.from(params))
+
+    res.writeHead(200)
+
+    if (paramData.cmd === 'list_root') {
+      const resData = {
+        device_name: deviceName,
+        files: [
+          {
+            label: 'Dir',
+            name: 'dir',
+            mount: cwd,
+            has_children: true,
+            fileSystem: 'macos',
+            space_free: 12923232322,
+            space_total: 25698232323,
+          },
+          {
+            label: 'PLACEHOLDER',
+            name: 'PLACEHOLDER',
+            mount: '/',
+            has_children: true,
+            fileSystem: 'macos',
+            space_free: 12923232322,
+            space_total: 25698232323,
+          },
+        ],
+      }
+      res.write(JSON.stringify(resData))
+    } else if (paramData.cmd === 'list') {
+
+      const middle = pathname.replace(cwd, '')
+      const prefix = middle
+        ? `.${middle}/`
+        : '/'
+
+      console.log({ cwd, pathname, prefix })
+
+      const entries = fs.readdirSync(prefix)
+      const resData = {
+        files: entries.map(entry => {
+          try {
+            const stat = fs.statSync(prefix + entry)
+            return {
+              n: entry,
+              t: stat.isDirectory() ? 1 : 0,
+              size: stat.size,
+              mime: '',
+              hidden: entry.startsWith('.'),
+              time: new Date(stat.birthtime).getTime(),
+              has_children: true,
+            }
+          } catch (err) {
+            return null
+          }
+        }).filter(Boolean)
+      }
+      res.write(JSON.stringify(resData))
+    } else {
+      const dirs = fs.readdirSync('./')
+      res.write(JSON.stringify(dirs))
+    }
+    res.end()
+  } else {
+    let targetPathName = pathname === '/'
+      ? '/wfms/index.html'
+      : pathname
+    const publicFilePathname = path.join(__dirname, targetPathName)
+    fs.readFile(publicFilePathname, (err, data) => {
+      if (err) {
+        res.writeHead(404)
+        res.write('404 - File is not found!')
+        res.end()
+      } else {
+        res.writeHead(200)
+        res.write(data)
+        res.end()
+      }
+    })
+  }
+})
+
+server.listen(PORT)
