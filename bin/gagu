@@ -8,73 +8,71 @@ const path = require('path')
 
 
 const deviceName = os.hostname()
-const cwd = process.cwd()
-
 const PORT = 9293
 
 const server = http.createServer((req, res) => {
-  const { pathname, search } = url.parse(req.url)
+  const { method } = req
+  const { pathname } = url.parse(req.url)
 
-  if (search) {
-    const params = new URLSearchParams(search)
-    const paramData = Object.fromEntries(Array.from(params))
+  const isRequestApi = pathname.startsWith('/api')
 
-    res.writeHead(200)
+  if (isRequestApi) {
+    res.writeHead(200, {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+    })
 
-    if (paramData.cmd === 'list_root') {
+    if (pathname === '/api/root' && method === 'GET') {
       const resData = {
-        device_name: deviceName,
+        deviceName,
         files: [
           {
-            label: 'Dir',
-            name: 'dir',
-            mount: cwd,
-            has_children: true,
-            fileSystem: 'macos',
-            space_free: 12923232322,
-            space_total: 25698232323,
+            label: 'Root',
+            name: 'root',
+            mount: '',
+            hasChildren: true,
+            spaceFree: 12923232322,
+            spaceTotal: 25698232323,
           },
           {
             label: 'PLACEHOLDER',
             name: 'PLACEHOLDER',
             mount: '/',
-            has_children: true,
-            fileSystem: 'macos',
-            space_free: 12923232322,
-            space_total: 25698232323,
+            hasChildren: true,
+            spaceFree: 12923232322,
+            spaceTotal: 25698232323,
           },
         ],
       }
       res.write(JSON.stringify(resData))
-    } else if (paramData.cmd === 'list') {
-
-      const middle = pathname.replace(cwd, '')
-      const prefix = middle
-        ? `.${middle}/`
-        : '/'
-
-      console.log({ cwd, pathname, prefix })
-
-      const entries = fs.readdirSync(prefix)
-      const resData = {
-        files: entries.map(entry => {
-          try {
-            const stat = fs.statSync(prefix + entry)
-            return {
-              n: entry,
-              t: stat.isDirectory() ? 1 : 0,
-              size: stat.size,
-              mime: '',
-              hidden: entry.startsWith('.'),
-              time: new Date(stat.birthtime).getTime(),
-              has_children: true,
+    } else if (pathname.startsWith('/api/root/')) {
+      if (method === 'GET') {
+        const dirPath = './' + pathname.replace('/api/root/', '')
+        const entries = fs.readdirSync(dirPath)
+        const resData = {
+          files: entries.map(entry => {
+            try {
+              const stat = fs.statSync(`${dirPath}/${entry}`)
+              return {
+                name: entry,
+                type: stat.isDirectory() ? 'directory' : 'file',
+                size: stat.size,
+                hidden: entry.startsWith('.'),
+                lastModified: new Date(stat.birthtime).getTime(),
+                hasChildren: true,
+              }
+            } catch (err) {
+              return null
             }
-          } catch (err) {
-            return null
-          }
-        }).filter(Boolean)
+          }).filter(Boolean)
+        }
+        console.log({ pathname, resData, dirPath, method })
+        res.write(JSON.stringify(resData))
+      } else if (method === 'POST') {
+        res.write('test')
+      } else {
+        res.write('test')
       }
-      res.write(JSON.stringify(resData))
     } else {
       const dirs = fs.readdirSync('./')
       res.write(JSON.stringify(dirs))
@@ -82,19 +80,18 @@ const server = http.createServer((req, res) => {
     res.end()
   } else {
     let targetPathName = pathname === '/'
-      ? '/wfms/index.html'
+      ? '/app/index.html'
       : pathname
     const publicFilePathname = path.join(__dirname, targetPathName)
-    fs.readFile(publicFilePathname, (err, data) => {
+    fs.readFile(publicFilePathname, (err, fileData) => {
       if (err) {
         res.writeHead(404)
         res.write('404 - File is not found!')
-        res.end()
       } else {
         res.writeHead(200)
-        res.write(data)
-        res.end()
+        res.write(fileData)
       }
+      res.end()
     })
   }
 })

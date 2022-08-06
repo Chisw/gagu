@@ -1,0 +1,40 @@
+.bg-hazy-10 {
+  backdrop-filter: saturate(180%) blur(1px);
+  -webkit-backdrop-filter: saturate(180%) blur(1px);
+}
+
+.bg-hazy-25 {
+  backdrop-filter: saturate(180%) blur(2.5px);
+  -webkit-backdrop-filter: saturate(180%) blur(2.5px);
+}
+
+.bg-hazy-50 {
+  backdrop-filter: saturate(180%) blur(5px);
+  -webkit-backdrop-filter: saturate(180%) blur(5px);
+}
+
+.bg-hazy-100 {
+  backdrop-filter: saturate(180%) blur(10px);
+  -webkit-backdrop-filter: saturate(180%) blur(10px);
+}
+
+.bg-hazy-200 {
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+}
+
+.blur-10 {
+  filter: blur(1px);
+}
+
+.blur-25 {
+  filter: blur(2.5px);
+}
+
+.blur-50 {
+  filter: blur(5px);
+}
+
+.blur-100 {
+  filter: blur(10px);
+}
