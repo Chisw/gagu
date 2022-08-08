@@ -45,12 +45,12 @@ instance.interceptors.response.use(response => response, (error: AxiosError) => 
 
 
 export const getRootInfo = async (config?: AxiosRequestConfig) => {
-  const { data } = await instance.get('/api/root', config)
+  const { data } = await instance.get(`/api/list?path=/`, config)
   return data
 }
 
 export const getPathEntries = async (path: string, config?: AxiosRequestConfig) => {
-  const { data } = await instance.get(`/api/root${path}`, config)
+  const { data } = await instance.get(`/api/list?path=/${path}`, config)
   return data
 }
 
