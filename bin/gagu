@@ -6,9 +6,10 @@ const os = require('os')
 const url = require('url')
 const path = require('path')
 
-
 const deviceName = os.hostname()
+
 const PORT = 9293
+const ROOT_BASE = '/Users/jsw/'
 
 const server = http.createServer((req, res) => {
   const { method } = req
@@ -47,16 +48,18 @@ const server = http.createServer((req, res) => {
       res.write(JSON.stringify(resData))
     } else if (pathname.startsWith('/api/root/')) {
       if (method === 'GET') {
-        const dirPath = './' + pathname.replace('/api/root/', '')
+        const dirPath = ROOT_BASE + '/' + pathname.replace('/api/root/', '')
         const entries = fs.readdirSync(dirPath)
         const resData = {
           files: entries.map(entry => {
             try {
               const stat = fs.statSync(`${dirPath}/${entry}`)
+              const type = stat.isDirectory() ? 'directory' : 'file'
+              const size = type === 'file' ? stat.size : undefined
               return {
                 name: entry,
-                type: stat.isDirectory() ? 'directory' : 'file',
-                size: stat.size,
+                type,
+                size,
                 hidden: entry.startsWith('.'),
                 lastModified: new Date(stat.birthtime).getTime(),
                 hasChildren: true,
@@ -73,9 +76,6 @@ const server = http.createServer((req, res) => {
       } else {
         res.write('test')
       }
-    } else {
-      const dirs = fs.readdirSync('./')
-      res.write(JSON.stringify(dirs))
     }
     res.end()
   } else {

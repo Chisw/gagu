@@ -19,7 +19,7 @@ const instance = axios.create({
 // interceptors
 instance.interceptors.request.use(config => {
   const { url, method } = config
-  const pass = localStorage.getItem(PASS_KEY)
+  // const pass = localStorage.getItem(PASS_KEY)
   // if (pass) config.url += `&pass=${pass}`
   if (method === 'post' && url?.includes('?cmd=file')) config.timeout = 0
   return config
