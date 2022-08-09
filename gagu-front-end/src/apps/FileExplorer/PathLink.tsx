@@ -1,6 +1,6 @@
-import { Checkmark16, Copy16, DocumentBlank16, Folder16, ChevronRight16 } from '@carbon/icons-react'
 import { useMemo } from 'react'
 import Toast from '../../components/EasyToast'
+import RemixIcon from '../../img/remixicon'
 import { copy } from '../../utils'
 import { IEntry } from '../../utils/types'
 
@@ -64,7 +64,7 @@ export default function PathLink(props: PathLinkProps) {
           const disabled = mountIndex > mountList.length - 2 - (selectedLen === 1 ? 1 : 0)
           return (
             <span key={encodeURIComponent(fullPath)}>
-              <ChevronRight16 className="inline transform scale-75 -mt-2px" />
+              <RemixIcon.ChevronRight className="transform scale-75" />
               <span
                 title={fullPath}
                 className={disabled ? '' : 'cursor-pointer hover:text-black'}
@@ -83,19 +83,19 @@ export default function PathLink(props: PathLinkProps) {
             Toast.toast('路径复制成功', 1000)
           }}
         >
-          <Copy16 className="inline transform scale-75 -mt-2px" />
+          <RemixIcon.Copy className="inline transform scale-75 -mt-2px" />
         </span>
       </div>
       <div className="flex-shrink-0 flex items-center pl-4 pr-1 font-din">
         {!!selectedLen && (
           <>
-            <Checkmark16 />&nbsp;<span>{loading ? '-' : selectedLen}</span>
+            <RemixIcon.Check />&nbsp;<span>{loading ? '-' : selectedLen}</span>
             &emsp;
           </>
         )}
-        <Folder16 />&nbsp;<span>{loading ? '-' : dirCount}</span>
+        <RemixIcon.Folder />&nbsp;<span>{loading ? '-' : dirCount}</span>
         &emsp;
-        <DocumentBlank16 />&nbsp;<span>{loading ? '-' : fileCount}</span>
+        <RemixIcon.File />&nbsp;<span>{loading ? '-' : fileCount}</span>
       </div>
     </div>
   )

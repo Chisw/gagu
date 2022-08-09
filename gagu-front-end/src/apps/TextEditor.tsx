@@ -1,4 +1,3 @@
-import { Copy16, Reset16, Save16, TextAllCaps16 } from '@carbon/icons-react'
 import { useCallback, useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import Toast from '../components/EasyToast'
@@ -10,6 +9,7 @@ import { getTextFileContent, uploadFile } from '../utils/api'
 import { APP_ID_MAP } from '../utils/appList'
 import { openedEntryListState } from '../utils/state'
 import { AppComponentProps, IOpenedEntry } from '../utils/types'
+import RemixIcon from '../img/remixicon'
 
 export default function TextEditor(props: AppComponentProps) {
 
@@ -68,25 +68,25 @@ export default function TextEditor(props: AppComponentProps) {
         <div className="h-8 flex-shrink-0 flex items-center border-b bg-white">
           <ToolButton
             title="保存"
-            icon={<Save16 />}
+            icon={<RemixIcon.Save />}
             disabled={value === textContent && !saving}
             loading={saving}
             onClick={handleSave}
           />
           <ToolButton
             title="重置"
-            icon={<Reset16 />}
+            icon={<RemixIcon.Restart />}
             disabled={value === textContent}
             onClick={() => setValue(textContent)}
           />
           <ToolButton
-            title="等宽"
-            icon={<TextAllCaps16 />}
+            title="等宽显示"
+            icon={<RemixIcon.CodeSlash />}
             onClick={() => setMonoMode(!monoMode)}
           />
           <ToolButton
             title="复制文本"
-            icon={<Copy16 />}
+            icon={<RemixIcon.Copy />}
             onClick={() => {
               copy(value)
               Toast.toast('文本复制成功')

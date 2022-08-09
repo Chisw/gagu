@@ -1,4 +1,3 @@
-import { CropGrowth32, Delete32, Download32, ChevronRight16 } from '@carbon/icons-react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import Icon from './Icon'
@@ -23,6 +22,9 @@ import { pick, throttle } from 'lodash'
 import { ContextMenu, Spinner } from '@blueprintjs/core'
 import Menus from './Menus'
 import Pagination from '../../components/Pagination'
+import RemixIcon from '../../img/remixicon'
+import deleteSVG from '../../img/remixicon/delete.svg'
+import downloadSVG from '../../img/remixicon/download.svg'
 
 const MAX_PAGE_SIZE = 200
 
@@ -325,7 +327,11 @@ export default function FileExplorer(props: AppComponentProps) {
       content: (
         <div className="p-4 text-center">
           <div className="p-4 flex justify-center">
-            <Download32 />
+            <img
+              src={downloadSVG}
+              alt="download"
+              className="w-12 h-12"
+            />
           </div>
           <p className="mt-2 text-base break-all">{msg} ？</p>
         </div>
@@ -350,7 +356,11 @@ export default function FileExplorer(props: AppComponentProps) {
       content: (
         <div className="p-4 text-center">
           <div className="p-4 flex justify-center">
-            <Delete32 />
+            <img
+              src={deleteSVG}
+              alt="delete"
+              className="w-12 h-12"
+            />
           </div>
           <p className="mt-2 text-base break-all">删除 <span className="font-bold">{msg}</span> ？</p>
         </div>
@@ -590,7 +600,9 @@ export default function FileExplorer(props: AppComponentProps) {
             `)}
             onClick={() => setSideCollapse(!sideCollapse)}
           >
-            <ChevronRight16 className={sideCollapse ? '' : 'transform -rotate-180'} />
+            <span className={sideCollapse ? '' : 'transform -rotate-180'}>
+              <RemixIcon.ChevronRight />
+            </span>
           </div>
           <div
             ref={containerRef}
@@ -605,7 +617,7 @@ export default function FileExplorer(props: AppComponentProps) {
             {/* empty tip */}
             {(!fetching && isEntryListEmpty) && (
               <div className="absolute inset-0 p-10 flex justify-end items-end text-gray-200">
-                <CropGrowth32 />
+                <RemixIcon.Plant size={32} />
               </div>
             )}
             <div

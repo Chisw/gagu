@@ -1,25 +1,6 @@
-import {
-  ArrowUp16,
-  Checkmark16,
-  ArrowLeft16,
-  ArrowRight16,
-  Download16,
-  Edit16,
-  Upload16,
-  Filter16,
-  FolderAdd16,
-  Grid16,
-  Renew16,
-  Star16,
-  TrashCan16,
-  View16,
-  List16,
-  ViewOff16,
-  DocumentAdd16,
-  Close16,
-} from '@carbon/icons-react'
 import { Button, InputGroup } from '@blueprintjs/core'
 import ToolButton from '../../components/ToolButton'
+import RemixIcon from '../../img/remixicon'
 
 export interface IToolBarDisabledMap {
   navBack: boolean
@@ -99,32 +80,32 @@ export default function ToolBar(props: ToolBarProps) {
       <div className="h-8 flex-shrink-0 flex items-center border-b">
         <ToolButton
           title="后退 [Shift + ←]"
-          icon={<ArrowLeft16 />}
+          icon={<RemixIcon.ArrowLeft />}
           disabled={disabledMap.navBack}
           onClick={onNavBack}
         />
         <ToolButton
           title="前进 [Shift + →]"
-          icon={<ArrowRight16 />}
+          icon={<RemixIcon.ArrowRight />}
           disabled={disabledMap.navForward}
           onClick={onNavForward}
         />
         {disabledMap.refresh ? (
           <ToolButton
-            title=""
-            icon={<Close16 />}
+            title="停止"
+            icon={<RemixIcon.Close />}
             onClick={onAbort}
           />
         ) : (
           <ToolButton
             title="刷新 [Shift + R]"
-            icon={<Renew16 />}
+            icon={<RemixIcon.Refresh />}
             onClick={onRefresh}
           />
         )}
         <ToolButton
           title="上级目录 [Shift + ↑]"
-          icon={<ArrowUp16 />}
+          icon={<RemixIcon.ArrowUp />}
           disabled={disabledMap.backToTop}
           onClick={onBackToTop}
         />
@@ -133,40 +114,40 @@ export default function ToolBar(props: ToolBarProps) {
 
         <ToolButton
           title="新建文件夹 [Shift + N]"
-          icon={<FolderAdd16 />}
+          icon={<RemixIcon.FolderAdd />}
           disabled={disabledMap.newDir}
           onClick={onNewDir}
         />
         <ToolButton
           title="新建文本文件 [Shift + T]"
-          icon={<DocumentAdd16 />}
+          icon={<RemixIcon.FileAdd />}
           disabled={disabledMap.newTxt}
           onClick={onNewTxt}
         />
         <ToolButton
           title="重命名 [Shift + E]"
-          icon={<Edit16 />}
+          icon={<RemixIcon.Edit />}
           disabled={disabledMap.rename}
           onClick={onRename}
         />
         <ToolButton
           title="上传 [Shift + U]"
-          icon={<Upload16 />}
+          icon={<RemixIcon.Upload />}
           onClick={onUpload}
         />
         <ToolButton
           title="下载 [Shift + D]"
-          icon={<Download16 />}
+          icon={<RemixIcon.Download />}
           disabled={disabledMap.download}
           onClick={onDownload}
         />
         <ToolButton
           title="收藏 [Shift + S]"
-          icon={<Star16 />}
+          icon={<RemixIcon.Star />}
         />
         <ToolButton
           title="删除 [Del]"
-          icon={<TrashCan16 />}
+          icon={<RemixIcon.Delete />}
           disabled={disabledMap.delete}
           onClick={onDelete}
         />
@@ -180,11 +161,6 @@ export default function ToolBar(props: ToolBarProps) {
                 small
                 autoFocus
                 placeholder="在当前目录筛选"
-                leftIcon={(
-                  <span className="bp3-icon text-gray-400">
-                    <Filter16 />
-                  </span>
-                )}
                 rightElement={(
                   <Button
                     minimal
@@ -201,7 +177,7 @@ export default function ToolBar(props: ToolBarProps) {
           ) : (
             <ToolButton
               title="筛选 [Shift + F]"
-              icon={<Filter16 />}
+              icon={<RemixIcon.Filter />}
               disabled={disabledMap.filter}
               onClick={() => setFilterMode(true)}
             />
@@ -210,18 +186,18 @@ export default function ToolBar(props: ToolBarProps) {
 
         <ToolButton
           title="全选 [Shift + A]"
-          icon={<Checkmark16 />}
+          icon={<RemixIcon.Check />}
           disabled={disabledMap.selectAll}
           onClick={onSelectAll}
         />
         <ToolButton
           title={`${hiddenShow ? '不' : ''}显示隐藏项 [Shift + H]`}
-          icon={hiddenShow ? <ViewOff16 /> : <View16 />}
+          icon={hiddenShow ? <RemixIcon.EyeOff /> : <RemixIcon.Eye />}
           onClick={() => setHiddenShow(!hiddenShow)}
         />
         <ToolButton
           title={gridMode ? '显示为列表 [Shift + L]' : '显示为图标 [Shift + G]'}
-          icon={gridMode ? <List16 /> : <Grid16 />}
+          icon={gridMode ? <RemixIcon.ViewList /> : <RemixIcon.ViewGrid />}
           onClick={() => setGridMode(!gridMode)}
         /> 
       </div>

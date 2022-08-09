@@ -1,10 +1,10 @@
 import { ContextMenu, Menu, MenuItem } from '@blueprintjs/core'
-import { Application16, Cube16, DocumentAdd16, Download16, Edit16, Upload16, FolderAdd16, Renew16, TrashCan16 } from '@carbon/icons-react'
 import { IApp, IEntry, IOpenedEntry } from '../../utils/types'
 import APP_LIST from '../../utils/appList'
 import { useCallback, useMemo } from 'react'
 import { getBinFileUrl } from '../../utils/api'
 import iina from '../../img/icons/iina.png'
+import RemixIcon from '../../img/remixicon'
 
 const availableAppIdList = ['text-editor', 'photo-gallery', 'music-player', 'video-player']
 
@@ -115,31 +115,31 @@ export default function Menus(props: MenusProps) {
   const actions = useMemo(() => {
     return [
       {
-        icon: <FolderAdd16 />,
+        icon: <RemixIcon.FolderAdd />,
         text: '新建文件夹',
         isShow: isOnBlank,
         onClick: () => setNewDirMode(true),
       },
       {
-        icon: <DocumentAdd16 />,
+        icon: <RemixIcon.FileAdd />,
         text: '新建文本文件',
         isShow: isOnBlank,
         onClick: () => setNewTxtMode(true),
       },
       {
-        icon: <Renew16 />,
+        icon: <RemixIcon.Refresh />,
         text: '刷新',
         isShow: isOnBlank,
         onClick: handleRefresh,
       },
       {
-        icon: <Edit16 />,
+        icon: <RemixIcon.Edit />,
         text: '重命名',
         isShow: isSingleConfirmed,
         onClick: () => setTimeout(handleRename, 0),
       },
       {
-        icon: <Application16 />,
+        icon: <RemixIcon.Apps />,
         text: '打开方式',
         isShow: !isOnDir && isSingleConfirmed,
         onClick: () => { },
@@ -154,19 +154,19 @@ export default function Menus(props: MenusProps) {
         }),
       },
       {
-        icon: <Cube16 />,
+        icon: <RemixIcon.FolderInfo />,
         text: '文件夹大小',
         isShow: isOnDir,
         onClick: () => updateDirSize(contextEntryList[0]),
       },
       {
-        icon: <Upload16 />,
+        icon: <RemixIcon.Upload />,
         text: '上传',
         isShow: isOnBlank,
         onClick: handleUploadClick,
       },
       {
-        icon: <Download16 />,
+        icon: <RemixIcon.Download />,
         text: '下载',
         isShow: true,
         onClick: () => handleDownloadClick(contextEntryList),
@@ -178,7 +178,7 @@ export default function Menus(props: MenusProps) {
       //   onClick: () => { },
       // },
       {
-        icon: <TrashCan16 />,
+        icon: <RemixIcon.Delete />,
         text: '删除',
         isShow: !isOnBlank,
         onClick: () => handleDeleteClick(contextEntryList),
@@ -197,7 +197,7 @@ export default function Menus(props: MenusProps) {
         .map(({ icon, text, onClick, children }) => (
           <MenuItem
             key={encodeURIComponent(text)}
-            icon={<span className="bp3-icon">{icon}</span>}
+            icon={icon}
             text={text}
             onClick={() => {
               onClick()

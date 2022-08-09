@@ -1,12 +1,12 @@
 import { IApp } from '../../utils/types'
 import { Rnd } from 'react-rnd'
-import { CenterToFit16, Close16, FitToScreen16, Subtract16 } from '@carbon/icons-react'
 import { useCallback, useMemo, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { runningAppListState, topWindowIndexState } from '../../utils/state'
 import { line } from '../../utils'
+import RemixIcon from '../../img/remixicon'
 
-const SAME_CLASS_NAME = `w-8 h-8 flex justify-center items-center cursor-pointer transition-all duration-200`
+const SAME_CLASS_NAME = `w-6 h-6 flex justify-center items-center cursor-pointer transition-all duration-200`
 
 interface WindowProps {
   app: IApp
@@ -62,7 +62,7 @@ export default function Window(props: WindowProps) {
       setIsFullScreen(false)
     } else {
       rndInstance.updatePosition({ x: window.innerWidth, y: 0 })
-      rndInstance.updateSize({ width: window.innerWidth, height: window.innerHeight - 94 })
+      rndInstance.updateSize({ width: window.innerWidth, height: window.innerHeight - 46 })  // dock height
       setIsFullScreen(true)
     }
   }, [memoInfo, isFullScreen, rndInstance])
@@ -99,9 +99,9 @@ export default function Window(props: WindowProps) {
         <div
           className={line(`
             move-to-front-trigger
-            absolute inset-0 bg-white-700 bg-hazy-100 rounded-lg overflow-hidden
-            border border-gray-500 border-opacity-30 bg-clip-padding
+            absolute inset-0 bg-white-700 bg-hazy-100 overflow-hidden
             transition-box-shadow duration-200 flex flex-col
+            ${isFullScreen ? '' : 'rounded-sm border border-gray-500 border-opacity-30 bg-clip-padding'}
             ${isTopWindow ? 'shadow-xl' : 'shadow'}
           `)}
           onMouseDownCapture={handleMoveToFront}  // click is too late
@@ -109,7 +109,7 @@ export default function Window(props: WindowProps) {
           {/* header */}
           <div
             className={line(`
-              w-full h-8 flex items-center select-none
+              w-full h-6 flex items-center select-none
               ${windowLoading ? 'bg-loading' : 'bg-gradient-to-b from-transparent to-gray-200'}
               ${isTopWindow ? '' : 'filter grayscale opacity-60'}
             `)}
@@ -119,10 +119,10 @@ export default function Window(props: WindowProps) {
               onDoubleClick={handleZoom}
             >
               <div
-                className="w-4 h-4 bg-center bg-no-repeat bg-contain"
+                className="w-3 h-3 bg-center bg-no-repeat bg-contain"
                 style={{ backgroundImage: `url("${icon}")` }}
               />
-              <span className="ml-2 text-gray-500 text-sm">
+              <span className="ml-2 text-gray-500 text-xs">
                 {windowTitle || title}
               </span>
             </div>
@@ -145,7 +145,7 @@ export default function Window(props: WindowProps) {
                 `)}
                 onClick={() => setHidden(!hidden)}
               >
-                <Subtract16 />
+                <RemixIcon.Subtract />
               </span>
               <span
                 title={isFullScreen ? '窗口' : '全屏'}
@@ -155,7 +155,7 @@ export default function Window(props: WindowProps) {
                 `)}
                 onClick={handleZoom}
               >
-                {isFullScreen ? <CenterToFit16 /> : <FitToScreen16 />}
+                {isFullScreen ? <RemixIcon.FullscreenExit /> : <RemixIcon.Fullscreen />}
               </span>
               <span
                 title="关闭"
@@ -166,7 +166,7 @@ export default function Window(props: WindowProps) {
                 `)}
                 onClick={handleClose}
               >
-                <Close16 />
+                <RemixIcon.Close />
               </span>
             </div>
           </div>

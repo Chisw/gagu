@@ -13,7 +13,7 @@ export default function WindowContainer() {
         id="app-container"
         className="absolute z-10"
         style={{
-          top: '1.5rem',
+          top: '0',
           left: '-100%',
           width: '300%',
           height: '200%',

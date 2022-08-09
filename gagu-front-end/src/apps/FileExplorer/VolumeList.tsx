@@ -1,4 +1,4 @@
-import { VmdkDisk16 } from '@carbon/icons-react'
+import RemixIcon from '../../img/remixicon'
 import { getBytesSize, line } from '../../utils'
 import { IVolume } from '../../utils/types'
 
@@ -40,7 +40,7 @@ export default function VolumeList(props: VolumeListProps) {
               onClick={() => canVolumeClick && onVolumeClick(mount)}
             >
               <div className="flex items-center">
-                <VmdkDisk16 className="flex-shrink-0" />
+                <RemixIcon.Folder />
                 <span className="ml-1 truncate flex-grow">{title}</span>
                 <span className="font-din text-gray-500">
                   {`${getBytesSize({ bytes: spaceUsed })}/${getBytesSize({ bytes: spaceTotal })}`.replace(/\s/g, '')}

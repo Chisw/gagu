@@ -1,4 +1,3 @@
-import { Download16, Share16, Share32 } from '@carbon/icons-react'
 import { useCallback, useState } from 'react'
 import Confirmor, { ConfirmorProps } from './Confirmor'
 import Toast from './EasyToast'
@@ -6,11 +5,12 @@ import ToolButton from './ToolButton'
 import { copy, getDownloadInfo } from '../utils'
 import { downloadEntries, getBinFileUrl } from '../utils/api'
 import { IOpenedEntry } from '../utils/types'
+import RemixIcon from '../img/remixicon'
+import shareSVG from '../img/remixicon/share.svg'
 
 interface CommonToolButtonsProps {
   currentEntry: IOpenedEntry | null
 }
-
 
 export default function CommonToolButtons(props: CommonToolButtonsProps) {
 
@@ -27,7 +27,11 @@ export default function CommonToolButtons(props: CommonToolButtonsProps) {
       content: (
         <div className="p-4 text-center">
           <div className="p-4 flex justify-center">
-            <Share32 />
+            <img
+              src={shareSVG}
+              alt="share"
+              className="w-12 h-12"
+            />
           </div>
           <p className="mt-2 text-sm break-all">分享文件链接给局域网内的伙伴</p>
           <p className="mt-1 text-xs text-gray-400 break-all">{url}</p>
@@ -55,13 +59,13 @@ export default function CommonToolButtons(props: CommonToolButtonsProps) {
       <div className="flex-grow" />
       <ToolButton
         title={`分享 ${currentEntry?.name}`}
-        icon={<Share16 />}
+        icon={<RemixIcon.Share />}
         onClick={handleShare}
         disabled={!currentEntry}
       />
       <ToolButton
         title={`下载 ${currentEntry?.name}`}
-        icon={<Download16 />}
+        icon={<RemixIcon.Download />}
         onClick={handleDownload}
         disabled={!currentEntry}
       />

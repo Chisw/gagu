@@ -1,4 +1,3 @@
-import { Application20, DataBase20, Document20, Help20, Folder32, Image20, Music20, Pen20, Video20, Box20, Code20 } from '@carbon/icons-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { IEntry, IEntryIcon } from '../../utils/types'
 import dirAndroid from '../../img/icons/dir-android.png'
@@ -24,6 +23,7 @@ import { get } from 'lodash'
 import { line } from '../../utils'
 import { getThumbnailUrl } from '../../utils/api'
 import { CALLABLE_APP_LIST } from '../../utils/appList'
+import RemixIcon from '../../img/remixicon'
 
 
 const VIDEO_MATCH_LIST = ['mp4', 'mkv', 'avi', 'rm', 'rmvb']
@@ -35,7 +35,7 @@ const THUMBNAIL_MATCH_LIST = [
 
 const DEFAULT_ENTRY_ICON: IEntryIcon = {
   type: 'unknown',
-  icon: <Help20 />,
+  icon: <RemixIcon.Unknown />,
   iconClassName: 'text-gray-500 bg-gray-200 border-gray-200',
   matchList: [],
 }
@@ -43,73 +43,73 @@ const DEFAULT_ENTRY_ICON: IEntryIcon = {
 const ENTRY_ICON_LIST: IEntryIcon[] = [
   {
     type: 'folder',
-    icon: <Folder32 />,
+    icon: <RemixIcon.Folder />,
     iconClassName: 'text-white bg-gradient-to-b from-yellow-300 to-yellow-500 border-yellow-400',
     matchList: ['_dir'],
   },
   {
     type: 'folder',
-    icon: <Folder32 />,
+    icon: <RemixIcon.Folder />,
     iconClassName: 'text-white bg-gradient-to-b from-yellow-200 to-yellow-400 border-yellow-300',
     matchList: ['_dir_new'],
   },
   {
     type: 'folder',
-    icon: <Folder32 />,
+    icon: <RemixIcon.Folder />,
     iconClassName: 'text-white bg-gradient-to-b from-yellow-300 to-yellow-500 border-yellow-400',
     matchList: ['_dir_empty'],
   },
   {
     type: 'document',
-    icon: <Pen20 />,
+    icon: <RemixIcon.Document />,
     iconClassName: 'text-gray-500 bg-gray-100 border-gray-300',
     matchList: ['_txt_new', 'txt', 'md'],
   },
   {
     type: 'pdf',
-    icon: <Document20 />,
+    icon: <RemixIcon.PDF />,
     iconClassName: 'text-red-900 bg-red-100 border-red-200',
     matchList: ['pdf'],
   },
   {
     type: 'code',
-    icon: <Code20 />,
+    icon: <RemixIcon.CodeSlash />,
     iconClassName: 'text-green-400 bg-black-900 border-green-600',
     matchList: ['html', 'css', 'js', 'php'],
   },
   {
     type: 'data',
-    icon: <DataBase20 />,
+    icon: <RemixIcon.Database />,
     iconClassName: 'text-gray-700 bg-gray-100 border-gray-300',
     matchList: ['dat', 'db', 'sql', 'json', 'log'],
   },
   {
     type: 'image',
-    icon: <Image20 />,
+    icon: <RemixIcon.Image />,
     iconClassName: 'text-orange-500 bg-orange-100 border-orange-200',
     matchList: ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'insp', 'svg', 'ico'],
   },
   {
     type: 'audio',
-    icon: <Music20 />,
+    icon: <RemixIcon.Music />,
     iconClassName: 'text-pink-700 bg-pink-100 border-pink-200',
     matchList: ['mp3', 'flac', 'wav', 'aac'],
   },
   {
     type: 'video',
-    icon: <Video20 />,
+    icon: <RemixIcon.Film />,
     iconClassName: 'text-blue-500 bg-blue-100 border-blue-200',
     matchList: ['mp4', 'mov', 'wmv', 'insv', 'mkv', 'avi', 'rm', 'rmvb'],
   },
   {
     type: 'archive',
-    icon: <Box20 />,
+    icon: <RemixIcon.Zip />,
     iconClassName: 'text-amber-700 bg-amber-100 border-amber-300',
     matchList: ['zip', 'rar', '.7z'],
   },
   {
     type: 'application',
-    icon: <Application20 />,
+    icon: <RemixIcon.Application />,
     iconClassName: 'text-lime-600 bg-lime-100 border-lime-300',
     matchList: ['apk'],
   }
