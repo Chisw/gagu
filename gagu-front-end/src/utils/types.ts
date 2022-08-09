@@ -30,11 +30,9 @@ export interface IApp {
 }
 
 export interface IVolume {
-  label: string
   name: string
   mount: string
   hasChildren: boolean
-  fileSystem: string
   spaceFree: number
   spaceTotal: number
 }

@@ -28,7 +28,7 @@ export default function Side(props: SideProps) {
       `)}
     >
       <div className="p-2 w-64 h-full border-r overflow-x-hidden overflow-y-auto">
-        <p className="p-1 text-xs text-gray-400">宗卷</p>
+        <p className="p-1 text-xs text-gray-400">挂载目录</p>
         <VolumeList
           {...{ currentDirPath, activeVolume, volumeList }}
           onVolumeClick={onVolumeClick}

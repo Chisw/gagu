@@ -1,6 +1,6 @@
 {
   "name": "gagu-front-end",
-  "homepage": "/app",
+  "homepage": "/public",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

@@ -12,6 +12,7 @@ import { ReactComponent as Database } from './database.svg'
 import { ReactComponent as Document } from './document.svg'
 import { ReactComponent as PDF } from './pdf.svg'
 import { ReactComponent as Folder } from './folder.svg'
+import { ReactComponent as FolderFill } from './folder-fill.svg'
 import { ReactComponent as FolderAdd } from './folder-add.svg'
 import { ReactComponent as FolderInfo } from './folder-info.svg'
 import { ReactComponent as File } from './file.svg'
@@ -42,6 +43,8 @@ import { ReactComponent as EyeOff } from './eye-off.svg'
 import { ReactComponent as Filter } from './filter.svg'
 import { ReactComponent as ViewList } from './view-list.svg'
 import { ReactComponent as ViewGrid } from './view-grid.svg'
+import { ReactComponent as ShutDown } from './shut-down.svg'
+import { ReactComponent as Dashboard } from './dashboard.svg'
 
 
 const iconsMap: { [KEY: string]: React.FC } = {
@@ -58,6 +61,7 @@ const iconsMap: { [KEY: string]: React.FC } = {
   Document,
   PDF,
   Folder,
+  FolderFill,
   FolderAdd,
   FolderInfo,
   File,
@@ -88,6 +92,8 @@ const iconsMap: { [KEY: string]: React.FC } = {
   Filter,
   ViewList,
   ViewGrid,
+  ShutDown,
+  Dashboard,
 }
 
 const RemixIcon: { [KEY: string]: any } = {}

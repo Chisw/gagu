@@ -21,8 +21,8 @@ export default function VolumeList(props: VolumeListProps) {
   return (
     <>
       <div>
-        {volumeList.map(({ label, name, mount, spaceFree, spaceTotal }, volumeIndex) => {
-          const title = `${name || mount} (${label})`
+        {volumeList.map(({ name, mount, spaceFree, spaceTotal }, volumeIndex) => {
+          const title = `${name}`
           const isActive = mount === activeVolume
           const canVolumeClick = currentDirPath !== mount
           const spaceUsed = spaceTotal - spaceFree

@@ -6,3 +6,13 @@ export interface IEntry {
   lastModified: number
   hasChildren: boolean
 }
+
+export interface IMount extends IEntry {
+  mount: string
+  isVolume: boolean
+}
+
+export interface IVolume extends IMount {
+  spaceFree: number
+  spaceTotal: number
+}

@@ -170,9 +170,7 @@ export default function FileExplorer(props: AppComponentProps) {
     updateVolume?: boolean
   }) => {
     abortController && abortController.abort()
-    const { path: _path, direction, pushPath, updateVolume } = props
-    // TODO
-    const path = _path.replace('//', '/')
+    const { path, direction, pushPath, updateVolume } = props
     setPrevDirPath(currentDirPath)
     setCurrentPath(path)
     fetchPathData(path)

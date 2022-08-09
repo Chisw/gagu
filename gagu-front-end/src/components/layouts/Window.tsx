@@ -62,7 +62,7 @@ export default function Window(props: WindowProps) {
       setIsFullScreen(false)
     } else {
       rndInstance.updatePosition({ x: window.innerWidth, y: 0 })
-      rndInstance.updateSize({ width: window.innerWidth, height: window.innerHeight - 46 })  // dock height
+      rndInstance.updateSize({ width: window.innerWidth, height: window.innerHeight - 42 })  // dock height
       setIsFullScreen(true)
     }
   }, [memoInfo, isFullScreen, rndInstance])
@@ -109,8 +109,8 @@ export default function Window(props: WindowProps) {
           {/* header */}
           <div
             className={line(`
-              w-full h-6 flex items-center select-none
-              ${windowLoading ? 'bg-loading' : 'bg-gradient-to-b from-transparent to-gray-200'}
+              w-full h-6 flex items-center select-none border-b
+              ${windowLoading ? 'bg-loading' : 'bg-white'}
               ${isTopWindow ? '' : 'filter grayscale opacity-60'}
             `)}
           >

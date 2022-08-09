@@ -40,25 +40,49 @@ const DEFAULT_ENTRY_ICON: IEntryIcon = {
   matchList: [],
 }
 
-const ENTRY_ICON_LIST: IEntryIcon[] = [
+const SMALL_FOLDER_ICON_LIST: IEntryIcon[] = [
   {
     type: 'folder',
-    icon: <RemixIcon.Folder />,
-    iconClassName: 'text-white bg-gradient-to-b from-yellow-300 to-yellow-500 border-yellow-400',
+    icon: <RemixIcon.FolderFill size={24} />,
+    iconClassName: 'text-yellow-400 border-none',
     matchList: ['_dir'],
   },
   {
     type: 'folder',
-    icon: <RemixIcon.Folder />,
-    iconClassName: 'text-white bg-gradient-to-b from-yellow-200 to-yellow-400 border-yellow-300',
-    matchList: ['_dir_new'],
+    icon: <RemixIcon.FolderFill size={24} />,
+    iconClassName: 'text-yellow-400 border-none',
+    matchList: ['_dir_empty'],
   },
   {
     type: 'folder',
-    icon: <RemixIcon.Folder />,
-    iconClassName: 'text-white bg-gradient-to-b from-yellow-300 to-yellow-500 border-yellow-400',
+    icon: <RemixIcon.FolderFill size={24} />,
+    iconClassName: 'text-yellow-200 border-none',
+    matchList: ['_dir_new'],
+  },
+]
+
+const LARGE_FOLDER_ICON_LIST: IEntryIcon[] = [
+  {
+    type: 'folder',
+    icon: <RemixIcon.FolderFill size={56} />,
+    iconClassName: 'text-yellow-400 border-none',
+    matchList: ['_dir'],
+  },
+  {
+    type: 'folder',
+    icon: <RemixIcon.FolderFill size={56} />,
+    iconClassName: 'text-yellow-400 border-none',
     matchList: ['_dir_empty'],
   },
+  {
+    type: 'folder',
+    icon: <RemixIcon.FolderFill size={56} />,
+    iconClassName: 'text-yellow-200 border-none',
+    matchList: ['_dir_new'],
+  },
+]
+
+const ENTRY_ICON_LIST: IEntryIcon[] = [
   {
     type: 'document',
     icon: <RemixIcon.Document />,
@@ -138,11 +162,14 @@ const DIR_SUB_ICON_MAP = {
   'WeiXin': dirWeiXin,
 }
 
-const getIconInfo = (entry: IEntry) => {
+const getIconInfo = (entry: IEntry, small: boolean) => {
   const { name, type, extension } = entry
   const isDir = type === 'directory'
   const entryIcon = extension
-    ? (ENTRY_ICON_LIST.find(o => o.matchList.includes(extension)) || DEFAULT_ENTRY_ICON)
+    ? (([
+      ...(small ? SMALL_FOLDER_ICON_LIST : LARGE_FOLDER_ICON_LIST),
+      ...ENTRY_ICON_LIST,
+    ]).find(o => o.matchList.includes(extension)) || DEFAULT_ENTRY_ICON)
     : DEFAULT_ENTRY_ICON
 
   const dirSubIcon = isDir
@@ -197,12 +224,12 @@ export default function Icon(props: IconProps) {
     const { extension } = entry
     const useThumbnail = extension && THUMBNAIL_MATCH_LIST.includes(extension)
     const isVideo = extension && VIDEO_MATCH_LIST.includes(extension)
-    const { isDir, entryIcon: { icon, iconClassName }, dirSubIcon, fileSubIcon } = getIconInfo(entry)
+    const { isDir, entryIcon: { icon, iconClassName }, dirSubIcon, fileSubIcon } = getIconInfo(entry, small)
     return {
       useThumbnail, isVideo, isDir,
       icon, iconClassName, dirSubIcon, fileSubIcon,
     }
-  }, [entry])
+  }, [entry, small])
 
   const showThumbnail = !virtual && useThumbnail && !thumbnailError
 

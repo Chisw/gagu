@@ -14,7 +14,7 @@ import RemixIcon from '../../img/remixicon'
 
 export default function Dock() {
 
-  const [timeStr, setTimerStr] = useState('')
+  const [timeStr, setTimerStr] = useState('----/--/-- 星期- --:--')
 
   const [rootInfo, setRootInfo] = useRecoilState(rootInfoState)
   const [topWindowIndex, setTopWindowIndex] = useRecoilState(topWindowIndexState)
@@ -40,7 +40,7 @@ export default function Dock() {
   useEffect(() => {
     const tick = () => {
       const now = DateTime.local()
-      const str = now.toFormat('HH:mm 星期几<br>yyyy/MM/dd')
+      const str = now.toFormat('yyyy/MM/dd 星期几 HH:mm')
       const day = '一二三四五六日'[+now.toFormat('c') - 1]
       setTimerStr(str.replace('星期几', `星期${day}`))
     }
@@ -53,19 +53,23 @@ export default function Dock() {
   const buttonList = useMemo(() => {
     return [
       {
-        text: '关于',
-        onClick: () => { },
+        text: 'Github',
+        icon: <RemixIcon.GitHub />,
+        onClick: () => window.open('https://github.com/Chisw/gagu'),
       },
       {
         text: '进入全屏',
+        icon: <RemixIcon.Fullscreen />,
         onClick: () => document.querySelector('html')?.requestFullscreen(),
       },
       {
         text: '刷新',
+        icon: <RemixIcon.Refresh />,
         onClick: () => fetch(),
       },
       {
         text: '退出',
+        icon: <RemixIcon.ShutDown />,
         onClick: () => { },
       },
     ]
@@ -103,45 +107,36 @@ export default function Dock() {
 
   return (
     <>
-      <div className="fixed z-20 right-0 bottom-0 left-0 p-2 bg-white-500 flex justify-between bg-hazy-100 border-t border-gray-500 border-opacity-20 bg-clip-padding">
-        <div className="w-24 flex-shrink-0">
+      <div className="fixed z-20 right-0 bottom-0 left-0 p-2 bg-white-500 flex justify-between items-center bg-hazy-100 border-t border-gray-500 border-opacity-20 bg-clip-padding">
+        <div className="w-32 flex-shrink-0">
           <Popover
             minimal
             position="top-left"
-            targetTagName="div"
+            className="rounded-none"
             popoverClassName="bg-red-500 force-outline-none"
-            target={(
-              <div className="flex items-center cursor-pointer hover:bg-white-700 hover:text-black active:bg-white-500">
-                <span className="text-xs">{loading ? '系统加载中' : `${rootInfo.deviceName}`}</span>
+          >
+            <div className="w-6 h-6 rounded flex justify-center items-center cursor-pointer hover:bg-white-600 hover:text-black active:bg-white-500">
+              <RemixIcon.Dashboard />
+            </div>
+            <div className="w-56 p-2">
+              <div className="mb-1 p-1 border-b text-xs text-gray-600">
+                {loading ? '系统加载中' : `${rootInfo.deviceName} 已连接`}
               </div>
-            )}
-            content={(
-              <div className="w-48 p-2">
-                {buttonList.map(({ text, onClick }, buttonIndex) => (
-                  <Button
-                    key={buttonIndex}
-                    small
-                    minimal
-                    alignText="left"
-                    className={`w-full ${Classes.POPOVER_DISMISS}`}
-                    onClick={onClick}
-                  >
-                    {text}
-                  </Button>
-                ))}
+              {buttonList.map(({ text, icon, onClick }, buttonIndex) => (
                 <Button
+                  key={buttonIndex}
                   small
                   minimal
                   alignText="left"
-                  className="w-full"
-                  icon={<RemixIcon.GitHub />}
-                  onClick={() => window.open('https://github.com/Chisw/gagu')}
+                  icon={icon}
+                  className={`mb-1 w-full ${Classes.POPOVER_DISMISS}`}
+                  onClick={onClick}
                 >
-                  GitHub
+                  {text}
                 </Button>
-              </div>
-            )}
-          />
+              ))}
+            </div>
+          </Popover>
         </div>
         <div className="flex items-center">
           {APP_LIST.map(app => {
@@ -159,8 +154,8 @@ export default function Dock() {
                 />
                 <span
                   className={line(`
-                    absolute left-1/2 bottom-0 w-3 h-1 rounded-full bg-green-500
-                    transform -translate-x-1/2 translate-y-2
+                    absolute left-1/2 bottom-0 w-4 h-2 bg-blue-500
+                    transform -translate-x-1/2 translate-y-3
                     transition-all duration-300
                     ${isRunning ? 'opacity-100' : 'opacity-0'}
                   `)}
@@ -169,11 +164,8 @@ export default function Dock() {
             )
           })}
         </div>
-        <div className="w-24 flex-shrink-0 text-center text-xs leading-tight">
-          <span
-            className="font-din"
-            dangerouslySetInnerHTML={{ __html: timeStr }}
-          />
+        <div className="w-32 flex-shrink-0 text-center text-xs leading-none font-din">
+          {timeStr}
         </div>
       </div>
     </>

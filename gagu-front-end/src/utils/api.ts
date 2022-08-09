@@ -50,7 +50,7 @@ export const getRootInfo = async (config?: AxiosRequestConfig) => {
 }
 
 export const getPathEntries = async (path: string, config?: AxiosRequestConfig) => {
-  const { data } = await instance.get(`/api/list?path=/${path}`, config)
+  const { data } = await instance.get(`/api/list?path=${path}`, config)
   return data
 }
 
