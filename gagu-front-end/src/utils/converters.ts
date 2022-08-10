@@ -4,8 +4,6 @@ import { IEntry, IRootInfo, IVolume } from './types'
 export const rootInfoConverter: (data: any) => IRootInfo = data => {
   const { deviceName, entryList } = data
   const volumeList: IVolume[] = entryList
-    .sort((a: any, b: any) => a.name.length > b.name.length ? -1 : 1)
-  // volumeList.forEach((vol: any) => vol.mount = '/')
   return {
     deviceName,
     volumeList,

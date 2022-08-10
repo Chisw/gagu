@@ -45,6 +45,14 @@ import { ReactComponent as ViewList } from './view-list.svg'
 import { ReactComponent as ViewGrid } from './view-grid.svg'
 import { ReactComponent as ShutDown } from './shut-down.svg'
 import { ReactComponent as Dashboard } from './dashboard.svg'
+import { ReactComponent as FolderFillFiles } from './folder-fill-files.svg'
+import { ReactComponent as FontSize } from './font-size.svg'
+import { ReactComponent as Alipay } from './alipay.svg'
+import { ReactComponent as Android } from './android.svg'
+import { ReactComponent as QQ } from './qq.svg'
+import { ReactComponent as Wechat } from './wechat.svg'
+import { ReactComponent as Baidu } from './baidu.svg'
+import { ReactComponent as Camera } from './camera.svg'
 
 
 const iconsMap: { [KEY: string]: React.FC } = {
@@ -94,6 +102,14 @@ const iconsMap: { [KEY: string]: React.FC } = {
   ViewGrid,
   ShutDown,
   Dashboard,
+  FolderFillFiles,
+  FontSize,
+  Alipay,
+  Android,
+  QQ,
+  Wechat,
+  Baidu,
+  Camera,
 }
 
 const RemixIcon: { [KEY: string]: any } = {}

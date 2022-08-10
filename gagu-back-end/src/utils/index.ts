@@ -11,6 +11,14 @@ import {
 } from 'fs'
 import { IEntry } from 'src/types'
 
+export const getHasChildren = (path: string) => {
+  try {
+    return readdirSync(path).length > 0
+  } catch (err) {
+    return false
+  }
+}
+
 export const getEntryList = (path: string) => {
   let entryNameList: string[] = []
   try {
@@ -29,13 +37,14 @@ export const getEntryList = (path: string) => {
         const size = isDirectory ? undefined : stat.size
         const hidden = entryName.startsWith('.')
         const lastModified = stat.ctimeMs
+        const hasChildren = isDirectory && getHasChildren(entryPath)
         return {
           name: entryName,
           type,
           size,
           hidden,
           lastModified,
-          hasChildren: false,
+          hasChildren,
         }
       } catch (err) {
         console.log('ERR:', 'getEntryList', err)

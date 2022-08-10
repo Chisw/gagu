@@ -1,24 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { IEntry, IEntryIcon } from '../../utils/types'
-import dirAndroid from '../../img/icons/dir-android.png'
-import dirAlipay from '../../img/icons/dir-alipay.png'
-import dirAutonavi from '../../img/icons/dir-autonavi.png'
-import dirBackup from '../../img/icons/dir-backup.png'
-import dirBaidu from '../../img/icons/dir-baidu.png'
-import dirBrowser from '../../img/icons/dir-browser.png'
-import dirCamera from '../../img/icons/dir-camera.png'
-import dirDownload from '../../img/icons/dir-download.png'
-import dirDuokan from '../../img/icons/dir-duokan.png'
-import dirFonts from '../../img/icons/dir-fonts.png'
-import dirMovies from '../../img/icons/app-video-player.png'
-import dirMusic from '../../img/icons/app-music-player.png'
-import dirPictures from '../../img/icons/app-photo-gallery.png'
-import dirRetroArch from '../../img/icons/dir-retroarch.png'
-import dirSogou from '../../img/icons/dir-sogou.png'
-import dirTencent from '../../img/icons/dir-tencent.png'
-import dirWeiXin from '../../img/icons/dir-weixin.png'
-import dirMi from '../../img/icons/dir-mi.png'
-import dirQQBrowser from '../../img/icons/dir-qq-browser.png'
 import { get } from 'lodash'
 import { line } from '../../utils'
 import { getThumbnailUrl } from '../../utils/api'
@@ -43,20 +24,20 @@ const DEFAULT_ENTRY_ICON: IEntryIcon = {
 const SMALL_FOLDER_ICON_LIST: IEntryIcon[] = [
   {
     type: 'folder',
-    icon: <RemixIcon.FolderFill size={24} />,
-    iconClassName: 'text-yellow-400 border-none',
+    icon: <RemixIcon.FolderFillFiles size={24} />,
+    iconClassName: 'border-none',
     matchList: ['_dir'],
   },
   {
     type: 'folder',
     icon: <RemixIcon.FolderFill size={24} />,
-    iconClassName: 'text-yellow-400 border-none',
+    iconClassName: 'border-none',
     matchList: ['_dir_empty'],
   },
   {
     type: 'folder',
     icon: <RemixIcon.FolderFill size={24} />,
-    iconClassName: 'text-yellow-200 border-none',
+    iconClassName: 'border-none opacity-50',
     matchList: ['_dir_new'],
   },
 ]
@@ -64,20 +45,20 @@ const SMALL_FOLDER_ICON_LIST: IEntryIcon[] = [
 const LARGE_FOLDER_ICON_LIST: IEntryIcon[] = [
   {
     type: 'folder',
-    icon: <RemixIcon.FolderFill size={56} />,
-    iconClassName: 'text-yellow-400 border-none',
+    icon: <RemixIcon.FolderFillFiles size={56} />,
+    iconClassName: 'border-none',
     matchList: ['_dir'],
   },
   {
     type: 'folder',
     icon: <RemixIcon.FolderFill size={56} />,
-    iconClassName: 'text-yellow-400 border-none',
+    iconClassName: 'border-none',
     matchList: ['_dir_empty'],
   },
   {
     type: 'folder',
     icon: <RemixIcon.FolderFill size={56} />,
-    iconClassName: 'text-yellow-200 border-none',
+    iconClassName: 'border-none opacity-50',
     matchList: ['_dir_new'],
   },
 ]
@@ -136,30 +117,32 @@ const ENTRY_ICON_LIST: IEntryIcon[] = [
     icon: <RemixIcon.Application />,
     iconClassName: 'text-lime-600 bg-lime-100 border-lime-300',
     matchList: ['apk'],
-  }
+  },
 ]
 
 const DIR_SUB_ICON_MAP = {
-  'alipay': dirAlipay,
-  'Android': dirAndroid,
-  'autonavi': dirAutonavi,
-  'backups': dirBackup,
-  'baidu': dirBaidu,
-  'browser': dirBrowser,
-  'DCIM': dirCamera,
-  'DuoKan': dirDuokan,
-  'Download': dirDownload,
-  'Fonts': dirFonts,
-  'Movies': dirMovies,
-  'Music': dirMusic,
-  'Pictures': dirPictures,
-  'QQBrowser': dirQQBrowser,
-  'RetroArch': dirRetroArch,
-  'sogou': dirSogou,
-  'Tencent': dirTencent,
-  'MIUI': dirMi,
-  'miad': dirMi,
-  'WeiXin': dirWeiXin,
+  'alipay': <RemixIcon.Alipay />,
+  'android': <RemixIcon.Android />,
+  // 'autonavi': dirAutonavi,
+  // 'backups': dirBackup,
+  'baidu': <RemixIcon.Baidu />,
+  // 'browser': dirBrowser,
+  'camera': <RemixIcon.Camera />,
+  'dcim': <RemixIcon.Camera />,
+  // 'duoKan': dirDuokan,
+  'download': <RemixIcon.Download />,
+  'downloads': <RemixIcon.Download />,
+  'font': <RemixIcon.FontSize />,
+  'fonts': <RemixIcon.FontSize />,
+  'movies': <RemixIcon.Film />,
+  'music': <RemixIcon.Music />,
+  'pictures': <RemixIcon.Image />,
+  // 'retroarch': dirRetroArch,
+  'qq': <RemixIcon.QQ />,
+  'tencent': <RemixIcon.QQ />,
+  // 'miui': dirMi,
+  'wechat': <RemixIcon.Wechat />,
+  'weixin': <RemixIcon.Wechat />,
 }
 
 const getIconInfo = (entry: IEntry, small: boolean) => {
@@ -173,7 +156,7 @@ const getIconInfo = (entry: IEntry, small: boolean) => {
     : DEFAULT_ENTRY_ICON
 
   const dirSubIcon = isDir
-    ? get(DIR_SUB_ICON_MAP, name)
+    ? get(DIR_SUB_ICON_MAP, name.toLowerCase())
     : undefined
 
   const fileSubIcon = isDir
@@ -236,11 +219,15 @@ export default function Icon(props: IconProps) {
   const DirSubIcon = dirSubIcon && (
     <div
       className={line(`
-        absolute left-0 bottom-0 bg-center bg-no-repeat bg-contain m-1px
-        ${small ? 'w-3 h-3' : 'w-5 h-5'}
+        absolute top-1/2 left-1/2 mt-1px w-5 h-5
+        flex justify-center items-center
+        transform -translate-x-1/2 -translate-y-1/2
+        text-yellow-600
+        ${small ? 'scale-50' : ''}
       `)}
-      style={{ backgroundImage: `url("${dirSubIcon}")` }}
-    />
+    >
+      {dirSubIcon}
+    </div>
   )
 
   const FileSubIcon = fileSubIcon && (
