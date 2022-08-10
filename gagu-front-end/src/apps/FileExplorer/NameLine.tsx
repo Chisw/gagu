@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react'
 import Toast from '../../components/EasyToast'
 import useFetch from '../../hooks/useFetch'
 import { line } from '../../utils'
-import { getIsExist, addNewDir, renameEntry, uploadFile } from '../../utils/api'
+import { getExists, addDirectory, renameEntry, uploadFile } from '../../utils/api'
 import { INVALID_NAME_CHAR_LIST } from '../../utils/constant'
 import { IEntry } from '../../utils/types'
 
@@ -39,8 +39,8 @@ export default function NameLine(props: NameLineProps) {
     setInputValue(e.target.value)
   }, [])
 
-  const { fetch: fetchExist, loading: loadingExist } = useFetch(getIsExist)
-  const { fetch: fetchNewDir, loading: loadingNewDir } = useFetch(addNewDir)
+  const { fetch: fetchExists, loading: loadingExist } = useFetch(getExists)
+  const { fetch: fetchNewDir, loading: loadingNewDir } = useFetch(addDirectory)
   const { fetch: fetchRename, loading: loadingRename } = useFetch(renameEntry)
   const { fetch: uploadFileToPath } = useFetch(uploadFile)
 
@@ -65,7 +65,7 @@ export default function NameLine(props: NameLineProps) {
     }
 
     const newPath = `${currentDirPath}/${newName}`
-    const { exists } = await fetchExist(newPath)
+    const { exists } = await fetchExists(newPath)
     if (exists) {
       onFail('exist')
       Toast.warning('已存在')
@@ -101,7 +101,7 @@ export default function NameLine(props: NameLineProps) {
         }
       }
     }
-  }, [entry, currentDirPath, create, fetchExist, fetchNewDir, fetchRename, uploadFileToPath, onSuccess, onFail])
+  }, [entry, currentDirPath, create, fetchExists, fetchNewDir, fetchRename, uploadFileToPath, onSuccess, onFail])
 
   return (
     <div className={`w-full leading-none ${gridMode ? 'mt-2 text-center' : 'ml-4 flex justify-center items-center'}`}>

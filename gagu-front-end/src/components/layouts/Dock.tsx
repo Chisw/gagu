@@ -6,7 +6,7 @@ import { IApp } from '../../utils/types'
 import { line } from '../../utils'
 import { DateTime } from 'luxon'
 import useFetch from '../../hooks/useFetch'
-import { getRootInfo } from '../../utils/api'
+import { getEntryList } from '../../utils/api'
 import { DOCUMENT_TITLE } from '../../utils/constant'
 import { rootInfoConverter } from '../../utils/converters'
 import { Button, Classes, Popover } from '@blueprintjs/core'
@@ -21,10 +21,10 @@ export default function Dock() {
   const [runningAppList, setRunningAppList] = useRecoilState(runningAppListState)
   const [openedEntryList, setOpenedEntryList] = useRecoilState(openedEntryListState)
 
-  const { fetch, loading, data } = useFetch(getRootInfo)
+  const { fetch, loading, data } = useFetch(getEntryList)
 
   useEffect(() => {
-    fetch()
+    fetch('/')
   }, [fetch])
 
   useEffect(() => {
@@ -65,7 +65,7 @@ export default function Dock() {
       {
         text: '刷新',
         icon: <RemixIcon.Refresh />,
-        onClick: () => fetch(),
+        onClick: () => fetch('/'),
       },
       {
         text: '退出',

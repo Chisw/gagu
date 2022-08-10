@@ -2,8 +2,8 @@ import { getFileNameExtension } from '.'
 import { IEntry, IRootInfo, IVolume } from './types'
 
 export const rootInfoConverter: (data: any) => IRootInfo = data => {
-  const { deviceName, entries } = data
-  const volumeList: IVolume[] = entries
+  const { deviceName, entryList } = data
+  const volumeList: IVolume[] = entryList
     .sort((a: any, b: any) => a.name.length > b.name.length ? -1 : 1)
   // volumeList.forEach((vol: any) => vol.mount = '/')
   return {
@@ -12,9 +12,9 @@ export const rootInfoConverter: (data: any) => IRootInfo = data => {
   }
 }
 
-export const entryConverter = (data: { entries: any[] }, currentDirPath: string) => {
-  const { entries } = data
-  return entries.map(({
+export const entryConverter = (data: { entryList: any[] }, currentDirPath: string) => {
+  const { entryList } = data
+  return entryList.map(({
     name,
     type,
     size,

@@ -3,7 +3,7 @@ import { useRecoilState } from 'recoil'
 import Icon from './Icon'
 import useFetch from '../../hooks/useFetch'
 import { getBytesSize, getDownloadInfo, getIsContained, isSameEntry, entrySorter, line, getMatchAppId } from '../../utils'
-import { deleteEntry, downloadEntries, getDirSize, getPathEntries, uploadFile } from '../../utils/api'
+import { deleteEntry, downloadEntries, getDirectorySize, getEntryList, uploadFile } from '../../utils/api'
 import { entryConverter } from '../../utils/converters'
 import { openedEntryListState, rootInfoState, sizeMapState, uploadTaskListState } from '../../utils/state'
 import { AppComponentProps, IEntry, IHistory, IRectInfo, INestedFile, IUploadTask } from '../../utils/types'
@@ -64,10 +64,10 @@ export default function FileExplorer(props: AppComponentProps) {
   const containerInnerRef = useRef(null)  // entryList 容器，最小高度与 containerRef 的一致，自动撑高
   const uploadInputRef = useRef(null)
 
-  const { fetch: fetchPath, loading: fetching, data, setData } = useFetch(getPathEntries)
+  const { fetch: fetchPath, loading: fetching, data, setData } = useFetch(getEntryList)
   const { fetch: deletePath, loading: deleting } = useFetch(deleteEntry)
   const { fetch: uploadFileToPath, loading: uploading } = useFetch(uploadFile)
-  const { fetch: getSize, loading: getting } = useFetch(getDirSize)
+  const { fetch: getSize, loading: getting } = useFetch(getDirectorySize)
 
   const { volumeList, volumeMountList } = useMemo(() => {
     const { volumeList } = rootInfo

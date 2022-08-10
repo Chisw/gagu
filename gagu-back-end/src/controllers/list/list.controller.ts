@@ -6,7 +6,7 @@ import {
   HttpStatus,
   Query,
 } from '@nestjs/common'
-import { getEntries } from '../../utils/index'
+import { getEntryList } from '../../utils/index'
 
 const deviceName = 'mac-mini'
 const username = process.env.USER
@@ -21,7 +21,7 @@ export class ListController {
     if (['', '/'].includes(path)) {
       return {
         deviceName,
-        entries: [
+        entryList: [
           {
             name: `/Users/${username}`,
             type: 'directory',
@@ -49,12 +49,11 @@ export class ListController {
         ],
       }
     } else {
-      const absPath = path
-      console.log('API/LIST:', absPath)
-      const entries = getEntries(absPath)
+      console.log('API/LIST:', path)
+      const entryList = getEntryList(path)
       const resData = {
         deviceName,
-        entries,
+        entryList,
       }
       return resData
     }

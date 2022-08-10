@@ -12,7 +12,7 @@ const instance = axios.create({
   timeout: 10 * 1000,
   timeoutErrorMessage: 'timeout-error',
   headers: {
-    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    'Content-Type': 'application/json; charset=UTF-8',
   },
 })
 
@@ -44,44 +44,45 @@ instance.interceptors.response.use(response => response, (error: AxiosError) => 
 })
 
 
-export const getRootInfo = async (config?: AxiosRequestConfig) => {
-  const { data } = await instance.get(`/api/list?path=/`, config)
-  return data
-}
-
-export const getPathEntries = async (path: string, config?: AxiosRequestConfig) => {
+export const getEntryList = async (path: string, config?: AxiosRequestConfig) => {
   const { data } = await instance.get(`/api/list?path=${path}`, config)
   return data
 }
 
+export const getDirectorySize = async (path: string, config?: AxiosRequestConfig) => {
+  const { data } = await instance.get(`/api/size?path=${path}`, config)
+  return data
+}
+
 export const deleteEntry = async (path: string, config?: AxiosRequestConfig) => {
-  const { data } = await instance.delete(`/api/root${path}`, config)
+  const { data } = await instance.delete(`/api/delete?path=${path}`, config)
+  return data
+}
+
+export const getExists = async (path: string, config?: AxiosRequestConfig) => {
+  const { data } = await instance.get(`/api/exists?path=${path}`, config)
+  return data
+}
+
+export const renameEntry = async (oldPath: string, newPath: string, config?: AxiosRequestConfig) => {
+  const formData = { oldPath, newPath }
+  const { data } = await instance.put(`/api/rename`, formData, config)
+  return data
+}
+
+export const addDirectory = async (path: string, config?: AxiosRequestConfig) => {
+  const formData = { path }
+  const { data } = await instance.post(`/api/addDirectory`, formData, config)
+  return data
+}
+
+export const getTextContent = async (path: string, config?: AxiosRequestConfig) => {
+  const { data } = await instance.get(`/api/textContent?path=${path}`, config)
   return data
 }
 
 
 
-
-
-export const getIsExist = async (path: string, config?: AxiosRequestConfig) => {
-  const { data } = await instance.get(`${path}?cmd=exists`, config)
-  return data
-}
-
-export const getDirSize = async (path: string, config?: AxiosRequestConfig) => {
-  const { data } = await instance.get(`${path}?cmd=dir_size`, config)
-  return data
-}
-
-export const addNewDir = async (path: string, config?: AxiosRequestConfig) => {
-  const { data } = await instance.put(`${path}?cmd=new_dir`, undefined, config)
-  return data
-}
-
-export const renameEntry = async (path: string, newPath: string, config?: AxiosRequestConfig) => {
-  const { data } = await instance.put(`${path}?cmd=rename&n=${encodeURIComponent(newPath)}`, undefined, config)
-  return data
-}
 
 
 
@@ -93,10 +94,7 @@ export const uploadFile = async (parentPath: string, nestedFile: INestedFile, co
   return data
 }
 
-export const getTextFileContent = async (path: string, config?: AxiosRequestConfig) => {
-  const { data } = await instance.get(`${path}?cmd=text_file`, config)
-  return data
-}
+
 
 // 
 export const downloadEntries = (parentPath: string, downloadName: string, cmd: string) => {

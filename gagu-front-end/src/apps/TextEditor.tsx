@@ -5,7 +5,7 @@ import ToolButton from '../components/ToolButton'
 import CommonToolButtons from '../components/CommonToolButtons'
 import useFetch from '../hooks/useFetch'
 import { copy } from '../utils'
-import { getTextFileContent, uploadFile } from '../utils/api'
+import { getTextContent, uploadFile } from '../utils/api'
 import { APP_ID_MAP } from '../utils/appList'
 import { openedEntryListState } from '../utils/state'
 import { AppComponentProps, IOpenedEntry } from '../utils/types'
@@ -20,7 +20,7 @@ export default function TextEditor(props: AppComponentProps) {
   const [value, setValue] = useState('')
   const [monoMode, setMonoMode] = useState(false)
 
-  const { fetch: fetchTextContent, loading: fetching, data: textContent, setData: setTextContent } = useFetch(getTextFileContent)
+  const { fetch: fetchTextContent, loading: fetching, data: textContent, setData: setTextContent } = useFetch(getTextContent)
   const { fetch: uploadFileToPath, loading: saving } = useFetch(uploadFile)
 
   useEffect(() => setWindowLoading(fetching), [setWindowLoading, fetching])

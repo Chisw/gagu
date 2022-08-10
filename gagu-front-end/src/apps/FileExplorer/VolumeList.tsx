@@ -48,7 +48,7 @@ export default function VolumeList(props: VolumeListProps) {
               </div>
               <div className="relative mt-1 h-1 text-gray-500 font-din bg-white rounded-sm overflow-hidden">
                 <div
-                  className="absolute top-0 bottom-0 left-0 bg-green-500"
+                  className="absolute top-0 bottom-0 left-0 bg-blue-500"
                   style={{ width: `${spaceUsed / spaceTotal * 100}%` }}
                 />
               </div>
