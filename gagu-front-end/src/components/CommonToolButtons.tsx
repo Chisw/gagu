@@ -3,7 +3,7 @@ import Confirmor, { ConfirmorProps } from './Confirmor'
 import Toast from './EasyToast'
 import ToolButton from './ToolButton'
 import { copy, getDownloadInfo } from '../utils'
-import { downloadEntries, getBinFileUrl } from '../utils/api'
+import { FsApi } from '../api'
 import { IOpenedEntry } from '../utils/types'
 import RemixIcon from '../img/remixicon'
 import shareSVG from '../img/remixicon/share.svg'
@@ -19,7 +19,7 @@ export default function CommonToolButtons(props: CommonToolButtonsProps) {
   const [shareConfirmorProps, setShareConfirmorProps] = useState<ConfirmorProps>({ isOpen: false })
 
   const handleShare = useCallback(() => {
-    const url = getBinFileUrl(`${currentEntry!.parentPath}/${currentEntry!.name}`)
+    const url = FsApi.getBinFileUrl(`${currentEntry!.parentPath}/${currentEntry!.name}`)
     const close = () => setShareConfirmorProps({ isOpen: false })
 
     setShareConfirmorProps({
@@ -50,7 +50,7 @@ export default function CommonToolButtons(props: CommonToolButtonsProps) {
   const handleDownload = useCallback(() => {
     if (currentEntry) {
       const { downloadName, cmd } = getDownloadInfo(currentEntry.parentPath, [currentEntry])
-      downloadEntries(currentEntry.parentPath, downloadName, cmd)
+      FsApi.downloadEntries(currentEntry.parentPath, downloadName, cmd)
     }
   }, [currentEntry])
 

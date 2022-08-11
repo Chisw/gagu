@@ -3,7 +3,7 @@ import { useRecoilState } from 'recoil'
 import Icon from './Icon'
 import useFetch from '../../hooks/useFetch'
 import { getBytesSize, getDownloadInfo, getIsContained, isSameEntry, entrySorter, line, getMatchAppId } from '../../utils'
-import { deleteEntry, downloadEntries, getDirectorySize, getEntryList, uploadFile } from '../../utils/api'
+import { FsApi } from '../../api'
 import { entryConverter } from '../../utils/converters'
 import { openedEntryListState, rootInfoState, sizeMapState, uploadTaskListState } from '../../utils/state'
 import { AppComponentProps, IEntry, IHistory, IRectInfo, INestedFile, IUploadTask } from '../../utils/types'
@@ -64,10 +64,10 @@ export default function FileExplorer(props: AppComponentProps) {
   const containerInnerRef = useRef(null)  // entryList 容器，最小高度与 containerRef 的一致，自动撑高
   const uploadInputRef = useRef(null)
 
-  const { fetch: fetchPath, loading: fetching, data, setData } = useFetch(getEntryList)
-  const { fetch: deletePath, loading: deleting } = useFetch(deleteEntry)
-  const { fetch: uploadFileToPath, loading: uploading } = useFetch(uploadFile)
-  const { fetch: getSize, loading: getting } = useFetch(getDirectorySize)
+  const { fetch: getEntryList, loading: fetching, data, setData } = useFetch(FsApi.getEntryList)
+  const { fetch: deleteEntry, loading: deleting } = useFetch(FsApi.deleteEntry)
+  const { fetch: uploadFile, loading: uploading } = useFetch(FsApi.uploadFile)
+  const { fetch: getDirectorySize, loading: getting } = useFetch(FsApi.getDirectorySize)
 
   const { volumeList, volumeMountList } = useMemo(() => {
     const { volumeList } = rootInfo
@@ -146,10 +146,10 @@ export default function FileExplorer(props: AppComponentProps) {
     !keepData && setData(null)
     const controller = new AbortController()
     const config = { signal: controller.signal }
-    fetchPath(path, config)
+    getEntryList(path, config)
     setAbortController(controller)
     setNewDirMode(false)
-  }, [setData, fetchPath])
+  }, [setData, getEntryList])
 
   const updateHistory = useCallback((direction: 'forward' | 'back', path?: string) => {
     const map = { forward: 1, back: -1 }
@@ -262,7 +262,7 @@ export default function FileExplorer(props: AppComponentProps) {
         lastUpload = { time: now, size: loaded }
       }
 
-      const data = await uploadFileToPath(parentPath, nestedFile, { onUploadProgress })
+      const data = await uploadFile(parentPath, nestedFile, { onUploadProgress })
       const isUploaded = !!data?.hasDon
 
       if (isUploaded) {
@@ -283,7 +283,7 @@ export default function FileExplorer(props: AppComponentProps) {
       setVirtualEntries([])
     }
     ;(uploadInputRef.current as any).value = ''
-  }, [uploadTaskList, setUploadTaskList, currentDirPath, uploadFileToPath, handleRefresh])
+  }, [uploadTaskList, setUploadTaskList, currentDirPath, uploadFile, handleRefresh])
 
   const handleCancelSelect = useCallback((e: any) => {
     if (e.button === 2) return  // oncontextmenu
@@ -337,7 +337,7 @@ export default function FileExplorer(props: AppComponentProps) {
       onCancel: close,
       onConfirm: () => {
         close()
-        downloadEntries(currentDirPath, downloadName, cmd)
+        FsApi.downloadEntries(currentDirPath, downloadName, cmd)
       },
     })
   }, [currentDirPath, selectedEntryList])
@@ -369,7 +369,7 @@ export default function FileExplorer(props: AppComponentProps) {
         const okList: boolean[] = []
         for (const entry of processList) {
           const { name } = entry
-          const { ok } = await deletePath(`${currentDirPath}/${name}`)
+          const { ok } = await deleteEntry(`${currentDirPath}/${name}`)
           document.querySelector(`.entry-node[data-name="${name}"]`)?.setAttribute('style', 'opacity:0;')
           okList.push(ok)
         }
@@ -379,7 +379,7 @@ export default function FileExplorer(props: AppComponentProps) {
         }
       },
     })
-  }, [deletePath, currentDirPath, selectedEntryList, handleRefresh])
+  }, [deleteEntry, currentDirPath, selectedEntryList, handleRefresh])
 
   useEffect(() => setWindowLoading(fetching), [setWindowLoading, fetching])
 
@@ -424,9 +424,9 @@ export default function FileExplorer(props: AppComponentProps) {
   const updateDirSize = useCallback(async (entry: IEntry) => {
     const { name, parentPath } = entry
     const path = `${parentPath}/${name}`
-    const { hasDon, size } = await getSize(path)
+    const { hasDon, size } = await getDirectorySize(path)
     hasDon && setSizeMap({ ...sizeMap, [path]: size })
-  }, [getSize, sizeMap, setSizeMap])
+  }, [getDirectorySize, sizeMap, setSizeMap])
 
   const handleEntryClick = useCallback((e: any, entry: IEntry) => {
     if (newDirMode || newTxtMode || renameMode) return

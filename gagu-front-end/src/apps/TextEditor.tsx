@@ -5,7 +5,7 @@ import ToolButton from '../components/ToolButton'
 import CommonToolButtons from '../components/CommonToolButtons'
 import useFetch from '../hooks/useFetch'
 import { copy } from '../utils'
-import { getTextContent, uploadFile } from '../utils/api'
+import { FsApi } from '../api'
 import { APP_ID_MAP } from '../utils/appList'
 import { openedEntryListState } from '../utils/state'
 import { AppComponentProps, IOpenedEntry } from '../utils/types'
@@ -20,8 +20,8 @@ export default function TextEditor(props: AppComponentProps) {
   const [value, setValue] = useState('')
   const [monoMode, setMonoMode] = useState(false)
 
-  const { fetch: fetchTextContent, loading: fetching, data: textContent, setData: setTextContent } = useFetch(getTextContent)
-  const { fetch: uploadFileToPath, loading: saving } = useFetch(uploadFile)
+  const { fetch: getTextContent, loading: fetching, data: textContent, setData: setTextContent } = useFetch(FsApi.getTextContent)
+  const { fetch: uploadFile, loading: saving } = useFetch(FsApi.uploadFile)
 
   useEffect(() => setWindowLoading(fetching), [setWindowLoading, fetching])
 
@@ -38,12 +38,12 @@ export default function TextEditor(props: AppComponentProps) {
     if (currentEntry) {
       const { parentPath, name, isOpen } = currentEntry
       if (!isOpen) {
-        fetchTextContent(`${parentPath}/${name}`)
+        getTextContent(`${parentPath}/${name}`)
         setWindowTitle(name)
         setCurrentEntry({ ...currentEntry, isOpen: true })
       }
     }
-  }, [currentEntry, fetchTextContent, setWindowTitle])
+  }, [currentEntry, getTextContent, setWindowTitle])
 
   useEffect(() => {
     setValue(textContent)
@@ -53,14 +53,14 @@ export default function TextEditor(props: AppComponentProps) {
     if (currentEntry) {
       const blob = new Blob([value], { type: 'text/plain;charset=utf-8' })
       const file = new File([blob], currentEntry.name)
-      const data = await uploadFileToPath(currentEntry.parentPath, file)
+      const data = await uploadFile(currentEntry.parentPath, file)
       const isUploaded = !!data?.hasDon
       if (isUploaded) {
         Toast.toast('保存成功')
         setTextContent(value)
       }
     }
-  }, [value, currentEntry, uploadFileToPath, setTextContent])
+  }, [value, currentEntry, uploadFile, setTextContent])
 
   return (
     <>

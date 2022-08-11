@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { IEntry, IEntryIcon } from '../../utils/types'
 import { get } from 'lodash'
 import { line } from '../../utils'
-import { getThumbnailUrl } from '../../utils/api'
+import { FsApi } from '../../api'
 import { CALLABLE_APP_LIST } from '../../utils/appList'
 import RemixIcon from '../../img/remixicon'
 
@@ -123,6 +123,7 @@ const ENTRY_ICON_LIST: IEntryIcon[] = [
 const DIR_SUB_ICON_MAP = {
   'alipay': <RemixIcon.Alipay />,
   'android': <RemixIcon.Android />,
+  'applications': <RemixIcon.Application />,
   // 'autonavi': dirAutonavi,
   // 'backups': dirBackup,
   'baidu': <RemixIcon.Baidu />,
@@ -130,6 +131,9 @@ const DIR_SUB_ICON_MAP = {
   'camera': <RemixIcon.Camera />,
   'dcim': <RemixIcon.Camera />,
   // 'duoKan': dirDuokan,
+  'desktop': <RemixIcon.Computer />,
+  'document': <RemixIcon.FileText />,
+  'documents': <RemixIcon.FileText />,
   'download': <RemixIcon.Download />,
   'downloads': <RemixIcon.Download />,
   'font': <RemixIcon.FontSize />,
@@ -137,6 +141,7 @@ const DIR_SUB_ICON_MAP = {
   'movies': <RemixIcon.Film />,
   'music': <RemixIcon.Music />,
   'pictures': <RemixIcon.Image />,
+  'public': <RemixIcon.Walk />,
   // 'retroarch': dirRetroArch,
   'qq': <RemixIcon.QQ />,
   'tencent': <RemixIcon.QQ />,
@@ -257,7 +262,7 @@ export default function Icon(props: IconProps) {
               max-w-full max-h-full bg-white shadow-md
               ${isVideo ? '' : `border ${small ? 'p-1px' : 'p-2px'}`}
             `)}
-            src={getThumbnailUrl(`${parentPath}/${name}`)}
+            src={FsApi.getThumbnailUrl(`${parentPath}/${name}`)}
             onLoad={() => setThumbnailLoaded(true)}
             onError={() => setThumbnailError(true)}
           />
@@ -272,13 +277,13 @@ export default function Icon(props: IconProps) {
             ${(isDir && small)   ? 'w-7  h-6  rounded' : ''}
             ${(isDir && !small)  ? 'w-14 h-12 rounded-lg' : ''}
             ${(!isDir && small)  ? 'w-5  h-6  rounded-sm rounded-tr mx-1' : ''}
-            ${(!isDir && !small) ? 'w-10 h-12 rounded    rounded-tr-lg' : ''}
+            ${(!isDir && !small) ? 'w-10 h-12 rounded rounded-tr-lg' : ''}
             ${iconClassName}
           `)}
         >
           {small ? icon : (
             <div>
-              <div>{icon}</div>
+              <div className="text-center">{icon}</div>
               {!isDir && (
                 <div className="mt-2px font-din text-center text-xs">
                   {extension?.replace('_txt_new', 'txt').substring(0, 4).toUpperCase()}

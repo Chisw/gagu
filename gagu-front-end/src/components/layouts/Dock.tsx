@@ -6,14 +6,16 @@ import { IApp } from '../../utils/types'
 import { line } from '../../utils'
 import { DateTime } from 'luxon'
 import useFetch from '../../hooks/useFetch'
-import { getEntryList } from '../../utils/api'
+import { FsApi } from '../../api'
 import { DOCUMENT_TITLE } from '../../utils/constant'
 import { rootInfoConverter } from '../../utils/converters'
 import { Button, Classes, Popover } from '@blueprintjs/core'
 import RemixIcon from '../../img/remixicon'
+import { useNavigate } from 'react-router-dom'
 
 export default function Dock() {
 
+  const navigate = useNavigate()
   const [timeStr, setTimerStr] = useState('----/--/-- 星期- --:--')
 
   const [rootInfo, setRootInfo] = useRecoilState(rootInfoState)
@@ -21,7 +23,7 @@ export default function Dock() {
   const [runningAppList, setRunningAppList] = useRecoilState(runningAppListState)
   const [openedEntryList, setOpenedEntryList] = useRecoilState(openedEntryListState)
 
-  const { fetch, loading, data } = useFetch(getEntryList)
+  const { fetch, loading, data } = useFetch(FsApi.getEntryList)
 
   useEffect(() => {
     fetch('/')
@@ -70,10 +72,10 @@ export default function Dock() {
       {
         text: '退出',
         icon: <RemixIcon.ShutDown />,
-        onClick: () => { },
+        onClick: () => navigate('/login'),
       },
     ]
-  }, [fetch])
+  }, [fetch, navigate])
 
   const handleOpenApp = useCallback((app: IApp) => {
     const sameRunningAppList = runningAppList.filter(a => a.id === app.id)

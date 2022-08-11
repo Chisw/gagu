@@ -6,7 +6,6 @@ interface DesktopProps {
 }
 
 export default function Desktop(props: DesktopProps) {
-
   return (
     <>
       <div

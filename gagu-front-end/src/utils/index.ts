@@ -2,6 +2,8 @@ import { CALLABLE_APP_LIST } from './appList'
 import { IEntry, INestedFile, IOffsetInfo, IRectInfo } from './types'
 
 
+export * from './constant'
+
 export const entrySorter = (a: IEntry, b: IEntry) => {
   const map = { directory: 1, file: 2 }
   const aVal = map[a.type]

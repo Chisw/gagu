@@ -6,11 +6,9 @@ import {
   HttpStatus,
   Query,
 } from '@nestjs/common'
-import { getEntryList } from '../../utils/index'
+import { getEntryList, USERNAME } from 'src/utils'
 
 const deviceName = 'mac-mini'
-const username = process.env.USER
-
 @Controller('/api/list')
 export class ListController {
   @Get()
@@ -23,13 +21,13 @@ export class ListController {
         deviceName,
         entryList: [
           {
-            name: `/Users/${username}`,
+            name: `/Users/${USERNAME}`,
             type: 'directory',
             size: undefined,
             hidden: false,
             lastModified: 0,
             hasChildren: false,
-            mount: `/Users/${username}`,
+            mount: `/Users/${USERNAME}`,
             isVolume: false,
             spaceFree: 82341341312,
             spaceTotal: 212341341312,

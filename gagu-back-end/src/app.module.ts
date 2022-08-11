@@ -1,18 +1,22 @@
 import { Module } from '@nestjs/common'
 import { AppService } from './app.service'
 import { AppController } from './controllers/app.controller'
-import { ListController } from './controllers/list/list.controller'
-import { SizeController } from './controllers/size/size.controller'
-import { DeleteController } from './controllers/delete/delete.controller'
-import { RenameController } from './controllers/rename/rename.controller'
-import { ExistsController } from './controllers/exists/exists.controller'
-import { AddDirectoryController } from './controllers/add-directory/add-directory.controller'
-import { TextContentController } from './controllers/text-content/text-content.controller'
+import { LoginController } from './controllers/auth/login/login.controller'
+import { ListController } from './controllers/fs/list/list.controller'
+import { SizeController } from './controllers/fs/size/size.controller'
+import { DeleteController } from './controllers/fs/delete/delete.controller'
+import { RenameController } from './controllers/fs/rename/rename.controller'
+import { ExistsController } from './controllers/fs/exists/exists.controller'
+import { AddDirectoryController } from './controllers/fs/add-directory/add-directory.controller'
+import { TextContentController } from './controllers/fs/text-content/text-content.controller'
+import { ThumbnailController } from './controllers/fs/thumbnail/thumbnail.controller'
+import { FileController } from './controllers/fs/file/file.controller'
 
 @Module({
   imports: [],
   controllers: [
     AppController,
+    LoginController,
     ListController,
     SizeController,
     DeleteController,
@@ -20,6 +24,8 @@ import { TextContentController } from './controllers/text-content/text-content.c
     ExistsController,
     AddDirectoryController,
     TextContentController,
+    ThumbnailController,
+    FileController,
   ],
   providers: [AppService],
 })

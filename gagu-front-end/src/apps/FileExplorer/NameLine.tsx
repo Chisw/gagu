@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react'
 import Toast from '../../components/EasyToast'
 import useFetch from '../../hooks/useFetch'
 import { line } from '../../utils'
-import { getExists, addDirectory, renameEntry, uploadFile } from '../../utils/api'
+import { FsApi } from '../../api'
 import { INVALID_NAME_CHAR_LIST } from '../../utils/constant'
 import { IEntry } from '../../utils/types'
 
@@ -39,10 +39,10 @@ export default function NameLine(props: NameLineProps) {
     setInputValue(e.target.value)
   }, [])
 
-  const { fetch: fetchExists, loading: loadingExist } = useFetch(getExists)
-  const { fetch: fetchNewDir, loading: loadingNewDir } = useFetch(addDirectory)
-  const { fetch: fetchRename, loading: loadingRename } = useFetch(renameEntry)
-  const { fetch: uploadFileToPath } = useFetch(uploadFile)
+  const { fetch: getExists, loading: loadingExist } = useFetch(FsApi.getExists)
+  const { fetch: addDirectory, loading: loadingNewDir } = useFetch(FsApi.addDirectory)
+  const { fetch: renameEntry, loading: loadingRename } = useFetch(FsApi.renameEntry)
+  const { fetch: uploadFile } = useFetch(FsApi.uploadFile)
 
   const handleName = useCallback(async (e: any) => {
     const oldName = entry?.name
@@ -65,14 +65,14 @@ export default function NameLine(props: NameLineProps) {
     }
 
     const newPath = `${currentDirPath}/${newName}`
-    const { exists } = await fetchExists(newPath)
+    const { exists } = await getExists(newPath)
     if (exists) {
       onFail('exist')
       Toast.warning('已存在')
     } else {
       if (oldName) {  // rename
         const oldPath = `${currentDirPath}/${oldName}`
-        const { ok } = await fetchRename(oldPath, newPath)
+        const { ok } = await renameEntry(oldPath, newPath)
         if (ok) {
           onSuccess({ ...entry!, name: newName })
         } else {
@@ -80,7 +80,7 @@ export default function NameLine(props: NameLineProps) {
         }
       } else {  // new dir
         if (create === 'dir') {
-          const { ok } = await fetchNewDir(newPath)
+          const { ok } = await addDirectory(newPath)
           if (ok) {
             onSuccess({ name: newName, type: 'directory', parentPath: currentDirPath })
           } else {
@@ -91,7 +91,7 @@ export default function NameLine(props: NameLineProps) {
           const suffix = newName.includes('.') ? '' : '.txt'
           const name = newName + suffix
           const file = new File([blob], name)
-          const data = await uploadFileToPath(currentDirPath, file)
+          const data = await uploadFile(currentDirPath, file)
           const isUploaded = !!data?.hasDon
           if (isUploaded) {
             onSuccess({ name, type: 'file', parentPath: currentDirPath })
@@ -101,7 +101,7 @@ export default function NameLine(props: NameLineProps) {
         }
       }
     }
-  }, [entry, currentDirPath, create, fetchExists, fetchNewDir, fetchRename, uploadFileToPath, onSuccess, onFail])
+  }, [entry, currentDirPath, create, getExists, addDirectory, renameEntry, uploadFile, onSuccess, onFail])
 
   return (
     <div className={`w-full leading-none ${gridMode ? 'mt-2 text-center' : 'ml-4 flex justify-center items-center'}`}>

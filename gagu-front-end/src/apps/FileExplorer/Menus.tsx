@@ -2,7 +2,7 @@ import { ContextMenu, Menu, MenuItem } from '@blueprintjs/core'
 import { IApp, IEntry, IOpenedEntry } from '../../utils/types'
 import APP_LIST from '../../utils/appList'
 import { useCallback, useMemo } from 'react'
-import { getBinFileUrl } from '../../utils/api'
+import { FsApi } from '../../api'
 import iina from '../../img/icons/iina.png'
 import RemixIcon from '../../img/remixicon'
 
@@ -12,7 +12,7 @@ const openInIINA = (entry: IEntry) => {
   if (!entry) return
   const { name, parentPath } = entry
   const a = document.createElement('a')
-  a.href = `iina://open?url=${getBinFileUrl(`${parentPath}/${name}`)}`
+  a.href = `iina://open?url=${FsApi.getBinFileUrl(`${parentPath}/${name}`)}`
   a.click()
 }
 

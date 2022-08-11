@@ -53,6 +53,10 @@ import { ReactComponent as QQ } from './qq.svg'
 import { ReactComponent as Wechat } from './wechat.svg'
 import { ReactComponent as Baidu } from './baidu.svg'
 import { ReactComponent as Camera } from './camera.svg'
+import { ReactComponent as FileText } from './file-text.svg'
+import { ReactComponent as Walk } from './walk.svg'
+import { ReactComponent as Computer } from './computer.svg'
+import { ReactComponent as Account } from './account.svg'
 
 
 const iconsMap: { [KEY: string]: React.FC } = {
@@ -110,6 +114,10 @@ const iconsMap: { [KEY: string]: React.FC } = {
   Wechat,
   Baidu,
   Camera,
+  FileText,
+  Walk,
+  Computer,
+  Account,
 }
 
 const RemixIcon: { [KEY: string]: any } = {}

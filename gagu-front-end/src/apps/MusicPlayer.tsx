@@ -1,7 +1,7 @@
 import { Spinner } from '@blueprintjs/core'
 import { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
-import { getBinFileUrl } from '../utils/api'
+import { FsApi } from '../api'
 import { APP_ID_MAP } from '../utils/appList'
 import { openedEntryListState } from '../utils/state'
 import { AppComponentProps, IOpenedEntry } from '../utils/types'
@@ -31,7 +31,7 @@ export default function MusicPlayer(props: AppComponentProps) {
     if (currentEntry) {
       setLoading(true)
       const { parentPath, name, isOpen } = currentEntry
-      const fileUrl = getBinFileUrl(`${parentPath}/${name}`)
+      const fileUrl = FsApi.getBinFileUrl(`${parentPath}/${name}`)
       setFileUrl(fileUrl)
 
       if (!isOpen) {
