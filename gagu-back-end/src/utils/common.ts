@@ -8,3 +8,8 @@ export const hashCode = (str: string) => {
   }
   return Math.abs(hash as number).toString(36) as string
 }
+
+export const getFileNameExtension = (name: string) => {
+  if (!name || !name.includes('.') || name.startsWith('.')) return undefined
+  return name.split('.').reverse()[0].toLowerCase()
+}

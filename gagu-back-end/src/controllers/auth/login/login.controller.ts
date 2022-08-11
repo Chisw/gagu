@@ -23,7 +23,7 @@ export class LoginController {
     @Body('password') password: string,
   ) {
     console.log(
-      'API/ADD_DIRECTORY:',
+      'API/LOGIN:',
       ' username: ',
       username,
       'password',

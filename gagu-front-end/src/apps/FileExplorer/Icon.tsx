@@ -1,18 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { IEntry, IEntryIcon } from '../../utils/types'
 import { get } from 'lodash'
-import { line } from '../../utils'
+import { GEN_THUMBNAIL_LIST, GEN_THUMBNAIL_VIDEO_LIST, line } from '../../utils'
 import { FsApi } from '../../api'
 import { CALLABLE_APP_LIST } from '../../utils/appList'
 import RemixIcon from '../../img/remixicon'
-
-
-const VIDEO_MATCH_LIST = ['mp4', 'mkv', 'avi', 'rm', 'rmvb']
-
-const THUMBNAIL_MATCH_LIST = [
-  'jpg', 'jpeg', 'png', 'gif', 'webp', 'pbm', 'bmp',
-  ...VIDEO_MATCH_LIST,
-]
 
 const DEFAULT_ENTRY_ICON: IEntryIcon = {
   type: 'unknown',
@@ -210,8 +202,8 @@ export default function Icon(props: IconProps) {
     icon, iconClassName, dirSubIcon, fileSubIcon,
   } = useMemo(() => {
     const { extension } = entry
-    const useThumbnail = extension && THUMBNAIL_MATCH_LIST.includes(extension)
-    const isVideo = extension && VIDEO_MATCH_LIST.includes(extension)
+    const useThumbnail = extension && GEN_THUMBNAIL_LIST.includes(extension)
+    const isVideo = extension && GEN_THUMBNAIL_VIDEO_LIST.includes(extension)
     const { isDir, entryIcon: { icon, iconClassName }, dirSubIcon, fileSubIcon } = getIconInfo(entry, small)
     return {
       useThumbnail, isVideo, isDir,
