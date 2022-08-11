@@ -1,4 +1,6 @@
 import { Module } from '@nestjs/common'
+import { ServeStaticModule } from '@nestjs/serve-static'
+import { join } from 'path'
 import { AppService } from './app.service'
 import { AppController } from './controllers/app.controller'
 import { LoginController } from './controllers/auth/login/login.controller'
@@ -13,7 +15,12 @@ import { ThumbnailController } from './controllers/fs/thumbnail/thumbnail.contro
 import { FileController } from './controllers/fs/file/file.controller'
 
 @Module({
-  imports: [],
+  imports: [
+    ServeStaticModule.forRoot({
+      serveRoot: '/public',
+      rootPath: join(__dirname, '..', 'public'),
+    }),
+  ],
   controllers: [
     AppController,
     LoginController,

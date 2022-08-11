@@ -1,6 +1,6 @@
 {
   "name": "gagu",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "description": "A cool web file management system",
   "bin": {
     "gagu": "./bin/gagu"
@@ -18,5 +18,17 @@
     "url": "https://github.com/Chisw/gagu/issues"
   },
   "homepage": "https://github.com/Chisw/gagu#readme",
-  "dependencies": {}
+  "dependencies": {
+    "@nestjs/common": "^9.0.0",
+    "@nestjs/core": "^9.0.0",
+    "@nestjs/platform-express": "^9.0.0",
+    "@nestjs/serve-static": "^3.0.0",
+    "gm": "^1.23.1",
+    "md5": "^2.3.0",
+    "reflect-metadata": "^0.1.13",
+    "rimraf": "^3.0.2",
+    "rxjs": "^7.2.0",
+    "thumbsupply": "^0.4.0"
+  },
+  "files": ["bin"]
 }

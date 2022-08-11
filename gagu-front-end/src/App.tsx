@@ -11,7 +11,6 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<DesktopPage />} />
-        <Route path="/public" element={<DesktopPage />} />
         <Route path="/login" element={<LoginPage />} />
         {/* <Route path="*" render={() => <Redirect to="/404" />} /> */}
       </Routes>

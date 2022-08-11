@@ -25,7 +25,7 @@ export default function LoginPage() {
     const res = await login(formData)
     if (res.success) {
       localStorage.setItem(GAGU_AUTH_CODE_KEY, res.authCode)
-      navigate('/public')
+      navigate('/')
     } else {
       Toast.danger(res.msg)
     }
