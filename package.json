@@ -1,6 +1,6 @@
 {
   "name": "gagu",
-  "version": "0.0.5",
+  "version": "0.0.8",
   "description": "A cool web file management system",
   "bin": {
     "gagu": "./bin/gagu"
@@ -29,6 +29,5 @@
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
     "thumbsupply": "^0.4.0"
-  },
-  "files": ["bin"]
+  }
 }

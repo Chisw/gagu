@@ -1,5 +1,14 @@
-#!/usr/bin/env node
+#!/usr/bin/env node 
 
-const { exec } = require('child_process')
-
-exec('cd app && node main.js & open http://127.0.0.1:9293 & xdg-open http://127.0.0.1:9293')
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const core_1 = require("@nestjs/core");
+const app_module_1 = require("./app.module");
+const utils_1 = require("./utils");
+async function bootstrap() {
+    const app = await core_1.NestFactory.create(app_module_1.AppModule);
+    app.enableCors();
+    await app.listen(9293);
+    (0, utils_1.initConfigDir)();
+}
+bootstrap();
