@@ -115,7 +115,7 @@ export default function Window(props: WindowProps) {
             `)}
           >
             <div
-              className="drag-handler flex items-center flex-shrink-0 flex-grow px-2 h-full"
+              className="drag-handler flex items-center flex-grow px-2 h-full truncate"
               onDoubleClick={handleZoom}
             >
               <div

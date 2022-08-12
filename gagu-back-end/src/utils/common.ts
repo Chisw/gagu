@@ -1,3 +1,5 @@
+import * as os from 'os'
+
 export const hashCode = (str: string) => {
   let hash = 0
   if (str.length === 0) return '0'
@@ -12,4 +14,13 @@ export const hashCode = (str: string) => {
 export const getFileNameExtension = (name: string) => {
   if (!name || !name.includes('.') || name.startsWith('.')) return undefined
   return name.split('.').reverse()[0].toLowerCase()
+}
+
+export const getDeviceInfo = () => {
+  const deviceInfo = {
+    username: os.userInfo().username,
+    hostname: os.hostname(),
+    platform: os.platform(),
+  }
+  return deviceInfo
 }

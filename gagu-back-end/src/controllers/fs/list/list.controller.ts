@@ -6,9 +6,70 @@ import {
   HttpStatus,
   Query,
 } from '@nestjs/common'
-import { getEntryList, USERNAME } from 'src/utils'
+import { IVolume } from 'src/types'
+import { getDeviceInfo, getEntryList } from 'src/utils'
 
-const deviceName = 'mac-mini'
+const { username, platform, hostname } = getDeviceInfo()
+const deviceName = `${hostname}[${platform}]`
+
+const rootEntryList: IVolume[] = []
+
+if (platform === 'darwin') {
+  rootEntryList.push(
+    {
+      name: 'Home',
+      type: 'directory',
+      size: undefined,
+      hidden: false,
+      lastModified: 0,
+      hasChildren: false,
+      mount: `/Users/${username}`,
+      isVolume: false,
+      spaceFree: 82341341312,
+      spaceTotal: 212341341312,
+    },
+    {
+      name: 'Volumes',
+      type: 'directory',
+      size: undefined,
+      hidden: false,
+      lastModified: 0,
+      hasChildren: false,
+      mount: '/Volumes',
+      isVolume: false,
+      spaceFree: 82341341312,
+      spaceTotal: 212341341312,
+    },
+  )
+} else if (platform === 'android') {
+  rootEntryList.push(
+    {
+      name: 'Home',
+      type: 'directory',
+      size: undefined,
+      hidden: false,
+      lastModified: 0,
+      hasChildren: false,
+      mount: '/data/data/com.termux/files/home',
+      isVolume: false,
+      spaceFree: 82341341312,
+      spaceTotal: 212341341312,
+    },
+    {
+      name: 'Shared',
+      type: 'directory',
+      size: undefined,
+      hidden: false,
+      lastModified: 0,
+      hasChildren: false,
+      mount: '/data/data/com.termux/files/home/storage/shared',
+      isVolume: false,
+      spaceFree: 82341341312,
+      spaceTotal: 212341341312,
+    },
+  )
+}
+
 @Controller('/api/list')
 export class ListController {
   @Get()
@@ -19,32 +80,7 @@ export class ListController {
     if (['', '/'].includes(path)) {
       return {
         deviceName,
-        entryList: [
-          {
-            name: `/Users/${USERNAME}`,
-            type: 'directory',
-            size: undefined,
-            hidden: false,
-            lastModified: 0,
-            hasChildren: false,
-            mount: `/Users/${USERNAME}`,
-            isVolume: false,
-            spaceFree: 82341341312,
-            spaceTotal: 212341341312,
-          },
-          {
-            name: '/Volumes',
-            type: 'directory',
-            size: undefined,
-            hidden: false,
-            lastModified: 0,
-            hasChildren: false,
-            mount: '/Volumes',
-            isVolume: false,
-            spaceFree: 82341341312,
-            spaceTotal: 212341341312,
-          },
-        ],
+        entryList: rootEntryList,
       }
     } else {
       console.log('API/LIST:', path)

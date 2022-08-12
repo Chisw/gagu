@@ -22,14 +22,13 @@ export default function VolumeList(props: VolumeListProps) {
     <>
       <div>
         {volumeList.map(({ name, mount, spaceFree, spaceTotal }, volumeIndex) => {
-          const title = `${name}`
           const isActive = mount === activeVolume
           const canVolumeClick = currentDirPath !== mount
           const spaceUsed = spaceTotal - spaceFree
           return (
             <div
               key={volumeIndex}
-              title={title}
+              title={name}
               className={line(`
                 mb-2 p-2 text-xs rounded cursor-pointer
                 ${isActive
@@ -41,16 +40,21 @@ export default function VolumeList(props: VolumeListProps) {
             >
               <div className="flex items-center">
                 <RemixIcon.Folder />
-                <span className="ml-1 truncate flex-grow">{title}</span>
-                <span className="font-din text-gray-500">
-                  {`${getBytesSize({ bytes: spaceUsed })}/${getBytesSize({ bytes: spaceTotal })}`.replace(/\s/g, '')}
-                </span>
+                <span className="ml-1 truncate flex-grow">{name}</span>
               </div>
               <div className="relative mt-1 h-1 text-gray-500 font-din bg-white rounded-sm overflow-hidden">
                 <div
                   className="absolute top-0 bottom-0 left-0 bg-blue-500"
                   style={{ width: `${spaceUsed / spaceTotal * 100}%` }}
                 />
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="transform scale-75 origin-left">
+                  {mount}
+                </span>
+                <span className="transform scale-75 origin-right font-din text-gray-500">
+                  {`${getBytesSize({ bytes: spaceUsed })}/${getBytesSize({ bytes: spaceTotal })}`.replace(/\s/g, '')}
+                </span>
               </div>
             </div>
           )
