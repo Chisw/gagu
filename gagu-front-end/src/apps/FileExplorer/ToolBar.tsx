@@ -1,4 +1,3 @@
-import { Button, InputGroup } from '@blueprintjs/core'
 import ToolButton from '../../components/ToolButton'
 import RemixIcon from '../../img/remixicon'
 
@@ -156,22 +155,20 @@ export default function ToolBar(props: ToolBarProps) {
 
         <div className={`${filterMode ? 'w-40' : 'w-8'} h-full transition-all duration-200`}>
           {filterMode ? (
-            <div className="px-1 h-full flex items-center">
-              <InputGroup
-                small
+            <div className="px-1 h-full flex justify-center items-center border-r">
+              <input
                 autoFocus
                 placeholder="在当前目录筛选"
-                rightElement={(
-                  <Button
-                    minimal
-                    icon="cross"
-                    onClick={cancel}
-                  />
-                )}
+                className="max-w-full text-xs outline-none"
                 value={filterText}
                 onChange={e => setFilterText(e.target.value)}
                 onBlur={e => !e.target.value && setFilterMode(false)}
                 onKeyUp={e => e.key === 'Escape' && cancel()}
+              />
+              <ToolButton
+                title="取消"
+                icon={<RemixIcon.Close />}
+                onClick={cancel}
               />
             </div>
           ) : (

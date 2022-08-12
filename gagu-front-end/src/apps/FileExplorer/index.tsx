@@ -19,7 +19,6 @@ import useDragSelect from '../../hooks/useDragSelect'
 import useDragOperations from '../../hooks/useDragOperations'
 import useShortcuts from '../../hooks/useShortcuts'
 import { pick, throttle } from 'lodash'
-import { ContextMenu, Spinner } from '@blueprintjs/core'
 import Menus from './Menus'
 import Pagination from '../../components/Pagination'
 import RemixIcon from '../../img/remixicon'
@@ -58,6 +57,7 @@ export default function FileExplorer(props: AppComponentProps) {
   const [currentPage, setCurrentPage] = useState(1)
   const [uploadInfo, setUploadInfo] = useState({ ratio: 0, speed: '' })
   const [abortController, setAbortController] = useState<AbortController | null>(null)
+  const [shownMenus, setShownMenus] = useState<any>(null)
 
   const rectRef = useRef(null)
   const containerRef = useRef(null)       // containerInnerRef 的容器，y-scroll-auto
@@ -518,7 +518,8 @@ export default function FileExplorer(props: AppComponentProps) {
 
   useShortcuts({
     type: 'keyup',
-    bindCondition: isTopWindow && !newDirMode && !newTxtMode && !renameMode && !filterMode && !ContextMenu.isOpen(),
+    // bindCondition: isTopWindow && !newDirMode && !newTxtMode && !renameMode && !filterMode && !ContextMenu.isOpen(),
+    bindCondition: isTopWindow && !newDirMode && !newTxtMode && !renameMode && !filterMode,
     shortcutMap: {
       'Delete': disabledMap.delete ? null : handleDeleteClick,
       'Escape': () => setSelectedEntryList([]),
@@ -548,12 +549,13 @@ export default function FileExplorer(props: AppComponentProps) {
     event.stopPropagation()
     const { target, clientX: left, clientY: top } = event
     const menuProps = {
+      top, left,
       target, currentDirPath, entryList, selectedEntryList,
       setOpenedEntryList, updateDirSize,
       setNewDirMode, setNewTxtMode, setSelectedEntryList,
       handleRefresh, handleRename, handleUploadClick, handleDownloadClick, handleDeleteClick,
     }
-    ContextMenu.show(<Menus {...menuProps} />, { top, left })
+    setShownMenus(<Menus {...menuProps} />)
   }, [
     currentDirPath, entryList, selectedEntryList,
     setOpenedEntryList, updateDirSize,
@@ -564,6 +566,7 @@ export default function FileExplorer(props: AppComponentProps) {
 
   return (
     <>
+      {shownMenus}
       <div className="absolute inset-0 flex">
         {/* side */}
         <Side
@@ -631,10 +634,7 @@ export default function FileExplorer(props: AppComponentProps) {
                 <div className="absolute right-0 top-0 m-1 flex items-center">
                   <span className="font-din text-xs text-gray-500">{uploadInfo.speed}</span>
                   &nbsp;
-                  <Spinner
-                    size={12}
-                    value={uploadInfo.ratio}
-                  />
+                  {uploadInfo.ratio}
                 </div>
               )}
               {/* create */}

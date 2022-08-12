@@ -1,19 +1,34 @@
-import { Toaster, IconName, Intent } from '@blueprintjs/core'
+interface ToastParams {
+  message: string
+  timeout: number
+  icon: any
+  intent: string
+}
 
-const toaster = Toaster.create({ position: 'top' })
+const toaster = {
+  show: (params: ToastParams) => {
+    const {
+      message,
+      // timeout,
+      // icon,
+      // intent,
+    } = params
+    alert(message)
+  },
+}
 
 const Toast = {
 
-  toast(message: string, timeout?: number, icon?: IconName, intent?: Intent) {
+  toast(message: string, timeout?: number, icon?: string, intent?: string) {
     toaster.show({
       message,
-      timeout,
+      timeout: timeout || 3000,
       icon,
-      intent,
+      intent: intent || '',
     })
   },
 
-  primary(message: string, timeout?: number, icon?: IconName) {
+  primary(message: string, timeout?: number, icon?: string) {
     Toast.toast(
       message,
       timeout || 5000,
@@ -22,7 +37,7 @@ const Toast = {
     )
   },
 
-  success(message: string, timeout?: number, icon?: IconName) {
+  success(message: string, timeout?: number, icon?: string) {
     Toast.toast(
       message,
       timeout || 2000,
@@ -31,7 +46,7 @@ const Toast = {
     )
   },
 
-  danger(message: string, timeout?: number, icon?: IconName) {
+  danger(message: string, timeout?: number, icon?: string) {
     Toast.toast(
       message,
       timeout || 3000,
@@ -40,7 +55,7 @@ const Toast = {
     )
   },
 
-  warning(message: string, timeout?: number, icon?: IconName) {
+  warning(message: string, timeout?: number, icon?: string) {
     Toast.toast(
       message,
       timeout || 5000,

@@ -1,4 +1,3 @@
-import { Button, Dialog } from '@blueprintjs/core'
 import { ReactNode, useEffect } from 'react'
 
 export interface ConfirmorProps {
@@ -23,8 +22,6 @@ export default function Confirmor(props: ConfirmorProps) {
     confirmText = '确定',
     onCancel = () => { },
     onConfirm = () => { },
-    canEscapeKeyClose = true,
-    canOutsideClickClose = true,
   } = props
 
   useEffect(() => {
@@ -41,33 +38,36 @@ export default function Confirmor(props: ConfirmorProps) {
   }, [isOpen, onConfirm])
 
   return (
-    <Dialog
-      usePortal={false}
-      isOpen={isOpen}
-      canEscapeKeyClose={canEscapeKeyClose}
-      canOutsideClickClose={canOutsideClickClose}
-      className="w-72 max-w-full bg-white shadow-xl border p-4 select-none"
-      backdropClassName="bg-white-700 bg-hazy-10"
-      onClose={onCancel}
-    >
-      <div className="pb-4">
-        {content || children}
-      </div>
-      <div className="flex -mx-1">
-        <Button
-          className="mx-1 w-full"
-          onClick={onCancel}
-        >
-          {cancelText}
-        </Button>
-        <Button
-          intent="primary"
-          className="mx-1 w-full"
-          onClick={onConfirm}
-        >
-          {confirmText}
-        </Button>
-      </div>
-    </Dialog>
+    <>
+      {isOpen && (
+        <div className="fixed inset-0 flex justify-center items-center bg-white-700 bg-hazy-10">
+          <div
+            // usePortal={false}
+            // canEscapeKeyClose={canEscapeKeyClose}
+            // canOutsideClickClose={canOutsideClickClose}
+            className="w-72 max-w-full bg-white shadow-xl border p-4 select-none"
+            // onClose={onCancel}
+          >
+            <div className="pb-4">
+              {content || children}
+            </div>
+            <div className="flex -mx-1">
+              <button
+                className="mx-1 w-full"
+                onClick={onCancel}
+              >
+                {cancelText}
+              </button>
+              <button
+                className="mx-1 w-full bg-blue-500 text-white"
+                onClick={onConfirm}
+              >
+                {confirmText}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   )
 }

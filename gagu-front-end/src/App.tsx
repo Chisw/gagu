@@ -1,10 +1,7 @@
 import './css/index.css'
-import { FocusStyleManager } from '@blueprintjs/core'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import DesktopPage from './pages/DesktopPage'
 import LoginPage from './pages/LoginPage'
-
-FocusStyleManager.onlyShowFocusOnTabs()
 
 function App() {
   return (

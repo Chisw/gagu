@@ -64,7 +64,7 @@ export default function PathLink(props: PathLinkProps) {
           const disabled = mountIndex > mountList.length - 2 - (selectedLen === 1 ? 1 : 0)
           return (
             <span key={encodeURIComponent(fullPath)}>
-              <RemixIcon.ChevronRight className="transform scale-75" />
+              <RemixIcon.ChevronRight size={12} />
               <span
                 title={fullPath}
                 className={disabled ? '' : 'cursor-pointer hover:text-black'}
@@ -77,13 +77,13 @@ export default function PathLink(props: PathLinkProps) {
         })}
         <span
           title="复制"
-          className="invisible ml-1 px-1 cursor-pointer group-hover:visible text-xs hover:text-gray-500 active:opacity-50"
+          className="invisible ml-1 cursor-pointer group-hover:visible text-xs hover:text-gray-500 active:opacity-50"
           onClick={() => {
             copy(`${activeVolume}/${mountList.join('/')}`)
             Toast.toast('路径复制成功', 1000)
           }}
         >
-          <RemixIcon.Copy className="inline transform scale-75 -mt-2px" />
+          <RemixIcon.Copy size={12} />
         </span>
       </div>
       <div className="flex-shrink-0 flex items-center pl-4 pr-1 font-din">

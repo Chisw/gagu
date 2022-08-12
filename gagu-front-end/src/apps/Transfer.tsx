@@ -1,6 +1,7 @@
-import { Tag } from '@blueprintjs/core'
 import { useRecoilState } from 'recoil'
+import { line } from '../utils'
 import { uploadTaskListState } from '../utils/state'
+
 
 export default function Transfer() {
 
@@ -26,12 +27,14 @@ export default function Transfer() {
               >
                 <span>{indexStr}. {name}</span>
                 &nbsp;
-                <Tag
-                  round
-                  intent={isSuccess ? 'success' : 'none'}
+                <span
+                  className={line(`
+                    inline-block px-2 py-1 text-white rounded-full
+                    ${isSuccess ? 'bg-green-500' : 'bg-gray-400'}
+                  `)}
                 >
                   {status}
-                </Tag>
+                </span>
               </div>
             )
           })}

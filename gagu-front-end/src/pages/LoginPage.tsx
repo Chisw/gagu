@@ -1,12 +1,12 @@
 import bg from '../img/bg.jpg'
 import { useNavigate } from 'react-router-dom'
-import { Button, InputGroup } from '@blueprintjs/core'
 import { useCallback, useState } from 'react'
 import useFetch from '../hooks/useFetch'
 import { AuthApi } from '../api'
 import md5 from 'md5'
 import { GAGU_AUTH_CODE_KEY } from '../utils'
 import Toast from '../components/EasyToast'
+import RemixIcon from '../img/remixicon'
 
 
 export default function LoginPage() {
@@ -45,27 +45,29 @@ export default function LoginPage() {
                 style={{ backgroundImage: `url("${bg}")` }}
               />
             </div>
-            <InputGroup
-              leftIcon="user"
+            <input
               placeholder="账户"
-              className="mt-6"
+              className="px-2 py-1 w-full mt-6 text-sm outline-none"
+              maxLength={16}
               value={username}
               onChange={(e: any) => setUsername(e.target.value.trim())}
             />
-            <InputGroup
-              type="password"
-              leftIcon="key"
-              placeholder="密码"
-              className="mt-4"
-              value={password}
-              onChange={(e: any) => setPassword(e.target.value)}
-              rightElement={(
-                <Button
-                  icon="arrow-right"
-                  onClick={handleLogin}
-                />
-              )}
-            />
+            <div className="relative mt-4">
+              <input
+                type="password"
+                placeholder="密码"
+                className="px-2 py-1 w-full text-sm outline-none"
+                maxLength={16}
+                value={password}
+                onChange={(e: any) => setPassword(e.target.value)}
+              />
+              <button
+                className="absolute top-0 right-0 w-8 h-full hover:bg-gray-100"
+                onClick={handleLogin}
+              >
+                <RemixIcon.ArrowRight />
+              </button>
+            </div>
           </div>
         </div>
       </div>

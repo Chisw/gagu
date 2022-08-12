@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { Button, ButtonGroup, InputGroup } from '@blueprintjs/core'
+import RemixIcon from '../img/remixicon'
 
 export interface PaginationProps {
   pageSize: number
@@ -54,68 +54,81 @@ export default function Pagination(props: PaginationProps) {
 
   return (
     <div className="flex p-1 bg-white rounded-lg shadow-lg select-none">
-      <ButtonGroup className="bg-white font-din">
-        <Button
-          icon="chevron-left"
+      <div className="flex items-center bg-white font-din">
+        <button
+          className="w-4 hover:bg-gray-100"
           onClick={() => onChange(prev)}
           disabled={current === FIRST}
-        />
+        >
+          <RemixIcon.ArrowLeft />
+        </button>
+      
 
-        <Button
+        <button
+          className="w-4 hover:bg-gray-100"
           onClick={() => onChange(FIRST)}
-          active={current === FIRST}
+          disabled={current === FIRST}
         >
           {FIRST}
-        </Button>
+        </button>
 
         {isLong && groupStart >= (FIRST + GROUP_OFFSET) && ( 
-          <Button icon="more" />
+          <button className="w-4 hover:bg-gray-100">...</button>
         )}
 
         {GROUP.filter(i => i < groupLen).map(index => {
           const page = groupStart + index
           return (
-            <Button
+            <button
+              className="w-4 hover:bg-gray-100"
               key={index}
               onClick={() => onChange(page)}
-              active={page === current}
+              disabled={page === current}
             >
               {page}
-            </Button>
+            </button>
           )
         })}
 
         {isLong && groupEnd < pages && (
-          <Button icon="more" />
+          <button className="w-4 hover:bg-gray-100">...</button>
         )}
 
         {pages !== FIRST && (
-          <Button
-            active={current === pages}
+          <button
+            className="w-4 hover:bg-gray-100"
             onClick={() => onChange(pages)}
+            disabled={current === pages}
           >
             {pages}
-          </Button>
+          </button>
         )}
 
-        <Button
-          icon="chevron-right"
+        <button
+          className="w-4 hover:bg-gray-100"
           onClick={() => onChange(next)}
           disabled={current === pages}
-        />
-      </ButtonGroup>
+        >
+          <RemixIcon.ArrowRight />
+        </button>
+      </div>
 
       {isLong && (
-        <InputGroup
-          className="ml-2 w-20"
-          placeholder="页码"
-          value={jumpValue}
-          onChange={(e: any) => setJumpValue(e.target.value)}
-          onKeyUp={handleJump}
-          rightElement={(
-            <Button icon="circle-arrow-right" onClick={() => handleJump({ key: 'Enter' })} />
-          )}
-        />
+        <>
+          <input
+            className="ml-2 w-10"
+            placeholder="页码"
+            value={jumpValue}
+            onChange={(e: any) => setJumpValue(e.target.value)}
+            onKeyUp={handleJump}
+          />
+          <button
+            className="w-4 hover:bg-gray-100"
+            onClick={() => handleJump({ key: 'Enter' })}
+          >
+            <RemixIcon.ArrowRight />
+          </button>
+        </>
       )}
     </div>
   )

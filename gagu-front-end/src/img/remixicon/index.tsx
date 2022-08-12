@@ -57,6 +57,7 @@ import { ReactComponent as FileText } from './file-text.svg'
 import { ReactComponent as Walk } from './walk.svg'
 import { ReactComponent as Computer } from './computer.svg'
 import { ReactComponent as Account } from './account.svg'
+import { ReactComponent as Loader } from './loader.svg'
 
 
 const iconsMap: { [KEY: string]: React.FC } = {
@@ -118,18 +119,23 @@ const iconsMap: { [KEY: string]: React.FC } = {
   Walk,
   Computer,
   Account,
+  Loader,
 }
 
 const RemixIcon: { [KEY: string]: any } = {}
 
 Object.entries(iconsMap).forEach(([name, icon]) => {
-  RemixIcon[name] = (props: any) => {
-    const { size } = props
+  RemixIcon[name] = (props: { size?: number, className?: string }) => {
+    const {
+      size = 16,
+      className = '',
+    } = props
     return (
-      <span className="bp3-icon">
+      <span className={`inline-block ${className}`}>
         {(icon as any).render({
-          width: size || 16,
-          height: size || 16,
+          width: size,
+          height: size,
+          fill: 'currentColor',
         })}
       </span>
     )

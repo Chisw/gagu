@@ -1,4 +1,4 @@
-import { Spinner } from '@blueprintjs/core'
+import { Spinner } from '../components/base'
 import { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { FsApi } from '../api'

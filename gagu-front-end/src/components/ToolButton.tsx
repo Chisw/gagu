@@ -1,4 +1,4 @@
-import { Spinner } from '@blueprintjs/core'
+import { Spinner } from '../components/base'
 import { ReactNode } from 'react'
 import { line } from '../utils'
 

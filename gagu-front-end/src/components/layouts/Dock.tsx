@@ -9,7 +9,6 @@ import useFetch from '../../hooks/useFetch'
 import { FsApi } from '../../api'
 import { DOCUMENT_TITLE } from '../../utils/constant'
 import { rootInfoConverter } from '../../utils/converters'
-import { Button, Classes, Popover } from '@blueprintjs/core'
 import RemixIcon from '../../img/remixicon'
 import { useNavigate } from 'react-router-dom'
 
@@ -111,34 +110,29 @@ export default function Dock() {
     <>
       <div className="fixed z-20 right-0 bottom-0 left-0 p-2 bg-white-500 flex justify-between items-center bg-hazy-100 border-t border-gray-500 border-opacity-20 bg-clip-padding">
         <div className="w-32 flex-shrink-0">
-          <Popover
-            minimal
-            position="top-left"
-            className="rounded-none"
-            popoverClassName="bg-red-500 force-outline-none"
-          >
-            <div className="w-6 h-6 rounded flex justify-center items-center cursor-pointer hover:bg-white-600 hover:text-black active:bg-white-500">
-              <RemixIcon.Dashboard />
-            </div>
-            <div className="w-56 p-2">
-              <div className="mb-1 p-1 border-b text-xs text-gray-600">
-                {loading ? '系统加载中' : `${rootInfo.deviceName} 已连接`}
+          <div className="relative w-6 h-6 rounded flex justify-center items-center cursor-pointer hover:bg-white-600 hover:text-black active:bg-white-500 group">
+            <RemixIcon.Dashboard />
+            <div
+              className="absolute left-0 bottom-0 mb-6 bg-white-600 hidden group-hover:block bg-hazy-50"
+            >
+
+              <div className="w-56 p-2">
+                <div className="mb-1 p-1 border-b text-xs text-gray-600">
+                  {loading ? '系统加载中' : `${rootInfo.deviceName} 已连接`}
+                </div>
+                {buttonList.map(({ text, icon, onClick }, buttonIndex) => (
+                  <button
+                    key={buttonIndex}
+                    className="mb-1 w-full text-left hover:bg-gray-100"
+                    onClick={onClick}
+                  >
+                    {icon}
+                    {text}
+                  </button>
+                ))}
               </div>
-              {buttonList.map(({ text, icon, onClick }, buttonIndex) => (
-                <Button
-                  key={buttonIndex}
-                  small
-                  minimal
-                  alignText="left"
-                  icon={icon}
-                  className={`mb-1 w-full ${Classes.POPOVER_DISMISS}`}
-                  onClick={onClick}
-                >
-                  {text}
-                </Button>
-              ))}
             </div>
-          </Popover>
+          </div>
         </div>
         <div className="flex items-center">
           {APP_LIST.map(app => {

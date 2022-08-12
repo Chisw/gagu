@@ -1,4 +1,3 @@
-import { ContextMenu, Menu, MenuItem } from '@blueprintjs/core'
 import { IApp, IEntry, IOpenedEntry } from '../../utils/types'
 import APP_LIST from '../../utils/appList'
 import { useCallback, useMemo } from 'react'
@@ -17,6 +16,8 @@ const openInIINA = (entry: IEntry) => {
 }
 
 interface MenusProps {
+  top: number
+  left: number
   target: any
   currentDirPath: string
   entryList: IEntry[]
@@ -36,6 +37,8 @@ interface MenusProps {
 export default function Menus(props: MenusProps) {
 
   const {
+    top,
+    left,
     target,
     currentDirPath,
     entryList,
@@ -191,33 +194,37 @@ export default function Menus(props: MenusProps) {
   ])
 
   return (
-    <Menu className="force-outline-none">
+    <div
+      className="fixed z-10 bg-white shadow-lg force-outline-none"
+      style={{ top, left }}
+    >
       {actions
         .filter(({ isShow }) => isShow)
         .map(({ icon, text, onClick, children }) => (
-          <MenuItem
+          <div
             key={encodeURIComponent(text)}
-            icon={icon}
-            text={text}
             onClick={() => {
               onClick()
-              !children && ContextMenu.hide()
+              // !children && ContextMenu.hide()
             }}
           >
+            {icon}
+            {text}
             {children && children.map(({ icon, text, onClick }) => (
-              <MenuItem
+              <div
                 key={encodeURIComponent(text)}
-                icon={<span className="bp3-icon">{icon}</span>}
-                text={text}
                 onClick={() => {
                   onClick()
-                  ContextMenu.hide()
+                  // ContextMenu.hide()
                 }}
-              />
+              >
+                {icon}
+                {text}
+              </div>
             ))}
-          </MenuItem>
+          </div>
         ))
       }
-    </Menu>
+    </div>
   )
 }
