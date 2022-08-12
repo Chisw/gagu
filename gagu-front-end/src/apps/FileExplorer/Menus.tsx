@@ -32,6 +32,7 @@ interface MenusProps {
   handleUploadClick: () => void
   handleDownloadClick: (entries?: IEntry[]) => void
   handleDeleteClick: (entries?: IEntry[]) => void
+  onClose: () => void
 }
 
 export default function Menus(props: MenusProps) {
@@ -53,6 +54,7 @@ export default function Menus(props: MenusProps) {
     handleUploadClick,
     handleDownloadClick,
     handleDeleteClick,
+    onClose,
   } = props
 
   const availableAppMap = useMemo(() => {
@@ -195,33 +197,42 @@ export default function Menus(props: MenusProps) {
 
   return (
     <div
-      className="fixed z-10 bg-white shadow-lg force-outline-none"
-      style={{ top, left }}
+      className="absolute z-10 py-1 w-44 bg-white-900 bg-hazy-50 shadow-lg border"
+      style={{ top: top - 24, left: left - 134 }}
     >
       {actions
         .filter(({ isShow }) => isShow)
         .map(({ icon, text, onClick, children }) => (
           <div
             key={encodeURIComponent(text)}
+            className="px-2 py-1 hover:bg-gray-100 cursor-pointer text-sm"
             onClick={() => {
               onClick()
-              // !children && ContextMenu.hide()
+              !children && onClose()
             }}
           >
-            {icon}
-            {text}
-            {children && children.map(({ icon, text, onClick }) => (
-              <div
-                key={encodeURIComponent(text)}
-                onClick={() => {
-                  onClick()
-                  // ContextMenu.hide()
-                }}
-              >
-                {icon}
-                {text}
-              </div>
-            ))}
+            <div className="relative flex items-center group">
+              {icon}
+              <span className="ml-2 flex-grow">{text}</span>
+              {children && <RemixIcon.ArrowRight />}
+              {children && (
+                <div className="absolute top-0 left-0 w-44 ml-40 hidden group-hover:block py-1 bg-white-900 bg-hazy-50 shadow-lg border">
+                  {children.map(({ icon, text, onClick }) => (
+                    <div
+                      key={encodeURIComponent(text)}
+                      className="px-2 py-1 hover:bg-gray-100 cursor-pointer text-sm flex items-center"
+                      onClick={() => {
+                        onClick()
+                        onClose()
+                      }}
+                    >
+                      {icon}
+                      <span className="ml-2 flex-grow">{text}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         ))
       }

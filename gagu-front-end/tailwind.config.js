@@ -149,6 +149,7 @@ module.exports = {
       },
       transitionProperty: {
         'all': 'all',
+        'background': 'background',
         'box-shadow': 'box-shadow',
       },
     },

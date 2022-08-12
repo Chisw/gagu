@@ -70,8 +70,13 @@ export default function Dock() {
       },
       {
         text: '退出',
-        icon: <RemixIcon.ShutDown />,
+        icon: <RemixIcon.Logout />,
         onClick: () => navigate('/login'),
+      },
+      {
+        text: '关闭系统',
+        icon: <RemixIcon.ShutDown />,
+        onClick: () => {},
       },
     ]
   }, [fetch, navigate])
@@ -110,24 +115,24 @@ export default function Dock() {
     <>
       <div className="fixed z-20 right-0 bottom-0 left-0 p-2 bg-white-500 flex justify-between items-center bg-hazy-100 border-t border-gray-500 border-opacity-20 bg-clip-padding">
         <div className="w-32 flex-shrink-0">
-          <div className="relative w-6 h-6 rounded flex justify-center items-center cursor-pointer hover:bg-white-600 hover:text-black active:bg-white-500 group">
+          <div className="relative w-6 h-6 flex justify-center items-center hover:bg-white-600 hover:text-black active:bg-white-500 group">
             <RemixIcon.Dashboard />
-            <div
-              className="absolute left-0 bottom-0 mb-6 bg-white-600 hidden group-hover:block bg-hazy-50"
-            >
+            <div className="absolute left-0 bottom-0 mb-6 bg-white-900 hidden group-hover:block">
 
-              <div className="w-56 p-2">
-                <div className="mb-1 p-1 border-b text-xs text-gray-600">
+              <div className="w-56 py-1">
+                <div className="mb-1 p-2 border-b text-xs text-gray-600">
                   {loading ? '系统加载中' : `${rootInfo.deviceName} 已连接`}
                 </div>
                 {buttonList.map(({ text, icon, onClick }, buttonIndex) => (
                   <button
                     key={buttonIndex}
-                    className="mb-1 w-full text-left hover:bg-gray-100"
+                    className="mb-1 px-2 py-1 w-full text-left hover:bg-gray-200 flex items-center select-none"
                     onClick={onClick}
                   >
                     {icon}
-                    {text}
+                    <span className="ml-2 text-sm">
+                      {text}
+                    </span>
                   </button>
                 ))}
               </div>

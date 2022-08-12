@@ -548,12 +548,14 @@ export default function FileExplorer(props: AppComponentProps) {
     event.preventDefault()
     event.stopPropagation()
     const { target, clientX: left, clientY: top } = event
+    const onClose = () => setShownMenus(null)
     const menuProps = {
       top, left,
       target, currentDirPath, entryList, selectedEntryList,
       setOpenedEntryList, updateDirSize,
       setNewDirMode, setNewTxtMode, setSelectedEntryList,
       handleRefresh, handleRename, handleUploadClick, handleDownloadClick, handleDeleteClick,
+      onClose,
     }
     setShownMenus(<Menus {...menuProps} />)
   }, [
@@ -641,7 +643,7 @@ export default function FileExplorer(props: AppComponentProps) {
               {(newDirMode || newTxtMode) && (
                 <div
                   className={line(`
-                    overflow-hidden rounded select-none hover:bg-gray-100
+                    overflow-hidden rounded select-none
                     ${gridMode ? 'm-2 px-1 py-2 w-28' : 'mb-1 px-2 py-1 w-full flex items-center'}
                   `)}
                 >
@@ -680,7 +682,7 @@ export default function FileExplorer(props: AppComponentProps) {
                     data-selected={isSelected}
                     draggable
                     className={line(`
-                      entry-node overflow-hidden rounded select-none transition-opacity duration-300
+                      entry-node overflow-hidden rounded select-none transition-background duration-300
                       ${gridMode ? 'm-2 px-1 py-2 w-28' : 'mb-1 px-2 py-1 w-full flex items-center'}
                       ${!gridMode && isSelected ? 'bg-blue-600' : 'hover:bg-gray-100'}
                       ${isSelected ? 'bg-gray-100' : ''}
