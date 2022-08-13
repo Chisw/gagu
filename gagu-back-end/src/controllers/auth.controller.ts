@@ -4,20 +4,22 @@ import {
   Body,
 } from '@nestjs/common'
 import * as md5 from 'md5'
+import { Public } from '../utils/api.decorator'
 
 const userMap: { [KEY: string]: string } = {
-  chisw: md5('9293'),
+  admin: md5('9293'),
 }
 
-@Controller('/api/auth')
+@Controller('/auth')
 export class AuthController {
+  @Public()
   @Post('login')
   findAll(
     @Body('username') username: string,
     @Body('password') password: string,
   ) {
     console.log(
-      'API/LOGIN:',
+      'API/AUTH/LOGIN:',
       ' username: ',
       username,
       'password',

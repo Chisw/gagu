@@ -22,11 +22,12 @@ import {
 } from 'src/utils'
 import { Response } from 'express'
 import { getMockRootEntryList } from 'src/utils/mock'
+import { Public } from 'src/utils/api.decorator'
 
 const { platform, hostname } = getDeviceInfo()
 const deviceName = `${hostname}[${platform}]`
 
-@Controller('/api/fs')
+@Controller('/fs')
 export class FsController {
   @Get('list')
   findAll(@Query('path') path: string) {
@@ -84,20 +85,24 @@ export class FsController {
   }
 
   @Delete('delete')
-  delete(@Query('path') path: string) {
+  remove(@Query('path') path: string) {
     console.log('API/FS/DELETE:', path)
     deleteEntry(path)
     return { success: true }
   }
 
+  // TODO
+  @Public()
   @Get('thumbnail')
   @Header('Content-Type', 'image/png')
   async readThumbnail(@Query('path') path: string, @Res() response: Response) {
-    console.log('API/THUMBNAIL:', path)
+    console.log('API/FS/THUMBNAIL:', path)
     const thumbnailPath = await getThumbnail(path)
     response.download(thumbnailPath)
   }
 
+  // TODO
+  @Public()
   @Get('stream')
   readStream(@Query('path') path: string, @Res() response: Response) {
     console.log('API/FS/STREAM:', path)

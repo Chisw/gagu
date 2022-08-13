@@ -26,6 +26,6 @@ cat bin/main.js >> bin/gagu
 
 chmod 777 bin/gagu
 
-echo '\n✨  Build gagu bin successfully. \n\n'
+echo '\n✨  Build gagu bin successfully. \n'
 
 echo '🔔  Update package version before publish to npm. \n'

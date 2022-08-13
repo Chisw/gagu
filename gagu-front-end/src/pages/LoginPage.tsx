@@ -12,7 +12,7 @@ import RemixIcon from '../img/remixicon'
 export default function LoginPage() {
 
   const navigate = useNavigate()
-  const [username, setUsername] = useState('chisw')
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
   const { fetch: login } = useFetch(AuthApi.login)
@@ -62,6 +62,7 @@ export default function LoginPage() {
                 onChange={(e: any) => setPassword(e.target.value)}
               />
               <button
+                disabled={!username || !password}
                 className="absolute top-0 right-0 w-8 h-full hover:bg-gray-100"
                 onClick={handleLogin}
               >

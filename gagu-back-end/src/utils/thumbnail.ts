@@ -1,13 +1,15 @@
-import { createReadStream, unlinkSync } from 'fs'
-import { getFileNameExtension, hashCode } from './common'
+import { createReadStream, statSync, unlinkSync } from 'fs'
+import { getFileNameExtension } from './common'
 import { GEN_THUMBNAIL_VIDEO_LIST, USERNAME } from './constant'
 import { getExists } from './fs'
 import * as gm from 'gm'
 import * as thumbsupply from 'thumbsupply'
+import * as md5 from 'md5'
 
 export const getThumbnail = async (path: string) => {
-  const pathId = hashCode(path)
-  const thumbnailPath = `/Users/${USERNAME}/.gagu/thumbnail/thumbnail-${pathId}.png`
+  const { mtimeMs } = statSync(path)
+  const thumbnailId = md5(`${path}-${mtimeMs}`)
+  const thumbnailPath = `/Users/${USERNAME}/.gagu/thumbnail/${thumbnailId}`
 
   if (getExists(thumbnailPath)) {
     return thumbnailPath
@@ -27,20 +29,19 @@ export const getThumbnail = async (path: string) => {
   }
 
   await new Promise(async (resolve, reject) => {
-
-  gm(createReadStream(targetPath))
-    .selectFrame(4)
-    .resize(100)
-    .noProfile()
-    .write(thumbnailPath, (err) => {
-      if (err) {
-        console.log(err)
-        reject(err)
-      } else {
-        resolve(thumbnailPath)
-        isGenVideo && unlinkSync(targetPath)
-      }
-    })
+    gm(createReadStream(targetPath))
+      .selectFrame(4)
+      .resize(48)
+      .noProfile()
+      .write(thumbnailPath, (err) => {
+        if (err) {
+          console.log(err)
+          reject(err)
+        } else {
+          resolve(thumbnailPath)
+          isGenVideo && unlinkSync(targetPath)
+        }
+      })
   })
   return thumbnailPath
 }

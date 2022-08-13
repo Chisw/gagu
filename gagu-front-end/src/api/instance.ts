@@ -2,15 +2,12 @@ import axios, { AxiosError } from 'axios'
 import Toast from '../components/EasyToast'
 import { BASE_URL, GAGU_AUTH_CODE_KEY } from '../utils/constant'
 
-const gaguAuthCode = localStorage.getItem(GAGU_AUTH_CODE_KEY) || ''
-
 const instance = axios.create({
   baseURL: BASE_URL,
   timeout: 10 * 1000,
   timeoutErrorMessage: 'timeout-error',
   headers: {
     'Content-Type': 'application/json; charset=UTF-8',
-    'gagu-auth-code': gaguAuthCode,
   },
 })
 
@@ -19,6 +16,11 @@ instance.interceptors.request.use(config => {
   // const { url, method } = config
   // if (pass) config.url += `&pass=${pass}`
   // if (method === 'post' && url?.includes('?cmd=file')) config.timeout = 0
+  const gaguAuthCode = localStorage.getItem(GAGU_AUTH_CODE_KEY) || ''
+  config.headers = {
+    ...config.headers,
+    'Authorization': gaguAuthCode,
+  }
   return config
 })
 
@@ -29,9 +31,10 @@ instance.interceptors.response.use(response => response, (error: AxiosError) => 
   }
   if (!response) return
   const { status } = response
-  if (status === 401) {
-    window.history.replaceState(null, '', '/login')
-    window.location.reload()
+  if ([401, 403].includes(status)) {
+    window.location.href = '/login'
+    // window.history.replaceState(null, '', '/login')
+    // window.location.reload()
   } else if (status === 502) {
     Toast.toast('请求失败')
   }
