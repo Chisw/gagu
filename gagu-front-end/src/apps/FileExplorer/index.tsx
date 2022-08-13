@@ -366,14 +366,14 @@ export default function FileExplorer(props: AppComponentProps) {
       onCancel: close,
       onConfirm: async () => {
         close()
-        const okList: boolean[] = []
+        const successList: boolean[] = []
         for (const entry of processList) {
           const { name } = entry
-          const { ok } = await deleteEntry(`${currentDirPath}/${name}`)
+          const { success } = await deleteEntry(`${currentDirPath}/${name}`)
           document.querySelector(`.entry-node[data-name="${name}"]`)?.setAttribute('style', 'opacity:0;')
-          okList.push(ok)
+          successList.push(success)
         }
-        if (okList.every(Boolean)) {
+        if (successList.every(Boolean)) {
           handleRefresh()
           Toast.toast('删除成功', 2000)
         }
@@ -424,8 +424,8 @@ export default function FileExplorer(props: AppComponentProps) {
   const updateDirSize = useCallback(async (entry: IEntry) => {
     const { name, parentPath } = entry
     const path = `${parentPath}/${name}`
-    const { hasDon, size } = await getDirectorySize(path)
-    hasDon && setSizeMap({ ...sizeMap, [path]: size })
+    const { success, size } = await getDirectorySize(path)
+    success && setSizeMap({ ...sizeMap, [path]: size })
   }, [getDirectorySize, sizeMap, setSizeMap])
 
   const handleEntryClick = useCallback((e: any, entry: IEntry) => {

@@ -31,7 +31,7 @@ export default function MusicPlayer(props: AppComponentProps) {
     if (currentEntry) {
       setLoading(true)
       const { parentPath, name, isOpen } = currentEntry
-      const fileUrl = FsApi.getBinFileUrl(`${parentPath}/${name}`)
+      const fileUrl = FsApi.getFileStreamUrl(`${parentPath}/${name}`)
       setFileUrl(fileUrl)
 
       if (!isOpen) {

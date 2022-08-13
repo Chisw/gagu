@@ -19,7 +19,7 @@ export default function CommonToolButtons(props: CommonToolButtonsProps) {
   const [shareConfirmorProps, setShareConfirmorProps] = useState<ConfirmorProps>({ isOpen: false })
 
   const handleShare = useCallback(() => {
-    const url = FsApi.getBinFileUrl(`${currentEntry!.parentPath}/${currentEntry!.name}`)
+    const url = FsApi.getFileStreamUrl(`${currentEntry!.parentPath}/${currentEntry!.name}`)
     const close = () => setShareConfirmorProps({ isOpen: false })
 
     setShareConfirmorProps({

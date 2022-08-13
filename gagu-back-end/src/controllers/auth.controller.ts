@@ -1,9 +1,6 @@
 import {
   Controller,
   Post,
-  Header,
-  HttpCode,
-  HttpStatus,
   Body,
 } from '@nestjs/common'
 import * as md5 from 'md5'
@@ -12,12 +9,9 @@ const userMap: { [KEY: string]: string } = {
   chisw: md5('9293'),
 }
 
-@Controller('/api/login')
-export class LoginController {
-  @Post()
-  @HttpCode(HttpStatus.OK)
-  @Header('Content-Type', 'application/json')
-  @Header('Access-Control-Allow-Origin', '*')
+@Controller('/api/auth')
+export class AuthController {
+  @Post('login')
   findAll(
     @Body('username') username: string,
     @Body('password') password: string,
@@ -41,8 +35,8 @@ export class LoginController {
       msg: success
         ? 'OK'
         : passwordRecord === undefined
-        ? '用户不存在'
-        : '密码错误',
+          ? '用户不存在'
+          : '密码错误',
     }
   }
 }

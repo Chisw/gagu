@@ -72,16 +72,16 @@ export default function NameLine(props: NameLineProps) {
     } else {
       if (oldName) {  // rename
         const oldPath = `${currentDirPath}/${oldName}`
-        const { ok } = await renameEntry(oldPath, newPath)
-        if (ok) {
+        const { success } = await renameEntry(oldPath, newPath)
+        if (success) {
           onSuccess({ ...entry!, name: newName })
         } else {
           onFail('net_error')
         }
       } else {  // new dir
         if (create === 'dir') {
-          const { ok } = await addDirectory(newPath)
-          if (ok) {
+          const { success } = await addDirectory(newPath)
+          if (success) {
             onSuccess({ name: newName, type: 'directory', parentPath: currentDirPath })
           } else {
             onFail('net_error')

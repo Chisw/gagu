@@ -11,7 +11,7 @@ const openInIINA = (entry: IEntry) => {
   if (!entry) return
   const { name, parentPath } = entry
   const a = document.createElement('a')
-  a.href = `iina://open?url=${FsApi.getBinFileUrl(`${parentPath}/${name}`)}`
+  a.href = `iina://open?url=${FsApi.getFileStreamUrl(`${parentPath}/${name}`)}`
   a.click()
 }
 
