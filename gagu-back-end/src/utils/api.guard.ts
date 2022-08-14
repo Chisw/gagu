@@ -18,9 +18,9 @@ export class ApiGuard implements CanActivate {
       return true
     } else {
       const request = context.switchToHttp().getRequest<Request>()
-      const headerAuthorization = request.header('Authorization')
-      console.log({ headerAuthorization })
-      return !!headerAuthorization
+      const Authorization = request.header('Authorization')
+      console.log({ Authorization })
+      return !!Authorization
     }
   }
 }

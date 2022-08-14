@@ -7,7 +7,7 @@ import * as md5 from 'md5'
 import { Public } from '../utils/api.decorator'
 
 const userMap: { [KEY: string]: string } = {
-  admin: md5('9293'),
+  gagu: md5('9293'),
 }
 
 @Controller('/auth')

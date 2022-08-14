@@ -46,7 +46,7 @@ export default function LoginPage() {
               />
             </div>
             <input
-              placeholder="账户"
+              placeholder="用户名"
               className="px-2 py-1 w-full mt-6 text-sm outline-none"
               maxLength={16}
               value={username}

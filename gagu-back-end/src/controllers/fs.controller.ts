@@ -25,7 +25,7 @@ import { getMockRootEntryList } from 'src/utils/mock'
 import { Public } from 'src/utils/api.decorator'
 
 const { platform, hostname } = getDeviceInfo()
-const deviceName = `${hostname}[${platform}]`
+const deviceName = `${hostname} [${platform}]`
 
 @Controller('/fs')
 export class FsController {
