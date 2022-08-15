@@ -145,7 +145,7 @@ export default function Window(props: WindowProps) {
                 `)}
                 onClick={() => setHidden(!hidden)}
               >
-                <RemixIcon.Subtract />
+                <RemixIcon.Subtract size={14} />
               </span>
               <span
                 title={isFullScreen ? '窗口' : '全屏'}
@@ -155,7 +155,7 @@ export default function Window(props: WindowProps) {
                 `)}
                 onClick={handleZoom}
               >
-                {isFullScreen ? <RemixIcon.FullscreenExit /> : <RemixIcon.Fullscreen />}
+                {isFullScreen ? <RemixIcon.FullscreenExit size={14} /> : <RemixIcon.Fullscreen size={14} />}
               </span>
               <span
                 title="关闭"

@@ -91,9 +91,8 @@ export default function NameLine(props: NameLineProps) {
           const suffix = newName.includes('.') ? '' : '.txt'
           const name = newName + suffix
           const file = new File([blob], name)
-          const data = await uploadFile(currentDirPath, file)
-          const isUploaded = !!data?.hasDon
-          if (isUploaded) {
+          const { success } = await uploadFile(currentDirPath, file)
+          if (success) {
             onSuccess({ name, type: 'file', parentPath: currentDirPath })
           } else {
             onFail('net_error')

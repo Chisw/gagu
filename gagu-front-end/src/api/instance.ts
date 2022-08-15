@@ -14,6 +14,7 @@ const instance = axios.create({
 // interceptors
 instance.interceptors.request.use(config => {
   // const { url, method } = config
+  // let extra = {}
   // if (pass) config.url += `&pass=${pass}`
   // if (method === 'post' && url?.includes('?cmd=file')) config.timeout = 0
   const gaguAuthCode = localStorage.getItem(GAGU_AUTH_CODE_KEY) || ''

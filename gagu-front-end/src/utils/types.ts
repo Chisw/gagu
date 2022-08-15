@@ -84,8 +84,9 @@ export interface IOffsetInfo {
   offsetHeight: number
 }
 
+// 多层文件夹上传时的嵌套路径，包含文件名
 export interface INestedFile extends File {
-  nestedPath?: string  // 多层文件夹上传时的嵌套路径，包含文件名
+  nestedPath?: string
 }
 
 export interface IUploadTask {

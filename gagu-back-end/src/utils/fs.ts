@@ -1,15 +1,19 @@
 import {
   readdirSync,
   statSync,
-  rmdirSync,
+  // rmdirSync,
   unlinkSync,
   renameSync,
   accessSync,
   constants,
   mkdirSync,
   readFileSync,
+  createReadStream,
+  writeFileSync,
 } from 'fs'
+import { createGzip } from 'zlib'
 import { IEntry } from 'src/types'
+import { exec } from 'child_process'
 
 export const getHasChildren = (path: string) => {
   try {
@@ -72,7 +76,8 @@ export const getDirectorySize = (path: string) => {
 export const deleteEntry = (path: string) => {
   const stat = statSync(path)
   if (stat.isDirectory()) {
-    rmdirSync(path)
+    // rmdirSync(path)
+    exec(`rm -rf ${path}`)
   } else {
     unlinkSync(path)
   }
@@ -99,4 +104,40 @@ export const addDirectory = (path: string) => {
 
 export const getTextContent = (path: string) => {
   return readFileSync(path).toString('utf-8')
+}
+
+export const completeNestedPathList = (path: string) => {
+  const list = path.split('/').filter(Boolean).slice(0, -1)
+  const nestedPathList = list.map((dirName, index) => {
+    const prefix = '/' + list.filter((d, i) => i < index).join('/')
+    return `${prefix}/${dirName}`
+  })
+  nestedPathList.forEach((path) => {
+    const exists = getExists(path)
+    if (!exists) {
+      addDirectory(path)
+    }
+  })
+}
+
+export const uploadFile = (path: string, buffer: Buffer) => {
+  try {
+    completeNestedPathList(path)
+    writeFileSync(path, buffer)
+    return {
+      success: true,
+    }
+  } catch (err) {
+    return {
+      success: false,
+      msg: err.toString(),
+    }
+  }
+}
+
+export const gzipEntryList = async (entryPathList: string[]) => {
+  for (const entryPath of entryPathList) {
+    const readStream = createReadStream(entryPath)
+    await readStream.pipe(createGzip())
+  }
 }

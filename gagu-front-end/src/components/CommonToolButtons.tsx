@@ -50,7 +50,7 @@ export default function CommonToolButtons(props: CommonToolButtonsProps) {
   const handleDownload = useCallback(() => {
     if (currentEntry) {
       const { downloadName, cmd } = getDownloadInfo(currentEntry.parentPath, [currentEntry])
-      FsApi.downloadEntries(currentEntry.parentPath, downloadName, cmd)
+      FsApi.startDownload(currentEntry.parentPath, downloadName, cmd)
     }
   }, [currentEntry])
 

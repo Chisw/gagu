@@ -22,7 +22,7 @@ interface MenusProps {
   currentDirPath: string
   entryList: IEntry[]
   selectedEntryList: IEntry[]
-  setOpenedEntryList: (entries: IOpenedEntry[]) => void
+  setOpenedEntryList: (entryList: IOpenedEntry[]) => void
   setSelectedEntryList: (entry: IEntry[]) => void
   setNewDirMode: (mode: boolean) => void
   setNewTxtMode: (mode: boolean) => void
@@ -30,8 +30,8 @@ interface MenusProps {
   handleRefresh: () => void
   handleRename: () => void
   handleUploadClick: () => void
-  handleDownloadClick: (entries?: IEntry[]) => void
-  handleDeleteClick: (entries?: IEntry[]) => void
+  handleDownloadClick: (entryList?: IEntry[]) => void
+  handleDeleteClick: (entryList?: IEntry[]) => void
   onClose: () => void
 }
 

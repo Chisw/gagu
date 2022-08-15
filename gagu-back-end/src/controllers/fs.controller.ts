@@ -8,6 +8,8 @@ import {
   Put,
   Query,
   Res,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common'
 import {
   getDirectorySize,
@@ -19,15 +21,17 @@ import {
   getTextContent,
   deleteEntry,
   getThumbnail,
+  uploadFile,
 } from 'src/utils'
 import { Response } from 'express'
 import { getMockRootEntryList } from 'src/utils/mock'
 import { Public } from 'src/utils/api.decorator'
+import { FileInterceptor } from '@nestjs/platform-express'
 
 const { platform, hostname } = getDeviceInfo()
 const deviceName = `${hostname} [${platform}]`
 
-@Controller('/fs')
+@Controller('fs')
 export class FsController {
   @Get('list')
   findAll(@Query('path') path: string) {
@@ -91,7 +95,7 @@ export class FsController {
     return { success: true }
   }
 
-  // TODO
+  // TODO: remove public
   @Public()
   @Get('thumbnail')
   @Header('Content-Type', 'image/png')
@@ -101,11 +105,37 @@ export class FsController {
     response.download(thumbnailPath)
   }
 
-  // TODO
+  // TODO: remove public
   @Public()
   @Get('stream')
   readStream(@Query('path') path: string, @Res() response: Response) {
     console.log('API/FS/STREAM:', path)
-    response.download(path)
+    response.sendFile(path)
+  }
+
+  @Post('upload')
+  @UseInterceptors(FileInterceptor('file'))
+  uploadFile(
+    @Query('path') path: string,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    console.log('API/FS/UPLOAD:', path)
+    return uploadFile(path, file.buffer)
+  }
+
+  // TODO: remove public
+  @Public()
+  @Get('download*')
+  readDownload(
+    @Query('path') path: string,
+    @Query('entry') entryList: string[],
+    @Res() response: Response,
+  ) {
+    console.log('API/FS/DOWNLOAD:', { path, entryList })
+    if (entryList) {
+      console.log()
+    } else {
+      response.download(path)
+    }
   }
 }

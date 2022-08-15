@@ -42,6 +42,7 @@
     "@types/jest": "28.1.4",
     "@types/md5": "^2.3.2",
     "@types/minimist": "^1.2.2",
+    "@types/multer": "^1.4.7",
     "@types/node": "^16.0.0",
     "@types/supertest": "^2.0.11",
     "@typescript-eslint/eslint-plugin": "^5.0.0",

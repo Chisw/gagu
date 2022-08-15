@@ -41,6 +41,14 @@ export class FsApi {
     return data
   }
 
+  static uploadFile = async (parentPath: string, nestedFile: INestedFile, config?: AxiosRequestConfig) => {
+    const { name, nestedPath } = nestedFile
+    let formData = new FormData()
+    formData.append('file', nestedFile)
+    const { data } = await instance.post(`/api/fs/upload?path=${parentPath}${nestedPath || `/${name}`}`, formData, config)
+    return data
+  }
+
   static getThumbnailUrl = (path: string) => {
     return `${BASE_URL}/api/fs/thumbnail?path=${path}`
   }
@@ -49,15 +57,7 @@ export class FsApi {
     return `${BASE_URL}/api/fs/stream?path=${path}`
   }
 
-  static downloadEntries = (parentPath: string, downloadName: string, cmd: string) => {
-    window.open(`${BASE_URL}${parentPath}/${downloadName}?${cmd}`, '_self')
-  }
-
-  static uploadFile = async (parentPath: string, nestedFile: INestedFile, config?: AxiosRequestConfig) => {
-    const { name, size, lastModified, nestedPath } = nestedFile
-    const targetFileName = nestedPath || `/${name}`
-    const url = `${parentPath}${targetFileName}?cmd=file&size=${size}&file_date=${lastModified}`
-    const { data } = await instance.post(url, nestedFile, config)
-    return data
+  static startDownload = (parentPath: string, downloadName: string, cmd: string) => {
+    window.open(`${BASE_URL}/api/fs/download/${downloadName}?path=${parentPath}/${downloadName}${cmd}`, '_self')
   }
 }

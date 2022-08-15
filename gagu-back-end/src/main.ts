@@ -5,19 +5,14 @@ import * as minimist from 'minimist'
 
 const argv = minimist(process.argv.slice(2), {
   alias: {
-    'silent': 's',
-    'port': 'p',
-    'dir': 'd',
-    'proxy': 'x',
-    'log': 'l',
-    'fallback': 'f',
+    port: 'p',
+    log: 'l',
   },
-  string: ['port', 'fallback'],
-  boolean: ['silent', 'log'],
+  string: ['port'],
+  boolean: ['log'],
   default: {
-    'port': 9293,
-    'dir': process.cwd(),
-  }
+    port: 9293,
+  },
 })
 
 console.log({ argv })
@@ -27,7 +22,7 @@ async function bootstrap() {
   app.enableCors()
   app.setGlobalPrefix('api')
   await app.listen(argv.port)
-  console.log(`\n✨  Application is running on: http://127.0.0.1:${argv.port}`);
+  console.log(`\n✨  Application is running on: http://127.0.0.1:${argv.port}`)
   initConfigDir()
 }
 

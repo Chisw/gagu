@@ -63,8 +63,8 @@ export const getMatchAppId = (entry: IEntry) => {
   return CALLABLE_APP_LIST.find(({ matchList }) => matchList!.includes(extension))?.id
 }
 
-export const getDownloadInfo = (parentPathPath: string, selectedEntryList: IEntry[]) => {
-  const pathName = parentPathPath.split('/').reverse()[0]
+export const getDownloadInfo = (parentPath: string, selectedEntryList: IEntry[]) => {
+  const pathName = parentPath.split('/').reverse()[0]
   const len = selectedEntryList.length
   const firstEntry: IEntry | undefined = selectedEntryList[0]
   const isDownloadAll = !len
@@ -89,12 +89,12 @@ export const getDownloadInfo = (parentPathPath: string, selectedEntryList: IEntr
       : `下载 ${len} 个项目为 ${downloadName}`
 
   const cmd = isDownloadAll
-    ? 'cmd=zip'
+    ? ''
     : isDownloadSingle
       ? isDownloadSingleDir
-        ? 'cmd=zip'
-        : 'cmd=file&mime=application%2Foctet-stream'
-      : `cmd=zip${selectedEntryList.map(o => `&f=${o.name}`).join('')}`
+        ? ''
+        : ''
+      : `${selectedEntryList.map(o => `&entry=${o.name}`).join('')}`
   
   return { downloadName, msg, cmd }
 }
@@ -173,8 +173,8 @@ export const getEntryNestedFileList = async (entry: any) => {  // any: FileSyste
   } else {
     await new Promise((resolve, reject) => {
       const reader = (entry as any).createReader()  // any: FileSystemDirectoryEntry
-      reader.readEntries(async (entries: any) => {  // any: FileSystemEntry[]
-        for (const entry of entries) {
+      reader.readEntries(async (entryList: any) => {  // any: FileSystemEntry[]
+        for (const entry of entryList) {
           const list = await getEntryNestedFileList(entry)
           nestedFileList.push(...list)
         }

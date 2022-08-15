@@ -53,9 +53,8 @@ export default function TextEditor(props: AppComponentProps) {
     if (currentEntry) {
       const blob = new Blob([value], { type: 'text/plain;charset=utf-8' })
       const file = new File([blob], currentEntry.name)
-      const data = await uploadFile(currentEntry.parentPath, file)
-      const isUploaded = !!data?.hasDon
-      if (isUploaded) {
+      const { success } = await uploadFile(currentEntry.parentPath, file)
+      if (success) {
         Toast.toast('保存成功')
         setTextContent(value)
       }

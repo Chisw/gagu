@@ -246,7 +246,7 @@ export default function FileExplorer(props: AppComponentProps) {
 
     setUploadTaskList(allTaskList)
 
-    const okList: boolean[] = []
+    const successList: boolean[] = []
     for (const nestedFile of nestedFileList) {
       const parentPath = `${currentDirPath}${destDir ? `/${destDir}` : ''}`
       let lastUpload = { time: Date.now(), size: 0 }
@@ -262,10 +262,9 @@ export default function FileExplorer(props: AppComponentProps) {
         lastUpload = { time: now, size: loaded }
       }
 
-      const data = await uploadFile(parentPath, nestedFile, { onUploadProgress })
-      const isUploaded = !!data?.hasDon
+      const { success } = await uploadFile(parentPath, nestedFile, { onUploadProgress })
 
-      if (isUploaded) {
+      if (success) {
         document.querySelector(`[data-name="${nestedFile.name}"]`)
           ?.setAttribute('style', 'opacity:1;')
         const list = [...allTaskList]
@@ -275,9 +274,9 @@ export default function FileExplorer(props: AppComponentProps) {
         allTaskList = list
         setUploadTaskList(list)
       }
-      okList.push(isUploaded)
+      successList.push(success)
     }
-    if (okList.every(Boolean)) {
+    if (successList.every(Boolean)) {
       handleRefresh()
       Toast.toast('上传成功', 2000)
       setVirtualEntries([])
@@ -337,7 +336,7 @@ export default function FileExplorer(props: AppComponentProps) {
       onCancel: close,
       onConfirm: () => {
         close()
-        FsApi.downloadEntries(currentDirPath, downloadName, cmd)
+        FsApi.startDownload(currentDirPath, downloadName, cmd)
       },
     })
   }, [currentDirPath, selectedEntryList])
@@ -666,7 +665,7 @@ export default function FileExplorer(props: AppComponentProps) {
                   />
                 </div>
               )}
-              {/* entries */}
+              {/* entryList */}
               {displayEntryList.map(entry => {
                 const { name, type, hidden, size, lastModified } = entry
                 const isSelected = !!selectedEntryList.find(o => isSameEntry(o, entry))

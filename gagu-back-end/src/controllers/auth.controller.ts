@@ -10,7 +10,7 @@ const userMap: { [KEY: string]: string } = {
   gagu: md5('9293'),
 }
 
-@Controller('/auth')
+@Controller('auth')
 export class AuthController {
   @Public()
   @Post('login')
