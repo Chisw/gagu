@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import Toast from '../../components/EasyToast'
+import { toast } from 'react-toastify'
 import RemixIcon from '../../img/remixicon'
 import { copy } from '../../utils'
 import { IEntry } from '../../utils/types'
@@ -80,7 +80,7 @@ export default function PathLink(props: PathLinkProps) {
           className="invisible ml-1 cursor-pointer group-hover:visible text-xs hover:text-gray-500 active:opacity-50"
           onClick={() => {
             copy(`${activeVolume}/${mountList.join('/')}`)
-            Toast.toast('路径复制成功', 1000)
+            toast.success('路径复制成功')
           }}
         >
           <RemixIcon.Copy size={12} />

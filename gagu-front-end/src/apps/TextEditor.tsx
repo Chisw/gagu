@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
-import Toast from '../components/EasyToast'
+import { toast } from 'react-toastify'
 import ToolButton from '../components/ToolButton'
 import CommonToolButtons from '../components/CommonToolButtons'
 import useFetch from '../hooks/useFetch'
@@ -55,7 +55,7 @@ export default function TextEditor(props: AppComponentProps) {
       const file = new File([blob], currentEntry.name)
       const { success } = await uploadFile(currentEntry.parentPath, file)
       if (success) {
-        Toast.toast('保存成功')
+        toast.success('保存成功')
         setTextContent(value)
       }
     }
@@ -88,7 +88,7 @@ export default function TextEditor(props: AppComponentProps) {
             icon={<RemixIcon.Copy />}
             onClick={() => {
               copy(value)
-              Toast.toast('文本复制成功')
+              toast.success('文本复制成功')
             }}
           />
           <CommonToolButtons {...{ currentEntry }} />

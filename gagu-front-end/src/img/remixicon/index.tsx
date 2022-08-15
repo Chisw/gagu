@@ -59,6 +59,7 @@ import { ReactComponent as Computer } from './computer.svg'
 import { ReactComponent as Account } from './account.svg'
 import { ReactComponent as Loader } from './loader.svg'
 import { ReactComponent as Logout } from './logout.svg'
+import { ReactComponent as HardDrive } from './hard-drive.svg'
 
 
 const iconsMap: { [KEY: string]: React.FC } = {
@@ -122,6 +123,7 @@ const iconsMap: { [KEY: string]: React.FC } = {
   Account,
   Loader,
   Logout,
+  HardDrive,
 }
 
 const RemixIcon: { [KEY: string]: any } = {}

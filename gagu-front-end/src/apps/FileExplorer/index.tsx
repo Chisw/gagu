@@ -11,7 +11,7 @@ import PathLink from './PathLink'
 import ToolBar, { IToolBarDisabledMap } from './ToolBar'
 import NameLine, { NameFailType } from './NameLine'
 import { DateTime } from 'luxon'
-import Toast from '../../components/EasyToast'
+import { toast } from 'react-toastify'
 import Confirmor, { ConfirmorProps } from '../../components/Confirmor'
 import VirtualEntries from './VirtualEntries'
 import Side from './Side'
@@ -20,7 +20,7 @@ import useDragOperations from '../../hooks/useDragOperations'
 import useShortcuts from '../../hooks/useShortcuts'
 import { pick, throttle } from 'lodash'
 import Menus from './Menus'
-import Pagination from '../../components/Pagination'
+import Pagination from '../../components/base/Pagination'
 import RemixIcon from '../../img/remixicon'
 import deleteSVG from '../../img/remixicon/delete.svg'
 import downloadSVG from '../../img/remixicon/download.svg'
@@ -227,7 +227,7 @@ export default function FileExplorer(props: AppComponentProps) {
 
   const handleUploadStart = useCallback(async (nestedFileList: INestedFile[], destDir?: string) => {
     if (!nestedFileList.length) {
-      Toast.toast('无有效文件', 2000)
+      toast.error('无有效文件')
       return
     }
     // 只显示当前文件夹下的
@@ -278,7 +278,7 @@ export default function FileExplorer(props: AppComponentProps) {
     }
     if (successList.every(Boolean)) {
       handleRefresh()
-      Toast.toast('上传成功', 2000)
+      toast.success('上传成功')
       setVirtualEntries([])
     }
     ;(uploadInputRef.current as any).value = ''
@@ -374,7 +374,7 @@ export default function FileExplorer(props: AppComponentProps) {
         }
         if (successList.every(Boolean)) {
           handleRefresh()
-          Toast.toast('删除成功', 2000)
+          toast.success('删除成功')
         }
       },
     })

@@ -1,7 +1,7 @@
 export interface IEntry {
   name: string
   type: 'directory' | 'file'
-  size: number | undefined
+  size: number
   hidden: boolean
   lastModified: number
   hasChildren: boolean

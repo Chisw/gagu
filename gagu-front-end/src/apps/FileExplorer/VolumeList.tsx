@@ -21,7 +21,7 @@ export default function VolumeList(props: VolumeListProps) {
   return (
     <>
       <div>
-        {volumeList.map(({ name, mount, spaceFree, spaceTotal }, volumeIndex) => {
+        {volumeList.map(({ name, mount, spaceFree, spaceTotal, isVolume }, volumeIndex) => {
           const isActive = mount === activeVolume
           const canVolumeClick = currentDirPath !== mount
           const spaceUsed = spaceTotal - spaceFree
@@ -39,7 +39,7 @@ export default function VolumeList(props: VolumeListProps) {
               onClick={() => canVolumeClick && onVolumeClick(mount)}
             >
               <div className="flex items-center">
-                <RemixIcon.Folder />
+                {isVolume ? <RemixIcon.HardDrive /> : <RemixIcon.Folder />}
                 <span className="ml-1 truncate flex-grow">{name}</span>
               </div>
               <div className="relative mt-1 h-1 text-gray-500 font-din bg-white rounded-sm overflow-hidden">

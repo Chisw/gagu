@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import RemixIcon from '../img/remixicon'
+import RemixIcon from '../../img/remixicon'
 
 export interface PaginationProps {
   pageSize: number

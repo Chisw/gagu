@@ -5,7 +5,7 @@ import useFetch from '../hooks/useFetch'
 import { AuthApi } from '../api'
 import md5 from 'md5'
 import { GAGU_AUTH_CODE_KEY } from '../utils'
-import Toast from '../components/EasyToast'
+import { toast } from 'react-toastify'
 import RemixIcon from '../img/remixicon'
 
 
@@ -27,7 +27,7 @@ export default function LoginPage() {
       localStorage.setItem(GAGU_AUTH_CODE_KEY, res.authCode)
       navigate('/')
     } else {
-      Toast.danger(res.msg)
+      toast.error(res.msg)
     }
   }, [username, password, login, navigate])
   

@@ -35,6 +35,7 @@ export interface IVolume {
   hasChildren: boolean
   spaceFree: number
   spaceTotal: number
+  isVolume: boolean
 }
 
 export interface IRootInfo {

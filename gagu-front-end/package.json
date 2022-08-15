@@ -25,6 +25,7 @@
     "react-rnd": "^10.3.4",
     "react-router-dom": "^6.3.0",
     "react-scripts": "4.0.3",
+    "react-toastify": "9.0.3",
     "recoil": "^0.4.1",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat",
     "typescript": "^4.1.2",

@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 import Confirmor, { ConfirmorProps } from './Confirmor'
-import Toast from './EasyToast'
+import { toast } from 'react-toastify'
 import ToolButton from './ToolButton'
 import { copy, getDownloadInfo } from '../utils'
 import { FsApi } from '../api'
@@ -42,7 +42,7 @@ export default function CommonToolButtons(props: CommonToolButtonsProps) {
       onConfirm: () => {
         close()
         copy(url)
-        Toast.toast('复制成功', 1000)
+        toast.success('复制成功')
       },
     })
   }, [currentEntry])

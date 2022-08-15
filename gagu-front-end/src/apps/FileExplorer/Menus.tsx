@@ -214,7 +214,7 @@ export default function Menus(props: MenusProps) {
             <div className="relative flex items-center group">
               {icon}
               <span className="ml-2 flex-grow">{text}</span>
-              {children && <RemixIcon.ArrowRight />}
+              {children && <RemixIcon.ChevronRight />}
               {children && (
                 <div className="absolute top-0 left-0 w-44 ml-40 hidden group-hover:block py-1 bg-white-900 bg-hazy-50 shadow-lg border">
                   {children.map(({ icon, text, onClick }) => (
