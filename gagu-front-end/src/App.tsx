@@ -3,9 +3,13 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { ToastContainer, Flip } from 'react-toastify'
 import DesktopPage from './pages/DesktopPage'
 import LoginPage from './pages/LoginPage'
-
+import useFavicon from './hooks/useFavicon'
+import defaultFavicon from './img/icons/app-transfer.png'
 
 export default function App() {
+
+  useFavicon(defaultFavicon)
+
   return (
     <BrowserRouter>
       <ToastContainer

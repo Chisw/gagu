@@ -200,3 +200,34 @@ export const getDTNestedFileList = async (dataTransfer: DataTransfer) => {
   }))
   return nestedFileList
 }
+
+export const getImageTypeBase64ByURL = async (url: string, options?: { width?: number, height?: number, bgColor?: string, usePNG?: boolean }) => {
+  const {
+    width,
+    height,
+    bgColor,
+    usePNG = false,
+  } = options || {}
+
+  return new Promise((resolve, reject) => {
+    const img = document.createElement('img')
+    img.setAttribute('crossOrigin', 'anonymous')
+    img.onload = () => {
+      const w = width || img.naturalWidth
+      const h = height || img.naturalHeight
+      const canvas = document.createElement('canvas')
+      canvas.width = w
+      canvas.height = h
+      const ctx = canvas.getContext('2d')
+      ctx!.fillStyle = bgColor || 'transparent'
+      ctx!.fillRect(0, 0, w, h)
+      ctx!.drawImage(img, 0, 0, w, h)
+      const base64: string = canvas.toDataURL(`image/${usePNG ? 'png' : 'jpeg'}`, 1)
+      resolve(base64)
+    }
+    img.onerror = (error) => {
+      reject(error)
+    }
+    img.src = url
+  })
+}

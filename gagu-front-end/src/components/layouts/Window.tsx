@@ -5,6 +5,7 @@ import { useRecoilState } from 'recoil'
 import { runningAppListState, topWindowIndexState } from '../../utils/state'
 import { line } from '../../utils'
 import RemixIcon from '../../img/remixicon'
+import useFavicon from '../../hooks/useFavicon'
 
 const SAME_CLASS_NAME = `w-6 h-6 flex justify-center items-center cursor-pointer transition-all duration-200`
 
@@ -45,6 +46,8 @@ export default function Window(props: WindowProps) {
   const [rndInstance, setRndInstance] = useState<any>(null)
 
   const isTopWindow = useMemo(() => currentIndex === topWindowIndex, [currentIndex, topWindowIndex])
+
+  useFavicon(icon)
 
   const handleMoveToFront = useCallback((e) => {
     if (isTopWindow || e.target.closest('[prevent-move-to-front]')) return
