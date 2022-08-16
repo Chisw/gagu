@@ -2,13 +2,12 @@ import { useCallback, useEffect, useState, useMemo } from 'react'
 import { useRecoilState } from 'recoil'
 import { openedEntryListState, runningAppListState, topWindowIndexState, rootInfoState } from '../../utils/state'
 import APP_LIST from '../../utils/appList'
-import { IApp } from '../../utils/types'
+import { IApp, IRootInfo } from '../../utils/types'
 import { line } from '../../utils'
 import { DateTime } from 'luxon'
 import useFetch from '../../hooks/useFetch'
 import { FsApi } from '../../api'
 import { DOCUMENT_TITLE, GAGU_AUTH_CODE_KEY } from '../../utils/constant'
-import { rootInfoConverter } from '../../utils/converters'
 import RemixIcon from '../../img/remixicon'
 import { useNavigate } from 'react-router-dom'
 
@@ -30,7 +29,8 @@ export default function Dock() {
 
   useEffect(() => {
     if (data) {
-      setRootInfo(rootInfoConverter(data))
+      const { deviceName, entryList: rootEntryList } = data
+      setRootInfo({ deviceName, rootEntryList } as IRootInfo)
     }
   }, [data, setRootInfo])
 

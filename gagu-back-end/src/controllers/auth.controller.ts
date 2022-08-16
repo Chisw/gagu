@@ -1,10 +1,6 @@
-import {
-  Controller,
-  Post,
-  Body,
-} from '@nestjs/common'
+import { Controller, Post, Body } from '@nestjs/common'
 import * as md5 from 'md5'
-import { Public } from '../utils/api.decorator'
+import { Public } from '../utils'
 
 const userMap: { [KEY: string]: string } = {
   gagu: md5('9293'),
@@ -37,8 +33,8 @@ export class AuthController {
       msg: success
         ? 'OK'
         : passwordRecord === undefined
-          ? '用户不存在'
-          : '密码错误',
+        ? '用户不存在'
+        : '密码错误',
     }
   }
 }

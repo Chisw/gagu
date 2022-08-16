@@ -14,7 +14,6 @@ import {
 import {
   getDirectorySize,
   getExists,
-  getDeviceInfo,
   getEntryList,
   renameEntry,
   addDirectory,
@@ -22,10 +21,10 @@ import {
   deleteEntry,
   getThumbnail,
   uploadFile,
-} from 'src/utils'
+} from 'src/utils/fs'
+import { getDeviceInfo, getMockRootEntryList } from 'src/utils'
 import { Response } from 'express'
-import { getMockRootEntryList } from 'src/utils/mock'
-import { Public } from 'src/utils/api.decorator'
+import { Public } from '../utils'
 import { FileInterceptor } from '@nestjs/platform-express'
 
 const { platform, hostname } = getDeviceInfo()

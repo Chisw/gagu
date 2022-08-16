@@ -1,7 +1,6 @@
 import {
   readdirSync,
   statSync,
-  // rmdirSync,
   unlinkSync,
   renameSync,
   accessSync,
@@ -12,8 +11,13 @@ import {
   writeFileSync,
 } from 'fs'
 import { createGzip } from 'zlib'
-import { IEntry } from 'src/types'
+import { IEntry, EntryType } from 'src/utils/types'
 import { exec } from 'child_process'
+import { GEN_THUMBNAIL_VIDEO_LIST, USERNAME } from './index'
+import { getExtension } from './index'
+import * as md5 from 'md5'
+import * as thumbsupply from 'thumbsupply'
+import * as gm from 'gm'
 
 export const getHasChildren = (path: string) => {
   try {
@@ -31,31 +35,44 @@ export const getEntryList = (path: string) => {
     console.log('ERR:', 'getEntryList', err)
     return []
   }
-  const entryList = entryNameList
+  const entryList: IEntry[] = entryNameList
     .map((entryName: string) => {
       try {
         const entryPath = `${path}/${entryName}`
         const stat = statSync(entryPath)
         const isDirectory = stat.isDirectory()
-        const type = isDirectory ? 'directory' : 'file'
+        const type = isDirectory ? EntryType.directory : EntryType.file
         const size = isDirectory ? undefined : stat.size
         const hidden = entryName.startsWith('.')
         const lastModified = stat.ctimeMs
         const hasChildren = isDirectory && getHasChildren(entryPath)
+        const extension = isDirectory
+          ? `_dir${hasChildren ? '' : '_empty'}`
+          : getExtension(entryName)
         return {
           name: entryName,
           type,
           size,
           hidden,
           lastModified,
+          parentPath: path,
           hasChildren,
+          extension,
         }
       } catch (err) {
         console.log('ERR:', 'getEntryList', err)
-        return null
+        return {
+          name: '',
+          type: EntryType.file,
+          hidden: true,
+          lastModified: 0,
+          parentPath: '',
+          hasChildren: false,
+          extension: '',
+        }
       }
     })
-    .filter(Boolean) as IEntry[]
+    .filter((e) => e.name)
   return entryList
 }
 
@@ -63,7 +80,7 @@ export const getDirectorySize = (path: string) => {
   let size = 0
   const entryList = getEntryList(path)
   entryList.forEach((entry) => {
-    if (entry.type === 'directory') {
+    if (entry.type === EntryType.directory) {
       const recSize = getDirectorySize(`${path}/${entry.name}`)
       size += recSize
     } else {
@@ -104,6 +121,46 @@ export const addDirectory = (path: string) => {
 
 export const getTextContent = (path: string) => {
   return readFileSync(path).toString('utf-8')
+}
+
+export const getThumbnail = async (path: string) => {
+  const { mtimeMs } = statSync(path)
+  const thumbnailId = md5(`${path}-${mtimeMs}`)
+  const thumbnailPath = `/Users/${USERNAME}/.gagu/thumbnail/${thumbnailId}`
+
+  if (getExists(thumbnailPath)) {
+    return thumbnailPath
+  }
+
+  const extension = getExtension(path)
+  let targetPath = path
+
+  const isGenVideo = GEN_THUMBNAIL_VIDEO_LIST.includes(extension)
+  if (isGenVideo) {
+    const cacheThumbnailPath = await thumbsupply.generateThumbnail(path, {
+      cacheDir: `/Users/${USERNAME}/.gagu/cache`,
+      mimetype: 'video/mp4',
+      timestamp: '10%',
+    })
+    targetPath = cacheThumbnailPath
+  }
+
+  await new Promise(async (resolve, reject) => {
+    gm(createReadStream(targetPath))
+      .selectFrame(4)
+      .resize(48)
+      .noProfile()
+      .write(thumbnailPath, (err) => {
+        if (err) {
+          console.log(err)
+          reject(err)
+        } else {
+          resolve(thumbnailPath)
+          isGenVideo && unlinkSync(targetPath)
+        }
+      })
+  })
+  return thumbnailPath
 }
 
 export const completeNestedPathList = (path: string) => {

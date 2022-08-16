@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { IEntry, IEntryIcon } from '../../utils/types'
+import { EntryType, IEntry, IEntryIcon } from '../../utils/types'
 import { get } from 'lodash'
 import { GEN_THUMBNAIL_LIST, GEN_THUMBNAIL_VIDEO_LIST, line } from '../../utils'
 import { FsApi } from '../../api'
@@ -144,7 +144,7 @@ const DIR_SUB_ICON_MAP = {
 
 const getIconInfo = (entry: IEntry, small: boolean) => {
   const { name, type, extension } = entry
-  const isDir = type === 'directory'
+  const isDir = type === EntryType.directory
   const entryIcon = extension
     ? (([
       ...(small ? SMALL_FOLDER_ICON_LIST : LARGE_FOLDER_ICON_LIST),

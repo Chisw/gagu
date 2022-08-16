@@ -1,4 +1,5 @@
-import { getFileNameExtension, line } from '../../utils'
+import { line } from '../../utils'
+import { EntryType } from '../../utils/types'
 import Icon from './Icon'
 import { NameLabel } from './NameLine'
 
@@ -29,7 +30,7 @@ export default function VirtualEntries(props: VirtualEntriesProps) {
           <Icon
             virtual
             small={!gridMode}
-            entry={{ name, type: 'file', parentPath: '', extension: getFileNameExtension(name) }}
+            entry={{ name, type: EntryType.file, parentPath: '', extension: '', lastModified: 0, hasChildren: false, hidden: false }}
           />
           <div className={`${gridMode ? 'mt-2 text-center' : 'ml-4 flex justify-center items-center'}`}>
             <NameLabel

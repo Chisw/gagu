@@ -4,7 +4,7 @@ import useFetch from '../../hooks/useFetch'
 import { line } from '../../utils'
 import { FsApi } from '../../api'
 import { INVALID_NAME_CHAR_LIST } from '../../utils/constant'
-import { IEntry } from '../../utils/types'
+import { EntryType, IEntry } from '../../utils/types'
 
 export type NameFailType = 'escape' | 'empty' | 'exist' | 'no_change' | 'net_error' | 'invalid'
 
@@ -82,7 +82,7 @@ export default function NameLine(props: NameLineProps) {
         if (create === 'dir') {
           const { success } = await addDirectory(newPath)
           if (success) {
-            onSuccess({ name: newName, type: 'directory', parentPath: currentDirPath })
+            onSuccess({ name: newName, type: EntryType.directory, parentPath: currentDirPath, lastModified: 0, hasChildren: false, hidden: false, extension: '_dir' })
           } else {
             onFail('net_error')
           }
@@ -93,7 +93,7 @@ export default function NameLine(props: NameLineProps) {
           const file = new File([blob], name)
           const { success } = await uploadFile(currentDirPath, file)
           if (success) {
-            onSuccess({ name, type: 'file', parentPath: currentDirPath })
+            onSuccess({ name, type: EntryType.file, parentPath: currentDirPath, lastModified: 0, hasChildren: false, hidden: false, extension: '' })
           } else {
             onFail('net_error')
           }

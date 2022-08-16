@@ -1,6 +1,5 @@
 import { ReactNode } from 'react'
 
-
 export interface AppComponentProps {
   isTopWindow: boolean
   setWindowLoading: (loading: boolean) => void
@@ -29,29 +28,39 @@ export interface IApp {
   matchList?: string[]
 }
 
-export interface IVolume {
-  name: string
-  mount: string
-  hasChildren: boolean
-  spaceFree: number
-  spaceTotal: number
-  isVolume: boolean
-}
-
-export interface IRootInfo {
-  deviceName: string
-  volumeList: IVolume[]
+export enum EntryType {
+  directory = 'directory',
+  file = 'file',
 }
 
 export interface IEntry {
   name: string
-  type: 'directory' | 'file'
+  type: EntryType.directory | EntryType.file
+  hidden: boolean
+  lastModified: number
   parentPath: string
-  extension?: string
+  hasChildren: boolean
+  extension: string
   size?: number
-  hidden?: boolean
-  lastModified?: number
-  hasChildren?: boolean
+  mounted?: string
+  isVolume?: boolean
+  spaceFree?: number
+  spaceTotal?: number
+}
+
+export interface IRootEntry extends IEntry {
+  mounted: string
+  isVolume: boolean
+}
+
+export interface IVolume extends IRootEntry {
+  spaceFree: number
+  spaceTotal: number
+}
+
+export interface IRootInfo {
+  deviceName: string
+  rootEntryList: IRootEntry[]
 }
 
 export interface IOpenedEntry extends IEntry {

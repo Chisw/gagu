@@ -1,5 +1,5 @@
 import { CALLABLE_APP_LIST } from './appList'
-import { IEntry, INestedFile, IOffsetInfo, IRectInfo } from './types'
+import { EntryType, IEntry, INestedFile, IOffsetInfo, IRectInfo } from './types'
 
 
 export * from './constant'
@@ -11,11 +11,6 @@ export const entrySorter = (a: IEntry, b: IEntry) => {
   const typeDirection = aVal - bVal
   if (typeDirection !== 0) return typeDirection
   return a.name.toLowerCase().localeCompare(b.name.toLowerCase())
-}
-
-export const getFileNameExtension = (name: string) => {
-  if (!name || !name.includes('.') || name.startsWith('.')) return undefined
-  return name.split('.').reverse()[0].toLowerCase()
 }
 
 export const copy = (str: string) => {
@@ -69,7 +64,7 @@ export const getDownloadInfo = (parentPath: string, selectedEntryList: IEntry[])
   const firstEntry: IEntry | undefined = selectedEntryList[0]
   const isDownloadAll = !len
   const isDownloadSingle = len === 1
-  const isDownloadSingleDir = isDownloadSingle && firstEntry.type === 'directory'
+  const isDownloadSingleDir = isDownloadSingle && firstEntry.type === EntryType.directory
   const singleEntryName = firstEntry?.name
 
   const downloadName = isDownloadAll

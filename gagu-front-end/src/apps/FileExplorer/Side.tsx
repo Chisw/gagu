@@ -1,13 +1,13 @@
 import { line } from '../../utils'
-import { IVolume } from '../../utils/types'
-import VolumeList from './VolumeList'
+import { IRootEntry } from '../../utils/types'
+import RootEntryList from './RootEntryList'
 
 interface SideProps {
   sideCollapse: boolean
   currentDirPath: string
-  activeVolume: string
-  volumeList: IVolume[]
-  onVolumeClick: (mount: string) => void
+  activeRootEntryMounted: string
+  rootEntryList: IRootEntry[]
+  onRootEntryClick: (mounted: string) => void
 }
 
 export default function Side(props: SideProps) {
@@ -15,9 +15,9 @@ export default function Side(props: SideProps) {
   const {
     sideCollapse,
     currentDirPath,
-    activeVolume,
-    volumeList,
-    onVolumeClick,
+    activeRootEntryMounted,
+    rootEntryList,
+    onRootEntryClick,
   } = props
   
   return (
@@ -28,10 +28,10 @@ export default function Side(props: SideProps) {
       `)}
     >
       <div className="p-2 w-64 h-full border-r overflow-x-hidden overflow-y-auto">
-        <p className="p-1 text-xs text-gray-400">挂载点</p>
-        <VolumeList
-          {...{ currentDirPath, activeVolume, volumeList }}
-          onVolumeClick={onVolumeClick}
+        <p className="p-1 text-xs text-gray-400">根节点</p>
+        <RootEntryList
+          {...{ currentDirPath, activeRootEntryMounted, rootEntryList }}
+          onRootEntryClick={onRootEntryClick}
         />
         <p className="mt-3 p-1 text-xs text-gray-400">收藏</p>
       </div>
