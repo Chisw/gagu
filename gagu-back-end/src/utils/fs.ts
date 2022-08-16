@@ -13,7 +13,7 @@ import {
 import { createGzip } from 'zlib'
 import { IEntry, EntryType } from 'src/utils/types'
 import { exec } from 'child_process'
-import { GEN_THUMBNAIL_VIDEO_LIST, USERNAME } from './index'
+import { GAGU_CONFIG_PATH, GEN_THUMBNAIL_VIDEO_LIST } from './index'
 import { getExtension } from './index'
 import * as md5 from 'md5'
 import * as thumbsupply from 'thumbsupply'
@@ -93,7 +93,6 @@ export const getDirectorySize = (path: string) => {
 export const deleteEntry = (path: string) => {
   const stat = statSync(path)
   if (stat.isDirectory()) {
-    // rmdirSync(path)
     exec(`rm -rf ${path}`)
   } else {
     unlinkSync(path)
@@ -126,7 +125,7 @@ export const getTextContent = (path: string) => {
 export const getThumbnail = async (path: string) => {
   const { mtimeMs } = statSync(path)
   const thumbnailId = md5(`${path}-${mtimeMs}`)
-  const thumbnailPath = `/Users/${USERNAME}/.gagu/thumbnail/${thumbnailId}`
+  const thumbnailPath = `${GAGU_CONFIG_PATH}/thumbnail/${thumbnailId}`
 
   if (getExists(thumbnailPath)) {
     return thumbnailPath
@@ -138,9 +137,10 @@ export const getThumbnail = async (path: string) => {
   const isGenVideo = GEN_THUMBNAIL_VIDEO_LIST.includes(extension)
   if (isGenVideo) {
     const cacheThumbnailPath = await thumbsupply.generateThumbnail(path, {
-      cacheDir: `/Users/${USERNAME}/.gagu/cache`,
-      mimetype: 'video/mp4',
+      size: thumbsupply.ThumbSize.MEDIUM,
       timestamp: '10%',
+      mimetype: 'video/mp4',
+      cacheDir: `${GAGU_CONFIG_PATH}/thumbnail`,
     })
     targetPath = cacheThumbnailPath
   }
@@ -163,7 +163,7 @@ export const getThumbnail = async (path: string) => {
   return thumbnailPath
 }
 
-export const completeNestedPathList = (path: string) => {
+export const completeNestedPath = (path: string) => {
   const list = path.split('/').filter(Boolean).slice(0, -1)
   const nestedPathList = list.map((dirName, index) => {
     const prefix = '/' + list.filter((d, i) => i < index).join('/')
@@ -179,7 +179,7 @@ export const completeNestedPathList = (path: string) => {
 
 export const uploadFile = (path: string, buffer: Buffer) => {
   try {
-    completeNestedPathList(path)
+    completeNestedPath(path)
     writeFileSync(path, buffer)
     return {
       success: true,

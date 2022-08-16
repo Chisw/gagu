@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import Icon from './Icon'
 import useFetch from '../../hooks/useFetch'
-import { getBytesSize, getDownloadInfo, getIsContained, isSameEntry, entrySorter, line, getMatchAppId } from '../../utils'
+import { getReadableSize, getDownloadInfo, getIsContained, isSameEntry, entrySorter, line, getMatchAppId } from '../../utils'
 import { FsApi } from '../../api'
 import { openedEntryListState, rootInfoState, sizeMapState, uploadTaskListState } from '../../utils/state'
 import { AppComponentProps, EntryType, IEntry, IHistory, IRectInfo, INestedFile, IUploadTask } from '../../utils/types'
@@ -256,7 +256,7 @@ export default function FileExplorer(props: AppComponentProps) {
         const now = Date.now()
         const interval = (now - time) / 1000
         const delta = loaded - size
-        const speed = getBytesSize({ bytes: delta / interval, keepFloat: true }) + '/s'
+        const speed = getReadableSize(delta / interval, { keepFloat: true }) + '/s'
         setUploadInfo({ ratio: loaded / total, speed })
         lastUpload = { time: now, size: loaded }
       }
@@ -673,7 +673,7 @@ export default function FileExplorer(props: AppComponentProps) {
                 const isSelected = !!selectedEntryList.find(o => isSameEntry(o, entry))
                 const small = !gridMode
                 const bytes = size === undefined ? sizeMap[`${currentDirPath}/${name}`] : size
-                const sizeLabel = bytes === undefined ? '--' : getBytesSize({ bytes })
+                const sizeLabel = bytes === undefined ? '--' : getReadableSize(bytes)
                 const dateLabel = lastModified ? DateTime.fromMillis(lastModified).toFormat('yyyy-MM-dd HH:mm') : ''
                 return (
                   <div

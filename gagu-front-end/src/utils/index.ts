@@ -31,25 +31,40 @@ export const isSameEntry = (a: IEntry, b: IEntry) => {
   return a.name === b.name && a.type === b.type
 }
 
-export const getBytesSize = (params: { bytes: number, unit?: 'B' | 'K' | 'M' | 'G', keepFloat?: boolean }) => {
-  let { bytes, unit, keepFloat } = params
+// 1024 1048576 1073741824
+interface getReadableSizeOption {
+  keepFloat?: boolean
+  separator?: string
+  stepSize?: 1000 | 1024
+}
+export const getReadableSize = (size: number, options?: getReadableSizeOption) => {
+  const {
+    keepFloat = false,
+    separator = '',
+    stepSize = 1024,
+  } = options || {}
 
+  const stepList = [stepSize, Math.pow(stepSize, 2), Math.pow(stepSize, 3), Math.pow(stepSize, 4)]
+
+  let unit = ''
   if (!unit) {
-    if (0 <= bytes && bytes < 1024) {
+    if (0 <= size && size < stepList[0]) {
       unit = 'B'
-    } else if (1024 <= bytes && bytes < 1048576) {
-      unit = 'K'
-    } else if (1048576 <= bytes && bytes < 1073741824) {
-      unit = 'M'
+    } else if (stepList[0] <= size && size < stepList[1]) {
+      unit = 'KB'
+    } else if (stepList[1] <= size && size < stepList[2]) {
+      unit = 'MB'
+    } else if (stepList[2] <= size && size < stepList[3]) {
+      unit = 'GB'
     } else {
-      unit = 'G'
+      unit = 'TB'
     }
   }
-  const level = ['B', 'K', 'M', 'G'].indexOf(unit)
-  const divisor = [1, 1024, 1048576, 1073741824][level]
-  const fixedSize = (bytes / divisor).toFixed(unit === 'B' ? 0 : 1)
-  const size = keepFloat ? fixedSize : fixedSize.replace('.0', '')
-  return `${size}${unit}`
+  const level = ['B', 'KB', 'MB', 'GB', 'TB'].indexOf(unit)
+  const divisor = [1, ...stepList][level]
+  const fixedSize = (size / divisor).toFixed(unit === 'B' ? 0 : 1)
+  const readableSize = keepFloat ? fixedSize : fixedSize.replace('.0', '')
+  return `${readableSize}${separator}${unit}`
 }
 
 export const getMatchAppId = (entry: IEntry) => {

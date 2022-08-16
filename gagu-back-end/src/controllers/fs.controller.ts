@@ -22,21 +22,19 @@ import {
   getThumbnail,
   uploadFile,
 } from 'src/utils/fs'
-import { getDeviceInfo, getMockRootEntryList } from 'src/utils'
+import { getRootEntryList, HOSTNAME, PLATFORM, Public } from 'src/utils'
 import { Response } from 'express'
-import { Public } from '../utils'
 import { FileInterceptor } from '@nestjs/platform-express'
 
-const { platform, hostname } = getDeviceInfo()
-const deviceName = `${hostname} [${platform}]`
+const deviceName = `${HOSTNAME} [${PLATFORM}]`
 
 @Controller('fs')
 export class FsController {
   @Get('list')
   findAll(@Query('path') path: string) {
-    console.log('API/FS/LIST:', path)
+    console.log('FS/LIST:', path)
     const entryList = ['', '/'].includes(path)
-      ? getMockRootEntryList()
+      ? getRootEntryList()
       : getEntryList(path)
     return {
       deviceName,
@@ -46,7 +44,7 @@ export class FsController {
 
   @Get('exists')
   readExists(@Query('path') path: string) {
-    console.log('API/FS/EXISTS:', path)
+    console.log('FS/EXISTS:', path)
     const exists = getExists(path)
     return {
       success: true,
@@ -56,7 +54,7 @@ export class FsController {
 
   @Get('size')
   readSize(@Query('path') path: string) {
-    console.log('API/FS/SIZE:', path)
+    console.log('FS/SIZE:', path)
     const size = getDirectorySize(path)
     return {
       success: true,
@@ -66,14 +64,14 @@ export class FsController {
 
   @Get('text')
   readTextContent(@Query('path') path: string) {
-    console.log('API/FS/TEXT:', path)
+    console.log('FS/TEXT:', path)
     const textContent = getTextContent(path)
     return textContent
   }
 
   @Put('rename')
   update(@Body('oldPath') oldPath: string, @Body('newPath') newPath: string) {
-    console.log('API/FS/RENAME:', oldPath, 'to', newPath)
+    console.log('FS/RENAME:', oldPath, 'to', newPath)
     renameEntry(oldPath, newPath)
     return {
       success: true,
@@ -82,14 +80,14 @@ export class FsController {
 
   @Post('mkdir')
   create(@Body('path') path: string) {
-    console.log('API/FS/MKDIR:', path)
+    console.log('FS/MKDIR:', path)
     addDirectory(path)
     return { success: true }
   }
 
   @Delete('delete')
   remove(@Query('path') path: string) {
-    console.log('API/FS/DELETE:', path)
+    console.log('FS/DELETE:', path)
     deleteEntry(path)
     return { success: true }
   }
@@ -99,7 +97,7 @@ export class FsController {
   @Get('thumbnail')
   @Header('Content-Type', 'image/png')
   async readThumbnail(@Query('path') path: string, @Res() response: Response) {
-    console.log('API/FS/THUMBNAIL:', path)
+    console.log('FS/THUMBNAIL:', path)
     const thumbnailPath = await getThumbnail(path)
     response.download(thumbnailPath)
   }
@@ -108,7 +106,7 @@ export class FsController {
   @Public()
   @Get('stream')
   readStream(@Query('path') path: string, @Res() response: Response) {
-    console.log('API/FS/STREAM:', path)
+    console.log('FS/STREAM:', path)
     response.sendFile(path)
   }
 
@@ -118,7 +116,7 @@ export class FsController {
     @Query('path') path: string,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    console.log('API/FS/UPLOAD:', path)
+    console.log('FS/UPLOAD:', path)
     return uploadFile(path, file.buffer)
   }
 
@@ -130,7 +128,7 @@ export class FsController {
     @Query('entry') entryList: string[],
     @Res() response: Response,
   ) {
-    console.log('API/FS/DOWNLOAD:', { path, entryList })
+    console.log('FS/DOWNLOAD:', { path, entryList })
     if (entryList) {
       console.log()
     } else {

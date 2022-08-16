@@ -1,5 +1,5 @@
 import RemixIcon from '../../img/remixicon'
-import { getBytesSize, line } from '../../utils'
+import { getReadableSize, line } from '../../utils'
 import { IRootEntry } from '../../utils/types'
 
 interface RootEntryListProps {
@@ -30,9 +30,9 @@ export default function RootEntryList(props: RootEntryListProps) {
               key={mounted}
               title={name}
               className={line(`
-                mb-2 p-2 text-xs rounded cursor-pointer
+                px-2 py-1 text-xs rounded-sm cursor-pointer
                 ${isActive
-                  ? 'bg-gray-200 text-black'
+                  ? 'bg-gray-300 text-black'
                   : 'text-gray-500 hover:text-black'
                 }
               `)}
@@ -47,13 +47,13 @@ export default function RootEntryList(props: RootEntryListProps) {
                   {mounted}
                 </span>
                 {isVolume && (
-                  <span className="transform scale-75 origin-right font-din text-gray-500">
-                    {`${getBytesSize({ bytes: spaceUsed })}/${getBytesSize({ bytes: spaceTotal! })}`.replace(/\s/g, '')}
+                  <span className="transform scale-75 origin-right font-din">
+                    {`${getReadableSize(spaceUsed!)}/${getReadableSize(spaceTotal!)}`.replace(/\s/g, '')}
                   </span>
                 )}
               </div>
               {isVolume && (
-                <div className="relative mt-1 h-1 text-gray-500 font-din bg-white rounded-sm overflow-hidden">
+                <div className="relative h-2px font-din bg-white rounded-sm overflow-hidden">
                   <div
                     className="absolute top-0 bottom-0 left-0 bg-blue-500"
                     style={{ width: `${spaceUsed / spaceTotal! * 100}%` }}

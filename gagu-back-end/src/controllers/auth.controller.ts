@@ -15,7 +15,7 @@ export class AuthController {
     @Body('password') password: string,
   ) {
     console.log(
-      'API/AUTH/LOGIN:',
+      'AUTH/LOGIN:',
       ' username: ',
       username,
       'password',

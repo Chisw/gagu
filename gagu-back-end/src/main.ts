@@ -18,15 +18,15 @@ const argv = minimist(process.argv.slice(2), {
 
 async function bootstrap() {
   if (argv.version) {
-    console.log(`gagu v0.0.12`)
+    console.log('v0.0.13')
     return null
   }
+  initConfig()
   const app = await NestFactory.create(AppModule)
   app.enableCors()
   app.setGlobalPrefix('api')
   await app.listen(argv.port)
   console.log(`\n✨  Application is running on: http://127.0.0.1:${argv.port}`)
-  initConfig()
 }
 
 bootstrap()

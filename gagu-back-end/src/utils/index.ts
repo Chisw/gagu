@@ -3,9 +3,13 @@ import { EntryType, IEntry, IRootEntry, IVolume } from './types'
 // import { mkdirSync } from 'fs'
 import * as nodeDiskInfo from 'node-disk-info'
 import { SetMetadata } from '@nestjs/common'
+import { completeNestedPath } from './fs'
 
-export const USERNAME = process.env.USER
 export const IS_DEV = process.env.NODE_ENV === 'development'
+export const IS_API_PUBLIC_KEY = 'IS_API_PUBLIC_KEY'
+export const USERNAME = process.env.USER || os.userInfo().username
+export const HOSTNAME = os.hostname()
+export const PLATFORM = os.platform()
 
 // sync back and front
 export const GEN_THUMBNAIL_VIDEO_LIST = ['mp4', 'mkv', 'avi', 'rm', 'rmvb']
@@ -23,13 +27,25 @@ export const GEN_THUMBNAIL_LIST = [
   ...GEN_THUMBNAIL_IMAGE_LIST,
 ]
 
+let gaguConfigPath = ''
+if (PLATFORM === 'darwin') {
+  gaguConfigPath = `/Users/${USERNAME}/.io.gagu`
+} else if (PLATFORM === 'android') {
+  gaguConfigPath = `/data/data/com.termux/files/home/storage/shared/Android/.io.gagu`
+} else if (PLATFORM === 'win32') {
+  gaguConfigPath = `C:/Programs Files/.io.gagu`
+}
+export const GAGU_CONFIG_PATH = gaguConfigPath
+
+export const Public = () => SetMetadata(IS_API_PUBLIC_KEY, true)
+
 export const hashCode = (str: string) => {
   let hash = 0
   if (str.length === 0) return '0'
   for (let i = 0; i < str.length; i++) {
     const chr = str.charCodeAt(i)
     hash = (hash << 5) - hash + chr
-    hash |= 0 // Convert to 32bit integer
+    hash |= 0
   }
   return Math.abs(hash as number).toString(36) as string
 }
@@ -39,21 +55,11 @@ export const getExtension = (name: string) => {
   return name.split('.').reverse()[0].toLowerCase()
 }
 
-export const getDeviceInfo = () => {
-  const deviceInfo = {
-    username: os.userInfo().username,
-    hostname: os.hostname(),
-    platform: os.platform(),
-  }
-  return deviceInfo
-}
-
-export const getMockRootEntryList = () => {
+export const getRootEntryList = () => {
   const rootEntryList: IEntry[] = []
-  const { username, platform } = getDeviceInfo()
   const diskInfo = nodeDiskInfo.getDiskInfoSync()
 
-  if (platform === 'darwin') {
+  if (PLATFORM === 'darwin') {
     const driveList = diskInfo.filter((d) => d.mounted.startsWith('/Volumes/'))
 
     const homeEntry: IRootEntry = {
@@ -64,7 +70,7 @@ export const getMockRootEntryList = () => {
       extension: '_dir',
       parentPath: '/Users',
       hasChildren: true,
-      mounted: `/Users/${username}`,
+      mounted: `/Users/${USERNAME}`,
       isVolume: false,
     }
 
@@ -83,7 +89,7 @@ export const getMockRootEntryList = () => {
     }))
 
     rootEntryList.push(homeEntry, ...volumeList)
-  } else if (platform === 'android') {
+  } else if (PLATFORM === 'android') {
     rootEntryList.push(
       {
         name: 'Home',
@@ -112,11 +118,6 @@ export const getMockRootEntryList = () => {
   return rootEntryList
 }
 
-export const IS_API_PUBLIC_KEY = 'IS_API_PUBLIC_KEY'
-export const Public = () => SetMetadata(IS_API_PUBLIC_KEY, true)
-
 export const initConfig = () => {
-  // mkdirSync(`/Users/${USERNAME}/.gagu`)
-  // mkdirSync(`/Users/${USERNAME}/.gagu/thumbnail`)
-  // mkdirSync(`/Users/${USERNAME}/.gagu/cache`)
+  completeNestedPath(`${GAGU_CONFIG_PATH}/thumbnail/PLACEHOLDER`)
 }
