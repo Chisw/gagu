@@ -13,17 +13,17 @@ export interface IEntry {
   extension: string
   size?: number
   mounted?: string
-  isVolume?: boolean
+  isDisk?: boolean
   spaceFree?: number
   spaceTotal?: number
 }
 
 export interface IRootEntry extends IEntry {
   mounted: string
-  isVolume: boolean
+  isDisk: boolean
 }
 
-export interface IVolume extends IRootEntry {
+export interface IDisk extends IRootEntry {
   spaceFree: number
   spaceTotal: number
 }

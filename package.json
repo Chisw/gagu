@@ -1,6 +1,6 @@
 {
   "name": "gagu",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "A cool web file management system",
   "bin": {
     "gagu": "./bin/gagu"

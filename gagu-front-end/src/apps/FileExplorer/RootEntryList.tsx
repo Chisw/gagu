@@ -21,10 +21,10 @@ export default function RootEntryList(props: RootEntryListProps) {
   return (
     <>
       <div>
-        {rootEntryList.map(({ name, mounted, spaceFree, spaceTotal, isVolume }) => {
+        {rootEntryList.map(({ name, mounted, spaceFree, spaceTotal, isDisk }) => {
           const isActive = mounted === activeRootEntryMounted
           const canRootEntryClick = currentDirPath !== mounted
-          const spaceUsed = isVolume ? spaceTotal! - spaceFree! : 0
+          const spaceUsed = isDisk ? spaceTotal! - spaceFree! : 0
           return (
             <div
               key={mounted}
@@ -39,20 +39,20 @@ export default function RootEntryList(props: RootEntryListProps) {
               onClick={() => canRootEntryClick && onRootEntryClick(mounted)}
             >
               <div className="flex items-center">
-                {isVolume ? <RemixIcon.HardDrive /> : <RemixIcon.Folder />}
+                {isDisk ? <RemixIcon.HardDrive /> : <RemixIcon.Folder />}
                 <span className="ml-1 truncate flex-grow">{name}</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="transform scale-75 origin-left">
                   {mounted}
                 </span>
-                {isVolume && (
+                {isDisk && (
                   <span className="transform scale-75 origin-right font-din">
                     {`${getReadableSize(spaceUsed!)}/${getReadableSize(spaceTotal!)}`.replace(/\s/g, '')}
                   </span>
                 )}
               </div>
-              {isVolume && (
+              {isDisk && (
                 <div className="relative h-2px font-din bg-white rounded-sm overflow-hidden">
                   <div
                     className="absolute top-0 bottom-0 left-0 bg-blue-500"

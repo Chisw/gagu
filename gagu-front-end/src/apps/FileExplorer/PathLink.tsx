@@ -50,7 +50,7 @@ export default function PathLink(props: PathLinkProps) {
 
   return (
     <div className="flex-shrink-0 px-2 py-1 text-xs text-gray-400 select-none flex justify-between items-center bg-gray-100 border-t">
-      <div className="group flex-shrink-0">
+      <div className="group">
         <span
           title={activeRootEntryMounted}
           className={isRootEntryDisabled ? '' : 'cursor-pointer hover:text-black'}
@@ -64,7 +64,7 @@ export default function PathLink(props: PathLinkProps) {
           const disabled = mountIndex > mountList.length - 2 - (selectedLen === 1 ? 1 : 0)
           return (
             <span key={encodeURIComponent(fullPath)}>
-              <RemixIcon.ChevronRight size={12} />
+              <RemixIcon.ChevronRight size={14} className="inline -mt-2px" />
               <span
                 title={fullPath}
                 className={disabled ? '' : 'cursor-pointer hover:text-black'}
@@ -83,7 +83,7 @@ export default function PathLink(props: PathLinkProps) {
             toast.success('路径复制成功')
           }}
         >
-          <RemixIcon.Copy size={12} />
+          <RemixIcon.Copy size={14} className="inline -mt-2px" />
         </span>
       </div>
       <div className="flex-shrink-0 flex items-center pl-4 pr-1 font-din">

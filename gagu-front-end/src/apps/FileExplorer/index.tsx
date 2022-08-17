@@ -21,8 +21,6 @@ import { pick, throttle } from 'lodash'
 import Menus from './Menus'
 import Pagination from '../../components/base/Pagination'
 import RemixIcon from '../../img/remixicon'
-import deleteSVG from '../../img/remixicon/delete.svg'
-import downloadSVG from '../../img/remixicon/download.svg'
 
 const MAX_PAGE_SIZE = 200
 
@@ -317,17 +315,14 @@ export default function FileExplorer(props: AppComponentProps) {
     const processList = contextEntryList || selectedEntryList
     const { msg, downloadName, cmd } = getDownloadInfo(currentDirPath, processList)
     const close = () => setDownloadConfirmorProps({ isOpen: false })
+    const icon = <RemixIcon.Download size={36} />
 
     setDownloadConfirmorProps({
       isOpen: true,
       content: (
         <div className="p-4 text-center">
           <div className="p-4 flex justify-center">
-            <img
-              src={downloadSVG}
-              alt="download"
-              className="w-12 h-12"
-            />
+            {icon}
           </div>
           <p className="mt-2 text-base break-all">{msg} ？</p>
         </div>
@@ -346,17 +341,14 @@ export default function FileExplorer(props: AppComponentProps) {
     if (!len) return
     const msg = len === 1 ? processList[0].name : `${len} 个项目`
     const close = () => setDeleteConfirmorProps({ isOpen: false })
+    const icon = <RemixIcon.Delete size={36} />
 
     setDeleteConfirmorProps({
       isOpen: true,
       content: (
         <div className="p-4 text-center">
           <div className="p-4 flex justify-center">
-            <img
-              src={deleteSVG}
-              alt="delete"
-              className="w-12 h-12"
-            />
+            {icon}
           </div>
           <p className="mt-2 text-base break-all">删除 <span className="font-bold">{msg}</span> ？</p>
         </div>

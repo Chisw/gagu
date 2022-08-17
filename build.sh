@@ -6,9 +6,13 @@ mkdir bin/public
 
 cd gagu-back-end
 
+echo '\n🔨  Building gagu-back-end..\n'
+
 yarn build
 
 cd ../gagu-front-end
+
+echo '\n🔨  Building gagu-front-end..\n'
 
 yarn build
 

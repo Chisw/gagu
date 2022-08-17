@@ -6,7 +6,6 @@ import { copy, getDownloadInfo } from '../utils'
 import { FsApi } from '../api'
 import { IOpenedEntry } from '../utils/types'
 import RemixIcon from '../img/remixicon'
-import shareSVG from '../img/remixicon/share.svg'
 
 interface CommonToolButtonsProps {
   currentEntry: IOpenedEntry | null
@@ -21,17 +20,14 @@ export default function CommonToolButtons(props: CommonToolButtonsProps) {
   const handleShare = useCallback(() => {
     const url = FsApi.getFileStreamUrl(`${currentEntry!.parentPath}/${currentEntry!.name}`)
     const close = () => setShareConfirmorProps({ isOpen: false })
+    const icon = <RemixIcon.Share size={36} />
 
     setShareConfirmorProps({
       isOpen: true,
       content: (
         <div className="p-4 text-center">
           <div className="p-4 flex justify-center">
-            <img
-              src={shareSVG}
-              alt="share"
-              className="w-12 h-12"
-            />
+            {icon}
           </div>
           <p className="mt-2 text-sm break-all">分享文件链接给局域网内的伙伴</p>
           <p className="mt-1 text-xs text-gray-400 break-all">{url}</p>

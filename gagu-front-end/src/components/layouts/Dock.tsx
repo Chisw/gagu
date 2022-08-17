@@ -55,7 +55,7 @@ export default function Dock() {
     return [
       {
         text: 'Github',
-        icon: <RemixIcon.GitHub />,
+        icon: <RemixIcon.Github />,
         onClick: () => window.open('https://github.com/Chisw/gagu'),
       },
       {

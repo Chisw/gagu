@@ -11,10 +11,11 @@ import {
   writeFileSync,
 } from 'fs'
 import { createGzip } from 'zlib'
-import { IEntry, EntryType } from 'src/utils/types'
+import { IEntry, EntryType, IRootEntry, IDisk } from 'src/utils/types'
 import { exec } from 'child_process'
-import { GAGU_CONFIG_PATH, GEN_THUMBNAIL_VIDEO_LIST } from './index'
+import { GAGU_CONFIG_PATH, GEN_THUMBNAIL_VIDEO_LIST, OS } from './index'
 import { getExtension } from './index'
+import * as nodeDiskInfo from 'node-disk-info'
 import * as md5 from 'md5'
 import * as thumbsupply from 'thumbsupply'
 import * as gm from 'gm'
@@ -27,6 +28,86 @@ export const getHasChildren = (path: string) => {
   }
 }
 
+export const getRootEntryList = () => {
+  const rootEntryList: IEntry[] = []
+  if (OS.isMacOS) {
+    const driveList = nodeDiskInfo
+      .getDiskInfoSync()
+      .filter((d) => d.mounted.startsWith('/Volumes/'))
+
+    const homeEntry: IRootEntry = {
+      name: 'Home',
+      type: EntryType.directory,
+      hidden: false,
+      lastModified: 0,
+      extension: '_dir',
+      parentPath: '/Users',
+      hasChildren: true,
+      mounted: `/Users/${OS.username}`,
+      isDisk: false,
+    }
+
+    const diskList: IDisk[] = driveList.map((drive) => ({
+      name: drive.mounted.replace('/Volumes/', ''),
+      type: EntryType.directory,
+      hidden: false,
+      lastModified: 0,
+      parentPath: '/Volumes',
+      hasChildren: true,
+      extension: '_dir',
+      mounted: drive.mounted,
+      isDisk: true,
+      spaceFree: drive.available * 512,
+      spaceTotal: drive.blocks * 512,
+    }))
+
+    rootEntryList.push(homeEntry, ...diskList)
+  } else if (OS.isWindows) {
+    const driveList = nodeDiskInfo.getDiskInfoSync()
+    const diskList: IDisk[] = driveList.map((drive) => ({
+      name: drive.mounted,
+      type: EntryType.directory,
+      hidden: false,
+      lastModified: 0,
+      parentPath: '',
+      hasChildren: true,
+      extension: '_dir',
+      mounted: drive.mounted,
+      isDisk: true,
+      spaceFree: drive.available * 512,
+      spaceTotal: drive.blocks * 512,
+    }))
+
+    rootEntryList.push(...diskList)
+  } else if (OS.isAndroid) {
+    rootEntryList.push(
+      {
+        name: 'Home',
+        type: EntryType.directory,
+        hidden: false,
+        lastModified: 0,
+        parentPath: '/data/data/com.termux/files/',
+        hasChildren: true,
+        extension: '_dir',
+        mounted: '/data/data/com.termux/files/home',
+        isDisk: false,
+      },
+      {
+        name: 'Shared',
+        type: EntryType.directory,
+        hidden: false,
+        lastModified: 0,
+        extension: '_dir',
+        parentPath: '/data/data/com.termux/files/home/storage/',
+        hasChildren: true,
+        mounted: '/data/data/com.termux/files/home/storage/shared',
+        isDisk: false,
+      },
+    )
+  }
+  return rootEntryList
+}
+
 export const getEntryList = (path: string) => {
   let entryNameList: string[] = []
   try {
@@ -35,7 +116,7 @@ export const getEntryList = (path: string) => {
     console.log('ERR:', 'getEntryList', err)
     return []
   }
-  const entryList: IEntry[] = entryNameList
+  const entryList = entryNameList
     .map((entryName: string) => {
       try {
         const entryPath = `${path}/${entryName}`
@@ -49,7 +130,7 @@ export const getEntryList = (path: string) => {
         const extension = isDirectory
           ? `_dir${hasChildren ? '' : '_empty'}`
           : getExtension(entryName)
-        return {
+        const entry: IEntry = {
           name: entryName,
           type,
           size,
@@ -59,20 +140,13 @@ export const getEntryList = (path: string) => {
           hasChildren,
           extension,
         }
+        return entry
       } catch (err) {
         console.log('ERR:', 'getEntryList', err)
-        return {
-          name: '',
-          type: EntryType.file,
-          hidden: true,
-          lastModified: 0,
-          parentPath: '',
-          hasChildren: false,
-          extension: '',
-        }
+        return null
       }
     })
-    .filter((e) => e.name)
+    .filter(Boolean) as IEntry[]
   return entryList
 }
 
@@ -170,11 +244,14 @@ export const completeNestedPath = (path: string) => {
     return `${prefix}/${dirName}`
   })
   nestedPathList.forEach((path) => {
-    const exists = getExists(path)
-    if (!exists) {
-      addDirectory(path)
-    }
+    const p = OS.isWindows ? path.replace('/', '') : path
+    const exists = getExists(p)
+    !exists && addDirectory(p)
   })
+}
+
+export const initConfig = () => {
+  completeNestedPath(`${GAGU_CONFIG_PATH}/thumbnail/PLACEHOLDER`)
 }
 
 export const uploadFile = (path: string, buffer: Buffer) => {

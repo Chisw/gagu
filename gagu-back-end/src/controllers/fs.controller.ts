@@ -14,6 +14,7 @@ import {
 import {
   getDirectorySize,
   getExists,
+  getRootEntryList,
   getEntryList,
   renameEntry,
   addDirectory,
@@ -22,11 +23,11 @@ import {
   getThumbnail,
   uploadFile,
 } from 'src/utils/fs'
-import { getRootEntryList, HOSTNAME, PLATFORM, Public } from 'src/utils'
+import { OS, Public } from 'src/utils'
 import { Response } from 'express'
 import { FileInterceptor } from '@nestjs/platform-express'
 
-const deviceName = `${HOSTNAME} [${PLATFORM}]`
+const deviceName = `${OS.hostname} [${OS.platform}]`
 
 @Controller('fs')
 export class FsController {
@@ -123,7 +124,7 @@ export class FsController {
   // TODO: remove public
   @Public()
   @Get('download*')
-  readDownload(
+  getDownload(
     @Query('path') path: string,
     @Query('entry') entryList: string[],
     @Res() response: Response,

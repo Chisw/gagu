@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
-import { initConfig } from './utils'
+import { initConfig } from './utils/fs'
 import * as minimist from 'minimist'
 
 const argv = minimist(process.argv.slice(2), {
@@ -18,7 +18,7 @@ const argv = minimist(process.argv.slice(2), {
 
 async function bootstrap() {
   if (argv.version) {
-    console.log('v0.0.13')
+    console.log('v0.0.14')
     return null
   }
   initConfig()
