@@ -20,7 +20,7 @@ import {
   addDirectory,
   getTextContent,
   deleteEntry,
-  getThumbnail,
+  getThumbnailBase64,
   uploadFile,
 } from 'src/utils/fs'
 import { OS, Public } from 'src/utils'
@@ -93,14 +93,12 @@ export class FsController {
     return { success: true }
   }
 
-  // TODO: remove public
-  @Public()
   @Get('thumbnail')
   @Header('Content-Type', 'image/png')
-  async readThumbnail(@Query('path') path: string, @Res() response: Response) {
+  async readThumbnail(@Query('path') path: string) {
     console.log('FS/THUMBNAIL:', path)
-    const thumbnailPath = await getThumbnail(path)
-    response.download(thumbnailPath)
+    const base64 = await getThumbnailBase64(path)
+    return base64
   }
 
   // TODO: remove public

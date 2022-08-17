@@ -102,7 +102,7 @@ export default function Window(props: WindowProps) {
         <div
           className={line(`
             move-to-front-trigger
-            absolute inset-0 bg-white-700 bg-hazy-100 overflow-hidden
+            absolute inset-0 bg-white-800 bg-hazy-100 overflow-hidden
             transition-box-shadow duration-200 flex flex-col
             ${isFullScreen ? '' : 'rounded-sm border border-gray-500 border-opacity-30 bg-clip-padding'}
             ${isTopWindow ? 'shadow-xl' : 'shadow'}
@@ -148,17 +148,17 @@ export default function Window(props: WindowProps) {
                 `)}
                 onClick={() => setHidden(!hidden)}
               >
-                <RemixIcon.Subtract size={14} />
+                <RemixIcon.Subtract size={12} />
               </span>
               <span
-                title={isFullScreen ? '窗口' : '全屏'}
+                title={isFullScreen ? '退出全屏' : '全屏'}
                 className={line(`
                   text-gray-400 hover:bg-gray-200 hover:text-black active:bg-gray-400
                   ${SAME_CLASS_NAME}
                 `)}
                 onClick={handleZoom}
               >
-                {isFullScreen ? <RemixIcon.FullscreenExit size={14} /> : <RemixIcon.Fullscreen size={14} />}
+                {isFullScreen ? <RemixIcon.FullscreenExit size={12} /> : <RemixIcon.Fullscreen size={12} />}
               </span>
               <span
                 title="关闭"

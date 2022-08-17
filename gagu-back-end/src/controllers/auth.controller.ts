@@ -14,13 +14,7 @@ export class AuthController {
     @Body('username') username: string,
     @Body('password') password: string,
   ) {
-    console.log(
-      'AUTH/LOGIN:',
-      ' username: ',
-      username,
-      'password',
-      password,
-    )
+    console.log('AUTH/LOGIN:', ' username: ', username, 'password', password)
     const userName = username.toLowerCase()
     const passwordRecord = userMap[userName]
     const success = passwordRecord === password

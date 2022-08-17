@@ -1,5 +1,5 @@
 import axios, { AxiosError } from 'axios'
-import { BASE_URL, GAGU_AUTH_CODE_KEY } from '../utils/constant'
+import { BASE_URL, GAGU_AUTH_KEY } from '../utils/constant'
 import { toast } from 'react-toastify'
 
 const instance = axios.create({
@@ -15,10 +15,10 @@ instance.interceptors.request.use(config => {
   // const { url, method } = config
   // if (pass) config.url += `&pass=${pass}`
   // if (method === 'post' && url?.includes('?cmd=file')) config.timeout = 0
-  const gaguAuthCode = localStorage.getItem(GAGU_AUTH_CODE_KEY) || ''
+  const authorization = localStorage.getItem(GAGU_AUTH_KEY) || ''
   config.headers = {
     ...config.headers,
-    'Authorization': gaguAuthCode,
+    'Authorization': authorization,
   }
   return config
 })

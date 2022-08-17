@@ -30,7 +30,7 @@ export default function RootEntryList(props: RootEntryListProps) {
               key={mounted}
               title={name}
               className={line(`
-                px-2 py-1 text-xs rounded-sm cursor-pointer
+                px-2 py-1 text-xs rounded cursor-pointer
                 ${isActive
                   ? 'bg-gray-300 text-black'
                   : 'text-gray-500 hover:text-black'

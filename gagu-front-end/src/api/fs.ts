@@ -25,14 +25,12 @@ export class FsApi {
   }
 
   static renameEntry = async (oldPath: string, newPath: string, config?: AxiosRequestConfig) => {
-    const formData = { oldPath, newPath }
-    const { data } = await instance.put(`/api/fs/rename`, formData, config)
+    const { data } = await instance.put(`/api/fs/rename`, { oldPath, newPath }, config)
     return data
   }
 
   static addDirectory = async (path: string, config?: AxiosRequestConfig) => {
-    const formData = { path }
-    const { data } = await instance.post(`/api/fs/mkdir`, formData, config)
+    const { data } = await instance.post(`/api/fs/mkdir`, { path }, config)
     return data
   }
 
@@ -49,8 +47,9 @@ export class FsApi {
     return data
   }
 
-  static getThumbnailUrl = (path: string) => {
-    return `${BASE_URL}/api/fs/thumbnail?path=${path}`
+  static getThumbnailBase64 = async (path: string, config?: AxiosRequestConfig) => {
+    const { data } = await instance.get(`/api/fs/thumbnail?path=${path}`, config)
+    return data
   }
 
   static getFileStreamUrl = (path: string) => {

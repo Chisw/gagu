@@ -4,7 +4,7 @@ import { useCallback, useState } from 'react'
 import useFetch from '../hooks/useFetch'
 import { AuthApi } from '../api'
 import md5 from 'md5'
-import { GAGU_AUTH_CODE_KEY } from '../utils'
+import { GAGU_AUTH_KEY } from '../utils'
 import { toast } from 'react-toastify'
 import RemixIcon from '../img/remixicon'
 
@@ -24,7 +24,7 @@ export default function LoginPage() {
     }
     const res = await login(formData)
     if (res.success) {
-      localStorage.setItem(GAGU_AUTH_CODE_KEY, res.authCode)
+      localStorage.setItem(GAGU_AUTH_KEY, res.authCode)
       navigate('/')
     } else {
       toast.error(res.msg)

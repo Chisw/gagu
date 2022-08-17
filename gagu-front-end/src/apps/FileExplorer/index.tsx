@@ -173,7 +173,10 @@ export default function FileExplorer(props: AppComponentProps) {
     fetchPathData(path)
     updateHistory(direction, pushPath ? path : undefined)
     if (updateRootEntryMounted) {
-      const mounted = rootEntryMountedList.find(m => path.startsWith(m))!
+      const mounted = rootEntryMountedList
+        .filter(m => path.startsWith(m))
+        .sort((a, b) => a.length > b.length ? -1 : 1)
+        .at(0)!
       setActiveRootEntryMounted(mounted)
     }
   }, [abortController, currentDirPath, fetchPathData, rootEntryMountedList, updateHistory])
@@ -634,7 +637,7 @@ export default function FileExplorer(props: AppComponentProps) {
                 <div
                   className={line(`
                     overflow-hidden rounded select-none
-                    ${gridMode ? 'm-2 px-1 py-2 w-28' : 'mb-1 px-2 py-1 w-full flex items-center'}
+                    ${gridMode ? 'm-2 px-1 py-2 w-28' : 'mb-1 px-2 py-0 w-full flex items-center'}
                   `)}
                 >
                   <Icon
@@ -675,8 +678,8 @@ export default function FileExplorer(props: AppComponentProps) {
                     data-selected={isSelected}
                     draggable
                     className={line(`
-                      entry-node overflow-hidden rounded select-none transition-background duration-300
-                      ${gridMode ? 'm-2 px-1 py-2 w-28' : 'mb-1 px-2 py-1 w-full flex items-center'}
+                      entry-node overflow-hidden rounded select-none
+                      ${gridMode ? 'm-2 px-1 py-2 w-28' : 'mb-1 px-2 py-0 w-full flex items-center'}
                       ${!gridMode && isSelected ? 'bg-blue-600' : 'hover:bg-gray-100'}
                       ${isSelected ? 'bg-gray-100' : ''}
                       ${(isSelected && deleting) ? 'bg-loading' : ''}

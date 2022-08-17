@@ -5,6 +5,7 @@ import { GEN_THUMBNAIL_LIST, GEN_THUMBNAIL_VIDEO_LIST, line } from '../../utils'
 import { FsApi } from '../../api'
 import { CALLABLE_APP_LIST } from '../../utils/appList'
 import RemixIcon from '../../img/remixicon'
+import useFetch from '../../hooks/useFetch'
 
 const DEFAULT_ENTRY_ICON: IEntryIcon = {
   type: 'unknown',
@@ -181,11 +182,12 @@ export default function Icon(props: IconProps) {
 
   const { name, parentPath, extension } = entry
 
-  const [thumbnailLoaded, setThumbnailLoaded] = useState(false)
   const [thumbnailError, setThumbnailError] = useState(false)
   const [isInView, setIsInView] = useState(false)
 
   const iconRef = useRef<any>(null)
+
+  const { fetch, data: base64 } = useFetch(FsApi.getThumbnailBase64)
 
   useEffect(() => {
     const icon: any = iconRef.current
@@ -211,7 +213,13 @@ export default function Icon(props: IconProps) {
     }
   }, [entry, small])
 
-  const showThumbnail = !virtual && useThumbnail && !thumbnailError
+  const showThumbnail = useMemo(() => {
+    return !virtual && useThumbnail && !thumbnailError && isInView
+  }, [virtual, useThumbnail, thumbnailError, isInView])
+
+  useEffect(() => {
+    showThumbnail && fetch(`${parentPath}/${name}`)
+  }, [showThumbnail, fetch, parentPath, name])
 
   const DirSubIcon = dirSubIcon && (
     <div
@@ -239,13 +247,16 @@ export default function Icon(props: IconProps) {
   )
 
   return (
-    <div ref={iconRef} className="flex justify-center items-center pointer-events-none">
-      {(showThumbnail && isInView) ? (
+    <div
+      ref={iconRef}
+      className="flex justify-center items-center pointer-events-none"
+    >
+      {(showThumbnail && isInView && base64) ? (
         <div
           className={line(`
             relative flex justify-center items-center
             ${small ? 'w-7 h-6' : 'w-18 h-12'}
-            ${thumbnailLoaded ? (isVideo ? 'bg-black rounded-sm' : '') : 'bg-loading'}
+            ${isVideo ? 'bg-black rounded-sm' : ''}
           `)}
         >
           <img
@@ -254,8 +265,7 @@ export default function Icon(props: IconProps) {
               max-w-full max-h-full bg-white shadow-md
               ${isVideo ? '' : `border ${small ? 'p-1px' : 'p-2px'}`}
             `)}
-            src={FsApi.getThumbnailUrl(`${parentPath}/${name}`)}
-            onLoad={() => setThumbnailLoaded(true)}
+            src={base64}
             onError={() => setThumbnailError(true)}
           />
           {FileSubIcon}

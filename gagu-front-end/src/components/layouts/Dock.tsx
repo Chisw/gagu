@@ -7,7 +7,7 @@ import { line } from '../../utils'
 import { DateTime } from 'luxon'
 import useFetch from '../../hooks/useFetch'
 import { FsApi } from '../../api'
-import { DOCUMENT_TITLE, GAGU_AUTH_CODE_KEY } from '../../utils/constant'
+import { DOCUMENT_TITLE, GAGU_AUTH_KEY } from '../../utils/constant'
 import RemixIcon from '../../img/remixicon'
 import { useNavigate } from 'react-router-dom'
 
@@ -72,7 +72,7 @@ export default function Dock() {
         text: '退出',
         icon: <RemixIcon.Logout />,
         onClick: () => {
-          localStorage.removeItem(GAGU_AUTH_CODE_KEY)
+          localStorage.removeItem(GAGU_AUTH_KEY)
           navigate('/login')
         },
       },

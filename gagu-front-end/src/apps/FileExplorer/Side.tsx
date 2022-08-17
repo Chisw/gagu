@@ -28,12 +28,11 @@ export default function Side(props: SideProps) {
       `)}
     >
       <div className="p-2 w-64 h-full border-r overflow-x-hidden overflow-y-auto">
-        <p className="p-1 text-xs text-gray-400">根节点</p>
+        {/* <p className="p-1 text-xs text-gray-400">收藏</p> */}
         <RootEntryList
           {...{ currentDirPath, activeRootEntryMounted, rootEntryList }}
           onRootEntryClick={onRootEntryClick}
         />
-        <p className="mt-3 p-1 text-xs text-gray-400">收藏</p>
       </div>
     </div>
   )

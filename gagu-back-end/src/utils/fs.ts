@@ -196,45 +196,47 @@ export const getTextContent = (path: string) => {
   return readFileSync(path).toString('utf-8')
 }
 
-export const getThumbnail = async (path: string) => {
+export const getThumbnailBase64 = async (path: string) => {
   const { mtimeMs } = statSync(path)
   const thumbnailId = md5(`${path}-${mtimeMs}`)
-  const thumbnailPath = `${GAGU_CONFIG_PATH}/thumbnail/${thumbnailId}`
+  const thumbnailDirPath = `${GAGU_CONFIG_PATH}/thumbnail`
+  const thumbnailFilePath = `${thumbnailDirPath}/${thumbnailId}`
 
-  if (getExists(thumbnailPath)) {
-    return thumbnailPath
-  }
+  if (!getExists(thumbnailFilePath)) {
+    const extension = getExtension(path)
+    let targetPath = path
 
-  const extension = getExtension(path)
-  let targetPath = path
-
-  const isGenVideo = GEN_THUMBNAIL_VIDEO_LIST.includes(extension)
-  if (isGenVideo) {
-    const cacheThumbnailPath = await thumbsupply.generateThumbnail(path, {
-      size: thumbsupply.ThumbSize.MEDIUM,
-      timestamp: '10%',
-      mimetype: 'video/mp4',
-      cacheDir: `${GAGU_CONFIG_PATH}/thumbnail`,
-    })
-    targetPath = cacheThumbnailPath
-  }
-
-  await new Promise(async (resolve, reject) => {
-    gm(createReadStream(targetPath))
-      .selectFrame(4)
-      .resize(48)
-      .noProfile()
-      .write(thumbnailPath, (err) => {
-        if (err) {
-          console.log(err)
-          reject(err)
-        } else {
-          resolve(thumbnailPath)
-          isGenVideo && unlinkSync(targetPath)
-        }
+    const isGenVideo = GEN_THUMBNAIL_VIDEO_LIST.includes(extension)
+    if (isGenVideo) {
+      const cacheThumbnailPath = await thumbsupply.generateThumbnail(path, {
+        size: thumbsupply.ThumbSize.MEDIUM,
+        timestamp: '10%',
+        mimetype: 'video/mp4',
+        cacheDir: thumbnailDirPath,
       })
-  })
-  return thumbnailPath
+      targetPath = cacheThumbnailPath
+    }
+
+    await new Promise(async (resolve, reject) => {
+      gm(createReadStream(targetPath))
+        .selectFrame(4)
+        .resize(48)
+        .noProfile()
+        .write(thumbnailFilePath, (err) => {
+          if (err) {
+            console.log(err)
+            reject(err)
+          } else {
+            resolve(thumbnailFilePath)
+            isGenVideo && unlinkSync(targetPath)
+          }
+        })
+    })
+  }
+
+  const bitmap = readFileSync(thumbnailFilePath)
+  const base64 = Buffer.from(bitmap).toString('base64')
+  return `data:image/png;base64,${base64}`
 }
 
 export const completeNestedPath = (path: string) => {
@@ -252,6 +254,7 @@ export const completeNestedPath = (path: string) => {
 
 export const initConfig = () => {
   completeNestedPath(`${GAGU_CONFIG_PATH}/thumbnail/PLACEHOLDER`)
+  completeNestedPath(`${GAGU_CONFIG_PATH}/users/PLACEHOLDER`)
 }
 
 export const uploadFile = (path: string, buffer: Buffer) => {
