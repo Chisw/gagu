@@ -11,8 +11,6 @@
 
 <br>
 
-<div style="text-align: center;">
-
 # GAGU (Beta)
 
 A cool web file management system.
@@ -22,8 +20,6 @@ Running on macOS, Windows, Linux, and Android/Termux.
 ![](https://img.shields.io/badge/npm-v0.0.14-orange)
 ![](https://img.shields.io/badge/license-MIT-green)
 ![](https://img.shields.io/badge/package-655KB-success)
-
-</div>
 
 ## Preparation
 
