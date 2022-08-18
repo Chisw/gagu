@@ -6,4 +6,9 @@ export class AuthApi {
     const { data } = await instance.post('/api/auth/login', formData, config)
     return data
   }
+
+  static shutdown = async () => {
+    const { data } = await instance.post('/api/auth/shutdown')
+    return data
+  }
 }

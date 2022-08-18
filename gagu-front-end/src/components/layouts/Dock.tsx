@@ -6,7 +6,7 @@ import { IApp, IRootInfo } from '../../utils/types'
 import { line } from '../../utils'
 import { DateTime } from 'luxon'
 import useFetch from '../../hooks/useFetch'
-import { FsApi } from '../../api'
+import { AuthApi, FsApi } from '../../api'
 import { DOCUMENT_TITLE, GAGU_AUTH_KEY } from '../../utils/constant'
 import RemixIcon from '../../img/remixicon'
 import { useNavigate } from 'react-router-dom'
@@ -22,6 +22,7 @@ export default function Dock() {
   const [openedEntryList, setOpenedEntryList] = useRecoilState(openedEntryListState)
 
   const { fetch, loading, data } = useFetch(FsApi.getEntryList)
+  const { fetch: shutdown } = useFetch(AuthApi.shutdown)
 
   useEffect(() => {
     fetch('/')
@@ -79,10 +80,13 @@ export default function Dock() {
       {
         text: '关闭系统',
         icon: <RemixIcon.ShutDown />,
-        onClick: () => {},
+        onClick: () => {
+          shutdown()
+          window.close()
+        },
       },
     ]
-  }, [fetch, navigate])
+  }, [fetch, navigate, shutdown])
 
   const handleOpenApp = useCallback((app: IApp) => {
     const sameRunningAppList = runningAppList.filter(a => a.id === app.id)

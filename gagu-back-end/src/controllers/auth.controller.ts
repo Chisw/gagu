@@ -10,7 +10,7 @@ const userMap: { [KEY: string]: string } = {
 export class AuthController {
   @Public()
   @Post('login')
-  findAll(
+  login(
     @Body('username') username: string,
     @Body('password') password: string,
   ) {
@@ -30,5 +30,11 @@ export class AuthController {
         ? '用户不存在'
         : '密码错误',
     }
+  }
+
+  @Post('shutdown')
+  shutdown() {
+    console.log('AUTH/SHUTDOWN')
+    return process.exit(1)
   }
 }

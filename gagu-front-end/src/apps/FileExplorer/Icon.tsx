@@ -285,7 +285,7 @@ export default function Icon(props: IconProps) {
         >
           {small ? icon : (
             <div>
-              <div className="text-center">{icon}</div>
+              <div className="flex justify-center items-center">{icon}</div>
               {!isDir && (
                 <div className="mt-2px font-din text-center text-xs">
                   {extension?.replace('_txt_new', 'txt').substring(0, 4).toUpperCase()}
