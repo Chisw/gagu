@@ -1,6 +1,6 @@
 <div align="center">
 
-  <img src="./logo.svg" >
+  <img src="./logo.svg" style="height: 98px;" >
   
   <br>
 
@@ -57,7 +57,7 @@ $ gagu -v
 
 ## 💡 Thumbnail
 
-You need to install `ffmpeg` and `GraphicsMagick` to support thumbnail api.
+You need to install [ffmpeg](https://ffmpeg.org/) and [GraphicsMagick](http://www.graphicsmagick.org/) to support thumbnail api.
 
 ## 🛠 Development
 
@@ -89,7 +89,7 @@ yarn start:dev
 
 ## 🔨 Build package
 
-Refer to `./build.sh`.
+Refer to [./build.sh](./build.sh).
 
 ## 📜  License
 
