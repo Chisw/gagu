@@ -43,7 +43,7 @@ export class FsApi {
     const { name, nestedPath } = nestedFile
     let formData = new FormData()
     formData.append('file', nestedFile)
-    const { data } = await instance.post(`/api/fs/upload?path=${parentPath}${nestedPath || `/${name}`}`, formData, config)
+    const { data } = await instance.post(`/api/fs/upload?path=${parentPath}${nestedPath || `/${name}`}`, formData, { ...config, timeout: 0 })
     return data
   }
 

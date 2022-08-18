@@ -38,35 +38,40 @@ export default function LoginPage() {
         style={{ backgroundImage: `url("${bg}")` }}
       >
         <div className="absolute inset-0 flex justify-center items-center bg-hazy-100 bg-black-300">
-          <div className="w-48">
+          <div className="w-56">
             <div className="text-white flex justify-center items-center">
               <div
                 className="w-24 h-24 rounded-full bg-center bg-cover shadow-lg"
                 style={{ backgroundImage: `url("${bg}")` }}
               />
             </div>
-            <input
-              placeholder="用户名"
-              className="px-2 py-1 w-full mt-6 text-sm outline-none"
-              maxLength={16}
-              value={username}
-              onChange={(e: any) => setUsername(e.target.value.trim())}
-            />
-            <div className="relative mt-4">
+            <code>
               <input
-                type="password"
-                placeholder="密码"
-                className="px-2 py-1 w-full text-sm outline-none"
+                autoFocus
+                placeholder="Username"
+                className="px-3 py-2 w-full rounded-sm mt-6 text-sm outline-none bg-black-100 text-white placeholder-gray-400 border-b border-transparent focus:border-white"
                 maxLength={16}
-                value={password}
-                onChange={(e: any) => setPassword(e.target.value)}
+                value={username}
+                onChange={(e: any) => setUsername(e.target.value.trim())}
               />
+            </code>
+            <div className="relative mt-4">
+              <code>
+                <input
+                  type="password"
+                  placeholder="Password"
+                  className="px-3 py-2 w-full rounded-sm text-sm outline-none bg-black-100 text-white placeholder-gray-400 border-b border-transparent focus:border-white"
+                  maxLength={16}
+                  value={password}
+                  onChange={(e: any) => setPassword(e.target.value)}
+                />
+              </code>
               <button
                 disabled={!username || !password}
-                className="absolute top-0 right-0 w-8 h-full hover:bg-gray-100"
+                className="absolute top-0 right-0 px-3 h-full hover:bg-black-200"
                 onClick={handleLogin}
               >
-                <RemixIcon.ArrowRight />
+                <RemixIcon.ArrowRight className="text-white"/>
               </button>
             </div>
           </div>

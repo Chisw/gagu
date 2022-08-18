@@ -368,7 +368,6 @@ export default function FileExplorer(props: AppComponentProps) {
         }
         if (successList.every(Boolean)) {
           handleRefresh()
-          toast.success('删除成功')
         }
       },
     })
@@ -636,7 +635,7 @@ export default function FileExplorer(props: AppComponentProps) {
               {(newDirMode || newTxtMode) && (
                 <div
                   className={line(`
-                    overflow-hidden rounded select-none
+                    overflow-hidden rounded-sm select-none
                     ${gridMode ? 'm-2 px-1 py-2 w-28' : 'mb-1 px-2 py-0 w-full flex items-center'}
                   `)}
                 >
@@ -678,7 +677,7 @@ export default function FileExplorer(props: AppComponentProps) {
                     data-selected={isSelected}
                     draggable
                     className={line(`
-                      entry-node overflow-hidden rounded select-none
+                      entry-node overflow-hidden rounded-sm select-none
                       ${gridMode ? 'm-2 px-1 py-2 w-28' : 'mb-1 px-2 py-0 w-full flex items-center'}
                       ${!gridMode && isSelected ? 'bg-blue-600' : 'hover:bg-gray-100'}
                       ${isSelected ? 'bg-gray-100' : ''}
