@@ -1,6 +1,6 @@
 {
   "name": "gagu",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "A cool web file management system",
   "bin": {
     "gagu": "./bin/gagu"
@@ -10,7 +10,8 @@
     "url": "git+https://github.com/Chisw/gagu.git"
   },
   "keywords": [
-    "GAGU"
+    "gagu",
+    "file management"
   ],
   "author": "Chisw",
   "license": "MIT",

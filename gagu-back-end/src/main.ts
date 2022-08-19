@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
 import { initConfig } from './utils/fs'
 import * as minimist from 'minimist'
-import { GAGU_CURRENT_VERSION } from './utils'
+import { GAGU_CURRENT_VERSION, IS_DEV, openInBrowser } from './utils'
 
 const argv = minimist(process.argv.slice(2), {
   alias: {
@@ -20,10 +20,10 @@ const argv = minimist(process.argv.slice(2), {
 async function bootstrap() {
   if (argv.help) {
     console.log('Usage:')
-    console.log('  anywhere          // Start service')
-    console.log('  anywhere -p 8888  // Start with customized port, `--port`')
-    console.log('  anywhere -h       // Show help info, `--help`')
-    console.log('  anywhere -v       // Show version, `--version`')
+    console.log('  gagu          // Start service')
+    console.log('  gagu -p 8888  // Start with customized port, `--port`')
+    console.log('  gagu -h       // Show help info, `--help`')
+    console.log('  gagu -v       // Show version, `--version`')
     process.exit(0)
   }
 
@@ -38,7 +38,9 @@ async function bootstrap() {
   app.enableCors()
   app.setGlobalPrefix('api')
   await app.listen(argv.port)
-  console.log(`\n✨  Application is running on: http://127.0.0.1:${argv.port}`)
+  const url = `http://127.0.0.1:${argv.port}`
+  console.log(`\n✨  GAGU service is running on: ${url}`)
+  !IS_DEV && openInBrowser(url)
 }
 
 bootstrap()

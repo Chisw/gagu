@@ -35,6 +35,6 @@ export class AuthController {
   @Post('shutdown')
   shutdown() {
     console.log('AUTH/SHUTDOWN')
-    return process.exit(1)
+    return process.exit(0)
   }
 }

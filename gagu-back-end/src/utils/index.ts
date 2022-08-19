@@ -1,7 +1,8 @@
 import * as os from 'os'
 import { SetMetadata } from '@nestjs/common'
+import { exec, spawn } from 'child_process'
 
-export const GAGU_CURRENT_VERSION = 'v0.0.15'
+export const GAGU_CURRENT_VERSION = 'v0.0.16'
 export const IS_DEV = process.env.NODE_ENV === 'development'
 export const IS_API_PUBLIC_KEY = 'IS_API_PUBLIC_KEY'
 
@@ -57,4 +58,14 @@ export const hashCode = (str: string) => {
 export const getExtension = (name: string) => {
   if (!name || !name.includes('.') || name.startsWith('.')) return ''
   return name.split('.').reverse()[0].toLowerCase()
+}
+
+export const openInBrowser = (url: string) => {
+  if (OS.isMacOS) {
+    exec(`open ${url}`)
+  } else if (OS.isWindows) {
+    exec(`start ${url}`)
+  } else {
+    spawn('xdg-open', [url])
+  }
 }
