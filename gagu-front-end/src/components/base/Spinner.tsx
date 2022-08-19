@@ -1,4 +1,4 @@
-import RemixIcon from '../../img/remixicon'
+import { SvgIcon } from './SvgIcon'
 
 interface SpinnerProps {
   size?: number
@@ -13,7 +13,7 @@ export function Spinner(props: SpinnerProps) {
 
   return (
     <div className={`inline-block ${className} text-gray-400 animate-spin`}>
-      <RemixIcon.Loader size={size} />
+      <SvgIcon.Loader size={size} />
     </div>
   )
 }

@@ -6,7 +6,7 @@ import { AuthApi } from '../api'
 import md5 from 'md5'
 import { GAGU_AUTH_KEY } from '../utils'
 import { toast } from 'react-toastify'
-import RemixIcon from '../img/remixicon'
+import { SvgIcon } from '../components/base'
 
 
 export default function LoginPage() {
@@ -71,7 +71,7 @@ export default function LoginPage() {
                 className="absolute top-0 right-0 px-3 h-full hover:bg-black-200"
                 onClick={handleLogin}
               >
-                <RemixIcon.ArrowRight className="text-white"/>
+                <SvgIcon.ArrowRight className="text-white"/>
               </button>
             </div>
           </div>

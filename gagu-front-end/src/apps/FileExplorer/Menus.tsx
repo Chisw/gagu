@@ -3,7 +3,7 @@ import APP_LIST from '../../utils/appList'
 import { useCallback, useMemo } from 'react'
 import { FsApi } from '../../api'
 import iina from '../../img/icons/iina.png'
-import RemixIcon from '../../img/remixicon'
+import { SvgIcon } from '../../components/base'
 
 const availableAppIdList = ['text-editor', 'photo-gallery', 'music-player', 'video-player']
 
@@ -120,31 +120,31 @@ export default function Menus(props: MenusProps) {
   const actions = useMemo(() => {
     return [
       {
-        icon: <RemixIcon.FolderAdd />,
+        icon: <SvgIcon.FolderAdd />,
         text: '新建文件夹',
         isShow: isOnBlank,
         onClick: () => setNewDirMode(true),
       },
       {
-        icon: <RemixIcon.FileAdd />,
+        icon: <SvgIcon.FileAdd />,
         text: '新建文本文件',
         isShow: isOnBlank,
         onClick: () => setNewTxtMode(true),
       },
       {
-        icon: <RemixIcon.Refresh />,
+        icon: <SvgIcon.Refresh />,
         text: '刷新',
         isShow: isOnBlank,
         onClick: handleRefresh,
       },
       {
-        icon: <RemixIcon.Edit />,
+        icon: <SvgIcon.Edit />,
         text: '重命名',
         isShow: isSingleConfirmed,
         onClick: () => setTimeout(handleRename, 0),
       },
       {
-        icon: <RemixIcon.Apps />,
+        icon: <SvgIcon.Apps />,
         text: '打开方式',
         isShow: !isOnDir && isSingleConfirmed,
         onClick: () => { },
@@ -159,19 +159,19 @@ export default function Menus(props: MenusProps) {
         }),
       },
       {
-        icon: <RemixIcon.FolderInfo />,
+        icon: <SvgIcon.FolderInfo />,
         text: '文件夹大小',
         isShow: isOnDir,
         onClick: () => updateDirSize(contextEntryList[0]),
       },
       {
-        icon: <RemixIcon.Upload />,
+        icon: <SvgIcon.Upload />,
         text: '上传',
         isShow: isOnBlank,
         onClick: handleUploadClick,
       },
       {
-        icon: <RemixIcon.Download />,
+        icon: <SvgIcon.Download />,
         text: '下载',
         isShow: true,
         onClick: () => handleDownloadClick(contextEntryList),
@@ -183,7 +183,7 @@ export default function Menus(props: MenusProps) {
       //   onClick: () => { },
       // },
       {
-        icon: <RemixIcon.Delete />,
+        icon: <SvgIcon.Delete />,
         text: '删除',
         isShow: !isOnBlank,
         onClick: () => handleDeleteClick(contextEntryList),
@@ -214,7 +214,7 @@ export default function Menus(props: MenusProps) {
             <div className="relative flex items-center group">
               {icon}
               <span className="ml-2 flex-grow">{text}</span>
-              {children && <RemixIcon.ChevronRight />}
+              {children && <SvgIcon.ChevronRight />}
               {children && (
                 <div className="absolute top-0 left-0 w-44 ml-40 hidden group-hover:block py-1 bg-white-800 backdrop-filter backdrop-blur shadow-lg border">
                   {children.map(({ icon, text, onClick }) => (

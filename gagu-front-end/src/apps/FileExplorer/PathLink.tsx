@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { toast } from 'react-toastify'
-import RemixIcon from '../../img/remixicon'
+import { SvgIcon } from '../../components/base'
 import { copy } from '../../utils'
 import { IEntry } from '../../utils/types'
 
@@ -64,7 +64,7 @@ export default function PathLink(props: PathLinkProps) {
           const disabled = mountIndex > mountList.length - 2 - (selectedLen === 1 ? 1 : 0)
           return (
             <span key={encodeURIComponent(fullPath)}>
-              <RemixIcon.ChevronRight size={14} className="inline -mt-2px" />
+              <SvgIcon.ChevronRight size={14} className="inline -mt-2px" />
               <span
                 title={fullPath}
                 className={disabled ? '' : 'cursor-pointer hover:text-black'}
@@ -83,19 +83,19 @@ export default function PathLink(props: PathLinkProps) {
             toast.success('路径复制成功')
           }}
         >
-          <RemixIcon.Copy size={14} className="inline -mt-2px" />
+          <SvgIcon.Copy size={14} className="inline -mt-2px" />
         </span>
       </div>
       <div className="flex-shrink-0 flex items-center pl-4 pr-1 font-din">
         {!!selectedLen && (
           <>
-            <RemixIcon.Check />&nbsp;<span>{loading ? '-' : selectedLen}</span>
+            <SvgIcon.Check />&nbsp;<span>{loading ? '-' : selectedLen}</span>
             &emsp;
           </>
         )}
-        <RemixIcon.Folder />&nbsp;<span>{loading ? '-' : dirCount}</span>
+        <SvgIcon.Folder />&nbsp;<span>{loading ? '-' : dirCount}</span>
         &emsp;
-        <RemixIcon.File />&nbsp;<span>{loading ? '-' : fileCount}</span>
+        <SvgIcon.File />&nbsp;<span>{loading ? '-' : fileCount}</span>
       </div>
     </div>
   )

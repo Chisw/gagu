@@ -1,4 +1,4 @@
-import RemixIcon from '../../img/remixicon'
+import { SvgIcon } from '../../components/base'
 import { getReadableSize, line } from '../../utils'
 import { IRootEntry } from '../../utils/types'
 
@@ -39,7 +39,7 @@ export default function RootEntryList(props: RootEntryListProps) {
               onClick={() => canRootEntryClick && onRootEntryClick(mounted)}
             >
               <div className="flex items-center">
-                {isDisk ? <RemixIcon.HardDrive /> : <RemixIcon.Folder />}
+                {isDisk ? <SvgIcon.HardDrive /> : <SvgIcon.Folder />}
                 <span className="ml-1 truncate flex-grow">{name}</span>
               </div>
               <div className="flex justify-between items-center">

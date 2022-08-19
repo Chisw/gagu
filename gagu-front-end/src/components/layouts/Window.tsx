@@ -4,7 +4,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { runningAppListState, topWindowIndexState } from '../../utils/state'
 import { line } from '../../utils'
-import RemixIcon from '../../img/remixicon'
+import { SvgIcon } from '../../components/base'
 import useFavicon from '../../hooks/useFavicon'
 
 const SAME_CLASS_NAME = `w-6 h-6 flex justify-center items-center cursor-pointer transition-all duration-200`
@@ -148,7 +148,7 @@ export default function Window(props: WindowProps) {
                 `)}
                 onClick={() => setHidden(!hidden)}
               >
-                <RemixIcon.Subtract size={12} />
+                <SvgIcon.Subtract size={12} />
               </span>
               <span
                 title={isFullScreen ? '退出全屏' : '全屏'}
@@ -158,7 +158,7 @@ export default function Window(props: WindowProps) {
                 `)}
                 onClick={handleZoom}
               >
-                {isFullScreen ? <RemixIcon.FullscreenExit size={12} /> : <RemixIcon.Fullscreen size={12} />}
+                {isFullScreen ? <SvgIcon.FullscreenExit size={12} /> : <SvgIcon.Fullscreen size={12} />}
               </span>
               <span
                 title="关闭"
@@ -169,7 +169,7 @@ export default function Window(props: WindowProps) {
                 `)}
                 onClick={handleClose}
               >
-                <RemixIcon.Close />
+                <SvgIcon.Close />
               </span>
             </div>
           </div>

@@ -1,5 +1,5 @@
 import ToolButton from '../../components/ToolButton'
-import RemixIcon from '../../img/remixicon'
+import { SvgIcon } from '../../components/base'
 
 export interface IToolBarDisabledMap {
   navBack: boolean
@@ -79,32 +79,32 @@ export default function ToolBar(props: ToolBarProps) {
       <div className="h-8 flex-shrink-0 flex items-center border-b">
         <ToolButton
           title="后退 [Shift + ←]"
-          icon={<RemixIcon.ArrowLeft />}
+          icon={<SvgIcon.ArrowLeft />}
           disabled={disabledMap.navBack}
           onClick={onNavBack}
         />
         <ToolButton
           title="前进 [Shift + →]"
-          icon={<RemixIcon.ArrowRight />}
+          icon={<SvgIcon.ArrowRight />}
           disabled={disabledMap.navForward}
           onClick={onNavForward}
         />
         {disabledMap.refresh ? (
           <ToolButton
             title="停止"
-            icon={<RemixIcon.Close />}
+            icon={<SvgIcon.Close />}
             onClick={onAbort}
           />
         ) : (
           <ToolButton
             title="刷新 [Shift + R]"
-            icon={<RemixIcon.Refresh />}
+            icon={<SvgIcon.Refresh />}
             onClick={onRefresh}
           />
         )}
         <ToolButton
           title="上级目录 [Shift + ↑]"
-          icon={<RemixIcon.ArrowUp />}
+          icon={<SvgIcon.ArrowUp />}
           disabled={disabledMap.backToTop}
           onClick={onBackToTop}
         />
@@ -113,40 +113,40 @@ export default function ToolBar(props: ToolBarProps) {
 
         <ToolButton
           title="新建文件夹 [Shift + N]"
-          icon={<RemixIcon.FolderAdd />}
+          icon={<SvgIcon.FolderAdd />}
           disabled={disabledMap.newDir}
           onClick={onNewDir}
         />
         <ToolButton
           title="新建文本文件 [Shift + T]"
-          icon={<RemixIcon.FileAdd />}
+          icon={<SvgIcon.FileAdd />}
           disabled={disabledMap.newTxt}
           onClick={onNewTxt}
         />
         <ToolButton
           title="重命名 [Shift + E]"
-          icon={<RemixIcon.Edit />}
+          icon={<SvgIcon.Edit />}
           disabled={disabledMap.rename}
           onClick={onRename}
         />
         <ToolButton
           title="上传 [Shift + U]"
-          icon={<RemixIcon.Upload />}
+          icon={<SvgIcon.Upload />}
           onClick={onUpload}
         />
         <ToolButton
           title="下载 [Shift + D]"
-          icon={<RemixIcon.Download />}
+          icon={<SvgIcon.Download />}
           disabled={disabledMap.download}
           onClick={onDownload}
         />
         <ToolButton
           title="收藏 [Shift + S]"
-          icon={<RemixIcon.Star />}
+          icon={<SvgIcon.Star />}
         />
         <ToolButton
           title="删除 [Del]"
-          icon={<RemixIcon.Delete />}
+          icon={<SvgIcon.Delete />}
           disabled={disabledMap.delete}
           onClick={onDelete}
         />
@@ -167,14 +167,14 @@ export default function ToolBar(props: ToolBarProps) {
               />
               <ToolButton
                 title="取消"
-                icon={<RemixIcon.Close />}
+                icon={<SvgIcon.Close />}
                 onClick={cancel}
               />
             </div>
           ) : (
             <ToolButton
               title="筛选 [Shift + F]"
-              icon={<RemixIcon.Filter />}
+              icon={<SvgIcon.Filter />}
               disabled={disabledMap.filter}
               onClick={() => setFilterMode(true)}
             />
@@ -183,18 +183,18 @@ export default function ToolBar(props: ToolBarProps) {
 
         <ToolButton
           title="全选 [Shift + A]"
-          icon={<RemixIcon.Check />}
+          icon={<SvgIcon.Check />}
           disabled={disabledMap.selectAll}
           onClick={onSelectAll}
         />
         <ToolButton
           title={`${hiddenShow ? '不' : ''}显示隐藏项 [Shift + H]`}
-          icon={hiddenShow ? <RemixIcon.EyeOff /> : <RemixIcon.Eye />}
+          icon={hiddenShow ? <SvgIcon.EyeOff /> : <SvgIcon.Eye />}
           onClick={() => setHiddenShow(!hiddenShow)}
         />
         <ToolButton
           title={gridMode ? '显示为列表 [Shift + L]' : '显示为图标 [Shift + G]'}
-          icon={gridMode ? <RemixIcon.ViewList /> : <RemixIcon.ViewGrid />}
+          icon={gridMode ? <SvgIcon.ViewList /> : <SvgIcon.ViewGrid />}
           onClick={() => setGridMode(!gridMode)}
         /> 
       </div>

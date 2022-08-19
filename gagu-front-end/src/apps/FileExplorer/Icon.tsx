@@ -4,54 +4,33 @@ import { get } from 'lodash'
 import { GEN_THUMBNAIL_LIST, GEN_THUMBNAIL_VIDEO_LIST, line } from '../../utils'
 import { FsApi } from '../../api'
 import { CALLABLE_APP_LIST } from '../../utils/appList'
-import RemixIcon from '../../img/remixicon'
+import { SvgIcon  } from '../../components/base'
 import useFetch from '../../hooks/useFetch'
 
 const DEFAULT_ENTRY_ICON: IEntryIcon = {
   type: 'unknown',
-  icon: <RemixIcon.Unknown />,
-  iconClassName: 'text-gray-500 bg-gray-200 border-gray-200',
+  icon: <SvgIcon.Unknown />,
+  iconClassName: 'text-gray-500 bg-gray-200',
   matchList: [],
 }
 
-const SMALL_FOLDER_ICON_LIST: IEntryIcon[] = [
+const FOLDER_ICON_LIST: IEntryIcon[] = [
   {
     type: 'folder',
-    icon: <RemixIcon.FolderFillFiles size={24} />,
-    iconClassName: 'border-none',
+    icon: '',
+    iconClassName: '--folder',
     matchList: ['_dir'],
   },
   {
     type: 'folder',
-    icon: <RemixIcon.FolderFill size={24} />,
-    iconClassName: 'border-none',
+    icon: '',
+    iconClassName: '--folder --empty',
     matchList: ['_dir_empty'],
   },
   {
     type: 'folder',
-    icon: <RemixIcon.FolderFill size={24} />,
-    iconClassName: 'border-none opacity-50',
-    matchList: ['_dir_new'],
-  },
-]
-
-const LARGE_FOLDER_ICON_LIST: IEntryIcon[] = [
-  {
-    type: 'folder',
-    icon: <RemixIcon.FolderFillFiles size={56} />,
-    iconClassName: 'border-none',
-    matchList: ['_dir'],
-  },
-  {
-    type: 'folder',
-    icon: <RemixIcon.FolderFill size={56} />,
-    iconClassName: 'border-none',
-    matchList: ['_dir_empty'],
-  },
-  {
-    type: 'folder',
-    icon: <RemixIcon.FolderFill size={56} />,
-    iconClassName: 'border-none opacity-50',
+    icon: '',
+    iconClassName: '--folder --empty opacity-50',
     matchList: ['_dir_new'],
   },
 ]
@@ -59,88 +38,88 @@ const LARGE_FOLDER_ICON_LIST: IEntryIcon[] = [
 const ENTRY_ICON_LIST: IEntryIcon[] = [
   {
     type: 'document',
-    icon: <RemixIcon.Document />,
+    icon: <SvgIcon.Document />,
     iconClassName: 'text-gray-500 bg-gray-100 border-gray-300',
     matchList: ['_txt_new', 'txt', 'md'],
   },
   {
     type: 'pdf',
-    icon: <RemixIcon.PDF />,
-    iconClassName: 'text-red-900 bg-red-100 border-red-200',
+    icon: <SvgIcon.PDF />,
+    iconClassName: '--file --pdf',
     matchList: ['pdf'],
   },
   {
     type: 'code',
-    icon: <RemixIcon.CodeSlash />,
-    iconClassName: 'text-green-400 bg-black-900 border-green-600',
+    icon: <SvgIcon.CodeSlash />,
+    iconClassName: '--file --code',
     matchList: ['html', 'css', 'js', 'php'],
   },
   {
     type: 'data',
-    icon: <RemixIcon.Database />,
+    icon: <SvgIcon.Database />,
     iconClassName: 'text-gray-700 bg-gray-100 border-gray-300',
     matchList: ['dat', 'db', 'sql', 'json', 'log'],
   },
   {
     type: 'image',
-    icon: <RemixIcon.Image />,
+    icon: <SvgIcon.Image />,
     iconClassName: 'text-orange-500 bg-orange-100 border-orange-200',
     matchList: ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'insp', 'svg', 'ico'],
   },
   {
     type: 'audio',
-    icon: <RemixIcon.Music />,
-    iconClassName: 'text-pink-700 bg-pink-100 border-pink-200',
+    icon: <SvgIcon.Music />,
+    iconClassName: '--file --music',
     matchList: ['mp3', 'flac', 'wav', 'aac'],
   },
   {
     type: 'video',
-    icon: <RemixIcon.Film />,
+    icon: <SvgIcon.Film />,
     iconClassName: 'text-blue-500 bg-blue-100 border-blue-200',
     matchList: ['mp4', 'mov', 'wmv', 'insv', 'mkv', 'avi', 'rm', 'rmvb'],
   },
   {
     type: 'archive',
-    icon: <RemixIcon.Zip />,
+    icon: <SvgIcon.Zip />,
     iconClassName: 'text-amber-700 bg-amber-100 border-amber-300',
     matchList: ['zip', 'rar', '.7z'],
   },
   {
     type: 'application',
-    icon: <RemixIcon.Application />,
+    icon: <SvgIcon.Application />,
     iconClassName: 'text-lime-600 bg-lime-100 border-lime-300',
     matchList: ['apk'],
   },
 ]
 
 const DIR_SUB_ICON_MAP = {
-  'alipay': <RemixIcon.Alipay />,
-  'android': <RemixIcon.Android />,
-  'applications': <RemixIcon.Application />,
+  'alipay': <SvgIcon.Alipay />,
+  'android': <SvgIcon.Android />,
+  'applications': <SvgIcon.Application />,
   // 'autonavi': dirAutonavi,
   // 'backups': dirBackup,
-  'baidu': <RemixIcon.Baidu />,
+  'baidu': <SvgIcon.Baidu />,
   // 'browser': dirBrowser,
-  'camera': <RemixIcon.Camera />,
-  'dcim': <RemixIcon.Camera />,
+  'camera': <SvgIcon.Camera />,
+  'dcim': <SvgIcon.Camera />,
   // 'duoKan': dirDuokan,
-  'desktop': <RemixIcon.Computer />,
-  'document': <RemixIcon.FileText />,
-  'documents': <RemixIcon.FileText />,
-  'download': <RemixIcon.Download />,
-  'downloads': <RemixIcon.Download />,
-  'font': <RemixIcon.FontSize />,
-  'fonts': <RemixIcon.FontSize />,
-  'movies': <RemixIcon.Film />,
-  'music': <RemixIcon.Music />,
-  'pictures': <RemixIcon.Image />,
-  'public': <RemixIcon.Walk />,
+  'desktop': <SvgIcon.Computer />,
+  'document': <SvgIcon.FileText />,
+  'documents': <SvgIcon.FileText />,
+  'download': <SvgIcon.Download />,
+  'downloads': <SvgIcon.Download />,
+  'font': <SvgIcon.FontSize />,
+  'fonts': <SvgIcon.FontSize />,
+  'movies': <SvgIcon.Film />,
+  'music': <SvgIcon.Music />,
+  'pictures': <SvgIcon.Image />,
+  'public': <SvgIcon.Walk />,
   // 'retroarch': dirRetroArch,
-  'qq': <RemixIcon.QQ />,
-  'tencent': <RemixIcon.QQ />,
+  'qq': <SvgIcon.QQ />,
+  'tencent': <SvgIcon.QQ />,
   // 'miui': dirMi,
-  'wechat': <RemixIcon.Wechat />,
-  'weixin': <RemixIcon.Wechat />,
+  'wechat': <SvgIcon.Wechat />,
+  'weixin': <SvgIcon.Wechat />,
 }
 
 const getIconInfo = (entry: IEntry, small: boolean) => {
@@ -148,7 +127,7 @@ const getIconInfo = (entry: IEntry, small: boolean) => {
   const isDir = type === EntryType.directory
   const entryIcon = extension
     ? (([
-      ...(small ? SMALL_FOLDER_ICON_LIST : LARGE_FOLDER_ICON_LIST),
+      ...FOLDER_ICON_LIST,
       ...ENTRY_ICON_LIST,
     ]).find(o => o.matchList.includes(extension)) || DEFAULT_ENTRY_ICON)
     : DEFAULT_ENTRY_ICON
@@ -273,26 +252,18 @@ export default function Icon(props: IconProps) {
       ) : (
         <div
           className={line(`
+            entry-icon
             relative flex justify-center items-center
-            ${small ? 'px-2px' : ''}
-            ${(isDir || small) ? 'border' : 'border-2'}
-            ${(isDir && small)   ? 'w-7  h-6  rounded' : ''}
-            ${(isDir && !small)  ? 'w-14 h-12 rounded-lg' : ''}
-            ${(!isDir && small)  ? 'w-5  h-6  rounded-sm rounded-tr mx-1' : ''}
-            ${(!isDir && !small) ? 'w-10 h-12 rounded rounded-tr-lg' : ''}
+            ${(isDir && small) ? 'w-7 h-6' : ''}
+            ${(isDir && !small) ? 'w-14 h-12' : ''}
+            ${(!isDir && small) ? 'w-5 h-6' : ''}
+            ${(!isDir && !small) ? 'w-10 h-12' : ''}
+            ${small ? '--no-ext' : ''}
             ${iconClassName}
           `)}
+          data-ext={extension.replace('_txt_new', 'txt').substring(0, 4)}
         >
-          {small ? icon : (
-            <div>
-              <div className="flex justify-center items-center">{icon}</div>
-              {!isDir && (
-                <div className="mt-2px font-din text-center text-xs">
-                  {extension?.replace('_txt_new', 'txt').substring(0, 4).toUpperCase()}
-                </div>
-              )}
-            </div>
-          )}
+          {icon}
           {DirSubIcon}
           {FileSubIcon}
         </div>

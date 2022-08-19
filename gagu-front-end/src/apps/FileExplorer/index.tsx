@@ -19,8 +19,7 @@ import useDragOperations from '../../hooks/useDragOperations'
 import useShortcuts from '../../hooks/useShortcuts'
 import { pick, throttle } from 'lodash'
 import Menus from './Menus'
-import Pagination from '../../components/base/Pagination'
-import RemixIcon from '../../img/remixicon'
+import { Pagination, SvgIcon } from '../../components/base'
 
 const MAX_PAGE_SIZE = 200
 
@@ -318,7 +317,7 @@ export default function FileExplorer(props: AppComponentProps) {
     const processList = contextEntryList || selectedEntryList
     const { msg, downloadName, cmd } = getDownloadInfo(currentDirPath, processList)
     const close = () => setDownloadConfirmorProps({ isOpen: false })
-    const icon = <RemixIcon.Download size={36} />
+    const icon = <SvgIcon.Download size={36} />
 
     setDownloadConfirmorProps({
       isOpen: true,
@@ -344,7 +343,7 @@ export default function FileExplorer(props: AppComponentProps) {
     if (!len) return
     const msg = len === 1 ? processList[0].name : `${len} 个项目`
     const close = () => setDeleteConfirmorProps({ isOpen: false })
-    const icon = <RemixIcon.Delete size={36} />
+    const icon = <SvgIcon.Delete size={36} />
 
     setDeleteConfirmorProps({
       isOpen: true,
@@ -596,7 +595,7 @@ export default function FileExplorer(props: AppComponentProps) {
             onClick={() => setSideCollapse(!sideCollapse)}
           >
             <span className={sideCollapse ? '' : 'transform -rotate-180'}>
-              <RemixIcon.ChevronRight />
+              <SvgIcon.ChevronRight />
             </span>
           </div>
           <div
@@ -612,7 +611,7 @@ export default function FileExplorer(props: AppComponentProps) {
             {/* empty tip */}
             {(!fetching && isEntryListEmpty) && (
               <div className="absolute inset-0 p-10 flex justify-end items-end text-gray-200">
-                <RemixIcon.Plant size={32} />
+                <SvgIcon.Plant size={32} />
               </div>
             )}
             <div

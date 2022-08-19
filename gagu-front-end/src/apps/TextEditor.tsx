@@ -9,7 +9,7 @@ import { FsApi } from '../api'
 import { APP_ID_MAP } from '../utils/appList'
 import { openedEntryListState } from '../utils/state'
 import { AppComponentProps, IOpenedEntry } from '../utils/types'
-import RemixIcon from '../img/remixicon'
+import { SvgIcon } from '../components/base'
 
 export default function TextEditor(props: AppComponentProps) {
 
@@ -67,25 +67,25 @@ export default function TextEditor(props: AppComponentProps) {
         <div className="h-8 flex-shrink-0 flex items-center border-b bg-white">
           <ToolButton
             title="保存"
-            icon={<RemixIcon.Save />}
+            icon={<SvgIcon.Save />}
             disabled={value === textContent && !saving}
             loading={saving}
             onClick={handleSave}
           />
           <ToolButton
             title="重置"
-            icon={<RemixIcon.Restart />}
+            icon={<SvgIcon.Restart />}
             disabled={value === textContent}
             onClick={() => setValue(textContent)}
           />
           <ToolButton
             title="等宽显示"
-            icon={<RemixIcon.CodeSlash />}
+            icon={<SvgIcon.CodeSlash />}
             onClick={() => setMonoMode(!monoMode)}
           />
           <ToolButton
             title="复制文本"
-            icon={<RemixIcon.Copy />}
+            icon={<SvgIcon.Copy />}
             onClick={() => {
               copy(value)
               toast.success('文本复制成功')

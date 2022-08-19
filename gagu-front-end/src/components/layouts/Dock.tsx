@@ -8,7 +8,7 @@ import { DateTime } from 'luxon'
 import useFetch from '../../hooks/useFetch'
 import { AuthApi, FsApi } from '../../api'
 import { DOCUMENT_TITLE, GAGU_AUTH_KEY } from '../../utils/constant'
-import RemixIcon from '../../img/remixicon'
+import { SvgIcon } from '../../components/base'
 import { useNavigate } from 'react-router-dom'
 import LogoSvg from '../../img/logo.svg'
 
@@ -59,17 +59,17 @@ export default function Dock() {
     return [
       {
         text: '进入全屏',
-        icon: <RemixIcon.Fullscreen />,
+        icon: <SvgIcon.Fullscreen />,
         onClick: () => document.querySelector('html')?.requestFullscreen(),
       },
       {
         text: '刷新',
-        icon: <RemixIcon.Refresh />,
+        icon: <SvgIcon.Refresh />,
         onClick: () => fetch('/'),
       },
       {
         text: '退出',
-        icon: <RemixIcon.Logout />,
+        icon: <SvgIcon.Logout />,
         onClick: () => {
           localStorage.removeItem(GAGU_AUTH_KEY)
           navigate('/login')
@@ -77,7 +77,7 @@ export default function Dock() {
       },
       {
         text: '关闭系统',
-        icon: <RemixIcon.ShutDown />,
+        icon: <SvgIcon.ShutDown />,
         onClick: () => {
           shutdown()
           window.close()
@@ -121,7 +121,7 @@ export default function Dock() {
       <div className="fixed z-20 right-0 bottom-0 left-0 p-2 bg-white-500 flex justify-between items-center backdrop-filter backdrop-blur border-t border-gray-500 border-opacity-20 bg-clip-padding">
         <div className="w-32 flex-shrink-0">
           <div className="relative w-6 h-6 flex justify-center items-center hover:bg-white-600 hover:text-black active:bg-white-500 group">
-            <RemixIcon.Dashboard />
+            <SvgIcon.Dashboard />
             <div className="absolute left-0 bottom-0 mb-6 bg-white-900 hidden group-hover:block">
               <div className="py-2 flex justify-center items-center text-gray-500">
                 <a
@@ -145,7 +145,7 @@ export default function Dock() {
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <RemixIcon.Github />
+                  <SvgIcon.Github />
                 </a>
               </div>
               <div className="w-56 py-1">

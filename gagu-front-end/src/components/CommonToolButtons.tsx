@@ -5,7 +5,7 @@ import ToolButton from './ToolButton'
 import { copy, getDownloadInfo } from '../utils'
 import { FsApi } from '../api'
 import { IOpenedEntry } from '../utils/types'
-import RemixIcon from '../img/remixicon'
+import { SvgIcon } from '../components/base'
 
 interface CommonToolButtonsProps {
   currentEntry: IOpenedEntry | null
@@ -20,7 +20,7 @@ export default function CommonToolButtons(props: CommonToolButtonsProps) {
   const handleShare = useCallback(() => {
     const url = FsApi.getFileStreamUrl(`${currentEntry!.parentPath}/${currentEntry!.name}`)
     const close = () => setShareConfirmorProps({ isOpen: false })
-    const icon = <RemixIcon.Share size={36} />
+    const icon = <SvgIcon.Share size={36} />
 
     setShareConfirmorProps({
       isOpen: true,
@@ -55,13 +55,13 @@ export default function CommonToolButtons(props: CommonToolButtonsProps) {
       <div className="flex-grow" />
       <ToolButton
         title={`分享 ${currentEntry?.name}`}
-        icon={<RemixIcon.Share />}
+        icon={<SvgIcon.Share />}
         onClick={handleShare}
         disabled={!currentEntry}
       />
       <ToolButton
         title={`下载 ${currentEntry?.name}`}
-        icon={<RemixIcon.Download />}
+        icon={<SvgIcon.Download />}
         onClick={handleDownload}
         disabled={!currentEntry}
       />

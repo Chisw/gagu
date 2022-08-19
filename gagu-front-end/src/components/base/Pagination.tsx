@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import RemixIcon from '../../img/remixicon'
+import { SvgIcon } from './SvgIcon'
 
 export interface PaginationProps {
   pageSize: number
@@ -8,7 +8,7 @@ export interface PaginationProps {
   onChange: (index: number) => void
 }
 
-export default function Pagination(props: PaginationProps) {
+export function Pagination(props: PaginationProps) {
   
   const { pageSize, count, current, onChange } = props
   const pages = Math.ceil( count / pageSize )
@@ -60,7 +60,7 @@ export default function Pagination(props: PaginationProps) {
           onClick={() => onChange(prev)}
           disabled={current === FIRST}
         >
-          <RemixIcon.ArrowLeft />
+          <SvgIcon.ChevronLeft />
         </button>
       
 
@@ -109,7 +109,7 @@ export default function Pagination(props: PaginationProps) {
           onClick={() => onChange(next)}
           disabled={current === pages}
         >
-          <RemixIcon.ArrowRight />
+          <SvgIcon.ChevronRight />
         </button>
       </div>
 
@@ -126,7 +126,7 @@ export default function Pagination(props: PaginationProps) {
             className="w-4 hover:bg-gray-100"
             onClick={() => handleJump({ key: 'Enter' })}
           >
-            <RemixIcon.ArrowRight />
+            <SvgIcon.ChevronRight />
           </button>
         </>
       )}
