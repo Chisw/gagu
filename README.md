@@ -6,9 +6,9 @@
   <p>Website: <a href="https://gagu.io" target="_blank">gagu.io</a></p>
   <p>A cool web file management system.</p>
   <p>Work on macOS, Windows, Linux(planning), and Android/Termux.</p>
-  <p>Inspired by Android/X-plore and NPM/anywhere.</p>
-  <img src="https://img.shields.io/badge/NPM-v0.0.14-orange">
-  <img src="https://img.shields.io/badge/Package-655KB-success">
+  <p>Inspired by <a href="https://play.google.com/store/apps/details?id=com.lonelycatgames.Xplore" target="_blank">Android/X-plore</a> and <a href="https://www.npmjs.com/package/anywhere" target="_blank">NPM/anywhere</a>.</p>
+  <img src="https://img.shields.io/badge/NPM-v0.0.15-orange">
+  <img src="https://img.shields.io/badge/Package-653KB-success">
   <img src="https://img.shields.io/badge/License-MIT-green">
   <br>
   <br>
@@ -42,11 +42,14 @@ $ gagu
 #   username: gagu
 #   password: 9293
 
-# Start with customized port with `-p`
+# Start with customized port with `-p` or `--port`
 $ gagu -p 8888
 
 # Show version with `-v` or `--version`
 $ gagu -v
+
+# Stop service
+# Ctrl + C
 ```
 
 You need to install [ffmpeg](https://ffmpeg.org/) and [GraphicsMagick](http://www.graphicsmagick.org/) to support thumbnail api.
@@ -63,7 +66,7 @@ $ cd gagu-back-end
 # Install dependencies
 $ yarn
 
-# Start dev at http://127.0.0.1:9293
+# Start dev
 $ yarn start:dev
 ```
 
@@ -75,7 +78,7 @@ $ cd gagu-front-end
 # Install dependencies
 $ yarn
 
-# Start dev at http://127.0.0.1:3000
+# Start dev
 $ yarn start
 ```
 
@@ -84,7 +87,6 @@ $ yarn start
 Update following version tags:
 
 - ./gagu-back-end/src/utils/index.ts - GAGU_CURRENT_VERSION
-- ./gagu-front-end/src/utils/constant.ts - GAGU_CURRENT_VERSION
 - ./package.json - version field
 - ./README.md - version tag
 

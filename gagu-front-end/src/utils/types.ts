@@ -59,6 +59,7 @@ export interface IDisk extends IRootEntry {
 }
 
 export interface IRootInfo {
+  version: string,
   deviceName: string
   rootEntryList: IRootEntry[]
 }

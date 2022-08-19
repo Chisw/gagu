@@ -23,7 +23,7 @@ import {
   getThumbnailBase64,
   uploadFile,
 } from 'src/utils/fs'
-import { OS, Public } from 'src/utils'
+import { GAGU_CURRENT_VERSION, OS, Public } from 'src/utils'
 import { Response } from 'express'
 import { FileInterceptor } from '@nestjs/platform-express'
 
@@ -38,6 +38,7 @@ export class FsController {
       ? getRootEntryList()
       : getEntryList(path)
     return {
+      version: GAGU_CURRENT_VERSION,
       deviceName,
       entryList,
     }

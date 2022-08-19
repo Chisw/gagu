@@ -14,6 +14,7 @@ export const runningAppListState = atom<IApp[]>({
 export const rootInfoState = atom<IRootInfo>({
   key: 'rootInfoState',
   default: {
+    version: 'v-.-.-',
     deviceName: '--',
     rootEntryList: [],
   },

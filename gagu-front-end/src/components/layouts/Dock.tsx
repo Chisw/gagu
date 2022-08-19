@@ -7,7 +7,7 @@ import { line } from '../../utils'
 import { DateTime } from 'luxon'
 import useFetch from '../../hooks/useFetch'
 import { AuthApi, FsApi } from '../../api'
-import { DOCUMENT_TITLE, GAGU_AUTH_KEY, GAGU_CURRENT_VERSION } from '../../utils/constant'
+import { DOCUMENT_TITLE, GAGU_AUTH_KEY } from '../../utils/constant'
 import RemixIcon from '../../img/remixicon'
 import { useNavigate } from 'react-router-dom'
 import LogoSvg from '../../img/logo.svg'
@@ -22,6 +22,8 @@ export default function Dock() {
   const [runningAppList, setRunningAppList] = useRecoilState(runningAppListState)
   const [openedEntryList, setOpenedEntryList] = useRecoilState(openedEntryListState)
 
+  console.log()
+
   const { fetch, loading, data } = useFetch(FsApi.getEntryList)
   const { fetch: shutdown } = useFetch(AuthApi.shutdown)
 
@@ -31,8 +33,8 @@ export default function Dock() {
 
   useEffect(() => {
     if (data) {
-      const { deviceName, entryList: rootEntryList } = data
-      setRootInfo({ deviceName, rootEntryList } as IRootInfo)
+      const { version, deviceName, entryList: rootEntryList } = data
+      setRootInfo({ version, deviceName, rootEntryList } as IRootInfo)
     }
   }, [data, setRootInfo])
 
@@ -134,6 +136,10 @@ export default function Dock() {
                   />
                 </a>
                 &nbsp;
+                <span className="text-xs font-din">
+                  {rootInfo.version}
+                </span>
+                &nbsp;
                 <a
                   href="https://github.com/Chisw/gagu"
                   target="_blank"
@@ -141,10 +147,6 @@ export default function Dock() {
                 >
                   <RemixIcon.Github />
                 </a>
-                &nbsp;
-                <span className="text-xs font-din">
-                  {GAGU_CURRENT_VERSION}
-                </span>
               </div>
               <div className="w-56 py-1">
                 <div className="mb-1 p-2 border-t border-b text-xs text-gray-600">

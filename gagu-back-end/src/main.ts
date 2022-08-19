@@ -6,23 +6,34 @@ import { GAGU_CURRENT_VERSION } from './utils'
 
 const argv = minimist(process.argv.slice(2), {
   alias: {
+    help: 'h',
     port: 'p',
-    log: 'l',
     version: 'v',
   },
   string: ['port'],
-  boolean: ['log', 'version'],
+  boolean: ['help', 'version'],
   default: {
     port: 9293,
   },
 })
 
 async function bootstrap() {
+  if (argv.help) {
+    console.log('Usage:')
+    console.log('  anywhere          // Start service')
+    console.log('  anywhere -p 8888  // Start with customized port, `--port`')
+    console.log('  anywhere -h       // Show help info, `--help`')
+    console.log('  anywhere -v       // Show version, `--version`')
+    process.exit(0)
+  }
+
   if (argv.version) {
     console.log(GAGU_CURRENT_VERSION)
-    return null
+    process.exit(0)
   }
+
   initConfig()
+
   const app = await NestFactory.create(AppModule)
   app.enableCors()
   app.setGlobalPrefix('api')
