@@ -1,5 +1,5 @@
 {
-  "name": "gagu",
+  "name": "GAGU",
   "version": "0.0.14",
   "description": "A cool web file management system",
   "bin": {
@@ -10,7 +10,7 @@
     "url": "git+https://github.com/Chisw/gagu.git"
   },
   "keywords": [
-    "gagu"
+    "GAGU"
   ],
   "author": "Chisw",
   "license": "MIT",

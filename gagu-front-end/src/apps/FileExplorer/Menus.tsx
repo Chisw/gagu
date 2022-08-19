@@ -197,7 +197,7 @@ export default function Menus(props: MenusProps) {
 
   return (
     <div
-      className="absolute z-10 py-1 w-44 bg-white-900 bg-hazy-50 shadow-lg border"
+      className="absolute z-10 py-1 w-44 bg-white-900 backdrop-filter backdrop-blur shadow-lg border"
       style={{ top: top - 24, left: left - 134 }}
     >
       {actions
@@ -216,7 +216,7 @@ export default function Menus(props: MenusProps) {
               <span className="ml-2 flex-grow">{text}</span>
               {children && <RemixIcon.ChevronRight />}
               {children && (
-                <div className="absolute top-0 left-0 w-44 ml-40 hidden group-hover:block py-1 bg-white-900 bg-hazy-50 shadow-lg border">
+                <div className="absolute top-0 left-0 w-44 ml-40 hidden group-hover:block py-1 bg-white-800 backdrop-filter backdrop-blur shadow-lg border">
                   {children.map(({ icon, text, onClick }) => (
                     <div
                       key={encodeURIComponent(text)}

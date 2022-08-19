@@ -102,7 +102,7 @@ export default function Window(props: WindowProps) {
         <div
           className={line(`
             move-to-front-trigger
-            absolute inset-0 bg-white-800 bg-hazy-100 overflow-hidden
+            absolute inset-0 bg-white-800 backdrop-filter backdrop-blur-sm overflow-hidden
             transition-box-shadow duration-200 flex flex-col
             ${isFullScreen ? '' : 'rounded-sm border border-gray-500 border-opacity-30 bg-clip-padding'}
             ${isTopWindow ? 'shadow-xl' : 'shadow'}

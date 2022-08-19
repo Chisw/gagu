@@ -1,62 +1,11 @@
 <div style="display:flex; justify-content: center;">
-  <svg width="396" height="98" viewBox="0 0 396 98" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0 0H396V98H0V0Z" fill="#FED500"/>
-    <path d="M118.286 10.3158V72.2105H159.429V56.7368H180V72.2105H200.571V10.3158H118.286Z" fill="white"/>
-    <path d="M108 10.3158H25.7143V72.2105H108V36.1053H87.4286V56.7368H66.8571V25.7895H108V10.3158Z" fill="white"/>
-    <path d="M293.143 10.3158H210.857V72.2105H293.143V36.1053H272.571V56.7368H252V25.7895H293.143V10.3158Z" fill="white"/>
-    <path d="M303.429 10.3158H344.571V56.7368H365.143V10.3158H385.714V72.2105H303.429V10.3158Z" fill="white"/>
-    <path d="M159.429 25.7895H180V36.1053H159.429V25.7895Z" fill="#FED500"/>
-  </svg>
+<svg width="396" height="96" viewBox="0 0 396 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 0H396V96H0V0Z" fill="#FACC15"/>
+<path d="M121.846 10.1053V70.7368H162.462V55.5789H182.769V70.7368H203.077V10.1053H121.846Z" fill="white"/>
+<path d="M111.692 10.1053H30.4615V70.7368H111.692V35.3684H91.3846V55.5789H71.0769V25.2632H111.692V10.1053Z" fill="white"/>
+<path d="M294.462 10.1053H213.231V70.7368H294.462V35.3684H274.154V55.5789H253.846V25.2632H294.462V10.1053Z" fill="white"/>
+<path d="M304.615 10.1053H345.231V55.5789H365.538V10.1053H385.846V70.7368H304.615V10.1053Z" fill="white"/>
+<path d="M162.462 25.2632H182.769V35.3684H162.462V25.2632Z" fill="#FACC15"/>
+</svg>
+
 </div>
-
-<br>
-
-# GAGU (Beta)
-
-A cool web file management system.
-
-Running on macOS, Windows, Linux, and Android/Termux.
-
-![](https://img.shields.io/badge/npm-v0.0.14-orange)
-![](https://img.shields.io/badge/license-MIT-green)
-![](https://img.shields.io/badge/package-655KB-success)
-
-## Preparation
-
-GAGU is published on npm, so install node.js on your device first.
-
-## Installation
-
-```sh
-npm i gagu -g
-```
-
-In macOS, you may need command `sudo`:
-
-```sh
-sudo npm i gagu -g
-```
-
-## Usage
-
-```sh
-# Start service and visit http://127.0.0.1:9293
-# Default admin:
-#   username: gagu
-#   password: 9293
-gagu
-
-# Customize service port with -p
-gagu -p 8888
-
-# Show version with -v or --version
-gagu -v
-```
-
-## Thumbnail
-
-You need to install `ffmpeg` and `GraphicsMagick` to support thumbnail api.
-
-## License
-
-The MIT license.

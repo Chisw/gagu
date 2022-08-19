@@ -7,9 +7,10 @@ import { line } from '../../utils'
 import { DateTime } from 'luxon'
 import useFetch from '../../hooks/useFetch'
 import { AuthApi, FsApi } from '../../api'
-import { DOCUMENT_TITLE, GAGU_AUTH_KEY } from '../../utils/constant'
+import { DOCUMENT_TITLE, GAGU_AUTH_KEY, GAGU_CURRENT_VERSION } from '../../utils/constant'
 import RemixIcon from '../../img/remixicon'
 import { useNavigate } from 'react-router-dom'
+import LogoSvg from '../../img/logo.svg'
 
 export default function Dock() {
 
@@ -54,11 +55,6 @@ export default function Dock() {
 
   const buttonList = useMemo(() => {
     return [
-      {
-        text: 'Github',
-        icon: <RemixIcon.Github />,
-        onClick: () => window.open('https://github.com/Chisw/gagu'),
-      },
       {
         text: '进入全屏',
         icon: <RemixIcon.Fullscreen />,
@@ -120,14 +116,38 @@ export default function Dock() {
 
   return (
     <>
-      <div className="fixed z-20 right-0 bottom-0 left-0 p-2 bg-white-500 flex justify-between items-center bg-hazy-100 border-t border-gray-500 border-opacity-20 bg-clip-padding">
+      <div className="fixed z-20 right-0 bottom-0 left-0 p-2 bg-white-500 flex justify-between items-center backdrop-filter backdrop-blur border-t border-gray-500 border-opacity-20 bg-clip-padding">
         <div className="w-32 flex-shrink-0">
           <div className="relative w-6 h-6 flex justify-center items-center hover:bg-white-600 hover:text-black active:bg-white-500 group">
             <RemixIcon.Dashboard />
             <div className="absolute left-0 bottom-0 mb-6 bg-white-900 hidden group-hover:block">
-
+              <div className="py-2 flex justify-center items-center text-gray-500">
+                <a
+                  href="https://gagu.io"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <img
+                    src={LogoSvg}
+                    alt="GAGU"
+                    className="inline-block h-8"
+                  />
+                </a>
+                &nbsp;
+                <a
+                  href="https://github.com/Chisw/gagu"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <RemixIcon.Github />
+                </a>
+                &nbsp;
+                <span className="text-xs font-din">
+                  {GAGU_CURRENT_VERSION}
+                </span>
+              </div>
               <div className="w-56 py-1">
-                <div className="mb-1 p-2 border-b text-xs text-gray-600">
+                <div className="mb-1 p-2 border-t border-b text-xs text-gray-600">
                   {loading ? '系统加载中' : `${rootInfo.deviceName} 已连接`}
                 </div>
                 {buttonList.map(({ text, icon, onClick }, buttonIndex) => (

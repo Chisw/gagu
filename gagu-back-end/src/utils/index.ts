@@ -1,6 +1,7 @@
 import * as os from 'os'
 import { SetMetadata } from '@nestjs/common'
 
+export const GAGU_CURRENT_VERSION = 'v0.0.14'
 export const IS_DEV = process.env.NODE_ENV === 'development'
 export const IS_API_PUBLIC_KEY = 'IS_API_PUBLIC_KEY'
 

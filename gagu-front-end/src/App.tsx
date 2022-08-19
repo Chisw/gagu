@@ -4,7 +4,7 @@ import { ToastContainer, Flip } from 'react-toastify'
 import DesktopPage from './pages/DesktopPage'
 import LoginPage from './pages/LoginPage'
 import useFavicon from './hooks/useFavicon'
-import defaultFavicon from './img/icons/app-transfer.png'
+import defaultFavicon from './img/icons/default-favicon.png'
 
 export default function App() {
 

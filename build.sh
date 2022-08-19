@@ -34,6 +34,4 @@ rm bin/main.js
 
 rm bin/public/static/js/*.LICENSE.txt
 
-echo '\n✨  Build gagu bin successfully.'
-
-echo '\n🔔  Update package version before publish to npm. \n'
+echo '\n✨  Build GAGU bin successfully.'

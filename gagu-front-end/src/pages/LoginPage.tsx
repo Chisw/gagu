@@ -37,7 +37,7 @@ export default function LoginPage() {
         className="fixed z-0 inset-0 bg-cover bg-center overflow-hidden"
         style={{ backgroundImage: `url("${bg}")` }}
       >
-        <div className="absolute inset-0 flex justify-center items-center bg-hazy-100 bg-black-300">
+        <div className="absolute inset-0 flex justify-center items-center backdrop-filter backdrop-blur-lg bg-black-100">
           <div className="w-56">
             <div className="text-white flex justify-center items-center">
               <div
@@ -49,7 +49,7 @@ export default function LoginPage() {
               <input
                 autoFocus
                 placeholder="Username"
-                className="px-3 py-2 w-full rounded-sm mt-6 text-sm outline-none bg-black-100 text-white placeholder-gray-400 border-b border-transparent focus:border-white"
+                className="px-3 py-2 w-full mt-6 text-sm outline-none bg-black-100 text-white placeholder-gray-400 border-b border-transparent focus:border-white"
                 maxLength={16}
                 value={username}
                 onChange={(e: any) => setUsername(e.target.value.trim())}
@@ -60,7 +60,7 @@ export default function LoginPage() {
                 <input
                   type="password"
                   placeholder="Password"
-                  className="px-3 py-2 w-full rounded-sm text-sm outline-none bg-black-100 text-white placeholder-gray-400 border-b border-transparent focus:border-white"
+                  className="px-3 py-2 w-full text-sm outline-none bg-black-100 text-white placeholder-gray-400 border-b border-transparent focus:border-white"
                   maxLength={16}
                   value={password}
                   onChange={(e: any) => setPassword(e.target.value)}

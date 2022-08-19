@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
 import { initConfig } from './utils/fs'
 import * as minimist from 'minimist'
+import { GAGU_CURRENT_VERSION } from './utils'
 
 const argv = minimist(process.argv.slice(2), {
   alias: {
@@ -18,7 +19,7 @@ const argv = minimist(process.argv.slice(2), {
 
 async function bootstrap() {
   if (argv.version) {
-    console.log('v0.0.14')
+    console.log(GAGU_CURRENT_VERSION)
     return null
   }
   initConfig()
