@@ -103,7 +103,7 @@ export default function NameLine(props: NameLineProps) {
   }, [entry, currentDirPath, create, getExists, addDirectory, renameEntry, uploadFile, onSuccess, onFail])
 
   return (
-    <div className={`w-full leading-none ${gridMode ? 'mt-2 text-center' : 'ml-4 flex justify-center items-center'}`}>
+    <div className={`w-full leading-none ${gridMode ? 'mt-1 text-center' : 'ml-4 flex justify-center items-center'}`}>
       {showInput ? (
         <div
           className={line(`

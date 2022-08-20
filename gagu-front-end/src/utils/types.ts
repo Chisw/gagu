@@ -1,5 +1,3 @@
-import { ReactNode } from 'react'
-
 export interface AppComponentProps {
   isTopWindow: boolean
   setWindowLoading: (loading: boolean) => void
@@ -67,13 +65,6 @@ export interface IRootInfo {
 export interface IOpenedEntry extends IEntry {
   openAppId: string
   isOpen: boolean
-}
-
-export interface IEntryIcon {
-  type: string
-  icon: ReactNode
-  iconClassName: string
-  matchList: string[]
 }
 
 export interface IHistory {
