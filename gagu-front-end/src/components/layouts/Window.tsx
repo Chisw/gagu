@@ -5,10 +5,8 @@ import { useRecoilState } from 'recoil'
 import { runningAppListState, topWindowIndexState } from '../../utils/state'
 import { line } from '../../utils'
 import { SvgIcon } from '../../components/base'
-import useFavicon from '../../hooks/useFavicon'
 
 const SAME_CLASS_NAME = `w-6 h-6 flex justify-center items-center cursor-pointer transition-all duration-200`
-
 interface WindowProps {
   app: IApp
 }
@@ -17,9 +15,9 @@ export default function Window(props: WindowProps) {
 
   const {
     app: {
+      id: appId,
       runningId,
       title,
-      icon,
       bgImg,
       width,
       height,
@@ -46,8 +44,6 @@ export default function Window(props: WindowProps) {
   const [rndInstance, setRndInstance] = useState<any>(null)
 
   const isTopWindow = useMemo(() => currentIndex === topWindowIndex, [currentIndex, topWindowIndex])
-
-  useFavicon(icon)
 
   const handleMoveToFront = useCallback((e) => {
     if (isTopWindow || e.target.closest('[prevent-move-to-front]')) return
@@ -122,8 +118,8 @@ export default function Window(props: WindowProps) {
               onDoubleClick={handleZoom}
             >
               <div
-                className="w-3 h-3 bg-center bg-no-repeat bg-contain"
-                style={{ backgroundImage: `url("${icon}")` }}
+                className="app-icon w-3 h-3 bg-center bg-no-repeat bg-contain"
+                data-app-id={appId}
               />
               <span className="ml-2 text-gray-500 text-xs">
                 {windowTitle || title}

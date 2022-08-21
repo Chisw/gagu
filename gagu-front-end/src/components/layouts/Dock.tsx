@@ -33,8 +33,8 @@ export default function Dock() {
 
   useEffect(() => {
     if (data) {
-      const { version, deviceName, entryList: rootEntryList } = data
-      setRootInfo({ version, deviceName, rootEntryList } as IRootInfo)
+      const { version, platform, deviceName, entryList: rootEntryList } = data
+      setRootInfo({ version, platform, deviceName, rootEntryList } as IRootInfo)
     }
   }, [data, setRootInfo])
 
@@ -150,7 +150,7 @@ export default function Dock() {
               </div>
               <div className="w-56 py-1">
                 <div className="mb-1 p-2 border-t border-b text-xs text-gray-600">
-                  {loading ? '系统加载中' : `${rootInfo.deviceName} 已连接`}
+                  {loading ? '系统加载中' : `${rootInfo.deviceName} [${rootInfo.platform}] 已连接`}
                 </div>
                 {buttonList.map(({ text, icon, onClick }, buttonIndex) => (
                   <button
@@ -177,9 +177,9 @@ export default function Dock() {
                 className="relative mx-2 w-6 h-6"
               >
                 <div
-                  className="filter hover:brightness-110 active:brightness-75 transition-all duration-50 w-full h-full bg-no-repeat bg-center bg-contain cursor-pointer"
+                  className="app-icon filter hover:brightness-110 active:brightness-75 transition-all duration-50 w-full h-full cursor-pointer"
+                  data-app-id={app.id}
                   title={app.title}
-                  style={{ backgroundImage: `url("${app.icon}")` }}
                   onClick={() => handleOpenApp(app)}
                 />
                 <span

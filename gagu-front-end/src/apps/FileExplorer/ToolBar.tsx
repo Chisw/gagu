@@ -36,9 +36,9 @@ interface ToolBarProps {
   onBackToTop: () => void
   onNewDir: () => void
   onNewTxt: () => void
-  onRename: () => void
   onUpload: () => void
   onDownload: () => void
+  onRename: () => void
   onDelete: () => void
   onSelectAll: () => void
 }
@@ -62,9 +62,9 @@ export default function ToolBar(props: ToolBarProps) {
     onBackToTop,
     onNewDir,
     onNewTxt,
-    onRename,
     onUpload,
     onDownload,
+    onRename,
     onDelete,
     onSelectAll,
   } = props
@@ -124,12 +124,6 @@ export default function ToolBar(props: ToolBarProps) {
           onClick={onNewTxt}
         />
         <ToolButton
-          title="重命名 [Shift + E]"
-          icon={<SvgIcon.Edit />}
-          disabled={disabledMap.rename}
-          onClick={onRename}
-        />
-        <ToolButton
           title="上传 [Shift + U]"
           icon={<SvgIcon.Upload />}
           onClick={onUpload}
@@ -143,6 +137,12 @@ export default function ToolBar(props: ToolBarProps) {
         <ToolButton
           title="收藏 [Shift + S]"
           icon={<SvgIcon.Star />}
+        />
+        <ToolButton
+          title="重命名 [Shift + E]"
+          icon={<SvgIcon.Edit />}
+          disabled={disabledMap.rename}
+          onClick={onRename}
         />
         <ToolButton
           title="删除 [Del]"

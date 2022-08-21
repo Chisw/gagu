@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useRecoilState } from 'recoil'
-import Icon from './Icon'
+import EntryIcon from './EntryIcon'
 import useFetch from '../../hooks/useFetch'
 import { getReadableSize, getDownloadInfo, getIsContained, isSameEntry, entrySorter, line, getMatchAppId } from '../../utils'
 import { FsApi } from '../../api'
@@ -12,7 +12,6 @@ import NameLine, { NameFailType } from './NameLine'
 import { DateTime } from 'luxon'
 import { toast } from 'react-toastify'
 import Confirmor, { ConfirmorProps } from '../../components/Confirmor'
-import VirtualEntries from './VirtualEntries'
 import Side from './Side'
 import useDragSelect from '../../hooks/useDragSelect'
 import useDragOperations from '../../hooks/useDragOperations'
@@ -48,7 +47,6 @@ export default function FileExplorer(props: AppComponentProps) {
   const [waitDropToCurrentPath, setWaitDropToCurrentPath] = useState(false)
   const [downloadConfirmorProps, setDownloadConfirmorProps] = useState<ConfirmorProps>({ isOpen: false })
   const [deleteConfirmorProps, setDeleteConfirmorProps] = useState<ConfirmorProps>({ isOpen: false })
-  const [virtualEntries, setVirtualEntries] = useState<File[]>([])
   const [hiddenShow, setHiddenShow] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
   const [uploadInfo, setUploadInfo] = useState({ ratio: 0, speed: '' })
@@ -229,11 +227,6 @@ export default function FileExplorer(props: AppComponentProps) {
       toast.error('无有效文件')
       return
     }
-    // 只显示当前文件夹下的
-    if (!destDir) {
-      setVirtualEntries(nestedFileList.filter(f => '/' + f.name === f.nestedPath).map(f => f))
-    }
-
     const newTaskList: IUploadTask[] = nestedFileList.map(nestedFile => ({
       id: Math.random().toString(36).slice(-8),
       nestedFile,
@@ -264,7 +257,7 @@ export default function FileExplorer(props: AppComponentProps) {
       const { success } = await uploadFile(parentPath, nestedFile, { onUploadProgress })
 
       if (success) {
-        document.querySelector(`[data-name="${nestedFile.name}"]`)
+        document.querySelector(`[data-entry-name="${nestedFile.name}"]`)
           ?.setAttribute('style', 'opacity:1;')
         const list = [...allTaskList]
         const task = list.find(t => t.nestedFile.nestedPath === nestedFile.nestedPath)!
@@ -278,7 +271,6 @@ export default function FileExplorer(props: AppComponentProps) {
     if (successList.every(Boolean)) {
       handleRefresh()
       toast.success('上传成功')
-      setVirtualEntries([])
     }
     ;(uploadInputRef.current as any).value = ''
   }, [uploadTaskList, setUploadTaskList, currentDirPath, uploadFile, handleRefresh])
@@ -362,7 +354,7 @@ export default function FileExplorer(props: AppComponentProps) {
         for (const entry of processList) {
           const { name } = entry
           const { success } = await deleteEntry(`${currentDirPath}/${name}`)
-          document.querySelector(`.entry-node[data-name="${name}"]`)?.setAttribute('style', 'opacity:0;')
+          document.querySelector(`.entry-node[data-entry-name="${name}"]`)?.setAttribute('style', 'opacity:0;')
           successList.push(success)
         }
         if (successList.every(Boolean)) {
@@ -452,8 +444,7 @@ export default function FileExplorer(props: AppComponentProps) {
   const handleEntryDoubleClick = useCallback((entry: IEntry) => {
     if (renameMode) return
     const { type, name } = entry
-    const isDirectory = type === EntryType.directory
-    if (isDirectory) {
+    if (type === EntryType.directory) {
       handleDirOpen(name)
     } else {
       const appId = getMatchAppId(entry)
@@ -601,7 +592,7 @@ export default function FileExplorer(props: AppComponentProps) {
           <div
             ref={containerRef}
             data-drag-hover={waitDropToCurrentPath}
-            className="relative flex-grow overflow-x-hidden overflow-y-auto"
+            className="relative flex-grow overflow-x-hidden overflow-y-auto select-none"
             onMouseDownCapture={handleCancelSelect}
           >
             <div
@@ -634,14 +625,14 @@ export default function FileExplorer(props: AppComponentProps) {
               {(newDirMode || newTxtMode) && (
                 <div
                   className={line(`
-                    overflow-hidden rounded-sm select-none
-                    ${gridMode ? 'm-2 px-1 py-2 w-28' : 'mb-1 px-2 py-0 w-full flex items-center'}
+                    relative overflow-hidden rounded-sm
+                    ${gridMode ? 'm-1 px-1 py-2 w-28' : 'mb-1 px-2 py-0 w-full flex items-center'}
                   `)}
                 >
-                  <Icon
-                    small={!gridMode}
+                  <EntryIcon
+                    isSmall={!gridMode}
                     entry={{
-                      name: 'virtual-entry',
+                      name: 'temp-entry',
                       type: newDirMode ? EntryType.directory : EntryType.file,
                       lastModified: 0,
                       hidden: false,
@@ -660,24 +651,24 @@ export default function FileExplorer(props: AppComponentProps) {
                   />
                 </div>
               )}
-              {/* entryList */}
+              {/* entry list */}
               {displayEntryList.map(entry => {
                 const { name, type, hidden, size, lastModified } = entry
                 const isSelected = !!selectedEntryList.find(o => isSameEntry(o, entry))
-                const small = !gridMode
+                const isSmall = !gridMode
                 const bytes = size === undefined ? sizeMap[`${currentDirPath}/${name}`] : size
                 const sizeLabel = bytes === undefined ? '--' : getReadableSize(bytes)
                 const dateLabel = lastModified ? DateTime.fromMillis(lastModified).toFormat('yyyy-MM-dd HH:mm') : ''
                 return (
                   <div
                     key={encodeURIComponent(name)}
-                    data-name={name}
-                    data-dir={type === EntryType.directory}
+                    data-entry-name={name}
+                    data-is-folder={type === EntryType.directory}
                     data-selected={isSelected}
                     draggable
                     className={line(`
-                      entry-node overflow-hidden rounded-sm select-none
-                      ${gridMode ? 'm-2 px-1 py-2 w-28' : 'mb-1 px-2 py-0 w-full flex items-center'}
+                      entry-node relative overflow-hidden rounded-sm
+                      ${gridMode ? 'm-1 px-1 py-2 w-28' : 'mb-1 px-2 py-0 w-full flex items-center'}
                       ${!gridMode && isSelected ? 'bg-blue-600' : 'hover:bg-gray-100'}
                       ${isSelected ? 'bg-gray-100' : ''}
                       ${(isSelected && deleting) ? 'bg-loading' : ''}
@@ -686,7 +677,7 @@ export default function FileExplorer(props: AppComponentProps) {
                     onClick={e => handleEntryClick(e, entry)}
                     onDoubleClick={() => handleEntryDoubleClick(entry)}
                   >
-                    <Icon {...{ small, entry, scrollHook }} />
+                    <EntryIcon {...{ isSmall, entry, scrollHook }} />
                     <NameLine
                       showInput={renameMode && isSelected}
                       entry={entry}
@@ -718,9 +709,6 @@ export default function FileExplorer(props: AppComponentProps) {
                   </div>
                 )
               })}
-
-              <VirtualEntries {...{ virtualEntries, gridMode }} />
-
             </div>
           </div>
           <PathLink

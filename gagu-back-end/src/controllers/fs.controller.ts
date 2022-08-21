@@ -27,8 +27,6 @@ import { GAGU_CURRENT_VERSION, OS, Public } from 'src/utils'
 import { Response } from 'express'
 import { FileInterceptor } from '@nestjs/platform-express'
 
-const deviceName = `${OS.hostname} [${OS.platform}]`
-
 @Controller('fs')
 export class FsController {
   @Get('list')
@@ -39,7 +37,8 @@ export class FsController {
       : getEntryList(path)
     return {
       version: GAGU_CURRENT_VERSION,
-      deviceName,
+      platform: OS.platform,
+      deviceName: OS.hostname,
       entryList,
     }
   }
@@ -98,8 +97,13 @@ export class FsController {
   @Header('Content-Type', 'image/png')
   async readThumbnail(@Query('path') path: string) {
     console.log('FS/THUMBNAIL:', path)
-    const base64 = await getThumbnailBase64(path)
-    return base64
+    try {
+      const base64 = await getThumbnailBase64(path)
+      return base64
+    } catch (err) {
+      console.log(err)
+      return ''
+    }
   }
 
   // TODO: remove public

@@ -3,6 +3,6 @@
 @tailwind utilities;
 
 @import "react-toastify/dist/ReactToastify.min.css";
-@import "./font.css";
+@import "./fonts.css";
+@import "./icons.css";
 @import "./style.css";
-@import "./entry-icon.css";

@@ -42,11 +42,14 @@ $ gagu
 #   username: gagu
 #   password: 9293
 
-# Start with customized port with `-p` or `--port`
+# Start with customized port
 $ gagu -p 8888
 
-# Show version with `-v` or `--version`
+# Show version
 $ gagu -v
+
+# Show help info
+$ gagu -h
 
 # Stop service
 # Ctrl + C

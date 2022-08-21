@@ -1,14 +1,4 @@
 import { IApp } from './types'
-import iconFileExplorer from '../img/icons/app-file-explorer.png'
-import iconTransfer from '../img/icons/app-transfer.png'
-import iconTextEditor from '../img/icons/app-text-editor.png'
-import iconPhotoGallery from '../img/icons/app-photo-gallery.png'
-import iconMusicPlayer from '../img/icons/app-music-player.png'
-import iconVideoPlayer from '../img/icons/app-video-player.png'
-import iconSettings from '../img/icons/app-settings.png'
-import iconBaiduMap from '../img/icons/app-baidu-map.png'
-import iconPQINA from '../img/icons/app-pqina.png'
-import iconPS from '../img/icons/app-ps.png'
 import bgMusic from '../img/bg-music.jpg'
 import FileExplorer from '../apps/FileExplorer'
 import Transfer from '../apps/Transfer'
@@ -39,9 +29,8 @@ const APP_LIST: IApp[] = [
     id: APP_ID_MAP.fileExplorer,
     runningId: 0,
     title: '文件管理器',
-    icon: iconFileExplorer,
     AppComponent: FileExplorer,
-    width: 960,
+    width: 1020,
     height: 640,
     resizeRange: {
       minWidth: 640,
@@ -52,7 +41,6 @@ const APP_LIST: IApp[] = [
     id: APP_ID_MAP.transfer,
     runningId: 0,
     title: '传输助手',
-    icon: iconTransfer,
     AppComponent: Transfer,
     width: 400,
     height: 400,
@@ -66,7 +54,6 @@ const APP_LIST: IApp[] = [
     id: APP_ID_MAP.textEditor,
     runningId: 0,
     title: '文本编辑器',
-    icon: iconTextEditor,
     AppComponent: TextEditor,
     width: 640,
     height: 480,
@@ -80,7 +67,6 @@ const APP_LIST: IApp[] = [
     id: APP_ID_MAP.photoGallery,
     runningId: 0,
     title: '图片查看器',
-    icon: iconPhotoGallery,
     AppComponent: PhotoGallery,
     width: 640,
     height: 480,
@@ -94,7 +80,6 @@ const APP_LIST: IApp[] = [
     id: APP_ID_MAP.musicPlayer,
     runningId: 0,
     title: '音乐播放器',
-    icon: iconMusicPlayer,
     AppComponent: MusicPlayer,
     width: 400,
     height: 200,
@@ -111,7 +96,6 @@ const APP_LIST: IApp[] = [
     id: APP_ID_MAP.videoPlayer,
     runningId: 0,
     title: '视频播放器',
-    icon: iconVideoPlayer,
     AppComponent: VideoPlayer,
     width: 640,
     height: 400,
@@ -125,7 +109,6 @@ const APP_LIST: IApp[] = [
     id: APP_ID_MAP.settings,
     runningId: 0,
     title: '偏好设置',
-    icon: iconSettings,
     AppComponent: Settings,
     width: 500,
     height: 500,
@@ -138,7 +121,6 @@ const APP_LIST: IApp[] = [
     id: APP_ID_MAP.baiduMap,
     runningId: 0,
     title: '百度地图',
-    icon: iconBaiduMap,
     AppComponent: BaiduMap,
     width: 800,
     height: 600,
@@ -151,7 +133,6 @@ const APP_LIST: IApp[] = [
     id: APP_ID_MAP.pqina,
     runningId: 0,
     title: 'PQINA',
-    icon: iconPQINA,
     AppComponent: PQINA,
     width: 800,
     height: 600,
@@ -164,7 +145,6 @@ const APP_LIST: IApp[] = [
     id: APP_ID_MAP.ps,
     runningId: 0,
     title: 'PS',
-    icon: iconPS,
     AppComponent: PS,
     width: 1000,
     height: 800,

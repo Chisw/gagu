@@ -12,7 +12,6 @@ export interface IApp {
   id: string
   runningId: number
   title: string
-  icon: string
   AppComponent: IAppComponent
   width: number
   height: number
@@ -58,6 +57,7 @@ export interface IDisk extends IRootEntry {
 
 export interface IRootInfo {
   version: string,
+  platform: string,
   deviceName: string
   rootEntryList: IRootEntry[]
 }

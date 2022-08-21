@@ -83,8 +83,8 @@ export default function Menus(props: MenusProps) {
     if (targetEntry) {
       isOnBlank = false
 
-      const isDir = targetEntry.getAttribute('data-dir') === 'true'
-      const entryName = targetEntry.getAttribute('data-name')
+      const isDir = targetEntry.getAttribute('data-is-folder') === 'true'
+      const entryName = targetEntry.getAttribute('data-entry-name')
       const entry = entryList.find(o => o.name === entryName)
 
       if (isDir) isOnDir = true
@@ -149,7 +149,7 @@ export default function Menus(props: MenusProps) {
         isShow: !isOnDir && isSingleConfirmed,
         onClick: () => { },
         children: availableAppIdList.map(appId => ({
-          icon: <img src={availableAppMap[appId].icon} alt="app" className="w-4 h-4" />,
+          icon: <div className="app-icon w-4 h-4" data-app-id={appId} />,
           text: availableAppMap[appId].title,
           onClick: () => handleOpenEntry(appId),
         })).concat({

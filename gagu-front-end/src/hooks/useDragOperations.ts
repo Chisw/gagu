@@ -29,7 +29,7 @@ export default function useDragOperations(props: useDragOperationsProps) {
       e.stopPropagation()
 
       const { type, dataTransfer, target } = e
-      const closestDir = target.closest('[data-dir="true"]')
+      const closestDir = target.closest('[data-is-folder="true"]')
 
       if (closestDir) {
         clear()
@@ -38,7 +38,7 @@ export default function useDragOperations(props: useDragOperationsProps) {
         clear()
       }
 
-      const destDir = closestDir ? closestDir.getAttribute('data-name') : undefined
+      const destDir = closestDir ? closestDir.getAttribute('data-entry-name') : undefined
 
       if (type === 'dragenter' || target === containerInner) {
         onEnterContainer()
