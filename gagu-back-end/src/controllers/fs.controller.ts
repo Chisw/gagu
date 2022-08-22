@@ -101,7 +101,7 @@ export class FsController {
       const base64 = await getThumbnailBase64(path)
       return base64
     } catch (err) {
-      console.log(err)
+      console.log('ERR: THUMBNAIL')
       return ''
     }
   }

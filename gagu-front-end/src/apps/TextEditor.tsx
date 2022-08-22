@@ -49,7 +49,7 @@ export default function TextEditor(props: AppComponentProps) {
   }, [currentEntry, getTextContent, setWindowTitle])
 
   useEffect(() => {
-    setValue(textContent)
+    setValue(typeof textContent === 'object' ? JSON.stringify(textContent) : textContent)
   }, [textContent])
 
   const handleSave = useCallback(async () => {

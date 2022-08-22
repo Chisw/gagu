@@ -11,7 +11,7 @@ const argv = minimist(process.argv.slice(2), {
     version: 'v',
   },
   string: ['port'],
-  boolean: ['help', 'version'],
+  boolean: ['help', 'version'], 
   default: {
     port: 9293,
   },
@@ -32,12 +32,15 @@ async function bootstrap() {
     process.exit(0)
   }
 
-  initConfig()
+  const { userList } = initConfig()
+  console.log(userList)
 
   const app = await NestFactory.create(AppModule)
   app.enableCors()
   app.setGlobalPrefix('api')
+
   await app.listen(argv.port)
+
   const url = `http://127.0.0.1:${argv.port}`
   console.log(`\n✨  GAGU service is running on: ${url}`)
   !IS_DEV && openInBrowser(url)

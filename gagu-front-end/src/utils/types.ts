@@ -39,15 +39,13 @@ export interface IEntry {
   hasChildren: boolean
   extension: string
   size?: number
-  label?: string
-  isDisk?: boolean
-  spaceFree?: number
-  spaceTotal?: number
 }
 
 export interface IRootEntry extends IEntry {
   label: string
   isDisk: boolean
+  spaceFree?: number
+  spaceTotal?: number
 }
 
 export interface IDisk extends IRootEntry {

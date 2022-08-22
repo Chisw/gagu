@@ -66,7 +66,7 @@ export default function Icon(props: IconProps) {
       data-folder-name={isFolder ? entry.name.toLowerCase() : undefined}
       data-show-thumbnail={String(showThumbnail)}
       className={line(`
-        relative pointer-events-none
+        relative mx-auto max-w-16 pointer-events-none
         flex justify-center items-center flex-shrink-0
         bg-no-repeat bg-contain bg-center
         entry-icon

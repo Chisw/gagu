@@ -11,7 +11,7 @@ import {
   writeFileSync,
 } from 'fs'
 import { createGzip } from 'zlib'
-import { IEntry, EntryType, IRootEntry, IDisk } from 'src/utils/types'
+import { IEntry, EntryType, IRootEntry, IDisk, IUser } from 'src/utils/types'
 import { exec } from 'child_process'
 import { GAGU_CONFIG_PATH, GEN_THUMBNAIL_VIDEO_LIST, OS } from './index'
 import { getExtension } from './index'
@@ -29,7 +29,7 @@ export const getHasChildren = (path: string) => {
 }
 
 export const getRootEntryList = () => {
-  const rootEntryList: IEntry[] = []
+  const rootEntryList: IRootEntry[] = []
   if (OS.isMacOS) {
     const driveList = nodeDiskInfo
       .getDiskInfoSync()
@@ -256,7 +256,28 @@ export const completeNestedPath = (path: string) => {
 
 export const initConfig = () => {
   completeNestedPath(`${GAGU_CONFIG_PATH}/thumbnail/PLACEHOLDER`)
-  completeNestedPath(`${GAGU_CONFIG_PATH}/users/PLACEHOLDER`)
+  completeNestedPath(`${GAGU_CONFIG_PATH}/data/PLACEHOLDER`)
+  const userListDataPath = `${GAGU_CONFIG_PATH}/data/users.json`
+  if (!getExists(userListDataPath)) {
+    const admin: IUser = {
+      isAdmin: true,
+      username: 'gagu',
+      password: md5('9293'),
+      avatar: '',
+      rootEntryList: [],
+      permissionList: [],
+      validUntil: 0,
+    }
+    writeFileSync(userListDataPath, JSON.stringify({
+      version: '0.0.18',
+      userList: [admin],
+    }))
+  }
+  const userListData = readFileSync(userListDataPath).toString('utf-8')
+  const userList = JSON.parse(userListData)
+  return {
+    userList,
+  }
 }
 
 export const uploadFile = (path: string, buffer: Buffer) => {
