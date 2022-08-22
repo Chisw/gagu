@@ -65,7 +65,7 @@ export default function FileExplorer(props: AppComponentProps) {
 
   const { rootEntryList, rootEntryMountedList } = useMemo(() => {
     const { rootEntryList } = rootInfo
-    const rootEntryMountedList = rootEntryList.map(v => v.mounted)
+    const rootEntryMountedList = rootEntryList.map(v => `${v.parentPath}/${v.name}`)
     return { rootEntryList, rootEntryMountedList }
   }, [rootInfo])
 
@@ -367,7 +367,8 @@ export default function FileExplorer(props: AppComponentProps) {
 
   useEffect(() => {
     if (!currentDirPath && rootEntryList.length) {
-      handleRootEntryClick(rootEntryList[0].mounted)
+      const { name, parentPath } = rootEntryList[0]
+      handleRootEntryClick(`${parentPath}/${name}`)
     }
   }, [currentDirPath, rootEntryList, handleRootEntryClick])
 

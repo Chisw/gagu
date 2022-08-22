@@ -55,8 +55,8 @@ const APP_LIST: IApp[] = [
     runningId: 0,
     title: '文本编辑器',
     AppComponent: TextEditor,
-    width: 640,
-    height: 480,
+    width: 960,
+    height: 720,
     resizeRange: {
       minWidth: 240,
       minHeight: 100,

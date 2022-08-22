@@ -12,14 +12,14 @@ export interface IEntry {
   hasChildren: boolean
   extension: string
   size?: number
-  mounted?: string
+  label?: string
   isDisk?: boolean
   spaceFree?: number
   spaceTotal?: number
 }
 
 export interface IRootEntry extends IEntry {
-  mounted: string
+  label: string
   isDisk: boolean
 }
 

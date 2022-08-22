@@ -34,7 +34,7 @@ export default function LoginPage() {
   return (
     <>
       <div
-        className="fixed z-0 inset-0 overflow-hidden bg-gradient-to-tl from-yellow-500 via-orange-600 to-red-700"
+        className="fixed z-0 inset-0 overflow-hidden bg-gradient-to-br from-gray-400 to-gray-900"
       >
         <div className="absolute inset-0 flex justify-center items-center backdrop-filter backdrop-blur-lg">
           <div className="w-56">

@@ -21,7 +21,8 @@ export default function RootEntryList(props: RootEntryListProps) {
   return (
     <>
       <div>
-        {rootEntryList.map(({ name, mounted, spaceFree, spaceTotal, isDisk }) => {
+        {rootEntryList.map(({ name, parentPath, spaceFree, spaceTotal, label, isDisk }) => {
+          const mounted = `${parentPath}/${name}`
           const isActive = mounted === activeRootEntryMounted
           const canRootEntryClick = currentDirPath !== mounted
           const spaceUsed = isDisk ? spaceTotal! - spaceFree! : 0
@@ -30,7 +31,7 @@ export default function RootEntryList(props: RootEntryListProps) {
               key={mounted}
               title={name}
               className={line(`
-                px-2 py-1 text-xs rounded cursor-pointer
+                mb-1 p-2 text-xs rounded-sm cursor-pointer
                 ${isActive
                   ? 'bg-white text-black shadow'
                   : 'text-gray-500 hover:text-black'
@@ -40,20 +41,17 @@ export default function RootEntryList(props: RootEntryListProps) {
             >
               <div className="flex items-center">
                 {isDisk ? <SvgIcon.HardDrive /> : <SvgIcon.Folder />}
-                <span className="ml-1 truncate flex-grow">{name}</span>
+                <span className="ml-1 truncate flex-grow">{label}</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="transform scale-75 origin-left">
-                  {mounted}
-                </span>
                 {isDisk && (
-                  <span className="transform scale-75 origin-right font-din">
+                  <span className="transform scale-75 origin-left font-din">
                     {`${getReadableSize(spaceUsed!)}/${getReadableSize(spaceTotal!)}`.replace(/\s/g, '')}
                   </span>
                 )}
               </div>
               {isDisk && (
-                <div className="relative h-2px font-din bg-white rounded-sm overflow-hidden">
+                <div className="relative h-2px font-din bg-white rounded-sm overflow-hidden shadow">
                   <div
                     className="absolute top-0 bottom-0 left-0 bg-blue-500"
                     style={{ width: `${spaceUsed / spaceTotal! * 100}%` }}

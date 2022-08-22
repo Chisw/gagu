@@ -4,7 +4,7 @@ import toast from 'react-hot-toast'
 import ToolButton from '../components/ToolButton'
 import CommonToolButtons from '../components/CommonToolButtons'
 import useFetch from '../hooks/useFetch'
-import { copy } from '../utils'
+import { copy, ENTRY_ICON_LIST } from '../utils'
 import { FsApi } from '../api'
 import { APP_ID_MAP } from '../utils/appList'
 import { openedEntryListState } from '../utils/state'
@@ -36,11 +36,14 @@ export default function TextEditor(props: AppComponentProps) {
 
   useEffect(() => {
     if (currentEntry) {
-      const { parentPath, name, isOpen } = currentEntry
+      const { parentPath, name, isOpen, extension } = currentEntry
       if (!isOpen) {
         getTextContent(`${parentPath}/${name}`)
         setWindowTitle(name)
         setCurrentEntry({ ...currentEntry, isOpen: true })
+      }
+      if (ENTRY_ICON_LIST.find(l => l.type === 'code')?.matchList.includes(extension)) {
+        setMonoMode(true)
       }
     }
   }, [currentEntry, getTextContent, setWindowTitle])
@@ -96,7 +99,7 @@ export default function TextEditor(props: AppComponentProps) {
         <div className="flex-grow">
           <code style={monoMode ? undefined : { fontFamily: 'unset' }}>
             <textarea
-              className="p-2 w-full h-full outline-none resize-none bg-transparent"
+              className="p-2 w-full h-full outline-none resize-none bg-transparent text-xs"
               value={value}
               onChange={e => setValue(e.target.value)}
             />

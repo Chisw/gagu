@@ -142,7 +142,7 @@
 
 /* file icon */
 .entry-icon.--e-file {
-  background-image: url("data: image/svg+xml, %3Csvg width='17' height='20' viewBox='0 0 17 20' fill='none' xmlns='http://www.w3.org/2000/svg' %3E%3Cpath d='M1 1h12l3 3v15H1V1z' fill='%23EEE' /%3E%3Cpath d='M1 1h12l3 3v15H1V1z' fill='%23EEE' /%3E%3Cpath d='M1 1v18h15V4l-3-3H1z' stroke='%23fff' /%3E%3Cpath d='M15.5 4L13 1.5V4h2.5z' fill='%23DDD' /%3E%3C/svg%3E")
+  background-image: url("data: image/svg+xml, %3Csvg width='17' height='20' viewBox='0 0 17 20' fill='none' xmlns='http://www.w3.org/2000/svg' %3E%3Cpath d='M1 1h12l3 3v15H1V1z' fill='%23fff' /%3E%3Cpath d='M1 1h12l3 3v15H1V1z' fill='%23fff' /%3E%3Cpath d='M1 1v18h15V4l-3-3H1z' stroke='%23EAEAEA' stroke-width='.5' /%3E%3Cpath d='M15.5 4L13 1.5V4h2.5z' fill='%23EAEAEA' /%3E%3C/svg%3E");
 }
 
 .entry-icon.--e-file::before {
@@ -170,7 +170,6 @@
 }
 
 .entry-icon.--e-file.--small-icon::after {
-  /* @apply hidden; */
   @apply mt-2px w-2/3 h-1;
   content: "";
 }

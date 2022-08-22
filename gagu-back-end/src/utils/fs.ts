@@ -36,14 +36,14 @@ export const getRootEntryList = () => {
       .filter((d) => d.mounted.startsWith('/Volumes/'))
 
     const homeEntry: IRootEntry = {
-      name: 'Home',
+      name: OS.username,
       type: EntryType.directory,
       hidden: false,
       lastModified: 0,
       extension: '_dir',
       parentPath: '/Users',
       hasChildren: true,
-      mounted: `/Users/${OS.username}`,
+      label: 'Home',
       isDisk: false,
     }
 
@@ -56,6 +56,7 @@ export const getRootEntryList = () => {
       hasChildren: true,
       extension: '_dir',
       mounted: drive.mounted,
+      label: drive.mounted.replace('/Volumes/', ''),
       isDisk: true,
       spaceFree: drive.available * 512,
       spaceTotal: drive.blocks * 512,
@@ -73,6 +74,7 @@ export const getRootEntryList = () => {
       hasChildren: true,
       extension: '_dir',
       mounted: drive.mounted,
+      label: drive.mounted,
       isDisk: true,
       spaceFree: drive.available * 512,
       spaceTotal: drive.blocks * 512,
@@ -82,25 +84,25 @@ export const getRootEntryList = () => {
   } else if (OS.isAndroid) {
     rootEntryList.push(
       {
-        name: 'Home',
+        name: 'home',
         type: EntryType.directory,
         hidden: false,
         lastModified: 0,
         parentPath: '/data/data/com.termux/files/',
         hasChildren: true,
         extension: '_dir',
-        mounted: '/data/data/com.termux/files/home',
+        label: 'Home',
         isDisk: false,
       },
       {
-        name: 'Shared',
+        name: 'shared',
         type: EntryType.directory,
         hidden: false,
         lastModified: 0,
         extension: '_dir',
         parentPath: '/data/data/com.termux/files/home/storage/',
         hasChildren: true,
-        mounted: '/data/data/com.termux/files/home/storage/shared',
+        label: 'Shared',
         isDisk: false,
       },
     )
