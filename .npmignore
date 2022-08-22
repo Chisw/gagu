@@ -1,6 +1,7 @@
 docs
 gagu-back-end
 gagu-front-end
+gagu-website
 node_modules
 .gitignore
 .npmignore

@@ -172,8 +172,7 @@ export default function FileExplorer(props: AppComponentProps) {
     if (updateRootEntryMounted) {
       const mounted = rootEntryMountedList
         .filter(m => path.startsWith(m))
-        .sort((a, b) => a.length > b.length ? -1 : 1)
-        .at(0)!
+        .sort((a, b) => a.length > b.length ? -1 : 1)[0]
       setActiveRootEntryMounted(mounted)
     }
   }, [abortController, currentDirPath, fetchPathData, rootEntryMountedList, updateHistory])

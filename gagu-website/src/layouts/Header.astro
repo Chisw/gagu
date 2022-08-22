@@ -1,0 +1,27 @@
+---
+const navList = [
+  { label: 'Home', url: '/' },
+  { label: 'Scenes', url: '/scenes' },
+  { label: 'About', url: '/about' },
+  { label: 'Github', url: 'https://github.com/Chisw/gagu' },
+]
+---
+
+<div class="mx-auto max-w-6xl h-12 flex justify-between items-center">
+  <a href="/">
+    <img
+      class="h-12"
+      src="/logo.svg"
+    />
+  </a>
+  <div class="flex items-center">
+    {navList.map(({ label, url }) => (
+      <a
+        class="ml-6 font-bold text-yellow-600 hover:text-yellow-700"
+        href={url}
+      >
+        {label}
+      </a>
+    ))}
+  </div>
+</div>

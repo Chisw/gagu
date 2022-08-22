@@ -62,30 +62,26 @@ password: 9293
 
 ## 🛠 Development
 
-The project consists of two parts: gagu-back-end and gagu-front-end.
-
-Back-end:
+GAGU app code consists of two parts: `./gagu-back-end` and `./gagu-front-end`.
 
 ```sh
+# Back-end
 $ cd gagu-back-end
-
-# Install dependencies
 $ yarn
-
-# Start dev
 $ yarn start:dev
+
+# Font-end
+$ cd gagu-front-end
+$ yarn
+$ yarn start
 ```
 
-Front-end:
+GAGU website code is in `./gagu-website`.
 
 ```sh
-$ cd gagu-front-end
-
-# Install dependencies
-$ yarn
-
-# Start dev
-$ yarn start
+cd gagu-website
+yarn
+yarn start
 ```
 
 ## 🔨 Build NPM package
