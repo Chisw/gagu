@@ -32,7 +32,7 @@ export default function RootEntryList(props: RootEntryListProps) {
               className={line(`
                 px-2 py-1 text-xs rounded cursor-pointer
                 ${isActive
-                  ? 'bg-white text-black'
+                  ? 'bg-white text-black shadow'
                   : 'text-gray-500 hover:text-black'
                 }
               `)}

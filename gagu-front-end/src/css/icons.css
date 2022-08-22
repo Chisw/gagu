@@ -166,11 +166,17 @@
 }
 
 .entry-icon.--e-file.--small-icon::before {
-  @apply -translate-y-1;
+  @apply -translate-y-1.5;
 }
 
 .entry-icon.--e-file.--small-icon::after {
-  @apply hidden;
+  /* @apply hidden; */
+  @apply mt-2px w-2/3 h-1;
+  content: "";
+}
+
+.entry-icon .app-icon {
+  z-index: 1;
 }
 
 .entry-icon.--e-file.--i-application::before {

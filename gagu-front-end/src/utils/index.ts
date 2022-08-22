@@ -1,7 +1,6 @@
 import { CALLABLE_APP_LIST } from './appList'
 import { EntryType, IEntry, INestedFile, IOffsetInfo, IRectInfo } from './types'
 
-
 export * from './constant'
 
 export const entrySorter = (a: IEntry, b: IEntry) => {

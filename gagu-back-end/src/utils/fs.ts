@@ -220,7 +220,7 @@ export const getThumbnailBase64 = async (path: string) => {
     await new Promise(async (resolve, reject) => {
       gm(createReadStream(targetPath))
         .selectFrame(4)
-        .resize(48)
+        .resize(100)
         .noProfile()
         .write(thumbnailFilePath, (err) => {
           if (err) {

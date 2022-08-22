@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 import Confirmor, { ConfirmorProps } from './Confirmor'
-import { toast } from 'react-toastify'
+import toast from 'react-hot-toast'
 import ToolButton from './ToolButton'
 import { copy, getDownloadInfo } from '../utils'
 import { FsApi } from '../api'

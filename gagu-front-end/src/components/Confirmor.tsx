@@ -40,7 +40,7 @@ export default function Confirmor(props: ConfirmorProps) {
   return (
     <>
       {isOpen && (
-        <div className="fixed inset-0 flex justify-center items-center bg-white-700 backdrop-filter backdrop-blur-sm">
+        <div className="fixed z-10 inset-0 flex justify-center items-center bg-white-700 backdrop-filter backdrop-blur-sm">
           <div
             // usePortal={false}
             // canEscapeKeyClose={canEscapeKeyClose}

@@ -7,8 +7,8 @@
   <p>A cool web file management system.</p>
   <p>Work on macOS, Windows, Linux(planning), and Android/Termux.</p>
   <p>Inspired by <a href="https://play.google.com/store/apps/details?id=com.lonelycatgames.Xplore" target="_blank">Android/X-plore</a> and <a href="https://www.npmjs.com/package/anywhere" target="_blank">NPM/anywhere</a>.</p>
-  <img src="https://img.shields.io/badge/NPM-v0.0.16-orange">
-  <img src="https://img.shields.io/badge/Package-653KB-success">
+  <img src="https://img.shields.io/badge/NPM-v0.0.17-orange">
+  <img src="https://img.shields.io/badge/Bundle Size-269KB-success">
   <img src="https://img.shields.io/badge/License-MIT-green">
   <br>
   <br>
@@ -17,6 +17,8 @@
 ## 🔔 Preparation
 
 GAGU is published on NPM, so install [Node.js](https://nodejs.org/) on your device first.
+
+You need to install [ffmpeg](https://ffmpeg.org/) and [GraphicsMagick](http://www.graphicsmagick.org/) to support thumbnail api.
 
 ## 📦 Installation
 
@@ -38,10 +40,6 @@ $ sudo npm i gagu -g
 # Start service
 $ gagu
 
-# Default admin:
-#   username: gagu
-#   password: 9293
-
 # Start with customized port
 $ gagu -p 8888
 
@@ -55,7 +53,12 @@ $ gagu -h
 # Ctrl + C
 ```
 
-You need to install [ffmpeg](https://ffmpeg.org/) and [GraphicsMagick](http://www.graphicsmagick.org/) to support thumbnail api.
+Default admin:
+
+```
+username: gagu
+password: 9293
+```
 
 ## 🛠 Development
 
@@ -90,7 +93,7 @@ $ yarn start
 Update following version tags:
 
 ```
-./gagu-back-end/src/utils/index.ts - GAGU_CURRENT_VERSION
+./gagu-back-end/src/utils/index.ts - GAGU_VERSION
 ./package.json - version field
 ./README.md - version tag
 ```

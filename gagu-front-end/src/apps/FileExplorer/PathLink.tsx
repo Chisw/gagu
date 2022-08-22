@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { toast } from 'react-toastify'
+import toast from 'react-hot-toast'
 import { SvgIcon } from '../../components/base'
 import { copy } from '../../utils'
 import { IEntry } from '../../utils/types'

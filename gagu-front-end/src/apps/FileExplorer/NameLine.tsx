@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { toast } from 'react-toastify'
+import toast from 'react-hot-toast'
 import useFetch from '../../hooks/useFetch'
 import { line } from '../../utils'
 import { FsApi } from '../../api'
@@ -55,7 +55,7 @@ export default function NameLine(props: NameLineProps) {
 
     if (INVALID_NAME_CHAR_LIST.some(char => newName.includes(char))) {
       onFail('invalid')
-      toast.warning(`存在非法字符：${INVALID_NAME_CHAR_LIST.join(' ')}`)
+      toast.error(`存在非法字符：${INVALID_NAME_CHAR_LIST.join(' ')}`)
       return
     }
 
@@ -68,7 +68,7 @@ export default function NameLine(props: NameLineProps) {
     const { exists } = await getExists(newPath)
     if (exists) {
       onFail('exist')
-      toast.warning('已存在')
+      toast.error('已存在')
     } else {
       if (oldName) {  // rename
         const oldPath = `${currentDirPath}/${oldName}`

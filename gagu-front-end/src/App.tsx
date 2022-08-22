@@ -1,6 +1,6 @@
 import './css/index.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { ToastContainer, Flip } from 'react-toastify'
+import { Toaster } from 'react-hot-toast'
 import DesktopPage from './pages/DesktopPage'
 import LoginPage from './pages/LoginPage'
 import useFavicon from './hooks/useFavicon'
@@ -12,13 +12,7 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      <ToastContainer
-        hideProgressBar
-        theme="colored"
-        position="top-center"
-        autoClose={1000}
-        transition={Flip}
-      />
+      <Toaster />
       <Routes>
         <Route path="/" element={<DesktopPage />} />
         <Route path="/login" element={<LoginPage />} />

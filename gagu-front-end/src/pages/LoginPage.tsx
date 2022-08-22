@@ -1,12 +1,12 @@
-import bg from '../img/bg.jpg'
 import { useNavigate } from 'react-router-dom'
 import { useCallback, useState } from 'react'
 import useFetch from '../hooks/useFetch'
 import { AuthApi } from '../api'
 import md5 from 'md5'
 import { GAGU_AUTH_KEY } from '../utils'
-import { toast } from 'react-toastify'
+import toast from 'react-hot-toast'
 import { SvgIcon } from '../components/base'
+import avatar from '../img/icons/default-favicon.png'
 
 
 export default function LoginPage() {
@@ -34,15 +34,14 @@ export default function LoginPage() {
   return (
     <>
       <div
-        className="fixed z-0 inset-0 bg-cover bg-center overflow-hidden"
-        style={{ backgroundImage: `url("${bg}")` }}
+        className="fixed z-0 inset-0 overflow-hidden bg-gradient-to-tl from-yellow-500 via-orange-600 to-red-700"
       >
-        <div className="absolute inset-0 flex justify-center items-center backdrop-filter backdrop-blur-lg bg-black-100">
+        <div className="absolute inset-0 flex justify-center items-center backdrop-filter backdrop-blur-lg">
           <div className="w-56">
             <div className="text-white flex justify-center items-center">
               <div
-                className="w-24 h-24 rounded-full bg-center bg-cover shadow-lg"
-                style={{ backgroundImage: `url("${bg}")` }}
+                className="w-24 h-24 rounded-full bg-center bg-cover shadow"
+                style={{ backgroundImage: `url("${avatar}")` }}
               />
             </div>
             <code>

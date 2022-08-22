@@ -10,7 +10,7 @@ import PathLink from './PathLink'
 import ToolBar, { IToolBarDisabledMap } from './ToolBar'
 import NameLine, { NameFailType } from './NameLine'
 import { DateTime } from 'luxon'
-import { toast } from 'react-toastify'
+import toast from 'react-hot-toast'
 import Confirmor, { ConfirmorProps } from '../../components/Confirmor'
 import Side from './Side'
 import useDragSelect from '../../hooks/useDragSelect'
@@ -550,7 +550,6 @@ export default function FileExplorer(props: AppComponentProps) {
 
   return (
     <>
-      {shownMenus}
       <div className="absolute inset-0 flex">
         {/* side */}
         <Side
@@ -601,8 +600,8 @@ export default function FileExplorer(props: AppComponentProps) {
             />
             {/* empty tip */}
             {(!fetching && isEntryListEmpty) && (
-              <div className="absolute inset-0 p-10 flex justify-end items-end text-gray-200">
-                <SvgIcon.Plant size={32} />
+              <div className="absolute inset-0 p-10 flex justify-center items-center text-gray-200 text-lg font-thin">
+                空空如也
               </div>
             )}
             <div
@@ -737,6 +736,8 @@ export default function FileExplorer(props: AppComponentProps) {
         className="hidden"
         onChange={(e: any) => handleUploadStart([...e.target.files])}
       />
+
+      {shownMenus}
 
       <Confirmor {...downloadConfirmorProps} />
       <Confirmor {...deleteConfirmorProps} />

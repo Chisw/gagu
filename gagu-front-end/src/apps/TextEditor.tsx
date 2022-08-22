@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
-import { toast } from 'react-toastify'
+import toast from 'react-hot-toast'
 import ToolButton from '../components/ToolButton'
 import CommonToolButtons from '../components/CommonToolButtons'
 import useFetch from '../hooks/useFetch'

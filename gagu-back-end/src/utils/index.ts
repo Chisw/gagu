@@ -2,7 +2,7 @@ import * as os from 'os'
 import { SetMetadata } from '@nestjs/common'
 import { exec, spawn } from 'child_process'
 
-export const GAGU_CURRENT_VERSION = 'v0.0.16'
+export const GAGU_VERSION = 'v0.0.17'
 export const IS_DEV = process.env.NODE_ENV === 'development'
 export const IS_API_PUBLIC_KEY = 'IS_API_PUBLIC_KEY'
 
@@ -36,7 +36,7 @@ let gaguConfigPath = ''
 if (OS.isMacOS) {
   gaguConfigPath = `/Users/${OS.username}/.io.gagu`
 } else if (OS.isWindows) {
-  gaguConfigPath = `C:/Programs Files/.io.gagu`
+  gaguConfigPath = `C:/Users/${OS.username}/.io.gagu`
 } else if (OS.isAndroid) {
   gaguConfigPath = `/data/data/com.termux/files/home/storage/shared/Android/.io.gagu`
 }
