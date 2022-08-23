@@ -1,3 +1,5 @@
+import { Response } from 'express'
+import { FileInterceptor } from '@nestjs/platform-express'
 import {
   Body,
   Controller,
@@ -22,10 +24,10 @@ import {
   deleteEntry,
   getThumbnailBase64,
   uploadFile,
-} from 'src/utils/fs'
-import { GAGU_VERSION, OS, Public } from 'src/utils'
-import { Response } from 'express'
-import { FileInterceptor } from '@nestjs/platform-express'
+  GAGU_VERSION,
+  OS,
+  Public,
+} from 'src/utils'
 
 @Controller('fs')
 export class FsController {

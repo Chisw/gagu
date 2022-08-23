@@ -79,9 +79,9 @@ $ yarn start
 GAGU website code is in `./gagu-website`.
 
 ```sh
-cd gagu-website
-yarn
-yarn start
+$ cd gagu-website
+$ yarn
+$ yarn start
 ```
 
 ## 🔨 Build NPM package

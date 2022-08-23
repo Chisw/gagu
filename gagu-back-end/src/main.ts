@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
-import { initConfig } from './utils/fs'
+import { initConfig } from './utils'
 import * as minimist from 'minimist'
 import { GAGU_VERSION, IS_DEV, openInBrowser } from './utils'
 
@@ -11,7 +11,7 @@ const argv = minimist(process.argv.slice(2), {
     version: 'v',
   },
   string: ['port'],
-  boolean: ['help', 'version'], 
+  boolean: ['help', 'version'],
   default: {
     port: 9293,
   },
@@ -32,8 +32,7 @@ async function bootstrap() {
     process.exit(0)
   }
 
-  const { userList } = initConfig()
-  console.log(userList)
+  initConfig()
 
   const app = await NestFactory.create(AppModule)
   app.enableCors()

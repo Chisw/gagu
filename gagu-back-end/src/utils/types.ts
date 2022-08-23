@@ -8,6 +8,11 @@ export interface IUser {
   validUntil: number
 }
 
+export interface IUserListData {
+  version: string
+  userList: IUser[]
+}
+
 export enum EntryType {
   directory = 'directory',
   file = 'file',

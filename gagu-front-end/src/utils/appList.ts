@@ -30,7 +30,7 @@ const APP_LIST: IApp[] = [
     runningId: 0,
     title: '文件管理器',
     AppComponent: FileExplorer,
-    width: 1020,
+    width: 980,
     height: 640,
     resizeRange: {
       minWidth: 640,

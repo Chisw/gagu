@@ -24,10 +24,10 @@ export default function Side(props: SideProps) {
     <div
       className={line(`
         relative flex-shrink-0 h-full transition-all duration-300 select-none overflow-hidden
-        ${sideCollapse ? 'w-0' : 'w-64'}
+        ${sideCollapse ? 'w-0' : 'w-52'}
       `)}
     >
-      <div className="p-2 w-64 h-full border-r overflow-x-hidden overflow-y-auto">
+      <div className="p-2 w-52 h-full border-r overflow-x-hidden overflow-y-auto">
         {/* <p className="p-1 text-xs text-gray-400">收藏</p> */}
         <RootEntryList
           {...{ currentDirPath, activeRootEntryMounted, rootEntryList }}

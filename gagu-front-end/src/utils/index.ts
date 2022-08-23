@@ -30,12 +30,12 @@ export const isSameEntry = (a: IEntry, b: IEntry) => {
   return a.name === b.name && a.type === b.type
 }
 
-// 1024 1048576 1073741824
 interface getReadableSizeOption {
   keepFloat?: boolean
   separator?: string
   stepSize?: 1000 | 1024
 }
+
 export const getReadableSize = (size: number, options?: getReadableSizeOption) => {
   const {
     keepFloat = false,
@@ -126,52 +126,11 @@ export const getIsContained = (props: IRectInfo & IOffsetInfo) => {
     offsetTop < endY
 }
 
-export function SpeedCounter(this: typeof SpeedCounter) {
-  const SECONDS = 16
-  const UPDATES_PER_SEC = 1
-  const TIME_SPAN_BUCKET_MS = 1000 / UPDATES_PER_SEC
-  const buckets: number[] = []
-  for (let i = 0; i < SECONDS * UPDATES_PER_SEC; i++) {
-    buckets[i] = 0
-  }
-  const startTime = Date.now()
-  let lastUsedBucket = 0
-  let bucketI = 0
-
-  ;(this as any).tick = (bytesCopied: number) => {
-    const bI = ((Date.now() - startTime) / TIME_SPAN_BUCKET_MS) & 0x7fffffff
-    let upd = false
-    while (bucketI !== bI) {
-      upd = true
-      bucketI++
-      bucketI &= 0x7fffffff
-      const dI = bucketI % buckets.length
-      if (lastUsedBucket < dI)
-        lastUsedBucket = dI
-      buckets[dI] = 0
-    }
-    buckets[bI % buckets.length] += bytesCopied
-    return upd
-  }
-
-  ;(this as any).getBytesPerSec = () => {
-    var sum = 0
-    for (var i = lastUsedBucket + 1; --i >= 0;) {
-      if (i !== bucketI) sum += buckets[i]
-    }
-    return Math.floor(sum * UPDATES_PER_SEC / lastUsedBucket)
-  }
-
-  ;(this as any).isStable = () => {
-    return lastUsedBucket * 2 >= buckets.length
-  }
-}
-
-export const getEntryNestedFileList = async (entry: any) => {  // any: FileSystemEntry
+export const getEntryNestedFileList = async (entry: FileSystemEntry) => {
   const nestedFileList: INestedFile[] = []
   if (entry.isFile) {
     await new Promise((resolve, reject) => {
-      (entry as any).file((file: File) => {  // any: FileSystemFileEntry
+      (entry as FileSystemFileEntry).file((file: File) => {
         const fileName = file.name
         if (fileName !== '.DS_Store' && !fileName.startsWith('._')) {
           nestedFileList.push(Object.assign(file, { nestedPath: entry.fullPath }))
@@ -181,8 +140,8 @@ export const getEntryNestedFileList = async (entry: any) => {  // any: FileSyste
     })
   } else {
     await new Promise((resolve, reject) => {
-      const reader = (entry as any).createReader()  // any: FileSystemDirectoryEntry
-      reader.readEntries(async (entryList: any) => {  // any: FileSystemEntry[]
+      const reader = (entry as FileSystemDirectoryEntry).createReader()
+      reader.readEntries(async (entryList: FileSystemEntry[]) => {
         for (const entry of entryList) {
           const list = await getEntryNestedFileList(entry)
           nestedFileList.push(...list)
@@ -196,13 +155,15 @@ export const getEntryNestedFileList = async (entry: any) => {  // any: FileSyste
 
 export const getDTNestedFileList = async (dataTransfer: DataTransfer) => {
   const nestedFileList: INestedFile[] = []
-  const { items } = dataTransfer as any
+  const { items } = dataTransfer
   // don't use `for of`
-  await Promise.all([...items].map(async (item) => {
+  await Promise.all(Array.from(items).map(async (item) => {
     if (item.kind === 'file' && item.webkitGetAsEntry) {
-      const entry = item.webkitGetAsEntry() as any // any: FileSystemEntry
-      const files = await getEntryNestedFileList(entry)
-      nestedFileList.push(...files)
+      const entry = item.webkitGetAsEntry()
+      if (entry) {
+        const files = await getEntryNestedFileList(entry)
+        nestedFileList.push(...files)
+      }
     } else if (item.kind === 'string') {
       // handle string
     }

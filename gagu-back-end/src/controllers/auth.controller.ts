@@ -1,10 +1,6 @@
 import { Controller, Post, Body } from '@nestjs/common'
+import { Public, readUserListData } from '../utils'
 import * as md5 from 'md5'
-import { Public } from '../utils'
-
-const userMap: { [KEY: string]: string } = {
-  gagu: md5('9293'),
-}
 
 @Controller('auth')
 export class AuthController {
@@ -14,21 +10,31 @@ export class AuthController {
     @Body('username') username: string,
     @Body('password') password: string,
   ) {
-    console.log('AUTH/LOGIN:', ' username: ', username, 'password', password)
-    const userName = username.toLowerCase()
-    const passwordRecord = userMap[userName]
-    const success = passwordRecord === password
+    console.log('AUTH/LOGIN:', ' username: ', username)
 
-    return {
-      success,
-      authCode: success
-        ? Math.random().toString(36).slice(-8).toUpperCase()
-        : '',
-      msg: success
-        ? 'OK'
-        : passwordRecord === undefined
-        ? '用户不存在'
-        : '密码错误',
+    const { userList } = readUserListData()
+    const user = userList.find((u) => u.username === username)
+
+    if (user) {
+      if (user.password === password) {
+        return {
+          success: true,
+          authorization: md5(Math.random().toString()),
+          msg: 'OK',
+        }
+      } else {
+        return {
+          success: false,
+          authCode: '',
+          msg: '密码错误',
+        }
+      }
+    } else {
+      return {
+        success: false,
+        authCode: '',
+        msg: '用户不存在',
+      }
     }
   }
 

@@ -600,7 +600,7 @@ export default function FileExplorer(props: AppComponentProps) {
             />
             {/* empty tip */}
             {(!fetching && isEntryListEmpty) && (
-              <div className="absolute inset-0 p-10 flex justify-center items-center text-gray-200 text-lg font-thin">
+              <div className="absolute inset-0 p-10 flex justify-center items-center text-gray-200 text-lg">
                 空空如也
               </div>
             )}

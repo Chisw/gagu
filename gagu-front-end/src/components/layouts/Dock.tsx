@@ -21,8 +21,7 @@ export default function Dock() {
   const [topWindowIndex, setTopWindowIndex] = useRecoilState(topWindowIndexState)
   const [runningAppList, setRunningAppList] = useRecoilState(runningAppListState)
   const [openedEntryList, setOpenedEntryList] = useRecoilState(openedEntryListState)
-
-  console.log()
+  const [isMounted, setIsMounted] = useState(false)
 
   const { fetch, loading, data } = useFetch(FsApi.getEntryList)
   const { fetch: shutdown } = useFetch(AuthApi.shutdown)
@@ -30,6 +29,10 @@ export default function Dock() {
   useEffect(() => {
     fetch('/')
   }, [fetch])
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   useEffect(() => {
     if (data) {
@@ -118,7 +121,18 @@ export default function Dock() {
 
   return (
     <>
-      <div className="fixed z-20 right-0 bottom-0 left-0 p-2 bg-white-500 flex justify-between items-center backdrop-filter backdrop-blur border-t border-gray-500 border-opacity-20 bg-clip-padding">
+      <div
+        className={line(`
+          fixed z-20 right-0 bottom-0 left-0 p-2 
+          flex justify-between items-center
+          border-t border-gray-500 border-opacity-20
+          bg-clip-padding bg-white-500
+          backdrop-filter backdrop-blur
+          transition-all duration-300
+          transform
+          ${isMounted ? 'translate-y-0' : 'translate-y-20'}
+        `)}
+      >
         <div className="w-32 flex-shrink-0">
           <div className="relative w-6 h-6 flex justify-center items-center hover:bg-white-600 hover:text-black active:bg-white-500 group">
             <SvgIcon.Dashboard />
@@ -148,7 +162,7 @@ export default function Dock() {
                   <SvgIcon.Github />
                 </a>
               </div>
-              <div className="w-56 py-1">
+              <div className="w-56 py-1 backdrop-filter backdrop-blur">
                 <div className="mb-1 p-2 border-t border-b text-xs text-gray-600">
                   {loading ? '系统加载中' : `${rootInfo.deviceName} [${rootInfo.platform}] 已连接`}
                 </div>

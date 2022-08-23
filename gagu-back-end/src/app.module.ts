@@ -14,19 +14,12 @@ import { Reflector } from '@nestjs/core'
 import { Observable } from 'rxjs'
 import { Request } from 'express'
 
-const rootPath = IS_DEV
-  ? join(__dirname, '..', '..', 'gagu-front-end', 'build')
-  : join(__dirname, 'public')
-
-// console.log({ rootPath })
-
 @Injectable()
 export class AppService {}
 
 @Injectable()
 export class ApiGuard implements CanActivate {
   constructor(private readonly reflector: Reflector) {}
-
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
@@ -38,9 +31,9 @@ export class ApiGuard implements CanActivate {
       return true
     } else {
       const request = context.switchToHttp().getRequest<Request>()
-      const Authorization = request.header('Authorization')
-      console.log({ Authorization })
-      return !!Authorization
+      const authorization = request.header('Authorization')
+      console.log({ authorization })
+      return !!authorization
     }
   }
 }
@@ -49,6 +42,10 @@ export class ApiGuard implements CanActivate {
   providers: [{ provide: APP_GUARD, useClass: ApiGuard }],
 })
 class CommonModule {}
+
+const rootPath = IS_DEV
+  ? join(__dirname, '..', '..', 'gagu-front-end', 'build')
+  : join(__dirname, 'public')
 
 @Module({
   imports: [
