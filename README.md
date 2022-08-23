@@ -7,8 +7,8 @@
   <p>A cool web file management system.</p>
   <p>Work on macOS, Windows, Linux(planning), and Android/Termux.</p>
   <p>Inspired by <a href="https://play.google.com/store/apps/details?id=com.lonelycatgames.Xplore" target="_blank">Android/X-plore</a> and <a href="https://www.npmjs.com/package/anywhere" target="_blank">NPM/anywhere</a>.</p>
-  <img src="https://img.shields.io/badge/NPM-v0.0.17-orange">
-  <img src="https://img.shields.io/badge/Bundle Size-269KB-success">
+  <img src="https://img.shields.io/badge/NPM-v0.0.18-orange">
+  <img src="https://img.shields.io/badge/Bundle Size-277KB-success">
   <img src="https://img.shields.io/badge/License-MIT-green">
   <br>
   <br>
@@ -53,7 +53,7 @@ $ gagu -h
 # Ctrl + C
 ```
 
-Default admin:
+Default admin user:
 
 ```
 username: gagu
@@ -86,7 +86,7 @@ $ yarn start
 
 ## 🔨 Build NPM package
 
-Update following version tags:
+1. Update following version tags:
 
 ```
 ./gagu-back-end/src/utils/index.ts - GAGU_VERSION
@@ -94,11 +94,11 @@ Update following version tags:
 ./README.md - version tag
 ```
 
-Sync back-end package dependencies to root package.
+2. Sync back-end package dependencies to root package.
 
-Run build script, refer to [./build.sh](./build.sh).
+3. Run build script, refer to [./build.sh](./build.sh).
 
-Publish to NPM.
+4. Publish to NPM.
 
 ## 📜  License
 

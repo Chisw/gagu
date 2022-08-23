@@ -596,7 +596,7 @@ export default function FileExplorer(props: AppComponentProps) {
           >
             <div
               ref={rectRef}
-              className="hidden absolute z-10 border box-content border-gray-400 bg-black-100 pointer-events-none"
+              className="absolute z-10 border box-content border-gray-400 bg-black-100 pointer-events-none opacity-0 transition-opacity duration-300"
             />
             {/* empty tip */}
             {(!fetching && isEntryListEmpty) && (

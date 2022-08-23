@@ -26,7 +26,7 @@ import {
   IUserListData,
 } from 'src/utils/types'
 
-export const GAGU_VERSION = 'v0.0.17'
+export const GAGU_VERSION = 'v0.0.18'
 export const IS_DEV = process.env.NODE_ENV === 'development'
 export const IS_API_PUBLIC_KEY = 'IS_API_PUBLIC_KEY'
 
@@ -336,6 +336,7 @@ export const initConfig = () => {
   completeNestedPath(`${GAGU_CONFIG_PATH}/thumbnail/PLACEHOLDER`)
   completeNestedPath(`${GAGU_CONFIG_PATH}/data/PLACEHOLDER`)
   completeNestedPath(`${GAGU_CONFIG_PATH}/log/PLACEHOLDER`)
+  completeNestedPath(`${GAGU_CONFIG_PATH}/desktop/PLACEHOLDER`)
   if (!getExists(USER_LIST_DATA_PATH)) {
     const adminUser: IUser = {
       isAdmin: true,

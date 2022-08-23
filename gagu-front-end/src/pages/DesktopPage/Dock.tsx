@@ -36,8 +36,8 @@ export default function Dock() {
 
   useEffect(() => {
     if (data) {
-      const { version, platform, deviceName, entryList: rootEntryList } = data
-      setRootInfo({ version, platform, deviceName, rootEntryList } as IRootInfo)
+      const { version, platform, deviceName, desktopEntryList, entryList: rootEntryList } = data
+      setRootInfo({ version, platform, deviceName, desktopEntryList, rootEntryList } as IRootInfo)
     }
   }, [data, setRootInfo])
 
@@ -123,12 +123,13 @@ export default function Dock() {
     <>
       <div
         className={line(`
-          fixed z-20 right-0 bottom-0 left-0 p-2 
+          gagu-dock
+          fixed z-20 right-0 bottom-0 left-0 px-2 h-10
           flex justify-between items-center
           border-t border-gray-500 border-opacity-20
           bg-clip-padding bg-white-500
           backdrop-filter backdrop-blur
-          transition-all duration-300
+          transition-all duration-500
           transform
           ${isMounted ? 'translate-y-0' : 'translate-y-20'}
         `)}

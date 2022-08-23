@@ -61,7 +61,7 @@ const APP_LIST: IApp[] = [
       minWidth: 240,
       minHeight: 100,
     },
-    matchList: ['txt', 'md', 'html', 'xml', 'css', 'js', 'json', 'php', 'java', 'sh', 'log', 'md'],
+    matchList: ['txt', 'md', 'html', 'xml', 'css', 'js', 'json', 'php', 'java', 'sh', 'log', 'md', 'ts', 'tsx'],
   },
   {
     id: APP_ID_MAP.photoGallery,

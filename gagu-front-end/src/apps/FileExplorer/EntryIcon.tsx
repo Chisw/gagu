@@ -78,10 +78,10 @@ export default function Icon(props: IconProps) {
       {callableAppId && (
         <div
           data-app-id={callableAppId}
-          className={`
+          className={line(`
             app-icon absolute z-0 right-0 bottom-0 left-1/2 w-3 h-3 rounded-sm shadow-sm
             ${isSmall ? 'ml-2px' : 'ml-4'}
-          `}
+          `)}
         />
       )}
       {showThumbnail && (

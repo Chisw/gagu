@@ -19,7 +19,7 @@ export const ENTRY_ICON_LIST = [
   { type: 'application', matchList: ['apk'] },
   { type: 'archive', matchList: ['zip', 'rar', '7z'] },
   { type: 'audio', matchList: ['mp3', 'flac', 'wav', 'aac'] },
-  { type: 'code', matchList: ['html', 'css', 'js', 'php'] },
+  { type: 'code', matchList: ['html', 'css', 'js', 'php', 'ts', 'tsx'] },
   { type: 'data', matchList: ['dat', 'db', 'sql', 'json', 'log'] },
   { type: 'document', matchList: ['_txt_new', 'txt', 'md'] },
   { type: 'image', matchList: ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'insp', 'svg', 'ico', 'pbm'] },

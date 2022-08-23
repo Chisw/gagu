@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+@import "react-photo-view/dist/react-photo-view.css";
 @import "./fonts.css";
 @import "./icons.css";
 @import "./style.css";

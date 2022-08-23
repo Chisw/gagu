@@ -57,6 +57,7 @@ export interface IRootInfo {
   version: string,
   platform: string,
   deviceName: string
+  desktopEntryList: IEntry[]
   rootEntryList: IRootEntry[]
 }
 

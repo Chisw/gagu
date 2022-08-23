@@ -27,6 +27,7 @@ import {
   GAGU_VERSION,
   OS,
   Public,
+  GAGU_CONFIG_PATH,
 } from 'src/utils'
 
 @Controller('fs')
@@ -41,6 +42,7 @@ export class FsController {
       version: GAGU_VERSION,
       platform: OS.platform,
       deviceName: OS.hostname,
+      desktopEntryList: getEntryList(`${GAGU_CONFIG_PATH}/desktop`),
       entryList,
     }
   }

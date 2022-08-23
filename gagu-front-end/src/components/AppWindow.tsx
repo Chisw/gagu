@@ -1,17 +1,17 @@
-import { IApp } from '../../utils/types'
+import { IApp } from '../utils/types'
 import { Rnd } from 'react-rnd'
 import { useCallback, useMemo, useState } from 'react'
 import { useRecoilState } from 'recoil'
-import { runningAppListState, topWindowIndexState } from '../../utils/state'
-import { line } from '../../utils'
-import { SvgIcon } from '../../components/base'
+import { runningAppListState, topWindowIndexState } from '../utils/state'
+import { line } from '../utils'
+import { SvgIcon } from './base'
 
 const SAME_CLASS_NAME = `w-6 h-6 flex justify-center items-center cursor-pointer transition-all duration-200`
 interface WindowProps {
   app: IApp
 }
 
-export default function Window(props: WindowProps) {
+export default function AppWindow(props: WindowProps) {
 
   const {
     app: {
@@ -27,7 +27,7 @@ export default function Window(props: WindowProps) {
   } = props
 
   const defaultInfo = useMemo(() => {
-    const x = Math.max((window.innerWidth * 3 - width) / 2, 10)
+    const x = Math.max((window.innerWidth - width) / 2, 10)
     const y = Math.max((window.innerHeight - 100 - height) / 2, 10)
     return { x, y, width, height }
   }, [width, height])
@@ -56,12 +56,12 @@ export default function Window(props: WindowProps) {
   const handleZoom = useCallback(() => {
     if (isFullScreen) {
       const { x, y, width, height } = memoInfo
-      rndInstance.updatePosition({ x, y})
+      rndInstance.updatePosition({ x, y })
       rndInstance.updateSize({ width, height })
       setIsFullScreen(false)
     } else {
-      rndInstance.updatePosition({ x: window.innerWidth, y: 0 })
-      rndInstance.updateSize({ width: window.innerWidth, height: window.innerHeight - 40 })  // dock height
+      rndInstance.updatePosition({ x: 0, y: 0 })
+      rndInstance.updateSize({ width: window.innerWidth, height: window.innerHeight - 40 })  // Dock height
       setIsFullScreen(true)
     }
   }, [memoInfo, isFullScreen, rndInstance])
@@ -78,7 +78,6 @@ export default function Window(props: WindowProps) {
         ref={setRndInstance}
         id={`window-${runningId}`}
         dragHandleClassName="drag-handler"
-        bounds="#app-container"
         data-hidden={hidden}
         className="app-window"
         default={defaultInfo}

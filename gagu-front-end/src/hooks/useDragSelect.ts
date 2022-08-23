@@ -82,7 +82,7 @@ export default function useDragSelect(props: useDragSelectProps) {
         rect.style.left = `${rectLeft}px`
         rect.style.width = `${rectWidth}px`
         rect.style.height = `${rectHeight}px`
-        rect.style.display = 'block'
+        rect.style.opacity = 1
 
         onDragging({
           startX: rectLeft,
@@ -96,7 +96,7 @@ export default function useDragSelect(props: useDragSelectProps) {
     const mouseupListener = (e: any) => {
       if (!isMouseDown) return
       isMouseDown = false
-      rect.style.display = 'none'
+      rect.style.opacity = 0
     }
 
     const bind = () => {

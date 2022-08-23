@@ -5,7 +5,7 @@ import { FsApi } from '../api'
 import { APP_ID_MAP } from '../utils/appList'
 import { openedEntryListState } from '../utils/state'
 import { AppComponentProps, IOpenedEntry } from '../utils/types'
-
+import { PhotoProvider, PhotoView } from 'react-photo-view'
 
 export default function PhotoGallery(props: AppComponentProps) {
 
@@ -45,13 +45,17 @@ export default function PhotoGallery(props: AppComponentProps) {
     <>
       <div className="absolute inset-0 flex justify-center items-center">
         {loading && <Spinner />}
-        <img
-          src={fileUrl}
-          alt="img"
-          className={loading ? 'hidden' : 'max-w-full max-h-full'}
-          onLoad={() => setLoading(false)}
-          onError={() => { }}
-        />
+        <PhotoProvider>
+          <PhotoView src={fileUrl}>
+            <img
+              src={fileUrl}
+              alt="img"
+              className={loading ? 'hidden' : 'max-w-full max-h-full'}
+              onLoad={() => setLoading(false)}
+              onError={() => { }}
+            />
+          </PhotoView>
+        </PhotoProvider>
       </div>
     </>
   )
