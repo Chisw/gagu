@@ -18,7 +18,6 @@ export default function AppWindow(props: WindowProps) {
       id: appId,
       runningId,
       title,
-      bgImg,
       width,
       height,
       resizeRange,
@@ -169,10 +168,7 @@ export default function AppWindow(props: WindowProps) {
             </div>
           </div>
           {/* main */}
-          <div
-            className="relative flex-grow overflow-hidden bg-center bg-cover bg-no-repeat"
-            style={{ backgroundImage: bgImg ? `url("${bgImg}")` : undefined }}
-          >
+          <div className="relative flex-grow overflow-hidden">
             <AppComponent
               isTopWindow={isTopWindow}
               setWindowLoading={setWindowLoading}

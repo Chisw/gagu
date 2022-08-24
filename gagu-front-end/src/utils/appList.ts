@@ -1,5 +1,4 @@
 import { IApp } from './types'
-import bgMusic from '../img/bg-music.jpg'
 import FileExplorer from '../apps/FileExplorer'
 import Transfer from '../apps/Transfer'
 import TextEditor from '../apps/TextEditor'
@@ -66,10 +65,10 @@ const APP_LIST: IApp[] = [
   {
     id: APP_ID_MAP.photoGallery,
     runningId: 0,
-    title: '图片查看器',
+    title: '图片浏览器',
     AppComponent: PhotoGallery,
-    width: 640,
-    height: 480,
+    width: 720,
+    height: 640,
     resizeRange: {
       minWidth: 240,
       minHeight: 200,
@@ -89,7 +88,6 @@ const APP_LIST: IApp[] = [
       minWidth: 400,
       minHeight: 200,
     },
-    bgImg: bgMusic,
     matchList: ['mp3', 'aac', 'flac'],
   },
   {

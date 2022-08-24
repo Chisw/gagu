@@ -21,7 +21,6 @@ export interface IApp {
     minWidth?: number
     minHeight?: number
   }
-  bgImg?: string
   matchList?: string[]
 }
 
@@ -61,9 +60,10 @@ export interface IRootInfo {
   rootEntryList: IRootEntry[]
 }
 
-export interface IOpenedEntry extends IEntry {
-  openAppId: string
-  isOpen: boolean
+export interface IOpenOperation {
+  app: IApp
+  matchedEntryList: IEntry[]
+  activeEntryIndex: number
 }
 
 export interface IHistory {

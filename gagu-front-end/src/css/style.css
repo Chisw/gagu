@@ -15,3 +15,8 @@
   outline-offset: -2px;
   animation: pulse 1s ease-in-out infinite;
 }
+
+.gagu-logo {
+  @apply bg-center bg-contain bg-no-repeat;
+  background-image: url("data: image/svg+xml, %3Csvg width='396' height='96' viewBox='0 0 396 96' fill='none' xmlns='http://www.w3.org/2000/svg' %3E%3Cpath d='M0 0h396v96H0V0z' fill='%23FACC15' /%3E%3Cpath d='M121.846 10.105v60.632h40.616V55.579h20.307v15.158h20.308V10.105h-81.231zM111.692 10.105h-81.23v60.632h81.23V35.368H91.385v20.21H71.077V25.264h40.615V10.105zM294.462 10.105h-81.231v60.632h81.231V35.368h-20.308v20.21h-20.308V25.264h40.616V10.105zM304.615 10.105h40.616V55.58h20.307V10.105h20.308v60.632h-81.231V10.105z' fill='%23fff' /%3E%3Cpath d='M162.462 25.263h20.307v10.105h-20.307V25.263z' fill='%23FACC15' /%3E%3C/svg%3E");
+}

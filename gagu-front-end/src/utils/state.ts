@@ -1,5 +1,5 @@
 import { atom } from 'recoil'
-import { IApp, IEntry, IRootInfo, IOpenedEntry, IUploadTask } from './types'
+import { IApp, IEntry, IRootInfo, IOpenOperation, IUploadTask } from './types'
 
 export const topWindowIndexState = atom<number>({
   key: 'topWindowIndexState',
@@ -32,9 +32,9 @@ export const sizeMapState = atom<{ [KEY: string]: number }>({
   default: {},
 })
 
-export const openedEntryListState = atom<IOpenedEntry[]>({
-  key: 'openedEntryListState',
-  default: [],
+export const openOperationState = atom<IOpenOperation | null>({
+  key: 'openOperationState',
+  default: null,
 })
 
 export const uploadTaskListState = atom<IUploadTask[]>({

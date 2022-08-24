@@ -2,9 +2,9 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import EntryIcon from './EntryIcon'
 import useFetch from '../../hooks/useFetch'
-import { getReadableSize, getDownloadInfo, getIsContained, isSameEntry, entrySorter, line, getMatchAppId } from '../../utils'
+import { getReadableSize, getDownloadInfo, getIsContained, isSameEntry, entrySorter, line, getMatchedApp } from '../../utils'
 import { FsApi } from '../../api'
-import { openedEntryListState, rootInfoState, sizeMapState, uploadTaskListState } from '../../utils/state'
+import { openOperationState, rootInfoState, sizeMapState, uploadTaskListState } from '../../utils/state'
 import { AppComponentProps, EntryType, IEntry, IHistory, IRectInfo, INestedFile, IUploadTask } from '../../utils/types'
 import PathLink from './PathLink'
 import ToolBar, { IToolBarDisabledMap } from './ToolBar'
@@ -28,7 +28,7 @@ export default function FileExplorer(props: AppComponentProps) {
 
   const [rootInfo] = useRecoilState(rootInfoState)
   const [sizeMap, setSizeMap] = useRecoilState(sizeMapState)
-  const [, setOpenedEntryList] = useRecoilState(openedEntryListState)
+  const [, setOpenOperation] = useRecoilState(openOperationState)
   const [uploadTaskList, setUploadTaskList] = useRecoilState(uploadTaskListState)
   const [sideCollapse, setSideCollapse] = useState(false)
   const [currentDirPath, setCurrentPath] = useState('')
@@ -91,17 +91,22 @@ export default function FileExplorer(props: AppComponentProps) {
     return () => container.removeEventListener('scroll', throttleListener)
   }, [])
 
-  const { entryList, entryListLen, isEntryListEmpty, dirCount, fileCount } = useMemo(() => {
-    const list: IEntry[] = data ? data.entryList.sort(entrySorter) : []
-    const entryList = list
-      .filter(o => o.name.toLowerCase().includes(filterText.toLowerCase()))
-      .filter(o => hiddenShow ? true : !o.hidden)
-    let dirCount = 0
+  const { entryList, entryListLen, isEntryListEmpty, folderCount, fileCount } = useMemo(() => {
+    const allEntryList: IEntry[] = data?.entryList.sort(entrySorter) || []
+    const ft = filterText.toLowerCase()
+    const methodName = ft.startsWith('*') ? 'endsWith' : (ft.endsWith('*') ? 'startsWith' : 'includes')
+    const entryList = allEntryList
+      .filter(entry => hiddenShow ? true : !entry.hidden)
+      .filter(entry => ft
+        ? entry.name.toLowerCase()[methodName](ft.replaceAll('*', ''))
+        : true
+      )
+    let folderCount = 0
     let fileCount = 0
-    entryList.forEach(({ type }) => type === EntryType.directory ? dirCount++ : fileCount++)
+    entryList.forEach(({ type }) => type === EntryType.directory ? folderCount++ : fileCount++)
     const entryListLen = entryList.length
     const isEntryListEmpty = entryListLen === 0
-    return { entryList, entryListLen, isEntryListEmpty, dirCount, fileCount }
+    return { entryList, entryListLen, isEntryListEmpty, folderCount, fileCount }
   }, [data, filterText, hiddenShow])
 
   const displayEntryList = useMemo(() => {
@@ -447,14 +452,20 @@ export default function FileExplorer(props: AppComponentProps) {
     if (type === EntryType.directory) {
       handleDirOpen(name)
     } else {
-      const appId = getMatchAppId(entry)
-      if (appId) {
-        setOpenedEntryList([{ ...entry, parentPath: currentDirPath, openAppId: appId, isOpen: false }])
+      const app = getMatchedApp(entry)
+      if (app) {
+        const matchedEntryList = entryList.filter(en => app.matchList?.includes(en.extension))
+        const activeEntryIndex = matchedEntryList.findIndex(en => en.name === name)
+        setOpenOperation({
+          app,
+          matchedEntryList,
+          activeEntryIndex,
+        })
       } else {
         handleDownloadClick()
       }
     }
-  }, [renameMode, currentDirPath, handleDirOpen, handleDownloadClick, setOpenedEntryList])
+  }, [renameMode, entryList, handleDirOpen, handleDownloadClick, setOpenOperation])
 
   const handleSelectAll = useCallback((force?: boolean) => {
     const isSelectAll = force || !selectedEntryList.length
@@ -533,16 +544,16 @@ export default function FileExplorer(props: AppComponentProps) {
     const onClose = () => setShownMenus(null)
     const menuProps = {
       top, left,
-      target, currentDirPath, entryList, selectedEntryList,
-      setOpenedEntryList, updateDirSize,
+      target, entryList, selectedEntryList,
+      setOpenOperation, updateDirSize,
       setNewDirMode, setNewTxtMode, setSelectedEntryList,
       handleRefresh, handleRename, handleUploadClick, handleDownloadClick, handleDeleteClick,
       onClose,
     }
     setShownMenus(<Menus {...menuProps} />)
   }, [
-    currentDirPath, entryList, selectedEntryList,
-    setOpenedEntryList, updateDirSize,
+    entryList, selectedEntryList,
+    setOpenOperation, updateDirSize,
     handleRefresh, handleRename, handleUploadClick, handleDownloadClick, handleDeleteClick,
   ])
 
@@ -577,7 +588,7 @@ export default function FileExplorer(props: AppComponentProps) {
           <div
             title={sideCollapse ? '展开' : '收起'}
             className={line(`
-              absolute z-10 top-1/2 left-0 w-3 h-12 bg-gray-200 rounded-r-lg
+              absolute z-10 top-1/2 left-0 w-2 h-12 bg-gray-200 rounded-r-sm
               opacity-40 hover:bg-gray-300
               transition-all duration-200 transform -translate-y-1/2 cursor-pointer
               flex justify-center items-center
@@ -596,7 +607,7 @@ export default function FileExplorer(props: AppComponentProps) {
           >
             <div
               ref={rectRef}
-              className="absolute z-10 border box-content border-gray-400 bg-black-100 pointer-events-none opacity-0 transition-opacity duration-300"
+              className="hidden absolute z-10 border box-content border-gray-400 bg-black-100 pointer-events-none"
             />
             {/* empty tip */}
             {(!fetching && isEntryListEmpty) && (
@@ -711,7 +722,7 @@ export default function FileExplorer(props: AppComponentProps) {
             </div>
           </div>
           <PathLink
-            {...{ dirCount, fileCount, currentDirPath, activeRootEntryMounted, selectedEntryList }}
+            {...{ folderCount, fileCount, currentDirPath, activeRootEntryMounted, selectedEntryList }}
             loading={fetching}
             onDirClick={handleGoFullPath}
             onRootEntryClick={handleRootEntryClick}

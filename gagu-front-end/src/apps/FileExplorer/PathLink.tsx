@@ -6,7 +6,7 @@ import { IEntry } from '../../utils/types'
 
 interface PathLinkProps {
   loading: boolean
-  dirCount: number
+  folderCount: number
   fileCount: number
   currentDirPath: string
   activeRootEntryMounted: string
@@ -19,7 +19,7 @@ export default function PathLink(props: PathLinkProps) {
 
   const {
     loading,
-    dirCount,
+    folderCount,
     fileCount,
     currentDirPath,
     activeRootEntryMounted,
@@ -93,7 +93,7 @@ export default function PathLink(props: PathLinkProps) {
             &emsp;
           </>
         )}
-        <SvgIcon.Folder />&nbsp;<span>{loading ? '-' : dirCount}</span>
+        <SvgIcon.Folder />&nbsp;<span>{loading ? '-' : folderCount}</span>
         &emsp;
         <SvgIcon.File />&nbsp;<span>{loading ? '-' : fileCount}</span>
       </div>

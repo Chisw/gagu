@@ -1,11 +1,9 @@
-import { IApp, IEntry, IOpenedEntry } from '../../utils/types'
-import APP_LIST from '../../utils/appList'
+import { IApp, IEntry, IOpenOperation } from '../../utils/types'
+import { CALLABLE_APP_LIST } from '../../utils/appList'
 import { useCallback, useMemo } from 'react'
 import { FsApi } from '../../api'
 import iina from '../../img/icons/iina.png'
 import { SvgIcon } from '../../components/base'
-
-const availableAppIdList = ['text-editor', 'photo-gallery', 'music-player', 'video-player']
 
 const openInIINA = (entry: IEntry) => {
   if (!entry) return
@@ -19,10 +17,9 @@ interface MenusProps {
   top: number
   left: number
   target: any
-  currentDirPath: string
   entryList: IEntry[]
   selectedEntryList: IEntry[]
-  setOpenedEntryList: (entryList: IOpenedEntry[]) => void
+  setOpenOperation: (operation: IOpenOperation) => void
   setSelectedEntryList: (entry: IEntry[]) => void
   setNewDirMode: (mode: boolean) => void
   setNewTxtMode: (mode: boolean) => void
@@ -41,10 +38,9 @@ export default function Menus(props: MenusProps) {
     top,
     left,
     target,
-    currentDirPath,
     entryList,
     selectedEntryList,
-    setOpenedEntryList,
+    setOpenOperation,
     setSelectedEntryList,
     setNewDirMode,
     setNewTxtMode,
@@ -56,16 +52,6 @@ export default function Menus(props: MenusProps) {
     handleDeleteClick,
     onClose,
   } = props
-
-  const availableAppMap = useMemo(() => {
-    const availableAppMap: { [KEY: string]: IApp } = {}
-    APP_LIST.forEach(app => {
-      if (availableAppIdList.includes(app.id)) {
-        availableAppMap[app.id] = app
-      }
-    })
-    return availableAppMap
-  }, [])
 
   const {
     isOnBlank,
@@ -107,15 +93,16 @@ export default function Menus(props: MenusProps) {
     }
   }, [target, selectedEntryList, entryList, setSelectedEntryList])
 
-  const handleOpenEntry = useCallback((appId: string) => {
-    const list = contextEntryList.map(entry => ({
-      ...entry,
-      parentPath: currentDirPath,
-      openAppId: appId,
-      isOpen: false,
-    }))
-    setOpenedEntryList(list)
-  }, [contextEntryList, currentDirPath, setOpenedEntryList])
+  const handleOpenEntry = useCallback((app: IApp) => {
+
+    const matchedEntryList = contextEntryList.filter(en => app.matchList?.includes(en.extension))
+    // const activeEntryIndex = matchedEntryList.findIndex(en => en.name === name)
+    setOpenOperation({
+      app,
+      matchedEntryList,
+      activeEntryIndex: 0,
+    })
+  }, [contextEntryList, setOpenOperation])
 
   const actions = useMemo(() => {
     return [
@@ -148,10 +135,10 @@ export default function Menus(props: MenusProps) {
         text: '打开方式',
         isShow: !isOnDir && isSingleConfirmed,
         onClick: () => { },
-        children: availableAppIdList.map(appId => ({
-          icon: <div className="app-icon w-4 h-4" data-app-id={appId} />,
-          text: availableAppMap[appId].title,
-          onClick: () => handleOpenEntry(appId),
+        children: CALLABLE_APP_LIST.map(app => ({
+          icon: <div className="app-icon w-4 h-4" data-app-id={app.id} />,
+          text: app.title,
+          onClick: () => handleOpenEntry(app),
         })).concat({
           icon: <img src={iina} alt="iina" className="w-4 h-4" />,
           text: 'IINA',
@@ -190,7 +177,7 @@ export default function Menus(props: MenusProps) {
       },
     ]
   }, [
-    availableAppMap, contextEntryList, isOnBlank, isOnDir, isSingleConfirmed,
+    contextEntryList, isOnBlank, isOnDir, isSingleConfirmed,
     setNewDirMode, setNewTxtMode, updateDirSize, handleOpenEntry,
     handleDeleteClick, handleDownloadClick, handleRefresh, handleRename, handleUploadClick,
   ])

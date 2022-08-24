@@ -1,54 +1,39 @@
 import { Spinner } from '../components/base'
 import { useEffect, useState } from 'react'
-import { useRecoilState } from 'recoil'
-import { FsApi } from '../api'
 import { APP_ID_MAP } from '../utils/appList'
-import { openedEntryListState } from '../utils/state'
-import { AppComponentProps, IOpenedEntry } from '../utils/types'
-
+import { AppComponentProps } from '../utils/types'
+import useOpenOperation from '../hooks/useOpenOperation'
 
 export default function MusicPlayer(props: AppComponentProps) {
 
   const { setWindowTitle, setWindowLoading } = props
+  const {
+    // matchedEntryList,
+    // activeIndex,
+    activeEntry,
+    activeEntryStreamUrl,
+    // setActiveIndex,
+  } = useOpenOperation(APP_ID_MAP.musicPlayer)
 
-  const [openedEntryList, setOpenedEntryList] = useRecoilState(openedEntryListState)
-  const [currentEntry, setCurrentEntry] = useState<IOpenedEntry | null>(null)
-  const [fileUrl, setFileUrl] = useState('')
   const [loading, setLoading] = useState(false)
 
   useEffect(() => setWindowLoading(loading), [setWindowLoading, loading])
 
   useEffect(() => {
-    const openedEntry = openedEntryList[0]
-    if (openedEntry && !openedEntry.isOpen && openedEntry.openAppId === APP_ID_MAP.musicPlayer) {
-      setCurrentEntry(openedEntry)
-      setOpenedEntryList([])
-    }
-
-  }, [openedEntryList, setOpenedEntryList])
-
-  useEffect(() => {
-    if (currentEntry) {
+    if (activeEntry) {
       setLoading(true)
-      const { parentPath, name, isOpen } = currentEntry
-      const fileUrl = FsApi.getFileStreamUrl(`${parentPath}/${name}`)
-      setFileUrl(fileUrl)
-
-      if (!isOpen) {
-        setWindowTitle(name)
-        setCurrentEntry({ ...currentEntry, isOpen: true })
-      }
+      setWindowTitle(activeEntry.name)
     }
-  }, [currentEntry, setWindowTitle])
+  }, [activeEntry, setWindowTitle])
 
   return (
     <>
-      <div className="absolute inset-0 flex justify-center items-center">
+      <div className="absolute inset-0 flex justify-center items-center bg-gradient-to-br from-pink-700 to-pink-900">
         {loading && <Spinner />}
         <audio
           autoPlay
           controls
-          src={fileUrl}
+          src={activeEntryStreamUrl}
           className={loading ? 'hidden' : 'max-w-full max-h-full outline-none'}
           onLoadedData={() => setLoading(false)}
           onError={() => { }}

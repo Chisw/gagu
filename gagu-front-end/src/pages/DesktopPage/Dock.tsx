@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState, useMemo } from 'react'
 import { useRecoilState } from 'recoil'
-import { openedEntryListState, runningAppListState, topWindowIndexState, rootInfoState } from '../../utils/state'
+import { openOperationState, runningAppListState, topWindowIndexState, rootInfoState } from '../../utils/state'
 import APP_LIST from '../../utils/appList'
 import { IApp, IRootInfo } from '../../utils/types'
 import { line } from '../../utils'
@@ -10,7 +10,6 @@ import { AuthApi, FsApi } from '../../api'
 import { DOCUMENT_TITLE, GAGU_AUTH_KEY } from '../../utils/constant'
 import { SvgIcon } from '../../components/base'
 import { useNavigate } from 'react-router-dom'
-import LogoSvg from '../../img/logo.svg'
 
 export default function Dock() {
 
@@ -20,7 +19,7 @@ export default function Dock() {
   const [rootInfo, setRootInfo] = useRecoilState(rootInfoState)
   const [topWindowIndex, setTopWindowIndex] = useRecoilState(topWindowIndexState)
   const [runningAppList, setRunningAppList] = useRecoilState(runningAppListState)
-  const [openedEntryList, setOpenedEntryList] = useRecoilState(openedEntryListState)
+  const [openOperation] = useRecoilState(openOperationState)
   const [isMounted, setIsMounted] = useState(false)
 
   const { fetch, loading, data } = useFetch(FsApi.getEntryList)
@@ -111,13 +110,12 @@ export default function Dock() {
   }, [topWindowIndex, setTopWindowIndex, runningAppList, setRunningAppList])
 
   useEffect(() => {
-    console.log('openedEntryList', openedEntryList)
-    const openedEntry = openedEntryList[0]
-    if (openedEntry) {
-      const app = APP_LIST.find(a => a.id === openedEntry.openAppId)!
+    console.log('openOperation', openOperation)
+    if (openOperation) {
+      const app = APP_LIST.find(a => a.id === openOperation.app.id)!
       handleOpenApp(app)
     }
-  }, [openedEntryList, setOpenedEntryList, handleOpenApp])
+  }, [openOperation, handleOpenApp])
 
   return (
     <>
@@ -143,12 +141,9 @@ export default function Dock() {
                   href="https://gagu.io"
                   target="_blank"
                   rel="noreferrer"
+                  className="h-8"
                 >
-                  <img
-                    src={LogoSvg}
-                    alt="GAGU"
-                    className="inline-block h-8"
-                  />
+                  <div className="gagu-logo w-16 h-8" />
                 </a>
                 &nbsp;
                 <span className="text-xs font-din">

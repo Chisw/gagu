@@ -4,21 +4,21 @@ import toast from 'react-hot-toast'
 import ToolButton from './ToolButton'
 import { copy, getDownloadInfo } from '../utils'
 import { FsApi } from '../api'
-import { IOpenedEntry } from '../utils/types'
+import { IEntry } from '../utils/types'
 import { SvgIcon } from '../components/base'
 
 interface CommonToolButtonsProps {
-  currentEntry: IOpenedEntry | null
+  activeEntry: IEntry | null
 }
 
 export default function CommonToolButtons(props: CommonToolButtonsProps) {
 
-  const { currentEntry } = props
+  const { activeEntry } = props
 
   const [shareConfirmorProps, setShareConfirmorProps] = useState<ConfirmorProps>({ isOpen: false })
 
   const handleShare = useCallback(() => {
-    const url = FsApi.getFileStreamUrl(`${currentEntry!.parentPath}/${currentEntry!.name}`)
+    const url = FsApi.getFileStreamUrl(`${activeEntry!.parentPath}/${activeEntry!.name}`)
     const close = () => setShareConfirmorProps({ isOpen: false })
     const icon = <SvgIcon.Share size={36} />
 
@@ -41,29 +41,29 @@ export default function CommonToolButtons(props: CommonToolButtonsProps) {
         toast.success('复制成功')
       },
     })
-  }, [currentEntry])
+  }, [activeEntry])
 
   const handleDownload = useCallback(() => {
-    if (currentEntry) {
-      const { downloadName, cmd } = getDownloadInfo(currentEntry.parentPath, [currentEntry])
-      FsApi.startDownload(currentEntry.parentPath, downloadName, cmd)
+    if (activeEntry) {
+      const { downloadName, cmd } = getDownloadInfo(activeEntry.parentPath, [activeEntry])
+      FsApi.startDownload(activeEntry.parentPath, downloadName, cmd)
     }
-  }, [currentEntry])
+  }, [activeEntry])
 
   return (
     <>
       <div className="flex-grow" />
       <ToolButton
-        title={`分享 ${currentEntry?.name}`}
+        title={`分享 ${activeEntry?.name}`}
         icon={<SvgIcon.Share />}
         onClick={handleShare}
-        disabled={!currentEntry}
+        disabled={!activeEntry}
       />
       <ToolButton
-        title={`下载 ${currentEntry?.name}`}
+        title={`下载 ${activeEntry?.name}`}
         icon={<SvgIcon.Download />}
         onClick={handleDownload}
-        disabled={!currentEntry}
+        disabled={!activeEntry}
       />
 
       <Confirmor {...shareConfirmorProps} />

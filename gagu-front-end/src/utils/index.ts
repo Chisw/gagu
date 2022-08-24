@@ -66,10 +66,10 @@ export const getReadableSize = (size: number, options?: getReadableSizeOption) =
   return `${readableSize}${separator}${unit}`
 }
 
-export const getMatchAppId = (entry: IEntry) => {
+export const getMatchedApp = (entry: IEntry) => {
   const { extension } = entry
   if (!extension) return
-  return CALLABLE_APP_LIST.find(({ matchList }) => matchList!.includes(extension))?.id
+  return CALLABLE_APP_LIST.find(({ matchList }) => matchList!.includes(extension))
 }
 
 export const getDownloadInfo = (parentPath: string, selectedEntryList: IEntry[]) => {

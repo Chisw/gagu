@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useRecoilState } from 'recoil'
 import toast from 'react-hot-toast'
 import ToolButton from '../components/ToolButton'
 import CommonToolButtons from '../components/CommonToolButtons'
@@ -7,16 +6,21 @@ import useFetch from '../hooks/useFetch'
 import { copy, ENTRY_ICON_LIST } from '../utils'
 import { FsApi } from '../api'
 import { APP_ID_MAP } from '../utils/appList'
-import { openedEntryListState } from '../utils/state'
-import { AppComponentProps, IOpenedEntry } from '../utils/types'
+import { AppComponentProps } from '../utils/types'
 import { SvgIcon } from '../components/base'
+import useOpenOperation from '../hooks/useOpenOperation'
 
 export default function TextEditor(props: AppComponentProps) {
 
   const { setWindowTitle, setWindowLoading } = props
+  const {
+    // matchedEntryList,
+    // activeIndex,
+    activeEntry,
+    // activeEntryStreamUrl,
+    // setActiveIndex,
+  } = useOpenOperation(APP_ID_MAP.textEditor)
 
-  const [openedEntryList, setOpenedEntryList] = useRecoilState(openedEntryListState)
-  const [currentEntry, setCurrentEntry] = useState<IOpenedEntry | null>(null)
   const [value, setValue] = useState('')
   const [monoMode, setMonoMode] = useState(false)
 
@@ -26,43 +30,31 @@ export default function TextEditor(props: AppComponentProps) {
   useEffect(() => setWindowLoading(fetching), [setWindowLoading, fetching])
 
   useEffect(() => {
-    const openedEntry = openedEntryList[0]
-    if (openedEntry && !openedEntry.isOpen && openedEntry.openAppId === APP_ID_MAP.textEditor) {
-      setCurrentEntry(openedEntry)
-      setOpenedEntryList([])
-    }
-
-  }, [openedEntryList, setOpenedEntryList])
-
-  useEffect(() => {
-    if (currentEntry) {
-      const { parentPath, name, isOpen, extension } = currentEntry
-      if (!isOpen) {
-        getTextContent(`${parentPath}/${name}`)
-        setWindowTitle(name)
-        setCurrentEntry({ ...currentEntry, isOpen: true })
-      }
+    if (activeEntry) {
+      const { parentPath, name, extension } = activeEntry
+      getTextContent(`${parentPath}/${name}`)
+      setWindowTitle(name)
       if (ENTRY_ICON_LIST.find(l => l.type === 'code')?.matchList.includes(extension)) {
         setMonoMode(true)
       }
     }
-  }, [currentEntry, getTextContent, setWindowTitle])
+  }, [activeEntry, getTextContent, setWindowTitle])
 
   useEffect(() => {
     setValue(typeof textContent === 'object' ? JSON.stringify(textContent) : textContent)
   }, [textContent])
 
   const handleSave = useCallback(async () => {
-    if (currentEntry) {
+    if (activeEntry) {
       const blob = new Blob([value], { type: 'text/plain;charset=utf-8' })
-      const file = new File([blob], currentEntry.name)
-      const { success } = await uploadFile(currentEntry.parentPath, file)
+      const file = new File([blob], activeEntry.name)
+      const { success } = await uploadFile(activeEntry.parentPath, file)
       if (success) {
         toast.success('保存成功')
         setTextContent(value)
       }
     }
-  }, [value, currentEntry, uploadFile, setTextContent])
+  }, [value, activeEntry, uploadFile, setTextContent])
 
   return (
     <>
@@ -94,7 +86,7 @@ export default function TextEditor(props: AppComponentProps) {
               toast.success('文本复制成功')
             }}
           />
-          <CommonToolButtons {...{ currentEntry }} />
+          <CommonToolButtons {...{ activeEntry }} />
         </div>
         <div className="flex-grow">
           <code style={monoMode ? undefined : { fontFamily: 'unset' }}>
