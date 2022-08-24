@@ -8,7 +8,7 @@ interface useDragSelectProps {
   onDragging: (info: IRectInfo) => void
 }
 
-export default function useDragSelect(props: useDragSelectProps) {
+export function useDragSelect(props: useDragSelectProps) {
 
   const {
     rectRef,

@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import DesktopPage from './pages/DesktopPage'
 import LoginPage from './pages/LoginPage'
-import useFavicon from './hooks/useFavicon'
+import { useFavicon } from './hooks'
 import defaultFavicon from './img/icons/default-favicon.png'
 
 export default function App() {

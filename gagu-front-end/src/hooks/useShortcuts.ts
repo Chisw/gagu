@@ -6,7 +6,7 @@ interface useShortcutsProps {
   shortcutMap: {[KEY: string]: any}  // null | () => void
 }
 
-export default function useShortcuts(props: useShortcutsProps) {
+export function useShortcuts(props: useShortcutsProps) {
 
   const {
     type,

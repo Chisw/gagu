@@ -3,6 +3,7 @@ import * as nodeDiskInfo from 'node-disk-info'
 import * as md5 from 'md5'
 import * as thumbsupply from 'thumbsupply'
 import * as gm from 'gm'
+import * as piexifjs from 'piexifjs'
 import { SetMetadata } from '@nestjs/common'
 import { exec, spawn } from 'child_process'
 import {
@@ -364,4 +365,23 @@ export const uploadFile = (path: string, buffer: Buffer) => {
       msg: err.toString(),
     }
   }
+}
+
+export const getExif = (path: string) => {
+  const base64 = readFileSync(path).toString('base64')
+  const dataURL = `data:image/jpeg;base64,${base64}`
+  const exifObj = piexifjs.load(dataURL)
+  const exifData: any = {}
+  for (const ifd in exifObj) {
+    if (ifd === 'thumbnail') {
+      continue
+    }
+    exifData[ifd] = {}
+    for (const tag in exifObj[ifd]) {
+      const key = (piexifjs as any).TAGS[ifd][tag].name
+      const value = exifObj[ifd][tag]
+      exifData[ifd][key] = value
+    }
+  }
+  return exifData
 }

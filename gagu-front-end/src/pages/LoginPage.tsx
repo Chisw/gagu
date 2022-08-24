@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { useCallback, useState } from 'react'
-import useFetch from '../hooks/useFetch'
+import { useFetch } from '../hooks'
 import { AuthApi } from '../api'
 import md5 from 'md5'
 import { GAGU_AUTH_KEY } from '../utils'

@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 import toast from 'react-hot-toast'
-import useFetch from '../../hooks/useFetch'
+import { useFetch } from '../../hooks'
 import { line } from '../../utils'
 import { FsApi } from '../../api'
 import { INVALID_NAME_CHAR_LIST } from '../../utils/constant'

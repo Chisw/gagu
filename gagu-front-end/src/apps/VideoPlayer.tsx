@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import CommonToolButtons from '../components/CommonToolButtons'
 import { APP_ID_MAP } from '../utils/appList'
 import { AppComponentProps } from '../utils/types'
-import useOpenOperation from '../hooks/useOpenOperation'
+import { useOpenOperation } from '../hooks'
 
 export default function VideoPlayer(props: AppComponentProps) {
 

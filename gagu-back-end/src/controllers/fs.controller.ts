@@ -24,6 +24,7 @@ import {
   deleteEntry,
   getThumbnailBase64,
   uploadFile,
+  getExif,
   GAGU_VERSION,
   OS,
   Public,
@@ -107,6 +108,18 @@ export class FsController {
     } catch (err) {
       console.log('ERR: THUMBNAIL')
       return ''
+    }
+  }
+
+  @Get('exif')
+  async getExif(@Query('path') path: string) {
+    console.log('FS/EXIF:', path)
+    try {
+      const data = await getExif(path)
+      return data
+    } catch (err) {
+      console.log('ERR: EXIF')
+      return 'EXIF ERROR'
     }
   }
 

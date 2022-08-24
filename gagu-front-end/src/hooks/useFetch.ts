@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react'
 
 type RequestApi<A extends any[], T> = (...args: A) => Promise<T>
 
-export default function useFetch<A extends any[], D>(fetchFn: RequestApi<A, D>, initialValue?: D) {
+export function useFetch<A extends any[], D>(fetchFn: RequestApi<A, D>, initialValue?: D) {
 
   const [data, setData] = useState<D | undefined>(initialValue)
   const [loading, setLoading] = useState(false)

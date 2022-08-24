@@ -2,7 +2,7 @@ import { Spinner } from '../components/base'
 import { useEffect, useState } from 'react'
 import { APP_ID_MAP } from '../utils/appList'
 import { AppComponentProps } from '../utils/types'
-import useOpenOperation from '../hooks/useOpenOperation'
+import { useOpenOperation } from '../hooks'
 
 export default function MusicPlayer(props: AppComponentProps) {
 

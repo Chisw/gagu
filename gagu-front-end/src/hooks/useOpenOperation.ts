@@ -4,7 +4,7 @@ import { FsApi } from '../api'
 import { openOperationState } from '../utils/state'
 import { IEntry } from '../utils/types'
 
-export default function useOpenOperation(appId: string) {
+export function useOpenOperation(appId: string) {
   const [openOperation, setOpenOperation] = useRecoilState(openOperationState)
   const [matchedEntryList, setMatchedEntryList] = useState<IEntry[]>([])
   const [activeIndex, setActiveIndex] = useState(0)

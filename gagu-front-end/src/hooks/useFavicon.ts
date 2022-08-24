@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { getImageTypeBase64ByURL } from '../utils'
 
-export default function useFavicon(img: string) {
+export function useFavicon(img: string) {
   useEffect(() => {
     getImageTypeBase64ByURL(img, { width: 32, height: 32, usePNG: true }).then(base64 => {
       const link: any = document.querySelector('link[rel*=icon]') || document.createElement('link')

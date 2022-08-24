@@ -11,7 +11,7 @@ interface useDragOperationsProps {
 
 const clear = () => document.querySelectorAll('.entry-node').forEach(el => el.removeAttribute('data-drag-hover'))
 
-export default function useDragOperations(props: useDragOperationsProps) {
+export function useDragOperations(props: useDragOperationsProps) {
 
   const {
     containerInnerRef,
