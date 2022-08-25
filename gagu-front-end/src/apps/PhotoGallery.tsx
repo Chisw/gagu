@@ -84,12 +84,12 @@ export default function PhotoGallery(props: AppComponentProps) {
           onClick={() => setVisible(true)}
         >
           {loading && <Spinner />}
-          <div className="absolute inset-0 flex justify-center items-center">
+          <div className="absolute inset-0 flex justify-center items-center p-4">
             <img
               ref={imgRef}
               src={activeEntryStreamUrl}
               alt="img"
-              className={`max-w-full max-h-full ${loading ? '' : ''}`}
+              className={`max-w-full max-h-full shadow-lg ${loading ? '' : ''}`}
               onLoadedData={() => setLoading(false)}
               onLoadedDataCapture={() => setLoading(false)}
             />
@@ -134,6 +134,30 @@ export default function PhotoGallery(props: AppComponentProps) {
         onClose={() => setVisible(false)}
         index={activeIndex}
         onIndexChange={index => setActiveIndex(index)}
+        toolbarRender={({ rotate, onRotate, scale, onScale }) => {
+          return (
+            <>
+              <div
+                className="w-8 h-8 flex justify-center items-center text-gray-200 hover:text-gray-100 active:text-gray-300 cursor-pointer"
+                onClick={() => onScale(scale - 1)}
+              >
+                <SvgIcon.SubtractCircle size={18} />
+              </div>
+              <div
+                className="w-8 h-8 flex justify-center items-center text-gray-200 hover:text-gray-100 active:text-gray-300 cursor-pointer"
+                onClick={() => onScale(scale + 1)}
+              >
+                <SvgIcon.AddCircle size={18} />
+              </div>
+              <div
+                className="w-8 h-8 flex justify-center items-center text-gray-200 hover:text-gray-100 active:text-gray-300 cursor-pointer"
+                onClick={() => onRotate(rotate + 90)}
+              >
+                <SvgIcon.Restart size={18} />
+              </div>
+            </>
+          )
+        }}
       />
     </>
   )

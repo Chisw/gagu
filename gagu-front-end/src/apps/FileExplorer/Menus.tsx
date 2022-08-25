@@ -95,11 +95,11 @@ export default function Menus(props: MenusProps) {
 
   const handleOpenEntry = useCallback((app: IApp) => {
 
-    const matchedEntryList = contextEntryList.filter(en => app.matchList?.includes(en.extension))
+    // const matchedEntryList = contextEntryList.filter(en => app.matchList?.includes(en.extension))
     // const activeEntryIndex = matchedEntryList.findIndex(en => en.name === name)
     setOpenOperation({
       app,
-      matchedEntryList,
+      matchedEntryList: contextEntryList,
       activeEntryIndex: 0,
     })
   }, [contextEntryList, setOpenOperation])

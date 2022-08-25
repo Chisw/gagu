@@ -1,12 +1,14 @@
 import { IApp } from '../utils/types'
 import { Rnd } from 'react-rnd'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { runningAppListState, topWindowIndexState } from '../utils/state'
 import { line } from '../utils'
 import { SvgIcon } from './base'
 
 const SAME_CLASS_NAME = `w-6 h-6 flex justify-center items-center cursor-pointer transition-all duration-200`
+const DURATION = 200
+
 interface WindowProps {
   app: IApp
 }
@@ -41,8 +43,29 @@ export default function AppWindow(props: WindowProps) {
   const [isFullScreen, setIsFullScreen] = useState(false)
   const [memoInfo, setMemoInfo] = useState(defaultInfo)
   const [rndInstance, setRndInstance] = useState<any>(null)
+  const [windowStatus, setWindowStatus] = useState<'opening' | 'opened' | 'hiding' | 'hidden' | 'showing' | 'shown' | 'closing' | 'closed'>('closed')
 
   const isTopWindow = useMemo(() => currentIndex === topWindowIndex, [currentIndex, topWindowIndex])
+
+  useEffect(() => {
+    setWindowStatus('opening')
+    setTimeout(() => {
+      setWindowStatus('opened')
+    }, DURATION)
+  }, [])
+
+  const transformStyle = useMemo(() => {
+    return {
+      opening: { transition: 'none', transitionDuration: '0', transform: 'perspective(1000px) rotateX(-30deg) scale(.6)', opacity: 0 },
+      opened: { transition: 'all', transitionDuration: `${DURATION}ms`, transform: '', opacity: 1 },
+      hiding: { transition: 'all', transitionDuration: `${DURATION}ms`, transform: 'perspective(1000px) rotateX(0) scale(1) translateY(20vh)', opacity: 0 },
+      hidden: { transition: 'all', transitionDuration: `${DURATION}ms`, transform: 'perspective(1000px) rotateX(0) scale(1) translateY(20vh)', opacity: 0 },
+      showing: { transition: 'all', transitionDuration: '0', transform: 'perspective(1000px) rotateX(0) scale(1) translateY(20vh)', opacity: 0 },
+      shown: { transition: 'all', transitionDuration: `${DURATION}ms`, transform: 'perspective(1000px) rotateX(0) scale(1) translateY(0)', opacity: 1 },
+      closing: { transition: 'all', transitionDuration: `${DURATION}ms`, transform: 'perspective(1000px) rotateX(-30deg) scale(.6)', opacity: 0 },
+      closed: undefined,
+    }[windowStatus]
+  }, [windowStatus])
 
   const handleMoveToFront = useCallback((e) => {
     if (isTopWindow || e.target.closest('[prevent-move-to-front]')) return
@@ -52,7 +75,16 @@ export default function AppWindow(props: WindowProps) {
     document.getElementById(`window-${runningId}`)!.style.zIndex = String(newTopIndex)
   }, [isTopWindow, runningId, topWindowIndex, setTopWindowIndex])
 
-  const handleZoom = useCallback(() => {
+  const handleHide = useCallback(() => {
+    setWindowStatus(hidden ? 'showing' : 'hiding')
+    hidden && setHidden(!hidden)
+    setTimeout(() => {
+      !hidden && setHidden(!hidden)
+      setWindowStatus(hidden ? 'shown' : 'hidden')
+    }, DURATION)
+  }, [hidden])
+
+  const handleFullScreen = useCallback(() => {
     if (isFullScreen) {
       const { x, y, width, height } = memoInfo
       rndInstance.updatePosition({ x, y })
@@ -66,9 +98,13 @@ export default function AppWindow(props: WindowProps) {
   }, [memoInfo, isFullScreen, rndInstance])
 
   const handleClose = useCallback(() => {
-    const list = runningAppList.filter(a => a.runningId !== runningId)
-    setRunningAppList(list)
-    setTopWindowIndex(currentIndex - 1)
+    setWindowStatus('closing')
+    setTimeout(() => {
+      const list = runningAppList.filter(a => a.runningId !== runningId)
+      setRunningAppList(list)
+      setTopWindowIndex(currentIndex - 1)
+      setWindowStatus('closed')
+    }, DURATION)
   }, [runningAppList, setRunningAppList, runningId, currentIndex, setTopWindowIndex])
 
   return (
@@ -78,7 +114,7 @@ export default function AppWindow(props: WindowProps) {
         id={`window-${runningId}`}
         dragHandleClassName="drag-handler"
         data-hidden={hidden}
-        className="app-window"
+        className="app-window duration-100"
         default={defaultInfo}
         style={{ zIndex: initIndex }}
         {...resizeRange}
@@ -101,6 +137,7 @@ export default function AppWindow(props: WindowProps) {
             ${isFullScreen ? '' : 'rounded-sm border border-gray-500 border-opacity-30 bg-clip-padding'}
             ${isTopWindow ? 'shadow-xl' : 'shadow'}
           `)}
+          style={transformStyle}
           onMouseDownCapture={handleMoveToFront}  // click is too late
         >
           {/* header */}
@@ -113,7 +150,7 @@ export default function AppWindow(props: WindowProps) {
           >
             <div
               className="drag-handler flex items-center flex-grow px-2 h-full truncate"
-              onDoubleClick={handleZoom}
+              onDoubleClick={handleFullScreen}
             >
               <div
                 className="app-icon w-3 h-3 bg-center bg-no-repeat bg-contain"
@@ -140,7 +177,7 @@ export default function AppWindow(props: WindowProps) {
                   text-gray-400 hover:bg-gray-200 hover:text-black active:bg-gray-400
                   ${SAME_CLASS_NAME}
                 `)}
-                onClick={() => setHidden(!hidden)}
+                onClick={handleHide}
               >
                 <SvgIcon.Subtract size={12} />
               </span>
@@ -150,7 +187,7 @@ export default function AppWindow(props: WindowProps) {
                   text-gray-400 hover:bg-gray-200 hover:text-black active:bg-gray-400
                   ${SAME_CLASS_NAME}
                 `)}
-                onClick={handleZoom}
+                onClick={handleFullScreen}
               >
                 {isFullScreen ? <SvgIcon.FullscreenExit size={12} /> : <SvgIcon.Fullscreen size={12} />}
               </span>

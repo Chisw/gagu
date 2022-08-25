@@ -167,7 +167,7 @@ export default function ToolBar(props: ToolBarProps) {
               />
               <ToolButton
                 title="取消"
-                icon={<SvgIcon.Close />}
+                icon={<SvgIcon.CloseCircle />}
                 onClick={cancel}
               />
             </div>

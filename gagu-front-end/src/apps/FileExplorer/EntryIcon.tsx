@@ -66,10 +66,10 @@ export default function Icon(props: IconProps) {
       data-folder-name={isFolder ? entry.name.toLowerCase() : undefined}
       data-show-thumbnail={String(showThumbnail)}
       className={line(`
+        entry-icon
         relative mx-auto max-w-16 pointer-events-none
         flex justify-center items-center flex-shrink-0
         bg-no-repeat bg-contain bg-center
-        entry-icon
         ${isSmall ? 'w-6 h-6 --small-icon' : 'h-12'}
         ${isFolder ? '--e-folder' : '--e-file'}
         ${`--i-${entryIconType || 'unknown'}`}

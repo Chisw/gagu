@@ -14,7 +14,7 @@ import { useNavigate } from 'react-router-dom'
 export default function Dock() {
 
   const navigate = useNavigate()
-  const [timeStr, setTimerStr] = useState('----/--/-- 星期- --:--')
+  const [timeStr, setTimerStr] = useState('----/--/-- 周- --:--')
 
   const [rootInfo, setRootInfo] = useRecoilState(rootInfoState)
   const [topWindowIndex, setTopWindowIndex] = useRecoilState(topWindowIndexState)
@@ -47,9 +47,9 @@ export default function Dock() {
   useEffect(() => {
     const tick = () => {
       const now = DateTime.local()
-      const str = now.toFormat('yyyy/MM/dd 星期几 HH:mm')
+      const str = now.toFormat('yyyy/MM/dd 周几 HH:mm')
       const day = '一二三四五六日'[+now.toFormat('c') - 1]
-      setTimerStr(str.replace('星期几', `星期${day}`))
+      setTimerStr(str.replace('周几', `周${day}`))
     }
     tick()
     const timer = setInterval(tick, 1000)
@@ -122,7 +122,7 @@ export default function Dock() {
       <div
         className={line(`
           gagu-dock
-          fixed z-20 right-0 bottom-0 left-0 px-2 h-10
+          fixed z-20 right-0 bottom-0 left-0 px-2 h-12
           flex justify-between items-center
           border-t border-gray-500 border-opacity-20
           bg-clip-padding bg-white-500
@@ -184,7 +184,7 @@ export default function Dock() {
             return (
               <div
                 key={app.id}
-                className="relative mx-2 w-6 h-6"
+                className="relative mx-2 w-8 h-8"
               >
                 <div
                   className="app-icon filter hover:brightness-110 active:brightness-75 transition-all duration-50 w-full h-full cursor-pointer"
