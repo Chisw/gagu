@@ -6,7 +6,7 @@ import md5 from 'md5'
 import { GAGU_AUTH_KEY } from '../utils'
 import toast from 'react-hot-toast'
 import { SvgIcon } from '../components/base'
-import avatar from '../img/icons/default-favicon.png'
+import avatar from '../img/favicon.png'
 
 
 export default function LoginPage() {

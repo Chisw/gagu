@@ -1,3 +1,4 @@
+export * from './useClickAway'
 export * from './useDragOperations'
 export * from './useDragSelect'
 export * from './useFavicon'

@@ -2,10 +2,10 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import EntryIcon from './EntryIcon'
 import { useFetch, useDragSelect, useDragOperations, useShortcuts } from '../../hooks'
-import { getReadableSize, getDownloadInfo, getIsContained, isSameEntry, entrySorter, line, getMatchedApp } from '../../utils'
+import { getReadableSize, getDownloadInfo, getIsContained, isSameEntry, entrySorter, line, getMatchedApp, openInIINA } from '../../utils'
 import { FsApi } from '../../api'
-import { openOperationState, rootInfoState, sizeMapState, uploadTaskListState } from '../../utils/state'
-import { AppComponentProps, EntryType, IEntry, IHistory, IRectInfo, INestedFile, IUploadTask } from '../../utils/types'
+import { contextMenuState, openOperationState, rootInfoState, sizeMapState, uploadTaskListState } from '../../utils/state'
+import { AppComponentProps, EntryType, IEntry, IHistory, IRectInfo, INestedFile, IUploadTask, IContextMenuItem, IApp } from '../../utils/types'
 import PathLink from './PathLink'
 import ToolBar, { IToolBarDisabledMap } from './ToolBar'
 import NameLine, { NameFailType } from './NameLine'
@@ -14,8 +14,8 @@ import toast from 'react-hot-toast'
 import Confirmor, { ConfirmorProps } from '../../components/Confirmor'
 import Side from './Side'
 import { pick, throttle } from 'lodash'
-import Menus from './Menus'
 import { Pagination, SvgIcon } from '../../components/base'
+import { CALLABLE_APP_LIST } from '../../utils/appList'
 
 const MAX_PAGE_SIZE = 200
 
@@ -27,8 +27,10 @@ export default function FileExplorer(props: AppComponentProps) {
   const [sizeMap, setSizeMap] = useRecoilState(sizeMapState)
   const [, setOpenOperation] = useRecoilState(openOperationState)
   const [uploadTaskList, setUploadTaskList] = useRecoilState(uploadTaskListState)
+  const [, setContextMenu] = useRecoilState(contextMenuState)
+
   const [sideCollapse, setSideCollapse] = useState(false)
-  const [currentDirPath, setCurrentPath] = useState('')
+  const [currentPath, setCurrentPath] = useState('')
   const [prevDirPath, setPrevDirPath] = useState('')
   const [activeRootEntryMounted, setActiveRootEntryMounted] = useState('')
   const [gridMode, setGridMode] = useState(true)
@@ -48,7 +50,6 @@ export default function FileExplorer(props: AppComponentProps) {
   const [currentPage, setCurrentPage] = useState(1)
   const [uploadInfo, setUploadInfo] = useState({ ratio: 0, speed: '' })
   const [abortController, setAbortController] = useState<AbortController | null>(null)
-  const [shownMenus, setShownMenus] = useState<any>(null)
 
   const rectRef = useRef(null)
   const containerRef = useRef(null)       // containerInnerRef 的容器，y-scroll-auto
@@ -66,14 +67,14 @@ export default function FileExplorer(props: AppComponentProps) {
     return { rootEntryList, rootEntryMountedList }
   }, [rootInfo])
 
-  const isInRoot = useMemo(() => rootEntryMountedList.includes(currentDirPath), [rootEntryMountedList, currentDirPath])
+  const isInRoot = useMemo(() => rootEntryMountedList.includes(currentPath), [rootEntryMountedList, currentPath])
 
   useEffect(() => {
     const title = isInRoot
-      ? currentDirPath
-      : currentDirPath.split('/').pop() as string
+      ? currentPath
+      : currentPath.split('/').pop() as string
     setWindowTitle(title)
-  }, [currentDirPath, setWindowTitle, isInRoot])
+  }, [currentPath, setWindowTitle, isInRoot])
 
   useEffect(() => {
     const container: any = containerRef.current
@@ -88,7 +89,7 @@ export default function FileExplorer(props: AppComponentProps) {
     return () => container.removeEventListener('scroll', throttleListener)
   }, [])
 
-  const { entryList, entryListLen, isEntryListEmpty, folderCount, fileCount } = useMemo(() => {
+  const { entryList, entryListLen, showPagination, isEntryListEmpty, folderCount, fileCount } = useMemo(() => {
     const allEntryList: IEntry[] = data?.entryList.sort(entrySorter) || []
     const ft = filterText.toLowerCase()
     const methodName = ft.startsWith('*') ? 'endsWith' : (ft.endsWith('*') ? 'startsWith' : 'includes')
@@ -100,10 +101,14 @@ export default function FileExplorer(props: AppComponentProps) {
       )
     let folderCount = 0
     let fileCount = 0
+
     entryList.forEach(({ type }) => type === EntryType.directory ? folderCount++ : fileCount++)
+
     const entryListLen = entryList.length
+    const showPagination = entryListLen > MAX_PAGE_SIZE
     const isEntryListEmpty = entryListLen === 0
-    return { entryList, entryListLen, isEntryListEmpty, folderCount, fileCount }
+
+    return { entryList, entryListLen, showPagination, isEntryListEmpty, folderCount, fileCount }
   }, [data, filterText, hiddenShow])
 
   const displayEntryList = useMemo(() => {
@@ -122,8 +127,8 @@ export default function FileExplorer(props: AppComponentProps) {
     return {
       navBack: position <= 0,
       navForward: list.length === position + 1,
-      refresh: fetching || !currentDirPath,
-      backToTop: !currentDirPath || isInRoot,
+      refresh: fetching || !currentPath,
+      backToTop: !currentPath || isInRoot,
       newDir: newDirMode || newTxtMode,
       newTxt: newDirMode || newTxtMode,
       rename: selectedEntryList.length !== 1,
@@ -136,7 +141,7 @@ export default function FileExplorer(props: AppComponentProps) {
       showHidden: false,
       gridMode: false,
     }
-  }, [history, fetching, currentDirPath, isInRoot, newDirMode, newTxtMode, selectedEntryList, isEntryListEmpty])
+  }, [history, fetching, currentPath, isInRoot, newDirMode, newTxtMode, selectedEntryList, isEntryListEmpty])
 
   const fetchPathData = useCallback((path: string, keepData?: boolean) => {
     !keepData && setData(null)
@@ -167,7 +172,7 @@ export default function FileExplorer(props: AppComponentProps) {
   }) => {
     abortController && abortController.abort()
     const { path, direction, pushPath, updateRootEntryMounted } = props
-    setPrevDirPath(currentDirPath)
+    setPrevDirPath(currentPath)
     setCurrentPath(path)
     fetchPathData(path)
     updateHistory(direction, pushPath ? path : undefined)
@@ -177,16 +182,16 @@ export default function FileExplorer(props: AppComponentProps) {
         .sort((a, b) => a.length > b.length ? -1 : 1)[0]
       setActiveRootEntryMounted(mounted)
     }
-  }, [abortController, currentDirPath, fetchPathData, rootEntryMountedList, updateHistory])
+  }, [abortController, currentPath, fetchPathData, rootEntryMountedList, updateHistory])
 
   const handleRootEntryClick = useCallback((path: string) => {
     handlePathChange({ path, direction: 'forward', pushPath: true, updateRootEntryMounted: true })
   }, [handlePathChange])
 
   const handleDirOpen = useCallback((dirName: string) => {
-    const path = `${currentDirPath}/${dirName}`
+    const path = `${currentPath}/${dirName}`
     handlePathChange({ path, direction: 'forward', pushPath: true })
-  }, [handlePathChange, currentDirPath])
+  }, [handlePathChange, currentPath])
 
   const handleGoFullPath = useCallback((path: string) => {
     handlePathChange({ path, direction: 'forward', pushPath: true })
@@ -206,15 +211,15 @@ export default function FileExplorer(props: AppComponentProps) {
 
   const handleRefresh = useCallback(() => {
     setSelectedEntryList([])
-    fetchPathData(currentDirPath, true)
-  }, [fetchPathData, currentDirPath])
+    fetchPathData(currentPath, true)
+  }, [fetchPathData, currentPath])
 
   const handleBackToTop = useCallback(() => {
-    const list = currentDirPath.split('/')
+    const list = currentPath.split('/')
     list.pop()
     const path = list.join('/')
     handlePathChange({ path, direction: 'forward', pushPath: true })
-  }, [currentDirPath, handlePathChange])
+  }, [currentPath, handlePathChange])
 
   const handleCreate = useCallback((create: 'dir' | 'txt') => {
     setSelectedEntryList([])
@@ -241,7 +246,7 @@ export default function FileExplorer(props: AppComponentProps) {
 
     const successList: boolean[] = []
     for (const nestedFile of nestedFileList) {
-      const parentPath = `${currentDirPath}${destDir ? `/${destDir}` : ''}`
+      const parentPath = `${currentPath}${destDir ? `/${destDir}` : ''}`
       let lastUpload = { time: Date.now(), size: 0 }
 
       const onUploadProgress = (e: ProgressEvent) => {
@@ -274,7 +279,7 @@ export default function FileExplorer(props: AppComponentProps) {
       toast.success('上传成功')
     }
     ;(uploadInputRef.current as any).value = ''
-  }, [uploadTaskList, setUploadTaskList, currentDirPath, uploadFile, handleRefresh])
+  }, [uploadTaskList, setUploadTaskList, currentPath, uploadFile, handleRefresh])
 
   const handleCancelSelect = useCallback((e: any) => {
     if (e.button === 2) return  // oncontextmenu
@@ -308,7 +313,7 @@ export default function FileExplorer(props: AppComponentProps) {
 
   const handleDownloadClick = useCallback((contextEntryList?: IEntry[]) => {
     const processList = contextEntryList || selectedEntryList
-    const { msg, downloadName, cmd } = getDownloadInfo(currentDirPath, processList)
+    const { msg, downloadName, cmd } = getDownloadInfo(currentPath, processList)
     const close = () => setDownloadConfirmorProps({ isOpen: false })
     const icon = <SvgIcon.Download size={36} />
 
@@ -325,10 +330,10 @@ export default function FileExplorer(props: AppComponentProps) {
       onCancel: close,
       onConfirm: () => {
         close()
-        FsApi.startDownload(currentDirPath, downloadName, cmd)
+        FsApi.startDownload(currentPath, downloadName, cmd)
       },
     })
-  }, [currentDirPath, selectedEntryList])
+  }, [currentPath, selectedEntryList])
 
   const handleDeleteClick = useCallback(async (contextEntryList?: IEntry[]) => {
     const processList = contextEntryList || selectedEntryList
@@ -354,7 +359,7 @@ export default function FileExplorer(props: AppComponentProps) {
         const successList: boolean[] = []
         for (const entry of processList) {
           const { name } = entry
-          const { success } = await deleteEntry(`${currentDirPath}/${name}`)
+          const { success } = await deleteEntry(`${currentPath}/${name}`)
           document.querySelector(`.entry-node[data-entry-name="${name}"]`)?.setAttribute('style', 'opacity:0;')
           successList.push(success)
         }
@@ -363,16 +368,16 @@ export default function FileExplorer(props: AppComponentProps) {
         }
       },
     })
-  }, [deleteEntry, currentDirPath, selectedEntryList, handleRefresh])
+  }, [deleteEntry, currentPath, selectedEntryList, handleRefresh])
 
   useEffect(() => setWindowLoading(fetching), [setWindowLoading, fetching])
 
   useEffect(() => {
-    if (!currentDirPath && rootEntryList.length) {
+    if (!currentPath && rootEntryList.length) {
       const { name, parentPath } = rootEntryList[0]
       handleRootEntryClick(`${parentPath}/${name}`)
     }
-  }, [currentDirPath, rootEntryList, handleRootEntryClick])
+  }, [currentPath, rootEntryList, handleRootEntryClick])
 
   useEffect(() => {
     const container: any = containerRef.current
@@ -391,7 +396,7 @@ export default function FileExplorer(props: AppComponentProps) {
     setFilterMode(false)
     setFilterText('')
     setCurrentPage(1)
-  }, [currentDirPath])
+  }, [currentPath])
 
   useEffect(() => {
     const prevEntry = entryList.find(({ name, parentPath }) => `${parentPath}/${name}` === prevDirPath)
@@ -534,34 +539,135 @@ export default function FileExplorer(props: AppComponentProps) {
     },
   })
 
+
   const handleContextMenu = useCallback((event: any) => {
     event.preventDefault()
     event.stopPropagation()
-    const { target, clientX: left, clientY: top } = event
-    const onClose = () => setShownMenus(null)
-    const menuProps = {
-      top, left,
-      target, entryList, selectedEntryList,
-      setOpenOperation, updateDirSize,
-      setNewDirMode, setNewTxtMode, setSelectedEntryList,
-      handleRefresh, handleRename, handleUploadClick, handleDownloadClick, handleDeleteClick,
-      onClose,
-    }
-    setShownMenus(<Menus {...menuProps} />)
-  }, [
-    entryList, selectedEntryList,
-    setOpenOperation, updateDirSize,
-    handleRefresh, handleRename, handleUploadClick, handleDownloadClick, handleDeleteClick,
-  ])
 
-  const showPagination = entryListLen > MAX_PAGE_SIZE
+    const { target, clientX: left, clientY: top } = event
+
+    let isOnBlank = true
+    let isOnDir = false
+    let contextEntryList: IEntry[] = [...selectedEntryList]
+
+    const unconfirmedLen = contextEntryList.length
+    const targetEntry = target.closest('.entry-node')
+
+    if (targetEntry) {
+      isOnBlank = false
+
+      const isDir = targetEntry.getAttribute('data-is-directory') === 'true'
+      const entryName = targetEntry.getAttribute('data-entry-name')
+      const entry = entryList.find(o => o.name === entryName)
+
+      if (isDir) isOnDir = true
+      if (unconfirmedLen <= 1 && entry) {
+        contextEntryList = [entry]
+        setSelectedEntryList(contextEntryList)
+      }
+    } else {
+      setSelectedEntryList([])
+    }
+
+    const confirmedLen = contextEntryList.length
+    const isSingleConfirmed = confirmedLen === 1
+
+    const handleOpenEntry = (app: IApp) => {
+      // const matchedEntryList = contextEntryList.filter(en => app.matchList?.includes(en.extension))
+      // const activeEntryIndex = matchedEntryList.findIndex(en => en.name === name)
+      setOpenOperation({
+        app,
+        matchedEntryList: contextEntryList,
+        activeEntryIndex: 0,
+      })
+    }
+
+    const menuItemList: IContextMenuItem[] = [
+      {
+        icon: <SvgIcon.FolderAdd />,
+        label: '新建文件夹',
+        isShow: isOnBlank,
+        onClick: () => setNewDirMode(true),
+      },
+      {
+        icon: <SvgIcon.FileAdd />,
+        label: '新建文本文件',
+        isShow: isOnBlank,
+        onClick: () => setNewTxtMode(true),
+      },
+      {
+        icon: <SvgIcon.Refresh />,
+        label: '刷新',
+        isShow: isOnBlank,
+        onClick: handleRefresh,
+      },
+      {
+        icon: <SvgIcon.Edit />,
+        label: '重命名',
+        isShow: isSingleConfirmed,
+        onClick: () => setTimeout(handleRename, 0),
+      },
+      {
+        icon: <SvgIcon.Apps />,
+        label: '打开方式',
+        isShow: !isOnDir && isSingleConfirmed,
+        onClick: () => { },
+        children: CALLABLE_APP_LIST.map(app => ({
+          icon: <div className="app-icon w-4 h-4" data-app-id={app.id} />,
+          label: app.title,
+          onClick: () => handleOpenEntry(app),
+        })).concat({
+          icon: <div className="app-icon w-4 h-4" data-app-id="iina" />,
+          label: 'IINA',
+          onClick: () => openInIINA(contextEntryList[0]),
+        }),
+      },
+      {
+        icon: <SvgIcon.FolderInfo />,
+        label: '文件夹大小',
+        isShow: isOnDir,
+        onClick: () => updateDirSize(contextEntryList[0]),
+      },
+      {
+        icon: <SvgIcon.Upload />,
+        label: '上传',
+        isShow: isOnBlank,
+        onClick: handleUploadClick,
+      },
+      {
+        icon: <SvgIcon.Download />,
+        label: '下载',
+        isShow: true,
+        onClick: () => handleDownloadClick(contextEntryList),
+      },
+      {
+        icon: <SvgIcon.Delete />,
+        label: '删除',
+        isShow: !isOnBlank,
+        onClick: () => handleDeleteClick(contextEntryList),
+      },
+    ].filter(o => o.isShow)
+
+    setContextMenu({ top, left, menuItemList })
+  }, [
+    entryList,
+    selectedEntryList,
+    updateDirSize,
+    setContextMenu,
+    setOpenOperation,
+    handleRefresh,
+    handleRename,
+    handleUploadClick,
+    handleDownloadClick,
+    handleDeleteClick,
+  ])
 
   return (
     <>
       <div className="absolute inset-0 flex">
         {/* side */}
         <Side
-          {...{ sideCollapse, currentDirPath, activeRootEntryMounted, rootEntryList }}
+          {...{ sideCollapse, currentPath, activeRootEntryMounted, rootEntryList }}
           onRootEntryClick={handleRootEntryClick}
         />
         {/* main */}
@@ -644,7 +750,7 @@ export default function FileExplorer(props: AppComponentProps) {
                       lastModified: 0,
                       hidden: false,
                       hasChildren: false,
-                      parentPath: currentDirPath,
+                      parentPath: currentPath,
                       extension: newDirMode ? '_dir_new' : '_txt_new',
                     }}
                   />
@@ -652,7 +758,7 @@ export default function FileExplorer(props: AppComponentProps) {
                     showInput
                     create={newDirMode ? 'dir' : 'txt'}
                     gridMode={gridMode}
-                    currentDirPath={currentDirPath}
+                    currentPath={currentPath}
                     onSuccess={handleNameSuccess}
                     onFail={handleNameFail}
                   />
@@ -663,14 +769,14 @@ export default function FileExplorer(props: AppComponentProps) {
                 const { name, type, hidden, size, lastModified } = entry
                 const isSelected = !!selectedEntryList.find(o => isSameEntry(o, entry))
                 const isSmall = !gridMode
-                const bytes = size === undefined ? sizeMap[`${currentDirPath}/${name}`] : size
+                const bytes = size === undefined ? sizeMap[`${currentPath}/${name}`] : size
                 const sizeLabel = bytes === undefined ? '--' : getReadableSize(bytes)
                 const dateLabel = lastModified ? DateTime.fromMillis(lastModified).toFormat('yyyy-MM-dd HH:mm') : ''
                 return (
                   <div
                     key={encodeURIComponent(name)}
                     data-entry-name={name}
-                    data-is-folder={type === EntryType.directory}
+                    data-is-directory={type === EntryType.directory}
                     data-selected={isSelected}
                     draggable
                     className={line(`
@@ -690,7 +796,7 @@ export default function FileExplorer(props: AppComponentProps) {
                       entry={entry}
                       isSelected={isSelected}
                       gridMode={gridMode}
-                      currentDirPath={currentDirPath}
+                      currentPath={currentPath}
                       onSuccess={handleNameSuccess}
                       onFail={handleNameFail}
                     />
@@ -719,7 +825,7 @@ export default function FileExplorer(props: AppComponentProps) {
             </div>
           </div>
           <PathLink
-            {...{ folderCount, fileCount, currentDirPath, activeRootEntryMounted, selectedEntryList }}
+            {...{ folderCount, fileCount, currentPath, activeRootEntryMounted, selectedEntryList }}
             loading={fetching}
             onDirClick={handleGoFullPath}
             onRootEntryClick={handleRootEntryClick}
@@ -744,8 +850,6 @@ export default function FileExplorer(props: AppComponentProps) {
         className="hidden"
         onChange={(e: any) => handleUploadStart([...e.target.files])}
       />
-
-      {shownMenus}
 
       <Confirmor {...downloadConfirmorProps} />
       <Confirmor {...deleteConfirmorProps} />

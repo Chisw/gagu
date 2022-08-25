@@ -40,7 +40,7 @@ export default function Desktop() {
                   entry={entry}
                   isSelected={false}
                   gridMode={true}
-                  currentDirPath={''}
+                  currentPath={''}
                   onSuccess={() => { }}
                   onFail={() => { }}
                 />

@@ -97,3 +97,17 @@ export interface IUploadTask {
   status: 'waiting' | 'uploading' | 'success' | 'fail' | 'cancel'
   abortController?: AbortController
 }
+
+export interface IContextMenuItem {
+  icon: JSX.Element
+  label: string
+  onClick: () => void
+  isShow?: boolean
+  children?: IContextMenuItem[]
+}
+
+export interface IContextMenuState {
+  top: number
+  left: number
+  menuItemList: IContextMenuItem[]
+}

@@ -14,7 +14,7 @@ interface NameLineProps {
   entry?: IEntry,
   isSelected?: boolean
   gridMode: boolean
-  currentDirPath: string
+  currentPath: string
   onSuccess: (entry: IEntry) => void
   onFail: (failType: NameFailType) => void
 }
@@ -27,7 +27,7 @@ export default function NameLine(props: NameLineProps) {
     entry = undefined,
     isSelected = false,
     gridMode,
-    currentDirPath,
+    currentPath,
     onSuccess,
     onFail,
   } = props
@@ -64,14 +64,14 @@ export default function NameLine(props: NameLineProps) {
       return
     }
 
-    const newPath = `${currentDirPath}/${newName}`
+    const newPath = `${currentPath}/${newName}`
     const { exists } = await getExists(newPath)
     if (exists) {
       onFail('exist')
       toast.error('已存在')
     } else {
       if (oldName) {  // rename
-        const oldPath = `${currentDirPath}/${oldName}`
+        const oldPath = `${currentPath}/${oldName}`
         const { success } = await renameEntry(oldPath, newPath)
         if (success) {
           onSuccess({ ...entry!, name: newName })
@@ -82,7 +82,7 @@ export default function NameLine(props: NameLineProps) {
         if (create === 'dir') {
           const { success } = await addDirectory(newPath)
           if (success) {
-            onSuccess({ name: newName, type: EntryType.directory, parentPath: currentDirPath, lastModified: 0, hasChildren: false, hidden: false, extension: '_dir' })
+            onSuccess({ name: newName, type: EntryType.directory, parentPath: currentPath, lastModified: 0, hasChildren: false, hidden: false, extension: '_dir' })
           } else {
             onFail('net_error')
           }
@@ -91,16 +91,16 @@ export default function NameLine(props: NameLineProps) {
           const suffix = newName.includes('.') ? '' : '.txt'
           const name = newName + suffix
           const file = new File([blob], name)
-          const { success } = await uploadFile(currentDirPath, file)
+          const { success } = await uploadFile(currentPath, file)
           if (success) {
-            onSuccess({ name, type: EntryType.file, parentPath: currentDirPath, lastModified: 0, hasChildren: false, hidden: false, extension: '' })
+            onSuccess({ name, type: EntryType.file, parentPath: currentPath, lastModified: 0, hasChildren: false, hidden: false, extension: '' })
           } else {
             onFail('net_error')
           }
         }
       }
     }
-  }, [entry, currentDirPath, create, getExists, addDirectory, renameEntry, uploadFile, onSuccess, onFail])
+  }, [entry, currentPath, create, getExists, addDirectory, renameEntry, uploadFile, onSuccess, onFail])
 
   return (
     <div className={`w-full leading-none ${gridMode ? 'mt-1 text-center' : 'ml-4 flex justify-center items-center'}`}>

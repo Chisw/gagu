@@ -1,3 +1,4 @@
+import { FsApi } from '../api'
 import { CALLABLE_APP_LIST } from './appList'
 import { EntryType, IEntry, INestedFile, IOffsetInfo, IRectInfo } from './types'
 
@@ -200,4 +201,12 @@ export const getImageTypeBase64ByURL = async (url: string, options?: { width?: n
     }
     img.src = url
   })
+}
+
+export const openInIINA = (entry: IEntry) => {
+  if (!entry) return
+  const { name, parentPath } = entry
+  const a = document.createElement('a')
+  a.href = `iina://open?url=${FsApi.getFileStreamUrl(`${parentPath}/${name}`)}`
+  a.click()
 }

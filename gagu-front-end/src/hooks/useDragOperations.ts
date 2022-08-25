@@ -29,7 +29,7 @@ export function useDragOperations(props: useDragOperationsProps) {
       e.stopPropagation()
 
       const { type, dataTransfer, target } = e
-      const closestDir = target.closest('[data-is-folder="true"]')
+      const closestDir = target.closest('[data-is-directory="true"]')
 
       if (closestDir) {
         clear()

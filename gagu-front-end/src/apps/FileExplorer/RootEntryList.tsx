@@ -3,7 +3,7 @@ import { getReadableSize, line } from '../../utils'
 import { IRootEntry } from '../../utils/types'
 
 interface RootEntryListProps {
-  currentDirPath: string
+  currentPath: string
   activeRootEntryMounted: string
   rootEntryList: IRootEntry[]
   onRootEntryClick: (mounted: string) => void
@@ -12,7 +12,7 @@ interface RootEntryListProps {
 export default function RootEntryList(props: RootEntryListProps) {
 
   const {
-    currentDirPath,
+    currentPath,
     activeRootEntryMounted,
     rootEntryList,
     onRootEntryClick,
@@ -24,8 +24,9 @@ export default function RootEntryList(props: RootEntryListProps) {
         {rootEntryList.map(({ name, parentPath, spaceFree, spaceTotal, label, isDisk }) => {
           const mounted = `${parentPath}/${name}`
           const isActive = mounted === activeRootEntryMounted
-          const canRootEntryClick = currentDirPath !== mounted
+          const canRootEntryClick = currentPath !== mounted
           const spaceUsed = isDisk ? spaceTotal! - spaceFree! : 0
+          const path = `${parentPath}/${name}`
           return (
             <div
               key={mounted}
@@ -44,8 +45,9 @@ export default function RootEntryList(props: RootEntryListProps) {
                 <span className="ml-1 truncate flex-grow">{label}</span>
               </div>
               <div className="flex justify-between items-center">
+                <span className="text-xs transform scale-75 origin-left">{path}</span>
                 {isDisk && (
-                  <span className="transform scale-75 origin-left font-din">
+                  <span className="transform scale-75 origin-right font-din">
                     {`${getReadableSize(spaceUsed!)}/${getReadableSize(spaceTotal!)}`.replace(/\s/g, '')}
                   </span>
                 )}

@@ -8,7 +8,7 @@ interface PathLinkProps {
   loading: boolean
   folderCount: number
   fileCount: number
-  currentDirPath: string
+  currentPath: string
   activeRootEntryMounted: string
   selectedEntryList: IEntry[]
   onDirClick: (mounted: string) => void
@@ -21,7 +21,7 @@ export default function PathLink(props: PathLinkProps) {
     loading,
     folderCount,
     fileCount,
-    currentDirPath,
+    currentPath,
     activeRootEntryMounted,
     selectedEntryList,
     onDirClick,
@@ -34,17 +34,17 @@ export default function PathLink(props: PathLinkProps) {
     isRootEntryDisabled,
   } = useMemo(() => {
     const selectedLen = selectedEntryList.length
-    const mountList = currentDirPath.replace(activeRootEntryMounted, '').split('/').filter(Boolean)
+    const mountList = currentPath.replace(activeRootEntryMounted, '').split('/').filter(Boolean)
     if (selectedLen === 1) {
       mountList.push(selectedEntryList[0].name)
     }
-    const isRootEntryDisabled = currentDirPath === activeRootEntryMounted || !mountList.length
+    const isRootEntryDisabled = currentPath === activeRootEntryMounted || !mountList.length
     return {
       selectedLen,
       mountList,
       isRootEntryDisabled,
     }
-  }, [currentDirPath, activeRootEntryMounted, selectedEntryList])
+  }, [currentPath, activeRootEntryMounted, selectedEntryList])
 
   if (!activeRootEntryMounted) return <div />
 

@@ -4,7 +4,7 @@ import { Toaster } from 'react-hot-toast'
 import DesktopPage from './pages/DesktopPage'
 import LoginPage from './pages/LoginPage'
 import { useFavicon } from './hooks'
-import defaultFavicon from './img/icons/default-favicon.png'
+import defaultFavicon from './img/favicon.png'
 
 export default function App() {
 

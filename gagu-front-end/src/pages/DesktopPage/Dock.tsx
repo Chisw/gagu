@@ -122,10 +122,10 @@ export default function Dock() {
       <div
         className={line(`
           gagu-dock
-          fixed z-20 right-0 bottom-0 left-0 px-2 h-12
+          absolute z-20 right-0 bottom-0 left-0 px-2 h-12
           flex justify-between items-center
           border-t border-gray-500 border-opacity-20
-          bg-clip-padding bg-white-500
+          bg-clip-padding bg-white-600
           backdrop-filter backdrop-blur
           transition-all duration-500
           transform

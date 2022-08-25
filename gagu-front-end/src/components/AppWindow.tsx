@@ -44,6 +44,7 @@ export default function AppWindow(props: WindowProps) {
   const [memoInfo, setMemoInfo] = useState(defaultInfo)
   const [rndInstance, setRndInstance] = useState<any>(null)
   const [windowStatus, setWindowStatus] = useState<'opening' | 'opened' | 'hiding' | 'hidden' | 'showing' | 'shown' | 'closing' | 'closed'>('closed')
+  const [isDraggingOrResizing, setIsDraggingOrResizing] = useState(false)
 
   const isTopWindow = useMemo(() => currentIndex === topWindowIndex, [currentIndex, topWindowIndex])
 
@@ -114,19 +115,26 @@ export default function AppWindow(props: WindowProps) {
         id={`window-${runningId}`}
         dragHandleClassName="drag-handler"
         data-hidden={hidden}
-        className="app-window duration-100"
+        className="app-window"
         default={defaultInfo}
-        style={{ zIndex: initIndex }}
+        style={{
+          zIndex: initIndex,
+          transitionDuration: isDraggingOrResizing ? undefined : '200ms',
+        }}
         {...resizeRange}
+        onDragStart={() => setIsDraggingOrResizing(true)}
+        onResizeStart={() => setIsDraggingOrResizing(true)}
+        onDragStop={(e, { x, y }) => {
+          setIsDraggingOrResizing(false)
+          setMemoInfo({ ...memoInfo, x, y })
+        }}
         onResizeStop={(e, d, el, delta) => {
+          setIsDraggingOrResizing(false)
           setMemoInfo({
             ...memoInfo,
             width: memoInfo.width + delta.width,
             height: memoInfo.height + delta.height,
           })
-        }}
-        onDragStop={(e, { x, y }) => {
-          setMemoInfo({ ...memoInfo, x, y })
         }}
       >
         <div
