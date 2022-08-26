@@ -28,6 +28,13 @@ export default function PhotoGallery(props: AppComponentProps) {
     getExif(`${activeEntry.parentPath}/${activeEntry.name}`)
   }, [activeEntry, getExif])
 
+  // useEffect(() => {
+  //   const { width, height } = document.querySelector('.gg-app-photo-gallery')!.getBoundingClientRect()
+  //   window.innerWidth = width
+  //   window.innerHeight = height
+  //   setVisible(true)
+  // }, [])
+
   const imgRef = useRef<HTMLImageElement>(null)
 
   const imgInfo = useMemo(() => {
@@ -58,11 +65,9 @@ export default function PhotoGallery(props: AppComponentProps) {
     }
   }, [activeIndex, matchedEntryList])
 
-  console.log(loading)
-
   return (
     <>
-      <div className="absolute inset-0 flex flex-col select-none">
+      <div className="gg-app-photo-gallery absolute inset-0 flex flex-col select-none">
         <div className="absolute z-10 top-0 right-0 left-0 text-xs p-1 bg-black-400 text-white">
           {activeIndex + 1}/{matchedEntryList.length} - 
           {imgInfo && (
@@ -80,11 +85,11 @@ export default function PhotoGallery(props: AppComponentProps) {
           </div>
         </div>
         <div
-          className="relative flex-grow cursor-zoom-in"
+          className="relative flex-grow cursor-zoom-in bg-grid-light"
           onClick={() => setVisible(true)}
         >
           {loading && <Spinner />}
-          <div className="absolute inset-0 flex justify-center items-center p-4">
+          <div className="absolute inset-0 flex justify-center items-center p-2">
             <img
               ref={imgRef}
               src={activeEntryStreamUrl}
@@ -134,9 +139,12 @@ export default function PhotoGallery(props: AppComponentProps) {
         onClose={() => setVisible(false)}
         index={activeIndex}
         onIndexChange={index => setActiveIndex(index)}
-        toolbarRender={({ rotate, onRotate, scale, onScale }) => {
+        // portalContainer={document.querySelector('.gg-app-photo-gallery') as HTMLElement}
+        bannerVisible={false}
+        overlayRender={({ rotate, onRotate, scale, onScale, index, images, onClose }) => {
           return (
-            <>
+            <div className="absolute z-10 top-0 right-0 left-0 h-10 flex items-center bg-black-500">
+              <span className="text-white font-din text-xs">{index + 1} / {images.length} {matchedEntryList[index].name}</span>
               <div
                 className="w-8 h-8 flex justify-center items-center text-gray-200 hover:text-gray-100 active:text-gray-300 cursor-pointer"
                 onClick={() => onScale(scale - 1)}
@@ -155,7 +163,13 @@ export default function PhotoGallery(props: AppComponentProps) {
               >
                 <SvgIcon.Restart size={18} />
               </div>
-            </>
+              <div
+                className="w-8 h-8 flex justify-center items-center text-gray-200 hover:text-gray-100 active:text-gray-300 cursor-pointer"
+                onClick={onClose}
+              >
+                <SvgIcon.Close size={18} />
+              </div>
+            </div>
           )
         }}
       />

@@ -49,7 +49,7 @@ export const uploadTaskListState = atom<IUploadTask[]>({
   default: [],
 })
 
-export const contextMenuState = atom<IContextMenuState | null>({
-  key: 'contextMenuState',
+export const contextMenuDataState = atom<IContextMenuState | null>({
+  key: 'contextMenuDataState',
   default: null,
 })

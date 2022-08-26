@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState, useMemo } from 'react'
 import { useRecoilState } from 'recoil'
-import { openOperationState, runningAppListState, topWindowIndexState, rootInfoState } from '../../utils/state'
-import APP_LIST from '../../utils/appList'
-import { IApp, IRootInfo } from '../../utils/types'
+import { openOperationState, runningAppListState, topWindowIndexState, rootInfoState, contextMenuDataState } from '../../utils/state'
+import APP_LIST, { APP_ID_MAP } from '../../utils/appList'
+import { IApp, IContextMenuItem, IRootInfo } from '../../utils/types'
 import { line } from '../../utils'
 import { DateTime } from 'luxon'
 import { useFetch } from '../../hooks'
@@ -10,6 +10,7 @@ import { AuthApi, FsApi } from '../../api'
 import { DOCUMENT_TITLE, GAGU_AUTH_KEY } from '../../utils/constant'
 import { SvgIcon } from '../../components/base'
 import { useNavigate } from 'react-router-dom'
+import toast from 'react-hot-toast'
 
 export default function Dock() {
 
@@ -20,6 +21,8 @@ export default function Dock() {
   const [topWindowIndex, setTopWindowIndex] = useRecoilState(topWindowIndexState)
   const [runningAppList, setRunningAppList] = useRecoilState(runningAppListState)
   const [openOperation] = useRecoilState(openOperationState)
+  const [, setContextMenuData] = useRecoilState(contextMenuDataState)
+
   const [isMounted, setIsMounted] = useState(false)
 
   const { fetch, loading, data } = useFetch(FsApi.getEntryList)
@@ -88,17 +91,17 @@ export default function Dock() {
     ]
   }, [fetch, navigate, shutdown])
 
-  const handleOpenApp = useCallback((app: IApp) => {
+  const handleOpenApp = useCallback((app: IApp, openNew?: boolean) => {
     const sameRunningAppList = runningAppList.filter(a => a.id === app.id)
     const isRunning = !!sameRunningAppList.length
-    if (isRunning) {
+    if (isRunning && !openNew) {
       sameRunningAppList.forEach(app => {
-        const windowId = `window-${app.runningId}`
+        const windowId = `gg-app-window-${app.runningId}`
         if (document.getElementById(windowId)!.getAttribute('data-hidden') === 'true') {
-          const hiddenSwitchTrigger = document.querySelector(`#${windowId} .hidden-switch-trigger`) as any
+          const hiddenSwitchTrigger = document.querySelector(`#${windowId} .gg-hidden-switch-trigger`) as any
           hiddenSwitchTrigger.click()
         }
-        const moveToFrontTrigger = document.querySelector(`#${windowId} .move-to-front-trigger`) as Element
+        const moveToFrontTrigger = document.querySelector(`#${windowId} .gg-move-to-front-trigger`) as Element
         const mouseDownEvent = new MouseEvent('mousedown')
         moveToFrontTrigger.dispatchEvent(mouseDownEvent)
       })
@@ -117,11 +120,47 @@ export default function Dock() {
     }
   }, [openOperation, handleOpenApp])
 
+  const handleContextMenu = useCallback((event: any, app: IApp) => {
+    const appId = app.id
+    const canMultiple = ![APP_ID_MAP.transfer, APP_ID_MAP.baiduMap, APP_ID_MAP.ps, APP_ID_MAP.pqina].includes(appId)
+    const hasRunning = runningAppList.map(o => o.id).includes(appId)
+
+    const menuItemList: IContextMenuItem[] = [
+      {
+        icon: <SvgIcon.Add />,
+        label: hasRunning ? '新建窗口' : '打开',
+        isShow: !hasRunning || canMultiple,
+        onClick: () => handleOpenApp(app, true),
+      },
+      {
+        icon: <SvgIcon.Links />,
+        label: '新建连接',
+        isShow: app.id === APP_ID_MAP.fileExplorer,
+        onClick: () => toast.error('开发中'),
+      },
+      {
+        icon: <SvgIcon.Close />,
+        label: '关闭已开窗口',
+        isShow: hasRunning,
+        onClick: () => {
+          const list = runningAppList.filter(app => app.id !== appId)
+          setRunningAppList(list)
+        },
+      },
+    ]
+
+    setContextMenuData({
+      contextMenuEvent: event,
+      menuItemList,
+      isDock: true,
+    })
+  }, [runningAppList, setRunningAppList, handleOpenApp, setContextMenuData])
+
   return (
     <>
       <div
         className={line(`
-          gagu-dock
+          gg-dock
           absolute z-20 right-0 bottom-0 left-0 px-2 h-12
           flex justify-between items-center
           border-t border-gray-500 border-opacity-20
@@ -143,7 +182,7 @@ export default function Dock() {
                   rel="noreferrer"
                   className="h-8"
                 >
-                  <div className="gagu-logo w-16 h-8" />
+                  <div className="gg-logo w-16 h-8" />
                 </a>
                 &nbsp;
                 <span className="text-xs font-din">
@@ -187,10 +226,11 @@ export default function Dock() {
                 className="relative mx-2 w-8 h-8"
               >
                 <div
-                  className="app-icon filter hover:brightness-110 active:brightness-75 transition-all duration-50 w-full h-full cursor-pointer"
+                  className="gg-app-icon filter hover:brightness-110 active:brightness-75 transition-all duration-50 w-full h-full cursor-pointer shadow rounded-lg"
                   data-app-id={app.id}
                   title={app.title}
                   onClick={() => handleOpenApp(app)}
+                  onContextMenu={event => handleContextMenu(event, app)}
                 />
                 <span
                   className={line(`

@@ -66,7 +66,7 @@ export default function Icon(props: IconProps) {
       data-folder-name={isFolder ? entry.name.toLowerCase() : undefined}
       data-show-thumbnail={String(showThumbnail)}
       className={line(`
-        entry-icon
+        gg-entry-icon
         relative mx-auto max-w-16 pointer-events-none
         flex justify-center items-center flex-shrink-0
         bg-no-repeat bg-contain bg-center
@@ -79,7 +79,7 @@ export default function Icon(props: IconProps) {
         <div
           data-app-id={callableAppId}
           className={line(`
-            app-icon absolute z-0 right-0 bottom-0 left-1/2 w-3 h-3 rounded-sm shadow-sm
+            gg-app-icon absolute z-0 right-0 bottom-0 left-1/2 w-3 h-3 rounded-sm shadow-sm
             ${isSmall ? 'ml-2px' : 'ml-4'}
           `)}
         />

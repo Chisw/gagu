@@ -107,7 +107,7 @@ export interface IContextMenuItem {
 }
 
 export interface IContextMenuState {
-  top: number
-  left: number
+  contextMenuEvent: MouseEvent
   menuItemList: IContextMenuItem[]
+  isDock?: boolean
 }

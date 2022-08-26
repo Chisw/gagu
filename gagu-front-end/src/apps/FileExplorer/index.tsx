@@ -4,7 +4,7 @@ import EntryIcon from './EntryIcon'
 import { useFetch, useDragSelect, useDragOperations, useShortcuts } from '../../hooks'
 import { getReadableSize, getDownloadInfo, getIsContained, isSameEntry, entrySorter, line, getMatchedApp, openInIINA } from '../../utils'
 import { FsApi } from '../../api'
-import { contextMenuState, openOperationState, rootInfoState, sizeMapState, uploadTaskListState } from '../../utils/state'
+import { contextMenuDataState, openOperationState, rootInfoState, sizeMapState, uploadTaskListState } from '../../utils/state'
 import { AppComponentProps, EntryType, IEntry, IHistory, IRectInfo, INestedFile, IUploadTask, IContextMenuItem, IApp } from '../../utils/types'
 import PathLink from './PathLink'
 import ToolBar, { IToolBarDisabledMap } from './ToolBar'
@@ -27,7 +27,7 @@ export default function FileExplorer(props: AppComponentProps) {
   const [sizeMap, setSizeMap] = useRecoilState(sizeMapState)
   const [, setOpenOperation] = useRecoilState(openOperationState)
   const [uploadTaskList, setUploadTaskList] = useRecoilState(uploadTaskListState)
-  const [, setContextMenu] = useRecoilState(contextMenuState)
+  const [, setContextMenuData] = useRecoilState(contextMenuDataState)
 
   const [sideCollapse, setSideCollapse] = useState(false)
   const [currentPath, setCurrentPath] = useState('')
@@ -360,7 +360,7 @@ export default function FileExplorer(props: AppComponentProps) {
         for (const entry of processList) {
           const { name } = entry
           const { success } = await deleteEntry(`${currentPath}/${name}`)
-          document.querySelector(`.entry-node[data-entry-name="${name}"]`)?.setAttribute('style', 'opacity:0;')
+          document.querySelector(`.gg-entry-node[data-entry-name="${name}"]`)?.setAttribute('style', 'opacity:0;')
           successList.push(success)
         }
         if (successList.every(Boolean)) {
@@ -382,7 +382,7 @@ export default function FileExplorer(props: AppComponentProps) {
   useEffect(() => {
     const container: any = containerRef.current
     if (container && scrollWaiter.wait && !fetching) {
-      const target: any = document.querySelector('.entry-node[data-selected="true"]')
+      const target: any = document.querySelector('.gg-entry-node[data-selected="true"]')
       const top = target ? target.offsetTop - 10 : 0
       container!.scrollTo({ top, behavior: scrollWaiter.smooth ? 'smooth' : undefined })
       setScrollWaiter({ wait: false })
@@ -475,7 +475,7 @@ export default function FileExplorer(props: AppComponentProps) {
   }, [setSelectedEntryList, entryList, selectedEntryList])
 
   const handleRectSelect = useCallback((info: IRectInfo) => {
-    const entryElements = document.querySelectorAll('.entry-node')
+    const entryElements = document.querySelectorAll('.gg-entry-node')
     const pageOffset = (currentPage - 1) * MAX_PAGE_SIZE
     if (!entryElements.length) return
     const indexList: number[] = []
@@ -539,19 +539,13 @@ export default function FileExplorer(props: AppComponentProps) {
     },
   })
 
-
   const handleContextMenu = useCallback((event: any) => {
-    event.preventDefault()
-    event.stopPropagation()
-
-    const { target, clientX: left, clientY: top } = event
-
     let isOnBlank = true
     let isOnDir = false
     let contextEntryList: IEntry[] = [...selectedEntryList]
 
     const unconfirmedLen = contextEntryList.length
-    const targetEntry = target.closest('.entry-node')
+    const targetEntry = event.target.closest('.gg-entry-node')
 
     if (targetEntry) {
       isOnBlank = false
@@ -613,11 +607,11 @@ export default function FileExplorer(props: AppComponentProps) {
         isShow: !isOnDir && isSingleConfirmed,
         onClick: () => { },
         children: CALLABLE_APP_LIST.map(app => ({
-          icon: <div className="app-icon w-4 h-4" data-app-id={app.id} />,
+          icon: <div className="gg-app-icon w-4 h-4" data-app-id={app.id} />,
           label: app.title,
           onClick: () => handleOpenEntry(app),
         })).concat({
-          icon: <div className="app-icon w-4 h-4" data-app-id="iina" />,
+          icon: <div className="gg-app-icon w-4 h-4" data-app-id="iina" />,
           label: 'IINA',
           onClick: () => openInIINA(contextEntryList[0]),
         }),
@@ -646,14 +640,14 @@ export default function FileExplorer(props: AppComponentProps) {
         isShow: !isOnBlank,
         onClick: () => handleDeleteClick(contextEntryList),
       },
-    ].filter(o => o.isShow)
+    ]
 
-    setContextMenu({ top, left, menuItemList })
+    setContextMenuData({ contextMenuEvent: event, menuItemList })
   }, [
     entryList,
     selectedEntryList,
     updateDirSize,
-    setContextMenu,
+    setContextMenuData,
     setOpenOperation,
     handleRefresh,
     handleRename,
@@ -778,9 +772,10 @@ export default function FileExplorer(props: AppComponentProps) {
                     data-entry-name={name}
                     data-is-directory={type === EntryType.directory}
                     data-selected={isSelected}
-                    draggable
+                    // draggable
                     className={line(`
-                      entry-node relative overflow-hidden rounded-sm
+                      gg-entry-node
+                      relative overflow-hidden rounded-sm
                       ${gridMode ? 'm-1 px-1 py-2 w-28' : 'mb-1 px-2 py-0 w-full flex items-center'}
                       ${!gridMode && isSelected ? 'bg-blue-600' : 'hover:bg-gray-100'}
                       ${isSelected ? 'bg-gray-100' : ''}

@@ -9,7 +9,7 @@ interface useDragOperationsProps {
   onUpload: (files: INestedFile[], dir?: string) => void
 }
 
-const clear = () => document.querySelectorAll('.entry-node').forEach(el => el.removeAttribute('data-drag-hover'))
+const clear = () => document.querySelectorAll('.gg-entry-node').forEach(el => el.removeAttribute('data-drag-hover'))
 
 export function useDragOperations(props: useDragOperationsProps) {
 

@@ -8,7 +8,7 @@ export default function AppWindowContainer() {
 
   return (
     <>
-      <div className="absolute z-10">
+      <div className="gg-app-window-container absolute z-10">
         {runningAppList.map(app => (
           <AppWindow
             key={app.runningId}

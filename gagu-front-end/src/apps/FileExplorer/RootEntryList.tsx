@@ -34,7 +34,7 @@ export default function RootEntryList(props: RootEntryListProps) {
               className={line(`
                 mb-1 p-2 text-xs rounded-sm cursor-pointer
                 ${isActive
-                  ? 'bg-white text-black shadow'
+                  ? 'bg-white text-black'
                   : 'text-gray-500 hover:text-black'
                 }
               `)}

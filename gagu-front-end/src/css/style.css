@@ -2,11 +2,19 @@
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' style='background:%23f4f5f6' width='43' height='43' preserveAspectRatio='xMidYMid' viewBox='0 0 43 43'%3E%3Cg transform='scale(.17)'%3E%3Cdefs%3E%3Cg id='a' fill='%23fff'%3E%3Cpath d='M256-128h128l-512 512V256zM384 0v128L128 384H0z'/%3E%3C/g%3E%3C/defs%3E%3Cg id='jsw.im' transform='translate(196.208)'%3E%3Cuse href='%23a' x='-256'/%3E%3Cuse href='%23a'/%3E%3CanimateTransform attributeName='transform' type='translate' keyTimes='0;1' repeatCount='indefinite' dur='0.5s' values='0 0; 256 0'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
 
-.app-window[data-hidden="true"] {
+.bg-grid-dark {
+  background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%231A202C' d='M0 0h10v10H0zM10 10h10v10H10z'/%3E%3Cpath fill='%232D3748' d='M10 0h10v10H10zM0 10h10v10H0z'/%3E%3C/svg%3E");
+}
+
+.bg-grid-light {
+  background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23fff' d='M0 0h10v10H0zM10 10h10v10H10z'/%3E%3Cpath fill='%23EDF2F7' d='M10 0h10v10H10zM0 10h10v10H0z'/%3E%3C/svg%3E");
+}
+
+.gg-app-window[data-hidden="true"] {
   display: none !important;
 }
 
-.drag-handler:hover + .drag-handler-hover-mask {
+.gg-drag-handler:hover + .gg-drag-handler-hover-mask {
   display: block;
 }
 
@@ -16,7 +24,7 @@
   animation: pulse 1s ease-in-out infinite;
 }
 
-.gagu-logo {
+.gg-logo {
   @apply bg-center bg-contain bg-no-repeat;
   background-image: url("data: image/svg+xml, %3Csvg width='396' height='96' viewBox='0 0 396 96' fill='none' xmlns='http://www.w3.org/2000/svg' %3E%3Cpath d='M0 0h396v96H0V0z' fill='%23FACC15' /%3E%3Cpath d='M121.846 10.105v60.632h40.616V55.579h20.307v15.158h20.308V10.105h-81.231zM111.692 10.105h-81.23v60.632h81.23V35.368H91.385v20.21H71.077V25.264h40.615V10.105zM294.462 10.105h-81.231v60.632h81.231V35.368h-20.308v20.21h-20.308V25.264h40.616V10.105zM304.615 10.105h40.616V55.58h20.307V10.105h20.308v60.632h-81.231V10.105z' fill='%23fff' /%3E%3Cpath d='M162.462 25.263h20.307v10.105h-20.307V25.263z' fill='%23FACC15' /%3E%3C/svg%3E");
 }
