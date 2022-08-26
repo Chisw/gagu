@@ -96,7 +96,7 @@ export default function AppWindow(props: WindowProps) {
       setIsFullScreen(false)
     } else {
       rndInstance.updatePosition({ x: 0, y: 0 })
-      rndInstance.updateSize({ width: window.innerWidth, height: window.innerHeight - 40 })  // Dock height
+      rndInstance.updateSize({ width: window.innerWidth, height: window.innerHeight - 48 })  // Dock height
       setIsFullScreen(true)
     }
   }, [memoInfo, isFullScreen, rndInstance])

@@ -9,6 +9,7 @@ import Settings from '../apps/Settings'
 import BaiduMap from '../apps/BaiduMap'
 import PQINA from '../apps/PQINA'
 import PS from '../apps/PS'
+// import WebAMP from '../apps/WebAMP'
 
 export const APP_ID_MAP = {
   fileExplorer: 'file-explorer',
@@ -21,6 +22,7 @@ export const APP_ID_MAP = {
   baiduMap: 'baidu-map',
   pqina: 'pqina',
   ps: 'ps',
+  webamp: 'webamp',
 }
 
 const APP_LIST: IApp[] = [
@@ -81,7 +83,7 @@ const APP_LIST: IApp[] = [
     title: '音乐播放器',
     AppComponent: MusicPlayer,
     width: 400,
-    height: 200,
+    height: 600,
     resizeRange: {
       maxWidth: 400,
       maxHeight: 800,
@@ -151,6 +153,19 @@ const APP_LIST: IApp[] = [
       minHeight: 600,
     },
   },
+  // {
+  //   id: APP_ID_MAP.webamp,
+  //   runningId: 0,
+  //   title: 'WebAMP',
+  //   AppComponent: WebAMP,
+  //   width: 600,
+  //   height: 300,
+  //   resizeRange: {
+  //     minWidth: 800,
+  //     minHeight: 600,
+  //   },
+  //   matchList: ['mp3', 'aac', 'flac'],
+  // },
 ]
 
 export const CALLABLE_APP_LIST = APP_LIST.filter(app => !!app.matchList)

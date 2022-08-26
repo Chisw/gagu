@@ -18,7 +18,7 @@ export default function CommonToolButtons(props: CommonToolButtonsProps) {
   const [shareConfirmorProps, setShareConfirmorProps] = useState<ConfirmorProps>({ isOpen: false })
 
   const handleShare = useCallback(() => {
-    const url = FsApi.getFileStreamUrl(`${activeEntry!.parentPath}/${activeEntry!.name}`)
+    const url = FsApi.getFileStreamUrl(activeEntry!)
     const close = () => setShareConfirmorProps({ isOpen: false })
     const icon = <SvgIcon.Share size={36} />
 

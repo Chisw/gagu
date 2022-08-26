@@ -1,9 +1,14 @@
 import { AxiosRequestConfig } from 'axios'
 import { BASE_URL } from '../utils'
-import { INestedFile } from '../utils/types'
+import { IEntry, INestedFile } from '../utils/types'
 import instance from './instance'
 
 export class FsApi {
+  static getRootEntryList = async (config?: AxiosRequestConfig) => {
+    const { data } = await instance.get(`/api/fs/root`, config)
+    return data
+  }
+
   static getEntryList = async (path: string, config?: AxiosRequestConfig) => {
     const { data } = await instance.get(`/api/fs/list?path=${path}`, config)
     return data
@@ -57,8 +62,10 @@ export class FsApi {
     return data
   }
 
-  static getFileStreamUrl = (path: string) => {
-    return `${BASE_URL}/api/fs/stream?path=${path}`
+  static getFileStreamUrl = (entry: IEntry) => {
+    const { name, parentPath } = entry
+    const path = `${parentPath}/${name}`
+    return `${BASE_URL}/api/fs/stream?path=${path}&token=${'gagu9293'}`
   }
 
   static startDownload = (parentPath: string, downloadName: string, cmd: string) => {

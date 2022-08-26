@@ -108,7 +108,7 @@ export default function PhotoGallery(props: AppComponentProps) {
             <SvgIcon.ChevronLeft />
           </div>
           {displayEntryList.map(entry => {
-            const src = FsApi.getFileStreamUrl(`${entry.parentPath}/${entry.name}`)
+            const src = FsApi.getFileStreamUrl(entry)
             const entryName = entry.name
             const isActive = entryName === activeEntry?.name
             return (
@@ -134,7 +134,7 @@ export default function PhotoGallery(props: AppComponentProps) {
       </div>
 
       <PhotoSlider
-        images={matchedEntryList.map(entry => ({ src: FsApi.getFileStreamUrl(`${entry.parentPath}/${entry.name}`), key: entry.name }))}
+        images={matchedEntryList.map(entry => ({ src: FsApi.getFileStreamUrl(entry), key: entry.name }))}
         visible={visible}
         onClose={() => setVisible(false)}
         index={activeIndex}

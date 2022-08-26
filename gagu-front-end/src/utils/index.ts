@@ -205,8 +205,7 @@ export const getImageTypeBase64ByURL = async (url: string, options?: { width?: n
 
 export const openInIINA = (entry: IEntry) => {
   if (!entry) return
-  const { name, parentPath } = entry
   const a = document.createElement('a')
-  a.href = `iina://open?url=${FsApi.getFileStreamUrl(`${parentPath}/${name}`)}`
+  a.href = `iina://open?url=${FsApi.getFileStreamUrl(entry)}`
   a.click()
 }

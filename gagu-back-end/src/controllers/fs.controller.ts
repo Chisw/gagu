@@ -33,17 +33,25 @@ import {
 
 @Controller('fs')
 export class FsController {
-  @Get('list')
-  findAll(@Query('path') path: string) {
-    console.log('FS/LIST:', path)
-    const entryList = ['', '/'].includes(path)
-      ? getRootEntryList()
-      : getEntryList(path)
+  @Get('root')
+  getRoot() {
+    console.log('FS/ROOT')
+    const rootEntryList = getRootEntryList()
     return {
       version: GAGU_VERSION,
       platform: OS.platform,
       deviceName: OS.hostname,
       desktopEntryList: getEntryList(`${GAGU_CONFIG_PATH}/desktop`),
+      rootEntryList,
+    }
+  }
+
+  @Get('list')
+  findAll(@Query('path') path: string) {
+    console.log('FS/LIST:', path)
+    const entryList = getEntryList(path)
+    return {
+      success: true,
       entryList,
     }
   }
@@ -126,9 +134,17 @@ export class FsController {
   // TODO: remove public
   @Public()
   @Get('stream')
-  readStream(@Query('path') path: string, @Res() response: Response) {
+  readStream(
+    @Query('path') path: string,
+    @Query('token') token: string,
+    @Res() response: Response,
+  ) {
     console.log('FS/STREAM:', path)
-    response.sendFile(path)
+    if (token && token.length === 8) {
+      response.sendFile(path)
+    } else {
+      return 'TOKEN ERROR'
+    }
   }
 
   @Post('upload')

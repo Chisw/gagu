@@ -25,12 +25,12 @@ export default function Dock() {
 
   const [isMounted, setIsMounted] = useState(false)
 
-  const { fetch, loading, data } = useFetch(FsApi.getEntryList)
+  const { fetch: getRootEntryList, loading, data } = useFetch(FsApi.getRootEntryList)
   const { fetch: shutdown } = useFetch(AuthApi.shutdown)
 
   useEffect(() => {
-    fetch('/')
-  }, [fetch])
+    getRootEntryList()
+  }, [getRootEntryList])
 
   useEffect(() => {
     setIsMounted(true)
@@ -38,8 +38,7 @@ export default function Dock() {
 
   useEffect(() => {
     if (data) {
-      const { version, platform, deviceName, desktopEntryList, entryList: rootEntryList } = data
-      setRootInfo({ version, platform, deviceName, desktopEntryList, rootEntryList } as IRootInfo)
+      setRootInfo(data as IRootInfo)
     }
   }, [data, setRootInfo])
 
@@ -70,7 +69,7 @@ export default function Dock() {
       {
         text: '刷新',
         icon: <SvgIcon.Refresh />,
-        onClick: () => fetch('/'),
+        onClick: () => getRootEntryList(),
       },
       {
         text: '退出',
@@ -89,7 +88,7 @@ export default function Dock() {
         },
       },
     ]
-  }, [fetch, navigate, shutdown])
+  }, [getRootEntryList, navigate, shutdown])
 
   const handleOpenApp = useCallback((app: IApp, openNew?: boolean) => {
     const sameRunningAppList = runningAppList.filter(a => a.id === app.id)
