@@ -23,7 +23,7 @@ export default function Dock() {
   const [openOperation] = useRecoilState(openOperationState)
   const [, setContextMenuData] = useRecoilState(contextMenuDataState)
 
-  const [isMounted, setIsMounted] = useState(false)
+  const [isEffected, setIsEffected] = useState(false)
 
   const { fetch: getRootEntryList, loading, data } = useFetch(FsApi.getRootEntryList)
   const { fetch: shutdown } = useFetch(AuthApi.shutdown)
@@ -33,7 +33,7 @@ export default function Dock() {
   }, [getRootEntryList])
 
   useEffect(() => {
-    setIsMounted(true)
+    setIsEffected(true)
   }, [])
 
   useEffect(() => {
@@ -167,7 +167,7 @@ export default function Dock() {
           backdrop-filter backdrop-blur
           transition-all duration-500
           transform
-          ${isMounted ? 'translate-y-0' : 'translate-y-20'}
+          ${isEffected ? 'translate-y-0' : 'translate-y-20'}
         `)}
       >
         <div className="w-32 flex-shrink-0">

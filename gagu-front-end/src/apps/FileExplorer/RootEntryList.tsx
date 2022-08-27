@@ -1,19 +1,19 @@
 import { SvgIcon } from '../../components/base'
-import { getReadableSize, line } from '../../utils'
+import { getReadableSize, getRootEntryPath, line } from '../../utils'
 import { IRootEntry } from '../../utils/types'
 
 interface RootEntryListProps {
   currentPath: string
-  activeRootEntryMounted: string
+  activeRootEntry: IRootEntry | null
   rootEntryList: IRootEntry[]
-  onRootEntryClick: (mounted: string) => void
+  onRootEntryClick: (rootEntry: IRootEntry) => void
 }
 
 export default function RootEntryList(props: RootEntryListProps) {
 
   const {
     currentPath,
-    activeRootEntryMounted,
+    activeRootEntry,
     rootEntryList,
     onRootEntryClick,
   } = props
@@ -21,15 +21,15 @@ export default function RootEntryList(props: RootEntryListProps) {
   return (
     <>
       <div>
-        {rootEntryList.map(({ name, parentPath, spaceFree, spaceTotal, label, isDisk }) => {
-          const mounted = `${parentPath}/${name}`
-          const isActive = mounted === activeRootEntryMounted
-          const canRootEntryClick = currentPath !== mounted
+        {rootEntryList.map(rootEntry => {
+          const { name, spaceFree, spaceTotal, label, isDisk } = rootEntry
+          const rootEntryPath = getRootEntryPath(rootEntry)
+          const isActive = rootEntryPath === getRootEntryPath(activeRootEntry)
+          const canRootEntryClick = currentPath !== rootEntryPath
           const spaceUsed = isDisk ? spaceTotal! - spaceFree! : 0
-          const path = `${parentPath}/${name}`
           return (
             <div
-              key={mounted}
+              key={rootEntryPath}
               title={name}
               className={line(`
                 mb-1 p-2 text-xs rounded-sm cursor-pointer
@@ -38,14 +38,14 @@ export default function RootEntryList(props: RootEntryListProps) {
                   : 'text-gray-500 hover:text-black'
                 }
               `)}
-              onClick={() => canRootEntryClick && onRootEntryClick(mounted)}
+              onClick={() => canRootEntryClick && onRootEntryClick(rootEntry)}
             >
               <div className="flex items-center">
                 {isDisk ? <SvgIcon.HardDrive /> : <SvgIcon.Folder />}
                 <span className="ml-1 truncate flex-grow">{label}</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-xs transform scale-75 origin-left">{path}</span>
+                <span className="text-xs transform scale-75 origin-left">{rootEntryPath}</span>
                 {isDisk && (
                   <span className="transform scale-75 origin-right font-din">
                     {`${getReadableSize(spaceUsed!)}/${getReadableSize(spaceTotal!)}`.replace(/\s/g, '')}

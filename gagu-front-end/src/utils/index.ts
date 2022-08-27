@@ -1,6 +1,6 @@
 import { FsApi } from '../api'
 import { CALLABLE_APP_LIST } from './appList'
-import { EntryType, IEntry, INestedFile, IOffsetInfo, IRectInfo } from './types'
+import { EntryType, IEntry, INestedFile, IOffsetInfo, IRectInfo, IRootEntry } from './types'
 
 export * from './constant'
 
@@ -208,4 +208,10 @@ export const openInIINA = (entry: IEntry) => {
   const a = document.createElement('a')
   a.href = `iina://open?url=${FsApi.getFileStreamUrl(entry)}`
   a.click()
+}
+
+export const getRootEntryPath = (rootEntry: IRootEntry | null) => {
+  if (!rootEntry) return ''
+  const { name, parentPath } = rootEntry
+  return `${parentPath ? `${parentPath}/` : ''}${name}`
 }

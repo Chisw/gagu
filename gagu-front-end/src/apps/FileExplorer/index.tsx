@@ -2,10 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import EntryIcon from './EntryIcon'
 import { useFetch, useDragSelect, useDragOperations, useShortcuts } from '../../hooks'
-import { getReadableSize, getDownloadInfo, getIsContained, isSameEntry, entrySorter, line, getMatchedApp, openInIINA } from '../../utils'
 import { FsApi } from '../../api'
-import { contextMenuDataState, openOperationState, rootInfoState, sizeMapState, uploadTaskListState } from '../../utils/state'
-import { AppComponentProps, EntryType, IEntry, IHistory, IRectInfo, INestedFile, IUploadTask, IContextMenuItem, IApp } from '../../utils/types'
 import PathLink from './PathLink'
 import ToolBar, { IToolBarDisabledMap } from './ToolBar'
 import NameLine, { NameFailType } from './NameLine'
@@ -16,8 +13,37 @@ import Side from './Side'
 import { pick, throttle } from 'lodash'
 import { Pagination, SvgIcon } from '../../components/base'
 import { CALLABLE_APP_LIST } from '../../utils/appList'
-
-const MAX_PAGE_SIZE = 200
+import {
+  getReadableSize,
+  getDownloadInfo,
+  getIsContained,
+  isSameEntry,
+  entrySorter,
+  line,
+  getMatchedApp,
+  openInIINA,
+  getRootEntryPath,
+  MAX_PAGE_SIZE,
+} from '../../utils'
+import {
+  contextMenuDataState,
+  openOperationState,
+  rootInfoState,
+  sizeMapState,
+  uploadTaskListState,
+} from '../../utils/state'
+import {
+  AppComponentProps,
+  EntryType,
+  IEntry,
+  IRootEntry,
+  IHistory,
+  IRectInfo,
+  INestedFile,
+  IUploadTask,
+  IContextMenuItem,
+  IApp,
+} from '../../utils/types'
 
 export default function FileExplorer(props: AppComponentProps) {
 
@@ -32,7 +58,7 @@ export default function FileExplorer(props: AppComponentProps) {
   const [sideCollapse, setSideCollapse] = useState(false)
   const [currentPath, setCurrentPath] = useState('')
   const [prevDirPath, setPrevDirPath] = useState('')
-  const [activeRootEntryMounted, setActiveRootEntryMounted] = useState('')
+  const [activeRootEntry, setActiveRootEntry] = useState<IRootEntry | null>(null)
   const [gridMode, setGridMode] = useState(true)
   const [history, setHistory] = useState<IHistory>({ position: -1, list: [] })
   const [selectedEntryList, setSelectedEntryList] = useState<IEntry[]>([])
@@ -61,13 +87,13 @@ export default function FileExplorer(props: AppComponentProps) {
   const { fetch: uploadFile, loading: uploading } = useFetch(FsApi.uploadFile)
   const { fetch: getDirectorySize, loading: getting } = useFetch(FsApi.getDirectorySize)
 
-  const { rootEntryList, rootEntryMountedList } = useMemo(() => {
+  const { rootEntryList, rootEntryPathList } = useMemo(() => {
     const { rootEntryList } = rootInfo
-    const rootEntryMountedList = rootEntryList.map(v => `${v.parentPath}/${v.name}`)
-    return { rootEntryList, rootEntryMountedList }
+    const rootEntryPathList = rootEntryList.map(getRootEntryPath)
+    return { rootEntryList, rootEntryPathList }
   }, [rootInfo])
 
-  const isInRoot = useMemo(() => rootEntryMountedList.includes(currentPath), [rootEntryMountedList, currentPath])
+  const isInRoot = useMemo(() => rootEntryPathList.includes(currentPath), [rootEntryPathList, currentPath])
 
   useEffect(() => {
     const title = isInRoot
@@ -168,24 +194,27 @@ export default function FileExplorer(props: AppComponentProps) {
     path: string
     direction: 'forward' | 'back'
     pushPath?: boolean
-    updateRootEntryMounted?: boolean
+    updateActiveRootEntry?: boolean
   }) => {
     abortController && abortController.abort()
-    const { path, direction, pushPath, updateRootEntryMounted } = props
+    const { path, direction, pushPath, updateActiveRootEntry } = props
     setPrevDirPath(currentPath)
     setCurrentPath(path)
     fetchPathData(path)
     updateHistory(direction, pushPath ? path : undefined)
-    if (updateRootEntryMounted) {
-      const mounted = rootEntryMountedList
-        .filter(m => path.startsWith(m))
-        .sort((a, b) => a.length > b.length ? -1 : 1)[0]
-      setActiveRootEntryMounted(mounted)
+    if (updateActiveRootEntry) {
+      const activeEntry = rootEntryList
+        .map(entry => ({ path: getRootEntryPath(entry), entry }))
+        .filter(o => path.startsWith(o.path))
+        .sort((a, b) => a.path.length > b.path.length ? -1 : 1)[0].entry
+      setActiveRootEntry(activeEntry)
     }
-  }, [abortController, currentPath, fetchPathData, rootEntryMountedList, updateHistory])
+  }, [abortController, currentPath, fetchPathData, rootEntryList, updateHistory])
 
-  const handleRootEntryClick = useCallback((path: string) => {
-    handlePathChange({ path, direction: 'forward', pushPath: true, updateRootEntryMounted: true })
+  const handleRootEntryClick = useCallback((rootEntry: IRootEntry) => {
+    const { name, parentPath } = rootEntry
+    const path = `${parentPath ? `${parentPath}/` : ''}${name}`
+    handlePathChange({ path, direction: 'forward', pushPath: true, updateActiveRootEntry: true })
   }, [handlePathChange])
 
   const handleDirOpen = useCallback((dirName: string) => {
@@ -200,13 +229,13 @@ export default function FileExplorer(props: AppComponentProps) {
   const handleNavBack = useCallback(() => {
     const { position, list } = history
     const path = list[position - 1]
-    handlePathChange({ path, direction: 'back', updateRootEntryMounted: true })
+    handlePathChange({ path, direction: 'back', updateActiveRootEntry: true })
   }, [history, handlePathChange])
 
   const handleNavForward = useCallback(() => {
     const { position, list } = history
     const path = list[position + 1]
-    handlePathChange({ path, direction: 'forward', updateRootEntryMounted: true })
+    handlePathChange({ path, direction: 'forward', updateActiveRootEntry: true })
   }, [history, handlePathChange])
 
   const handleRefresh = useCallback(() => {
@@ -374,8 +403,7 @@ export default function FileExplorer(props: AppComponentProps) {
 
   useEffect(() => {
     if (!currentPath && rootEntryList.length) {
-      const { name, parentPath } = rootEntryList[0]
-      handleRootEntryClick(`${parentPath}/${name}`)
+      handleRootEntryClick(rootEntryList[0])
     }
   }, [currentPath, rootEntryList, handleRootEntryClick])
 
@@ -661,7 +689,7 @@ export default function FileExplorer(props: AppComponentProps) {
       <div className="absolute inset-0 flex">
         {/* side */}
         <Side
-          {...{ sideCollapse, currentPath, activeRootEntryMounted, rootEntryList }}
+          {...{ sideCollapse, currentPath, activeRootEntry, rootEntryList }}
           onRootEntryClick={handleRootEntryClick}
         />
         {/* main */}
@@ -820,7 +848,7 @@ export default function FileExplorer(props: AppComponentProps) {
             </div>
           </div>
           <PathLink
-            {...{ folderCount, fileCount, currentPath, activeRootEntryMounted, selectedEntryList }}
+            {...{ folderCount, fileCount, currentPath, rootEntry: activeRootEntry, selectedEntryList }}
             loading={fetching}
             onDirClick={handleGoFullPath}
             onRootEntryClick={handleRootEntryClick}

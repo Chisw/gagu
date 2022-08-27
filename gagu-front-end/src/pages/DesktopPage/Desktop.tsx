@@ -8,11 +8,11 @@ import { rootInfoState } from '../../utils/state'
 export default function Desktop() {
 
   const [rootInfo] = useRecoilState(rootInfoState)
-  const [mounted, setMounted] = useState(false)
+  const [isEffected, setIsEffected] = useState(false)
 
   // Show Dock and then show Desktop
   useEffect(() => {
-    setTimeout(() => setMounted(true), 500)
+    setTimeout(() => setIsEffected(true), 500)
   }, [])
 
   return (
@@ -22,7 +22,7 @@ export default function Desktop() {
           className={line(`
             w-full h-full p-4 flex flex-col flex-wrap content-start
             transition-opacity duration-500
-            ${mounted ? 'opacity-100' : 'opacity-0'}
+            ${isEffected ? 'opacity-100' : 'opacity-0'}
           `)}
         >
           {rootInfo.desktopEntryList.map(entry => {

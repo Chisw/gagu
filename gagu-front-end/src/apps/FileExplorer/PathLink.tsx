@@ -1,18 +1,18 @@
 import { useMemo } from 'react'
 import toast from 'react-hot-toast'
 import { SvgIcon } from '../../components/base'
-import { copy } from '../../utils'
-import { IEntry } from '../../utils/types'
+import { copy, getRootEntryPath } from '../../utils'
+import { IEntry, IRootEntry } from '../../utils/types'
 
 interface PathLinkProps {
   loading: boolean
   folderCount: number
   fileCount: number
   currentPath: string
-  activeRootEntryMounted: string
+  rootEntry: IRootEntry | null
   selectedEntryList: IEntry[]
-  onDirClick: (mounted: string) => void
-  onRootEntryClick: (mounted: string) => void
+  onDirClick: (dir: string) => void
+  onRootEntryClick: (rootEntry: IRootEntry) => void
 }
 
 export default function PathLink(props: PathLinkProps) {
@@ -22,7 +22,7 @@ export default function PathLink(props: PathLinkProps) {
     folderCount,
     fileCount,
     currentPath,
-    activeRootEntryMounted,
+    rootEntry,
     selectedEntryList,
     onDirClick,
     onRootEntryClick,
@@ -30,38 +30,41 @@ export default function PathLink(props: PathLinkProps) {
 
   const {
     selectedLen,
-    mountList,
+    rootEntryPath,
+    centerPathList,
     isRootEntryDisabled,
   } = useMemo(() => {
     const selectedLen = selectedEntryList.length
-    const mountList = currentPath.replace(activeRootEntryMounted, '').split('/').filter(Boolean)
+    const rootEntryPath = getRootEntryPath(rootEntry)
+    const centerPathList = currentPath.replace(rootEntryPath, '').split('/').filter(Boolean)
     if (selectedLen === 1) {
-      mountList.push(selectedEntryList[0].name)
+      centerPathList.push(selectedEntryList[0].name)
     }
-    const isRootEntryDisabled = currentPath === activeRootEntryMounted || !mountList.length
+    const isRootEntryDisabled = currentPath === rootEntryPath || !centerPathList.length
     return {
       selectedLen,
-      mountList,
+      rootEntryPath,
+      centerPathList,
       isRootEntryDisabled,
     }
-  }, [currentPath, activeRootEntryMounted, selectedEntryList])
+  }, [currentPath, rootEntry, selectedEntryList])
 
-  if (!activeRootEntryMounted) return <div />
+  if (!rootEntry) return <div />
 
   return (
     <div className="flex-shrink-0 px-2 py-1 text-xs text-gray-400 select-none flex justify-between items-center bg-gray-100 border-t">
       <div className="group">
         <span
-          title={activeRootEntryMounted}
+          title={rootEntryPath}
           className={isRootEntryDisabled ? '' : 'cursor-pointer hover:text-black'}
-          onClick={() => !isRootEntryDisabled && onRootEntryClick(activeRootEntryMounted)}
+          onClick={() => !isRootEntryDisabled && rootEntry && onRootEntryClick(rootEntry)}
         >
-          {activeRootEntryMounted}
+          {rootEntryPath}
         </span>
-        {mountList.map((mounted, mountIndex) => {
-          const prefix = mountList.filter((m, mIndex) => mIndex < mountIndex).join('/')
-          const fullPath = `${activeRootEntryMounted}/${prefix ? `${prefix}/` : ''}${mounted}`
-          const disabled = mountIndex > mountList.length - 2 - (selectedLen === 1 ? 1 : 0)
+        {centerPathList.map((path, pathIndex) => {
+          const prefix = centerPathList.filter((p, pIndex) => pIndex < pathIndex).join('/')
+          const fullPath = `${rootEntryPath}/${prefix ? `${prefix}/` : ''}${path}`
+          const disabled = pathIndex > centerPathList.length - 2 - (selectedLen === 1 ? 1 : 0)
           return (
             <span key={encodeURIComponent(fullPath)}>
               <SvgIcon.ChevronRight size={14} className="inline -mt-2px" />
@@ -70,7 +73,7 @@ export default function PathLink(props: PathLinkProps) {
                 className={disabled ? '' : 'cursor-pointer hover:text-black'}
                 onClick={() => !disabled && onDirClick(fullPath)}
               >
-                {mounted}
+                {path}
               </span>
             </span>
           )
@@ -79,7 +82,7 @@ export default function PathLink(props: PathLinkProps) {
           title="复制"
           className="invisible ml-1 cursor-pointer group-hover:visible text-xs hover:text-gray-500 active:opacity-50"
           onClick={() => {
-            copy(`${activeRootEntryMounted}/${mountList.join('/')}`)
+            copy(`${rootEntryPath}/${centerPathList.join('/')}`)
             toast.success('路径复制成功')
           }}
         >

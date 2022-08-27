@@ -120,7 +120,6 @@ export const getRootEntryList = () => {
       parentPath: '/Volumes',
       hasChildren: true,
       extension: '_dir',
-      mounted: drive.mounted,
       label: drive.mounted.replace('/Volumes/', ''),
       isDisk: true,
       spaceFree: drive.available * 512,
@@ -138,11 +137,10 @@ export const getRootEntryList = () => {
       parentPath: '',
       hasChildren: true,
       extension: '_dir',
-      mounted: drive.mounted,
       label: drive.mounted,
       isDisk: true,
-      spaceFree: drive.available * 512,
-      spaceTotal: drive.blocks * 512,
+      spaceFree: drive.available,
+      spaceTotal: drive.blocks,
     }))
 
     rootEntryList.push(...diskList)
@@ -178,9 +176,10 @@ export const getRootEntryList = () => {
 export const getEntryList = (path: string) => {
   let entryNameList: string[] = []
   try {
-    entryNameList = readdirSync(path)
+    const isWindowsDisk = OS.isWindows && !path.includes('/')
+    const p = isWindowsDisk ? `${path}/` : path
+    entryNameList = readdirSync(p)
   } catch (err) {
-    console.log('ERR:', 'getEntryList', err)
     return []
   }
   const entryList = entryNameList
@@ -309,7 +308,9 @@ export const getThumbnailBase64 = async (path: string) => {
 export const completeNestedPath = (path: string) => {
   const list = path.split('/').filter(Boolean).slice(0, -1)
   const nestedPathList = list.map((dirName, index) => {
-    const prefix = '/' + list.filter((d, i) => i < index).join('/')
+    const prefix = index === 0
+      ? ''
+      : '/' + list.filter((d, i) => i < index).join('/')
     return `${prefix}/${dirName}`
   })
   nestedPathList.forEach((path) => {

@@ -5,9 +5,9 @@ import RootEntryList from './RootEntryList'
 interface SideProps {
   sideCollapse: boolean
   currentPath: string
-  activeRootEntryMounted: string
+  activeRootEntry: IRootEntry | null
   rootEntryList: IRootEntry[]
-  onRootEntryClick: (mounted: string) => void
+  onRootEntryClick: (rootEntry: IRootEntry) => void
 }
 
 export default function Side(props: SideProps) {
@@ -15,7 +15,7 @@ export default function Side(props: SideProps) {
   const {
     sideCollapse,
     currentPath,
-    activeRootEntryMounted,
+    activeRootEntry,
     rootEntryList,
     onRootEntryClick,
   } = props
@@ -30,7 +30,7 @@ export default function Side(props: SideProps) {
       <div className="p-2 w-56 h-full border-r overflow-x-hidden overflow-y-auto">
         {/* <p className="p-1 text-xs text-gray-400">收藏</p> */}
         <RootEntryList
-          {...{ currentPath, activeRootEntryMounted, rootEntryList }}
+          {...{ currentPath, activeRootEntry, rootEntryList }}
           onRootEntryClick={onRootEntryClick}
         />
       </div>
