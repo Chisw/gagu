@@ -217,10 +217,11 @@ export default function FileExplorer(props: AppComponentProps) {
     handlePathChange({ path, direction: 'forward', pushPath: true, updateActiveRootEntry: true })
   }, [handlePathChange])
 
-  const handleDirOpen = useCallback((dirName: string) => {
-    const path = `${currentPath}/${dirName}`
+  const handleDirOpen = useCallback((entry: IEntry) => {
+    const { name, parentPath } = entry
+    const path = `${parentPath}/${name}`
     handlePathChange({ path, direction: 'forward', pushPath: true })
-  }, [handlePathChange, currentPath])
+  }, [handlePathChange])
 
   const handleGoFullPath = useCallback((path: string) => {
     handlePathChange({ path, direction: 'forward', pushPath: true })
@@ -480,7 +481,7 @@ export default function FileExplorer(props: AppComponentProps) {
     if (renameMode) return
     const { type, name } = entry
     if (type === EntryType.directory) {
-      handleDirOpen(name)
+      handleDirOpen(entry)
     } else {
       const app = getMatchedApp(entry)
       if (app) {
@@ -562,7 +563,7 @@ export default function FileExplorer(props: AppComponentProps) {
       'Shift+ArrowRight': disabledMap.navForward ? null : handleNavForward,
       'Shift+ArrowLeft': disabledMap.navBack ? null : handleNavBack,
       'Shift+ArrowDown': (selectedEntryList.length === 1 && selectedEntryList[0].type === EntryType.directory)
-        ? () => handleDirOpen(selectedEntryList[0].name)
+        ? () => handleDirOpen(selectedEntryList[0])
         : null,
     },
   })

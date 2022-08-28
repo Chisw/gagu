@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 html, body {
-  @apply w-full h-full bg-yellow-300;
+  @apply w-full h-full;
 }

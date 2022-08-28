@@ -6,22 +6,23 @@ import '../css/index.css';
 <Layout title="GAGU - A cool web file management system">
   <div class="py-20 flex flex-wrap">
     <div class="w-full lg:w-1/2 flex justify-center items-center">
-      <div class="text-white font-bold text-center drop-shadow-md">
-        <p class="text-5xl">A cool web file management system</p>
+      <div class="text-yellow-500 font-bold">
+        <p class="text-5xl">GAGU (Beta)</p>
+        <p class="mt-3 text-5xl">A cool web file management system</p>
         <p class="mt-6 text-xl">Work on macOS, Windows, Linux(planning), and Android/Termux</p>
       </div>
     </div>
     <div class="w-full lg:w-1/2 mt-10 lg:mt-0">
       <img
         src="http://127.0.0.1:9293/screenshot.png"
-        class="hidden lg:block"
+        class="hidden lg:block w-full h-full bg-yellow-100"
         style={{
           transform: 'perspective(500px) rotateX(4deg) rotateY(-4deg) rotateZ(1deg) scale(1.1)',
         }}
       />
       <img
         src="http://127.0.0.1:9293/screenshot.png"
-        class="block lg:hidden"
+        class="block lg:hidden w-full h-full bg-yellow-100"
         style={{
           transform: 'perspective(500px) rotateX(4deg) rotateY(-4deg) rotateZ(1deg) scale(.9)',
         }}
@@ -32,7 +33,7 @@ import '../css/index.css';
     <div>
       <p class="text-yellow-600 text-sm">Install GAGU on your terminal:</p>
       <code
-        class="block mt-2 px-4 py-2 w-full lg:w-1/2 rounded-sm bg-yellow-400 text-yellow-700"
+        class="block mt-2 px-4 py-2 w-full lg:w-1/2 rounded-sm bg-yellow-200 text-yellow-600"
       >
         $ npm i gagu -g
       </code>
@@ -40,7 +41,7 @@ import '../css/index.css';
     <div class="mt-4">
       <p class="text-yellow-600 text-sm">Start GAGU service:</p>
       <code
-        class="block mt-2 px-4 py-2 w-full lg:w-1/2 rounded-sm bg-yellow-400 text-yellow-700"
+        class="block mt-2 px-4 py-2 w-full lg:w-1/2 rounded-sm bg-yellow-200 text-yellow-600"
       >
         $ gagu
       </code>
