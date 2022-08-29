@@ -4,9 +4,9 @@ import {
   IEntry,
   IRootInfo,
   IOpenOperation,
-  IUploadTask,
   IContextMenuState,
-} from './types'
+  ITransferTask,
+} from '../types'
 
 export const topWindowIndexState = atom<number>({
   key: 'topWindowIndexState',
@@ -44,8 +44,13 @@ export const openOperationState = atom<IOpenOperation | null>({
   default: null,
 })
 
-export const uploadTaskListState = atom<IUploadTask[]>({
-  key: 'uploadTaskListState',
+export const transferSignalState = atom<number>({
+  key: 'transferSignalState',
+  default: 0
+})
+
+export const transferTaskListState = atom<ITransferTask[]>({
+  key: 'transferTaskListState',
   default: [],
 })
 

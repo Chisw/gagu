@@ -1,12 +1,12 @@
 import { useEffect } from 'react'
-import { getDTNestedFileList } from '../utils'
-import { INestedFile } from '../utils/types'
+import { INestedFile } from '../types'
+import { getDataTransferNestedFileList } from '../utils'
 
 interface useDragOperationsProps {
   containerInnerRef: any
-  onEnterContainer: () => void
-  onLeaveContainer: () => void
-  onUpload: (files: INestedFile[], dir?: string) => void
+  onEnter: () => void
+  onLeave: () => void
+  onDrop: (files: INestedFile[], dir?: string) => void
 }
 
 const clear = () => document.querySelectorAll('.gg-entry-node').forEach(el => el.removeAttribute('data-drag-hover'))
@@ -15,9 +15,9 @@ export function useDragOperations(props: useDragOperationsProps) {
 
   const {
     containerInnerRef,
-    onEnterContainer,
-    onLeaveContainer,
-    onUpload,
+    onEnter,
+    onLeave,
+    onDrop,
   } = props
 
   useEffect(() => {
@@ -38,17 +38,17 @@ export function useDragOperations(props: useDragOperationsProps) {
         clear()
       }
 
-      const destDir = closestDir ? closestDir.getAttribute('data-entry-name') : undefined
+      const targetDir = closestDir ? closestDir.getAttribute('data-entry-name') : undefined
 
       if (type === 'dragenter' || target === containerInner) {
-        onEnterContainer()
+        onEnter()
       }
       if (type === 'dragleave') {
-        onLeaveContainer()
+        onLeave()
       }
       if (type === 'drop') {
-        getDTNestedFileList(dataTransfer).then(files => {
-          onUpload(files, destDir)
+        getDataTransferNestedFileList(dataTransfer).then(files => {
+          onDrop(files, targetDir)
           clear()
         })
       }
@@ -73,6 +73,5 @@ export function useDragOperations(props: useDragOperationsProps) {
 
     bind()
     return unbind
-  }, [containerInnerRef, onEnterContainer, onLeaveContainer, onUpload])
-
+  }, [containerInnerRef, onEnter, onLeave, onDrop])
 }

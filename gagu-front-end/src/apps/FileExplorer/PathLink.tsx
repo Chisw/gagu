@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import toast from 'react-hot-toast'
 import { SvgIcon } from '../../components/base'
 import { copy, getRootEntryPath } from '../../utils'
-import { IEntry, IRootEntry } from '../../utils/types'
+import { IEntry, IRootEntry } from '../../types'
 
 interface PathLinkProps {
   loading: boolean

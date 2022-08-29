@@ -1,5 +1,5 @@
 import { line } from '../../utils'
-import { IRootEntry } from '../../utils/types'
+import { IRootEntry } from '../../types'
 import RootEntryList from './RootEntryList'
 
 interface SideProps {

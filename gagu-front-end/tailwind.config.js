@@ -88,11 +88,11 @@ const opacityList = [
   .95, .96, .97, .98, .99,
 ]
 
-const bgColor = {}
+const opacityColor = {}
 
 Object.entries(colorNameMap).forEach(([name, rgb]) => {
   opacityList.forEach(o => {
-    bgColor[`${name}-${o * 1000}`] = `rgba(${rgb}, ${o})`
+    opacityColor[`${name}-${o * 1000}`] = `rgba(${rgb}, ${o})`
   })
 })
 
@@ -133,9 +133,12 @@ module.exports = {
         'xl': '0.75rem',
         '2xl': '1rem',
       },
+      borderColor: Object.assign({
+
+      }, opacityColor),
       backgroundColor: Object.assign({
 
-      }, bgColor),
+      }, opacityColor),
       cursor: {
         'crosshair': 'crosshair',
         'zoom-in': 'zoom-in',
@@ -151,6 +154,9 @@ module.exports = {
         'all': 'all',
         'background': 'background',
         'box-shadow': 'box-shadow',
+      },
+      rotate: {
+        '270': '270deg',
       },
     },
   },

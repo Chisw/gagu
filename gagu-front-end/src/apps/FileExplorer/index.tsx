@@ -7,12 +7,13 @@ import PathLink from './PathLink'
 import ToolBar, { IToolBarDisabledMap } from './ToolBar'
 import NameLine, { NameFailType } from './NameLine'
 import { DateTime } from 'luxon'
-import toast from 'react-hot-toast'
 import Confirmor, { ConfirmorProps } from '../../components/Confirmor'
 import Side from './Side'
 import { pick, throttle } from 'lodash'
 import { Pagination, SvgIcon } from '../../components/base'
 import { CALLABLE_APP_LIST } from '../../utils/appList'
+import toast from 'react-hot-toast'
+
 import {
   getReadableSize,
   getDownloadInfo,
@@ -30,7 +31,8 @@ import {
   openOperationState,
   rootInfoState,
   sizeMapState,
-  uploadTaskListState,
+  transferTaskListState,
+  transferSignalState,
 } from '../../utils/state'
 import {
   AppComponentProps,
@@ -40,10 +42,12 @@ import {
   IHistory,
   IRectInfo,
   INestedFile,
-  IUploadTask,
   IContextMenuItem,
   IApp,
-} from '../../utils/types'
+  IUploadTransferTask,
+  TransferTaskType,
+  TransferTaskStatus,
+} from '../../types'
 
 export default function FileExplorer(props: AppComponentProps) {
 
@@ -52,8 +56,9 @@ export default function FileExplorer(props: AppComponentProps) {
   const [rootInfo] = useRecoilState(rootInfoState)
   const [sizeMap, setSizeMap] = useRecoilState(sizeMapState)
   const [, setOpenOperation] = useRecoilState(openOperationState)
-  const [uploadTaskList, setUploadTaskList] = useRecoilState(uploadTaskListState)
   const [, setContextMenuData] = useRecoilState(contextMenuDataState)
+  const [transferTaskList, setTransferTaskList] = useRecoilState(transferTaskListState)
+  const [transferSignal, setTransferSignal] = useRecoilState(transferSignalState)
 
   const [sideCollapse, setSideCollapse] = useState(false)
   const [currentPath, setCurrentPath] = useState('')
@@ -74,7 +79,6 @@ export default function FileExplorer(props: AppComponentProps) {
   const [deleteConfirmorProps, setDeleteConfirmorProps] = useState<ConfirmorProps>({ isOpen: false })
   const [hiddenShow, setHiddenShow] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
-  const [uploadInfo, setUploadInfo] = useState({ ratio: 0, speed: '' })
   const [abortController, setAbortController] = useState<AbortController | null>(null)
 
   const rectRef = useRef(null)
@@ -84,7 +88,6 @@ export default function FileExplorer(props: AppComponentProps) {
 
   const { fetch: getEntryList, loading: fetching, data, setData } = useFetch(FsApi.getEntryList)
   const { fetch: deleteEntry, loading: deleting } = useFetch(FsApi.deleteEntry)
-  const { fetch: uploadFile, loading: uploading } = useFetch(FsApi.uploadFile)
   const { fetch: getDirectorySize, loading: getting } = useFetch(FsApi.getDirectorySize)
 
   const { rootEntryList, rootEntryPathList } = useMemo(() => {
@@ -257,59 +260,6 @@ export default function FileExplorer(props: AppComponentProps) {
   }, [])
 
   const handleRename = useCallback(() => setRenameMode(true), [])
-
-  const handleUploadStart = useCallback(async (nestedFileList: INestedFile[], destDir?: string) => {
-    if (!nestedFileList.length) {
-      toast.error('无有效文件')
-      return
-    }
-    const newTaskList: IUploadTask[] = nestedFileList.map(nestedFile => ({
-      id: Math.random().toString(36).slice(-8),
-      nestedFile,
-      destDir,
-      status: 'waiting',
-    }))
-
-    let allTaskList = [...uploadTaskList, ...newTaskList]
-
-    setUploadTaskList(allTaskList)
-
-    const successList: boolean[] = []
-    for (const nestedFile of nestedFileList) {
-      const parentPath = `${currentPath}${destDir ? `/${destDir}` : ''}`
-      let lastUpload = { time: Date.now(), size: 0 }
-
-      const onUploadProgress = (e: ProgressEvent) => {
-        const { loaded, total } = e
-        const { time, size } = lastUpload
-        const now = Date.now()
-        const interval = (now - time) / 1000
-        const delta = loaded - size
-        const speed = getReadableSize(delta / interval, { keepFloat: true }) + '/s'
-        setUploadInfo({ ratio: loaded / total, speed })
-        lastUpload = { time: now, size: loaded }
-      }
-
-      const { success } = await uploadFile(parentPath, nestedFile, { onUploadProgress })
-
-      if (success) {
-        document.querySelector(`[data-entry-name="${nestedFile.name}"]`)
-          ?.setAttribute('style', 'opacity:1;')
-        const list = [...allTaskList]
-        const task = list.find(t => t.nestedFile.nestedPath === nestedFile.nestedPath)!
-        const taskIndex = list.findIndex(t => t.nestedFile.nestedPath === nestedFile.nestedPath)
-        list.splice(taskIndex, 1, { ...task, status: 'success' })
-        allTaskList = list
-        setUploadTaskList(list)
-      }
-      successList.push(success)
-    }
-    if (successList.every(Boolean)) {
-      handleRefresh()
-      toast.success('上传成功')
-    }
-    ;(uploadInputRef.current as any).value = ''
-  }, [uploadTaskList, setUploadTaskList, currentPath, uploadFile, handleRefresh])
 
   const handleCancelSelect = useCallback((e: any) => {
     if (e.button === 2) return  // oncontextmenu
@@ -526,17 +476,39 @@ export default function FileExplorer(props: AppComponentProps) {
     onDragging: handleRectSelect,
   })
 
+  const addUploadTransferTask = useCallback((nestedFileList: INestedFile[], targetDir?: string) => {
+    if (!nestedFileList.length) {
+      toast.error('无有效文件')
+      return
+    }
+    const newTaskList: IUploadTransferTask[] = nestedFileList.map(nestedFile => {
+      const { name, fullPath } = nestedFile
+      const file = nestedFile as File
+      const id = `${Date.now()}-${Math.random().toString(36).slice(-8)}`
+      const newPath = `${currentPath}${targetDir ? `/${targetDir}` : ''}${fullPath || `/${name}`}`
+      return {
+        id,
+        type: TransferTaskType.upload,
+        status: TransferTaskStatus.waiting,
+        file,
+        newPath,
+      }
+    })
+    setTransferTaskList([...transferTaskList, ...newTaskList])
+    setTransferSignal(transferSignal + 1)
+  }, [currentPath, transferTaskList, setTransferTaskList, transferSignal, setTransferSignal])
+
   useDragOperations({
     containerInnerRef,
-    onEnterContainer: () => {
+    onEnter: () => {
       setWaitDropToCurrentPath(true)
     },
-    onLeaveContainer: () => {
+    onLeave: () => {
       setWaitDropToCurrentPath(false)
     },
-    onUpload: (nestedFileList, destDir) => {
+    onDrop: (nestedFileList, targetDir) => {
       setWaitDropToCurrentPath(false)
-      handleUploadStart(nestedFileList, destDir)
+      addUploadTransferTask(nestedFileList, targetDir)
     },
   })
 
@@ -750,13 +722,6 @@ export default function FileExplorer(props: AppComponentProps) {
               `)}
               onContextMenu={handleContextMenu}
             >
-              {uploading && (
-                <div className="absolute right-0 top-0 m-1 flex items-center">
-                  <span className="font-din text-xs text-gray-500">{uploadInfo.speed}</span>
-                  &nbsp;
-                  {uploadInfo.ratio}
-                </div>
-              )}
               {/* create */}
               {(newDirMode || newTxtMode) && (
                 <div
@@ -872,7 +837,7 @@ export default function FileExplorer(props: AppComponentProps) {
         ref={uploadInputRef}
         type="file"
         className="hidden"
-        onChange={(e: any) => handleUploadStart([...e.target.files])}
+        onChange={(e: any) => addUploadTransferTask([...e.target.files])}
       />
 
       <Confirmor {...downloadConfirmorProps} />

@@ -1,4 +1,4 @@
-import { EntryType } from '../utils/types'
+import { EntryType } from '../types'
 
 interface EntrySelectorProps {
   multiple: boolean

@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { IRectInfo } from '../utils/types'
+import { IRectInfo } from '../types'
 
 interface useDragSelectProps {
   rectRef: any

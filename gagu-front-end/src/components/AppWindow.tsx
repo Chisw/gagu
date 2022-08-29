@@ -1,4 +1,4 @@
-import { IApp } from '../utils/types'
+import { IApp } from '../types'
 import { Rnd } from 'react-rnd'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRecoilState } from 'recoil'

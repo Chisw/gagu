@@ -1,6 +1,6 @@
 import { AxiosRequestConfig } from 'axios'
 import { BASE_URL } from '../utils'
-import { IEntry, INestedFile } from '../utils/types'
+import { IEntry } from '../types'
 import instance from './instance'
 
 export class FsApi {
@@ -44,11 +44,10 @@ export class FsApi {
     return data
   }
 
-  static uploadFile = async (parentPath: string, nestedFile: INestedFile, config?: AxiosRequestConfig) => {
-    const { name, nestedPath } = nestedFile
+  static uploadFile = async (path: string, file: File, config?: AxiosRequestConfig) => {
     let formData = new FormData()
-    formData.append('file', nestedFile)
-    const { data } = await instance.post(`/api/fs/upload?path=${parentPath}${nestedPath || `/${name}`}`, formData, { ...config, timeout: 0 })
+    formData.append('file', file)
+    const { data } = await instance.post(`/api/fs/upload?path=${path}`, formData, { ...config, timeout: 0 })
     return data
   }
 

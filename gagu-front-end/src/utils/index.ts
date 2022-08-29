@@ -1,6 +1,6 @@
 import { FsApi } from '../api'
 import { CALLABLE_APP_LIST } from './appList'
-import { EntryType, IEntry, INestedFile, IOffsetInfo, IRectInfo, IRootEntry } from './types'
+import { EntryType, IEntry, INestedFile, IOffsetInfo, IRectInfo, IRootEntry } from '../types'
 
 export * from './constant'
 
@@ -134,7 +134,7 @@ export const getEntryNestedFileList = async (entry: FileSystemEntry) => {
       (entry as FileSystemFileEntry).file((file: File) => {
         const fileName = file.name
         if (fileName !== '.DS_Store' && !fileName.startsWith('._')) {
-          nestedFileList.push(Object.assign(file, { nestedPath: entry.fullPath }))
+          nestedFileList.push(Object.assign(file, { fullPath: entry.fullPath }))
         }
         resolve(true)
       })
@@ -154,7 +154,7 @@ export const getEntryNestedFileList = async (entry: FileSystemEntry) => {
   return nestedFileList
 }
 
-export const getDTNestedFileList = async (dataTransfer: DataTransfer) => {
+export const getDataTransferNestedFileList = async (dataTransfer: DataTransfer) => {
   const nestedFileList: INestedFile[] = []
   const { items } = dataTransfer
   // don't use `for of`
@@ -166,7 +166,7 @@ export const getDTNestedFileList = async (dataTransfer: DataTransfer) => {
         nestedFileList.push(...files)
       }
     } else if (item.kind === 'string') {
-      // handle string
+      // TODO: handle string
     }
   }))
   return nestedFileList

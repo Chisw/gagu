@@ -1,6 +1,5 @@
-import { IApp } from './types'
+import { IApp } from '../types'
 import FileExplorer from '../apps/FileExplorer'
-import Transfer from '../apps/Transfer'
 import TextEditor from '../apps/TextEditor'
 import PhotoGallery from '../apps/PhotoGallery'
 import MusicPlayer from '../apps/MusicPlayer'
@@ -36,19 +35,6 @@ const APP_LIST: IApp[] = [
     resizeRange: {
       minWidth: 640,
       minHeight: 480,
-    },
-  },
-  {
-    id: APP_ID_MAP.transfer,
-    runningId: 0,
-    title: '传输助手',
-    AppComponent: Transfer,
-    width: 400,
-    height: 400,
-    resizeRange: {
-      minWidth: 400,
-      minHeight: 400,
-      maxWidth: 400,
     },
   },
   {

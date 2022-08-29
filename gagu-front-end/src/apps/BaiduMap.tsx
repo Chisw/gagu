@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { AppComponentProps } from '../utils/types'
+import { AppComponentProps } from '../types'
 
 export default function BaiduMap(props: AppComponentProps) {
 

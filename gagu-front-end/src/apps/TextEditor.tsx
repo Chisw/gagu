@@ -5,7 +5,7 @@ import CommonToolButtons from '../components/CommonToolButtons'
 import { copy, ENTRY_ICON_LIST } from '../utils'
 import { FsApi } from '../api'
 import { APP_ID_MAP } from '../utils/appList'
-import { AppComponentProps } from '../utils/types'
+import { AppComponentProps } from '../types'
 import { SvgIcon } from '../components/base'
 import { useOpenOperation, useFetch } from '../hooks'
 

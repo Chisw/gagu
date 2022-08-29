@@ -1,6 +1,6 @@
 import { SvgIcon } from '../../components/base'
+import { IRootEntry } from '../../types'
 import { getReadableSize, getRootEntryPath, line } from '../../utils'
-import { IRootEntry } from '../../utils/types'
 
 interface RootEntryListProps {
   currentPath: string

@@ -4,7 +4,7 @@ import toast from 'react-hot-toast'
 import ToolButton from './ToolButton'
 import { copy, getDownloadInfo } from '../utils'
 import { FsApi } from '../api'
-import { IEntry } from '../utils/types'
+import { IEntry } from '../types'
 import { SvgIcon } from '../components/base'
 
 interface CommonToolButtonsProps {

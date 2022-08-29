@@ -4,7 +4,7 @@ import { useFetch } from '../../hooks'
 import { line } from '../../utils'
 import { FsApi } from '../../api'
 import { INVALID_NAME_CHAR_LIST } from '../../utils/constant'
-import { EntryType, IEntry } from '../../utils/types'
+import { EntryType, IEntry } from '../../types'
 
 export type NameFailType = 'escape' | 'empty' | 'exist' | 'no_change' | 'net_error' | 'invalid'
 
