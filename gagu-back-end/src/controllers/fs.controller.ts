@@ -25,6 +25,7 @@ import {
   getThumbnailBase64,
   uploadFile,
   getExif,
+  getTags,
   GAGU_VERSION,
   OS,
   Public,
@@ -128,6 +129,18 @@ export class FsController {
     } catch (err) {
       console.log('ERR: EXIF')
       return 'EXIF ERROR'
+    }
+  }
+
+  @Get('tags')
+  async getTags(@Query('path') path: string) {
+    console.log('FS/TAGS:', path)
+    try {
+      const data = await getTags(path)
+      return data
+    } catch (err) {
+      console.log('ERR: EXIF')
+      return 'TAGS ERROR'
     }
   }
 

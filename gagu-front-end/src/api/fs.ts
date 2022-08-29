@@ -56,6 +56,11 @@ export class FsApi {
     return data
   }
 
+  static getTags = async (path: string, config?: AxiosRequestConfig) => {
+    const { data } = await instance.get(`/api/fs/tags?path=${path}`, config)
+    return data
+  }
+
   static getThumbnailBase64 = async (path: string, config?: AxiosRequestConfig) => {
     const { data } = await instance.get(`/api/fs/thumbnail?path=${path}`, config)
     return data

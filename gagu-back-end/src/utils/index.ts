@@ -4,6 +4,7 @@ import * as md5 from 'md5'
 import * as thumbsupply from 'thumbsupply'
 import * as gm from 'gm'
 import * as piexifjs from 'piexifjs'
+import * as jsmediatags from 'jsmediatags'
 import { SetMetadata } from '@nestjs/common'
 import { exec, spawn } from 'child_process'
 import {
@@ -385,4 +386,45 @@ export const getExif = (path: string) => {
     }
   }
   return exifData
+}
+
+export const getTags = async (path: string) => {
+  return new Promise((resolve, reject) => {
+    jsmediatags.read(path, {
+      onSuccess: (tagInfo: any) => {
+        const {
+          tags: {
+            title,
+            artist,
+            album,
+            track,
+            picture: { data, format },
+            TDRC: { data: recordingTime },
+            TDRL: { data: releaseTime },
+          },
+        } = tagInfo
+
+        let base64String = ''
+        for (let i = 0; i < data.length; i++) {
+          base64String += String.fromCharCode(data[i])
+        }
+        const base64 = `data:${format};base64,${btoa(base64String)}`
+
+        const tagData = {
+          title,
+          artist,
+          album,
+          track,
+          base64,
+          recordingTime,
+          releaseTime,
+        }
+
+        resolve(tagData)
+      },
+      onError: (error: any) => {
+        reject(error)
+      },
+    })
+  })
 }
