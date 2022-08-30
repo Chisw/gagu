@@ -28,7 +28,7 @@ import {
   IUserListData,
 } from 'src/utils/types'
 
-export const GAGU_VERSION = 'v0.0.21'
+export const GAGU_VERSION = 'v0.0.22'
 export const IS_DEV = process.env.NODE_ENV === 'development'
 export const IS_API_PUBLIC_KEY = 'IS_API_PUBLIC_KEY'
 

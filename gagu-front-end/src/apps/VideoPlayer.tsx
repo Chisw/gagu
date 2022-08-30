@@ -1,6 +1,6 @@
 import { Spinner } from '../components/base'
 import { useEffect, useState } from 'react'
-import CommonToolButtons from '../components/CommonToolButtons'
+// import CommonToolButtons from '../components/CommonToolButtons'
 import { APP_ID_MAP } from '../utils/appList'
 import { AppComponentProps } from '../types'
 import { useOpenOperation } from '../hooks'
@@ -30,9 +30,9 @@ export default function VideoPlayer(props: AppComponentProps) {
   return (
     <>
       <div className="absolute inset-0 flex flex-col">
-        <div className="h-8 flex-shrink-0 flex items-center bg-white">
+        {/* <div className="h-8 flex-shrink-0 flex items-center bg-white">
           <CommonToolButtons {...{ activeEntry }} />
-        </div>
+        </div> */}
         <div className="relative flex-grow bg-black">
           <div className="absolute inset-0 flex justify-center items-center">
             {loading && <Spinner />}

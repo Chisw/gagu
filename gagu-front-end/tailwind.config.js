@@ -99,6 +99,7 @@ Object.entries(colorNameMap).forEach(([name, rgb]) => {
 module.exports = {
   purge: [
     './src/**/*.tsx',
+    './src/**/*.ts',
   ],
   darkMode: false, // or 'media' or 'class'
   theme: {
@@ -110,6 +111,7 @@ module.exports = {
       spacing: Object.assign({
         '1px': '1px',
         '2px': '2px',
+        '3px': '3px',
       }, base, extra),
       width: Object.assign({
 
@@ -164,7 +166,7 @@ module.exports = {
     extend: {
       display: ['active', 'group-hover'],
       color: ['active'],
-      backgroundColor: ['active'],
+      backgroundColor: ['active', 'even'],
       opacity: ['active', 'group-hover'],
       visibility: ['active', 'group-hover'],
       brightness: ['hover', 'active'],

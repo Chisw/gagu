@@ -22,4 +22,5 @@ export interface IApp {
     minHeight?: number
   }
   matchList?: string[]
+  headerClassName?: string
 }

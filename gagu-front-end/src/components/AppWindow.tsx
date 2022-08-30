@@ -23,6 +23,7 @@ export default function AppWindow(props: WindowProps) {
       width,
       height,
       resizeRange,
+      headerClassName,
       AppComponent,
     },
   } = props
@@ -154,11 +155,11 @@ export default function AppWindow(props: WindowProps) {
           {/* header */}
           <div
             className={line(`
-              w-full h-6 flex items-center select-none border-b
-              ${windowLoading ? 'bg-loading' : 'bg-white'}
-              ${isTopWindow ? '' : 'filter grayscale opacity-60'}
+              relative w-full h-6 flex items-center select-none border-b
+              ${headerClassName || 'bg-white'}
             `)}
           >
+            {windowLoading && (<div className="absolute z-0 right-0 bottom-0 left-0 h-2px bg-loading" />)}
             <div
               className="gg-drag-handler flex items-center flex-grow px-2 h-full truncate"
               onDoubleClick={handleFullScreen}
@@ -167,7 +168,7 @@ export default function AppWindow(props: WindowProps) {
                 className="gg-app-icon w-3 h-3 bg-center bg-no-repeat bg-contain"
                 data-app-id={appId}
               />
-              <span className="ml-2 text-gray-500 text-xs">
+              <span className={`ml-2 text-xs ${headerClassName ? 'text-gray-200' : 'text-gray-500'}`}>
                 {windowTitle || title}
               </span>
             </div>
@@ -185,7 +186,8 @@ export default function AppWindow(props: WindowProps) {
                 prevent-move-to-front="true"
                 className={line(`
                   gg-hidden-switch-trigger
-                  text-gray-400 hover:bg-gray-200 hover:text-black active:bg-gray-400
+                hover:bg-gray-200 hover:text-black active:bg-gray-400
+                  ${headerClassName ? 'text-gray-200' : 'text-gray-400'}
                   ${SAME_CLASS_NAME}
                 `)}
                 onClick={handleHide}
@@ -195,7 +197,8 @@ export default function AppWindow(props: WindowProps) {
               <span
                 title={isFullScreen ? '退出全屏' : '全屏'}
                 className={line(`
-                  text-gray-400 hover:bg-gray-200 hover:text-black active:bg-gray-400
+                hover:bg-gray-200 hover:text-black active:bg-gray-400
+                  ${headerClassName ? 'text-gray-200' : 'text-gray-400'}
                   ${SAME_CLASS_NAME}
                 `)}
                 onClick={handleFullScreen}

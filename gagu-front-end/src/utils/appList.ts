@@ -8,7 +8,6 @@ import Settings from '../apps/Settings'
 import BaiduMap from '../apps/BaiduMap'
 import PQINA from '../apps/PQINA'
 import PS from '../apps/PS'
-// import WebAMP from '../apps/WebAMP'
 
 export const APP_ID_MAP = {
   fileExplorer: 'file-explorer',
@@ -71,12 +70,11 @@ const APP_LIST: IApp[] = [
     width: 480,
     height: 600,
     resizeRange: {
-      maxWidth: 480,
-      maxHeight: 800,
       minWidth: 480,
-      minHeight: 200,
+      minHeight: 240,
     },
     matchList: ['mp3', 'aac', 'flac'],
+    headerClassName: 'bg-pink-900 border-black-100',
   },
   {
     id: APP_ID_MAP.videoPlayer,
@@ -90,6 +88,7 @@ const APP_LIST: IApp[] = [
       minHeight: 240,
     },
     matchList: ['mp4', 'mkv'],
+    headerClassName: 'bg-gray-800 border-black-100',
   },
   {
     id: APP_ID_MAP.settings,
@@ -139,19 +138,6 @@ const APP_LIST: IApp[] = [
       minHeight: 600,
     },
   },
-  // {
-  //   id: APP_ID_MAP.webamp,
-  //   runningId: 0,
-  //   title: 'WebAMP',
-  //   AppComponent: WebAMP,
-  //   width: 600,
-  //   height: 300,
-  //   resizeRange: {
-  //     minWidth: 800,
-  //     minHeight: 600,
-  //   },
-  //   matchList: ['mp3', 'aac', 'flac'],
-  // },
 ]
 
 export const CALLABLE_APP_LIST = APP_LIST.filter(app => !!app.matchList)
