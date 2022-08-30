@@ -22,7 +22,7 @@ export function useOpenOperation(appId: string) {
     activeEntry,
     activeEntryStreamUrl,
   } = useMemo(() => {
-    const activeEntry: IEntry | undefined = matchedEntryList[activeIndex]
+    const activeEntry = matchedEntryList[activeIndex] as IEntry | undefined
     const activeEntryStreamUrl = activeEntry
       ? FsApi.getFileStreamUrl(activeEntry)
       : ''

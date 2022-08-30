@@ -7,6 +7,7 @@ import { FsApi } from '../api'
 import { DateTime } from 'luxon'
 import { getReadableSize } from '../utils'
 import SpectrumCanvas from '../components/SpectrumCanvas'
+import EntrySelector from '../components/EntrySelector'
 
 const getPlayerTime = (currentTime: number, duration: number) => {
   const currentSeconds = DateTime.fromSeconds(currentTime).toFormat('mm:ss')
@@ -42,19 +43,22 @@ export default function MusicPlayer(props: AppComponentProps) {
   } = useOpenOperation(APP_ID_MAP.musicPlayer)
 
   const [loading, setLoading] = useState(false)
+  const [timeList, setTimeList] = useState<string[]>([])
   const [isPlaying, setIsPlaying] = useState(false)
   const [playMode, setPlayMode] = useState('order')
+
+  const [currentTimeStr, durationStr, percent] = timeList
 
   const audioRef = useRef(null)
   const { fetch: getTags, data } = useFetch(FsApi.getTags)
 
   useEffect(() => {
-    if (!audioRef || !audioRef.current || !activeEntryStreamUrl) return
-    const audio: any = audioRef.current
-    audio.src = activeEntryStreamUrl
-    audio.play()
-    setIsPlaying(true)
-    // setLoading(true)
+    if (audioRef && audioRef.current && activeEntryStreamUrl) {
+      const audio: any = audioRef.current
+      audio.src = activeEntryStreamUrl
+      audio.play()
+      setIsPlaying(true)
+    }
   }, [activeEntryStreamUrl])
 
   useEffect(() => {
@@ -63,10 +67,6 @@ export default function MusicPlayer(props: AppComponentProps) {
       getTags(`${parentPath}/${name}`)
     }
   }, [activeEntry, getTags])
-
-  const [timeList, setTimeList] = useState<string[]>([])
-
-  const [currentTimeStr, durationStr, percent] = timeList
 
   useEffect(() => {
     let timer: any
@@ -170,6 +170,15 @@ export default function MusicPlayer(props: AppComponentProps) {
   return (
     <>
       <div className="gg-app absolute inset-0 flex flex-col bg-gradient-to-br from-pink-700 to-pink-900 select-none">
+        {!activeEntry && (
+          <EntrySelector
+            trigger={(
+              <div className="m-2 p-2 border border-pink-500 cursor-pointer text-xs text-white rounded-sm text-center hover:border-pink-300">
+                打开文件或目录
+              </div>
+            )}
+          />
+        )}
         {/* list */}
         <div className="relative flex-grow pb-3 overflow-y-auto">
           {matchedEntryList.map((entry, entryIndex) => {
@@ -231,7 +240,7 @@ export default function MusicPlayer(props: AppComponentProps) {
             <div className="flex items-center pr-2 w-3/5">
               <img
                 className="w-12 h-12 rounded shadow-lg"
-                alt={album}
+                alt=""
                 src={base64}
               />
               <div className="ml-2 text-xs text-pink-100 truncate">

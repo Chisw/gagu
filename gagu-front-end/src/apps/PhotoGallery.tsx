@@ -25,7 +25,9 @@ export default function PhotoGallery(props: AppComponentProps) {
   const { fetch: getExif, data: ExifData, setData } = useFetch(FsApi.getExif)
 
   const getExifData = useCallback(() => {
-    getExif(`${activeEntry.parentPath}/${activeEntry.name}`)
+    if (activeEntry && ['jpg', 'jpeg'].includes(activeEntry.extension)) {
+      getExif(`${activeEntry.parentPath}/${activeEntry.name}`)
+    }
   }, [activeEntry, getExif])
 
   // useEffect(() => {

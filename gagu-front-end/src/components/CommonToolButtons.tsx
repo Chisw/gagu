@@ -8,7 +8,7 @@ import { IEntry } from '../types'
 import { SvgIcon } from '../components/base'
 
 interface CommonToolButtonsProps {
-  activeEntry: IEntry | null
+  activeEntry: IEntry | undefined
 }
 
 export default function CommonToolButtons(props: CommonToolButtonsProps) {
