@@ -4,20 +4,11 @@ import { APP_ID_MAP } from '../utils/appList'
 import { AppComponentProps } from '../types'
 import { useFetch, useOpenOperation } from '../hooks'
 import { FsApi } from '../api'
-import { DateTime } from 'luxon'
-import { getReadableSize } from '../utils'
+import { getPlayInfo, getReadableSize } from '../utils'
 import SpectrumCanvas from '../components/SpectrumCanvas'
 import EntrySelector from '../components/EntrySelector'
-
-const getPlayerTime = (currentTime: number, duration: number) => {
-  const currentSeconds = DateTime.fromSeconds(currentTime).toFormat('mm:ss')
-  const durationSeconds = DateTime.fromSeconds(duration).toFormat('mm:ss')
-  return [
-    `${currentSeconds}`,
-    `${durationSeconds}`,
-    `${currentTime / duration * 100}`,
-  ]
-}
+import VolumeSlider from '../components/VolumeSlider'
+import ProgressSlider from '../components/ProgressSlider'
 
 const nextPlayMode: any = {
   order: 'repeat',
@@ -26,13 +17,12 @@ const nextPlayMode: any = {
 }
 
 const playModeIcon: any = {
-  order: <SvgIcon.PlayRepeat size={14} />,
-  repeat: <SvgIcon.PlayRepeatOne size={14} />,
-  random: <SvgIcon.PlayShuffle size={14} />,
+  order: <SvgIcon.PlayOrder size={14} />,
+  repeat: <SvgIcon.PlayRepeat size={14} />,
+  random: <SvgIcon.PlayRandom size={14} />,
 }
 
 export default function MusicPlayer(props: AppComponentProps) {
-
   const { setWindowTitle, setWindowLoading } = props
   const {
     matchedEntryList,
@@ -42,24 +32,36 @@ export default function MusicPlayer(props: AppComponentProps) {
     setActiveIndex,
   } = useOpenOperation(APP_ID_MAP.musicPlayer)
 
-  const [loading, setLoading] = useState(false)
-  const [timeList, setTimeList] = useState<string[]>([])
+  const [playInfo, setPlayInfo] = useState({ currentTimeLabel: '00:00', durationLabel: '00:00', playPercent: 0 })
   const [isPlaying, setIsPlaying] = useState(false)
   const [playMode, setPlayMode] = useState('order')
+  const [volume, setVolume] = useState(1)
+  const [volumeSliderShow, setVolumeSliderShow] = useState(false)
 
-  const [currentTimeStr, durationStr, percent] = timeList
+  const { fetch: getTags, data, loading } = useFetch(FsApi.getTags)
 
-  const audioRef = useRef(null)
-  const { fetch: getTags, data } = useFetch(FsApi.getTags)
+  const audioRef = useRef<HTMLAudioElement>(null)
+  const audioEl = useMemo(() => {
+    return audioRef.current || null as HTMLAudioElement | null
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [audioRef.current])
 
   useEffect(() => {
-    if (audioRef && audioRef.current && activeEntryStreamUrl) {
-      const audio: any = audioRef.current
-      audio.src = activeEntryStreamUrl
-      audio.play()
+    setWindowLoading(loading)
+  }, [loading, setWindowLoading])
+
+  useEffect(() => {
+    if (audioEl && activeEntryStreamUrl) {
+      audioEl.src = activeEntryStreamUrl
+      audioEl.play()
       setIsPlaying(true)
     }
-  }, [activeEntryStreamUrl])
+  }, [audioEl, activeEntryStreamUrl])
+
+  useEffect(() => {
+    if (!audioEl) return
+    audioEl.volume = volume
+  }, [audioEl, volume])
 
   useEffect(() => {
     if (activeEntry) {
@@ -72,38 +74,33 @@ export default function MusicPlayer(props: AppComponentProps) {
     let timer: any
     if (isPlaying) {
       timer = setInterval(() => {
-        if (!audioRef || !audioRef.current) return
-        const audio: HTMLAudioElement = audioRef.current
-        const { currentTime, duration } = audio
-        setTimeList(getPlayerTime(currentTime, duration))
+        if (!audioEl) return
+        const { currentTime, duration } = audioEl
+        setPlayInfo(getPlayInfo(currentTime || 0, duration || 0))
       }, 1000)
     } else {
       clearInterval(timer)
     }
     return () => clearInterval(timer)
-  }, [isPlaying])
-
-  useEffect(() => setWindowLoading(loading), [setWindowLoading, loading])
+  }, [audioEl, isPlaying])
 
   useEffect(() => {
     if (activeEntry) {
-      // setLoading(true)
       const title = `[${activeIndex + 1}/${matchedEntryList.length}] ${activeEntry.name}`
       setWindowTitle(title)
     }
   }, [activeIndex, activeEntry, matchedEntryList, setWindowTitle])
 
   const handlePlayOrPause = useCallback(() => {
-    if (!audioRef || !audioRef.current) return
-    const audio: HTMLAudioElement = audioRef.current
+    if (!audioEl) return
     if (isPlaying) {
-      audio.pause()
+      audioEl.pause()
       setIsPlaying(false)
     } else {
-      audio.play()
+      audioEl.play()
       setIsPlaying(true)
     }
-  }, [isPlaying])
+  }, [audioEl, isPlaying])
 
   const handlePrevOrNext = useCallback((offset: number) => {
     const max = matchedEntryList.length - 1
@@ -118,14 +115,20 @@ export default function MusicPlayer(props: AppComponentProps) {
     setActiveIndex(targetIndex)
   }, [playMode, matchedEntryList, activeIndex, setActiveIndex])
 
-  const handleProgressBarClick = useCallback((event: MouseEvent) => {
-    if (!audioRef || !audioRef.current) return
-    const audio: HTMLAudioElement = audioRef.current
-    const { target, clientX } = event
-    const { x, width } = (target as any).closest('.gg-app-window').getBoundingClientRect()
-    const percent = (clientX - x) / width
-    audio.currentTime = audio.duration * percent
-  }, [])
+  const handleProgressClick = useCallback((ratio: number) => {
+    if (!audioEl) return
+    audioEl.currentTime = audioEl.duration * ratio
+  }, [audioEl])
+
+  const handleEnded = useCallback(() => {
+    if (!audioEl) return
+    if (playMode === 'repeat') {
+      audioEl.currentTime = 0
+      audioEl.play()
+    } else {
+      handlePrevOrNext(1)
+    }
+  }, [audioEl, playMode, handlePrevOrNext])
 
   const { title, artist, album, base64 } = useMemo(() => {
     const { title, artist, album, base64 } = data || {
@@ -138,6 +141,12 @@ export default function MusicPlayer(props: AppComponentProps) {
   }, [data, activeEntry])
 
   const buttonList = useMemo(() => {
+    let volumeIcon = <SvgIcon.VolumeDown size={14} />
+    if (volume > .5) {
+      volumeIcon = <SvgIcon.VolumeUp size={14} />
+    } else if (volume === 0) {
+      volumeIcon = <SvgIcon.VolumeMute size={14} />
+    }
     return [
       {
         title: '播放模式',
@@ -161,15 +170,15 @@ export default function MusicPlayer(props: AppComponentProps) {
       },
       {
         title: '调整音量',
-        icon: <SvgIcon.VolumeDown size={14} />,
-        onClick: () => {},
+        icon: volumeIcon,
+        onClick: () => setVolumeSliderShow(true),
       },
     ]
-  }, [playMode, isPlaying, handlePlayOrPause, handlePrevOrNext])
+  }, [volume, playMode, isPlaying, handlePlayOrPause, handlePrevOrNext])
 
   return (
     <>
-      <div className="gg-app absolute inset-0 flex flex-col bg-gradient-to-br from-pink-700 to-pink-900 select-none">
+      <div className="absolute inset-0 flex flex-col bg-gradient-to-br from-pink-700 to-pink-900 select-none">
         {!activeEntry && (
           <EntrySelector
             trigger={(
@@ -210,46 +219,46 @@ export default function MusicPlayer(props: AppComponentProps) {
             )
           })}
         </div>
+
+        <ProgressSlider
+          duration={audioEl?.duration || 0}
+          playPercent={playInfo.playPercent}
+          frontAndBackColorClassNames={['bg-pink-600', 'bg-pink-300']}
+          onProgressClick={handleProgressClick}
+        />
+
+        <VolumeSlider
+          show={volumeSliderShow}
+          volume={volume}
+          right={8}
+          bottom={50}
+          onClose={() => setVolumeSliderShow(false)}
+          onVolumeChange={setVolume}
+        />
+
         {/* bottom */}
-        <div className="relative w-full h-16 bg-black-100 flex-shrink-0">
+        <div className="relative z-0 w-full h-16 bg-black-100 flex-shrink-0">
           {/* SpectrumCanvas */}
-          {activeEntryStreamUrl.startsWith(window.location.origin) && (
-            <div className="absolute z-0 inset-0">
-              <SpectrumCanvas audioRef={audioRef} />
-            </div>
-          )}
-          {/* progress bar */}
-          <div
-            className="absolute z-0 top-0 right-0 left-0 w-full -mt-2 h-4 cursor-pointer group"
-            onClick={e => handleProgressBarClick(e as any as MouseEvent)}
-          >
-            <div className="absolute bottom-0 right-0 left-0 transform -translate-y-2 h-2px bg-pink-300 group-hover:opacity-70">
-              <div
-                className="h-full bg-pink-600"
-                style={{ width: `${percent}%` }}
-              >
-                <div
-                  className="absolute -mt-3px -ml-1 w-2 h-2 rounded bg-white shadow"
-                  style={{ left: `${percent}%` }}
-                />
-              </div>
-            </div>
+          <div className="absolute z-0 inset-0">
+            <SpectrumCanvas audioEl={audioEl} />
           </div>
-          {/* content */}
+          {/* bottom */}
           <div className="absolute inset-0 z-10 p-2 flex justify-between items-center">
+            {/* info */}
             <div className="flex items-center pr-2 w-3/5">
-              <img
-                className="w-12 h-12 rounded shadow-lg"
-                alt=""
-                src={base64}
+              <div
+                className="gg-app-icon w-12 h-12 rounded shadow-lg"
+                data-app-id="music-player"
+                style={base64 ? { backgroundImage: `url("${base64}")` } : undefined}
               />
               <div className="ml-2 text-xs text-pink-100 truncate">
                 <p className="truncate">{title} - {artist}</p>
                 <p className="opacity-50">{album}</p>
-                <p className="opacity-50 font-din">{currentTimeStr} / {durationStr}</p>
+                <p className="opacity-50 font-din">{playInfo.currentTimeLabel} / {playInfo.durationLabel}</p>
               </div>
             </div>
-            <div className="flex justify-end items-center w-2/5">
+            {/* buttons */}
+            <div className="relative flex justify-end items-center w-2/5">
               {buttonList.map(({ title, icon, onClick }) => (
                 <div
                   key={title}
@@ -264,8 +273,13 @@ export default function MusicPlayer(props: AppComponentProps) {
           </div>
         </div>
       </div>
+
       <div className="w-0 h-0 overflow-hidden opacity-0">
-        <audio ref={audioRef} onLoad={() => setLoading(false)} />
+        <audio
+          crossOrigin="anonymous"
+          ref={audioRef}
+          onEnded={handleEnded}
+        />
       </div>
     </>
   )

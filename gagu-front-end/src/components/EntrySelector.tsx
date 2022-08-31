@@ -12,8 +12,8 @@ export default function EntrySelector(props: EntrySelectorProps) {
 
   const {
     trigger,
-    multiple = false,
-    only = false,
+    // multiple = false,
+    // only = false,
   } = props
 
   const [show, setShow] = useState(false)

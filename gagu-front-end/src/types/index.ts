@@ -30,7 +30,11 @@ export interface IContextMenuItem {
 }
 
 export interface IContextMenuState {
-  contextMenuEvent: MouseEvent
+  eventData: {
+    target: HTMLElement
+    clientX: number
+    clientY: number
+  }
   menuItemList: IContextMenuItem[]
   isDock?: boolean
 }

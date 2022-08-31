@@ -128,7 +128,10 @@ export class FsController {
       return data
     } catch (err) {
       console.log('ERR: EXIF')
-      return 'EXIF ERROR'
+      return {
+        success: false,
+        msg: 'EXIF ERROR',
+      }
     }
   }
 
@@ -140,7 +143,10 @@ export class FsController {
       return data
     } catch (err) {
       console.log('ERR: EXIF')
-      return 'TAGS ERROR'
+      return {
+        success: false,
+        msg: 'TAGS ERROR',
+      }
     }
   }
 
@@ -156,7 +162,7 @@ export class FsController {
     if (token && token.length === 8) {
       response.sendFile(path)
     } else {
-      return 'TOKEN ERROR'
+      response.end('TOKEN ERROR')
     }
   }
 

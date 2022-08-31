@@ -121,8 +121,10 @@ export default function Dock() {
 
   const handleContextMenu = useCallback((event: any, app: IApp) => {
     const appId = app.id
-    const canMultiple = ![APP_ID_MAP.transfer, APP_ID_MAP.baiduMap, APP_ID_MAP.ps, APP_ID_MAP.pqina].includes(appId)
+    const canMultiple = ![APP_ID_MAP.musicPlayer, APP_ID_MAP.transfer, APP_ID_MAP.baiduMap, APP_ID_MAP.ps, APP_ID_MAP.pqina].includes(appId)
     const hasRunning = runningAppList.map(o => o.id).includes(appId)
+    const { target, clientX, clientY } = event
+    const eventData = { target, clientX, clientY }
 
     const menuItemList: IContextMenuItem[] = [
       {
@@ -148,11 +150,7 @@ export default function Dock() {
       },
     ]
 
-    setContextMenuData({
-      contextMenuEvent: event,
-      menuItemList,
-      isDock: true,
-    })
+    setContextMenuData({ eventData, menuItemList, isDock: true })
   }, [runningAppList, setRunningAppList, handleOpenApp, setContextMenuData])
 
   return (

@@ -45,7 +45,7 @@ export default function RootEntryList(props: RootEntryListProps) {
                 <span className="ml-1 truncate flex-grow">{label}</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-xs transform scale-75 origin-left">{rootEntryPath}</span>
+                <span className="text-xs transform scale-90 origin-left">{rootEntryPath}</span>
                 {isDisk && (
                   <span className="transform scale-75 origin-right font-din">
                     {`${getReadableSize(spaceUsed!)}/${getReadableSize(spaceTotal!)}`.replace(/\s/g, '')}

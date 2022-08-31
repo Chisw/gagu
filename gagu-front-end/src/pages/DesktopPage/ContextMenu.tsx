@@ -20,8 +20,8 @@ export default function ContextMenu() {
   const [contextMenuData] = useRecoilState(contextMenuDataState)
 
   const { top, left, menuItemList, isDock } = useMemo(() => {
-    const { contextMenuEvent, menuItemList, isDock } = contextMenuData || { contextMenuEvent: null, menuItemList: [], isDock: false }
-    const { target, clientX, clientY } = contextMenuEvent || { target: null, clientX: 0, clientY: 0 }
+    const { eventData, menuItemList, isDock } = contextMenuData || { eventData: null, menuItemList: [], isDock: false }
+    const { target, clientX, clientY } = eventData || { target: null, clientX: 0, clientY: 0 }
     const filteredMenuItemList = menuItemList.filter(o => o.isShow)
 
     let top = 0
@@ -96,10 +96,7 @@ export default function ContextMenu() {
           )
         })}
         {isDock && (
-          <div
-            className="absolute z-0 left-0 bottom-0 -mb-1 ml-2 w-3 h-3 bg-white transform rotate-45 rounded-sm"
-          >
-          </div>
+          <div className="absolute z-0 left-0 bottom-0 -mb-1 ml-2 w-3 h-3 bg-white transform rotate-45 rounded-sm" />
         )}
       </div>
     </>

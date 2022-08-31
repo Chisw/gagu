@@ -68,13 +68,13 @@ const APP_LIST: IApp[] = [
     title: '音乐播放器',
     AppComponent: MusicPlayer,
     width: 480,
-    height: 600,
+    height: 640,
     resizeRange: {
       minWidth: 480,
       minHeight: 240,
     },
     matchList: ['mp3', 'aac', 'flac'],
-    headerClassName: 'bg-pink-900 border-black-100',
+    headerClassName: 'bg-pink-900 text-pink-100 border-black-100',
   },
   {
     id: APP_ID_MAP.videoPlayer,
@@ -88,7 +88,7 @@ const APP_LIST: IApp[] = [
       minHeight: 240,
     },
     matchList: ['mp4', 'mkv'],
-    headerClassName: 'bg-gray-800 border-black-100',
+    headerClassName: 'bg-gray-800 text-gray-100 border-black-100',
   },
   {
     id: APP_ID_MAP.settings,

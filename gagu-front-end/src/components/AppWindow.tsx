@@ -156,7 +156,7 @@ export default function AppWindow(props: WindowProps) {
           <div
             className={line(`
               relative w-full h-6 flex items-center select-none border-b
-              ${headerClassName || 'bg-white'}
+              ${headerClassName || 'bg-white text-gray-500'}
             `)}
           >
             {windowLoading && (<div className="absolute z-0 right-0 bottom-0 left-0 h-2px bg-loading" />)}
@@ -168,7 +168,7 @@ export default function AppWindow(props: WindowProps) {
                 className="gg-app-icon w-3 h-3 bg-center bg-no-repeat bg-contain"
                 data-app-id={appId}
               />
-              <span className={`ml-2 text-xs ${headerClassName ? 'text-gray-100' : 'text-gray-500'}`}>
+              <span className="ml-2 text-xs">
                 {windowTitle || title}
               </span>
             </div>

@@ -546,7 +546,9 @@ export default function FileExplorer(props: AppComponentProps) {
     let contextEntryList: IEntry[] = [...selectedEntryList]
 
     const unconfirmedLen = contextEntryList.length
-    const targetEntry = event.target.closest('.gg-entry-node')
+    const { target, clientX, clientY } = event
+    const targetEntry = target.closest('.gg-entry-node')
+    const eventData = { target, clientX, clientY }
 
     if (targetEntry) {
       isOnBlank = false
@@ -643,7 +645,7 @@ export default function FileExplorer(props: AppComponentProps) {
       },
     ]
 
-    setContextMenuData({ contextMenuEvent: event, menuItemList })
+    setContextMenuData({ eventData, menuItemList })
   }, [
     entryList,
     selectedEntryList,
