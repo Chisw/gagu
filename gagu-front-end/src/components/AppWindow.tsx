@@ -34,6 +34,7 @@ export default function AppWindow(props: WindowProps) {
   const [currentIndex, setCurrentIndex] = useState(initIndex)
   const [windowLoading, setWindowLoading] = useState(false)
   const [windowTitle, setWindowTitle] = useState('')
+  const [windowSize, setWindowSize] = useState({ width, height })
   const [hidden, setHidden] = useState(false)
   const [isFullScreen, setIsFullScreen] = useState(false)
   const [rndInstance, setRndInstance] = useState<any>(null)
@@ -133,12 +134,12 @@ export default function AppWindow(props: WindowProps) {
           setMemoInfo({ ...memoInfo, x, y })
         }}
         onResizeStop={(e, d, el, delta) => {
+          const { width: dWidth, height: dHeight } = delta
+          const width = memoInfo.width + dWidth
+          const height = memoInfo.height + dHeight
           setIsDraggingOrResizing(false)
-          setMemoInfo({
-            ...memoInfo,
-            width: memoInfo.width + delta.width,
-            height: memoInfo.height + delta.height,
-          })
+          setWindowSize({ width, height })
+          setMemoInfo({ ...memoInfo, width, height })
         }}
       >
         <div
@@ -165,7 +166,7 @@ export default function AppWindow(props: WindowProps) {
               onDoubleClick={handleFullScreen}
             >
               <div
-                className="gg-app-icon w-3 h-3 bg-center bg-no-repeat bg-contain"
+                className="gg-app-icon w-4 h-4 bg-center bg-no-repeat bg-contain"
                 data-app-id={appId}
               />
               <span className="ml-2 text-xs">
@@ -223,6 +224,7 @@ export default function AppWindow(props: WindowProps) {
           <div className="relative flex-grow overflow-hidden bg-black-50">
             <AppComponent
               isTopWindow={isTopWindow}
+              windowSize={windowSize}
               setWindowLoading={setWindowLoading}
               setWindowTitle={setWindowTitle}
             />

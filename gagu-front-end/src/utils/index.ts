@@ -1,7 +1,6 @@
 import { FsApi } from '../api'
 import { CALLABLE_APP_LIST } from './appList'
 import { EntryType, IEntry, INestedFile, IOffsetInfo, IRectInfo, IRootEntry } from '../types'
-import { DateTime } from 'luxon'
 
 export * from './constant'
 
@@ -215,15 +214,4 @@ export const getRootEntryPath = (rootEntry: IRootEntry | null) => {
   if (!rootEntry) return ''
   const { name, parentPath } = rootEntry
   return `${parentPath ? `${parentPath}/` : ''}${name}`
-}
-
-export const getPlayInfo = (currentTime: number, duration: number, useHourFormat?: boolean) => {
-  const format = useHourFormat ? 'HH:mm:ss' : 'mm:ss'
-  const currentSeconds = DateTime.fromSeconds(currentTime).toFormat(format)
-  const durationSeconds = DateTime.fromSeconds(duration).toFormat(format)
-  return {
-    currentTimeLabel: `${currentSeconds}`,
-    durationLabel: `${durationSeconds}`,
-    playPercent: currentTime / duration * 100,
-  }
 }

@@ -32,7 +32,7 @@ export default function VolumeSlider(props: VolumeSliderProps) {
         ref={sliderRef}
         className={line(`
           absolute z-10
-          w-8 h-32 rounded bg-black shadow-md
+          w-8 h-32 rounded bg-black shadow-lg border border-white-200
           ${show ? 'block' : 'hidden'}
         `)}
         style={{ right, bottom }}

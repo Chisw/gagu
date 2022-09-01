@@ -1,5 +1,6 @@
 export interface AppComponentProps {
   isTopWindow: boolean
+  windowSize: { width: number, height: number }
   setWindowLoading: (loading: boolean) => void
   setWindowTitle: (title: string) => void
 }

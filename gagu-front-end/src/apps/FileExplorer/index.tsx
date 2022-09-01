@@ -51,7 +51,12 @@ import {
 
 export default function FileExplorer(props: AppComponentProps) {
 
-  const { isTopWindow, setWindowTitle, setWindowLoading } = props
+  const {
+    isTopWindow,
+    windowSize: { width: windowWidth },
+    setWindowTitle,
+    setWindowLoading,
+  } = props
 
   const [rootInfo] = useRecoilState(rootInfoState)
   const [sizeMap, setSizeMap] = useRecoilState(sizeMapState)
@@ -670,7 +675,7 @@ export default function FileExplorer(props: AppComponentProps) {
         {/* main */}
         <div className="relative flex-grow h-full bg-white flex flex-col">
           <ToolBar
-            {...{ disabledMap, gridMode, filterMode, filterText, hiddenShow }}
+            {...{ windowWidth, disabledMap, gridMode, filterMode, filterText, hiddenShow }}
             {...{ setGridMode, setFilterMode, setFilterText, setHiddenShow }}
             onNavBack={handleNavBack}
             onNavForward={handleNavForward}
@@ -772,11 +777,12 @@ export default function FileExplorer(props: AppComponentProps) {
                     className={line(`
                       gg-entry-node
                       relative overflow-hidden rounded-sm
-                      ${gridMode ? 'm-1 px-1 py-2 w-28' : 'mb-1 px-2 py-0 w-full flex items-center'}
-                      ${!gridMode && isSelected ? 'bg-blue-600' : 'hover:bg-gray-100'}
+                      ${gridMode ? 'm-1 px-1 py-2 w-28' : 'px-2 py-2px w-full flex items-center'}
+                      ${!gridMode && isSelected ? 'bg-blue-600' : ' hover:bg-gray-100'}
+                      ${!gridMode && !isSelected ? 'even:bg-black-30' : ''}
                       ${isSelected ? 'bg-gray-100' : ''}
                       ${(isSelected && deleting) ? 'bg-loading' : ''}
-                      ${hidden ? 'opacity-50' : 'opacity-100'}
+                      ${hidden ? 'opacity-50' : ''}
                     `)}
                     onClick={e => handleEntryClick(e, entry)}
                     onDoubleClick={() => handleEntryDoubleClick(entry)}

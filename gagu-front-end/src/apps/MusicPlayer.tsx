@@ -2,9 +2,9 @@ import { SvgIcon } from '../components/base'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { APP_ID_MAP } from '../utils/appList'
 import { AppComponentProps } from '../types'
-import { useFetch, useOpenOperation } from '../hooks'
+import { useFetch, useOpenOperation, usePlayInfo } from '../hooks'
 import { FsApi } from '../api'
-import { getPlayInfo, getReadableSize } from '../utils'
+import { getReadableSize } from '../utils'
 import SpectrumCanvas from '../components/SpectrumCanvas'
 import EntrySelector from '../components/EntrySelector'
 import VolumeSlider from '../components/VolumeSlider'
@@ -32,7 +32,6 @@ export default function MusicPlayer(props: AppComponentProps) {
     setActiveIndex,
   } = useOpenOperation(APP_ID_MAP.musicPlayer)
 
-  const [playInfo, setPlayInfo] = useState({ currentTimeLabel: '00:00', durationLabel: '00:00', playPercent: 0 })
   const [isPlaying, setIsPlaying] = useState(false)
   const [playMode, setPlayMode] = useState('order')
   const [volume, setVolume] = useState(1)
@@ -46,9 +45,18 @@ export default function MusicPlayer(props: AppComponentProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [audioRef.current])
 
+  const playInfo = usePlayInfo({ el: audioEl, isPlaying })
+
   useEffect(() => {
     setWindowLoading(loading)
   }, [loading, setWindowLoading])
+
+  useEffect(() => {
+    if (activeEntry) {
+      const title = `[${activeIndex + 1}/${matchedEntryList.length}] ${activeEntry.name}`
+      setWindowTitle(title)
+    }
+  }, [activeIndex, activeEntry, matchedEntryList, setWindowTitle])
 
   useEffect(() => {
     if (audioEl && activeEntryStreamUrl) {
@@ -69,27 +77,6 @@ export default function MusicPlayer(props: AppComponentProps) {
       getTags(`${parentPath}/${name}`)
     }
   }, [activeEntry, getTags])
-
-  useEffect(() => {
-    let timer: any
-    if (isPlaying) {
-      timer = setInterval(() => {
-        if (!audioEl) return
-        const { currentTime, duration } = audioEl
-        setPlayInfo(getPlayInfo(currentTime || 0, duration || 0))
-      }, 1000)
-    } else {
-      clearInterval(timer)
-    }
-    return () => clearInterval(timer)
-  }, [audioEl, isPlaying])
-
-  useEffect(() => {
-    if (activeEntry) {
-      const title = `[${activeIndex + 1}/${matchedEntryList.length}] ${activeEntry.name}`
-      setWindowTitle(title)
-    }
-  }, [activeIndex, activeEntry, matchedEntryList, setWindowTitle])
 
   const handlePlayOrPause = useCallback(() => {
     if (!audioEl) return

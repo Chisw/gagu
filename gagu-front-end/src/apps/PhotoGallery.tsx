@@ -46,7 +46,8 @@ export default function PhotoGallery(props: AppComponentProps) {
     } else {
       return null
     }
-  }, [imgRef])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [imgRef.current])
 
   useEffect(() => setWindowLoading(loading), [setWindowLoading, loading])
 
@@ -87,7 +88,7 @@ export default function PhotoGallery(props: AppComponentProps) {
           </div>
         </div>
         <div
-          className="relative flex-grow cursor-zoom-in bg-grid-light"
+          className="relative flex-grow cursor-zoom-in bg-black"
           onClick={() => setVisible(true)}
         >
           {loading && <Spinner />}
@@ -102,9 +103,9 @@ export default function PhotoGallery(props: AppComponentProps) {
             />
           </div>
         </div>
-        <div className="flex justify-center items-center p-2 h-12 bg-white border-t flex-shrink-0">
+        <div className="flex justify-center items-center p-2 h-12 bg-gray-800 flex-shrink-0">
           <div
-            className="w-4 h-full flex justify-center items-center cursor-pointer bg-gray-100 hover:bg-gray-200 rounded-sm text-gray-500"
+            className="w-4 h-full flex justify-center items-center cursor-pointer bg-black-100 hover:bg-black-200 rounded-sm text-gray-500"
             onClick={() => activeIndex > 0 ? setActiveIndex(activeIndex - 1) : null}
           >
             <SvgIcon.ChevronLeft />
@@ -127,7 +128,7 @@ export default function PhotoGallery(props: AppComponentProps) {
             )
           })}
           <div
-            className="w-4 h-full flex justify-center items-center cursor-pointer bg-gray-100 hover:bg-gray-200 rounded-sm text-gray-500"
+            className="w-4 h-full flex justify-center items-center cursor-pointer bg-black-100 hover:bg-black-200 rounded-sm text-gray-500"
             onClick={() => activeIndex < matchedEntryList.length - 1 ? setActiveIndex(activeIndex + 1) : null}
           >
             <SvgIcon.ChevronRight />

@@ -20,6 +20,7 @@ export interface IToolBarDisabledMap {
 }
 
 interface ToolBarProps {
+  windowWidth: number
   disabledMap: IToolBarDisabledMap
   gridMode: boolean
   filterMode: boolean
@@ -46,6 +47,7 @@ interface ToolBarProps {
 export default function ToolBar(props: ToolBarProps) {
 
   const {
+    windowWidth,
     disabledMap,
     gridMode,
     filterMode,
@@ -110,56 +112,59 @@ export default function ToolBar(props: ToolBarProps) {
         />
 
         <div className="mx-2 h-3 border-l" />
-
-        <ToolButton
-          title="新建文件夹 [Shift + N]"
-          icon={<SvgIcon.FolderAdd />}
-          disabled={disabledMap.newDir}
-          onClick={onNewDir}
-        />
-        <ToolButton
-          title="新建文本文件 [Shift + T]"
-          icon={<SvgIcon.FileAdd />}
-          disabled={disabledMap.newTxt}
-          onClick={onNewTxt}
-        />
-        <ToolButton
-          title="上传 [Shift + U]"
-          icon={<SvgIcon.Upload />}
-          onClick={onUpload}
-        />
-        <ToolButton
-          title="下载 [Shift + D]"
-          icon={<SvgIcon.Download />}
-          disabled={disabledMap.download}
-          onClick={onDownload}
-        />
-        <ToolButton
-          title="收藏 [Shift + S]"
-          icon={<SvgIcon.Star />}
-        />
-        <ToolButton
-          title="重命名 [Shift + E]"
-          icon={<SvgIcon.Edit />}
-          disabled={disabledMap.rename}
-          onClick={onRename}
-        />
-        <ToolButton
-          title="删除 [Del]"
-          icon={<SvgIcon.Delete />}
-          disabled={disabledMap.delete}
-          onClick={onDelete}
-        />
+        {windowWidth > 720 && (
+          <>
+            <ToolButton
+              title="新建文件夹 [Shift + N]"
+              icon={<SvgIcon.FolderAdd />}
+              disabled={disabledMap.newDir}
+              onClick={onNewDir}
+            />
+            <ToolButton
+              title="新建文本文件 [Shift + T]"
+              icon={<SvgIcon.FileAdd />}
+              disabled={disabledMap.newTxt}
+              onClick={onNewTxt}
+            />
+            <ToolButton
+              title="上传 [Shift + U]"
+              icon={<SvgIcon.Upload />}
+              onClick={onUpload}
+            />
+            <ToolButton
+              title="下载 [Shift + D]"
+              icon={<SvgIcon.Download />}
+              disabled={disabledMap.download}
+              onClick={onDownload}
+            />
+            <ToolButton
+              title="收藏 [Shift + S]"
+              icon={<SvgIcon.Star />}
+            />
+            <ToolButton
+              title="重命名 [Shift + E]"
+              icon={<SvgIcon.Edit />}
+              disabled={disabledMap.rename}
+              onClick={onRename}
+            />
+            <ToolButton
+              title="删除 [Del]"
+              icon={<SvgIcon.Delete />}
+              disabled={disabledMap.delete}
+              onClick={onDelete}
+            />
+          </>
+        )}
 
         <div className="flex-grow mx-2 h-3 border-r" />
 
         <div className={`${filterMode ? 'w-40' : 'w-8'} h-full transition-all duration-200`}>
           {filterMode ? (
-            <div className="px-1 h-full flex justify-center items-center border-r">
+            <div className="h-full flex justify-between items-center border-r">
               <input
                 autoFocus
                 placeholder="在当前目录筛选"
-                className="max-w-full text-xs outline-none"
+                className="w-full px-2 py-1 text-xs outline-none"
                 value={filterText}
                 onChange={e => setFilterText(e.target.value)}
                 onBlur={e => !e.target.value && setFilterMode(false)}

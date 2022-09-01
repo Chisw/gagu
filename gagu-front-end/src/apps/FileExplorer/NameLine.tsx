@@ -20,7 +20,6 @@ interface NameLineProps {
 }
 
 export default function NameLine(props: NameLineProps) {
-
   const {
     create,
     showInput = false,
@@ -82,7 +81,15 @@ export default function NameLine(props: NameLineProps) {
         if (create === 'dir') {
           const { success } = await addDirectory(newPath)
           if (success) {
-            onSuccess({ name: newName, type: EntryType.directory, parentPath: currentPath, lastModified: 0, hasChildren: false, hidden: false, extension: '_dir' })
+            onSuccess({
+              name: newName,
+              type: EntryType.directory,
+              parentPath: currentPath,
+              lastModified: 0,
+              hasChildren: false,
+              hidden: false,
+              extension: '_dir',
+            })
           } else {
             onFail('net_error')
           }
@@ -93,7 +100,15 @@ export default function NameLine(props: NameLineProps) {
           const file = new File([blob], name)
           const { success } = await uploadFile(currentPath, file)
           if (success) {
-            onSuccess({ name, type: EntryType.file, parentPath: currentPath, lastModified: 0, hasChildren: false, hidden: false, extension: '' })
+            onSuccess({
+              name,
+              type: EntryType.file,
+              parentPath: currentPath,
+              lastModified: 0,
+              hasChildren: false,
+              hidden: false,
+              extension: '',
+            })
           } else {
             onFail('net_error')
           }
@@ -103,7 +118,12 @@ export default function NameLine(props: NameLineProps) {
   }, [entry, currentPath, create, getExists, addDirectory, renameEntry, uploadFile, onSuccess, onFail])
 
   return (
-    <div className={`w-full leading-none ${gridMode ? 'mt-1 text-center' : 'ml-4 flex justify-center items-center'}`}>
+    <div
+      className={line(`
+        w-full leading-none
+        ${gridMode ? 'mt-1 text-center' : 'ml-4 flex justify-center items-center'}
+      `)}
+    >
       {showInput ? (
         <div
           className={line(`
@@ -147,7 +167,6 @@ interface NameLabelProps {
 }
 
 export function NameLabel(props: NameLabelProps) {
-
   const {
     entryName,
     gridMode,
@@ -158,9 +177,9 @@ export function NameLabel(props: NameLabelProps) {
     <span
       title={entryName}
       className={line(`
-        inline-block px-1 rounded truncate text-xs
+        px-1 rounded  text-xs
         ${isSelected ? 'bg-blue-600 text-white' : 'text-gray-700'}
-        ${gridMode ? 'max-w-full' : 'w-full'}
+        ${gridMode ? 'max-w-full line-clamp-2' : 'w-full truncate'}
       `)}
     >
       {entryName}

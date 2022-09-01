@@ -112,7 +112,7 @@ export default function Dock() {
   }, [topWindowIndex, setTopWindowIndex, runningAppList, setRunningAppList])
 
   useEffect(() => {
-    console.log('openOperation', openOperation)
+    // console.log('openOperation', openOperation)
     if (openOperation) {
       const app = APP_LIST.find(a => a.id === openOperation.app.id)!
       handleOpenApp(app)
@@ -231,7 +231,7 @@ export default function Dock() {
                 />
                 <span
                   className={line(`
-                    absolute left-1/2 bottom-0 w-4 h-2 bg-blue-500
+                    absolute left-1/2 bottom-0 w-4 h-2 bg-blue-600
                     transform -translate-x-1/2 translate-y-3
                     transition-all duration-300
                     ${isRunning ? 'opacity-100' : 'opacity-0'}

@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import ToolButton from '../components/ToolButton'
-import CommonToolButtons from '../components/CommonToolButtons'
 import { copy, ENTRY_ICON_LIST } from '../utils'
 import { FsApi } from '../api'
 import { APP_ID_MAP } from '../utils/appList'
@@ -85,7 +84,6 @@ export default function TextEditor(props: AppComponentProps) {
               toast.success('文本复制成功')
             }}
           />
-          <CommonToolButtons {...{ activeEntry }} />
         </div>
         <div className="flex-grow">
           <code style={monoMode ? undefined : { fontFamily: 'unset' }}>
