@@ -169,8 +169,8 @@ export default function Dock() {
         `)}
       >
         <div className="w-32 flex-shrink-0">
-          <div className="relative w-6 h-6 flex justify-center items-center hover:bg-white-600 hover:text-black active:bg-white-500 group">
-            <SvgIcon.Dashboard />
+          <div className="relative w-6 h-6 rounded-sm flex justify-center items-center hover:bg-white-600 hover:text-black active:bg-white-500 group">
+            <SvgIcon.G />
             <div className="absolute left-0 bottom-0 mb-6 bg-white-900 hidden group-hover:block">
               <div className="py-2 flex justify-center items-center text-gray-500">
                 <a

@@ -55,10 +55,10 @@ const APP_LIST: IApp[] = [
     title: '图片浏览器',
     AppComponent: PhotoGallery,
     width: 720,
-    height: 640,
+    height: 480,
     resizeRange: {
-      minWidth: 240,
-      minHeight: 200,
+      minWidth: 400,
+      minHeight: 400,
     },
     matchList: ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'ico'],
     headerClassName: 'bg-gray-800 text-gray-100 border-black-100',
@@ -94,7 +94,7 @@ const APP_LIST: IApp[] = [
   {
     id: APP_ID_MAP.settings,
     runningId: 0,
-    title: '偏好设置',
+    title: '设置',
     AppComponent: Settings,
     width: 500,
     height: 500,
@@ -132,7 +132,7 @@ const APP_LIST: IApp[] = [
     runningId: 0,
     title: 'PS',
     AppComponent: PS,
-    width: 1000,
+    width: 1240,
     height: 800,
     resizeRange: {
       minWidth: 800,

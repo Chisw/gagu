@@ -30,12 +30,12 @@ export default function RootEntryList(props: RootEntryListProps) {
           return (
             <div
               key={rootEntryPath}
-              title={name}
+              title={label || name}
               className={line(`
-                mb-1 p-2 text-xs rounded-sm cursor-pointer
+                mb-2 p-2 text-sm rounded-sm cursor-pointer
                 ${isActive
                   ? 'bg-white text-black'
-                  : 'text-gray-500 hover:text-black'
+                  : 'bg-white-400 text-gray-500 hover:text-black'
                 }
               `)}
               onClick={() => canRootEntryClick && onRootEntryClick(rootEntry)}
@@ -44,20 +44,20 @@ export default function RootEntryList(props: RootEntryListProps) {
                 {isDisk ? <SvgIcon.HardDrive /> : <SvgIcon.Folder />}
                 <span className="ml-1 truncate flex-grow">{label}</span>
               </div>
-              <div className="flex justify-between items-center">
-                <span className="text-xs transform scale-90 origin-left">{rootEntryPath}</span>
-                {isDisk && (
-                  <span className="transform scale-75 origin-right font-din">
-                    {`${getReadableSize(spaceUsed!)}/${getReadableSize(spaceTotal!)}`.replace(/\s/g, '')}
-                  </span>
-                )}
+              <div className="break-word transform scale-90 origin-left opacity-60 font-din text-xs">
+                {rootEntryPath}
               </div>
               {isDisk && (
-                <div className="relative h-2px font-din bg-white rounded-sm overflow-hidden shadow">
-                  <div
-                    className="absolute top-0 bottom-0 left-0 bg-blue-500"
-                    style={{ width: `${spaceUsed / spaceTotal! * 100}%` }}
-                  />
+                <div className="mt-2px text-xs">
+                  <div className="relative z-0 h-1 font-din bg-gray-100 rounded-sm overflow-hidden">
+                    <div
+                      className="h-full bg-blue-500"
+                      style={{ width: `${spaceUsed / spaceTotal! * 100}%` }}
+                    />
+                  </div>
+                  <div className="font-din transform scale-90 origin-left opacity-60">
+                    {`${getReadableSize(spaceUsed!)} / ${getReadableSize(spaceTotal!)}`}
+                  </div>
                 </div>
               )}
             </div>

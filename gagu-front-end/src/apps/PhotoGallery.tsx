@@ -7,9 +7,7 @@ import { PhotoSlider } from 'react-photo-view'
 import { line } from '../utils'
 import { useOpenOperation, useFetch } from '../hooks'
 
-
 export default function PhotoGallery(props: AppComponentProps) {
-
   const { setWindowTitle, setWindowLoading } = props
   const {
     matchedEntryList,
@@ -29,13 +27,6 @@ export default function PhotoGallery(props: AppComponentProps) {
       getExif(`${activeEntry.parentPath}/${activeEntry.name}`)
     }
   }, [activeEntry, getExif])
-
-  // useEffect(() => {
-  //   const { width, height } = document.querySelector('.gg-app-photo-gallery')!.getBoundingClientRect()
-  //   window.innerWidth = width
-  //   window.innerHeight = height
-  //   setVisible(true)
-  // }, [])
 
   const imgRef = useRef<HTMLImageElement>(null)
 
@@ -68,31 +59,47 @@ export default function PhotoGallery(props: AppComponentProps) {
     }
   }, [activeIndex, matchedEntryList])
 
+  const buttonList = useMemo(() => {
+    return [
+      {
+        icon: <SvgIcon.LayoutBottom size={14} />,
+        title: '更多',
+        onClick: () => { },
+      },
+      {
+        icon: <SvgIcon.Info size={14} />,
+        title: 'Exif 信息',
+        onClick: getExifData,
+      },
+      {
+        icon: <SvgIcon.Delete size={14} />,
+        title: '删除',
+        onClick: () => { },
+      },
+      {
+        icon: <SvgIcon.Download size={14} />,
+        title: '下载',
+        onClick: () => { },
+      },
+    ]
+  }, [getExifData])
+
   return (
     <>
       <div className="gg-app-photo-gallery absolute inset-0 flex flex-col select-none">
-        <div className="absolute z-10 top-0 right-0 left-0 text-xs p-1 bg-black-400 text-white">
-          {activeIndex + 1}/{matchedEntryList.length} - 
-          {imgInfo && (
-            <span>{imgInfo.naturalWidth}x{imgInfo.naturalHeight}px</span>
-          )}
-          <button
-            onClick={getExifData}
-          >
-            EXIF
-          </button>
-          <div>
-            <code onDoubleClick={() => setData(null)}>
-              {JSON.stringify(ExifData)}
-            </code>
-          </div>
+        <div className="absolute z-10 text-xs text-white top-0 left-0">
+          <code onDoubleClick={() => setData(null)}>
+            {JSON.stringify(ExifData)}
+          </code>
         </div>
+
+        {/* img */}
         <div
-          className="relative flex-grow cursor-zoom-in bg-black"
+          className="relative flex-grow cursor-zoom-in bg-black group"
           onClick={() => setVisible(true)}
         >
           {loading && <Spinner />}
-          <div className="absolute inset-0 flex justify-center items-center p-2">
+          <div className="absolute z-0 inset-0 flex justify-center items-center p-2">
             <img
               ref={imgRef}
               src={activeEntryStreamUrl}
@@ -102,7 +109,39 @@ export default function PhotoGallery(props: AppComponentProps) {
               onLoadedDataCapture={() => setLoading(false)}
             />
           </div>
+
+          {/* bar */}
+          <div
+            className="absolute z-10 bottom-0 right-0 left-0
+              text-xs px-2 py-1 bg-black-500 text-white
+              flex items-center cursor-default
+              transition-opacity duration-300
+              opacity-0 group-hover:opacity-100"
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="w-24 font-din">
+              {activeIndex + 1} / {matchedEntryList.length}
+            </div>
+
+            <div className="flex-grow flex justify-center">
+              {buttonList.map(({ icon, title, onClick }) => (
+                <div
+                  key={title}
+                  title={title}
+                  className="mx-1 w-6 h-6 hover:bg-white-200 active:bg-white-100 cursor-pointer rounded-sm flex justify-center items-center"
+                  onClick={onClick}
+                >
+                  {icon}
+                </div>
+              ))}
+            </div>
+            <div className="w-24 font-din text-right">
+              {imgInfo?.naturalWidth} &times; {imgInfo?.naturalHeight} PX
+            </div>
+          </div>
         </div>
+
+        {/* slider */}
         <div className="flex justify-center items-center p-2 h-12 bg-gray-800 flex-shrink-0">
           <div
             className="w-4 h-full flex justify-center items-center cursor-pointer bg-black-100 hover:bg-black-200 rounded-sm text-gray-500"

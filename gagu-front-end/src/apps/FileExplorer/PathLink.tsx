@@ -59,7 +59,7 @@ export default function PathLink(props: PathLinkProps) {
           className={isRootEntryDisabled ? '' : 'cursor-pointer hover:text-black'}
           onClick={() => !isRootEntryDisabled && rootEntry && onRootEntryClick(rootEntry)}
         >
-          {rootEntryPath}
+          {rootEntry.label || rootEntry.name}
         </span>
         {centerPathList.map((path, pathIndex) => {
           const prefix = centerPathList.filter((p, pIndex) => pIndex < pathIndex).join('/')

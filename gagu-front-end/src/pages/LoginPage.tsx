@@ -6,8 +6,6 @@ import md5 from 'md5'
 import { GAGU_AUTH_KEY } from '../utils'
 import toast from 'react-hot-toast'
 import { SvgIcon } from '../components/base'
-import avatar from '../img/favicon.png'
-
 
 export default function LoginPage() {
 
@@ -39,16 +37,13 @@ export default function LoginPage() {
         <div className="absolute inset-0 flex justify-center items-center backdrop-filter backdrop-blur-lg">
           <div className="w-56">
             <div className="text-white flex justify-center items-center">
-              <div
-                className="w-24 h-24 rounded-full bg-center bg-cover shadow"
-                style={{ backgroundImage: `url("${avatar}")` }}
-              />
+              <SvgIcon.G size={64} />
             </div>
             <code>
               <input
                 autoFocus
                 placeholder="Username"
-                className="px-3 py-2 w-full mt-6 text-sm outline-none bg-black-100 text-white placeholder-gray-400 border-b border-transparent focus:border-white"
+                className="mt-12 px-3 py-2 w-full text-sm outline-none bg-black-100 text-white placeholder-gray-400 border-b border-transparent focus:border-white"
                 maxLength={16}
                 value={username}
                 onChange={(e: any) => setUsername(e.target.value.trim())}
