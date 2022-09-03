@@ -4,7 +4,7 @@ import { FsApi } from '../api'
 import { APP_ID_MAP } from '../utils/appList'
 import { AppComponentProps } from '../types'
 import { PhotoSlider } from 'react-photo-view'
-import { line } from '../utils'
+import { getReadableSize, line } from '../utils'
 import { useOpenOperation, useFetch } from '../hooks'
 
 export default function PhotoGallery(props: AppComponentProps) {
@@ -19,6 +19,8 @@ export default function PhotoGallery(props: AppComponentProps) {
 
   const [loading, setLoading] = useState(false)
   const [visible, setVisible] = useState(false)
+  const [bgLight, setBgLight] = useState(false)
+  const [bottomShow, setBottomShow] = useState(false)
 
   const { fetch: getExif, data: ExifData, setData } = useFetch(FsApi.getExif)
 
@@ -64,6 +66,16 @@ export default function PhotoGallery(props: AppComponentProps) {
       {
         icon: <SvgIcon.LayoutBottom size={14} />,
         title: '更多',
+        onClick: () => setBottomShow(!bottomShow),
+      },
+      {
+        icon: <SvgIcon.Contrast size={14} />,
+        title: '背景切换',
+        onClick: () => setBgLight(!bgLight),
+      },
+      {
+        icon: <SvgIcon.Download size={14} />,
+        title: '下载',
         onClick: () => { },
       },
       {
@@ -76,13 +88,8 @@ export default function PhotoGallery(props: AppComponentProps) {
         title: '删除',
         onClick: () => { },
       },
-      {
-        icon: <SvgIcon.Download size={14} />,
-        title: '下载',
-        onClick: () => { },
-      },
     ]
-  }, [getExifData])
+  }, [bottomShow, bgLight, getExifData])
 
   return (
     <>
@@ -95,16 +102,19 @@ export default function PhotoGallery(props: AppComponentProps) {
 
         {/* img */}
         <div
-          className="relative flex-grow cursor-zoom-in bg-black group"
+          className={`
+            relative flex-grow cursor-zoom-in group
+            ${bgLight ? 'bg-grid-light' : 'bg-grid-dark'}
+          `}
           onClick={() => setVisible(true)}
         >
           {loading && <Spinner />}
-          <div className="absolute z-0 inset-0 flex justify-center items-center p-2">
+          <div className="absolute z-0 inset-0 flex justify-center items-center">
             <img
               ref={imgRef}
               src={activeEntryStreamUrl}
               alt="img"
-              className={`max-w-full max-h-full shadow-lg ${loading ? '' : ''}`}
+              className="max-w-full max-h-full"
               onLoadedData={() => setLoading(false)}
               onLoadedDataCapture={() => setLoading(false)}
             />
@@ -115,11 +125,11 @@ export default function PhotoGallery(props: AppComponentProps) {
             className="absolute z-10 bottom-0 right-0 left-0
               text-xs px-2 py-1 bg-black-500 text-white
               flex items-center cursor-default
-              transition-opacity duration-300
+              transition-opacity duration-200
               opacity-0 group-hover:opacity-100"
             onClick={e => e.stopPropagation()}
           >
-            <div className="w-24 font-din">
+            <div className="w-28 font-din">
               {activeIndex + 1} / {matchedEntryList.length}
             </div>
 
@@ -135,14 +145,23 @@ export default function PhotoGallery(props: AppComponentProps) {
                 </div>
               ))}
             </div>
-            <div className="w-24 font-din text-right">
-              {imgInfo?.naturalWidth} &times; {imgInfo?.naturalHeight} PX
+            <div className="w-28 font-din text-right">
+              {imgInfo?.naturalWidth} &times; {imgInfo?.naturalHeight}PX
+              &nbsp;&nbsp;
+              {getReadableSize(activeEntry?.size || 0)}
             </div>
           </div>
         </div>
 
-        {/* slider */}
-        <div className="flex justify-center items-center p-2 h-12 bg-gray-800 flex-shrink-0">
+        {/* bottom */}
+        <div
+          className={line(`
+            bg-gray-800
+            flex justify-center items-center flex-shrink-0
+            transition-height duration-200 overflow-hidden
+            ${bottomShow ? 'h-12 p-2' : 'h-0'}
+          `)}
+        >
           <div
             className="w-4 h-full flex justify-center items-center cursor-pointer bg-black-100 hover:bg-black-200 rounded-sm text-gray-500"
             onClick={() => activeIndex > 0 ? setActiveIndex(activeIndex - 1) : null}
