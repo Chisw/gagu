@@ -1,7 +1,7 @@
 import { IApp } from '../types'
 import FileExplorer from '../apps/FileExplorer'
 import TextEditor from '../apps/TextEditor'
-import PhotoGallery from '../apps/PhotoGallery'
+import PhotoViewer from '../apps/PhotoViewer'
 import MusicPlayer from '../apps/MusicPlayer'
 import VideoPlayer from '../apps/VideoPlayer'
 import Settings from '../apps/Settings'
@@ -13,7 +13,7 @@ export const APP_ID_MAP = {
   fileExplorer: 'file-explorer',
   transfer: 'transfer',
   textEditor: 'text-editor',
-  photoGallery: 'photo-gallery',
+  photoViewer: 'photo-viewer',
   musicPlayer: 'music-player',
   videoPlayer: 'video-player',
   settings: 'settings',
@@ -50,15 +50,15 @@ const APP_LIST: IApp[] = [
     matchList: ['txt', 'md', 'html', 'xml', 'css', 'js', 'json', 'php', 'java', 'sh', 'log', 'md', 'ts', 'tsx'],
   },
   {
-    id: APP_ID_MAP.photoGallery,
+    id: APP_ID_MAP.photoViewer,
     runningId: 0,
     title: '图片浏览器',
-    AppComponent: PhotoGallery,
+    AppComponent: PhotoViewer,
     width: 720,
     height: 480,
     resizeRange: {
-      minWidth: 400,
-      minHeight: 400,
+      minWidth: 480,
+      minHeight: 480,
     },
     matchList: ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'ico'],
     headerClassName: 'bg-gray-800 text-gray-100 border-black-100',

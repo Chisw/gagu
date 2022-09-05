@@ -263,7 +263,7 @@ export const getTextContent = (path: string) => {
   return readFileSync(path).toString('utf-8')
 }
 
-export const getThumbnailBase64 = async (path: string) => {
+export const getThumbnailPath = async (path: string) => {
   const { mtimeMs } = statSync(path)
   const thumbnailId = md5(`${path}-${mtimeMs}`)
   const thumbnailDirPath = `${GAGU_CONFIG_PATH}/thumbnail`
@@ -301,9 +301,11 @@ export const getThumbnailBase64 = async (path: string) => {
     })
   }
 
-  const bitmap = readFileSync(thumbnailFilePath)
-  const base64 = Buffer.from(bitmap).toString('base64')
-  return `data:image/png;base64,${base64}`
+  return thumbnailFilePath
+
+  // const bitmap = readFileSync(thumbnailFilePath)
+  // const base64 = Buffer.from(bitmap).toString('base64')
+  // return `data:image/png;base64,${base64}`
 }
 
 export const completeNestedPath = (path: string) => {

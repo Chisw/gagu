@@ -22,7 +22,7 @@ import {
   addDirectory,
   getTextContent,
   deleteEntry,
-  getThumbnailBase64,
+  getThumbnailPath,
   uploadFile,
   getExif,
   getTags,
@@ -107,16 +107,25 @@ export class FsController {
     return { success: true }
   }
 
+  @Public()
   @Get('thumbnail')
   @Header('Content-Type', 'image/png')
-  async readThumbnail(@Query('path') path: string) {
+  async readThumbnail(
+    @Query('path') path: string,
+    @Query('token') token: string,
+    @Res() response: Response,
+  ) {
     console.log('FS/THUMBNAIL:', path)
     try {
-      const base64 = await getThumbnailBase64(path)
-      return base64
+      const filePath = await getThumbnailPath(path)
+      if (token && token.length === 8) {
+        response.sendFile(filePath)
+      } else {
+        response.end('TOKEN ERROR')
+      }
     } catch (err) {
       console.log('ERR: THUMBNAIL')
-      return ''
+      response.end('ERROR')
     }
   }
 
@@ -150,7 +159,6 @@ export class FsController {
     }
   }
 
-  // TODO: remove public
   @Public()
   @Get('stream')
   readStream(

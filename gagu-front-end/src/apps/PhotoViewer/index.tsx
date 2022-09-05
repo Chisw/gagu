@@ -1,26 +1,31 @@
-import { Spinner, SvgIcon } from '../components/base'
+import { Spinner, SvgIcon } from '../../components/base'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { FsApi } from '../api'
-import { APP_ID_MAP } from '../utils/appList'
-import { AppComponentProps } from '../types'
+import { FsApi } from '../../api'
+import { APP_ID_MAP } from '../../utils/appList'
+import { AppComponentProps } from '../../types'
 import { PhotoSlider } from 'react-photo-view'
-import { getReadableSize, line } from '../utils'
-import { useOpenOperation, useFetch } from '../hooks'
+import { getReadableSize, line } from '../../utils'
+import { useOpenOperation, useFetch } from '../../hooks'
+import ThumbnailList from './ThumbnailList'
 
-export default function PhotoGallery(props: AppComponentProps) {
-  const { setWindowTitle, setWindowLoading } = props
+export default function PhotoViewer(props: AppComponentProps) {
+  const {
+    windowSize: { width: windowWidth },
+    setWindowTitle,
+    setWindowLoading,
+  } = props
   const {
     matchedEntryList,
     activeIndex,
     activeEntry,
     activeEntryStreamUrl,
     setActiveIndex,
-  } = useOpenOperation(APP_ID_MAP.photoGallery)
+  } = useOpenOperation(APP_ID_MAP.photoViewer)
 
   const [loading, setLoading] = useState(false)
   const [visible, setVisible] = useState(false)
   const [bgLight, setBgLight] = useState(false)
-  const [bottomShow, setBottomShow] = useState(false)
+  const [thumbnailListShow, setThumbnailListShow] = useState(false)
 
   const { fetch: getExif, data: ExifData, setData } = useFetch(FsApi.getExif)
 
@@ -40,7 +45,7 @@ export default function PhotoGallery(props: AppComponentProps) {
       return null
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [imgRef.current])
+  }, [activeEntry, imgRef.current])
 
   useEffect(() => setWindowLoading(loading), [setWindowLoading, loading])
 
@@ -50,23 +55,12 @@ export default function PhotoGallery(props: AppComponentProps) {
     }
   }, [activeEntry, setWindowTitle, getExif])
 
-  const displayEntryList = useMemo(() => {
-    const len = matchedEntryList.length
-    if (0 < len && len <= 5) {
-      return matchedEntryList
-    } else {
-      const start = Math.max(activeIndex - 4, 0)
-      // const end = Math.min(activeIndex + 5, matchedEntryList.length - 1)
-      return matchedEntryList.slice(start, 5)
-    }
-  }, [activeIndex, matchedEntryList])
-
   const buttonList = useMemo(() => {
     return [
       {
         icon: <SvgIcon.LayoutBottom size={14} />,
         title: '更多',
-        onClick: () => setBottomShow(!bottomShow),
+        onClick: () => setThumbnailListShow(!thumbnailListShow),
       },
       {
         icon: <SvgIcon.Contrast size={14} />,
@@ -74,14 +68,14 @@ export default function PhotoGallery(props: AppComponentProps) {
         onClick: () => setBgLight(!bgLight),
       },
       {
-        icon: <SvgIcon.Download size={14} />,
-        title: '下载',
-        onClick: () => { },
-      },
-      {
         icon: <SvgIcon.Info size={14} />,
         title: 'Exif 信息',
         onClick: getExifData,
+      },
+      {
+        icon: <SvgIcon.Download size={14} />,
+        title: '下载',
+        onClick: () => { },
       },
       {
         icon: <SvgIcon.Delete size={14} />,
@@ -89,7 +83,7 @@ export default function PhotoGallery(props: AppComponentProps) {
         onClick: () => { },
       },
     ]
-  }, [bottomShow, bgLight, getExifData])
+  }, [thumbnailListShow, bgLight, getExifData])
 
   return (
     <>
@@ -120,13 +114,16 @@ export default function PhotoGallery(props: AppComponentProps) {
             />
           </div>
 
-          {/* bar */}
+          {/* toolbar */}
           <div
-            className="absolute z-10 bottom-0 right-0 left-0
+            className={line(`
+              absolute z-10 bottom-0 right-0 left-0
               text-xs px-2 py-1 bg-black-500 text-white
               flex items-center cursor-default
               transition-opacity duration-200
-              opacity-0 group-hover:opacity-100"
+              opacity-0 group-hover:opacity-100
+              ${thumbnailListShow ? 'opacity-100' : ''}
+            `)}
             onClick={e => e.stopPropagation()}
           >
             <div className="w-28 font-din">
@@ -153,45 +150,15 @@ export default function PhotoGallery(props: AppComponentProps) {
           </div>
         </div>
 
-        {/* bottom */}
-        <div
-          className={line(`
-            bg-gray-800
-            flex justify-center items-center flex-shrink-0
-            transition-height duration-200 overflow-hidden
-            ${bottomShow ? 'h-12 p-2' : 'h-0'}
-          `)}
-        >
-          <div
-            className="w-4 h-full flex justify-center items-center cursor-pointer bg-black-100 hover:bg-black-200 rounded-sm text-gray-500"
-            onClick={() => activeIndex > 0 ? setActiveIndex(activeIndex - 1) : null}
-          >
-            <SvgIcon.ChevronLeft />
-          </div>
-          {displayEntryList.map(entry => {
-            const src = FsApi.getFileStreamUrl(entry)
-            const entryName = entry.name
-            const isActive = entryName === activeEntry?.name
-            return (
-              <img
-                key={entryName}
-                alt={entryName}
-                className={line(`
-                  mx-2 w-10 cursor-pointer border-2
-                  ${isActive ? 'border-blue-500' : 'border-transparent hover:border-blue-300'}
-                `)}
-                src={src}
-                onClick={() => setActiveIndex(matchedEntryList.findIndex(en => en.name === entryName))}
-              />
-            )
-          })}
-          <div
-            className="w-4 h-full flex justify-center items-center cursor-pointer bg-black-100 hover:bg-black-200 rounded-sm text-gray-500"
-            onClick={() => activeIndex < matchedEntryList.length - 1 ? setActiveIndex(activeIndex + 1) : null}
-          >
-            <SvgIcon.ChevronRight />
-          </div>
-        </div>
+        {/* bottom thumbnail */}
+        <ThumbnailList
+          show={thumbnailListShow}
+          activeIndex={activeIndex}
+          matchedEntryList={matchedEntryList}
+          windowWidth={windowWidth}
+          onClick={setActiveIndex}
+        />
+
       </div>
 
       <PhotoSlider
@@ -200,7 +167,6 @@ export default function PhotoGallery(props: AppComponentProps) {
         onClose={() => setVisible(false)}
         index={activeIndex}
         onIndexChange={index => setActiveIndex(index)}
-        // portalContainer={document.querySelector('.gg-app-photo-gallery') as HTMLElement}
         bannerVisible={false}
         overlayRender={({ rotate, onRotate, scale, onScale, index, images, onClose }) => {
           return (

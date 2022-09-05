@@ -3,7 +3,6 @@ import { EntryType, IEntry } from '../../types'
 import { ENTRY_ICON_LIST, GEN_THUMBNAIL_LIST, GEN_THUMBNAIL_VIDEO_LIST, line } from '../../utils'
 import { CALLABLE_APP_LIST } from '../../utils/appList'
 import { FsApi } from '../../api'
-import { useFetch } from '../../hooks'
 
 interface IconProps {
   entry: IEntry
@@ -22,8 +21,6 @@ export default function Icon(props: IconProps) {
   const [thumbnailErr, setThumbnailErr] = useState(false)
 
   const iconRef = useRef<any>(null)
-
-  const { fetch, data: thumbnailBase64, loading } = useFetch(FsApi.getThumbnailBase64)
 
   useEffect(() => {
     const icon: any = iconRef.current
@@ -49,11 +46,6 @@ export default function Icon(props: IconProps) {
   const requestThumbnail = useMemo(() => {
     return useThumbnail && isInView
   }, [useThumbnail, isInView])
-
-  useEffect(() => {
-    const { parentPath, name } = entry
-    requestThumbnail && fetch(`${parentPath}/${name}`)
-  }, [requestThumbnail, fetch, entry])
 
   const showThumbnail = useMemo(() => {
     return requestThumbnail && !thumbnailErr
@@ -87,11 +79,11 @@ export default function Icon(props: IconProps) {
       {showThumbnail && (
         <img
           alt=""
-          src={thumbnailBase64}
+          src={FsApi.getThumbnailUrl(entry)}
           onError={() => setThumbnailErr(true)}
           className={line(`
             max-w-full max-h-full
-            ${loading
+            ${false  // TODO
               ? 'w-6 h-6 bg-loading'
               : isVideo
                 ? `${isSmall ? 'border-l-2 border-r-2' : 'border-l-4 border-r-4'} border-black rounded-sm`

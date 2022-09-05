@@ -61,11 +61,14 @@ export class FsApi {
     return data
   }
 
-  static getThumbnailBase64 = async (path: string, config?: AxiosRequestConfig) => {
-    const { data } = await instance.get(`/api/fs/thumbnail?path=${path}`, config)
-    return data
+  // TODO: handle token
+  static getThumbnailUrl = (entry: IEntry) => {
+    const { name, parentPath } = entry
+    const path = `${parentPath}/${name}`
+    return `${BASE_URL}/api/fs/thumbnail?path=${path}&token=${'gagu9293'}`
   }
 
+  // TODO: handle token
   static getFileStreamUrl = (entry: IEntry) => {
     const { name, parentPath } = entry
     const path = `${parentPath}/${name}`
