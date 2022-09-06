@@ -215,3 +215,15 @@ export const getRootEntryPath = (rootEntry: IRootEntry | null) => {
   const { name, parentPath } = rootEntry
   return `${parentPath ? `${parentPath}/` : ''}${name}`
 }
+
+export const getPaddedNo = (currentIndex: number, total: number, options?: { minWidth?: number, hideTotal?: boolean }) => {
+  const {
+    minWidth = 2,
+    hideTotal = false,
+  } = options || { minWidth: 2, hideTotal: false }
+  const width = Math.max(String(total).length, minWidth)
+  const i = total === 0 ? -1 : currentIndex
+  const currentNo = String(i + 1).padStart(width, '0')
+  const totalNo = total.toString().padStart(width, '0')
+  return `${currentNo}${hideTotal ? '' : ` / ${totalNo}`}`
+}

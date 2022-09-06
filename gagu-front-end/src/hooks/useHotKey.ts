@@ -1,27 +1,26 @@
 import { useEffect } from 'react'
 
-interface useShortcutsProps {
+interface useHotKeyProps {
   type: 'keydown' | 'keyup'
   bindCondition: boolean
-  shortcutMap: {[KEY: string]: any}  // null | () => void
+  hotKeyMap: {[KEY: string]: any}  // null | () => void
 }
 
-export function useShortcuts(props: useShortcutsProps) {
-
+export function useHotKey(props: useHotKeyProps) {
   const {
     type,
     bindCondition,
-    shortcutMap,
+    hotKeyMap,
   } = props
 
   useEffect(() => {
-    const shortcutKeys = Object.keys(shortcutMap)
+    const hotKeyList = Object.keys(hotKeyMap)
     const listener = (e: any) => {
       const { key, shiftKey } = e
-      const shortcut = `${shiftKey ? 'Shift+' : ''}${key}`
-
-      if (shortcutKeys.includes(shortcut)) {
-        const fn = shortcutMap[shortcut]
+      const hotKey = `${shiftKey ? 'Shift+' : ''}${key}`
+      // console.log({ key, shiftKey })
+      if (hotKeyList.includes(hotKey)) {
+        const fn = hotKeyMap[hotKey]
         fn && fn()
       }
     }
@@ -29,5 +28,5 @@ export function useShortcuts(props: useShortcutsProps) {
     const unbind = () => document.removeEventListener(type, listener)
     bindCondition ? bind() : unbind()
     return unbind
-  }, [type, bindCondition, shortcutMap])
+  }, [type, bindCondition, hotKeyMap])
 }

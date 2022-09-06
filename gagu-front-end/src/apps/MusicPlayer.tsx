@@ -4,11 +4,12 @@ import { APP_ID_MAP } from '../utils/appList'
 import { AppComponentProps } from '../types'
 import { useFetch, useOpenOperation, usePlayInfo } from '../hooks'
 import { FsApi } from '../api'
-import { getReadableSize } from '../utils'
+import { getPaddedNo, getReadableSize } from '../utils'
 import SpectrumCanvas from '../components/SpectrumCanvas'
 import EntrySelector from '../components/EntrySelector'
 import VolumeSlider from '../components/VolumeSlider'
 import ProgressSlider from '../components/ProgressSlider'
+import { IconButton } from '../components/base/IconButton'
 
 const nextPlayMode: any = {
   order: 'repeat',
@@ -53,10 +54,9 @@ export default function MusicPlayer(props: AppComponentProps) {
 
   useEffect(() => {
     if (activeEntry) {
-      const title = `[${activeIndex + 1}/${matchedEntryList.length}] ${activeEntry.name}`
-      setWindowTitle(title)
+      setWindowTitle(activeEntry.name)
     }
-  }, [activeIndex, activeEntry, matchedEntryList, setWindowTitle])
+  }, [activeEntry, setWindowTitle])
 
   useEffect(() => {
     if (audioEl && activeEntryStreamUrl) {
@@ -180,8 +180,7 @@ export default function MusicPlayer(props: AppComponentProps) {
           {matchedEntryList.map((entry, entryIndex) => {
             const { name, size } = entry
             const isActive = entryIndex === activeIndex
-            const indexLen = Math.max(String(matchedEntryList.length).length, 2)
-            const indexStr = String(entryIndex + 1).padStart(indexLen, '0')
+            const indexNo = getPaddedNo(entryIndex, matchedEntryList.length, { minWidth: 2, hideTotal: true })
             const onClick = isActive ? handlePlayOrPause : () => setActiveIndex(entryIndex)
             return (
               <div
@@ -189,7 +188,7 @@ export default function MusicPlayer(props: AppComponentProps) {
                 className="px-2 py-1 text-xs text-white even:bg-black-50 hover:bg-black-100 flex items-center group"
                 onDoubleClick={onClick}
               >
-                <div className="mr-2 font-din text-3xl opacity-60 italic">{indexStr}.</div>
+                <div className="mr-2 font-din text-3xl opacity-60 italic">{indexNo}.</div>
                 <div className="flex-grow">
                   <div>{name}</div>
                   <div>
@@ -239,22 +238,24 @@ export default function MusicPlayer(props: AppComponentProps) {
                 style={base64 ? { backgroundImage: `url("${base64}")` } : undefined}
               />
               <div className="ml-2 text-xs text-pink-100 truncate">
-                <p className="truncate">{title} - {artist}</p>
+                <p className="truncate" title={`${title} - ${artist}`}>{title} - {artist}</p>
                 <p className="opacity-50">{album}</p>
-                <p className="opacity-50 font-din">{playInfo.currentTimeLabel} / {playInfo.durationLabel}</p>
+                <p className="opacity-50 font-din">
+                  {getPaddedNo(activeIndex, matchedEntryList.length, { minWidth: 2 })}
+                  &nbsp;-&nbsp;
+                  {playInfo.currentTimeLabel} / {playInfo.durationLabel}
+                </p>
               </div>
             </div>
             {/* buttons */}
             <div className="relative flex justify-end items-center w-2/5">
               {buttonList.map(({ title, icon, onClick }) => (
-                <div
+                <IconButton
                   key={title}
+                  icon={icon}
                   title={title}
-                  className="w-8 h-8 text-white cursor-pointer hover:bg-black-100 active:bg-black-200 flex justify-center items-center rounded"
                   onClick={onClick}
-                >
-                  {icon}
-                </div>
+                />
               ))}
             </div>
           </div>

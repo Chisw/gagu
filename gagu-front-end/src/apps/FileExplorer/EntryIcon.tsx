@@ -43,13 +43,9 @@ export default function Icon(props: IconProps) {
     return { extensionLabel, useThumbnail, isVideo, isFolder, entryIconType, callableAppId }
   }, [entry])
 
-  const requestThumbnail = useMemo(() => {
-    return useThumbnail && isInView
-  }, [useThumbnail, isInView])
-
   const showThumbnail = useMemo(() => {
-    return requestThumbnail && !thumbnailErr
-  }, [requestThumbnail, thumbnailErr])
+    return useThumbnail && isInView && !thumbnailErr
+  }, [useThumbnail, isInView, thumbnailErr])
 
   return (
     <div

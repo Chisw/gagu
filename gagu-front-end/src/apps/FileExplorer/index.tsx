@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import EntryIcon from './EntryIcon'
-import { useFetch, useDragSelect, useDragOperations, useShortcuts } from '../../hooks'
+import { useFetch, useDragSelect, useDragOperations, useHotKey } from '../../hooks'
 import { FsApi } from '../../api'
 import PathLink from './PathLink'
 import ToolBar, { IToolBarDisabledMap } from './ToolBar'
@@ -517,11 +517,11 @@ export default function FileExplorer(props: AppComponentProps) {
     },
   })
 
-  useShortcuts({
+  useHotKey({
     type: 'keyup',
     // bindCondition: isTopWindow && !newDirMode && !newTxtMode && !renameMode && !filterMode && !ContextMenu.isOpen(),
     bindCondition: isTopWindow && !newDirMode && !newTxtMode && !renameMode && !filterMode,
-    shortcutMap: {
+    hotKeyMap: {
       'Delete': disabledMap.delete ? null : handleDeleteClick,
       'Escape': () => setSelectedEntryList([]),
       'Shift+A': disabledMap.selectAll ? null : () => handleSelectAll(true),
