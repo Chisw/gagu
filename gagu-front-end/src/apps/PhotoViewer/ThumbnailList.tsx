@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { Fragment, useMemo } from 'react'
 import { FsApi } from '../../api'
 import { IEntry } from '../../types'
 import { line } from '../../utils'
@@ -11,6 +11,8 @@ interface ThumbnailListProps {
   onClick: (index: number) => void
 }
 
+const WIDTH = 48  // width 40 + margin 4 * 2
+
 export default function ThumbnailList(props: ThumbnailListProps) {
 
   const {
@@ -21,11 +23,13 @@ export default function ThumbnailList(props: ThumbnailListProps) {
     onClick,
   } = props
 
-  const left = useMemo(() => {
-    const width = 48  // width 40 + margin 4 * 2
-    const activeEntryCenterPoint = activeIndex * width + width / 2
+  const { left, startIndex, endIndex } = useMemo(() => {
+    const activeEntryCenterPoint = activeIndex * WIDTH + WIDTH / 2
     const left = windowWidth / 2 - activeEntryCenterPoint
-    return left
+    const viewOffset = Math.ceil(windowWidth / WIDTH / 2)
+    const startIndex = activeIndex - viewOffset
+    const endIndex = activeIndex + viewOffset
+    return { left, startIndex, endIndex }
   }, [windowWidth, activeIndex])
 
   return (
@@ -44,18 +48,27 @@ export default function ThumbnailList(props: ThumbnailListProps) {
           const src = FsApi.getThumbnailUrl(entry)
           const entryName = entry.name
           const isActive = entryIndex === activeIndex
-          return (
-            <div
-              key={entryName}
-              className={line(`
-                mx-1 w-10 h-10 cursor-pointer border-2 flex-shrink-0
-                bg-center bg-no-repeat bg-cover
-                ${isActive ? 'border-orange-500' : 'border-transparent hover:border-orange-700'}
-              `)}
-              style={{ backgroundImage: `url("${src}")` }}
-              onClick={() => onClick(matchedEntryList.findIndex(en => en.name === entryName))}
-            />
-          )
+          if (startIndex <= entryIndex && entryIndex <= endIndex) {
+            return (
+              <div
+                key={entryName}
+                className={line(`
+                  absolute top-0
+                  mx-1 w-10 h-10 border-2
+                  flex-shrink-0 cursor-pointer
+                  bg-center bg-no-repeat bg-cover bg-white-100
+                  ${isActive ? 'border-orange-500' : 'border-transparent hover:border-orange-700'}
+                `)}
+                style={{
+                  backgroundImage: `url("${src}")`,
+                  left: entryIndex * WIDTH,
+                }}
+                onClick={() => onClick(matchedEntryList.findIndex(en => en.name === entryName))}
+              />
+            )
+          } else {
+            return <Fragment key={entryName}></Fragment>
+          }
         })}
       </div>
     </div>

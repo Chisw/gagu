@@ -6,6 +6,7 @@ import { useOpenOperation, useHotKey } from '../../hooks'
 import ThumbnailList from './ThumbnailList'
 import Toolbar from './Toolbar'
 import Viewer from './Viewer'
+import { line } from '../../utils'
 
 export default function PhotoViewer(props: AppComponentProps) {
   const {
@@ -42,7 +43,6 @@ export default function PhotoViewer(props: AppComponentProps) {
   }, [activeEntry, setWindowTitle])
 
   const handlePrevOrNext = useCallback((offset: number) => {
-    console.log(offset)
     const max = matchedEntryList.length - 1
     let targetIndex = 0
     targetIndex = activeIndex + offset
@@ -68,11 +68,11 @@ export default function PhotoViewer(props: AppComponentProps) {
       <div className="gg-app-photo-gallery absolute inset-0 flex flex-col select-none">
 
         <div
-          className={`
+          className={line(`
             relative flex-grow group
             ${isLight ? 'bg-grid-light' : 'bg-grid-dark'}
             ${activeEntry ? 'cursor-zoom-in' : ''}
-          `}
+          `)}
           onClick={() => activeEntry && setViewerShow(true)}
         >
           {loading && <Spinner />}
