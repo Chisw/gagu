@@ -16,6 +16,7 @@ export function useHotKey(props: useHotKeyProps) {
   useEffect(() => {
     const hotKeyList = Object.keys(hotKeyMap)
     const listener = (e: any) => {
+      e.preventDefault()
       const { key, shiftKey } = e
       const hotKey = `${shiftKey ? 'Shift+' : ''}${key}`
       // console.log({ key, shiftKey })

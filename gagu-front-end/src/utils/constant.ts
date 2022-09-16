@@ -8,7 +8,7 @@ export const MAX_PAGE_SIZE = 200
 
 // sync back and front
 export const GEN_THUMBNAIL_VIDEO_LIST = ['mp4', 'mov', 'wmv', 'insv', 'mkv', 'avi', 'rm', 'rmvb']
-export const GEN_THUMBNAIL_IMAGE_LIST = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'ico', 'pbm']
+export const GEN_THUMBNAIL_IMAGE_LIST = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'ico', 'pbm', 'svg']
 export const GEN_THUMBNAIL_LIST = [
   ...GEN_THUMBNAIL_VIDEO_LIST,
   ...GEN_THUMBNAIL_IMAGE_LIST,

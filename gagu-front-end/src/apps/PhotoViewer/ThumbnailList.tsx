@@ -1,4 +1,4 @@
-import { Fragment, useMemo } from 'react'
+import { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
 import { FsApi } from '../../api'
 import { IEntry } from '../../types'
 import { line } from '../../utils'
@@ -11,7 +11,7 @@ interface ThumbnailListProps {
   onClick: (index: number) => void
 }
 
-const WIDTH = 48  // width 40 + margin 4 * 2
+const ITEM_WIDTH = 48  // width 40 + margin 4 * 2
 
 export default function ThumbnailList(props: ThumbnailListProps) {
 
@@ -23,26 +23,60 @@ export default function ThumbnailList(props: ThumbnailListProps) {
     onClick,
   } = props
 
-  const { left, startIndex, endIndex } = useMemo(() => {
-    const activeEntryCenterPoint = activeIndex * WIDTH + WIDTH / 2
-    const left = windowWidth / 2 - activeEntryCenterPoint
-    const viewOffset = Math.ceil(windowWidth / WIDTH / 2)
-    const startIndex = activeIndex - viewOffset
-    const endIndex = activeIndex + viewOffset
-    return { left, startIndex, endIndex }
-  }, [windowWidth, activeIndex])
+  const [wheelOffset, setWheelOffset] = useState(0)
+
+  useEffect(() => setWheelOffset(0), [activeIndex])
+
+  const { totalScrollWidth, left, startIndex, endIndex, isToLeft, isToRight } = useMemo(() => {
+    const totalScrollWidth = matchedEntryList.length * ITEM_WIDTH
+    const halfWindowWidth = windowWidth / 2
+    const minLeft = - (totalScrollWidth - halfWindowWidth)
+    const maxLeft = halfWindowWidth
+    const activeEntryCenterPoint = activeIndex * ITEM_WIDTH + ITEM_WIDTH / 2
+    // default left on active item
+    let left = halfWindowWidth - activeEntryCenterPoint
+
+    if (wheelOffset !== 0) {
+      left = left - wheelOffset
+    }
+
+    left = Math.max(left, minLeft)
+    left = Math.min(left, maxLeft)
+
+    const isToLeft = left === maxLeft
+    const isToRight = left === minLeft
+    const inViewCount = Math.ceil(windowWidth / ITEM_WIDTH)
+    const startIndex = -Math.ceil(left / ITEM_WIDTH)
+    const endIndex = startIndex + inViewCount
+
+    return { totalScrollWidth, left, startIndex, endIndex, isToLeft, isToRight }
+  }, [windowWidth, activeIndex, matchedEntryList, wheelOffset])
+
+  const handleMouseWheel = useCallback((e: any) => {
+    const slowDownTimes = 4
+    const delta = e.deltaY / slowDownTimes
+    const canGoLeft = !isToLeft && delta < 0
+    const canGoRight = !isToRight && delta > 0
+    if (canGoLeft || canGoRight) {
+      setWheelOffset(wheelOffset + delta)
+    }
+  }, [wheelOffset, isToLeft, isToRight])
 
   return (
     <div
       className={line(`
-        relative bg-gray-800 flex-shrink-0
+        relative bg-gray-900 flex-shrink-0
         transition-height duration-200 overflow-hidden
         ${show ? 'h-12' : 'h-0'}
       `)}
+      onWheel={handleMouseWheel}
     >
       <div
-        className="absolute mt-1 flex justify-center items-center transition-spacing duration-300"
-        style={{ left }}
+        className="absolute h-full flex justify-center items-center transition-spacing duration-300 bg-white-100"
+        style={{
+          left,
+          width: totalScrollWidth,
+        }}
       >
         {show && matchedEntryList.map((entry, entryIndex) => {
           const src = FsApi.getThumbnailUrl(entry)
@@ -54,14 +88,14 @@ export default function ThumbnailList(props: ThumbnailListProps) {
                 key={entryName}
                 className={line(`
                   absolute top-0
-                  mx-1 w-10 h-10 border-2
+                  mx-1 mt-1 w-10 h-10 border-2 bg-clip-padding
                   flex-shrink-0 cursor-pointer
-                  bg-center bg-no-repeat bg-cover bg-white-100
+                  bg-center bg-no-repeat bg-cover
                   ${isActive ? 'border-orange-500' : 'border-transparent hover:border-orange-700'}
                 `)}
                 style={{
                   backgroundImage: `url("${src}")`,
-                  left: entryIndex * WIDTH,
+                  left: entryIndex * ITEM_WIDTH,
                 }}
                 onClick={() => onClick(matchedEntryList.findIndex(en => en.name === entryName))}
               />

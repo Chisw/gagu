@@ -52,6 +52,7 @@ export const GEN_THUMBNAIL_IMAGE_LIST = [
   'webp',
   'pbm',
   'bmp',
+  'svg',
 ]
 export const GEN_THUMBNAIL_LIST = [
   ...GEN_THUMBNAIL_VIDEO_LIST,
@@ -311,9 +312,8 @@ export const getThumbnailPath = async (path: string) => {
 export const completeNestedPath = (path: string) => {
   const list = path.split('/').filter(Boolean).slice(0, -1)
   const nestedPathList = list.map((dirName, index) => {
-    const prefix = index === 0
-      ? ''
-      : '/' + list.filter((d, i) => i < index).join('/')
+    const prefix =
+      index === 0 ? '' : '/' + list.filter((d, i) => i < index).join('/')
     return `${prefix}/${dirName}`
   })
   nestedPathList.forEach((path) => {

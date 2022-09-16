@@ -62,17 +62,20 @@ export class FsApi {
   }
 
   // TODO: handle token
-  static getThumbnailUrl = (entry: IEntry) => {
-    const { name, parentPath } = entry
-    const path = `${parentPath}/${name}`
-    return `${BASE_URL}/api/fs/thumbnail?path=${path}&token=${'gagu9293'}`
-  }
-
-  // TODO: handle token
   static getFileStreamUrl = (entry: IEntry) => {
     const { name, parentPath } = entry
     const path = `${parentPath}/${name}`
     return `${BASE_URL}/api/fs/stream?path=${path}&token=${'gagu9293'}`
+  }
+
+  // TODO: handle token
+  static getThumbnailUrl = (entry: IEntry) => {
+    if (entry.extension === 'svg') {
+      return this.getFileStreamUrl(entry)
+    }
+    const { name, parentPath } = entry
+    const path = `${parentPath}/${name}`
+    return `${BASE_URL}/api/fs/thumbnail?path=${path}&token=${'gagu9293'}`
   }
 
   static startDownload = (parentPath: string, downloadName: string, cmd: string) => {

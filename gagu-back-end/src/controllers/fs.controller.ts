@@ -117,8 +117,8 @@ export class FsController {
   ) {
     console.log('FS/THUMBNAIL:', path)
     try {
-      const filePath = await getThumbnailPath(path)
       if (token && token.length === 8) {
+        const filePath = await getThumbnailPath(path)
         response.sendFile(filePath)
       } else {
         response.end('TOKEN ERROR')

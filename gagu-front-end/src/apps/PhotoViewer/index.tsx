@@ -60,6 +60,8 @@ export default function PhotoViewer(props: AppComponentProps) {
       'Shift+ArrowRight': () => handlePrevOrNext(6),
       'Shift+ArrowLeft': () => handlePrevOrNext(-6),
       'Enter': () => setViewerShow(true),
+      'Shift': () => setIsLight(!isLight),
+      ' ': () => setThumbnailListShow(!thumbnailListShow),
     },
   })
 
@@ -96,6 +98,7 @@ export default function PhotoViewer(props: AppComponentProps) {
             thumbnailListShow={thumbnailListShow}
             setIsLight={setIsLight}
             setThumbnailListShow={setThumbnailListShow}
+            handlePrevOrNext={handlePrevOrNext}
           />
 
         </div>

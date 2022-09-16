@@ -15,6 +15,7 @@ interface ToolbarProps {
   thumbnailListShow: boolean
   setIsLight: (is: boolean) => void
   setThumbnailListShow: (is: boolean) => void
+  handlePrevOrNext: (offset: number) => void
 }
 
 export default function Toolbar(props: ToolbarProps) {
@@ -28,6 +29,7 @@ export default function Toolbar(props: ToolbarProps) {
     thumbnailListShow,
     setIsLight,
     setThumbnailListShow,
+    handlePrevOrNext,
   } = props
 
   const [sizeInfo, setSizeInfo] = useState({ width: 0, height: 0 })
@@ -52,6 +54,11 @@ export default function Toolbar(props: ToolbarProps) {
   const buttonList = useMemo(() => {
     return [
       {
+        icon: <SvgIcon.ChevronLeft size={14} />,
+        title: '上一张',
+        onClick: () => handlePrevOrNext(-1),
+      },
+      {
         icon: <SvgIcon.LayoutBottom size={14} />,
         title: '更多',
         disabled: !matchedEntryList.length,
@@ -66,7 +73,12 @@ export default function Toolbar(props: ToolbarProps) {
         icon: <SvgIcon.Download size={14} />,
         title: '下载',
         disabled: !activeEntry,
-        onClick: () => { },
+        onClick: () => {
+          if (activeEntry) {
+            const { name, parentPath } = activeEntry
+            FsApi.startDownload(parentPath, name, '')
+          }
+        },
       },
       {
         icon: <SvgIcon.Info size={14} />,
@@ -80,8 +92,13 @@ export default function Toolbar(props: ToolbarProps) {
         disabled: !activeEntry,
         onClick: () => { },
       },
+      {
+        icon: <SvgIcon.ChevronRight size={14} />,
+        title: '下一张',
+        onClick: () => handlePrevOrNext(1),
+      },
     ]
-  }, [thumbnailListShow, isLight, getExifData, activeEntry, matchedEntryList, setIsLight, setThumbnailListShow])
+  }, [thumbnailListShow, isLight, getExifData, activeEntry, matchedEntryList, setIsLight, setThumbnailListShow, handlePrevOrNext])
 
   return (
     <>
@@ -115,7 +132,7 @@ export default function Toolbar(props: ToolbarProps) {
           ))}
         </div>
         <div className="w-28 font-din text-right">
-          {sizeInfo.width} &times; {sizeInfo.height}
+          {sizeInfo.width} &times; {sizeInfo.height}PX
           &nbsp;&nbsp;
           {getReadableSize(activeEntry?.size || 0)}
         </div>
