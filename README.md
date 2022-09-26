@@ -89,7 +89,7 @@ $ yarn start
 1. Update following version tags:
 
 ```
-./gagu-back-end/src/utils/index.ts - GAGU_VERSION
+./gagu-back-end/src/utils/constant.ts - GAGU_VERSION
 ./package.json - version field
 ./README.md - version tag
 ```

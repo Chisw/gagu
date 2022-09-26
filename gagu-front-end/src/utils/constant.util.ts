@@ -1,4 +1,5 @@
 const { protocol, host } = window.location
+
 export const BASE_URL = process.env.REACT_APP_BASE_URL || `${protocol}//${host}`
 
 export const GAGU_AUTH_KEY = 'GAGU_AUTHORIZATION_KEY'

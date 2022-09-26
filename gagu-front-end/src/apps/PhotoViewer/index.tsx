@@ -1,6 +1,6 @@
 import { Spinner } from '../../components/base'
 import { useEffect, useMemo, useRef, useState, useCallback } from 'react'
-import { APP_ID_MAP } from '../../utils/appList'
+import { APP_ID_MAP } from '..'
 import { AppComponentProps } from '../../types'
 import { useOpenOperation, useHotKey } from '../../hooks'
 import ThumbnailList from './ThumbnailList'
@@ -67,7 +67,7 @@ export default function PhotoViewer(props: AppComponentProps) {
 
   return (
     <>
-      <div className="gg-app-photo-gallery absolute inset-0 flex flex-col select-none">
+      <div className="gg-app-photo-viewer absolute inset-0 flex flex-col select-none">
 
         <div
           className={line(`

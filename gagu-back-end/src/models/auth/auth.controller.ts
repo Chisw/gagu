@@ -1,9 +1,12 @@
-import { Controller, Post, Body } from '@nestjs/common'
-import { Public, readUserListData } from '../utils'
+import { Controller, Post, Body, Get } from '@nestjs/common'
+import { Public } from 'src/common/decorators/public.decorator'
 import * as md5 from 'md5'
+import { AuthService } from './auth.service'
 
 @Controller('auth')
 export class AuthController {
+  constructor(private readonly authService: AuthService) {}
+
   @Public()
   @Post('login')
   login(
@@ -12,8 +15,7 @@ export class AuthController {
   ) {
     console.log('AUTH/LOGIN:', ' username: ', username)
 
-    const { userList } = readUserListData()
-    const user = userList.find((u) => u.username === username)
+    const user = this.authService.getUser(username)
 
     if (user) {
       if (user.password === password) {
@@ -35,6 +37,15 @@ export class AuthController {
         authCode: '',
         msg: '用户不存在',
       }
+    }
+  }
+
+  @Get('users')
+  getUserList() {
+    const userList = this.authService.getUserList()
+    return {
+      success: true,
+      rows: userList,
     }
   }
 

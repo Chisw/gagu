@@ -1,13 +1,13 @@
 import { IApp } from '../types'
-import FileExplorer from '../apps/FileExplorer'
-import TextEditor from '../apps/TextEditor'
-import PhotoViewer from '../apps/PhotoViewer'
-import MusicPlayer from '../apps/MusicPlayer'
-import VideoPlayer from '../apps/VideoPlayer'
-import Settings from '../apps/Settings'
-import BaiduMap from '../apps/BaiduMap'
-import PQINA from '../apps/PQINA'
-import PS from '../apps/PS'
+import FileExplorer from './FileExplorer'
+import TextEditor from './TextEditor'
+import PhotoViewer from './PhotoViewer'
+import MusicPlayer from './Player/MusicPlayer'
+import VideoPlayer from './Player/VideoPlayer'
+import Settings from './Settings'
+import BaiduMap from './BaiduMap'
+import PQINA from './PQINA'
+import PS from './PS'
 
 export const APP_ID_MAP = {
   fileExplorer: 'file-explorer',
@@ -23,7 +23,7 @@ export const APP_ID_MAP = {
   webamp: 'webamp',
 }
 
-const APP_LIST: IApp[] = [
+export const APP_LIST: IApp[] = [
   {
     id: APP_ID_MAP.fileExplorer,
     runningId: 0,
@@ -142,5 +142,3 @@ const APP_LIST: IApp[] = [
 ]
 
 export const CALLABLE_APP_LIST = APP_LIST.filter(app => !!app.matchList)
-
-export default APP_LIST

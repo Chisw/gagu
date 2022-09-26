@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { APP_ID_MAP } from '../utils/appList'
-import { AppComponentProps } from '../types'
-import { useOpenOperation, usePlayInfo } from '../hooks'
-import ProgressSlider from '../components/ProgressSlider'
-import { line } from '../utils'
-import { SvgIcon } from '../components/base'
-import VolumeSlider from '../components/VolumeSlider'
+import { APP_ID_MAP } from '..'
+import { AppComponentProps } from '../../types'
+import { useOpenOperation, usePlayInfo } from '../../hooks'
+import ProgressSlider from './common/ProgressSlider'
+import { line } from '../../utils'
+import { SvgIcon } from '../../components/base'
+import VolumeSlider from './common/VolumeSlider'
 
 export default function VideoPlayer(props: AppComponentProps) {
 

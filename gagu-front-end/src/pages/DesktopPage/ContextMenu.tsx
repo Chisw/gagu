@@ -3,7 +3,7 @@ import { useRecoilState } from 'recoil'
 import { SvgIcon } from '../../components/base'
 import { useClickAway } from '../../hooks'
 import { line } from '../../utils'
-import { contextMenuDataState } from '../../utils/state'
+import { contextMenuDataState } from '../../states'
 
 export default function ContextMenu() {
 

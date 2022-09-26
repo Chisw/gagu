@@ -7,6 +7,11 @@ export class AuthApi {
     return data
   }
 
+  static getUserList = async () => {
+    const { data } = await instance.get('/api/auth/users')
+    return data
+  }
+
   static shutdown = async () => {
     const { data } = await instance.post('/api/auth/shutdown')
     return data

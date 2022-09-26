@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useRecoilState } from 'recoil'
 import { FsApi } from '../api'
-import { openOperationState } from '../utils/state'
+import { openOperationState } from '../states'
 import { IEntry } from '../types'
 
 export function useOpenOperation(appId: string) {

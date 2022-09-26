@@ -11,7 +11,7 @@ import Confirmor, { ConfirmorProps } from '../../components/Confirmor'
 import Side from './Side'
 import { pick, throttle } from 'lodash'
 import { Pagination, SvgIcon } from '../../components/base'
-import { CALLABLE_APP_LIST } from '../../utils/appList'
+import { CALLABLE_APP_LIST } from '..'
 import toast from 'react-hot-toast'
 
 import {
@@ -33,7 +33,7 @@ import {
   sizeMapState,
   transferTaskListState,
   transferSignalState,
-} from '../../utils/state'
+} from '../../states'
 import {
   AppComponentProps,
   EntryType,

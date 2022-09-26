@@ -1,4 +1,4 @@
-import { IApp } from './app'
+import { IApp } from './app.type'
 
 export enum EntryType {
   directory = 'directory',

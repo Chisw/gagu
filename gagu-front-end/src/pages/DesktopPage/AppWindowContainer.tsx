@@ -1,4 +1,4 @@
-import { runningAppListState } from '../../utils/state'
+import { runningAppListState } from '../../states'
 import { useRecoilState } from 'recoil'
 import AppWindow from '../../components/AppWindow'
 

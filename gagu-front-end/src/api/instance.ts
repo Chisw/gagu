@@ -1,5 +1,5 @@
 import axios, { AxiosError } from 'axios'
-import { BASE_URL, GAGU_AUTH_KEY } from '../utils/constant'
+import { BASE_URL, GAGU_AUTH_KEY } from '../utils'
 import toast from 'react-hot-toast'
 
 const instance = axios.create({

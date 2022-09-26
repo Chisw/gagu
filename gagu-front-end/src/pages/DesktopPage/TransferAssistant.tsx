@@ -7,7 +7,7 @@ import { SvgIcon } from '../../components/base'
 import { useFetch } from '../../hooks'
 import { ITransferTask, IUploadTransferTask, TransferTaskStatus, TransferTaskStatusType, TransferTaskType } from '../../types'
 import { getReadableSize, line } from '../../utils'
-import { transferSignalState, transferTaskListState } from '../../utils/state'
+import { transferSignalState, transferTaskListState } from '../../states'
 
 const statusIconMap = {
   waiting: <SvgIcon.Time />,

@@ -1,6 +1,6 @@
 import { useRef } from 'react'
-import { useClickAway } from '../hooks'
-import { line } from '../utils'
+import { useClickAway } from '../../../hooks'
+import { line } from '../../../utils'
 
 interface VolumeSliderProps {
   show: boolean

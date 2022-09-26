@@ -1,6 +1,6 @@
-export * from './app'
-export * from './entry'
-export * from './transfer'
+export * from './app.type'
+export * from './entry.type'
+export * from './transfer.type'
 
 export interface IHistory {
   position: number

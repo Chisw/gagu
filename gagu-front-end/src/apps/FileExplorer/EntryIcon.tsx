@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { EntryType, IEntry } from '../../types'
 import { ENTRY_ICON_LIST, GEN_THUMBNAIL_LIST, GEN_THUMBNAIL_VIDEO_LIST, line } from '../../utils'
-import { CALLABLE_APP_LIST } from '../../utils/appList'
+import { CALLABLE_APP_LIST } from '..'
 import { FsApi } from '../../api'
 
 interface IconProps {

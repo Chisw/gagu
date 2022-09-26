@@ -1,6 +1,6 @@
 import { Duration } from 'luxon'
 import { useCallback, useMemo, useState } from 'react'
-import { line } from '../utils'
+import { line } from '../../../utils'
 
 interface ProgressSliderProps {
   duration: number

@@ -2,7 +2,7 @@ import { IApp } from '../types'
 import { Rnd } from 'react-rnd'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRecoilState } from 'recoil'
-import { runningAppListState, topWindowIndexState } from '../utils/state'
+import { runningAppListState, topWindowIndexState } from '../states'
 import { line } from '../utils'
 import { SvgIcon } from './base'
 

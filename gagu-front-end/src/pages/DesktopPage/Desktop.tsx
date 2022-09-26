@@ -3,7 +3,7 @@ import { useRecoilState } from 'recoil'
 import EntryIcon from '../../apps/FileExplorer/EntryIcon'
 import NameLine from '../../apps/FileExplorer/NameLine'
 import { line } from '../../utils'
-import { rootInfoState } from '../../utils/state'
+import { rootInfoState } from '../../states'
 
 export default function Desktop() {
 

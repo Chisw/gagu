@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import ToolButton from '../components/ToolButton'
-import { copy, ENTRY_ICON_LIST } from '../utils'
-import { FsApi } from '../api'
-import { APP_ID_MAP } from '../utils/appList'
-import { AppComponentProps } from '../types'
-import { SvgIcon } from '../components/base'
-import { useOpenOperation, useFetch } from '../hooks'
+import ToolButton from '../../components/ToolButton'
+import { copy, ENTRY_ICON_LIST } from '../../utils'
+import { FsApi } from '../../api'
+import { APP_ID_MAP } from '..'
+import { AppComponentProps } from '../../types'
+import { SvgIcon } from '../../components/base'
+import { useOpenOperation, useFetch } from '../../hooks'
 
 export default function TextEditor(props: AppComponentProps) {
 
