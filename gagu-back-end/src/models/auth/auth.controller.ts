@@ -2,6 +2,7 @@ import { Controller, Post, Body, Get } from '@nestjs/common'
 import { Public } from 'src/common/decorators/public.decorator'
 import * as md5 from 'md5'
 import { AuthService } from './auth.service'
+import { User, IUser } from 'src/types'
 
 @Controller('auth')
 export class AuthController {
@@ -10,8 +11,8 @@ export class AuthController {
   @Public()
   @Post('login')
   login(
-    @Body('username') username: string,
-    @Body('password') password: string,
+    @Body('username') username: User.Username,
+    @Body('password') password: User.Password,
   ) {
     console.log('AUTH/LOGIN:', ' username: ', username)
 
@@ -19,9 +20,12 @@ export class AuthController {
 
     if (user) {
       if (user.password === password) {
+        const authorization = md5(Math.random().toString())
+        this.authService.addLoggedInMap(authorization, username)
+        console.log(this.authService.getLoggedInMap())
         return {
           success: true,
-          authorization: md5(Math.random().toString()),
+          authorization,
           msg: 'OK',
         }
       } else {
@@ -46,6 +50,14 @@ export class AuthController {
     return {
       success: true,
       rows: userList,
+    }
+  }
+
+  @Post('user')
+  addUser(@Body('user') user: IUser) {
+    this.authService.addUser(user)
+    return {
+      success: true,
     }
   }
 

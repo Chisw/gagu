@@ -70,7 +70,7 @@ export const initConfig = () => {
       password: md5('9293'),
       rootEntryList: [],
       permissionList: [],
-      validUntil: 0,
+      expiredAt: 0,
     }
     writeUserListData([adminUser])
   }

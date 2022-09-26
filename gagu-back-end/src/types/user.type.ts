@@ -1,10 +1,16 @@
+export namespace User {
+  export type Token = string
+  export type Username = string
+  export type Password = string
+}
+
 export interface IUser {
   isAdmin: boolean
-  username: string
-  password: string
+  username: User.Username
+  password: User.Password
   rootEntryList: string[]
   permissionList: string[]
-  validUntil: number
+  expiredAt: number
 }
 
 export interface IUserListData {
