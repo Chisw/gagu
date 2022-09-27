@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon'
 import { IOffsetInfo, IRectInfo } from '../types'
 
 export const copy = (str: string) => {
@@ -13,6 +14,11 @@ export const line = (str: string) => str
   .replace(/\n/g, ' ')
   .replace(/\s+/g, ' ')
   .trim()
+
+export const getAtTime = (millis: number) => {
+  if (!millis) return ''
+  return DateTime.fromMillis(millis).toFormat('yyyy-MM-dd HH:mm:ss')
+}
 
 interface getReadableSizeOption {
   keepFloat?: boolean

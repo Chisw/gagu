@@ -24,7 +24,9 @@ const playModeIcon: any = {
 }
 
 export default function MusicPlayer(props: AppComponentProps) {
+
   const { setWindowTitle, setWindowLoading } = props
+
   const {
     matchedEntryList,
     activeIndex,

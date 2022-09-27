@@ -10,6 +10,7 @@ import VolumeSlider from './common/VolumeSlider'
 export default function VideoPlayer(props: AppComponentProps) {
 
   const { setWindowTitle, setWindowLoading } = props
+
   const {
     // matchedEntryList,
     // activeIndex,

@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace User {
   export type Token = string
   export type Username = string
@@ -10,10 +11,12 @@ export interface IUser {
   password: User.Password
   rootEntryList: string[]
   permissionList: string[]
+  createdAt: number
   expiredAt: number
+  isForbidden: boolean
 }
 
-export interface IUserListData {
+export interface IUsersData {
   version: string
   userList: IUser[]
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { EntryType, IDisk, IEntry, IRootEntry } from 'src/types'
+import { EntryType, IDisk, IEntry, IRootEntry, User } from 'src/types'
 import { exec } from 'child_process'
 import {
   createReadStream,
@@ -12,7 +12,7 @@ import {
   writeFileSync,
 } from 'fs'
 import {
-  GAGU_CONFIG_PATH,
+  GAGU_PATH,
   GAGU_VERSION,
   getExtension,
   OS,
@@ -163,7 +163,7 @@ export class FsService {
       version: GAGU_VERSION,
       platform: OS.platform,
       deviceName: OS.hostname,
-      desktopEntryList: this.getEntryList(`${GAGU_CONFIG_PATH}/desktop`),
+      desktopEntryList: this.getEntryList(`${GAGU_PATH.ROOT}/desktop`),
       rootEntryList,
     }
   }
@@ -281,7 +281,7 @@ export class FsService {
   async getThumbnailPath(path: string) {
     const { mtimeMs } = statSync(path)
     const thumbnailId = md5(`${path}-${mtimeMs}`)
-    const thumbnailDirPath = `${GAGU_CONFIG_PATH}/thumbnail`
+    const thumbnailDirPath = `${GAGU_PATH.ROOT}/thumbnail`
     const thumbnailFilePath = `${thumbnailDirPath}/${thumbnailId}`
 
     if (!getExists(thumbnailFilePath)) {
@@ -321,5 +321,9 @@ export class FsService {
     // const bitmap = readFileSync(thumbnailFilePath)
     // const base64 = Buffer.from(bitmap).toString('base64')
     // return `data:image/png;base64,${base64}`
+  }
+
+  getAvatarPath(username: User.Username) {
+    return `${GAGU_PATH.ROOT}/public/avatar/${username}`
   }
 }

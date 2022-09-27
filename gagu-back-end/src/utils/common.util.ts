@@ -1,13 +1,11 @@
 import { exec, spawn } from 'child_process'
-import { accessSync, constants, mkdirSync, writeFileSync } from 'fs'
-import {
-  GAGU_CONFIG_PATH,
-  GAGU_VERSION,
-  OS,
-  USER_LIST_DATA_PATH,
-} from './constant.util'
+import { accessSync, constants, mkdirSync } from 'fs'
+import { GAGU_PATH, OS } from './constant.util'
 import * as md5 from 'md5'
-import { IUser, IUserListData } from 'src/types'
+import { IUser } from 'src/types'
+import { writeUsersData } from './user.util'
+
+export const genToken = () => md5(Math.random().toString())
 
 export const openInBrowser = (url: string) => {
   if (OS.isMacOS) {
@@ -49,29 +47,25 @@ export const completeNestedPath = (path: string) => {
   })
 }
 
-export const writeUserListData = (userList: IUser[]) => {
-  const userListData: IUserListData = {
-    version: GAGU_VERSION,
-    userList,
-  }
-  writeFileSync(USER_LIST_DATA_PATH, JSON.stringify(userListData))
-}
-
 export const initConfig = () => {
-  completeNestedPath(`${GAGU_CONFIG_PATH}/thumbnail/PLACEHOLDER`)
-  completeNestedPath(`${GAGU_CONFIG_PATH}/data/PLACEHOLDER`)
-  completeNestedPath(`${GAGU_CONFIG_PATH}/log/PLACEHOLDER`)
-  completeNestedPath(`${GAGU_CONFIG_PATH}/desktop/PLACEHOLDER`)
-  completeNestedPath(`${GAGU_CONFIG_PATH}/public/PLACEHOLDER`)
-  if (!getExists(USER_LIST_DATA_PATH)) {
+  completeNestedPath(`${GAGU_PATH.ROOT}/thumbnail/PLACEHOLDER`)
+  completeNestedPath(`${GAGU_PATH.ROOT}/data/PLACEHOLDER`)
+  completeNestedPath(`${GAGU_PATH.ROOT}/log/PLACEHOLDER`)
+  completeNestedPath(`${GAGU_PATH.ROOT}/desktop/PLACEHOLDER`)
+  completeNestedPath(`${GAGU_PATH.ROOT}/public/PLACEHOLDER`)
+  completeNestedPath(`${GAGU_PATH.ROOT}/public/avatar/PLACEHOLDER`)
+  completeNestedPath(`${GAGU_PATH.ROOT}/public/lib/PLACEHOLDER`)
+  if (!getExists(GAGU_PATH.USERS_DATA)) {
     const adminUser: IUser = {
       isAdmin: true,
       username: 'gagu',
       password: md5('9293'),
       rootEntryList: [],
       permissionList: [],
+      createdAt: Date.now(),
       expiredAt: 0,
+      isForbidden: false,
     }
-    writeUserListData([adminUser])
+    writeUsersData([adminUser])
   }
 }

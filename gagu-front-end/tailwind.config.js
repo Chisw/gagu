@@ -166,7 +166,7 @@ module.exports = {
     extend: {
       display: ['active', 'group-hover'],
       color: ['active'],
-      backgroundColor: ['active', 'even'],
+      backgroundColor: ['active', 'odd', 'even'],
       opacity: ['active', 'group-hover'],
       visibility: ['active', 'group-hover'],
       brightness: ['hover', 'active'],

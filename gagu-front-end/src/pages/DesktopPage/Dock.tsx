@@ -3,11 +3,11 @@ import { useRecoilState } from 'recoil'
 import { openOperationState, runningAppListState, topWindowIndexState, rootInfoState, contextMenuDataState } from '../../states'
 import { APP_LIST, APP_ID_MAP } from '../../apps'
 import { IApp, IContextMenuItem, IRootInfo } from '../../types'
-import { line } from '../../utils'
+import { line, TOKEN } from '../../utils'
 import { DateTime } from 'luxon'
 import { useFetch } from '../../hooks'
 import { AuthApi, FsApi } from '../../api'
-import { DOCUMENT_TITLE, GAGU_AUTH_KEY } from '../../utils'
+import { DOCUMENT_TITLE } from '../../utils'
 import { SvgIcon } from '../../components/base'
 import { useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
@@ -75,7 +75,7 @@ export default function Dock() {
         text: '退出',
         icon: <SvgIcon.Logout />,
         onClick: () => {
-          localStorage.removeItem(GAGU_AUTH_KEY)
+          TOKEN.remove()
           navigate('/login')
         },
       },
@@ -141,7 +141,7 @@ export default function Dock() {
       },
       {
         icon: <SvgIcon.Close />,
-        label: '关闭已开窗口',
+        label: '关闭所有窗口',
         isShow: hasRunning,
         onClick: () => {
           const list = runningAppList.filter(app => app.id !== appId)

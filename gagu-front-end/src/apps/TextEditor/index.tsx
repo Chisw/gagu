@@ -11,6 +11,7 @@ import { useOpenOperation, useFetch } from '../../hooks'
 export default function TextEditor(props: AppComponentProps) {
 
   const { setWindowTitle, setWindowLoading } = props
+
   const {
     // matchedEntryList,
     // activeIndex,

@@ -3,9 +3,9 @@ import { useCallback, useState } from 'react'
 import { useFetch } from '../hooks'
 import { AuthApi } from '../api'
 import md5 from 'md5'
-import { GAGU_AUTH_KEY } from '../utils'
 import toast from 'react-hot-toast'
 import { SvgIcon } from '../components/base'
+import { TOKEN } from '../utils'
 
 export default function LoginPage() {
 
@@ -13,7 +13,7 @@ export default function LoginPage() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
-  const { fetch: login } = useFetch(AuthApi.login)
+  const { fetch: login, loading } = useFetch(AuthApi.login)
 
   const handleLogin = useCallback(async () => {
     const formData = {
@@ -22,7 +22,7 @@ export default function LoginPage() {
     }
     const res = await login(formData)
     if (res.success) {
-      localStorage.setItem(GAGU_AUTH_KEY, res.authorization)
+      TOKEN.set(res.token)
       navigate('/')
     } else {
       toast.error(res.msg)
@@ -58,6 +58,7 @@ export default function LoginPage() {
                   maxLength={16}
                   value={password}
                   onChange={(e: any) => setPassword(e.target.value)}
+                  onKeyUp={(e: any) => e.key === 'Enter' && handleLogin()}
                 />
               </code>
               <button
@@ -65,7 +66,10 @@ export default function LoginPage() {
                 className="absolute top-0 right-0 px-3 h-full hover:bg-black-200"
                 onClick={handleLogin}
               >
-                <SvgIcon.ArrowRight className="text-white"/>
+                {loading
+                  ? <SvgIcon.Loader className="text-white"/>
+                  : <SvgIcon.ArrowRight className="text-white"/>
+                }
               </button>
             </div>
           </div>

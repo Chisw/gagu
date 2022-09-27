@@ -9,12 +9,14 @@ import Viewer from './Viewer'
 import { line } from '../../utils'
 
 export default function PhotoViewer(props: AppComponentProps) {
+
   const {
     isTopWindow,
     windowSize: { width: windowWidth },
     setWindowTitle,
     setWindowLoading,
   } = props
+
   const {
     matchedEntryList,
     activeIndex,

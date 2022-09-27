@@ -1,32 +1,15 @@
 import { Injectable } from '@nestjs/common'
-import { readFileSync, writeFileSync } from 'fs'
-import { User, IUser, IUserListData } from 'src/types'
-import { GAGU_VERSION, USER_LIST_DATA_PATH } from 'src/utils'
+import { User, IUser } from 'src/types'
+import { readUsersData, writeUsersData } from 'src/utils'
 
 @Injectable()
 export class AuthService {
   private userList: IUser[] = []
-  private loggedInUserMap: { [TOKEN: User.Token]: User.Username } = {}
+  private loggedInMap: { [TOKEN: User.Token]: User.Username } = {}
 
   constructor() {
-    const list = this.readUserListData()
+    const list = readUsersData()
     this.userList = list
-  }
-
-  readUserListData() {
-    const dataStr = readFileSync(USER_LIST_DATA_PATH).toString('utf-8')
-    const userListData: IUserListData = JSON.parse(dataStr)
-    const { version, userList } = userListData
-    // TODO: handle user version
-    return userList
-  }
-
-  writeUserListData() {
-    const userListData: IUserListData = {
-      version: GAGU_VERSION,
-      userList: this.userList,
-    }
-    writeFileSync(USER_LIST_DATA_PATH, JSON.stringify(userListData))
   }
 
   getUserList() {
@@ -39,23 +22,34 @@ export class AuthService {
 
   addUser(user: IUser) {
     this.userList.push(user)
-    this.writeUserListData()
+    writeUsersData(this.userList)
+  }
+
+  updateUser(user: IUser) {
+    const index = this.userList.findIndex((u) => u.username === user.username)
+    this.userList.splice(index, 1, user)
+    writeUsersData(this.userList)
+  }
+
+  removeUser(username: User.Username) {
+    this.userList = this.userList.filter((u) => u.username !== username)
+    writeUsersData(this.userList)
   }
 
   addLoggedInMap(token: User.Token, username: User.Username) {
-    this.loggedInUserMap[token] = username
+    this.loggedInMap[token] = username
   }
 
   getLoggedInMap() {
-    return this.loggedInUserMap
+    return this.loggedInMap
   }
 
   getLoggedInUser(token: string) {
-    const loggedInUser = this.loggedInUserMap[token] as User.Username | undefined
+    const loggedInUser = this.loggedInMap[token] as User.Username | undefined
     return loggedInUser
   }
 
   removeLoggedInUser(token: string) {
-    delete this.loggedInUserMap[token]
+    delete this.loggedInMap[token]
   }
 }

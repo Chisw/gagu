@@ -2,7 +2,8 @@ import { Module } from '@nestjs/common'
 import { APP_GUARD } from '@nestjs/core'
 import { ServeStaticModule } from '@nestjs/serve-static'
 import { join } from 'path'
-import { IS_DEV } from 'src/utils'
+import { AuthService } from 'src/models/auth/auth.service'
+import { IS_DEV } from '../utils'
 import { ApiGuard } from './guards/api.guard'
 
 // build before use
@@ -19,6 +20,6 @@ const rootPath = IS_DEV ? devRootPath : prodRootPath
       { rootPath, serveRoot: '/lock' },
     ),
   ],
-  providers: [{ provide: APP_GUARD, useClass: ApiGuard }],
+  providers: [{ provide: APP_GUARD, useClass: ApiGuard }, AuthService],
 })
 export class CommonModule {}
