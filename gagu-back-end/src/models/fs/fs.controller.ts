@@ -134,7 +134,7 @@ export class FsController {
 
   @Get('tags')
   async getTags(@Query('path') path: string) {
-    console.log('FS/TAGS:', path)
+    console.log('GET /FS/TAGS:', path)
     try {
       const data = await this.fsService.getTags(path)
       return data

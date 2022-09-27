@@ -27,7 +27,7 @@ export default function Side(props: SideProps) {
         ${sideCollapse ? 'w-0' : 'w-56'}
       `)}
     >
-      <div className="p-2 w-56 h-full border-r overflow-x-hidden overflow-y-auto">
+      <div className="w-56 h-full border-r overflow-x-hidden overflow-y-auto">
         {/* <p className="p-1 text-xs text-gray-400">收藏</p> */}
         <RootEntryList
           {...{ currentPath, activeRootEntry, rootEntryList }}

@@ -31,13 +31,13 @@ export class AuthController {
       } else {
         return {
           success: false,
-          msg: '密码错误',
+          msg: 'ERROR_PASSWORD_WRONG',
         }
       }
     } else {
       return {
         success: false,
-        msg: '用户不存在',
+        msg: 'ERROR_USER_NOT_EXISTED',
       }
     }
   }

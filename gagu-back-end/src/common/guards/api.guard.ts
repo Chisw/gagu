@@ -3,14 +3,10 @@ import { Reflector } from '@nestjs/core'
 import { Observable } from 'rxjs'
 import { Request } from 'express'
 import { IS_API_PUBLIC_KEY } from '../decorators/public.decorator'
-import { AuthService } from 'src/models/auth/auth.service'
 
 @Injectable()
 export class ApiGuard implements CanActivate {
-  constructor(
-    private readonly reflector: Reflector,
-    private readonly authService: AuthService,
-  ) {}
+  constructor(private readonly reflector: Reflector) {}
 
   canActivate(
     context: ExecutionContext,
@@ -20,8 +16,8 @@ export class ApiGuard implements CanActivate {
     const authorization = request.header('Authorization') || ''
     const queryToken = (request.query.token || '') as string
     const token = authorization || queryToken
-    const user = token ? this.authService.getLoggedInUser(token) : null
-    console.log({ token, user, map: this.authService.getLoggedInMap() })
+    // const user = token ? this.authService.getLoggedInUser(token) : null
+    // console.log({ token, user, map: this.authService.getLoggedInMap() })
     return isPublic || token.length === 32
   }
 }

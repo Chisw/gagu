@@ -49,7 +49,7 @@ export default function Settings (props: AppComponentProps) {
             </div>
           ))}
         </div>
-        <div className="relative w-full h-full bg-white">
+        <div className="relative w-full h-full bg-white border-l">
           <Panel
             setWindowLoading={setWindowLoading}
           />

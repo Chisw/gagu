@@ -32,10 +32,10 @@ export default function RootEntryList(props: RootEntryListProps) {
               key={rootEntryPath}
               title={label || name}
               className={line(`
-                mb-2 p-2 text-sm rounded-sm cursor-pointer
+                p-2 text-sm cursor-pointer
                 ${isActive
                   ? 'bg-white text-black'
-                  : 'bg-white-400 text-gray-500 hover:text-black'
+                  : 'bg-w hite-400 text-gray-500 hover:text-black'
                 }
               `)}
               onClick={() => canRootEntryClick && onRootEntryClick(rootEntry)}
