@@ -96,7 +96,6 @@ export class FsController {
       const filePath = await this.fsService.getThumbnailPath(path)
       response.sendFile(filePath)
     } catch (err) {
-      console.log('ERR: THUMBNAIL')
       response.end('ERROR')
     }
   }
@@ -110,10 +109,13 @@ export class FsController {
     console.log('GET /FS/AVATAR', username)
     try {
       const avatarPath = this.fsService.getAvatarPath(username)
-      response.sendFile(avatarPath)
+      if (getExists(avatarPath)) {
+        response.sendFile(avatarPath)
+      } else {
+        response.end('ERROR_AVATAR_NOT_EXISTED')
+      }
     } catch (err) {
-      console.log('ERR: AVATAR')
-      response.end('ERROR')
+      response.end('ERROR_AVATAR')
     }
   }
 

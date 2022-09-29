@@ -1,9 +1,7 @@
 import { exec, spawn } from 'child_process'
 import { accessSync, constants, mkdirSync } from 'fs'
-import { GAGU_PATH, OS } from './constant.util'
+import { OS } from './constant.util'
 import * as md5 from 'md5'
-import { IUser } from 'src/types'
-import { writeUsersData } from './user.util'
 
 export const genToken = () => md5(Math.random().toString())
 
@@ -45,27 +43,4 @@ export const completeNestedPath = (path: string) => {
     const exists = getExists(p)
     !exists && mkdirSync(p)
   })
-}
-
-export const initConfig = () => {
-  completeNestedPath(`${GAGU_PATH.ROOT}/thumbnail/PLACEHOLDER`)
-  completeNestedPath(`${GAGU_PATH.ROOT}/data/PLACEHOLDER`)
-  completeNestedPath(`${GAGU_PATH.ROOT}/log/PLACEHOLDER`)
-  completeNestedPath(`${GAGU_PATH.ROOT}/desktop/PLACEHOLDER`)
-  completeNestedPath(`${GAGU_PATH.ROOT}/public/PLACEHOLDER`)
-  completeNestedPath(`${GAGU_PATH.ROOT}/public/avatar/PLACEHOLDER`)
-  completeNestedPath(`${GAGU_PATH.ROOT}/public/lib/PLACEHOLDER`)
-  if (!getExists(GAGU_PATH.USERS_DATA)) {
-    const adminUser: IUser = {
-      isAdmin: true,
-      username: 'gagu',
-      password: md5('9293'),
-      rootEntryList: [],
-      permissionList: [],
-      createdAt: Date.now(),
-      expiredAt: 0,
-      isForbidden: false,
-    }
-    writeUsersData([adminUser])
-  }
 }

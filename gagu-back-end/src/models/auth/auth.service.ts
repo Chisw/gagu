@@ -1,15 +1,25 @@
 import { Injectable } from '@nestjs/common'
-import { User, IUser } from 'src/types'
-import { readUsersData, writeUsersData } from 'src/utils'
+import { User, IUser, ILoginMap } from 'src/types'
+import {
+  readLoginData,
+  readUsersData,
+  writeLoginData,
+  writeUsersData,
+} from 'src/utils'
 
 @Injectable()
 export class AuthService {
   private userList: IUser[] = []
-  private loggedInMap: { [TOKEN: User.Token]: User.Username } = {}
+  private loginMap: ILoginMap = {}
 
   constructor() {
-    const list = readUsersData()
-    this.userList = list
+    this.userList = readUsersData()
+    this.loginMap = readLoginData()
+  }
+
+  // user list
+  syncUsersData() {
+    writeUsersData(this.userList)
   }
 
   getUserList() {
@@ -22,34 +32,45 @@ export class AuthService {
 
   addUser(user: IUser) {
     this.userList.push(user)
-    writeUsersData(this.userList)
+    this.syncUsersData()
   }
 
   updateUser(user: IUser) {
     const index = this.userList.findIndex((u) => u.username === user.username)
     this.userList.splice(index, 1, user)
-    writeUsersData(this.userList)
+    this.syncUsersData()
   }
 
   removeUser(username: User.Username) {
     this.userList = this.userList.filter((u) => u.username !== username)
-    writeUsersData(this.userList)
+    this.removeLoginRecord(username)
+    this.syncUsersData()
   }
 
-  addLoggedInMap(token: User.Token, username: User.Username) {
-    this.loggedInMap[token] = username
+  // login map
+  syncLoginData() {
+    writeLoginData(this.loginMap)
   }
 
-  getLoggedInMap() {
-    return this.loggedInMap
+  getLoginMap() {
+    return this.loginMap
   }
 
-  getLoggedInUser(token: string) {
-    const loggedInUser = this.loggedInMap[token] as User.Username | undefined
-    return loggedInUser
+  getLoginUsername(token: string) {
+    const loginUsername = this.loginMap[token] as User.Username | undefined
+    return loginUsername
   }
 
-  removeLoggedInUser(token: string) {
-    delete this.loggedInMap[token]
+  addLoginRecord(token: User.Token, username: User.Username) {
+    this.loginMap[token] = username
+    this.syncLoginData()
+  }
+
+  removeLoginRecord(username: User.Username) {
+    const entries = Object.entries(this.loginMap).filter(
+      ([, userName]) => userName !== username,
+    )
+    this.loginMap = Object.fromEntries(entries)
+    this.syncLoginData()
   }
 }

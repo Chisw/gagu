@@ -1,7 +1,16 @@
-import { Controller, Post, Body, Get, Delete, Put, Param } from '@nestjs/common'
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Delete,
+  Put,
+  Param,
+  Headers,
+} from '@nestjs/common'
 import { Public } from 'src/common/decorators/public.decorator'
 import { AuthService } from './auth.service'
-import { User, IUser } from 'src/types'
+import { User, IUser, UserStatus, IUserForm } from 'src/types'
 import { genToken } from 'src/utils'
 
 @Controller('auth')
@@ -21,7 +30,7 @@ export class AuthController {
     if (user) {
       if (user.password === password) {
         const token = genToken()
-        this.authService.addLoggedInMap(token, username)
+        this.authService.addLoginRecord(token, username)
 
         return {
           success: true,
@@ -42,23 +51,34 @@ export class AuthController {
     }
   }
 
-  @Get('user')
-  getUserList() {
-    console.log('GET /AUTH/USER')
-
-    const userList = this.authService.getUserList()
+  @Post('logout')
+  logout(@Headers('Authorization') token: string) {
+    console.log('POST /AUTH/LOGOUT')
+    const username = this.authService.getLoginUsername(token)
+    username && this.authService.removeLoginRecord(username)
     return {
       success: true,
-      rows: userList,
+    }
+  }
+
+  @Get()
+  getAuthData() {
+    console.log('GET /AUTH')
+    const userList = this.authService.getUserList()
+    const loginMap = this.authService.getLoginMap()
+    const loggedInUsernameList = Object.values(loginMap)
+    return {
+      success: true,
+      userList,
+      loggedInUsernameList,
     }
   }
 
   @Post('user')
-  addUser(
-    @Body('username') username: User.Username,
-    @Body('password') password: User.Password,
-  ) {
+  addUser(@Body() userFormData: IUserForm) {
     console.log('POST /AUTH/USER')
+
+    const { username, password } = userFormData
 
     if (this.authService.getUser(username)) {
       return {
@@ -70,11 +90,11 @@ export class AuthController {
         isAdmin: false,
         username,
         password,
-        rootEntryList: [],
+        rootEntryPathList: [],
         permissionList: [],
         createdAt: Date.now(),
         expiredAt: Date.now() + 2 * 60 * 60 * 1000,
-        isForbidden: false,
+        status: UserStatus.normal,
       }
       this.authService.addUser(newUser)
       return {

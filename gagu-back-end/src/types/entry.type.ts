@@ -5,7 +5,7 @@ export enum EntryType {
 
 export interface IEntry {
   name: string
-  type: EntryType.directory | EntryType.file
+  type: keyof typeof EntryType
   hidden: boolean
   lastModified: number
   parentPath: string

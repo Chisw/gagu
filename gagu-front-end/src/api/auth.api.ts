@@ -1,14 +1,18 @@
-import { AxiosRequestConfig } from 'axios'
 import instance from './instance'
 
 export class AuthApi {
-  static login = async (formData: { username: string, password: string }, config?: AxiosRequestConfig) => {
-    const { data } = await instance.post('/api/auth/login', formData, config)
+  static login = async (formData: { username: string, password: string }) => {
+    const { data } = await instance.post('/api/auth/login', formData)
     return data
   }
 
-  static getUserList = async () => {
-    const { data } = await instance.get(`/api/auth/user?stamp=${Date.now()}`)
+  static logout = async () => {
+    const { data } = await instance.post('/api/auth/logout')
+    return data
+  }
+
+  static getAuthData = async () => {
+    const { data } = await instance.get('/api/auth')
     return data
   }
 

@@ -1,2 +1,2 @@
-export * from './auth'
-export * from './fs'
+export * from './auth.api'
+export * from './fs.api'

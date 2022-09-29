@@ -27,6 +27,7 @@ export default function Dock() {
 
   const { fetch: getRootEntryList, loading, data } = useFetch(FsApi.getRootEntryList)
   const { fetch: shutdown } = useFetch(AuthApi.shutdown)
+  const { fetch: logout } = useFetch(AuthApi.logout)
 
   useEffect(() => {
     getRootEntryList()
@@ -74,7 +75,8 @@ export default function Dock() {
       {
         text: '退出',
         icon: <SvgIcon.Logout />,
-        onClick: () => {
+        onClick: async () => {
+          await logout()
           TOKEN.remove()
           navigate('/login')
         },
@@ -88,7 +90,7 @@ export default function Dock() {
         },
       },
     ]
-  }, [getRootEntryList, navigate, shutdown])
+  }, [getRootEntryList, navigate, shutdown, logout])
 
   const handleOpenApp = useCallback((app: IApp, openNew?: boolean) => {
     const sameRunningAppList = runningAppList.filter(a => a.id === app.id)

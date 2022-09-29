@@ -7,12 +7,7 @@ export enum TransferTaskStatus {
   cancel = 'cancel',
 }
 
-export type TransferTaskStatusType = TransferTaskStatus.waiting
-  | TransferTaskStatus.uploading
-  | TransferTaskStatus.moving
-  | TransferTaskStatus.success
-  | TransferTaskStatus.fail
-  | TransferTaskStatus.cancel
+export type TransferTaskStatusType = keyof typeof TransferTaskStatus
 
 export enum TransferTaskType {
   upload = 'upload',
@@ -25,8 +20,8 @@ export interface INestedFile extends File {
 
 export interface ITransferTask {
   id: string
-  type: TransferTaskType.upload | TransferTaskType.move
-  status: TransferTaskStatusType
+  type: keyof typeof TransferTaskType
+  status: keyof typeof TransferTaskStatus
   file?: File
   newPath: string
   oldPath?: string

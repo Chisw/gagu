@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync } from 'fs'
-import { IUser, IUsersData } from 'src/types'
+import { ILoginMap, IUser, IUsersData } from 'src/types'
 import { GAGU_VERSION, GAGU_PATH } from './constant.util'
 
 export const writeUsersData = (userList: IUser[]) => {
@@ -20,4 +20,14 @@ export const readUsersData = () => {
   }
 
   return userList
+}
+
+export const writeLoginData = (loginMap: ILoginMap) => {
+  writeFileSync(GAGU_PATH.LOGIN_DATA, JSON.stringify(loginMap))
+}
+
+export const readLoginData = () => {
+  const dataStr = readFileSync(GAGU_PATH.LOGIN_DATA).toString('utf-8')
+  const loginMap: ILoginMap = JSON.parse(dataStr)
+  return loginMap
 }

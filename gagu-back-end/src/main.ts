@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
-import { initConfig } from './utils'
+import { initialize } from './utils'
 import { GAGU_VERSION, openInBrowser } from './utils'
 import * as minimist from 'minimist'
 
@@ -34,7 +34,7 @@ async function bootstrap() {
     process.exit(0)
   }
 
-  initConfig()
+  initialize()
 
   const app = await NestFactory.create(AppModule)
 
