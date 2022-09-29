@@ -45,4 +45,5 @@ export const GAGU_PATH = {
   ROOT: ROOT_PATH,
   USERS_DATA: `${ROOT_PATH}/data/users.json`,
   LOGIN_DATA: `${ROOT_PATH}/data/login.json`,
+  PUBLIC_AVATAR: `${ROOT_PATH}/public/avatar`,
 }

@@ -26,7 +26,7 @@ export class AuthService {
     return this.userList
   }
 
-  getUser(username: string) {
+  findOne(username: string) {
     return this.userList.find((u) => u.username === username)
   }
 

@@ -18,7 +18,7 @@ export enum UserStatus {
   forbidden = 'forbidden',
 }
 
-export interface IUserForm {
+export interface UserBase {
   username: User.Username
   password: User.Password
   rootEntryPathList: string[]
@@ -27,7 +27,11 @@ export interface IUserForm {
   status: keyof typeof UserStatus
 }
 
-export interface IUser extends IUserForm {
+export interface IUserForm extends UserBase {
+  avatar: string
+}
+
+export interface IUser extends UserBase {
   isAdmin: boolean
   createdAt: number
 }

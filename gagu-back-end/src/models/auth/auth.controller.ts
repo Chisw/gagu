@@ -11,11 +11,28 @@ import {
 import { Public } from 'src/common/decorators/public.decorator'
 import { AuthService } from './auth.service'
 import { User, IUser, UserStatus, IUserForm } from 'src/types'
-import { genToken } from 'src/utils'
+import { dataURLtoBuffer, GAGU_PATH, genToken } from 'src/utils'
+import { FsService } from '../fs/fs.service'
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly fsService: FsService,
+  ) {}
+
+  @Get()
+  getAuthData() {
+    console.log('GET /AUTH')
+    const userList = this.authService.getUserList()
+    const loginMap = this.authService.getLoginMap()
+    const loggedInUsernameList = Object.values(loginMap)
+    return {
+      success: true,
+      userList,
+      loggedInUsernameList,
+    }
+  }
 
   @Public()
   @Post('login')
@@ -25,7 +42,7 @@ export class AuthController {
   ) {
     console.log('POST /AUTH/LOGIN', username)
 
-    const user = this.authService.getUser(username)
+    const user = this.authService.findOne(username)
 
     if (user) {
       if (user.password === password) {
@@ -61,31 +78,21 @@ export class AuthController {
     }
   }
 
-  @Get()
-  getAuthData() {
-    console.log('GET /AUTH')
-    const userList = this.authService.getUserList()
-    const loginMap = this.authService.getLoginMap()
-    const loggedInUsernameList = Object.values(loginMap)
-    return {
-      success: true,
-      userList,
-      loggedInUsernameList,
-    }
-  }
-
   @Post('user')
   addUser(@Body() userFormData: IUserForm) {
     console.log('POST /AUTH/USER')
 
-    const { username, password } = userFormData
+    const { avatar, username, password } = userFormData
 
-    if (this.authService.getUser(username)) {
+    if (this.authService.findOne(username)) {
       return {
         success: false,
         msg: 'ERROR_USER_EXISTED',
       }
     } else {
+      const avatarBuffer = dataURLtoBuffer(avatar)
+      avatarBuffer && this.fsService.uploadFile(`${GAGU_PATH.PUBLIC_AVATAR}/${username}`, avatarBuffer)
+
       const newUser: IUser = {
         isAdmin: false,
         username,
@@ -97,6 +104,7 @@ export class AuthController {
         status: UserStatus.normal,
       }
       this.authService.addUser(newUser)
+
       return {
         success: true,
       }
@@ -107,7 +115,7 @@ export class AuthController {
   updateUser(@Body('user') user: IUser) {
     console.log('PUT /AUTH/USER')
 
-    if (!this.authService.getUser(user.username)) {
+    if (!this.authService.findOne(user.username)) {
       return {
         success: false,
         msg: 'ERROR_USER_NOT_EXISTED',
@@ -125,6 +133,8 @@ export class AuthController {
     console.log('DELETE /AUTH/USER', username)
 
     this.authService.removeUser(username)
+    this.fsService.deleteEntry(`${GAGU_PATH.PUBLIC_AVATAR}/${username}`)
+
     return {
       success: true,
     }

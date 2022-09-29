@@ -1,12 +1,12 @@
 import md5 from 'md5'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 import { IPanelProps } from '.'
 import { AuthApi, FsApi } from '../../api'
 import { SvgIcon } from '../../components/base'
 import { useFetch } from '../../hooks'
-import { IUser, User } from '../../types'
-import { getAtTime } from '../../utils'
+import { IUser, User, UserStatus } from '../../types'
+import { getAtTime, getImageTypeBase64ByURL } from '../../utils'
 
 const newForm = () => {
   return {
@@ -25,9 +25,17 @@ export default function UserPanel(props: IPanelProps) {
   const [formMode, setFormMode] = useState<'close' | 'add' | 'edit'>('close')
   const [form, setForm] = useState(newForm())
 
+  const fileInputRef = useRef<any>(null)
+
   const { fetch: getAuthData, data, loading } = useFetch(AuthApi.getAuthData)
   const { fetch: addUser } = useFetch(AuthApi.addUser)
   const { fetch: removeUser } = useFetch(AuthApi.removeUser)
+
+  useEffect(() => {
+    if (formMode === 'close') {
+      setForm(newForm())
+    }
+  }, [formMode])
 
   useEffect(() => {
     getAuthData()
@@ -43,13 +51,31 @@ export default function UserPanel(props: IPanelProps) {
     return { userList, loggedInUsernameList }
   }, [data])
 
+  const handleFileChange = useCallback(() => {
+    const file = fileInputRef?.current?.files[0]
+    if (file) {
+      if (!/image\/\w+/.test(file.type)) {
+        toast.error('ERROR_SELECT_IMAGE_FIRST')
+        return
+      }
+      const FR = new FileReader()
+      FR.readAsDataURL(file)
+      FR.onload = async e => {
+        const base64 = e.target?.result as string
+        const avatar = await getImageTypeBase64ByURL(base64, { width: 200, height: 200 }) as string
+        setForm({ ...form, avatar })
+      }
+    }
+  }, [form])
+
   const handleSubmit = useCallback(async () => {
-    const { username, password } = form
+    const { avatar, username, password } = form
     if (!username || !password) {
       toast.error('用户名、密码格式错误')
       return
     }
     const res = await addUser({
+      avatar,
       username,
       password: md5(password),
     })
@@ -83,13 +109,13 @@ export default function UserPanel(props: IPanelProps) {
       {
         label: '禁用',
         icon: <SvgIcon.Forbid className="text-yellow-500" />,
-        show: !user.isAdmin,
+        show: !user.isAdmin && user.status === UserStatus.normal,
         onClick: () => {},
       },
       {
         label: '启用',
         icon: <SvgIcon.CheckCircle className="text-green-500" />,
-        show: !user.isAdmin,
+        show: !user.isAdmin && user.status === UserStatus.forbidden,
         onClick: () => {},
       },
       {
@@ -208,30 +234,50 @@ export default function UserPanel(props: IPanelProps) {
           className="absolute z-10 inset-0 p-4 bg-white"
         >
           <div className="flex flex-col">
-            <span>Username</span>
+            <div className="relative mx-auto p-1 w-24 h-24 border-2 border-dashed border-gray-300 hover:border-blue-500 text-gray-500 rounded-full flex justify-center items-center">
+              <input
+                ref={fileInputRef}
+                type="file"
+                className="absolute z-10 block w-full h-full opacity-0 cursor-pointer"
+                onChange={handleFileChange}
+              />
+              {form.avatar ? (
+                <img src={form.avatar} alt="icon" className="w-full h-full rounded-full" />
+              ) : (
+                <SvgIcon.Avatar size={96} className="text-gray-200" />
+              )}
+            </div>
+            <p className="text-sm text-gray-500 font-din">Username</p>
             <input
               placeholder="Username"
-              className="border"
+              className="mt-1 mb-2 px-2 py-1 border rounded-sm"
+              maxLength={16}
               value={form.username}
               onChange={e => setForm({ ...form, username: e.target.value.toLowerCase().trim() })}
             />
-            <span>Password</span>
+            <p className="text-sm text-gray-500 font-din">Password</p>
             <input
               placeholder="Password"
-              className="border"
+              type="password"
+              className="mt-1 mb-2 px-2 py-1 border rounded-sm"
+              maxLength={16}
               value={form.password}
               onChange={e => setForm({ ...form, password: e.target.value.trim() })}
             />
-            <input
-              type="button"
-              value="提交"
-              onClick={handleSubmit}
-            />
-            <input
-              type="button"
-              value="取消"
-              onClick={() => setFormMode('close')}
-            />
+            <div className="flex justify-end">
+              <input
+                type="button"
+                className="mr-2 px-2 py-1 min-w-16 rounded-sm cursor-pointer bg-gray-200 hover:bg-gray-100 active:bg-gray-300"
+                value="Cancel"
+                onClick={() => setFormMode('close')}
+              />
+              <input
+                type="button"
+                className="px-2 py-1 min-w-16 rounded-sm cursor-pointer bg-blue-500 hover:bg-blue-400 active:bg-blue-600 text-white"
+                value="Add"
+                onClick={handleSubmit}
+              />
+            </div>
           </div>
         </div>
       )}

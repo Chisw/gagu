@@ -210,12 +210,14 @@ export class FsService {
   }
 
   deleteEntry(path: string) {
-    const stat = statSync(path)
-    if (stat.isDirectory()) {
-      exec(`rm -rf ${path}`)
-    } else {
-      unlinkSync(path)
-    }
+    try {
+      const stat = statSync(path)
+      if (stat.isDirectory()) {
+        exec(`rm -rf ${path}`)
+      } else {
+        unlinkSync(path)
+      }
+    } catch(err) {}
   }
 
   getExif(path: string) {
@@ -258,7 +260,6 @@ export class FsService {
             base64String += String.fromCharCode(data[i])
           }
           const base64 = `data:${format};base64,${btoa(base64String)}`
-
           const tagData = {
             title,
             artist,
