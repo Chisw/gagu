@@ -1,18 +1,24 @@
 import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
-import { initialize } from './utils'
-import { GAGU_VERSION, openInBrowser } from './utils'
+import {
+  HELP_INFO,
+  initialize,
+  GAGU_VERSION,
+  openInBrowser,
+  GAGU_PATH,
+  deleteEntry,
+} from './utils'
 import * as minimist from 'minimist'
 
 const argv = minimist(process.argv.slice(2), {
   alias: {
     help: 'h',
-    port: 'p',
     open: 'o',
+    port: 'p',
     version: 'v',
   },
   string: ['port'],
-  boolean: ['help', 'open', 'version'],
+  boolean: ['help', 'open', 'reset', 'version'],
   default: {
     port: 9293,
   },
@@ -20,12 +26,17 @@ const argv = minimist(process.argv.slice(2), {
 
 async function bootstrap() {
   if (argv.help) {
-    console.log('Usage:')
-    console.log('  gagu          // Start service')
-    console.log('  gagu -p 8888  // Start with customized port, `--port`')
-    console.log('  gagu -o       // Start and open in browser, `--open`')
-    console.log('  gagu -h       // Show help info, `--help`')
-    console.log('  gagu -v       // Show version, `--version`')
+    console.log(HELP_INFO)
+    process.exit(0)
+  }
+
+  if (argv.reset) {
+    deleteEntry(GAGU_PATH.ROOT)
+    console.log(
+      '\n🔔 GAGU_ROOT',
+      GAGU_PATH.ROOT,
+      'and sub entries are removed.\n',
+    )
     process.exit(0)
   }
 

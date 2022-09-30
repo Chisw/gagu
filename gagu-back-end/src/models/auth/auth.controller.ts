@@ -11,7 +11,7 @@ import {
 import { Public } from 'src/common/decorators/public.decorator'
 import { AuthService } from './auth.service'
 import { User, IUser, UserStatus, IUserForm } from 'src/types'
-import { dataURLtoBuffer, GAGU_PATH, genToken } from 'src/utils'
+import { dataURLtoBuffer, deleteEntry, GAGU_PATH, genToken } from 'src/utils'
 import { FsService } from '../fs/fs.service'
 
 @Controller('auth')
@@ -82,7 +82,7 @@ export class AuthController {
   addUser(@Body() userFormData: IUserForm) {
     console.log('POST /AUTH/USER')
 
-    const { avatar, username, password } = userFormData
+    const { avatar, nickname, username, password } = userFormData
 
     if (this.authService.findOne(username)) {
       return {
@@ -91,17 +91,19 @@ export class AuthController {
       }
     } else {
       const avatarBuffer = dataURLtoBuffer(avatar)
-      avatarBuffer && this.fsService.uploadFile(`${GAGU_PATH.PUBLIC_AVATAR}/${username}`, avatarBuffer)
+      const avatarPath = `${GAGU_PATH.PUBLIC_AVATAR}/${username}`
+      avatarBuffer && this.fsService.uploadFile(avatarPath, avatarBuffer)
 
       const newUser: IUser = {
-        isAdmin: false,
+        nickname,
         username,
         password,
-        rootEntryPathList: [],
-        permissionList: [],
-        createdAt: Date.now(),
-        expiredAt: Date.now() + 2 * 60 * 60 * 1000,
         status: UserStatus.normal,
+        expiredAt: 0,
+        permissionList: [],
+        rootEntryPathList: [],
+        isAdmin: false,
+        createdAt: Date.now(),
       }
       this.authService.addUser(newUser)
 
@@ -133,7 +135,7 @@ export class AuthController {
     console.log('DELETE /AUTH/USER', username)
 
     this.authService.removeUser(username)
-    this.fsService.deleteEntry(`${GAGU_PATH.PUBLIC_AVATAR}/${username}`)
+    deleteEntry(`${GAGU_PATH.PUBLIC_AVATAR}/${username}`)
 
     return {
       success: true,

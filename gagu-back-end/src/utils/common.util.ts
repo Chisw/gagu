@@ -1,5 +1,4 @@
 import { exec, spawn } from 'child_process'
-import { accessSync, constants, mkdirSync } from 'fs'
 import { OS } from './constant.util'
 import * as md5 from 'md5'
 
@@ -20,39 +19,14 @@ export const getExtension = (name: string) => {
   return name.split('.').reverse()[0].toLowerCase()
 }
 
-export const getExists = (path: string) => {
-  let exists = false
-  try {
-    accessSync(path, constants.F_OK)
-    exists = true
-  } catch (err) {
-    exists = false
-  }
-  return exists
-}
-
-export const completeNestedPath = (path: string) => {
-  const list = path.split('/').filter(Boolean).slice(0, -1)
-  const nestedPathList = list.map((dirName, index) => {
-    const prefix =
-      index === 0 ? '' : '/' + list.filter((d, i) => i < index).join('/')
-    return `${prefix}/${dirName}`
-  })
-  nestedPathList.forEach((path) => {
-    const p = OS.isWindows ? path.replace('/', '') : path
-    const exists = getExists(p)
-    !exists && mkdirSync(p)
-  })
-}
-
 export const dataURLtoBlob = (base64: string) => {
   const arr = base64.split(',')
-  const mime = arr[0].match(/:(.*?);/)![1]
+  const mime = arr[0].match(/:(.*?);/)?.[1]
   const bstr = atob(arr[1])
   let n = bstr.length
   const u8arr = new Uint8Array(n)
   while (n--) {
-    u8arr[n] = bstr.charCodeAt(n);
+    u8arr[n] = bstr.charCodeAt(n)
   }
   return new Blob([u8arr], { type: mime })
 }

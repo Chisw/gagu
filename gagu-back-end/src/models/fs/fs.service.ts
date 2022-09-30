@@ -1,12 +1,9 @@
 import { Injectable } from '@nestjs/common'
 import { EntryType, IDisk, IEntry, IRootEntry, User } from 'src/types'
-import { exec } from 'child_process'
 import {
   createReadStream,
-  mkdirSync,
   readdirSync,
   readFileSync,
-  renameSync,
   statSync,
   unlinkSync,
   writeFileSync,
@@ -186,10 +183,6 @@ export class FsService {
     return readFileSync(path).toString('utf-8')
   }
 
-  addDirectory(path: string) {
-    mkdirSync(path)
-  }
-
   uploadFile(path: string, buffer: Buffer) {
     try {
       completeNestedPath(path)
@@ -203,21 +196,6 @@ export class FsService {
         msg: err.toString(),
       }
     }
-  }
-
-  renameEntry(oldPath: string, newPath: string) {
-    renameSync(oldPath, newPath)
-  }
-
-  deleteEntry(path: string) {
-    try {
-      const stat = statSync(path)
-      if (stat.isDirectory()) {
-        exec(`rm -rf ${path}`)
-      } else {
-        unlinkSync(path)
-      }
-    } catch(err) {}
   }
 
   getExif(path: string) {

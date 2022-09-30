@@ -1,8 +1,9 @@
+// Sync BE & FE
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export declare namespace User {
-  export type Token = string
-  export type Username = string
-  export type Password = string
+  type Token = string
+  type Username = string
+  type Password = string
 }
 
 export enum UserPermission {
@@ -11,27 +12,52 @@ export enum UserPermission {
   delete = 'delete',
 }
 
-export type UserPermissionType = keyof typeof UserPermission
-
 export enum UserStatus {
   normal = 'normal',
   forbidden = 'forbidden',
 }
 
-export interface UserBase {
+export type UserPermissionType = keyof typeof UserPermission
+export type UserStatusType = keyof typeof UserStatus
+
+export interface IUserBase {
+  nickname: string
   username: User.Username
   password: User.Password
-  rootEntryPathList: string[]
-  permissionList: UserPermissionType[]
+  status: UserStatusType
   expiredAt: number
-  status: keyof typeof UserStatus
+  permissionList: UserPermissionType[]
+  rootEntryPathList: string[]
 }
 
-export interface IUserForm extends UserBase {
+export interface IUserForm extends IUserBase {
   avatar: string
 }
 
-export interface IUser extends UserBase {
+export class UserForm implements IUserBase {
+  avatar = ''
+  nickname = ''
+  username = ''
+  password = ''
+  status: UserStatusType = UserStatus.normal
+  expiredAt = 0
+  permissionList: UserPermissionType[] = []
+  rootEntryPathList: string[] = []
+
+  constructor(user?: IUser, avatarPath?: string) {
+    if (user) {
+      this.avatar = avatarPath || ''
+      this.nickname = user.nickname
+      this.username = user.username
+      this.status = user.status
+      this.expiredAt = user.expiredAt
+      this.permissionList = user.permissionList
+      this.rootEntryPathList = user.rootEntryPathList
+    }
+  }
+}
+
+export interface IUser extends IUserBase {
   isAdmin: boolean
   createdAt: number
 }

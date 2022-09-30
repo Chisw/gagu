@@ -6,7 +6,7 @@ export const DOCUMENT_TITLE = 'GAGU'
 export const INVALID_NAME_CHAR_LIST = ['/', '|', '\\', '?', ':', '"', '<', '>', '*']
 export const MAX_PAGE_SIZE = 200
 
-// SFB
+// Sync BE & FE
 export const GEN_THUMBNAIL_VIDEO_LIST = ['mp4', 'mov', 'wmv', 'insv', 'mkv', 'avi', 'rm', 'rmvb']
 export const GEN_THUMBNAIL_IMAGE_LIST = [
   'jpg',

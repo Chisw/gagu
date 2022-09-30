@@ -5,16 +5,8 @@ import { IPanelProps } from '.'
 import { AuthApi, FsApi } from '../../api'
 import { SvgIcon } from '../../components/base'
 import { useFetch } from '../../hooks'
-import { IUser, User, UserStatus } from '../../types'
+import { IUser, IUserForm, User, UserForm, UserStatus } from '../../types'
 import { getAtTime, getImageTypeBase64ByURL } from '../../utils'
-
-const newForm = () => {
-  return {
-    avatar: '',
-    username: '',
-    password: '',
-  }
-}
 
 export default function UserPanel(props: IPanelProps) {
 
@@ -23,7 +15,7 @@ export default function UserPanel(props: IPanelProps) {
   } = props
 
   const [formMode, setFormMode] = useState<'close' | 'add' | 'edit'>('close')
-  const [form, setForm] = useState(newForm())
+  const [form, setForm] = useState<IUserForm>(new UserForm())
 
   const fileInputRef = useRef<any>(null)
 
@@ -33,7 +25,7 @@ export default function UserPanel(props: IPanelProps) {
 
   useEffect(() => {
     if (formMode === 'close') {
-      setForm(newForm())
+      setForm(new UserForm())
     }
   }, [formMode])
 
@@ -69,13 +61,14 @@ export default function UserPanel(props: IPanelProps) {
   }, [form])
 
   const handleSubmit = useCallback(async () => {
-    const { avatar, username, password } = form
+    const { avatar, nickname, username, password } = form
     if (!username || !password) {
       toast.error('用户名、密码格式错误')
       return
     }
     const res = await addUser({
       avatar,
+      nickname,
       username,
       password: md5(password),
     })
@@ -104,7 +97,11 @@ export default function UserPanel(props: IPanelProps) {
         label: '编辑',
         icon: <SvgIcon.Edit className="text-gray-500" />,
         show: true,
-        onClick: () => {},
+        onClick: () => {
+          const avatarPath = FsApi.getAvatarStreamUrl(user.username)
+          setForm(new UserForm(user, avatarPath))
+          setFormMode('edit')
+        },
       },
       {
         label: '禁用',
@@ -183,32 +180,50 @@ export default function UserPanel(props: IPanelProps) {
 
         <div className="mt-2">
           {userList.map((user) => {
-            const { isAdmin, username, createdAt, expiredAt } = user
+            const { nickname, username, expiredAt, isAdmin, createdAt, status } = user
             const isLoggedIn = loggedInUsernameList.includes(username)
+            const showExpire = !isAdmin && !!expiredAt
             return (
               <div
                 key={username}
                 className="p-2 flex justify-start items-center  odd:bg-gray-100 hover:bg-gray-200 group rounded"
               >
                 <div
-                  className="relative w-8 h-8 flex-shrink-0 rounded-full bg-cover bg-center bg-no-repeat bg-blue-300"
-                  style={{ backgroundImage: `url("${FsApi.getUserAvatarStreamUrl(username)}")` }}
+                  className="relative w-10 h-10 flex-shrink-0 rounded-full bg-cover bg-center bg-no-repeat bg-gray-300 border-2 border-white"
+                  style={{ backgroundImage: `url("${FsApi.getAvatarStreamUrl(username)}")` }}
                 >
                   {isLoggedIn && (
                     <div className="absolute top-0 right-0 -m-1px w-2 h-2 rounded bg-green-400 border border-white" />
                   )}
                 </div>
-                <div className="ml-2 w-20 flex-shrink-0 leading-none">
-                  <p>{username}</p>
-                  {isAdmin && (
-                    <span className="inline-block px-1 py-0 text-xs text-white bg-blue-600 rounded select-none transform scale-75 origin-left">
+                <div className="ml-2 w-32 flex-shrink-0 leading-none">
+                  <div>
+                    <span className="text-sm">{nickname}</span>
+                    &nbsp;
+                    <span className="text-xs text-gray-400">@{username}</span>
+                  </div>
+                  {isAdmin ? (
+                    <span className="inline-block px-1 py-0 text-xs text-white bg-blue-600 rounded select-none transform scale-75 origin-top-left">
                       ADMIN
+                    </span>
+                  ) : (
+                    <span
+                      className={`
+                        inline-block px-1 py-0 rounded select-none
+                        transform scale-75 origin-top-left
+                        text-xs text-white uppercase
+                        ${status === UserStatus.normal ? 'bg-green-600' : 'bg-red-600'}
+                      `}
+                    >
+                      {status}
                     </span>
                   )}
                 </div>
                 <div className="flex-shrink-0 text-xs leading-none font-din text-gray-400">
                   <p>{getAtTime(createdAt)} 创建</p>
-                  <p>{getAtTime(expiredAt)} 过期</p>
+                  {showExpire && (
+                    <p>{getAtTime(expiredAt)} 过期</p>
+                  )}
                 </div>
                 <div className="hidden group-hover:flex flex-grow justify-end items-center">
                   {getButtonList(user).map(({ icon, label, onClick }) => (
@@ -242,11 +257,22 @@ export default function UserPanel(props: IPanelProps) {
                 onChange={handleFileChange}
               />
               {form.avatar ? (
-                <img src={form.avatar} alt="icon" className="w-full h-full rounded-full" />
+                <div
+                  className="w-full h-full rounded-full bg-center bg-cover bg-no-repeat bg-gray-300"
+                  style={{ backgroundImage: `url("${form.avatar}")` }}
+                />
               ) : (
                 <SvgIcon.Avatar size={96} className="text-gray-200" />
               )}
             </div>
+            <p className="text-sm text-gray-500 font-din">Nickname</p>
+            <input
+              placeholder="Nickname"
+              className="mt-1 mb-2 px-2 py-1 border rounded-sm"
+              maxLength={16}
+              value={form.nickname}
+              onChange={e => setForm({ ...form, nickname: e.target.value.trim() })}
+            />
             <p className="text-sm text-gray-500 font-din">Username</p>
             <input
               placeholder="Username"
@@ -274,7 +300,7 @@ export default function UserPanel(props: IPanelProps) {
               <input
                 type="button"
                 className="px-2 py-1 min-w-16 rounded-sm cursor-pointer bg-blue-500 hover:bg-blue-400 active:bg-blue-600 text-white"
-                value="Add"
+                value={formMode === 'add' ? 'Add' : 'Modify'}
                 onClick={handleSubmit}
               />
             </div>

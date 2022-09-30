@@ -1,6 +1,6 @@
 import { Response } from 'express'
 import { FileInterceptor } from '@nestjs/platform-express'
-import { getExists } from 'src/utils'
+import { deleteEntry, getExists } from 'src/utils'
 import { Public } from 'src/common/decorators/public.decorator'
 import { FsService } from './fs.service'
 import {
@@ -17,6 +17,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common'
 import { User } from 'src/types'
+import { mkdirSync, renameSync } from 'fs'
 
 @Controller('fs')
 export class FsController {
@@ -68,7 +69,7 @@ export class FsController {
   @Put('rename')
   update(@Body('oldPath') oldPath: string, @Body('newPath') newPath: string) {
     console.log('PUT /FS/RENAME', oldPath, 'to', newPath)
-    this.fsService.renameEntry(oldPath, newPath)
+    renameSync(oldPath, newPath)
     return {
       success: true,
     }
@@ -77,14 +78,14 @@ export class FsController {
   @Post('mkdir')
   create(@Body('path') path: string) {
     console.log('POST /FS/MKDIR', path)
-    this.fsService.addDirectory(path)
+    mkdirSync(path)
     return { success: true }
   }
 
   @Delete('delete')
   remove(@Query('path') path: string) {
     console.log('DELETE /FS/DELETE', path)
-    this.fsService.deleteEntry(path)
+    deleteEntry(path)
     return { success: true }
   }
 

@@ -7,7 +7,7 @@
   <p>A cool web file management system.</p>
   <p>Work on macOS, Windows, Linux(planning), and Android/Termux.</p>
   <p>Inspired by <a href="https://play.google.com/store/apps/details?id=com.lonelycatgames.Xplore" target="_blank">Android/X-plore</a> and <a href="https://www.npmjs.com/package/anywhere" target="_blank">NPM/anywhere</a>.</p>
-  <img src="https://img.shields.io/badge/NPM-v0.0.24-orange">
+  <img src="https://img.shields.io/badge/NPM-0.0.24-orange">
   <img src="https://img.shields.io/badge/Package Size-233KB-success">
   <img src="https://img.shields.io/badge/License-MIT-green">
   <br>
@@ -40,20 +40,26 @@ $ sudo npm i gagu -g
 # Start service
 $ gagu
 
+# Show help info
+$ gagu -h
+
+# Start and open in browser
+$ gagu -o
+
 # Start with customized port
 $ gagu -p 8888
 
 # Show version
 $ gagu -v
 
-# Show help info
-$ gagu -h
+# Reset with removing GAGU root directory and sub entries
+$ gagu --reset
 
 # Stop service
 # Ctrl + C
 ```
 
-Default admin user:
+Default admin:
 
 ```
 username: gagu
