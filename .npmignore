@@ -3,6 +3,7 @@ gagu-back-end
 gagu-front-end
 gagu-website
 node_modules
+pkg
 .gitignore
 .npmignore
 build.sh

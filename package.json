@@ -5,6 +5,13 @@
   "bin": {
     "gagu": "./bin/gagu"
   },
+  "scripts": {
+    "build": "./build.sh",
+    "pkg": "pkg . --out-path=pkg"
+  },
+  "pkg": {
+    "assets": ["bin/public/**/*"]
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Chisw/gagu.git"
