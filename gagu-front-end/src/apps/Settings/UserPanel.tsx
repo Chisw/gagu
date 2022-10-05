@@ -2,10 +2,10 @@ import md5 from 'md5'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 import { IPanelProps } from '.'
-import { AuthApi, FsApi } from '../../api'
+import { UserApi, FsApi } from '../../api'
 import { SvgIcon } from '../../components/base'
 import { useFetch } from '../../hooks'
-import { IUser, IUserForm, User, UserForm, UserStatus } from '../../types'
+import { IUser, IUserForm, User, UserForm, UserPermission } from '../../types'
 import { getAtTime, getImageTypeBase64ByURL } from '../../utils'
 
 export default function UserPanel(props: IPanelProps) {
@@ -14,17 +14,17 @@ export default function UserPanel(props: IPanelProps) {
     setWindowLoading,
   } = props
 
-  const [formMode, setFormMode] = useState<'close' | 'add' | 'edit'>('close')
+  const [formMode, setFormMode] = useState<'CLOSE' | 'ADD' | 'EDIT'>('CLOSE')
   const [form, setForm] = useState<IUserForm>(new UserForm())
 
   const fileInputRef = useRef<any>(null)
 
-  const { fetch: getAuthData, data, loading } = useFetch(AuthApi.getAuthData)
-  const { fetch: addUser } = useFetch(AuthApi.addUser)
-  const { fetch: removeUser } = useFetch(AuthApi.removeUser)
+  const { fetch: getAuthData, data, loading } = useFetch(UserApi.getData)
+  const { fetch: addUser } = useFetch(UserApi.addUser)
+  const { fetch: removeUser } = useFetch(UserApi.removeUser)
 
   useEffect(() => {
-    if (formMode === 'close') {
+    if (formMode === 'CLOSE') {
       setForm(new UserForm())
     }
   }, [formMode])
@@ -37,10 +37,10 @@ export default function UserPanel(props: IPanelProps) {
     setWindowLoading(loading)
   }, [setWindowLoading, loading])
 
-  const { userList, loggedInUsernameList } = useMemo(() => {
+  const { userList, loggedIn } = useMemo(() => {
     const userList: IUser[] = data?.userList || []
-    const loggedInUsernameList: User.Username[] = data?.loggedInUsernameList || []
-    return { userList, loggedInUsernameList }
+    const loggedIn: User.Username[] = data?.loggedIn || []
+    return { userList, loggedIn }
   }, [data])
 
   const handleFileChange = useCallback(() => {
@@ -61,23 +61,40 @@ export default function UserPanel(props: IPanelProps) {
   }, [form])
 
   const handleSubmit = useCallback(async () => {
-    const { avatar, nickname, username, password } = form
+    const {
+      avatar,
+      nickname,
+      username,
+      password,
+      disabled,
+      expiredAt,
+      permissionList,
+      rootEntryPathList,
+    } = form
+
     if (!username || !password) {
       toast.error('用户名、密码格式错误')
       return
     }
+
     const res = await addUser({
       avatar,
       nickname,
       username,
       password: md5(password),
+      disabled,
+      createdAt: 0,
+      expiredAt,
+      permissionList,
+      rootEntryPathList,
     })
+
     if (res.success) {
-      setFormMode('close')
+      setFormMode('CLOSE')
       getAuthData()
       toast.success('OK_USER_CREATED')
     } else {
-      toast.error(res.msg)
+      toast.error(res.message)
     }
   }, [getAuthData, addUser, form])
 
@@ -87,7 +104,7 @@ export default function UserPanel(props: IPanelProps) {
       getAuthData()
       toast.success('OK_USER_DELETED')
     } else {
-      toast.error(res.msg)
+      toast.error(res.message)
     }
   }, [getAuthData, removeUser])
 
@@ -100,25 +117,25 @@ export default function UserPanel(props: IPanelProps) {
         onClick: () => {
           const avatarPath = FsApi.getAvatarStreamUrl(user.username)
           setForm(new UserForm(user, avatarPath))
-          setFormMode('edit')
+          setFormMode('EDIT')
         },
       },
       {
         label: '禁用',
         icon: <SvgIcon.Forbid className="text-yellow-500" />,
-        show: !user.isAdmin && user.status === UserStatus.normal,
+        show: !user.disabled,
         onClick: () => {},
       },
       {
         label: '启用',
         icon: <SvgIcon.CheckCircle className="text-green-500" />,
-        show: !user.isAdmin && user.status === UserStatus.forbidden,
+        show: user.disabled,
         onClick: () => {},
       },
       {
         label: '删除',
         icon: <SvgIcon.Delete className="text-red-500" />,
-        show: !user.isAdmin,
+        show: !user.permissionList.includes(UserPermission.administer),
         onClick: () => toast((t) => (
           <div className="">
             <div className="py-8 w-56 text-center text-sm">
@@ -171,7 +188,7 @@ export default function UserPanel(props: IPanelProps) {
             <div
               title="新增用户"
               className="w-6 h-6 cursor-pointer hover:bg-gray-100 flex justify-center items-center rounded"
-              onClick={() => setFormMode('add')}
+              onClick={() => setFormMode('ADD')}
             >
               <SvgIcon.Add className="text-blue-500" />
             </div>
@@ -180,9 +197,9 @@ export default function UserPanel(props: IPanelProps) {
 
         <div className="mt-2">
           {userList.map((user) => {
-            const { nickname, username, expiredAt, isAdmin, createdAt, status } = user
-            const isLoggedIn = loggedInUsernameList.includes(username)
-            const showExpire = !isAdmin && !!expiredAt
+            const { nickname, username, expiredAt, createdAt, disabled } = user
+            const isLoggedIn = loggedIn.includes(username)
+            const showExpire = !!expiredAt
             return (
               <div
                 key={username}
@@ -202,7 +219,7 @@ export default function UserPanel(props: IPanelProps) {
                     &nbsp;
                     <span className="text-xs text-gray-400">@{username}</span>
                   </div>
-                  {isAdmin ? (
+                  {false ? (
                     <span className="inline-block px-1 py-0 text-xs text-white bg-blue-600 rounded select-none transform scale-75 origin-top-left">
                       ADMIN
                     </span>
@@ -212,10 +229,10 @@ export default function UserPanel(props: IPanelProps) {
                         inline-block px-1 py-0 rounded select-none
                         transform scale-75 origin-top-left
                         text-xs text-white uppercase
-                        ${status === UserStatus.normal ? 'bg-green-600' : 'bg-red-600'}
+                        ${disabled ? 'bg-red-600' : 'bg-green-600'}
                       `}
                     >
-                      {status}
+                      {disabled ? 'Disabled' : 'Normal'}
                     </span>
                   )}
                 </div>
@@ -244,7 +261,7 @@ export default function UserPanel(props: IPanelProps) {
 
       </div>
 
-      {(formMode !== 'close') && (
+      {(formMode !== 'CLOSE') && (
         <div
           className="absolute z-10 inset-0 p-4 bg-white"
         >
@@ -278,6 +295,7 @@ export default function UserPanel(props: IPanelProps) {
               placeholder="Username"
               className="mt-1 mb-2 px-2 py-1 border rounded-sm"
               maxLength={16}
+              disabled={formMode === 'EDIT'}
               value={form.username}
               onChange={e => setForm({ ...form, username: e.target.value.toLowerCase().trim() })}
             />
@@ -295,12 +313,12 @@ export default function UserPanel(props: IPanelProps) {
                 type="button"
                 className="mr-2 px-2 py-1 min-w-16 rounded-sm cursor-pointer bg-gray-200 hover:bg-gray-100 active:bg-gray-300"
                 value="Cancel"
-                onClick={() => setFormMode('close')}
+                onClick={() => setFormMode('CLOSE')}
               />
               <input
                 type="button"
                 className="px-2 py-1 min-w-16 rounded-sm cursor-pointer bg-blue-500 hover:bg-blue-400 active:bg-blue-600 text-white"
-                value={formMode === 'add' ? 'Add' : 'Modify'}
+                value={formMode === 'ADD' ? 'Add' : 'Modify'}
                 onClick={handleSubmit}
               />
             </div>

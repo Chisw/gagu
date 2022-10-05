@@ -1,21 +1,27 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common'
+import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
 import { Observable } from 'rxjs'
 import { Request } from 'express'
-import { IS_API_PUBLIC_KEY } from '../decorators/public.decorator'
+import { PUBLIC_DECORATOR_KEY } from '../decorators/public.decorator'
 import { AuthService } from 'src/models/auth/auth.service'
+import { PERMISSION_DECORATOR_KEY } from '../decorators/permission.decorator'
+import { UserService } from 'src/models/user/user.service'
+import { UserPermissionType } from 'src/types'
 
 @Injectable()
 export class ApiGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
     private readonly authService: AuthService,
+    private readonly userService: UserService,
   ) {}
 
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    const isPublic = this.reflector.get(IS_API_PUBLIC_KEY, context.getHandler())
+    const handler = context.getHandler()
+    const isPublic = this.reflector.get(PUBLIC_DECORATOR_KEY, handler)
+    const requiredPermission: UserPermissionType | undefined = this.reflector.get(PERMISSION_DECORATOR_KEY, handler)
     if (isPublic) {
       return true
     } else {
@@ -23,8 +29,19 @@ export class ApiGuard implements CanActivate {
       const authorization = request.header('Authorization') || ''
       const queryToken = (request.query.token || '') as string
       const token = authorization || queryToken
-      const user = token ? this.authService.getLoginUsername(token) : undefined
-      return !!user
+      const username = token ? this.authService.findOneUsername(token) : undefined
+      const isLoggedIn = !!username
+
+      if (isLoggedIn) {
+        if (requiredPermission) {
+          const user = this.userService.findOne(username)
+          return user!.permissionList.includes(requiredPermission)
+        } else {
+          return true
+        }
+      } else {
+        throw new UnauthorizedException()
+      }
     }
   }
 }

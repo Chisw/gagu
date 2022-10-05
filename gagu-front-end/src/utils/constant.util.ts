@@ -5,6 +5,7 @@ export const BASE_URL = process.env.REACT_APP_BASE_URL || `${protocol}//${host}`
 export const DOCUMENT_TITLE = 'GAGU'
 export const INVALID_NAME_CHAR_LIST = ['/', '|', '\\', '?', ':', '"', '<', '>', '*']
 export const MAX_PAGE_SIZE = 200
+export const ERROR_TIMEOUT = 'ERROR_TIMEOUT'
 
 // Sync BE & FE
 export const GEN_THUMBNAIL_VIDEO_LIST = ['mp4', 'mov', 'wmv', 'insv', 'mkv', 'avi', 'rm', 'rmvb']

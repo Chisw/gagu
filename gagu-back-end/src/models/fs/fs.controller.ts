@@ -25,13 +25,11 @@ export class FsController {
 
   @Get('root')
   getRoot() {
-    console.log('GET /FS/ROOT')
     return this.fsService.getRootEntryList()
   }
 
   @Get('list')
   findAll(@Query('path') path: string) {
-    console.log('GET /FS/LIST', path)
     const entryList = this.fsService.getEntryList(path)
     return {
       success: true,
@@ -41,7 +39,6 @@ export class FsController {
 
   @Get('exists')
   readExists(@Query('path') path: string) {
-    console.log('GET /FS/EXISTS', path)
     const exists = getExists(path)
     return {
       success: true,
@@ -51,7 +48,6 @@ export class FsController {
 
   @Get('size')
   readSize(@Query('path') path: string) {
-    console.log('GET /FS/SIZE:', path)
     const size = this.fsService.getDirectorySize(path)
     return {
       success: true,
@@ -61,14 +57,12 @@ export class FsController {
 
   @Get('text')
   readTextContent(@Query('path') path: string) {
-    console.log('GET /FS/TEXT', path)
     const textContent = this.fsService.getTextContent(path)
     return textContent
   }
 
   @Put('rename')
   update(@Body('oldPath') oldPath: string, @Body('newPath') newPath: string) {
-    console.log('PUT /FS/RENAME', oldPath, 'to', newPath)
     renameSync(oldPath, newPath)
     return {
       success: true,
@@ -77,14 +71,12 @@ export class FsController {
 
   @Post('mkdir')
   create(@Body('path') path: string) {
-    console.log('POST /FS/MKDIR', path)
     mkdirSync(path)
     return { success: true }
   }
 
   @Delete('delete')
   remove(@Query('path') path: string) {
-    console.log('DELETE /FS/DELETE', path)
     deleteEntry(path)
     return { success: true }
   }
@@ -92,7 +84,6 @@ export class FsController {
   @Get('thumbnail')
   @Header('Content-Type', 'image/jpg')
   async readThumbnail(@Query('path') path: string, @Res() response: Response) {
-    console.log('GET /FS/THUMBNAIL', path)
     try {
       const filePath = await this.fsService.getThumbnailPath(path)
       response.sendFile(filePath)
@@ -107,7 +98,6 @@ export class FsController {
     @Query('username') username: User.Username,
     @Res() response: Response,
   ) {
-    console.log('GET /FS/AVATAR', username)
     try {
       const avatarPath = this.fsService.getAvatarPath(username)
       if (getExists(avatarPath)) {
@@ -122,7 +112,6 @@ export class FsController {
 
   @Get('exif')
   async getExif(@Query('path') path: string) {
-    console.log('GET /FS/EXIF', path)
     try {
       const data = await this.fsService.getExif(path)
       return data
@@ -130,14 +119,13 @@ export class FsController {
       console.log('ERR: EXIF')
       return {
         success: false,
-        msg: 'EXIF ERROR',
+        message: 'EXIF ERROR',
       }
     }
   }
 
   @Get('tags')
   async getTags(@Query('path') path: string) {
-    console.log('GET /FS/TAGS:', path)
     try {
       const data = await this.fsService.getTags(path)
       return data
@@ -145,7 +133,7 @@ export class FsController {
       console.log('ERR: EXIF')
       return {
         success: false,
-        msg: 'TAGS ERROR',
+        message: 'TAGS ERROR',
       }
     }
   }
@@ -156,7 +144,6 @@ export class FsController {
     @Query('token') token: string,
     @Res() response: Response,
   ) {
-    console.log('GET /FS/STREAM', path)
     response.sendFile(path)
   }
 
@@ -166,7 +153,6 @@ export class FsController {
     @Query('path') path: string,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    console.log('POST /FS/UPLOAD', path)
     return this.fsService.uploadFile(path, file.buffer)
   }
 
@@ -178,7 +164,6 @@ export class FsController {
     @Query('entry') entryList: string[],
     @Res() response: Response,
   ) {
-    console.log('GET /FS/DOWNLOAD', { path, entryList })
     if (entryList) {
       console.log()
     } else {

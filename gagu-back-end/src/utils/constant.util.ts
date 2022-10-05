@@ -54,5 +54,5 @@ Usage:
   gagu -o       // Start and open in browser, --open
   gagu -p 8888  // Start with customized port, --port
   gagu -v       // Show version, --version
-  gagu --reset  // Reset with removing GAGU root directory and sub entries
+  gagu --reset  // Reset with removing GAGU root directory
 `

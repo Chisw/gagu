@@ -193,7 +193,7 @@ export class FsService {
     } catch (err) {
       return {
         success: false,
-        msg: err.toString(),
+        message: err.toString(),
       }
     }
   }

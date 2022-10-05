@@ -1,5 +1,5 @@
 import { SetMetadata } from '@nestjs/common'
 
-export const IS_API_PUBLIC_KEY = 'IS_API_PUBLIC_KEY'
+export const PUBLIC_DECORATOR_KEY = 'PUBLIC_DECORATOR_KEY'
 
-export const Public = () => SetMetadata(IS_API_PUBLIC_KEY, true)
+export const Public = () => SetMetadata(PUBLIC_DECORATOR_KEY, true)

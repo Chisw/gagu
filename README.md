@@ -52,7 +52,7 @@ $ gagu -p 8888
 # Show version
 $ gagu -v
 
-# Reset with removing GAGU root directory and sub entries
+# Reset with removing GAGU root directory
 $ gagu --reset
 
 # Stop service

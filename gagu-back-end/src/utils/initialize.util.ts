@@ -1,31 +1,35 @@
-import { IUser, UserStatus } from 'src/types'
+import { IUser, UserPermission } from 'src/types'
 import { GAGU_PATH } from './constant.util'
 import { writeLoginData, writeUsersData } from './user.util'
 import { completeNestedPath, getExists } from './fs.util'
 import * as md5 from 'md5'
 
 export const initialize = () => {
-  completeNestedPath(`${GAGU_PATH.ROOT}/data/PLACEHOLDER`)
-  completeNestedPath(`${GAGU_PATH.ROOT}/desktop/PLACEHOLDER`)
-  completeNestedPath(`${GAGU_PATH.ROOT}/log/PLACEHOLDER`)
-  completeNestedPath(`${GAGU_PATH.ROOT}/public/PLACEHOLDER`)
-  completeNestedPath(`${GAGU_PATH.ROOT}/public/avatar/PLACEHOLDER`)
-  completeNestedPath(`${GAGU_PATH.ROOT}/public/lib/PLACEHOLDER`)
-  completeNestedPath(`${GAGU_PATH.ROOT}/thumbnail/PLACEHOLDER`)
+  completeNestedPath(`${GAGU_PATH.ROOT}/data/_`)
+  completeNestedPath(`${GAGU_PATH.ROOT}/desktop/_`)
+  completeNestedPath(`${GAGU_PATH.ROOT}/log/_`)
+  completeNestedPath(`${GAGU_PATH.ROOT}/public/_`)
+  completeNestedPath(`${GAGU_PATH.ROOT}/public/avatar/_`)
+  completeNestedPath(`${GAGU_PATH.ROOT}/public/lib/_`)
+  completeNestedPath(`${GAGU_PATH.ROOT}/thumbnail/_`)
 
   if (!getExists(GAGU_PATH.USERS_DATA)) {
-    const adminUser: IUser = {
+    const administrator: IUser = {
       nickname: 'Admin',
       username: 'gagu',
       password: md5('9293'),
-      status: UserStatus.normal,
-      expiredAt: 0,
-      permissionList: [],
-      rootEntryPathList: [],
-      isAdmin: true,
+      disabled: false,
       createdAt: Date.now(),
+      expiredAt: 0,
+      permissionList: [
+        UserPermission.administer, 
+        UserPermission.read, 
+        UserPermission.write, 
+        UserPermission.delete,
+      ],
+      rootEntryPathList: [],
     }
-    writeUsersData([adminUser])
+    writeUsersData([administrator])
   }
 
   if (!getExists(GAGU_PATH.LOGIN_DATA)) {

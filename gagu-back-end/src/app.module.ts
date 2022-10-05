@@ -5,6 +5,7 @@ import { join } from 'path'
 import { ApiGuard } from './common/guards/api.guard'
 import { AuthModule } from './models/auth/auth.module'
 import { FsModule } from './models/fs/fs.module'
+import { UserModule } from './models/user/user.module'
 import { IS_DEV } from './utils'
 
 // build before use
@@ -21,6 +22,7 @@ const rootPath = IS_DEV ? devRootPath : prodRootPath
     ),
     AuthModule,
     FsModule,
+    UserModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: ApiGuard }],
 })

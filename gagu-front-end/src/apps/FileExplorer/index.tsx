@@ -298,7 +298,7 @@ export default function FileExplorer(props: AppComponentProps) {
 
   const handleDownloadClick = useCallback((contextEntryList?: IEntry[]) => {
     const processList = contextEntryList || selectedEntryList
-    const { msg, downloadName, cmd } = getDownloadInfo(currentPath, processList)
+    const { message, downloadName, cmd } = getDownloadInfo(currentPath, processList)
     const close = () => setDownloadConfirmorProps({ isOpen: false })
     const icon = <SvgIcon.Download size={36} />
 
@@ -309,7 +309,7 @@ export default function FileExplorer(props: AppComponentProps) {
           <div className="p-4 flex justify-center">
             {icon}
           </div>
-          <p className="mt-2 text-base break-all">{msg} ？</p>
+          <p className="mt-2 text-base break-all">{message} ？</p>
         </div>
       ),
       onCancel: close,
@@ -324,7 +324,7 @@ export default function FileExplorer(props: AppComponentProps) {
     const processList = contextEntryList || selectedEntryList
     const len = processList.length
     if (!len) return
-    const msg = len === 1 ? processList[0].name : `${len} 个项目`
+    const message = len === 1 ? processList[0].name : `${len} 个项目`
     const close = () => setDeleteConfirmorProps({ isOpen: false })
     const icon = <SvgIcon.Delete size={36} />
 
@@ -335,7 +335,7 @@ export default function FileExplorer(props: AppComponentProps) {
           <div className="p-4 flex justify-center">
             {icon}
           </div>
-          <p className="mt-2 text-base break-all">删除 <span className="font-bold">{msg}</span> ？</p>
+          <p className="mt-2 text-base break-all">删除 <span className="font-bold">{message}</span> ？</p>
         </div>
       ),
       onCancel: close,

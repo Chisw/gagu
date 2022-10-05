@@ -25,7 +25,7 @@ export default function LoginPage() {
       TOKEN.set(res.token)
       navigate('/')
     } else {
-      toast.error(res.msg)
+      toast.error(res.message)
     }
   }, [username, password, login, navigate])
   
