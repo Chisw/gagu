@@ -50,9 +50,7 @@ export default function Settings (props: AppComponentProps) {
           ))}
         </div>
         <div className="relative w-full h-full bg-white border-l">
-          <Panel
-            setWindowLoading={setWindowLoading}
-          />
+          <Panel setWindowLoading={setWindowLoading} />
         </div>
       </div>
     </>

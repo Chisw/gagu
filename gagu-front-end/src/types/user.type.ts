@@ -22,7 +22,7 @@ export interface IUser {
   password: User.Password
   disabled: boolean
   createdAt: number
-  expiredAt: number
+  expiredAt: number | undefined
   permissionList: UserPermissionType[]
   rootEntryPathList: string[]
 }
@@ -38,8 +38,8 @@ export class UserForm implements IUserForm {
   password: User.Password = ''
   disabled = false
   createdAt = 0
-  expiredAt = 0
-  permissionList: UserPermissionType[] = []
+  expiredAt: number | undefined = undefined
+  permissionList: UserPermissionType[] = [UserPermission.read]
   rootEntryPathList: string[] = []
 
   constructor(user?: IUser, avatarPath?: string) {

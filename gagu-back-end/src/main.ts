@@ -58,7 +58,7 @@ async function bootstrap() {
 
   const url = `http://127.0.0.1:${argv.port}`
 
-  console.log(`\n✨  GAGU service is running on: ${url}`)
+  console.log(`\n✨  GAGU service is running on: ${url}\n`)
 
   argv.open && openInBrowser(`${url}/login`)
 }

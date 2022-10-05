@@ -28,8 +28,7 @@ export class AuthService {
     this.sync()
   }
 
-  remove(token: User.Token) {
-    const username = this.findOneUsername(token)
+  remove(username: User.Username) {
     const entries = Object.entries(this.loginMap).filter(
       ([, userName]) => userName !== username,
     )

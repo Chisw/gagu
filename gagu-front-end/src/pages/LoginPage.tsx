@@ -6,6 +6,7 @@ import md5 from 'md5'
 import toast from 'react-hot-toast'
 import { SvgIcon } from '../components/base'
 import { TOKEN } from '../utils'
+import { Input } from '@douyinfe/semi-ui'
 
 export default function LoginPage() {
 
@@ -32,45 +33,44 @@ export default function LoginPage() {
   return (
     <>
       <div
-        className="fixed z-0 inset-0 overflow-hidden bg-gradient-to-br from-gray-400 to-gray-900"
+        className="semi-always-dark fixed z-0 inset-0 overflow-hidden bg-gradient-to-br from-gray-500 to-gray-900"
       >
         <div className="absolute inset-0 flex justify-center items-center backdrop-filter backdrop-blur-lg">
-          <div className="w-56">
+          <div className="w-56 ">
             <div className="text-white flex justify-center items-center">
               <SvgIcon.G size={64} />
             </div>
-            <code>
-              <input
-                autoFocus
-                placeholder="Username"
-                className="mt-12 px-3 py-2 w-full text-sm outline-none bg-black-100 text-white placeholder-gray-400 border-b border-transparent focus:border-white"
-                maxLength={16}
-                value={username}
-                onChange={(e: any) => setUsername(e.target.value.trim())}
-              />
-            </code>
+            <Input
+              autofocus
+              showClear
+              placeholder="Username"
+              className="mt-12"
+              maxLength={16}
+              value={username}
+              onChange={(value) => setUsername(value.trim())}
+            />
             <div className="relative mt-4">
-              <code>
-                <input
-                  type="password"
-                  placeholder="Password"
-                  className="px-3 py-2 w-full text-sm outline-none bg-black-100 text-white placeholder-gray-400 border-b border-transparent focus:border-white"
-                  maxLength={16}
-                  value={password}
-                  onChange={(e: any) => setPassword(e.target.value)}
-                  onKeyUp={(e: any) => e.key === 'Enter' && handleLogin()}
-                />
-              </code>
-              <button
-                disabled={!username || !password}
-                className="absolute top-0 right-0 px-3 h-full hover:bg-black-200"
-                onClick={handleLogin}
-              >
-                {loading
-                  ? <SvgIcon.Loader className="text-white"/>
-                  : <SvgIcon.ArrowRight className="text-white"/>
-                }
-              </button>
+              <Input
+                showClear
+                type="password"
+                placeholder="Password"
+                maxLength={16}
+                value={password}
+                onChange={(value) => setPassword(value)}
+                onKeyUp={(e: any) => e.key === 'Enter' && handleLogin()}
+                suffix={(
+                  <button
+                    disabled={!username || !password}
+                    className="mr-1 w-6 h-6 rounded hover:bg-black-200 text-white flex justify-center items-center"
+                    onClick={handleLogin}
+                  >
+                    {loading
+                      ? <SvgIcon.Loader />
+                      : <SvgIcon.ArrowRight />
+                    }
+                  </button>
+                )}
+              />
             </div>
           </div>
         </div>

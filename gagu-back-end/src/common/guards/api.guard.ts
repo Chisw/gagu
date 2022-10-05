@@ -35,7 +35,7 @@ export class ApiGuard implements CanActivate {
       if (isLoggedIn) {
         if (requiredPermission) {
           const user = this.userService.findOne(username)
-          return user!.permissionList.includes(requiredPermission)
+          return !!user?.permissionList.includes(requiredPermission)
         } else {
           return true
         }

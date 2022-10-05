@@ -4,8 +4,8 @@ import {
   Body,
   Get,
   Delete,
-  Put,
   Param,
+  Patch,
 } from '@nestjs/common'
 import { UserService } from './user.service'
 import { User, IUser, IUserForm, UserPermission } from 'src/types'
@@ -27,18 +27,25 @@ export class UserController {
   getData() {
     const userList = this.userService.findAll()
     const loginMap = this.authService.findAll()
-    const loggedIn = Object.values(loginMap)
+    const loggedInList = Object.values(loginMap)
     return {
       success: true,
       userList,
-      loggedIn,
+      loggedInList,
     }
   }
 
   @Post()
   @Permission(UserPermission.administer)
   create(@Body() userFormData: IUserForm) {
-    const { avatar, nickname, username, password } = userFormData
+    const {
+      avatar,
+      nickname,
+      username,
+      password,
+      expiredAt,
+      permissionList,
+    } = userFormData
 
     if (this.userService.findOne(username)) {
       return {
@@ -56,8 +63,8 @@ export class UserController {
         password,
         disabled: false,
         createdAt: Date.now(),
-        expiredAt: 0,
-        permissionList: [],
+        expiredAt,
+        permissionList,
         rootEntryPathList: [],
       }
       this.userService.create(newUser)
@@ -67,10 +74,10 @@ export class UserController {
     }
   }
 
-  @Put()
+  @Patch(':username')
   @Permission(UserPermission.administer)
-  update(@Body('user') userForm: IUserForm) {
-    if (!this.userService.findOne(userForm.username)) {
+  update(@Param('username') username: User.Username, @Body('user') userForm: IUserForm) {
+    if (!this.userService.findOne(username)) {
       return {
         success: false,
         message: 'ERROR_USER_NOT_EXISTED',
