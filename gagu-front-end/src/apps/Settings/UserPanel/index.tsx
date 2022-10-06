@@ -7,7 +7,7 @@ import { IUser, IUserForm, User, UserForm } from '../../../types'
 import UserFormModal from './UserFormModal'
 import UserList from './UserList'
 
-export type formModeType = 'CLOSE' | 'ADD' | 'EDIT'
+export type formModeType = 'CLOSE' | 'CREATE' | 'EDIT'
 
 export default function UserPanel(props: IPanelProps) {
 
@@ -18,7 +18,7 @@ export default function UserPanel(props: IPanelProps) {
   const [formMode, setFormMode] = useState<formModeType>('CLOSE')
   const [form, setForm] = useState<IUserForm>(new UserForm())
 
-  const { fetch: refresh, data, loading } = useFetch(UserApi.getData)
+  const { fetch: refresh, data, loading } = useFetch(UserApi.getUserData)
 
   useEffect(() => {
     refresh()
@@ -33,8 +33,6 @@ export default function UserPanel(props: IPanelProps) {
     const loggedInList: User.Username[] = data?.loggedInList || []
     return { userList, loggedInList }
   }, [data])
-
-
 
   return (
     <>
@@ -55,7 +53,7 @@ export default function UserPanel(props: IPanelProps) {
               className="w-6 h-6 cursor-pointer hover:bg-gray-100 flex justify-center items-center rounded"
               onClick={() => {
                 setForm(new UserForm())
-                setFormMode('ADD')
+                setFormMode('CREATE')
               }}
             >
               <SvgIcon.Add className="text-blue-500" />

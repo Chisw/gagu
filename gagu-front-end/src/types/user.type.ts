@@ -29,6 +29,7 @@ export interface IUser {
 
 export interface IUserForm extends IUser {
   avatar: string
+  password2: string
 }
 
 export class UserForm implements IUserForm {
@@ -36,6 +37,7 @@ export class UserForm implements IUserForm {
   nickname: User.Nickname = ''
   username: User.Username = ''
   password: User.Password = ''
+  password2: User.Password = ''
   disabled = false
   createdAt = 0
   expiredAt: number | undefined = undefined
@@ -55,9 +57,8 @@ export class UserForm implements IUserForm {
   }
 }
 
-export interface IUsersData {
-  version: string
-  userList: IUser[]
+export type ILoginRecord = {
+  token: User.Token
+  username: User.Username
+  timestamp: number
 }
-
-export type ILoginMap = { [TOKEN: User.Token]: User.Username }

@@ -27,7 +27,7 @@ export default function UserFormModal(props: UserFormModalProps) {
     setFormMode,
   } = props
 
-  const { fetch: addUser } = useFetch(UserApi.addUser)
+  const { fetch: createUser } = useFetch(UserApi.createUser)
 
   const fileInputRef = useRef<any>(null)
 
@@ -65,11 +65,12 @@ export default function UserFormModal(props: UserFormModalProps) {
       return
     }
 
-    const res = await addUser({
+    const res = await createUser({
       avatar,
       nickname,
       username,
       password: md5(password),
+      password2: '',
       disabled,
       createdAt: 0,
       expiredAt,
@@ -84,7 +85,7 @@ export default function UserFormModal(props: UserFormModalProps) {
     } else {
       toast.error(res.message)
     }
-  }, [refresh, addUser, form, setFormMode])
+  }, [refresh, createUser, form, setFormMode])
 
   return (
     <>
@@ -112,7 +113,8 @@ export default function UserFormModal(props: UserFormModalProps) {
             >
               <Form.Input
                 showClear
-                label="Nickname"
+                autofocus={formMode === 'CREATE'}
+                label="昵称"
                 placeholder="Nickname"
                 maxLength={16}
                 field="nickname"
@@ -120,7 +122,8 @@ export default function UserFormModal(props: UserFormModalProps) {
               />
               <Form.Input
                 showClear
-                label="Username"
+                disabled={formMode === 'EDIT'}
+                label="用户名"
                 placeholder="Username"
                 maxLength={16}
                 field="username"
@@ -128,31 +131,48 @@ export default function UserFormModal(props: UserFormModalProps) {
               />
               <Form.Input
                 showClear
-                label="Password"
+                label="密码"
                 placeholder="Password"
                 type="password"
                 maxLength={16}
                 field="password"
                 onChange={value => setForm({ ...form, password: value })}
               />
+              <Form.Input
+                showClear
+                label="确认密码"
+                placeholder="Password"
+                type="password"
+                maxLength={16}
+                field="password2"
+                onChange={value => setForm({ ...form, password2: value })}
+              />
               <Form.DatePicker
                 type="dateTime"
-                label="ExpiredAt"
+                label="有效期至"
                 field="expiredAt"
                 className="w-full"
+                extraText={<p className="text-xs">留空永不过期</p>}
                 onChange={date => setForm({ ...form, expiredAt: new Date(date as Date).getTime() })}
               />
               <Form.CheckboxGroup
-                label="PermissionList"
+                label="权限"
                 field="permissionList"
-                options={[
-                  { label: '系统管理', value: UserPermission.administer, extra: '关闭系统、系统设置、用户管理、日志' },
-                  { label: '读取', value: UserPermission.read, extra: '读取文件、数据、缩略图、Exif 信息等', disabled: true, checked: true },
-                  { label: '写入', value: UserPermission.write, extra: '新建文件夹、上传文件等' },
-                  { label: '删除', value: UserPermission.delete, extra: '删除文件、文件夹' },
-                ]}
                 onChange={value => setForm({ ...form, permissionList: value })}
               >
+                {[
+                  { label: '系统管理 Administer', value: UserPermission.administer, extra: '关闭系统、系统设置、用户管理、日志' },
+                  { label: '读取 Read', value: UserPermission.read, extra: '读取文件、数据、缩略图、Exif 信息等', disabled: true, checked: true },
+                  { label: '写入 Write', value: UserPermission.write, extra: '新建文件夹、上传文件等' },
+                  { label: '删除 Delete', value: UserPermission.delete, extra: '删除文件、文件夹' },
+                ].map(({ label, value, extra, disabled }) => (
+                  <div
+                    key={value}
+                  >
+                    <Form.Checkbox value={value} disabled={disabled}>{label}</Form.Checkbox>
+                    <p className="mt-1 text-xs text-gray-500">{extra}</p>
+                  </div>
+                ))}
               </Form.CheckboxGroup>
             </Form>
           </div>
@@ -167,7 +187,7 @@ export default function UserFormModal(props: UserFormModalProps) {
           <Button
             theme="solid"
             type="primary"
-            children={formMode === 'ADD' ? 'Add' : 'Modify'}
+            children={formMode === 'CREATE' ? 'Add' : 'Modify'}
             onClick={handleSubmit}
           />
         </div>

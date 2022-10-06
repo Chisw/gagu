@@ -1,38 +1,46 @@
 import { Injectable } from '@nestjs/common'
-import { User, ILoginMap } from 'src/types'
+import { User, ILoginRecord } from 'src/types'
 import { readLoginData, writeLoginData } from 'src/utils'
 
 @Injectable()
 export class AuthService {
-  private loginMap: ILoginMap = {}
+  private loginRecordList: ILoginRecord[] = []
 
   constructor() {
-    this.loginMap = readLoginData()
+    this.loginRecordList = readLoginData()
   }
 
   sync() {
-    writeLoginData(this.loginMap)
+    writeLoginData(this.loginRecordList)
   }
 
   findAll() {
-    return this.loginMap
+    return this.loginRecordList
   }
 
   findOneUsername(token: User.Token) {
-    const username = this.loginMap[token] as User.Username | undefined
+    const username = this.loginRecordList.find(r => r.token === token)?.username
     return username
   }
 
   create(token: User.Token, username: User.Username) {
-    this.loginMap[token] = username
+    this.loginRecordList.push({
+      token,
+      username,
+      timestamp: Date.now(),
+    })
     this.sync()
   }
 
-  remove(username: User.Username) {
-    const entries = Object.entries(this.loginMap).filter(
-      ([, userName]) => userName !== username,
-    )
-    this.loginMap = Object.fromEntries(entries)
+  remove(token: User.Token) {
+    this.loginRecordList = this.loginRecordList.filter(r => r.token !== token)
     this.sync()
+  }
+
+  removeUserAll(username: User.Username) {
+    this.loginRecordList
+      .filter(r => r.username === username)
+      .map(r => r.token)
+      .forEach(token => this.remove(token))
   }
 }

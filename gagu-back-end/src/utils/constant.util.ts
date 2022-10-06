@@ -38,7 +38,7 @@ export const PATH_MAP: { [PLATFORM: string]: string } = {
   android: `/data/data/com.termux/files/home/storage/shared/Android/.io.gagu`,
 }
 
-export const ROOT_PATH = PATH_MAP[OS.platform] || ''
+export const ROOT_PATH = (PATH_MAP[OS.platform] || '') + (IS_DEV ? '.dev' : '')
 
 export const GAGU_PATH = {
   ROOT: ROOT_PATH,

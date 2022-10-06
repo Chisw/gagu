@@ -4,8 +4,19 @@ import { formModeType } from '.'
 import { FsApi, UserApi } from '../../../api'
 import { SvgIcon } from '../../../components/base'
 import { useFetch } from '../../../hooks'
-import { IUser, IUserForm, UserForm, UserPermission } from '../../../types'
+import { IUser, IUserForm, UserForm, UserPermission, UserPermissionType } from '../../../types'
 import { getAtTime } from '../../../utils'
+
+const sortMap = {
+  [UserPermission.administer]: 0,
+  [UserPermission.read]: 1,
+  [UserPermission.write]: 2,
+  [UserPermission.delete]: 3,
+}
+
+const permissionSorter = (prev: UserPermissionType, next: UserPermissionType) => {
+  return sortMap[prev] > sortMap[next] ? 1 : -1
+}
 
 interface UserListProps {
   list: IUser[]
@@ -126,16 +137,6 @@ export default function UserList(props: UserListProps) {
                 &nbsp;
                 <span className="text-xs text-gray-400">@{username}</span>
               </div>
-              <div className="transform scale-75 origin-top-left">
-                {permissionList.map(p => (
-                  <span
-                    key={p}
-                    className="inline-block px-1 py-0 text-xs text-white bg-blue-600 rounded select-none"
-                  >
-                    {p}
-                  </span>
-                ))}
-              </div>
               {false ? (
                 <span className="inline-block px-1 py-0 text-xs text-white bg-blue-600 rounded select-none transform scale-75 origin-top-left">
                   ADMIN
@@ -143,21 +144,31 @@ export default function UserList(props: UserListProps) {
               ) : (
                 <span
                   className={`
-                    inline-block px-1 py-0 rounded select-none
-                    transform scale-75 origin-top-left
-                    text-xs text-white uppercase
-                    ${disabled ? 'bg-red-600' : 'bg-green-600'}
+                    inline-block px-2 py-0 rounded-full select-none
+                    transform scale-90 origin-top-left
+                    text-xs
+                    ${disabled ? 'text-yellow-600 bg-yellow-200' : 'text-green-600 bg-green-200'}
                   `}
                 >
-                  {disabled ? 'Disabled' : 'Normal'}
+                  {disabled ? 'Disabled' : 'Enabled'}
                 </span>
               )}
             </div>
-            <div className="flex-shrink-0 text-xs leading-none font-din text-gray-400">
+            <div className="flex-shrink-0 text-xs leading-none font-din text-gray-500">
               <p>{getAtTime(createdAt)} 创建</p>
               {showExpire && (
                 <p>{getAtTime(expiredAt)} 过期</p>
               )}
+              <div className="mt-1 transform scale-90 origin-top-left">
+                {permissionList.sort(permissionSorter).map(p => (
+                  <span
+                    key={p}
+                    className="inline-block mr-2px px-1 py-0 text-xs text-white bg-blue-600 rounded select-none capitalize"
+                  >
+                    {p}
+                  </span>
+                ))}
+              </div>
             </div>
             <div className="hidden group-hover:flex flex-grow justify-end items-center">
               {getButtonList(user).map(({ icon, label, onClick }) => (

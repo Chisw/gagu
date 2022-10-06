@@ -33,7 +33,7 @@ export default function LoginPage() {
   return (
     <>
       <div
-        className="semi-always-dark fixed z-0 inset-0 overflow-hidden bg-gradient-to-br from-gray-500 to-gray-900"
+        className="semi-always-dark fixed z-0 inset-0 overflow-hidden bg-gradient-to-br from-gray-500 to-black"
       >
         <div className="absolute inset-0 flex justify-center items-center backdrop-filter backdrop-blur-lg">
           <div className="w-56 ">
@@ -61,7 +61,7 @@ export default function LoginPage() {
                 suffix={(
                   <button
                     disabled={!username || !password}
-                    className="mr-1 w-6 h-6 rounded hover:bg-black-200 text-white flex justify-center items-center"
+                    className="mr-2px w-6 h-6 rounded hover:bg-black-200 text-white flex justify-center items-center"
                     onClick={handleLogin}
                   >
                     {loading

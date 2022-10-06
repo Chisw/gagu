@@ -26,8 +26,8 @@ export class UserController {
   @Permission(UserPermission.administer)
   getData() {
     const userList = this.userService.findAll()
-    const loginMap = this.authService.findAll()
-    const loggedInList = Object.values(loginMap)
+    const loginRecordList = this.authService.findAll()
+    const loggedInList = loginRecordList.map(r => r.username)
     return {
       success: true,
       userList,
@@ -94,7 +94,7 @@ export class UserController {
   @Permission(UserPermission.administer)
   remove(@Param('username') username: User.Username) {
     this.userService.remove(username)
-    this.authService.remove(username)
+    this.authService.removeUserAll(username)
     deleteEntry(`${GAGU_PATH.PUBLIC_AVATAR}/${username}`)
     return {
       success: true,

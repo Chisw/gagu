@@ -20,7 +20,7 @@ export const initialize = () => {
       password: md5('9293'),
       disabled: false,
       createdAt: Date.now(),
-      expiredAt: 0,
+      expiredAt: undefined,
       permissionList: [
         UserPermission.administer, 
         UserPermission.read, 
@@ -33,6 +33,6 @@ export const initialize = () => {
   }
 
   if (!getExists(GAGU_PATH.LOGIN_DATA)) {
-    writeLoginData({})
+    writeLoginData([])
   }
 }
