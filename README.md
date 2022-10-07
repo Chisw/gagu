@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./logo.svg" style="height: 96px;" >
+  <img src="https://gagu.io/logo.svg" style="height: 96px;" >
   <br>
   <br>
   <h1>GAGU (Beta)</h1>
@@ -7,8 +7,8 @@
   <p>A cool web file management system.</p>
   <p>Work on macOS, Windows, Linux(planning), and Android/Termux.</p>
   <p>Inspired by <a href="https://play.google.com/store/apps/details?id=com.lonelycatgames.Xplore" target="_blank">Android/X-plore</a> and <a href="https://www.npmjs.com/package/anywhere" target="_blank">NPM/anywhere</a>.</p>
-  <img src="https://img.shields.io/badge/NPM-0.0.24-orange">
-  <img src="https://img.shields.io/badge/Package Size-233KB-success">
+  <img src="https://img.shields.io/badge/NPM-0.0.25-orange">
+  <img src="https://img.shields.io/badge/Package Size-474KB-success">
   <img src="https://img.shields.io/badge/License-MIT-green">
   <br>
   <br>
@@ -102,7 +102,7 @@ $ yarn start
 
 2. Sync back-end package dependencies to root package.
 
-3. Run build script, refer to [./build.sh](./build.sh).
+3. Run build script `yarn build:bin`, refer to [./build.sh](./build.sh).
 
 4. Publish to NPM.
 

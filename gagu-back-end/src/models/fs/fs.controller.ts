@@ -16,19 +16,22 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common'
-import { User } from 'src/types'
+import { User, UserPermission } from 'src/types'
 import { mkdirSync, renameSync } from 'fs'
+import { Permission } from 'src/common/decorators/permission.decorator'
 
 @Controller('fs')
 export class FsController {
   constructor(private readonly fsService: FsService) {}
 
   @Get('root')
+  @Permission(UserPermission.read)
   getRoot() {
     return this.fsService.getRootEntryList()
   }
 
   @Get('list')
+  @Permission(UserPermission.read)
   findAll(@Query('path') path: string) {
     const entryList = this.fsService.getEntryList(path)
     return {
@@ -47,6 +50,7 @@ export class FsController {
   }
 
   @Get('size')
+  @Permission(UserPermission.read)
   readSize(@Query('path') path: string) {
     const size = this.fsService.getDirectorySize(path)
     return {
@@ -56,12 +60,14 @@ export class FsController {
   }
 
   @Get('text')
+  @Permission(UserPermission.read)
   readTextContent(@Query('path') path: string) {
     const textContent = this.fsService.getTextContent(path)
     return textContent
   }
 
   @Put('rename')
+  @Permission(UserPermission.write)
   update(@Body('oldPath') oldPath: string, @Body('newPath') newPath: string) {
     renameSync(oldPath, newPath)
     return {
@@ -70,18 +76,21 @@ export class FsController {
   }
 
   @Post('mkdir')
+  @Permission(UserPermission.write)
   create(@Body('path') path: string) {
     mkdirSync(path)
     return { success: true }
   }
 
   @Delete('delete')
+  @Permission(UserPermission.delete)
   remove(@Query('path') path: string) {
     deleteEntry(path)
     return { success: true }
   }
 
   @Get('thumbnail')
+  @Permission(UserPermission.read)
   @Header('Content-Type', 'image/jpg')
   async readThumbnail(@Query('path') path: string, @Res() response: Response) {
     try {
@@ -93,6 +102,7 @@ export class FsController {
   }
 
   @Get('avatar')
+  @Permission(UserPermission.read)
   @Header('Content-Type', 'image/jpg')
   readAvatar(
     @Query('username') username: User.Username,
@@ -111,6 +121,7 @@ export class FsController {
   }
 
   @Get('exif')
+  @Permission(UserPermission.read)
   async getExif(@Query('path') path: string) {
     try {
       const data = await this.fsService.getExif(path)
@@ -125,6 +136,7 @@ export class FsController {
   }
 
   @Get('tags')
+  @Permission(UserPermission.read)
   async getTags(@Query('path') path: string) {
     try {
       const data = await this.fsService.getTags(path)
@@ -139,6 +151,7 @@ export class FsController {
   }
 
   @Get('stream')
+  @Permission(UserPermission.read)
   readStream(
     @Query('path') path: string,
     @Query('token') token: string,
@@ -148,6 +161,7 @@ export class FsController {
   }
 
   @Post('upload')
+  @Permission(UserPermission.write)
   @UseInterceptors(FileInterceptor('file'))
   uploadFile(
     @Query('path') path: string,
@@ -158,6 +172,7 @@ export class FsController {
 
   // TODO: remove public
   @Public()
+  @Permission(UserPermission.read)
   @Get('download*')
   getDownload(
     @Query('path') path: string,

@@ -1,8 +1,9 @@
-import { Module } from '@nestjs/common'
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common'
 import { APP_GUARD } from '@nestjs/core'
 import { ServeStaticModule } from '@nestjs/serve-static'
 import { join } from 'path'
 import { ApiGuard } from './common/guards/api.guard'
+import { LoggerMiddleware } from './common/middlewares/logger.middleware'
 import { AuthModule } from './models/auth/auth.module'
 import { FsModule } from './models/fs/fs.module'
 import { UserModule } from './models/user/user.module'
@@ -26,4 +27,10 @@ const rootPath = IS_DEV ? devRootPath : prodRootPath
   ],
   providers: [{ provide: APP_GUARD, useClass: ApiGuard }],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(LoggerMiddleware)
+      .forRoutes('*')
+  }
+}

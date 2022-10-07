@@ -54,7 +54,7 @@ export default function UserList(props: UserListProps) {
       {
         label: '编辑',
         icon: <SvgIcon.Edit className="text-gray-500" />,
-        show: true,
+        show: false,
         onClick: () => {
           const avatarPath = FsApi.getAvatarStreamUrl(user.username)
           setForm(new UserForm(user, avatarPath))
@@ -64,13 +64,13 @@ export default function UserList(props: UserListProps) {
       {
         label: '禁用',
         icon: <SvgIcon.Forbid className="text-yellow-500" />,
-        show: !isAdmin && !user.disabled,
+        show: !isAdmin && !user.disabled && false,
         onClick: () => { },
       },
       {
         label: '启用',
         icon: <SvgIcon.CheckCircle className="text-green-500" />,
-        show: !isAdmin && user.disabled,
+        show: !isAdmin && user.disabled && false,
         onClick: () => { },
       },
       {

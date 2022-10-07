@@ -7,6 +7,7 @@ import { AuthService } from 'src/models/auth/auth.service'
 import { PERMISSION_DECORATOR_KEY } from '../decorators/permission.decorator'
 import { UserService } from 'src/models/user/user.service'
 import { UserPermissionType } from 'src/types'
+import { getReqToken } from 'src/utils'
 
 @Injectable()
 export class ApiGuard implements CanActivate {
@@ -25,10 +26,8 @@ export class ApiGuard implements CanActivate {
     if (isPublic) {
       return true
     } else {
-      const request = context.switchToHttp().getRequest<Request>()
-      const authorization = request.header('Authorization') || ''
-      const queryToken = (request.query.token || '') as string
-      const token = authorization || queryToken
+      const req = context.switchToHttp().getRequest<Request>()
+      const token = getReqToken(req)
       const username = token ? this.authService.findOneUsername(token) : undefined
       const isLoggedIn = !!username
 

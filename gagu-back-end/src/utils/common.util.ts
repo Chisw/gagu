@@ -1,8 +1,16 @@
 import { exec, spawn } from 'child_process'
 import { OS } from './constant.util'
 import * as md5 from 'md5'
+import { Request } from 'express'
 
 export const genToken = () => md5(Math.random().toString())
+
+export const getReqToken = (req: Request) => {
+  const authorization = req.header('Authorization') || ''
+  const queryToken = (req.query.token || '') as string
+  const token = authorization || queryToken
+  return token
+}
 
 export const openInBrowser = (url: string) => {
   if (OS.isMacOS) {

@@ -9,7 +9,6 @@ import {
   deleteEntry,
 } from './utils'
 import * as minimist from 'minimist'
-import { LogMiddleware } from './common/middlewares/log.middleware'
 
 const argv = minimist(process.argv.slice(2), {
   alias: {
@@ -52,7 +51,6 @@ async function bootstrap() {
 
   app.enableCors()
   app.setGlobalPrefix('api')
-  app.use(LogMiddleware)
 
   await app.listen(argv.port)
 
