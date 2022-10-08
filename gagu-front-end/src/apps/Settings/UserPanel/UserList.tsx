@@ -1,8 +1,9 @@
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import toast from 'react-hot-toast'
 import { formModeType } from '.'
 import { FsApi, UserApi } from '../../../api'
 import { SvgIcon } from '../../../components/base'
+import Confirmor from '../../../components/Confirmor'
 import { useFetch } from '../../../hooks'
 import { IUser, IUserForm, UserForm, UserPermission, UserPermissionType } from '../../../types'
 import { getAtTime } from '../../../utils'
@@ -36,7 +37,10 @@ export default function UserList(props: UserListProps) {
     setFormMode,
   } = props
 
-  const { fetch: removeUser } = useFetch(UserApi.removeUser)
+  const [activeUser, setActiveUser] = useState<IUser | null>(null)
+  const [deleteModalShow, setDeleteModalShow] = useState(false)
+
+  const { fetch: removeUser, loading } = useFetch(UserApi.removeUser)
 
   const handleRemove = useCallback(async (username: string) => {
     const res = await removeUser(username)
@@ -77,40 +81,14 @@ export default function UserList(props: UserListProps) {
         label: '删除',
         icon: <SvgIcon.Delete className="text-red-500" />,
         show: true, // !isAdmin,
-        onClick: () => toast((t) => (
-          <div className="">
-            <div className="py-8 w-56 text-center text-sm">
-              <SvgIcon.Delete size={24} className="inline-block" />
-              <p className="mt-4 font-medium text-gray-900">
-                Sure to delete this user?
-              </p>
-              <p className="text-gray-500">
-                User: {user.username}
-              </p>
-            </div>
-            <div className="py-2 flex">
-              <button
-                className="py-1 w-full border-transparent flex items-center justify-center text-sm font-medium rounded text-gray-600 hover:text-gray-500 hover:bg-gray-100"
-                onClick={() => toast.dismiss(t.id)}
-              >
-                Cancel
-              </button>
-              <button
-                className="ml-2 py-1 w-full border-transparent flex items-center justify-center text-sm font-medium rounded text-red-600 hover:text-red-500 hover:bg-red-100"
-                onClick={() => {
-                  handleRemove(user.username)
-                  toast.dismiss(t.id)
-                }}
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        ), { duration: 10 * 1000 })
+        onClick: () => {
+          setActiveUser(user)
+          setDeleteModalShow(true)
+        },
       },
     ].filter(b => b.show)
     return buttonList
-  }, [handleRemove, setForm, setFormMode])
+  }, [setForm, setFormMode])
 
   return (
     <>
@@ -185,6 +163,24 @@ export default function UserList(props: UserListProps) {
           </div>
         )
       })}
+
+      <Confirmor
+        show={deleteModalShow}
+        icon={<SvgIcon.Delete size={36} />}
+        content={(
+          <div>
+            <p className="font-bold">Sure to delete this user?</p>
+            <p>{activeUser?.nickname} @{activeUser?.username}</p>
+          </div>
+        )}
+        confirmLoading={loading}
+        onCancel={() => setDeleteModalShow(false)}
+        onConfirm={async () => {
+          await handleRemove(activeUser!.username)
+          setDeleteModalShow(false)
+        }}
+      />
+
     </>
   )
 }

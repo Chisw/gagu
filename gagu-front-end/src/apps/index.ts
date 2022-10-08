@@ -69,7 +69,7 @@ export const APP_LIST: IApp[] = [
     title: '音乐播放器',
     AppComponent: MusicPlayer,
     width: 480,
-    height: 360,
+    height: 640,
     resizeRange: {
       minWidth: 480,
       minHeight: 240,

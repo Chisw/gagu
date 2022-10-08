@@ -6,7 +6,7 @@ import { runningAppListState, topWindowIndexState } from '../states'
 import { line } from '../utils'
 import { SvgIcon } from './base'
 
-const SAME_CLASS_NAME = `w-6 h-6 flex justify-center items-center cursor-pointer transition-all duration-200`
+const SAME_CLASS_NAME = `w-8 h-8 flex justify-center items-center cursor-pointer transition-all duration-200`
 const DURATION = 200
 
 interface WindowProps {
@@ -160,7 +160,7 @@ export default function AppWindow(props: WindowProps) {
           {/* header */}
           <div
             className={line(`
-              relative w-full h-6 flex items-center select-none border-b
+              relative w-full h-8 flex items-center select-none border-b
               ${headerClassName || 'bg-white text-gray-500'}
             `)}
           >

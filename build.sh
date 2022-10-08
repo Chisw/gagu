@@ -1,8 +1,6 @@
 rm -rf bin
 
-mkdir bin
-
-mkdir bin/public
+mkdir bin bin/public
 
 cd gagu-back-end
 

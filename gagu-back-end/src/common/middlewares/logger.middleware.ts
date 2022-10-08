@@ -13,11 +13,15 @@ export class LoggerMiddleware implements NestMiddleware {
     const username = this.authService.findOneUsername(token) || 'unknown'
     const { method, originalUrl, ip } = req
     const { statusCode } = res
-    if (!originalUrl.startsWith('/api/fs/thumbnail') && !originalUrl.startsWith('/api/fs/avatar')) {
-      const dateTime = DateTime.now().toFormat('yyyy-MM-dd_HH:mm:ss')
+    if (
+      originalUrl.startsWith('/api/') &&
+      !originalUrl.startsWith('/api/fs/thumbnail') &&
+      !originalUrl.startsWith('/api/fs/avatar')
+    ) {
+      const dateTime = DateTime.now().toFormat('yyyy-MM-dd HH:mm:ss')
       const ipStr = String(ip).replace('::ffff:', '')
       const urlStr = decodeURIComponent(originalUrl)
-      const log = `${dateTime} ${username}@${ipStr} [${method}/${statusCode}] ${urlStr}`
+      const log = `[${dateTime}] ${username}@${ipStr} [${method}/${statusCode}] ${urlStr}`
       console.log(log)
     }
     next()

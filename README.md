@@ -25,13 +25,13 @@ You need to install [ffmpeg](https://ffmpeg.org/) and [GraphicsMagick](http://ww
 Install GAGU as a command line tool:
 
 ```sh
-$ npm i gagu -g
+$ npm i -g gagu
 ```
 
 In macOS, you may need command `sudo`:
 
 ```sh
-$ sudo npm i gagu -g
+$ sudo npm i -g gagu
 ```
 
 ## 📝  Usage
@@ -94,11 +94,9 @@ $ yarn start
 
 1. Update following version tags:
 
-```
-./gagu-back-end/src/utils/constant.ts - GAGU_VERSION
-./package.json - version field
-./README.md - version tag
-```
+- `GAGU_VERSION` in `./gagu-back-end/src/utils/constant.util.ts`
+- `version field` in `./package.json`
+- `version tag` in `./README.md`
 
 2. Sync back-end package dependencies to root package.
 

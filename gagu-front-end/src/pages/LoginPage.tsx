@@ -32,11 +32,9 @@ export default function LoginPage() {
   
   return (
     <>
-      <div
-        className="semi-always-dark fixed z-0 inset-0 overflow-hidden bg-gradient-to-br from-gray-500 to-black"
-      >
-        <div className="absolute inset-0 flex justify-center items-center backdrop-filter backdrop-blur-lg">
-          <div className="w-56 ">
+      <div className="fixed z-0 inset-0 overflow-hidden bg-gradient-to-br from-gray-500 to-black">
+        <div className="absolute inset-0 flex justify-center items-center">
+          <div className="semi-always-dark w-56">
             <div className="text-white flex justify-center items-center">
               <SvgIcon.G size={64} />
             </div>
@@ -44,35 +42,44 @@ export default function LoginPage() {
               autofocus
               showClear
               placeholder="Username"
-              className="mt-12"
+              className="mt-12 hover:border-white focus-within:border-white"
               maxLength={16}
               value={username}
               onChange={(value) => setUsername(value.trim())}
             />
-            <div className="relative mt-4">
-              <Input
-                showClear
-                type="password"
-                placeholder="Password"
-                maxLength={16}
-                value={password}
-                onChange={(value) => setPassword(value)}
-                onKeyUp={(e: any) => e.key === 'Enter' && handleLogin()}
-                suffix={(
-                  <button
-                    disabled={!username || !password}
-                    className="mr-2px w-6 h-6 rounded hover:bg-black-200 text-white flex justify-center items-center"
-                    onClick={handleLogin}
-                  >
-                    {loading
-                      ? <SvgIcon.Loader />
-                      : <SvgIcon.ArrowRight />
-                    }
-                  </button>
-                )}
-              />
-            </div>
+            <Input
+              showClear
+              type="password"
+              placeholder="Password"
+              className="mt-4 hover:border-white focus-within:border-white"
+              maxLength={16}
+              value={password}
+              onChange={(value) => setPassword(value)}
+              onKeyUp={(e: any) => e.key === 'Enter' && handleLogin()}
+              suffix={(
+                <button
+                  disabled={!username || !password}
+                  className="mr-2px w-6 h-6 rounded hover:bg-black-200 text-white flex justify-center items-center"
+                  onClick={handleLogin}
+                >
+                  {loading
+                    ? <SvgIcon.Loader />
+                    : <SvgIcon.ArrowRight />
+                  }
+                </button>
+              )}
+            />
           </div>
+        </div>
+        <div className="absolute bottom-0 py-4 w-full text-center text-xs text-white">
+          <a
+            rel="noreferrer"
+            href="https://gagu.io"
+            target="_blank"
+            className="underline opacity-50 hover:opacity-70"
+          >
+            https://gagu.io
+          </a>
         </div>
       </div>
     </>

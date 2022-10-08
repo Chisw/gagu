@@ -52,12 +52,12 @@ export const getDownloadInfo = (parentPath: string, selectedEntryList: IEntry[])
       : `${pathName}.zip`
 
   const message = isDownloadAll
-    ? `下载当前整个目录为 ${downloadName}`
+    ? `下载当前整个目录为 ${downloadName}?`
     : isDownloadSingle
       ? isDownloadSingleDir
-        ? `下载 ${singleEntryName} 为 ${singleEntryName}.zip`
-        : `下载 ${downloadName}`
-      : `下载 ${len} 个项目为 ${downloadName}`
+        ? `下载 ${singleEntryName} 为 ${singleEntryName}.zip?`
+        : `下载 ${downloadName}?`
+      : `下载 ${len} 个项目为 ${downloadName}?`
 
   const cmd = isDownloadAll
     ? ''

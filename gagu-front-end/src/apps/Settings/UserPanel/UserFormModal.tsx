@@ -60,11 +60,6 @@ export default function UserFormModal(props: UserFormModalProps) {
       rootEntryPathList,
     } = form
 
-    if (!username || !password) {
-      toast.error('用户名、密码格式错误')
-      return
-    }
-
     const res = await createUser({
       avatar,
       nickname,
@@ -85,7 +80,7 @@ export default function UserFormModal(props: UserFormModalProps) {
     } else {
       toast.error(res.message)
     }
-  }, [refresh, createUser, form, setFormMode])
+  }, [refresh, createUser, setFormMode, form])
 
   return (
     <>
@@ -110,6 +105,7 @@ export default function UserFormModal(props: UserFormModalProps) {
           <div className="ml-4 flex-grow">
             <Form
               initValues={form}
+              onSubmit={() => handleSubmit()}
             >
               <Form.Input
                 showClear
@@ -117,8 +113,14 @@ export default function UserFormModal(props: UserFormModalProps) {
                 label="昵称"
                 placeholder="Nickname"
                 maxLength={16}
+                suffix={<span className="pr-1 text-xs font-din text-gray-500">{form.nickname.length}/16</span>}
                 field="nickname"
                 onChange={value => setForm({ ...form, nickname: value.trim() })}
+                trigger="blur"
+                rules={[
+                  { required: true, message: 'Required' },
+                  { min: 2, message: 'At least 2 characters'},
+                ]}
               />
               <Form.Input
                 showClear
@@ -126,8 +128,14 @@ export default function UserFormModal(props: UserFormModalProps) {
                 label="用户名"
                 placeholder="Username"
                 maxLength={16}
+                suffix={<span className="pr-1 text-xs font-din text-gray-500">{form.username.length}/16</span>}
                 field="username"
                 onChange={value => setForm({ ...form, username: value.toLowerCase().trim() })}
+                trigger="blur"
+                rules={[
+                  { required: true, message: 'Required' },
+                  { min: 1, message: 'At least 1 character'},
+                ]}
               />
               <Form.Input
                 showClear
@@ -135,8 +143,14 @@ export default function UserFormModal(props: UserFormModalProps) {
                 placeholder="Password"
                 type="password"
                 maxLength={16}
+                suffix={<span className="pr-1 text-xs font-din text-gray-500">{form.password.length}/16</span>}
                 field="password"
                 onChange={value => setForm({ ...form, password: value })}
+                trigger="blur"
+                rules={[
+                  { required: true, message: 'Required' },
+                  { min: 4, message: 'At least 4 characters'},
+                ]}
               />
               <Form.Input
                 showClear
@@ -144,16 +158,34 @@ export default function UserFormModal(props: UserFormModalProps) {
                 placeholder="Password"
                 type="password"
                 maxLength={16}
+                suffix={<span className="pr-1 text-xs font-din text-gray-500">{form.password2.length}/16</span>}
                 field="password2"
                 onChange={value => setForm({ ...form, password2: value })}
+                trigger="blur"
+                rules={[
+                  { required: true, message: 'Required' },
+                  { min: 4, message: 'At least 4 characters'},
+                  {
+                    validator(rule, value, callback, source, options) {
+                      return value === form.password
+                    },
+                    message: 'Not matched'
+                  },
+                ]}
               />
               <Form.DatePicker
                 type="dateTime"
                 label="有效期至"
                 field="expiredAt"
                 className="w-full"
+                defaultValue={new Date()}
                 extraText={<p className="text-xs">留空永不过期</p>}
                 onChange={date => setForm({ ...form, expiredAt: new Date(date as Date).getTime() })}
+                transform={date => new Date(date).getTime()}
+                format="yyyy-MM-dd HH:mm"
+                timePickerOpts={{
+                  minuteStep: 10,
+                }}
               />
               <Form.CheckboxGroup
                 label="权限"
@@ -174,22 +206,22 @@ export default function UserFormModal(props: UserFormModalProps) {
                   </div>
                 ))}
               </Form.CheckboxGroup>
+              <div className="flex justify-end sticky bottom-0">
+                <Button
+                  type="tertiary"
+                  children="Cancel"
+                  onClick={() => setFormMode('CLOSE')}
+                />
+                &emsp;
+                <Button
+                  theme="solid"
+                  type="primary"
+                  htmlType="submit"
+                  children={formMode === 'CREATE' ? 'Add' : 'Modify'}
+                />
+              </div>
             </Form>
           </div>
-        </div>
-        <div className="flex justify-end sticky bottom-0">
-          <Button
-            type="tertiary"
-            children="Cancel"
-            onClick={() => setFormMode('CLOSE')}
-          />
-          &emsp;
-          <Button
-            theme="solid"
-            type="primary"
-            children={formMode === 'CREATE' ? 'Add' : 'Modify'}
-            onClick={handleSubmit}
-          />
         </div>
       </div>
     </>

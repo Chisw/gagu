@@ -80,8 +80,8 @@ export default function FileExplorer(props: AppComponentProps) {
   const [scrollWaiter, setScrollWaiter] = useState<{ wait: boolean, smooth?: boolean }>({ wait: false })
   const [scrollHook, setScrollHook] = useState({ top: 0, height: 0 })
   const [waitDropToCurrentPath, setWaitDropToCurrentPath] = useState(false)
-  const [downloadConfirmorProps, setDownloadConfirmorProps] = useState<ConfirmorProps>({ isOpen: false })
-  const [deleteConfirmorProps, setDeleteConfirmorProps] = useState<ConfirmorProps>({ isOpen: false })
+  const [downloadConfirmorProps, setDownloadConfirmorProps] = useState<ConfirmorProps>({ show: false })
+  const [deleteConfirmorProps, setDeleteConfirmorProps] = useState<ConfirmorProps>({ show: false })
   const [hiddenShow, setHiddenShow] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
   const [abortController, setAbortController] = useState<AbortController | null>(null)
@@ -299,19 +299,12 @@ export default function FileExplorer(props: AppComponentProps) {
   const handleDownloadClick = useCallback((contextEntryList?: IEntry[]) => {
     const processList = contextEntryList || selectedEntryList
     const { message, downloadName, cmd } = getDownloadInfo(currentPath, processList)
-    const close = () => setDownloadConfirmorProps({ isOpen: false })
-    const icon = <SvgIcon.Download size={36} />
+    const close = () => setDownloadConfirmorProps({ show: false })
 
     setDownloadConfirmorProps({
-      isOpen: true,
-      content: (
-        <div className="p-4 text-center">
-          <div className="p-4 flex justify-center">
-            {icon}
-          </div>
-          <p className="mt-2 text-base break-all">{message} ？</p>
-        </div>
-      ),
+      show: true,
+      icon: <SvgIcon.Download size={36} />,
+      content: message,
       onCancel: close,
       onConfirm: () => {
         close()
@@ -325,19 +318,12 @@ export default function FileExplorer(props: AppComponentProps) {
     const len = processList.length
     if (!len) return
     const message = len === 1 ? processList[0].name : `${len} 个项目`
-    const close = () => setDeleteConfirmorProps({ isOpen: false })
-    const icon = <SvgIcon.Delete size={36} />
+    const close = () => setDeleteConfirmorProps({ show: false })
 
     setDeleteConfirmorProps({
-      isOpen: true,
-      content: (
-        <div className="p-4 text-center">
-          <div className="p-4 flex justify-center">
-            {icon}
-          </div>
-          <p className="mt-2 text-base break-all">删除 <span className="font-bold">{message}</span> ？</p>
-        </div>
-      ),
+      show: true,
+      icon: <SvgIcon.Delete size={36} />,
+      content: <>删除 <span className="font-bold">{message}</span> ？</>,
       onCancel: close,
       onConfirm: async () => {
         close()

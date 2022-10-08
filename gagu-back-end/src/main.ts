@@ -32,11 +32,7 @@ async function bootstrap() {
 
   if (argv.reset) {
     deleteEntry(GAGU_PATH.ROOT)
-    console.log(
-      '\n🔔 GAGU_ROOT',
-      GAGU_PATH.ROOT,
-      'and sub entries are removed.\n',
-    )
+    console.log('\n🔔 GAGU_ROOT', GAGU_PATH.ROOT, 'removed successfully.\n')
     process.exit(0)
   }
 
