@@ -1,3 +1,5 @@
+import { IUser, IUserForm } from '../types'
+
 export const GAGU_AUTH_TOKEN_KEY = 'GAGU_AUTH_TOKEN_KEY'
 
 export const TOKEN = {
@@ -13,4 +15,9 @@ export const TOKEN = {
   remove() {
     localStorage.removeItem(GAGU_AUTH_TOKEN_KEY)
   },
+}
+
+export const getIsExpired = (userData: IUser | IUserForm) => {
+  const { expiredAt } = userData
+  return expiredAt && expiredAt < Date.now()
 }

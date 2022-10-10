@@ -217,7 +217,6 @@ export default function UserFormModal(props: UserFormModalProps) {
               label="有效期至"
               field="expiredAt"
               className="w-full"
-              defaultValue={new Date()}
               extraText="永不过期请留空"
               onChange={date => setForm({ ...form, expiredAt: new Date(date as Date).getTime() })}
               transform={date => new Date(date).getTime()}
@@ -232,7 +231,7 @@ export default function UserFormModal(props: UserFormModalProps) {
               onChange={value => setForm({ ...form, permissionList: value })}
             >
               {[
-                { label: '系统管理 Administer', value: UserPermission.administer, extra: '使用设置（系统、用户管理、日志）、关闭系统等功能，且该用户无法被禁用' },
+                { label: '系统管理 Administer', value: UserPermission.administer, extra: '使用设置（系统、用户管理、日志）、关闭系统等功能，该用户无法被禁用' },
                 { label: '读取 Read（必选）', value: UserPermission.read, extra: '读取目录，下载文件，获取缩略图、Exif 信息等', disabled: true, checked: true },
                 { label: '写入 Write', value: UserPermission.write, extra: '新建文件夹，上传文件，移动文件、文件夹等' },
                 { label: '删除 Delete', value: UserPermission.delete, extra: '删除文件、文件夹（若无删除权限，上传时无法覆盖同名文件）' },

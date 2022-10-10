@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common'
 import { UserService } from './user.service'
 import { User, IUserForm, UserPermission, UserAbilityType } from 'src/types'
-import { deleteEntry, GAGU_PATH, SERVER_MESSAGE_MAP } from 'src/utils'
+import { deleteEntry, GAGU_PATH, getIsExpired, SERVER_MESSAGE_MAP } from 'src/utils'
 import { FsService } from '../fs/fs.service'
 import { Permission } from 'src/common/decorators/permission.decorator'
 import { AuthService } from '../auth/auth.service'
@@ -65,7 +65,7 @@ export class UserController {
         message: SERVER_MESSAGE_MAP.ERROR_USER_NOT_EXISTED,
       }
     } else {
-      if (password) {
+      if (password || getIsExpired(userForm)) {
         this.authService.removeAll(username)
       }
       this.fsService.uploadAvatar(username, avatar)
@@ -95,7 +95,11 @@ export class UserController {
     @Param('username') username: User.Username,
     @Param('ability') ability: UserAbilityType,
   ) {
-    this.userService.updateAbility(username, ability === 'enable')
+    const isEnable = ability === 'enable'
+    this.userService.updateAbility(username, isEnable)
+    if (!isEnable) {
+      this.authService.removeAll(username)
+    }
     return {
       success: true,
       message: SERVER_MESSAGE_MAP.OK,

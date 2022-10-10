@@ -5,7 +5,8 @@
   <h1>GAGU (Beta)</h1>
   <p>Website: <a href="https://gagu.io" target="_blank">gagu.io</a></p>
   <p>A cool web file management system.</p>
-  <p>Work on macOS, Windows, Linux(planning), and Android/Termux.</p>
+  <p>Manage your different device files in browser.</p>
+  <p>Support Windows, macOS, Linux and Android/Termux.</p>
   <p>Inspired by <a href="https://play.google.com/store/apps/details?id=com.lonelycatgames.Xplore" target="_blank">Android/X-plore</a> and <a href="https://www.npmjs.com/package/anywhere" target="_blank">NPM/anywhere</a>.</p>
   <img src="https://img.shields.io/badge/NPM-0.0.25-orange">
   <img src="https://img.shields.io/badge/Package Size-474KB-success">

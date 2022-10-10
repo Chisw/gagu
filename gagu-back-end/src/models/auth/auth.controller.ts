@@ -2,7 +2,7 @@ import { Controller, Post, Body, Headers } from '@nestjs/common'
 import { Public } from 'src/common/decorators/public.decorator'
 import { AuthService } from './auth.service'
 import { User, UserPermission } from 'src/types'
-import { genToken, SERVER_MESSAGE_MAP } from 'src/utils'
+import { genToken, getIsExpired, SERVER_MESSAGE_MAP } from 'src/utils'
 import { UserService } from '../user/user.service'
 import { Permission } from 'src/common/decorators/permission.decorator'
 
@@ -21,19 +21,27 @@ export class AuthController {
   ) {
     const user = this.userService.findOne(username)
     if (user) {
+      const { disabled, expiredAt } = user
       if (password === user.password) {
         const token = genToken()
         this.authService.create(token, username)
-        if (user.disabled) {
+        if (disabled) {
           return {
             success: false,
             message: SERVER_MESSAGE_MAP.ERROR_USER_DISABLED,
           }
         } else {
-          return {
-            success: true,
-            message: SERVER_MESSAGE_MAP.OK,
-            token,
+          if (getIsExpired(user)) {
+            return {
+              success: false,
+              message: SERVER_MESSAGE_MAP.ERROR_USER_EXPIRED,
+            }
+          } else {
+            return {
+              success: true,
+              message: SERVER_MESSAGE_MAP.OK,
+              token,
+            }
           }
         }
       } else {
@@ -48,6 +56,11 @@ export class AuthController {
         message: SERVER_MESSAGE_MAP.ERROR_USER_NOT_EXISTED,
       }
     }
+  }
+
+  @Post('refresh')
+  refresh() {
+
   }
 
   @Post('logout')

@@ -6,7 +6,7 @@ import { SvgIcon } from '../../../components/base'
 import Confirmor from '../../../components/Confirmor'
 import { useFetch } from '../../../hooks'
 import { IUser, IUserForm, User, UserAbilityType, UserForm, UserPermission, UserPermissionType } from '../../../types'
-import { getAtTime } from '../../../utils'
+import { getAtTime, getIsExpired } from '../../../utils'
 
 const sortMap = {
   [UserPermission.administer]: 0,
@@ -107,6 +107,7 @@ export default function UserList(props: UserListProps) {
         const { nickname, username, expiredAt, createdAt, disabled, permissionList } = user
         const isLoggedIn = loggedInList.includes(username)
         const showExpire = !!expiredAt
+        const isExpired = getIsExpired(user)
         return (
           <div
             key={username}
@@ -126,20 +127,25 @@ export default function UserList(props: UserListProps) {
                 &nbsp;
                 <span className="text-xs text-gray-400">@{username}</span>
               </div>
-              {false ? (
-                <span className="inline-block px-1 py-0 text-xs text-white bg-blue-600 rounded select-none transform scale-75 origin-top-left">
-                  ADMIN
-                </span>
-              ) : (
+              <span
+                className={`
+                  inline-block px-2 py-0 rounded-full select-none
+                  transform scale-90 origin-top-left
+                  text-xs
+                  ${disabled ? 'text-yellow-600 bg-yellow-200' : 'text-green-600 bg-green-200'}
+                `}
+              >
+                {disabled ? 'Disabled' : 'Enabled'}
+              </span>
+              {isExpired && (
                 <span
                   className={`
                     inline-block px-2 py-0 rounded-full select-none
                     transform scale-90 origin-top-left
-                    text-xs
-                    ${disabled ? 'text-yellow-600 bg-yellow-200' : 'text-green-600 bg-green-200'}
+                    text-xs text-red-500 bg-red-200
                   `}
                 >
-                  {disabled ? 'Disabled' : 'Enabled'}
+                  Expired
                 </span>
               )}
             </div>

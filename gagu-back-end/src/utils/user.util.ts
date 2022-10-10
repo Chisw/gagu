@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync } from 'fs'
-import { ILoginRecord, IUser } from 'src/types'
+import { ILoginRecord, IUser, IUserForm } from 'src/types'
 import { GAGU_PATH } from './constant.util'
 
 export const writeUsersData = (userList: IUser[]) => {
@@ -20,4 +20,9 @@ export const readLoginData = () => {
   const dataStr = readFileSync(GAGU_PATH.LOGIN_DATA).toString('utf-8')
   const loginRecordList: ILoginRecord[] = JSON.parse(dataStr)
   return loginRecordList
+}
+
+export const getIsExpired = (userData: IUser | IUserForm) => {
+  const { expiredAt } = userData
+  return expiredAt && expiredAt < Date.now()
 }
