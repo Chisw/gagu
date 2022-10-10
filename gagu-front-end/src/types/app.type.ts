@@ -1,3 +1,5 @@
+import { IEntry } from './entry.type'
+
 export interface AppComponentProps {
   isTopWindow: boolean
   windowSize: { width: number, height: number }
@@ -24,4 +26,10 @@ export interface IApp {
   }
   matchList?: string[]
   headerClassName?: string
+}
+
+export interface IOpenOperation {
+  app: IApp
+  matchedEntryList: IEntry[]
+  activeEntryIndex: number
 }

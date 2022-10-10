@@ -1,5 +1,12 @@
 import { Injectable } from '@nestjs/common'
-import { EntryType, IDisk, IEntry, IRootEntry, User } from 'src/types'
+import {
+  EntryType,
+  IDisk,
+  IEntry,
+  IRootEntry,
+  IRootInfo,
+  User,
+} from 'src/types'
 import {
   createReadStream,
   readdirSync,
@@ -16,6 +23,7 @@ import {
   GEN_THUMBNAIL_VIDEO_LIST,
   getExists,
   completeNestedPath,
+  dataURLtoBuffer,
 } from 'src/utils'
 import * as nodeDiskInfo from 'node-disk-info'
 import * as md5 from 'md5'
@@ -79,7 +87,7 @@ export class FsService {
     return entryList
   }
 
-  getRootEntryList() {
+  getRootInfo() {
     const rootEntryList: IRootEntry[] = []
     if (OS.isMacOS) {
       const driveList = nodeDiskInfo
@@ -156,13 +164,16 @@ export class FsService {
         },
       )
     }
-    return {
+
+    const rootInfo: IRootInfo = {
       version: GAGU_VERSION,
       platform: OS.platform,
       deviceName: OS.hostname,
       desktopEntryList: this.getEntryList(`${GAGU_PATH.ROOT}/desktop`),
       rootEntryList,
     }
+
+    return rootInfo
   }
 
   getDirectorySize(path: string) {
@@ -195,6 +206,14 @@ export class FsService {
         success: false,
         message: err.toString(),
       }
+    }
+  }
+
+  uploadAvatar(username: User.Username, avatar: string) {
+    if (avatar) {
+      const avatarBuffer = dataURLtoBuffer(avatar)
+      const avatarPath = `${GAGU_PATH.PUBLIC_AVATAR}/${username}`
+      avatarBuffer && this.uploadFile(avatarPath, avatarBuffer)
     }
   }
 

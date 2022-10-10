@@ -1,3 +1,7 @@
 .gg-confirmor .semi-modal-mask {
   @apply bg-black-300 !important;
 }
+
+.semi-form-field-extra {
+  @apply text-xs !important;
+}

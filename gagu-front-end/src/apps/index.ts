@@ -142,3 +142,9 @@ export const APP_LIST: IApp[] = [
 ]
 
 export const CALLABLE_APP_LIST = APP_LIST.filter(app => !!app.matchList)
+export const MULTIPLE_OPEN_APP_ID_LIST = [
+  APP_ID_MAP.fileExplorer,
+  APP_ID_MAP.textEditor,
+  APP_ID_MAP.photoViewer,
+  APP_ID_MAP.videoPlayer,
+]

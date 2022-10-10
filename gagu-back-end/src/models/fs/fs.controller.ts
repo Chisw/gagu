@@ -1,6 +1,6 @@
 import { Response } from 'express'
 import { FileInterceptor } from '@nestjs/platform-express'
-import { deleteEntry, getExists } from 'src/utils'
+import { deleteEntry, getExists, SERVER_MESSAGE_MAP } from 'src/utils'
 import { Public } from 'src/common/decorators/public.decorator'
 import { FsService } from './fs.service'
 import {
@@ -27,7 +27,11 @@ export class FsController {
   @Get('root')
   @Permission(UserPermission.read)
   getRoot() {
-    return this.fsService.getRootEntryList()
+    return {
+      success: true,
+      message: SERVER_MESSAGE_MAP.OK,
+      rootInfo: this.fsService.getRootInfo(),
+    }
   }
 
   @Get('list')
@@ -36,6 +40,7 @@ export class FsController {
     const entryList = this.fsService.getEntryList(path)
     return {
       success: true,
+      message: SERVER_MESSAGE_MAP.OK,
       entryList,
     }
   }
@@ -45,6 +50,7 @@ export class FsController {
     const exists = getExists(path)
     return {
       success: true,
+      message: SERVER_MESSAGE_MAP.OK,
       exists,
     }
   }
@@ -55,6 +61,7 @@ export class FsController {
     const size = this.fsService.getDirectorySize(path)
     return {
       success: true,
+      message: SERVER_MESSAGE_MAP.OK,
       size,
     }
   }
@@ -72,6 +79,7 @@ export class FsController {
     renameSync(oldPath, newPath)
     return {
       success: true,
+      message: SERVER_MESSAGE_MAP.OK,
     }
   }
 
@@ -79,14 +87,20 @@ export class FsController {
   @Permission(UserPermission.write)
   create(@Body('path') path: string) {
     mkdirSync(path)
-    return { success: true }
+    return {
+      success: true,
+      message: SERVER_MESSAGE_MAP.OK,
+    }
   }
 
   @Delete('delete')
   @Permission(UserPermission.delete)
   remove(@Query('path') path: string) {
     deleteEntry(path)
-    return { success: true }
+    return {
+      success: true,
+      message: SERVER_MESSAGE_MAP.OK,
+    }
   }
 
   @Get('thumbnail')
@@ -130,7 +144,7 @@ export class FsController {
       console.log('ERR: EXIF')
       return {
         success: false,
-        message: 'EXIF ERROR',
+        message: SERVER_MESSAGE_MAP.ERROR_EXIF,
       }
     }
   }
@@ -145,7 +159,7 @@ export class FsController {
       console.log('ERR: EXIF')
       return {
         success: false,
-        message: 'TAGS ERROR',
+        message: SERVER_MESSAGE_MAP.ERROR_TAGS,
       }
     }
   }

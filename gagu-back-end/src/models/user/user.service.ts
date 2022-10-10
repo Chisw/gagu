@@ -15,32 +15,76 @@ export class UserService {
   }
 
   findAll() {
-    return this.userList
+    const publicUserList: IUser[] = JSON.parse(JSON.stringify(this.userList))
+    publicUserList.forEach((user) => (user.password = ''))
+    return publicUserList
   }
 
   findOne(username: User.Username) {
     return this.userList.find((user) => user.username === username)
   }
 
-  create(user: IUser) {
+  create(userForm: IUserForm) {
+    const {
+      nickname,
+      username,
+      password,
+      expiredAt,
+      permissionList,
+      rootEntryPathList,
+    } = userForm
+
+    const user: IUser = {
+      nickname,
+      username,
+      password,
+      disabled: false,
+      createdAt: Date.now(),
+      expiredAt,
+      permissionList,
+      rootEntryPathList,
+    }
+
     this.userList.push(user)
     this.sync()
   }
 
   update(userForm: IUserForm) {
-    const index = this.userList.findIndex((u) => u.username === userForm.username)
+    const {
+      nickname,
+      username,
+      password,
+      expiredAt,
+      permissionList,
+      rootEntryPathList,
+    } = userForm
+
+    const index = this.userList.findIndex((u) => u.username === username)
     const user: IUser = this.userList[index]
-    // Object.entries(userForm).forEach(([key, value]) => {
-    //   if (value && (key in user)) {
-    //     user[key] = value
-    //   }
-    // })
+
+    user.nickname = nickname
+    user.expiredAt = expiredAt
+    user.permissionList = permissionList
+    user.rootEntryPathList = rootEntryPathList
+
+    if (password) {
+      user.password = password
+    }
+
     this.userList.splice(index, 1, user)
     this.sync()
   }
 
   remove(username: User.Username) {
     this.userList = this.userList.filter((u) => u.username !== username)
+    this.sync()
+  }
+
+  updateAbility(username: User.Username, enable: boolean) {
+    const user = this.userList.find((user) => user.username === username)
+    if (user) {
+      user.disabled = !enable
+    }
     this.sync()
   }
 }

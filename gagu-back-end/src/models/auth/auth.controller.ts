@@ -1,13 +1,8 @@
-import {
-  Controller,
-  Post,
-  Body,
-  Headers,
-} from '@nestjs/common'
+import { Controller, Post, Body, Headers } from '@nestjs/common'
 import { Public } from 'src/common/decorators/public.decorator'
 import { AuthService } from './auth.service'
 import { User, UserPermission } from 'src/types'
-import { genToken } from 'src/utils'
+import { genToken, SERVER_MESSAGE_MAP } from 'src/utils'
 import { UserService } from '../user/user.service'
 import { Permission } from 'src/common/decorators/permission.decorator'
 
@@ -26,24 +21,31 @@ export class AuthController {
   ) {
     const user = this.userService.findOne(username)
     if (user) {
-      if (user.password === password) {
+      if (password === user.password) {
         const token = genToken()
         this.authService.create(token, username)
-        return {
-          success: true,
-          token,
-          message: 'OK',
+        if (user.disabled) {
+          return {
+            success: false,
+            message: SERVER_MESSAGE_MAP.ERROR_USER_DISABLED,
+          }
+        } else {
+          return {
+            success: true,
+            message: SERVER_MESSAGE_MAP.OK,
+            token,
+          }
         }
       } else {
         return {
           success: false,
-          message: 'ERROR_PASSWORD_WRONG',
+          message: SERVER_MESSAGE_MAP.ERROR_PASSWORD_WRONG,
         }
       }
     } else {
       return {
         success: false,
-        message: 'ERROR_USER_NOT_EXISTED',
+        message: SERVER_MESSAGE_MAP.ERROR_USER_NOT_EXISTED,
       }
     }
   }
@@ -53,6 +55,7 @@ export class AuthController {
     this.authService.remove(token)
     return {
       success: true,
+      message: SERVER_MESSAGE_MAP.OK,
     }
   }
 

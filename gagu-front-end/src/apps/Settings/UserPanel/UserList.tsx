@@ -5,7 +5,7 @@ import { FsApi, UserApi } from '../../../api'
 import { SvgIcon } from '../../../components/base'
 import Confirmor from '../../../components/Confirmor'
 import { useFetch } from '../../../hooks'
-import { IUser, IUserForm, UserForm, UserPermission, UserPermissionType } from '../../../types'
+import { IUser, IUserForm, User, UserAbilityType, UserForm, UserPermission, UserPermissionType } from '../../../types'
 import { getAtTime } from '../../../utils'
 
 const sortMap = {
@@ -40,7 +40,18 @@ export default function UserList(props: UserListProps) {
   const [activeUser, setActiveUser] = useState<IUser | null>(null)
   const [deleteModalShow, setDeleteModalShow] = useState(false)
 
+  const { fetch: updateUserAbility } = useFetch(UserApi.updateUserAbility)
   const { fetch: removeUser, loading } = useFetch(UserApi.removeUser)
+
+  const handleUpdateAbility = useCallback(async (username: User.Username, ability: UserAbilityType) => {
+    const res = await updateUserAbility(username, ability)
+    if (res.success) {
+      refresh()
+      toast.success(res.message)
+    } else {
+      toast.error(res.message)
+    }
+  }, [updateUserAbility, refresh])
 
   const handleRemove = useCallback(async (username: string) => {
     const res = await removeUser(username)
@@ -58,7 +69,7 @@ export default function UserList(props: UserListProps) {
       {
         label: '编辑',
         icon: <SvgIcon.Edit className="text-gray-500" />,
-        show: false,
+        show: true,
         onClick: () => {
           const avatarPath = FsApi.getAvatarStreamUrl(user.username)
           setForm(new UserForm(user, avatarPath))
@@ -68,14 +79,14 @@ export default function UserList(props: UserListProps) {
       {
         label: '禁用',
         icon: <SvgIcon.Forbid className="text-yellow-500" />,
-        show: !isAdmin && !user.disabled && false,
-        onClick: () => { },
+        show: !isAdmin && !user.disabled,
+        onClick: () => handleUpdateAbility(user.username, 'disable'),
       },
       {
         label: '启用',
         icon: <SvgIcon.CheckCircle className="text-green-500" />,
-        show: !isAdmin && user.disabled && false,
-        onClick: () => { },
+        show: !isAdmin && user.disabled,
+        onClick: () => handleUpdateAbility(user.username, 'enable'),
       },
       {
         label: '删除',
@@ -88,7 +99,7 @@ export default function UserList(props: UserListProps) {
       },
     ].filter(b => b.show)
     return buttonList
-  }, [setForm, setFormMode])
+  }, [setForm, setFormMode, handleUpdateAbility])
 
   return (
     <>

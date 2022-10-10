@@ -56,3 +56,14 @@ Usage:
   gagu -v       // Show version, --version
   gagu --reset  // Reset with removing GAGU root directory
 `
+
+// Sync BE & FE
+export const SERVER_MESSAGE_MAP = {
+  OK: 'OK',
+  ERROR_PASSWORD_WRONG: 'ERROR_PASSWORD_WRONG',
+  ERROR_USER_NOT_EXISTED: 'ERROR_USER_NOT_EXISTED',
+  ERROR_USER_EXISTED: 'ERROR_USER_EXISTED',
+  ERROR_USER_DISABLED: 'ERROR_USER_DISABLED',
+  ERROR_EXIF: 'ERROR_EXIF',
+  ERROR_TAGS: 'ERROR_TAGS',
+}

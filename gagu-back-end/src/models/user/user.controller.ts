@@ -8,8 +8,8 @@ import {
   Patch,
 } from '@nestjs/common'
 import { UserService } from './user.service'
-import { User, IUser, IUserForm, UserPermission } from 'src/types'
-import { dataURLtoBuffer, deleteEntry, GAGU_PATH } from 'src/utils'
+import { User, IUserForm, UserPermission, UserAbilityType } from 'src/types'
+import { deleteEntry, GAGU_PATH, SERVER_MESSAGE_MAP } from 'src/utils'
 import { FsService } from '../fs/fs.service'
 import { Permission } from 'src/common/decorators/permission.decorator'
 import { AuthService } from '../auth/auth.service'
@@ -27,9 +27,10 @@ export class UserController {
   getData() {
     const userList = this.userService.findAll()
     const loginRecordList = this.authService.findAll()
-    const loggedInList = loginRecordList.map(r => r.username)
+    const loggedInList = loginRecordList.map((record) => record.username)
     return {
       success: true,
+      message: SERVER_MESSAGE_MAP.OK,
       userList,
       loggedInList,
     }
@@ -37,55 +38,41 @@ export class UserController {
 
   @Post()
   @Permission(UserPermission.administer)
-  create(@Body() userFormData: IUserForm) {
-    const {
-      avatar,
-      nickname,
-      username,
-      password,
-      expiredAt,
-      permissionList,
-    } = userFormData
-
+  create(@Body() userForm: IUserForm) {
+    const { avatar, username } = userForm
     if (this.userService.findOne(username)) {
       return {
         success: false,
-        message: 'ERROR_USER_EXISTED',
+        message: SERVER_MESSAGE_MAP.ERROR_USER_EXISTED,
       }
     } else {
-      const avatarBuffer = dataURLtoBuffer(avatar)
-      const avatarPath = `${GAGU_PATH.PUBLIC_AVATAR}/${username}`
-      avatarBuffer && this.fsService.uploadFile(avatarPath, avatarBuffer)
-
-      const newUser: IUser = {
-        nickname,
-        username,
-        password,
-        disabled: false,
-        createdAt: Date.now(),
-        expiredAt,
-        permissionList,
-        rootEntryPathList: [],
-      }
-      this.userService.create(newUser)
+      this.fsService.uploadAvatar(username, avatar)
+      this.userService.create(userForm)
       return {
         success: true,
+        message: SERVER_MESSAGE_MAP.OK,
       }
     }
   }
 
-  @Patch(':username')
+  @Patch()
   @Permission(UserPermission.administer)
-  update(@Param('username') username: User.Username, @Body('user') userForm: IUserForm) {
+  update(@Body() userForm: IUserForm) {
+    const { avatar, username, password } = userForm
     if (!this.userService.findOne(username)) {
       return {
         success: false,
-        message: 'ERROR_USER_NOT_EXISTED',
+        message: SERVER_MESSAGE_MAP.ERROR_USER_NOT_EXISTED,
       }
     } else {
+      if (password) {
+        this.authService.removeAll(username)
+      }
+      this.fsService.uploadAvatar(username, avatar)
       this.userService.update(userForm)
       return {
         success: true,
+        message: SERVER_MESSAGE_MAP.OK,
       }
     }
   }
@@ -94,10 +81,24 @@ export class UserController {
   @Permission(UserPermission.administer)
   remove(@Param('username') username: User.Username) {
     this.userService.remove(username)
-    this.authService.removeUserAll(username)
+    this.authService.removeAll(username)
     deleteEntry(`${GAGU_PATH.PUBLIC_AVATAR}/${username}`)
     return {
       success: true,
+      message: SERVER_MESSAGE_MAP.OK,
+    }
+  }
+
+  @Post(':username/:ability')
+  @Permission(UserPermission.administer)
+  enable(
+    @Param('username') username: User.Username,
+    @Param('ability') ability: UserAbilityType,
+  ) {
+    this.userService.updateAbility(username, ability === 'enable')
+    return {
+      success: true,
+      message: SERVER_MESSAGE_MAP.OK,
     }
   }
 }

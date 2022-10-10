@@ -18,7 +18,7 @@ export const GEN_THUMBNAIL_IMAGE_LIST = [
   'webp',
   'ico',
   'pbm',
-  'svg'
+  'svg',
 ]
 
 export const GEN_THUMBNAIL_LIST = [
@@ -39,3 +39,13 @@ export const ENTRY_ICON_LIST = [
   { type: 'pdf', matchList: ['pdf'] },
   { type: 'video', matchList: ['mp4', 'mov', 'wmv', 'insv', 'mkv', 'avi', 'rm', 'rmvb'] },
 ]
+
+// Sync BE & FE
+export const SERVER_MESSAGE_MAP = {
+  OK: 'OK',
+  ERROR_PASSWORD_WRONG: 'ERROR_PASSWORD_WRONG',
+  ERROR_USER_NOT_EXISTED: 'ERROR_USER_NOT_EXISTED',
+  ERROR_USER_EXISTED: 'ERROR_USER_EXISTED',
+  ERROR_EXIF: 'ERROR_EXIF',
+  ERROR_TAGS: 'ERROR_TAGS',
+}

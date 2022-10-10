@@ -4,7 +4,7 @@ import { IEntry } from '../types'
 import instance from './instance'
 
 export class FsApi {
-  static getRootEntryList = async (config?: AxiosRequestConfig) => {
+  static getRootInfo = async (config?: AxiosRequestConfig) => {
     const { data } = await instance.get(`/api/fs/root`, config)
     return data
   }

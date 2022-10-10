@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState, useMemo } from 'react'
 import { useRecoilState } from 'recoil'
 import { openOperationState, runningAppListState, topWindowIndexState, rootInfoState, contextMenuDataState } from '../../states'
-import { APP_LIST, APP_ID_MAP } from '../../apps'
+import { APP_LIST, APP_ID_MAP, MULTIPLE_OPEN_APP_ID_LIST } from '../../apps'
 import { IApp, IContextMenuItem, IRootInfo } from '../../types'
 import { line, TOKEN } from '../../utils'
 import { DateTime } from 'luxon'
@@ -25,13 +25,13 @@ export default function Dock() {
 
   const [isEffected, setIsEffected] = useState(false)
 
-  const { fetch: getRootEntryList, loading, data } = useFetch(FsApi.getRootEntryList)
+  const { fetch: getRootInfo, loading, data } = useFetch(FsApi.getRootInfo)
   const { fetch: shutdown } = useFetch(AuthApi.shutdown)
   const { fetch: logout } = useFetch(AuthApi.logout)
 
   useEffect(() => {
-    getRootEntryList()
-  }, [getRootEntryList])
+    getRootInfo()
+  }, [getRootInfo])
 
   useEffect(() => {
     setIsEffected(true)
@@ -39,7 +39,7 @@ export default function Dock() {
 
   useEffect(() => {
     if (data) {
-      setRootInfo(data as IRootInfo)
+      setRootInfo(data.rootInfo as IRootInfo)
     }
   }, [data, setRootInfo])
 
@@ -70,7 +70,7 @@ export default function Dock() {
       {
         text: '刷新',
         icon: <SvgIcon.Refresh />,
-        onClick: () => getRootEntryList(),
+        onClick: () => getRootInfo(),
       },
       {
         text: '退出',
@@ -90,7 +90,7 @@ export default function Dock() {
         },
       },
     ]
-  }, [getRootEntryList, navigate, shutdown, logout])
+  }, [getRootInfo, navigate, shutdown, logout])
 
   const handleOpenApp = useCallback((app: IApp, openNew?: boolean) => {
     const sameRunningAppList = runningAppList.filter(a => a.id === app.id)
@@ -123,7 +123,7 @@ export default function Dock() {
 
   const handleContextMenu = useCallback((event: any, app: IApp) => {
     const appId = app.id
-    const canMultiple = ![APP_ID_MAP.musicPlayer, APP_ID_MAP.transfer, APP_ID_MAP.baiduMap, APP_ID_MAP.ps, APP_ID_MAP.pqina].includes(appId)
+    const canMultiple = MULTIPLE_OPEN_APP_ID_LIST.includes(appId)
     const hasRunning = runningAppList.map(o => o.id).includes(appId)
     const { target, clientX, clientY } = event
     const eventData = { target, clientX, clientY }

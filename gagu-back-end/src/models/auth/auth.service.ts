@@ -19,7 +19,9 @@ export class AuthService {
   }
 
   findOneUsername(token: User.Token) {
-    const username = this.loginRecordList.find(r => r.token === token)?.username
+    const username = this.loginRecordList.find(
+      (record) => record.token === token,
+    )?.username
     return username
   }
 
@@ -33,14 +35,16 @@ export class AuthService {
   }
 
   remove(token: User.Token) {
-    this.loginRecordList = this.loginRecordList.filter(r => r.token !== token)
+    this.loginRecordList = this.loginRecordList.filter(
+      (record) => record.token !== token,
+    )
     this.sync()
   }
 
-  removeUserAll(username: User.Username) {
+  removeAll(username: User.Username) {
     this.loginRecordList
-      .filter(r => r.username === username)
-      .map(r => r.token)
-      .forEach(token => this.remove(token))
+      .filter((r) => r.username === username)
+      .map((r) => r.token)
+      .forEach((token) => this.remove(token))
   }
 }

@@ -1,4 +1,4 @@
-import { IUserForm } from '../types'
+import { IUserForm, UserAbilityType } from '../types'
 import instance from './instance'
 
 export class UserApi {
@@ -13,13 +13,18 @@ export class UserApi {
     return data
   }
 
-  static updateUser = async (username: string, formData: IUserForm) => {
-    const { data } = await instance.post(`/api/user/${username}`, formData)
+  static updateUser = async (formData: IUserForm) => {
+    const { data } = await instance.patch('/api/user', formData)
     return data
   }
 
   static removeUser = async (username: string) => {
     const { data } = await instance.delete(`/api/user/${username}`)
+    return data
+  }
+
+  static updateUserAbility = async (username: string, ability: UserAbilityType) => {
+    const { data } = await instance.post(`/api/user/${username}/${ability}`)
     return data
   }
 }

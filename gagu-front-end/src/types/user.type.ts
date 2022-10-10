@@ -7,6 +7,8 @@ export declare namespace User {
   type Password = string
 }
 
+export type UserAbilityType = 'enable' | 'disable'
+
 export enum UserPermission {
   administer = 'administer',
   read = 'read',

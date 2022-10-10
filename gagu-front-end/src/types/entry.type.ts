@@ -1,5 +1,4 @@
-import { IApp } from './app.type'
-
+// Sync BE & FE
 export enum EntryType {
   directory = 'directory',
   file = 'file',
@@ -29,15 +28,9 @@ export interface IDisk extends IRootEntry {
 }
 
 export interface IRootInfo {
-  version: string,
-  platform: string,
+  version: string
+  platform: string
   deviceName: string
   desktopEntryList: IEntry[]
   rootEntryList: IRootEntry[]
-}
-
-export interface IOpenOperation {
-  app: IApp
-  matchedEntryList: IEntry[]
-  activeEntryIndex: number
 }

@@ -22,9 +22,9 @@ export const initialize = () => {
       createdAt: Date.now(),
       expiredAt: undefined,
       permissionList: [
-        UserPermission.administer, 
-        UserPermission.read, 
-        UserPermission.write, 
+        UserPermission.administer,
+        UserPermission.read,
+        UserPermission.write,
         UserPermission.delete,
       ],
       rootEntryPathList: [],

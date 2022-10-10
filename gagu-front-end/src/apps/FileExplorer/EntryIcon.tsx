@@ -79,7 +79,7 @@ export default function Icon(props: IconProps) {
           onError={() => setThumbnailErr(true)}
           className={line(`
             max-w-full max-h-full
-            ${false  // TODO
+            ${false  // TODO: handle loading bg
               ? 'w-6 h-6 bg-loading'
               : isVideo
                 ? `${isSmall ? 'border-l-2 border-r-2' : 'border-l-4 border-r-4'} border-black rounded-sm`
