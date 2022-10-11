@@ -1,4 +1,4 @@
-// Sync BE & FE
+// Sync following code to BE & FE
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export declare namespace User {
   type Token = string
@@ -8,6 +8,7 @@ export declare namespace User {
 }
 
 export type UserAbilityType = 'enable' | 'disable'
+export type UserExpiredAtType = number | undefined
 
 export enum UserPermission {
   administer = 'administer',
@@ -24,7 +25,7 @@ export interface IUser {
   password: User.Password
   disabled: boolean
   createdAt: number
-  expiredAt: number | undefined
+  expiredAt: UserExpiredAtType
   permissionList: UserPermissionType[]
   rootEntryPathList: string[]
 }
@@ -42,7 +43,7 @@ export class UserForm implements IUserForm {
   password2: User.Password = ''
   disabled = false
   createdAt = 0
-  expiredAt: number | undefined = undefined
+  expiredAt: UserExpiredAtType = undefined
   permissionList: UserPermissionType[] = [UserPermission.read]
   rootEntryPathList: string[] = []
 
@@ -59,8 +60,17 @@ export class UserForm implements IUserForm {
   }
 }
 
-export type ILoginRecord = {
+export interface ILoginRecord {
   token: User.Token
   username: User.Username
   timestamp: number
+}
+
+export interface IUserInfo {
+  token: User.Token
+  nickname: User.Nickname
+  username: User.Username
+  disabled: boolean
+  expiredAt: UserExpiredAtType
+  permissionList: UserPermissionType[]
 }

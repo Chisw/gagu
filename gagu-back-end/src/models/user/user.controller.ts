@@ -9,7 +9,13 @@ import {
 } from '@nestjs/common'
 import { UserService } from './user.service'
 import { User, IUserForm, UserPermission, UserAbilityType } from 'src/types'
-import { deleteEntry, GAGU_PATH, getIsExpired, SERVER_MESSAGE_MAP } from 'src/utils'
+import {
+  deleteEntry,
+  GAGU_PATH,
+  getIsExpired,
+  PULSE_INTERVAL,
+  SERVER_MESSAGE_MAP,
+} from 'src/utils'
 import { FsService } from '../fs/fs.service'
 import { Permission } from 'src/common/decorators/permission.decorator'
 import { AuthService } from '../auth/auth.service'
@@ -27,7 +33,9 @@ export class UserController {
   getData() {
     const userList = this.userService.findAll()
     const loginRecordList = this.authService.findAll()
-    const loggedInList = loginRecordList.map((record) => record.username)
+    const loggedInList = loginRecordList
+      .filter((record) => record.timestamp > Date.now() - PULSE_INTERVAL)
+      .map((record) => record.username)
     return {
       success: true,
       message: SERVER_MESSAGE_MAP.OK,

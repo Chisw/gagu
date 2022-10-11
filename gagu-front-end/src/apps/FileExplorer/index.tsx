@@ -33,6 +33,7 @@ import {
   sizeMapState,
   transferTaskListState,
   transferSignalState,
+  lastUploadedPathState,
 } from '../../states'
 import {
   AppComponentProps,
@@ -64,6 +65,7 @@ export default function FileExplorer(props: AppComponentProps) {
   const [, setContextMenuData] = useRecoilState(contextMenuDataState)
   const [transferTaskList, setTransferTaskList] = useRecoilState(transferTaskListState)
   const [transferSignal, setTransferSignal] = useRecoilState(transferSignalState)
+  const [lastUploadedPath] = useRecoilState(lastUploadedPathState)
 
   const [sideCollapse, setSideCollapse] = useState(false)
   const [currentPath, setCurrentPath] = useState('')
@@ -342,6 +344,12 @@ export default function FileExplorer(props: AppComponentProps) {
   }, [deleteEntry, currentPath, selectedEntryList, handleRefresh])
 
   useEffect(() => setWindowLoading(fetching), [setWindowLoading, fetching])
+
+  useEffect(() => {
+    if (lastUploadedPath.path === currentPath) {
+      handleRefresh()
+    }
+  }, [lastUploadedPath, currentPath, handleRefresh])
 
   useEffect(() => {
     if (!currentPath && rootEntryList.length) {

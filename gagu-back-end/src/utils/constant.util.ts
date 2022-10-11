@@ -2,7 +2,7 @@ import * as os from 'os'
 
 const platform = os.platform()
 
-export const GAGU_VERSION = '0.0.25'
+export const GAGU_VERSION = '0.0.26'
 export const IS_DEV = process.env.NODE_ENV === 'development'
 export const OS = {
   username: process.env.USER || os.userInfo().username,
@@ -12,25 +12,6 @@ export const OS = {
   isWindows: platform === 'win32',
   isAndroid: platform === 'android',
 }
-
-// Sync BE & FE
-export const GEN_THUMBNAIL_VIDEO_LIST = ['mp4', 'mkv', 'avi', 'rm', 'rmvb']
-export const GEN_THUMBNAIL_IMAGE_LIST = [
-  'jpg',
-  'jpeg',
-  'png',
-  'gif',
-  'bmp',
-  'webp',
-  'ico',
-  'pbm',
-  'svg',
-]
-
-export const GEN_THUMBNAIL_LIST = [
-  ...GEN_THUMBNAIL_VIDEO_LIST,
-  ...GEN_THUMBNAIL_IMAGE_LIST,
-]
 
 export const PATH_MAP: { [PLATFORM: string]: string } = {
   darwin: `/Users/${OS.username}/.io.gagu`,
@@ -57,7 +38,26 @@ Usage:
   gagu --reset  // Reset with removing GAGU root directory
 `
 
-// Sync BE & FE
+// Sync following code to BE & FE
+export const PULSE_INTERVAL = 60 * 1000
+export const GEN_THUMBNAIL_VIDEO_LIST = ['mp4', 'mkv', 'avi', 'rm', 'rmvb']
+export const GEN_THUMBNAIL_IMAGE_LIST = [
+  'jpg',
+  'jpeg',
+  'png',
+  'gif',
+  'bmp',
+  'webp',
+  'ico',
+  'pbm',
+  'svg',
+]
+
+export const GEN_THUMBNAIL_LIST = [
+  ...GEN_THUMBNAIL_VIDEO_LIST,
+  ...GEN_THUMBNAIL_IMAGE_LIST,
+]
+
 export const SERVER_MESSAGE_MAP = {
   OK: 'OK',
   ERROR_PASSWORD_WRONG: 'ERROR_PASSWORD_WRONG',
@@ -65,6 +65,7 @@ export const SERVER_MESSAGE_MAP = {
   ERROR_USER_EXISTED: 'ERROR_USER_EXISTED',
   ERROR_USER_DISABLED: 'ERROR_USER_DISABLED',
   ERROR_USER_EXPIRED: 'ERROR_USER_EXPIRED',
+  ERROR_TOKEN_INVALID: 'ERROR_TOKEN_INVALID',
   ERROR_EXIF: 'ERROR_EXIF',
   ERROR_TAGS: 'ERROR_TAGS',
 }

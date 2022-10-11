@@ -1,4 +1,4 @@
-// Sync BE & FE
+// Sync following code to BE & FE
 export enum EntryType {
   directory = 'directory',
   file = 'file',

@@ -249,6 +249,7 @@ export default function UserFormModal(props: UserFormModalProps) {
                 theme="solid"
                 type="primary"
                 htmlType="submit"
+                className="w-32"
                 loading={creating || updating}
                 children={MODE.isCreate ? '创建' : '修改'}
                 onClick={handleScrollToError}

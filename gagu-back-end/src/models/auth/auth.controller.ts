@@ -1,8 +1,13 @@
-import { Controller, Post, Body, Headers } from '@nestjs/common'
+import { Controller, Post, Body, Headers, Get } from '@nestjs/common'
 import { Public } from 'src/common/decorators/public.decorator'
 import { AuthService } from './auth.service'
 import { User, UserPermission } from 'src/types'
-import { genToken, getIsExpired, SERVER_MESSAGE_MAP } from 'src/utils'
+import {
+  genToken,
+  getIsExpired,
+  genUserInfo,
+  SERVER_MESSAGE_MAP,
+} from 'src/utils'
 import { UserService } from '../user/user.service'
 import { Permission } from 'src/common/decorators/permission.decorator'
 
@@ -21,7 +26,7 @@ export class AuthController {
   ) {
     const user = this.userService.findOne(username)
     if (user) {
-      const { disabled, expiredAt } = user
+      const { disabled } = user
       if (password === user.password) {
         const token = genToken()
         this.authService.create(token, username)
@@ -40,7 +45,7 @@ export class AuthController {
             return {
               success: true,
               message: SERVER_MESSAGE_MAP.OK,
-              token,
+              userInfo: genUserInfo(user, token),
             }
           }
         }
@@ -58,9 +63,30 @@ export class AuthController {
     }
   }
 
-  @Post('refresh')
-  refresh() {
-
+  @Get('pulse')
+  pulse(@Headers('Authorization') token: User.Token) {
+    const username = this.authService.findOneUsername(token)
+    if (username) {
+      const user = this.userService.findOne(username)
+      if (user) {
+        this.authService.update(token)
+        return {
+          success: true,
+          message: SERVER_MESSAGE_MAP.OK,
+          userInfo: genUserInfo(user, token),
+        }
+      } else {
+        return {
+          success: false,
+          message: SERVER_MESSAGE_MAP.ERROR_USER_NOT_EXISTED,
+        }
+      }
+    } else {
+      return {
+        success: false,
+        message: SERVER_MESSAGE_MAP.ERROR_TOKEN_INVALID,
+      }
+    }
   }
 
   @Post('logout')

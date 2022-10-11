@@ -35,6 +35,7 @@ export const APP_LIST: IApp[] = [
       minWidth: 640,
       minHeight: 480,
     },
+    multiple: true,
   },
   {
     id: APP_ID_MAP.textEditor,
@@ -48,6 +49,7 @@ export const APP_LIST: IApp[] = [
       minHeight: 100,
     },
     matchList: ['txt', 'md', 'html', 'xml', 'css', 'js', 'json', 'php', 'java', 'sh', 'log', 'md', 'ts', 'tsx'],
+    multiple: true,
   },
   {
     id: APP_ID_MAP.photoViewer,
@@ -62,6 +64,7 @@ export const APP_LIST: IApp[] = [
     },
     matchList: ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'ico'],
     headerClassName: 'bg-gray-800 text-gray-100 border-black-100',
+    multiple: true,
   },
   {
     id: APP_ID_MAP.musicPlayer,
@@ -90,6 +93,7 @@ export const APP_LIST: IApp[] = [
     },
     matchList: ['mp4', 'mkv'],
     headerClassName: 'bg-gray-800 text-gray-100 border-black-100',
+    multiple: true,
   },
   {
     id: APP_ID_MAP.settings,
@@ -142,9 +146,3 @@ export const APP_LIST: IApp[] = [
 ]
 
 export const CALLABLE_APP_LIST = APP_LIST.filter(app => !!app.matchList)
-export const MULTIPLE_OPEN_APP_ID_LIST = [
-  APP_ID_MAP.fileExplorer,
-  APP_ID_MAP.textEditor,
-  APP_ID_MAP.photoViewer,
-  APP_ID_MAP.videoPlayer,
-]

@@ -59,20 +59,18 @@ export class UserService {
       rootEntryPathList,
     } = userForm
 
-    const index = this.userList.findIndex((u) => u.username === username)
-    const user: IUser = this.userList[index]
+    const user = this.userList.find((u) => u.username === username)
 
-    user.nickname = nickname
-    user.expiredAt = expiredAt
-    user.permissionList = permissionList
-    user.rootEntryPathList = rootEntryPathList
-
-    if (password) {
-      user.password = password
+    if (user) {
+      user.nickname = nickname
+      user.expiredAt = expiredAt
+      user.permissionList = permissionList
+      user.rootEntryPathList = rootEntryPathList
+      if (password) {
+        user.password = password
+      }
+      this.sync()
     }
-
-    this.userList.splice(index, 1, user)
-    this.sync()
   }
 
   remove(username: User.Username) {

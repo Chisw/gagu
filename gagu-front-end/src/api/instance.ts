@@ -1,5 +1,5 @@
 import axios, { AxiosError } from 'axios'
-import { BASE_URL, ERROR_TIMEOUT, TOKEN } from '../utils'
+import { BASE_URL, ERROR_TIMEOUT, USER_INFO } from '../utils'
 import toast from 'react-hot-toast'
 
 const instance = axios.create({
@@ -12,11 +12,12 @@ const instance = axios.create({
 })
 
 instance.interceptors.request.use(config => {
+  // TODO
   // const { url, method } = config
   // if (method === 'post' && url?.includes('?cmd=file')) config.timeout = 0
   config.headers = {
     ...config.headers,
-    'Authorization': TOKEN.get(),
+    'Authorization': USER_INFO.getToken(),
   }
   return config
 })
@@ -32,6 +33,8 @@ instance.interceptors.response.use(response => response, (error: AxiosError) => 
     window.location.href = '/login'
   } else if (status === 403) {
     toast.error('ERROR_403')
+    // TODO
+    // response.data.success = false
   } else if (status >= 500) {
     toast.error(`ERROR_${status}: ${message}`)
   }

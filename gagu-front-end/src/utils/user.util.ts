@@ -1,22 +1,40 @@
-import { IUser, IUserForm } from '../types'
+import { IUser, IUserForm, IUserInfo } from '../types'
 
-export const GAGU_AUTH_TOKEN_KEY = 'GAGU_AUTH_TOKEN_KEY'
+export const GAGU_USER_INFO_KEY = 'GAGU_USER_INFO_KEY'
 
-export const TOKEN = {
+export const USER_INFO = {
   get() {
-    const token = localStorage.getItem(GAGU_AUTH_TOKEN_KEY) || ''
-    return token
+    const userInfoStr = localStorage.getItem(GAGU_USER_INFO_KEY) || ''
+    if (userInfoStr) {
+      const storeUserInfo = JSON.parse(userInfoStr)
+      const userInfo: IUserInfo = {
+        token: storeUserInfo.token || '',
+        nickname: storeUserInfo.nickname || 'NO_NICKNAME',
+        username: storeUserInfo.username || 'unknown',
+        disabled: storeUserInfo.disabled || false,
+        expiredAt: storeUserInfo.expiredAt,
+        permissionList: storeUserInfo.permissionList || [],
+      }
+      return userInfo
+    } else {
+      return null
+    }
   },
 
-  set(token: string) {
-    localStorage.setItem(GAGU_AUTH_TOKEN_KEY, token)
+  getToken() {
+    return this.get()?.token || ''
+  },
+
+  set(userInfo: IUserInfo) {
+    localStorage.setItem(GAGU_USER_INFO_KEY, JSON.stringify(userInfo))
   },
 
   remove() {
-    localStorage.removeItem(GAGU_AUTH_TOKEN_KEY)
+    localStorage.removeItem(GAGU_USER_INFO_KEY)
   },
 }
 
+// Sync following code to BE & FE
 export const getIsExpired = (userData: IUser | IUserForm) => {
   const { expiredAt } = userData
   return expiredAt && expiredAt < Date.now()

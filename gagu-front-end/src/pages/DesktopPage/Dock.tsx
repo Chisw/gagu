@@ -1,13 +1,11 @@
 import { useCallback, useEffect, useState, useMemo } from 'react'
 import { useRecoilState } from 'recoil'
-import { openOperationState, runningAppListState, topWindowIndexState, rootInfoState, contextMenuDataState } from '../../states'
-import { APP_LIST, APP_ID_MAP, MULTIPLE_OPEN_APP_ID_LIST } from '../../apps'
-import { IApp, IContextMenuItem, IRootInfo } from '../../types'
-import { line, TOKEN } from '../../utils'
-import { DateTime } from 'luxon'
+import { openOperationState, runningAppListState, topWindowIndexState, contextMenuDataState, userInfoState } from '../../states'
+import { APP_LIST, APP_ID_MAP } from '../../apps'
+import { IApp, IContextMenuItem } from '../../types'
+import { line, PULSE_INTERVAL, USER_INFO } from '../../utils'
 import { useFetch } from '../../hooks'
 import { AuthApi, FsApi } from '../../api'
-import { DOCUMENT_TITLE } from '../../utils'
 import { SvgIcon } from '../../components/base'
 import { useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
@@ -15,50 +13,46 @@ import toast from 'react-hot-toast'
 export default function Dock() {
 
   const navigate = useNavigate()
-  const [timeStr, setTimerStr] = useState('----/--/-- 周- --:--')
 
-  const [rootInfo, setRootInfo] = useRecoilState(rootInfoState)
+  const [isEffected, setIsEffected] = useState(false)
+
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState)
   const [topWindowIndex, setTopWindowIndex] = useRecoilState(topWindowIndexState)
   const [runningAppList, setRunningAppList] = useRecoilState(runningAppListState)
   const [openOperation] = useRecoilState(openOperationState)
   const [, setContextMenuData] = useRecoilState(contextMenuDataState)
 
-  const [isEffected, setIsEffected] = useState(false)
-
-  const { fetch: getRootInfo, loading, data } = useFetch(FsApi.getRootInfo)
+  const { fetch: pulse } = useFetch(AuthApi.pulse)
   const { fetch: shutdown } = useFetch(AuthApi.shutdown)
   const { fetch: logout } = useFetch(AuthApi.logout)
-
-  useEffect(() => {
-    getRootInfo()
-  }, [getRootInfo])
 
   useEffect(() => {
     setIsEffected(true)
   }, [])
 
   useEffect(() => {
-    if (data) {
-      setRootInfo(data.rootInfo as IRootInfo)
+    if (!userInfo) {
+      const info = USER_INFO.get()
+      if (info) {
+        setUserInfo(info)
+      } else {
+        navigate('/login')
+      }
     }
-  }, [data, setRootInfo])
+  }, [userInfo, setUserInfo, navigate])
 
   useEffect(() => {
-    document.title = `${rootInfo ? `${rootInfo.deviceName} - ` : ''}${DOCUMENT_TITLE}`
-  }, [rootInfo])
-
-  useEffect(() => {
-    const tick = () => {
-      const now = DateTime.local()
-      const str = now.toFormat('yyyy/MM/dd 周几 HH:mm')
-      const day = '一二三四五六日'[+now.toFormat('c') - 1]
-      setTimerStr(str.replace('周几', `周${day}`))
-    }
-    tick()
-    const timer = setInterval(tick, 1000)
+    const timer = setInterval(async () => {
+      const res = await pulse()
+      if (res.success) {
+        setUserInfo(res.userInfo)
+        USER_INFO.set(res.userInfo)
+      } else {
+        toast.error(res.message)
+      }
+    }, PULSE_INTERVAL)
     return () => clearInterval(timer)
-  }, [])
-
+  }, [pulse, setUserInfo])
 
   const buttonList = useMemo(() => {
     return [
@@ -68,16 +62,11 @@ export default function Dock() {
         onClick: () => document.querySelector('html')?.requestFullscreen(),
       },
       {
-        text: '刷新',
-        icon: <SvgIcon.Refresh />,
-        onClick: () => getRootInfo(),
-      },
-      {
         text: '退出',
         icon: <SvgIcon.Logout />,
         onClick: async () => {
           await logout()
-          TOKEN.remove()
+          USER_INFO.remove()
           navigate('/login')
         },
       },
@@ -90,7 +79,7 @@ export default function Dock() {
         },
       },
     ]
-  }, [getRootInfo, navigate, shutdown, logout])
+  }, [navigate, shutdown, logout])
 
   const handleOpenApp = useCallback((app: IApp, openNew?: boolean) => {
     const sameRunningAppList = runningAppList.filter(a => a.id === app.id)
@@ -123,7 +112,6 @@ export default function Dock() {
 
   const handleContextMenu = useCallback((event: any, app: IApp) => {
     const appId = app.id
-    const canMultiple = MULTIPLE_OPEN_APP_ID_LIST.includes(appId)
     const hasRunning = runningAppList.map(o => o.id).includes(appId)
     const { target, clientX, clientY } = event
     const eventData = { target, clientX, clientY }
@@ -132,7 +120,7 @@ export default function Dock() {
       {
         icon: <SvgIcon.Add />,
         label: hasRunning ? '新建窗口' : '打开',
-        isShow: !hasRunning || canMultiple,
+        isShow: !hasRunning || app.multiple,
         onClick: () => handleOpenApp(app, true),
       },
       {
@@ -172,34 +160,17 @@ export default function Dock() {
       >
         <div className="w-32 flex-shrink-0">
           <div className="relative w-6 h-6 rounded-sm flex justify-center items-center hover:bg-white-600 hover:text-black active:bg-white-500 group">
-            <SvgIcon.G />
+            {userInfo ? (
+              <img
+                alt={userInfo.nickname}
+                src={FsApi.getAvatarStreamUrl(userInfo.username)}
+                className="rounded-full border border-white"
+              />
+            ) : (
+              <SvgIcon.G />
+            )}
             <div className="absolute left-0 bottom-0 mb-6 bg-white-900 hidden group-hover:block">
-              <div className="py-2 flex justify-center items-center text-gray-500">
-                <a
-                  href="https://gagu.io"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="h-8"
-                >
-                  <div className="gg-logo w-16 h-8" />
-                </a>
-                &nbsp;
-                <span className="text-xs font-din">
-                  {rootInfo.version}
-                </span>
-                &nbsp;
-                <a
-                  href="https://github.com/Chisw/gagu"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <SvgIcon.Github />
-                </a>
-              </div>
               <div className="w-56 py-1 backdrop-filter backdrop-blur">
-                <div className="mb-1 p-2 border-t border-b text-xs text-gray-600">
-                  {loading ? '系统加载中' : `${rootInfo.deviceName} [${rootInfo.platform}] 已连接`}
-                </div>
                 {buttonList.map(({ text, icon, onClick }, buttonIndex) => (
                   <button
                     key={buttonIndex}
@@ -243,9 +214,7 @@ export default function Dock() {
             )
           })}
         </div>
-        <div className="w-32 flex-shrink-0 text-center text-xs leading-none font-din">
-          {timeStr}
-        </div>
+        <div className="w-32"></div>
       </div>
     </>
   )

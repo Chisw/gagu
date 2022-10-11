@@ -98,7 +98,7 @@ export default function AppWindow(props: WindowProps) {
       setIsFullScreen(false)
       setWindowSize({ width, height })
     } else {
-      rndInstance.updatePosition({ x: 0, y: 0 })
+      rndInstance.updatePosition({ x: 0, y: 24 })  // MenuBar height
       const width = window.innerWidth
       const height = window.innerHeight - 48  // Dock height
       rndInstance.updateSize({ width, height })  
@@ -151,7 +151,7 @@ export default function AppWindow(props: WindowProps) {
             gg-move-to-front-trigger
             absolute inset-0 bg-white-800 backdrop-filter backdrop-blur-sm overflow-hidden
             transition-box-shadow duration-200 flex flex-col
-            ${isFullScreen ? '' : 'rounded border border-gray-500 border-opacity-30 bg-clip-padding'}
+            ${isFullScreen ? '' : 'rounded-md border border-gray-500 border-opacity-30 bg-clip-padding'}
             ${isTopWindow ? 'shadow-xl' : 'shadow'}
           `)}
           style={transformStyle}

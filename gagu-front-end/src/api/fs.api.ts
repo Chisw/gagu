@@ -1,5 +1,5 @@
 import { AxiosRequestConfig } from 'axios'
-import { BASE_URL, TOKEN } from '../utils'
+import { BASE_URL, USER_INFO } from '../utils'
 import { IEntry } from '../types'
 import instance from './instance'
 
@@ -64,7 +64,7 @@ export class FsApi {
   static getFileStreamUrl = (entry: IEntry) => {
     const { name, parentPath } = entry
     const path = `${parentPath}/${name}`
-    return `${BASE_URL}/api/fs/stream?path=${path}&token=${TOKEN.get()}`
+    return `${BASE_URL}/api/fs/stream?path=${path}&token=${USER_INFO.getToken()}`
   }
 
   static getThumbnailUrl = (entry: IEntry) => {
@@ -73,11 +73,11 @@ export class FsApi {
     }
     const { name, parentPath } = entry
     const path = `${parentPath}/${name}`
-    return `${BASE_URL}/api/fs/thumbnail?path=${path}&token=${TOKEN.get()}`
+    return `${BASE_URL}/api/fs/thumbnail?path=${path}&token=${USER_INFO.getToken()}`
   }
 
   static getAvatarStreamUrl = (username: string) => {
-    return `${BASE_URL}/api/fs/avatar?username=${username}&token=${TOKEN.get()}`
+    return `${BASE_URL}/api/fs/avatar?username=${username}&token=${USER_INFO.getToken()}`
   }
 
   static startDownload = (parentPath: string, downloadName: string, cmd: string) => {

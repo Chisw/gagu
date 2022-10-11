@@ -1,7 +1,3 @@
-rm -rf bin
-
-mkdir bin bin/public
-
 cd gagu-back-end
 
 echo '\n🔨  Building gagu-back-end..\n'
@@ -15,6 +11,10 @@ echo '\n🔨  Building gagu-front-end..\n'
 yarn build
 
 cd ..
+
+rm -rf bin
+
+mkdir bin bin/public
 
 mv gagu-back-end/dist/* bin
 

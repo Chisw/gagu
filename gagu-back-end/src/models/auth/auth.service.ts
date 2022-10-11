@@ -34,6 +34,14 @@ export class AuthService {
     this.sync()
   }
 
+  update(token: User.Token) {
+    const record = this.loginRecordList.find((record) => record.token === token)
+    if (record) {
+      record.timestamp = Date.now()
+    }
+    this.sync()
+  }
+
   remove(token: User.Token) {
     this.loginRecordList = this.loginRecordList.filter(
       (record) => record.token !== token,

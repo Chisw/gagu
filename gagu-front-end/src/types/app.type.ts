@@ -26,6 +26,7 @@ export interface IApp {
   }
   matchList?: string[]
   headerClassName?: string
+  multiple?: boolean
 }
 
 export interface IOpenOperation {

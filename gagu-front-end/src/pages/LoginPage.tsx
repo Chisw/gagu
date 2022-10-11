@@ -5,14 +5,18 @@ import { AuthApi } from '../api'
 import md5 from 'md5'
 import toast from 'react-hot-toast'
 import { SvgIcon } from '../components/base'
-import { TOKEN } from '../utils'
+import { USER_INFO } from '../utils'
 import { Input } from '@douyinfe/semi-ui'
+import { useRecoilState } from 'recoil'
+import { userInfoState } from '../states'
 
 export default function LoginPage() {
 
   const navigate = useNavigate()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+
+  const [, setUserInfo] = useRecoilState(userInfoState)
 
   const { fetch: login, loading } = useFetch(AuthApi.login)
 
@@ -23,12 +27,13 @@ export default function LoginPage() {
     }
     const res = await login(formData)
     if (res.success) {
-      TOKEN.set(res.token)
+      setUserInfo(res.userInfo)
+      USER_INFO.set(res.userInfo)
       navigate('/')
     } else {
       toast.error(res.message)
     }
-  }, [username, password, login, navigate])
+  }, [username, password, login, setUserInfo, navigate])
   
   return (
     <>

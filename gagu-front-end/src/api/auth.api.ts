@@ -6,6 +6,11 @@ export class AuthApi {
     return data
   }
 
+  static pulse = async () => {
+    const { data } = await instance.get('/api/auth/pulse')
+    return data
+  }
+
   static logout = async () => {
     const { data } = await instance.post('/api/auth/logout')
     return data
