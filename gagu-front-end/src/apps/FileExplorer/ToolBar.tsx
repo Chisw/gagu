@@ -137,10 +137,10 @@ export default function ToolBar(props: ToolBarProps) {
               disabled={disabledMap.download}
               onClick={onDownload}
             />
-            <ToolButton
+            {/* <ToolButton
               title="收藏 [Shift + S]"
               icon={<SvgIcon.Star />}
-            />
+            /> */}
             <ToolButton
               title="重命名 [Shift + E]"
               icon={<SvgIcon.Edit />}

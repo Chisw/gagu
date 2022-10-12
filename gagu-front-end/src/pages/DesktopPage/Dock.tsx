@@ -1,85 +1,24 @@
-import { useCallback, useEffect, useState, useMemo } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
-import { openOperationState, runningAppListState, topWindowIndexState, contextMenuDataState, userInfoState } from '../../states'
+import { openOperationState, runningAppListState, topWindowIndexState, contextMenuDataState } from '../../states'
 import { APP_LIST, APP_ID_MAP } from '../../apps'
 import { IApp, IContextMenuItem } from '../../types'
-import { line, PULSE_INTERVAL, USER_INFO } from '../../utils'
-import { useFetch } from '../../hooks'
-import { AuthApi, FsApi } from '../../api'
+import { line } from '../../utils'
 import { SvgIcon } from '../../components/base'
-import { useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 
 export default function Dock() {
 
-  const navigate = useNavigate()
-
   const [isEffected, setIsEffected] = useState(false)
 
-  const [userInfo, setUserInfo] = useRecoilState(userInfoState)
   const [topWindowIndex, setTopWindowIndex] = useRecoilState(topWindowIndexState)
   const [runningAppList, setRunningAppList] = useRecoilState(runningAppListState)
   const [openOperation] = useRecoilState(openOperationState)
   const [, setContextMenuData] = useRecoilState(contextMenuDataState)
 
-  const { fetch: pulse } = useFetch(AuthApi.pulse)
-  const { fetch: shutdown } = useFetch(AuthApi.shutdown)
-  const { fetch: logout } = useFetch(AuthApi.logout)
-
   useEffect(() => {
-    setIsEffected(true)
+    setTimeout(() => setIsEffected(true))
   }, [])
-
-  useEffect(() => {
-    if (!userInfo) {
-      const info = USER_INFO.get()
-      if (info) {
-        setUserInfo(info)
-      } else {
-        navigate('/login')
-      }
-    }
-  }, [userInfo, setUserInfo, navigate])
-
-  useEffect(() => {
-    const timer = setInterval(async () => {
-      const res = await pulse()
-      if (res.success) {
-        setUserInfo(res.userInfo)
-        USER_INFO.set(res.userInfo)
-      } else {
-        toast.error(res.message)
-      }
-    }, PULSE_INTERVAL)
-    return () => clearInterval(timer)
-  }, [pulse, setUserInfo])
-
-  const buttonList = useMemo(() => {
-    return [
-      {
-        text: '进入全屏',
-        icon: <SvgIcon.Fullscreen />,
-        onClick: () => document.querySelector('html')?.requestFullscreen(),
-      },
-      {
-        text: '退出',
-        icon: <SvgIcon.Logout />,
-        onClick: async () => {
-          await logout()
-          USER_INFO.remove()
-          navigate('/login')
-        },
-      },
-      {
-        text: '关闭系统',
-        icon: <SvgIcon.ShutDown />,
-        onClick: () => {
-          shutdown()
-          window.close()
-        },
-      },
-    ]
-  }, [navigate, shutdown, logout])
 
   const handleOpenApp = useCallback((app: IApp, openNew?: boolean) => {
     const sameRunningAppList = runningAppList.filter(a => a.id === app.id)
@@ -148,45 +87,17 @@ export default function Dock() {
       <div
         className={line(`
           gg-dock
-          absolute z-20 right-0 bottom-0 left-0 px-2 h-12
-          flex justify-between items-center
-          border-t border-gray-500 border-opacity-20
+          absolute z-20 left-1/2 bottom-0 px-2 h-12
+          flex items-center
+          border border-b-0 border-gray-500 border-opacity-20
           bg-clip-padding bg-white-600
+          rounded-t-lg
           backdrop-filter backdrop-blur
           transition-all duration-500
-          transform
+          transform -translate-x-1/2
           ${isEffected ? 'translate-y-0' : 'translate-y-20'}
         `)}
       >
-        <div className="w-32 flex-shrink-0">
-          <div className="relative w-6 h-6 rounded-sm flex justify-center items-center hover:bg-white-600 hover:text-black active:bg-white-500 group">
-            {userInfo ? (
-              <img
-                alt={userInfo.nickname}
-                src={FsApi.getAvatarStreamUrl(userInfo.username)}
-                className="rounded-full border border-white"
-              />
-            ) : (
-              <SvgIcon.G />
-            )}
-            <div className="absolute left-0 bottom-0 mb-6 bg-white-900 hidden group-hover:block">
-              <div className="w-56 py-1 backdrop-filter backdrop-blur">
-                {buttonList.map(({ text, icon, onClick }, buttonIndex) => (
-                  <button
-                    key={buttonIndex}
-                    className="mb-1 px-2 py-1 w-full text-left hover:bg-gray-200 flex items-center select-none"
-                    onClick={onClick}
-                  >
-                    {icon}
-                    <span className="ml-2 text-sm">
-                      {text}
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
         <div className="flex items-center">
           {APP_LIST.map(app => {
             const isRunning = !!runningAppList.find(a => a.id === app.id)
@@ -214,7 +125,6 @@ export default function Dock() {
             )
           })}
         </div>
-        <div className="w-32"></div>
       </div>
     </>
   )

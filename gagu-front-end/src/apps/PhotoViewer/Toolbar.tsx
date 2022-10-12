@@ -65,7 +65,7 @@ export default function Toolbar(props: ToolbarProps) {
         onClick: () => setThumbnailListShow(!thumbnailListShow),
       },
       {
-        icon: <SvgIcon.Contrast size={14} />,
+        icon: <SvgIcon.Bulb size={14} />,
         title: '背景切换',
         onClick: () => setIsLight(!isLight),
       },

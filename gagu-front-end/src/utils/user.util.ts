@@ -1,4 +1,4 @@
-import { IUser, IUserForm, IUserInfo } from '../types'
+import { IUser, IUserForm, IUserInfo, UserPermission, UserPermissionType } from '../types'
 
 export const GAGU_USER_INFO_KEY = 'GAGU_USER_INFO_KEY'
 
@@ -32,6 +32,17 @@ export const USER_INFO = {
   remove() {
     localStorage.removeItem(GAGU_USER_INFO_KEY)
   },
+}
+
+const sortMap = {
+  [UserPermission.administer]: 0,
+  [UserPermission.read]: 1,
+  [UserPermission.write]: 2,
+  [UserPermission.delete]: 3,
+}
+
+export const permissionSorter = (prev: UserPermissionType, next: UserPermissionType) => {
+  return sortMap[prev] > sortMap[next] ? 1 : -1
 }
 
 // Sync following code to BE & FE

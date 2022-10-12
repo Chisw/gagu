@@ -74,7 +74,7 @@ export class UserController {
       }
     } else {
       if (password || getIsExpired(userForm)) {
-        this.authService.removeAll(username)
+        this.authService.removeUserAll(username)
       }
       this.fsService.uploadAvatar(username, avatar)
       this.userService.update(userForm)
@@ -89,7 +89,7 @@ export class UserController {
   @Permission(UserPermission.administer)
   remove(@Param('username') username: User.Username) {
     this.userService.remove(username)
-    this.authService.removeAll(username)
+    this.authService.removeUserAll(username)
     deleteEntry(`${GAGU_PATH.PUBLIC_AVATAR}/${username}`)
     return {
       success: true,
@@ -106,7 +106,7 @@ export class UserController {
     const isEnable = ability === 'enable'
     this.userService.updateAbility(username, isEnable)
     if (!isEnable) {
-      this.authService.removeAll(username)
+      this.authService.removeUserAll(username)
     }
     return {
       success: true,

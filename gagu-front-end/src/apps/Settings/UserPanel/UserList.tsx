@@ -5,19 +5,8 @@ import { FsApi, UserApi } from '../../../api'
 import { SvgIcon } from '../../../components/base'
 import Confirmor from '../../../components/Confirmor'
 import { useFetch } from '../../../hooks'
-import { IUser, IUserForm, User, UserAbilityType, UserForm, UserPermission, UserPermissionType } from '../../../types'
+import { IUser, IUserForm, User, UserAbilityType, UserForm, UserPermission } from '../../../types'
 import { getAtTime, getIsExpired } from '../../../utils'
-
-const sortMap = {
-  [UserPermission.administer]: 0,
-  [UserPermission.read]: 1,
-  [UserPermission.write]: 2,
-  [UserPermission.delete]: 3,
-}
-
-const permissionSorter = (prev: UserPermissionType, next: UserPermissionType) => {
-  return sortMap[prev] > sortMap[next] ? 1 : -1
-}
 
 interface UserListProps {
   list: IUser[]
@@ -155,7 +144,7 @@ export default function UserList(props: UserListProps) {
                 <p>{getAtTime(expiredAt)} 过期</p>
               )}
               <div className="mt-1 transform scale-90 origin-top-left">
-                {permissionList.sort(permissionSorter).map(p => (
+                {permissionList.map(p => (
                   <span
                     key={p}
                     className="inline-block mr-2px px-1 py-0 text-xs text-white bg-blue-600 rounded select-none capitalize"

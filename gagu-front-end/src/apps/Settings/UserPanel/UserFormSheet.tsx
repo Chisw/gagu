@@ -6,7 +6,7 @@ import { UserApi } from '../../../api'
 import { SvgIcon } from '../../../components/base'
 import { useFetch } from '../../../hooks'
 import { IUserForm, UserPermission } from '../../../types'
-import { getImageTypeBase64ByURL, line } from '../../../utils'
+import { getImageTypeBase64ByURL, line, permissionSorter } from '../../../utils'
 import { Button, Form, SideSheet } from '@douyinfe/semi-ui'
 
 const handleScrollToError = () => {
@@ -85,7 +85,7 @@ export default function UserFormModal(props: UserFormModalProps) {
       disabled,
       createdAt: 0,
       expiredAt,
-      permissionList,
+      permissionList: permissionList.sort(permissionSorter),
       rootEntryPathList,
     })
 

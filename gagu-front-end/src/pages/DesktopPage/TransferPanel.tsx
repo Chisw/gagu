@@ -7,7 +7,7 @@ import { useFetch } from '../../hooks'
 import { ITransferTask, IUploadTransferTask, TransferTaskStatus, TransferTaskStatusType, TransferTaskType } from '../../types'
 import { getReadableSize, line } from '../../utils'
 import { lastUploadedPathState, transferSignalState, transferTaskListState } from '../../states'
-import { SideSheet } from '@douyinfe/semi-ui'
+import { Button, SideSheet } from '@douyinfe/semi-ui'
 
 const statusIconMap = {
   waiting: <SvgIcon.Time />,
@@ -18,7 +18,7 @@ const statusIconMap = {
   cancel: <SvgIcon.Warning />,
 }
 
-export default function TransferAssistant() {
+export default function TransferPanel() {
 
   const [transferTaskList, setTransferTaskList] = useRecoilState(transferTaskListState)
   const [transferSignal] = useRecoilState(transferSignalState)
@@ -29,6 +29,12 @@ export default function TransferAssistant() {
   const [transferSignalCache, setTransferSignalCache] = useState(0)
 
   const { fetch: uploadFile, loading: uploading } = useFetch(FsApi.uploadFile)
+
+  useEffect(() => {
+    if (uploading) {
+      setUploadInfo({ ratio: 0, speed: '' })
+    }
+  }, [uploading])
 
   const updateTaskStatus = useCallback((tasks: ITransferTask[], status: TransferTaskStatusType) => {
     const list = [...transferTaskList]
@@ -82,21 +88,29 @@ export default function TransferAssistant() {
   return (
     <>
       <div
-        className="relative px-2 min-w-36 h-full flex items-center cursor-pointer text-xs hover:bg-black-200 active:bg-black-300"
+        className={`
+          relative px-2 h-full
+          text-xs
+          transition-width duration-200
+          flex items-center cursor-pointer hover:bg-white-300 active:bg-black-100
+          ${uploading ? 'min-w-32 bg-white-400' : ''}
+        `}
         onClick={() => setVisible(true)}
       >
         <div
-          className={`transition-width duration-200 absolute left-0 bottom-0 right-0 h-1px bg-green-400 ${uploading ? 'block' : 'hidden'}`}
+          className={`
+            absolute left-0 bottom-0 right-0
+            h-2px bg-green-400
+            transition-width duration-200
+            ${uploading ? 'block' : 'hidden'}
+          `}
           style={{ width: `${uploadInfo.ratio * 100}%` }}
         />
         <SvgIcon.Transfer />
-        &nbsp;
-        <span className="flex-grow">传输助手</span>
-        {uploading && (
-          <span className="font-din text-xs">{uploadInfo.speed}</span>
-        )}
-        &nbsp;
-        <span className="ml-1 font-din">
+        <span className="font-din text-xs text-center flex-grow">
+          {uploading && uploadInfo.speed}
+        </span>
+        <span className="ml-2 font-din">
           {transferTaskList.filter(t => t.status === 'success').length}
           &nbsp;/&nbsp;
           {transferTaskList.length}
@@ -104,14 +118,38 @@ export default function TransferAssistant() {
       </div>
 
       <SideSheet
-        title="传输列表"
+        title={(
+          <div className="flex items-center">
+            <SvgIcon.Transfer size={24} />
+            <span className="ml-2 font-din">{transferTaskList.length}</span>
+            <div className="flex-grow flex justify-end">
+              {transferTaskList.length > 0 && (
+                <Button
+                  size="small"
+                  icon={<SvgIcon.Brush />}
+                  onClick={() => setTransferTaskList([])}
+                >
+                  清空
+                </Button>
+              )}
+              &nbsp;
+              <Button
+                type="danger"
+                size="small"
+                icon={<SvgIcon.Close />}
+                onClick={() => setVisible(false)}
+              />
+            </div>
+          </div>
+        )}
+        closable={false}
         headerStyle={{ padding: '8px 20px', borderBottom: '1px solid #efefef' }}
         maskStyle={{ background: 'rgba(0, 0, 0, .1)' }}
         width={300}
         visible={visible}
         onCancel={() => setVisible(false)}
       >
-        <div className="max-h-full overflow-y-auto">
+        <div>
           {transferTaskList.map((task, taskIndex) => {
             const { id, file, status, newPath } = task
             const name = file ? file.name : ''
@@ -121,7 +159,7 @@ export default function TransferAssistant() {
             return (
               <div
                 key={id}
-                className="py-1 text-xs flex justify-between items-center hover:bg-gray-100"
+                className="py-1 text-xs flex justify-between items-center"
               >
                 <div className="truncate">
                   <p>{indexStr}. {name}</p>
@@ -139,12 +177,6 @@ export default function TransferAssistant() {
               </div>
             )
           })}
-        </div>
-        <div
-          className="mt-2 text-xs flex justify-center cursor-pointer"
-          onClick={() => setTransferTaskList([])}
-        >
-          <SvgIcon.CloseCircle /> 清空
         </div>
       </SideSheet>
     </>

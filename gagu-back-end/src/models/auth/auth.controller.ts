@@ -91,7 +91,7 @@ export class AuthController {
 
   @Post('logout')
   logout(@Headers('Authorization') token: User.Token) {
-    this.authService.remove(token)
+    this.authService.removeOne(token)
     return {
       success: true,
       message: SERVER_MESSAGE_MAP.OK,
@@ -101,6 +101,7 @@ export class AuthController {
   @Post('shutdown')
   @Permission(UserPermission.administer)
   shutdown() {
+    this.authService.removeAll()
     return process.exit(0)
   }
 }

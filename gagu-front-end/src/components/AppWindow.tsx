@@ -100,7 +100,7 @@ export default function AppWindow(props: WindowProps) {
     } else {
       rndInstance.updatePosition({ x: 0, y: 24 })  // MenuBar height
       const width = window.innerWidth
-      const height = window.innerHeight - 48  // Dock height
+      const height = window.innerHeight - 48 - 24  // Dock height
       rndInstance.updateSize({ width, height })  
       setIsFullScreen(true)
       setWindowSize({ width, height })
