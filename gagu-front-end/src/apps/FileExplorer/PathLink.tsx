@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import toast from 'react-hot-toast'
 import { SvgIcon } from '../../components/base'
-import { copy, getRootEntryPath } from '../../utils'
+import { copy, getEntryPath } from '../../utils'
 import { IEntry, IRootEntry } from '../../types'
 
 interface PathLinkProps {
@@ -35,7 +35,7 @@ export default function PathLink(props: PathLinkProps) {
     isRootEntryDisabled,
   } = useMemo(() => {
     const selectedLen = selectedEntryList.length
-    const rootEntryPath = getRootEntryPath(rootEntry)
+    const rootEntryPath = getEntryPath(rootEntry)
     const centerPathList = currentPath.replace(rootEntryPath, '').split('/').filter(Boolean)
     if (selectedLen === 1) {
       centerPathList.push(selectedEntryList[0].name)

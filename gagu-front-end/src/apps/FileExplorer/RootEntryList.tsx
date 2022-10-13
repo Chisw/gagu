@@ -1,6 +1,7 @@
+import { Tooltip } from '@douyinfe/semi-ui'
 import { SvgIcon } from '../../components/base'
 import { IRootEntry } from '../../types'
-import { getReadableSize, getRootEntryPath, line } from '../../utils'
+import { getReadableSize, getEntryPath, line } from '../../utils'
 
 interface RootEntryListProps {
   currentPath: string
@@ -22,15 +23,14 @@ export default function RootEntryList(props: RootEntryListProps) {
     <>
       <div>
         {rootEntryList.map(rootEntry => {
-          const { name, spaceFree, spaceTotal, label, isDisk } = rootEntry
-          const rootEntryPath = getRootEntryPath(rootEntry)
-          const isActive = rootEntryPath === getRootEntryPath(activeRootEntry)
+          const { spaceFree, spaceTotal, label, isDisk } = rootEntry
+          const rootEntryPath = getEntryPath(rootEntry)
+          const isActive = rootEntryPath === getEntryPath(activeRootEntry)
           const canRootEntryClick = currentPath !== rootEntryPath
           const spaceUsed = isDisk ? spaceTotal! - spaceFree! : 0
           return (
             <div
               key={rootEntryPath}
-              title={label || name}
               className={line(`
                 p-2 text-sm cursor-pointer
                 ${isActive
@@ -40,12 +40,25 @@ export default function RootEntryList(props: RootEntryListProps) {
               `)}
               onClick={() => canRootEntryClick && onRootEntryClick(rootEntry)}
             >
-              <div className="flex items-center">
-                {isDisk ? <SvgIcon.HardDrive /> : <SvgIcon.Folder />}
-                <span className="ml-1 truncate flex-grow">{label}</span>
-              </div>
-              <div className="break-word transform scale-90 origin-left opacity-60 font-din text-xs">
-                {rootEntryPath}
+              <div className="flex justify-between items-center group">
+                <div className="flex items-center">
+                  {isDisk ? <SvgIcon.HardDrive /> : <SvgIcon.Folder />}
+                  <span className="ml-1 truncate flex-grow">{label}</span>
+                </div>
+                <div className="hidden group-hover:block text-gray-400 cursor-default">
+                  <Tooltip
+                    position="topRight"
+                    content={(
+                      <span className="text-xs font-din">
+                        {rootEntryPath}
+                      </span>
+                    )}
+                  >
+                    <span>
+                      <SvgIcon.Info />
+                    </span>
+                  </Tooltip>
+                </div>
               </div>
               {isDisk && (
                 <div className="mt-2px text-xs">

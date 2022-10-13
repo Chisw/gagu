@@ -1,6 +1,6 @@
 import { FsApi } from '../api'
 import { CALLABLE_APP_LIST } from '../apps'
-import { EntryType, IEntry, INestedFile, IRootEntry } from '../types'
+import { EntryType, IEntry, INestedFile } from '../types'
 
 export const isSameEntry = (a: IEntry, b: IEntry) => {
   return a.name === b.name && a.type === b.type
@@ -13,7 +13,7 @@ export const openInIINA = (entry: IEntry) => {
   a.click()
 }
 
-export const getRootEntryPath = (rootEntry: IRootEntry | null) => {
+export const getEntryPath = (rootEntry: IEntry | null) => {
   if (!rootEntry) return ''
   const { name, parentPath } = rootEntry
   return `${parentPath ? `${parentPath}/` : ''}${name}`

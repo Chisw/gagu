@@ -91,7 +91,7 @@ export class AuthController {
 
   @Post('logout')
   logout(@Headers('Authorization') token: User.Token) {
-    this.authService.removeOne(token)
+    this.authService.remove(token)
     return {
       success: true,
       message: SERVER_MESSAGE_MAP.OK,

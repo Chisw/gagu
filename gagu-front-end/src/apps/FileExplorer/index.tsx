@@ -23,7 +23,7 @@ import {
   line,
   getMatchedApp,
   openInIINA,
-  getRootEntryPath,
+  getEntryPath,
   MAX_PAGE_SIZE,
 } from '../../utils'
 import {
@@ -99,7 +99,7 @@ export default function FileExplorer(props: AppComponentProps) {
 
   const { rootEntryList, rootEntryPathList } = useMemo(() => {
     const { rootEntryList } = rootInfo
-    const rootEntryPathList = rootEntryList.map(getRootEntryPath)
+    const rootEntryPathList = rootEntryList.map(getEntryPath)
     return { rootEntryList, rootEntryPathList }
   }, [rootInfo])
 
@@ -107,10 +107,10 @@ export default function FileExplorer(props: AppComponentProps) {
 
   useEffect(() => {
     const title = isInRoot
-      ? currentPath
+      ? (activeRootEntry?.label || currentPath)
       : currentPath.split('/').pop() as string
     setWindowTitle(title)
-  }, [currentPath, setWindowTitle, isInRoot])
+  }, [currentPath, setWindowTitle, isInRoot, activeRootEntry])
 
   useEffect(() => {
     const container: any = containerRef.current
@@ -214,7 +214,7 @@ export default function FileExplorer(props: AppComponentProps) {
     updateHistory(direction, pushPath ? path : undefined)
     if (updateActiveRootEntry) {
       const activeEntry = rootEntryList
-        .map(entry => ({ path: getRootEntryPath(entry), entry }))
+        .map(entry => ({ path: getEntryPath(entry), entry }))
         .filter(o => path.startsWith(o.path))
         .sort((a, b) => a.path.length > b.path.length ? -1 : 1)[0].entry
       setActiveRootEntry(activeEntry)
@@ -222,14 +222,12 @@ export default function FileExplorer(props: AppComponentProps) {
   }, [abortController, currentPath, fetchPathData, rootEntryList, updateHistory])
 
   const handleRootEntryClick = useCallback((rootEntry: IRootEntry) => {
-    const { name, parentPath } = rootEntry
-    const path = `${parentPath ? `${parentPath}/` : ''}${name}`
+    const path = getEntryPath(rootEntry)
     handlePathChange({ path, direction: 'forward', pushPath: true, updateActiveRootEntry: true })
   }, [handlePathChange])
 
   const handleDirOpen = useCallback((entry: IEntry) => {
-    const { name, parentPath } = entry
-    const path = `${parentPath}/${name}`
+    const path = getEntryPath(entry)
     handlePathChange({ path, direction: 'forward', pushPath: true })
   }, [handlePathChange])
 

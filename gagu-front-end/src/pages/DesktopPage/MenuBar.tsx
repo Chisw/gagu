@@ -20,6 +20,7 @@ export default function MenuBar() {
   const [timeStr, setTimerStr] = useState('----/--/-- 周- --:--')
   const [systemPopoverShow, setSystemPopoverShow] = useState(false)
   const [userPopoverShow, setUserPopoverShow] = useState(false)
+  const [isFullScreen, setIsFullScreen] = useState(false)
 
   const [userInfo, setUserInfo] = useRecoilState(userInfoState)
   const [rootInfo, setRootInfo] = useRecoilState(rootInfoState)
@@ -32,6 +33,12 @@ export default function MenuBar() {
   useEffect(() => {
     setTimeout(() => setIsEffected(true))
   }, [])
+
+  useEffect(() => {
+    if (systemPopoverShow) {
+      setIsFullScreen(document.fullscreen)
+    }
+  }, [systemPopoverShow])
 
   useEffect(() => {
     if (!userInfo) {
@@ -60,7 +67,6 @@ export default function MenuBar() {
   useEffect(() => {
     const tick = () => {
       const now = DateTime.local()
-      // const str = now.toFormat('yyyy/MM/dd HH:mm ccc')
       const str = now.toFormat('HH:mm')
       setTimerStr(str)
     }
@@ -105,17 +111,43 @@ export default function MenuBar() {
             visible={systemPopoverShow}
             render={(
               <Dropdown.Menu className="w-48">
-                <div className="mb-2px px-4 pb-1 border-b text-xs font-din">
-                  GAGU Version {rootInfo.version}
+                <div className="mb-2px px-2 pb-1 border-b text-xs font-din flex justify-between">
+                  <div>
+                    GAGU Version {rootInfo.version}
+                  </div>
+                  <div className="flex">
+                    <a
+                      title="访问网站"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-gray-400 hover:text-blue-600"
+                      href="https://gagu.io"
+                    >
+                      <SvgIcon.Earth />
+                    </a>
+                    <a
+                      title="代码仓库"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="ml-1 text-gray-400 hover:text-blue-600"
+                      href="https://github.com/Chisw/gagu"
+                    >
+                      <SvgIcon.Github />
+                    </a>
+                  </div>
                 </div>
                 <Dropdown.Item
-                  icon={<SvgIcon.Fullscreen />}
+                  icon={isFullScreen ? <SvgIcon.FullscreenExit /> : <SvgIcon.Fullscreen />}
                   onClick={() => {
                     setSystemPopoverShow(false)
-                    document.querySelector('html')?.requestFullscreen()
+                    if (isFullScreen) {
+                      document.exitFullscreen()
+                    } else {
+                      document.querySelector('html')?.requestFullscreen()
+                    }
                   }}
                 >
-                  进入全屏
+                  {isFullScreen ? '退出全屏' : '进入全屏'}
                 </Dropdown.Item>
                 <Dropdown.Item
                   icon={<SvgIcon.Refresh />}
@@ -154,19 +186,19 @@ export default function MenuBar() {
             visible={userPopoverShow}
             render={(
               <Dropdown.Menu className="w-48">
-                <div className="mb-2px px-4 pt-2 pb-1 border-b">
+                <div className="mb-2px px-2 pt-1 pb-1 border-b">
                   <div className="flex items-center">
                     <img
                       alt={userInfo?.nickname}
                       src={FsApi.getAvatarStreamUrl(userInfo?.username || '')}
-                      className="w-10 h-10 rounded-full"
+                      className="w-10 h-10 rounded-full border-2 border-white shadow"
                     />
-                    <div className="ml-2 text-sm">
+                    <div className="ml-2 text-sm leading-none">
                       <p>{userInfo?.nickname}</p>
                       <p className="text-xs text-gray-500">@{userInfo?.username}</p>
                     </div>
                   </div>
-                  <div className="mt-2 font-din capitalize text-xs">{userInfo?.permissionList.join(' ')}</div>
+                  <div className="mt-2 font-din capitalize text-xs text-gray-500">{userInfo?.permissionList.join(' ')}</div>
                 </div>
                 <Dropdown.Item
                   icon={<SvgIcon.Logout />}
@@ -190,7 +222,7 @@ export default function MenuBar() {
                   <img
                     alt={userInfo.nickname}
                     src={FsApi.getAvatarStreamUrl(userInfo.username)}
-                    className="w-3 h-3 rounded-full filter grayscale"
+                    className="w-3 h-3 rounded-full filter grayscale opacity-80"
                   />
                   <span className="ml-1 font-din">{userInfo.nickname}</span>
                 </>

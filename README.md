@@ -1,3 +1,4 @@
+<div align="center">
 <img src="https://gagu.io/logo.svg" style="height: 96px;" >
 <br>
 <br>
@@ -12,6 +13,7 @@
 <img src="https://img.shields.io/badge/License-MIT-blue">
 <br>
 <br>
+</div>
 
 ## 🔔 Preparation
 

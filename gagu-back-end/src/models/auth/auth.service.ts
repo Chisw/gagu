@@ -42,18 +42,18 @@ export class AuthService {
     this.sync()
   }
 
-  removeOne(token: User.Token) {
+  remove(token: User.Token) {
     this.loginRecordList = this.loginRecordList.filter(
       (record) => record.token !== token,
     )
     this.sync()
   }
 
-  removeUserAll(username: User.Username) {
+  removeUser(username: User.Username) {
     this.loginRecordList
       .filter((r) => r.username === username)
       .map((r) => r.token)
-      .forEach((token) => this.removeOne(token))
+      .forEach((token) => this.remove(token))
   }
 
   removeAll() {
