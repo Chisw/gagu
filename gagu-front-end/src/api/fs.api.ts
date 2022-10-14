@@ -80,7 +80,7 @@ export class FsApi {
     return `${BASE_URL}/api/fs/avatar?username=${username}&token=${USER_INFO.getToken()}`
   }
 
-  static startDownload = (parentPath: string, downloadName: string, cmd: string) => {
-    window.open(`${BASE_URL}/api/fs/download/${downloadName}?path=${parentPath}/${downloadName}${cmd}`, '_self')
+  static startDownload = (parentPath: string, downloadName: string) => {
+    window.open(`${BASE_URL}/api/fs/download/${downloadName}?path=${parentPath}/${downloadName}`, '_self')
   }
 }

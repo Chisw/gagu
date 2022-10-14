@@ -8,7 +8,6 @@ export declare namespace User {
 }
 
 export type UserAbilityType = 'enable' | 'disable'
-export type UserExpiredAtType = number | undefined
 
 export enum UserPermission {
   administer = 'administer',
@@ -25,7 +24,7 @@ export interface IUser {
   password: User.Password
   disabled: boolean
   createdAt: number
-  expiredAt: UserExpiredAtType
+  expiredAt?: number
   permissionList: UserPermissionType[]
   rootEntryPathList: string[]
 }
@@ -43,7 +42,7 @@ export class UserForm implements IUserForm {
   password2: User.Password = ''
   disabled = false
   createdAt = 0
-  expiredAt: UserExpiredAtType = undefined
+  expiredAt?: number
   permissionList: UserPermissionType[] = [UserPermission.read]
   rootEntryPathList: string[] = []
 
@@ -60,7 +59,7 @@ export class UserForm implements IUserForm {
   }
 }
 
-export interface ILoginRecord {
+export interface IAuthRecord {
   token: User.Token
   username: User.Username
   timestamp: number
@@ -71,6 +70,6 @@ export interface IUserInfo {
   nickname: User.Nickname
   username: User.Username
   disabled: boolean
-  expiredAt: UserExpiredAtType
+  expiredAt?: number
   permissionList: UserPermissionType[]
 }

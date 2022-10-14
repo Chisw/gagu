@@ -76,7 +76,7 @@ export default function Toolbar(props: ToolbarProps) {
         onClick: () => {
           if (activeEntry) {
             const { name, parentPath } = activeEntry
-            FsApi.startDownload(parentPath, name, '')
+            FsApi.startDownload(parentPath, name)
           }
         },
       },

@@ -1,3 +1,4 @@
+import { IDownloadablePassage } from './../../types/download.type'
 import { Injectable } from '@nestjs/common'
 import {
   EntryType,
@@ -24,6 +25,7 @@ import {
   getExists,
   completeNestedPath,
   dataURLtoBuffer,
+  readDownloadablePassageData,
 } from 'src/utils'
 import * as nodeDiskInfo from 'node-disk-info'
 import * as md5 from 'md5'
@@ -34,11 +36,15 @@ import * as thumbsupply from 'thumbsupply'
 
 @Injectable()
 export class FsService {
+  private downloadablePassageList: IDownloadablePassage[] = []
+
+  constructor() {
+    this.downloadablePassageList = readDownloadablePassageData()
+  }
+
   getHasChildren(path: string) {
     try {
-      return (
-        readdirSync(path).filter((name) => !name.startsWith('.')).length > 0
-      )
+      return readdirSync(path).some((name) => !name.startsWith('.'))
     } catch (err) {
       return false
     }

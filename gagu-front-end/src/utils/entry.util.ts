@@ -58,16 +58,8 @@ export const getDownloadInfo = (parentPath: string, selectedEntryList: IEntry[])
         ? `下载 ${singleEntryName} 为 ${singleEntryName}.zip?`
         : `下载 ${downloadName}?`
       : `下载 ${len} 个项目为 ${downloadName}?`
-
-  const cmd = isDownloadAll
-    ? ''
-    : isDownloadSingle
-      ? isDownloadSingleDir
-        ? ''
-        : ''
-      : `${selectedEntryList.map(o => `&entry=${o.name}`).join('')}`
   
-  return { downloadName, message, cmd }
+  return { downloadName, message }
 }
 
 export const getEntryNestedFileList = async (entry: FileSystemEntry) => {

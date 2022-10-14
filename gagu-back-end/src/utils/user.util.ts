@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync } from 'fs'
-import { ILoginRecord, IUser, IUserForm, IUserInfo, User } from 'src/types'
+import { IAuthRecord, IUser, IUserForm, IUserInfo, User } from 'src/types'
 import { GAGU_PATH } from './constant.util'
 import * as md5 from 'md5'
 import { Request } from 'express'
@@ -14,23 +14,23 @@ export const getReqToken = (req: Request) => {
 }
 
 export const writeUsersData = (userList: IUser[]) => {
-  writeFileSync(GAGU_PATH.USERS_DATA, JSON.stringify(userList))
+  writeFileSync(GAGU_PATH.DATA_USERS, JSON.stringify(userList))
 }
 
 export const readUsersData = () => {
-  const dataStr = readFileSync(GAGU_PATH.USERS_DATA).toString('utf-8')
+  const dataStr = readFileSync(GAGU_PATH.DATA_USERS).toString('utf-8')
   const userList: IUser[] = JSON.parse(dataStr)
   return userList
 }
 
-export const writeLoginData = (loginRecordList: ILoginRecord[]) => {
-  writeFileSync(GAGU_PATH.LOGIN_DATA, JSON.stringify(loginRecordList))
+export const writeAuthData = (authRecordList: IAuthRecord[]) => {
+  writeFileSync(GAGU_PATH.DATA_AUTH, JSON.stringify(authRecordList))
 }
 
-export const readLoginData = () => {
-  const dataStr = readFileSync(GAGU_PATH.LOGIN_DATA).toString('utf-8')
-  const loginRecordList: ILoginRecord[] = JSON.parse(dataStr)
-  return loginRecordList
+export const readAuthData = () => {
+  const dataStr = readFileSync(GAGU_PATH.DATA_AUTH).toString('utf-8')
+  const authRecordList: IAuthRecord[] = JSON.parse(dataStr)
+  return authRecordList
 }
 
 export const genUserInfo = (user: IUser, token: User.Token) => {

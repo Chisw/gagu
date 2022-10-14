@@ -1,32 +1,32 @@
 import { Injectable } from '@nestjs/common'
-import { User, ILoginRecord } from 'src/types'
-import { readLoginData, writeLoginData } from 'src/utils'
+import { User, IAuthRecord } from 'src/types'
+import { readAuthData, writeAuthData } from 'src/utils'
 
 @Injectable()
 export class AuthService {
-  private loginRecordList: ILoginRecord[] = []
+  private authRecordList: IAuthRecord[] = []
 
   constructor() {
-    this.loginRecordList = readLoginData()
+    this.authRecordList = readAuthData()
   }
 
   sync() {
-    writeLoginData(this.loginRecordList)
+    writeAuthData(this.authRecordList)
   }
 
   findAll() {
-    return this.loginRecordList
+    return this.authRecordList
   }
 
   findOneUsername(token: User.Token) {
-    const username = this.loginRecordList.find(
+    const username = this.authRecordList.find(
       (record) => record.token === token,
     )?.username
     return username
   }
 
   create(token: User.Token, username: User.Username) {
-    this.loginRecordList.push({
+    this.authRecordList.push({
       token,
       username,
       timestamp: Date.now(),
@@ -35,7 +35,7 @@ export class AuthService {
   }
 
   update(token: User.Token) {
-    const record = this.loginRecordList.find((record) => record.token === token)
+    const record = this.authRecordList.find((record) => record.token === token)
     if (record) {
       record.timestamp = Date.now()
     }
@@ -43,21 +43,21 @@ export class AuthService {
   }
 
   remove(token: User.Token) {
-    this.loginRecordList = this.loginRecordList.filter(
+    this.authRecordList = this.authRecordList.filter(
       (record) => record.token !== token,
     )
     this.sync()
   }
 
   removeUser(username: User.Username) {
-    this.loginRecordList
+    this.authRecordList
       .filter((r) => r.username === username)
       .map((r) => r.token)
       .forEach((token) => this.remove(token))
   }
 
   removeAll() {
-    this.loginRecordList = []
+    this.authRecordList = []
     this.sync
   }
 }

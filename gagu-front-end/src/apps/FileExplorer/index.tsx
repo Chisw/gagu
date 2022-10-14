@@ -180,6 +180,7 @@ export default function FileExplorer(props: AppComponentProps) {
   }, [history, fetching, currentPath, isInRoot, newDirMode, newTxtMode, selectedEntryList, isEntryListEmpty])
 
   const fetchPathData = useCallback((path: string, keepData?: boolean) => {
+    if (!path) return
     !keepData && setData(null)
     const controller = new AbortController()
     const config = { signal: controller.signal }
@@ -298,7 +299,7 @@ export default function FileExplorer(props: AppComponentProps) {
 
   const handleDownloadClick = useCallback((contextEntryList?: IEntry[]) => {
     const processList = contextEntryList || selectedEntryList
-    const { message, downloadName, cmd } = getDownloadInfo(currentPath, processList)
+    const { message, downloadName } = getDownloadInfo(currentPath, processList)
     const close = () => setDownloadConfirmorProps({ show: false })
 
     setDownloadConfirmorProps({
@@ -308,7 +309,7 @@ export default function FileExplorer(props: AppComponentProps) {
       onCancel: close,
       onConfirm: () => {
         close()
-        FsApi.startDownload(currentPath, downloadName, cmd)
+        FsApi.startDownload(currentPath, downloadName)
       },
     })
   }, [currentPath, selectedEntryList])

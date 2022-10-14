@@ -32,8 +32,8 @@ export class UserController {
   @Permission(UserPermission.administer)
   getData() {
     const userList = this.userService.findAll()
-    const loginRecordList = this.authService.findAll()
-    const loggedInList = loginRecordList
+    const authRecordList = this.authService.findAll()
+    const loggedInList = authRecordList
       .filter((record) => record.timestamp > Date.now() - PULSE_INTERVAL)
       .map((record) => record.username)
     return {

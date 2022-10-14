@@ -9,6 +9,7 @@ import {
   Delete,
   Get,
   Header,
+  Param,
   Post,
   Put,
   Query,
@@ -19,6 +20,7 @@ import {
 import { User, UserPermission } from 'src/types'
 import { mkdirSync, renameSync } from 'fs'
 import { Permission } from 'src/common/decorators/permission.decorator'
+import 'express-zip'
 
 @Controller('fs')
 export class FsController {
@@ -184,19 +186,28 @@ export class FsController {
     return this.fsService.uploadFile(path, file.buffer)
   }
 
+  @Public()
+  @Get('download/:id')
+  @Permission(UserPermission.read)
+  downloads(@Param('id') id: string, @Res() response: Response) {
+    const files = [
+      {
+        path: '/users/chisw/desktop/未命名文件夹/tailwindcss.md',
+        name: 'tailwindcss-2.md',
+      },
+      {
+        path: '/users/chisw/desktop/未命名文件夹/tailwindcss.md',
+        name: 'test/tailwindcss-2.md',
+      },
+    ]
+    ;(response as any).zip(files, 'test.zip')
+  }
+
   // TODO: remove public
   @Public()
-  @Permission(UserPermission.read)
   @Get('download*')
-  getDownload(
-    @Query('path') path: string,
-    @Query('entry') entryList: string[],
-    @Res() response: Response,
-  ) {
-    if (entryList) {
-      console.log()
-    } else {
-      response.download(path)
-    }
+  @Permission(UserPermission.read)
+  download(@Query('path') path: string, @Res() response: Response) {
+    response.download(path)
   }
 }

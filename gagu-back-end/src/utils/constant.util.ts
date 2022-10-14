@@ -23,8 +23,9 @@ export const ROOT_PATH = (PATH_MAP[OS.platform] || '') + (IS_DEV ? '.dev' : '')
 
 export const GAGU_PATH = {
   ROOT: ROOT_PATH,
-  USERS_DATA: `${ROOT_PATH}/data/users.json`,
-  LOGIN_DATA: `${ROOT_PATH}/data/login.json`,
+  DATA_USERS: `${ROOT_PATH}/data/users.json`,
+  DATA_AUTH: `${ROOT_PATH}/data/auth.json`,
+  DATA_DOWNLOADS: `${ROOT_PATH}/data/downloads.json`,
   PUBLIC_AVATAR: `${ROOT_PATH}/public/avatar`,
 }
 

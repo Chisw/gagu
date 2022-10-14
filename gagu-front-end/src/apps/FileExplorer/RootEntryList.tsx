@@ -40,37 +40,32 @@ export default function RootEntryList(props: RootEntryListProps) {
               `)}
               onClick={() => canRootEntryClick && onRootEntryClick(rootEntry)}
             >
-              <div className="flex justify-between items-center group">
-                <div className="flex items-center">
-                  {isDisk ? <SvgIcon.HardDrive /> : <SvgIcon.Folder />}
-                  <span className="ml-1 truncate flex-grow">{label}</span>
-                </div>
-                <div className="hidden group-hover:block text-gray-400 cursor-default">
-                  <Tooltip
-                    position="topRight"
-                    content={(
-                      <span className="text-xs font-din">
-                        {rootEntryPath}
-                      </span>
-                    )}
-                  >
-                    <span>
-                      <SvgIcon.Info />
+              <div className="flex justify-between items-center">
+                <Tooltip
+                  position="left"
+                  content={(
+                    <span className="text-xs font-din">
+                      {rootEntryPath}
                     </span>
-                  </Tooltip>
-                </div>
-              </div>
-              {isDisk && (
-                <div className="mt-2px text-xs">
-                  <div className="relative z-0 h-1 font-din bg-gray-100 rounded-sm overflow-hidden">
-                    <div
-                      className="h-full bg-blue-500"
-                      style={{ width: `${spaceUsed / spaceTotal! * 100}%` }}
-                    />
-                  </div>
-                  <div className="font-din transform scale-90 origin-left opacity-60">
+                  )}
+                >
+                  <span className="flex items-center">
+                    {isDisk ? <SvgIcon.HardDrive /> : <SvgIcon.Folder />}
+                    <span className="ml-1 truncate flex-grow">{label}</span>
+                  </span>
+                </Tooltip>
+                {isDisk && (
+                  <div className="font-din transform scale-75 origin-right opacity-60">
                     {`${getReadableSize(spaceUsed!)} / ${getReadableSize(spaceTotal!)}`}
                   </div>
+                )}
+              </div>
+              {isDisk && (
+                <div className="mt-2px text-xs relative z-0 h-1 font-din bg-gray-100 rounded-sm overflow-hidden">
+                  <div
+                    className="h-full bg-blue-500"
+                    style={{ width: `${spaceUsed / spaceTotal! * 100}%` }}
+                  />
                 </div>
               )}
             </div>

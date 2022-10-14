@@ -1,6 +1,6 @@
 import { IUser, UserPermission } from 'src/types'
 import { GAGU_PATH } from './constant.util'
-import { writeLoginData, writeUsersData } from './user.util'
+import { writeAuthData, writeUsersData } from './user.util'
 import { completeNestedPath, getExists } from './fs.util'
 import * as md5 from 'md5'
 
@@ -13,7 +13,7 @@ export const initialize = () => {
   completeNestedPath(`${GAGU_PATH.ROOT}/public/lib/_`)
   completeNestedPath(`${GAGU_PATH.ROOT}/thumbnail/_`)
 
-  if (!getExists(GAGU_PATH.USERS_DATA)) {
+  if (!getExists(GAGU_PATH.DATA_USERS)) {
     const administrator: IUser = {
       nickname: 'Admin',
       username: 'gagu',
@@ -32,7 +32,7 @@ export const initialize = () => {
     writeUsersData([administrator])
   }
 
-  if (!getExists(GAGU_PATH.LOGIN_DATA)) {
-    writeLoginData([])
+  if (!getExists(GAGU_PATH.DATA_AUTH)) {
+    writeAuthData([])
   }
 }
