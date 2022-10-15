@@ -1,4 +1,4 @@
-import { IUser, IUserForm, IUserInfo, UserPermission, UserPermissionType } from '../types'
+import { IUserInfo, UserPermission, UserPermissionType } from '../types'
 
 export const GAGU_USER_INFO_KEY = 'GAGU_USER_INFO_KEY'
 
@@ -10,7 +10,7 @@ export const USER_INFO = {
       const userInfo: IUserInfo = {
         token: storeUserInfo.token || '',
         nickname: storeUserInfo.nickname || 'NO_NICKNAME',
-        username: storeUserInfo.username || 'unknown',
+        username: storeUserInfo.username || 'UNKNOWN',
         disabled: storeUserInfo.disabled || false,
         expiredAt: storeUserInfo.expiredAt,
         permissionList: storeUserInfo.permissionList || [],
@@ -43,10 +43,4 @@ const sortMap = {
 
 export const permissionSorter = (prev: UserPermissionType, next: UserPermissionType) => {
   return sortMap[prev] > sortMap[next] ? 1 : -1
-}
-
-// Sync following code to BE & FE
-export const getIsExpired = (userData: IUser | IUserForm) => {
-  const { expiredAt } = userData
-  return expiredAt && expiredAt < Date.now()
 }

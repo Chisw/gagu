@@ -1,27 +1,6 @@
 import { exec } from 'child_process'
-import {
-  accessSync,
-  constants,
-  mkdirSync,
-  readFileSync,
-  statSync,
-  unlinkSync,
-  writeFileSync,
-} from 'fs'
-import { IDownloadablePassage } from 'src/types/download.type'
-import { GAGU_PATH, OS } from './constant.util'
-
-export const writeDownloadablePassageData = (
-  authRecordList: IDownloadablePassage[],
-) => {
-  writeFileSync(GAGU_PATH.DATA_DOWNLOADS, JSON.stringify(authRecordList))
-}
-
-export const readDownloadablePassageData = () => {
-  const dataStr = readFileSync(GAGU_PATH.DATA_DOWNLOADS).toString('utf-8')
-  const authRecordList: IDownloadablePassage[] = JSON.parse(dataStr)
-  return authRecordList
-}
+import { accessSync, constants, mkdirSync, statSync, unlinkSync } from 'fs'
+import { OS } from './constant.util'
 
 export const getExtension = (name: string) => {
   if (!name || !name.includes('.') || name.startsWith('.')) return ''

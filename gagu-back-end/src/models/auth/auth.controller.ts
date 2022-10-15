@@ -3,10 +3,11 @@ import { Public } from 'src/common/decorators/public.decorator'
 import { AuthService } from './auth.service'
 import { User, UserPermission } from 'src/types'
 import {
-  genToken,
-  getIsExpired,
+  genHashId,
   genUserInfo,
   SERVER_MESSAGE_MAP,
+  HEADERS_AUTH_KEY,
+  getIsExpired,
 } from 'src/utils'
 import { UserService } from '../user/user.service'
 import { Permission } from 'src/common/decorators/permission.decorator'
@@ -28,7 +29,7 @@ export class AuthController {
     if (user) {
       const { disabled } = user
       if (password === user.password) {
-        const token = genToken()
+        const token = genHashId()
         this.authService.create(token, username)
         if (disabled) {
           return {
@@ -36,7 +37,7 @@ export class AuthController {
             message: SERVER_MESSAGE_MAP.ERROR_USER_DISABLED,
           }
         } else {
-          if (getIsExpired(user)) {
+          if (getIsExpired(user.expiredAt)) {
             return {
               success: false,
               message: SERVER_MESSAGE_MAP.ERROR_USER_EXPIRED,
@@ -64,7 +65,7 @@ export class AuthController {
   }
 
   @Get('pulse')
-  pulse(@Headers('Authorization') token: User.Token) {
+  pulse(@Headers(HEADERS_AUTH_KEY) token: User.Token) {
     const username = this.authService.findOneUsername(token)
     if (username) {
       const user = this.userService.findOne(username)
@@ -90,7 +91,7 @@ export class AuthController {
   }
 
   @Post('logout')
-  logout(@Headers('Authorization') token: User.Token) {
+  logout(@Headers(HEADERS_AUTH_KEY) token: User.Token) {
     this.authService.remove(token)
     return {
       success: true,

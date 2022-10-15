@@ -1,7 +1,6 @@
 import { Response } from 'express'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { deleteEntry, getExists, SERVER_MESSAGE_MAP } from 'src/utils'
-import { Public } from 'src/common/decorators/public.decorator'
 import { FsService } from './fs.service'
 import {
   Body,
@@ -9,7 +8,6 @@ import {
   Delete,
   Get,
   Header,
-  Param,
   Post,
   Put,
   Query,
@@ -184,30 +182,5 @@ export class FsController {
     @UploadedFile() file: Express.Multer.File,
   ) {
     return this.fsService.uploadFile(path, file.buffer)
-  }
-
-  @Public()
-  @Get('download/:id')
-  @Permission(UserPermission.read)
-  downloads(@Param('id') id: string, @Res() response: Response) {
-    const files = [
-      {
-        path: '/users/chisw/desktop/未命名文件夹/tailwindcss.md',
-        name: 'tailwindcss-2.md',
-      },
-      {
-        path: '/users/chisw/desktop/未命名文件夹/tailwindcss.md',
-        name: 'test/tailwindcss-2.md',
-      },
-    ]
-    ;(response as any).zip(files, 'test.zip')
-  }
-
-  // TODO: remove public
-  @Public()
-  @Get('download*')
-  @Permission(UserPermission.read)
-  download(@Query('path') path: string, @Res() response: Response) {
-    response.download(path)
   }
 }

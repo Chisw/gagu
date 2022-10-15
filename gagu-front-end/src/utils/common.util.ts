@@ -116,3 +116,8 @@ export const getPaddedNo = (currentIndex: number, total: number, options?: { min
   const totalNo = total.toString().padStart(width, '0')
   return `${currentNo}${hideTotal ? '' : ` / ${totalNo}`}`
 }
+
+// Sync following code to BE & FE
+export const getIsExpired = (expiredAt?: number) => {
+  return expiredAt && expiredAt < Date.now()
+}

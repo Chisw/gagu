@@ -1,5 +1,5 @@
 import axios, { AxiosError } from 'axios'
-import { BASE_URL, ERROR_TIMEOUT, USER_INFO } from '../utils'
+import { BASE_URL, ERROR_TIMEOUT, HEADERS_AUTH_KEY, USER_INFO } from '../utils'
 import toast from 'react-hot-toast'
 
 const instance = axios.create({
@@ -17,7 +17,7 @@ instance.interceptors.request.use(config => {
   // if (method === 'post' && url?.includes('?cmd=file')) config.timeout = 0
   config.headers = {
     ...config.headers,
-    'Authorization': USER_INFO.getToken(),
+    [HEADERS_AUTH_KEY]: USER_INFO.getToken(),
   }
   return config
 })

@@ -79,8 +79,4 @@ export class FsApi {
   static getAvatarStreamUrl = (username: string) => {
     return `${BASE_URL}/api/fs/avatar?username=${username}&token=${USER_INFO.getToken()}`
   }
-
-  static startDownload = (parentPath: string, downloadName: string) => {
-    window.open(`${BASE_URL}/api/fs/download/${downloadName}?path=${parentPath}/${downloadName}`, '_self')
-  }
 }

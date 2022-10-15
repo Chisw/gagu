@@ -96,7 +96,7 @@ export default function UserList(props: UserListProps) {
         const { nickname, username, expiredAt, createdAt, disabled, permissionList } = user
         const isLoggedIn = loggedInList.includes(username)
         const showExpire = !!expiredAt
-        const isExpired = getIsExpired(user)
+        const isExpired = getIsExpired(expiredAt)
         return (
           <div
             key={username}

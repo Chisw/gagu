@@ -5,11 +5,12 @@ import { join } from 'path'
 import { ApiGuard } from './common/guards/api.guard'
 import { LoggerMiddleware } from './common/middlewares/logger.middleware'
 import { AuthModule } from './models/auth/auth.module'
+import { DownloadModule } from './models/download/download.module'
 import { FsModule } from './models/fs/fs.module'
 import { UserModule } from './models/user/user.module'
 import { IS_DEV } from './utils'
 
-// build before use
+// build FE before use dev
 const devRootPath = join(__dirname, '..', '..', '..', 'gagu-front-end', 'build')
 const prodRootPath = join(__dirname, 'public')
 const rootPath = IS_DEV ? devRootPath : prodRootPath
@@ -22,15 +23,14 @@ const rootPath = IS_DEV ? devRootPath : prodRootPath
       { rootPath, serveRoot: '/mobile' },
     ),
     AuthModule,
-    FsModule,
     UserModule,
+    FsModule,
+    DownloadModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: ApiGuard }],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(LoggerMiddleware)
-      .forRoutes('*')
+    consumer.apply(LoggerMiddleware).forRoutes('*')
   }
 }

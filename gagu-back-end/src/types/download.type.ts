@@ -2,13 +2,16 @@
 import { IEntry } from './entry.type'
 import { User } from './user.type'
 
-export interface IDownloadablePassage {
-  id: string
+export interface DownloadTunnelBase {
   entryList: IEntry[]
   downloadName: string
-  restTimes: number
-  creator: User.Username
-  createdAt: number
+  leftTimes: number
   expiredAt?: number
   code?: string
+}
+
+export interface IDownloadTunnel extends DownloadTunnelBase {
+  id: string
+  creator: User.Username
+  createdAt: number
 }

@@ -13,12 +13,6 @@ export const openInIINA = (entry: IEntry) => {
   a.click()
 }
 
-export const getEntryPath = (rootEntry: IEntry | null) => {
-  if (!rootEntry) return ''
-  const { name, parentPath } = rootEntry
-  return `${parentPath ? `${parentPath}/` : ''}${name}`
-}
-
 export const entrySorter = (a: IEntry, b: IEntry) => {
   const map = { directory: 1, file: 2 }
   const aVal = map[a.type]
@@ -105,4 +99,12 @@ export const getDataTransferNestedFileList = async (dataTransfer: DataTransfer) 
     }
   }))
   return nestedFileList
+}
+
+
+// Sync following code to BE & FE
+export const getEntryPath = (rootEntry: IEntry | null) => {
+  if (!rootEntry) return ''
+  const { name, parentPath } = rootEntry
+  return `${parentPath ? `${parentPath}/` : ''}${name}`
 }

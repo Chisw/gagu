@@ -41,6 +41,7 @@ Usage:
 
 // Sync following code to BE & FE
 export const PULSE_INTERVAL = 60 * 1000
+export const HEADERS_AUTH_KEY = 'Authorization'
 export const GEN_THUMBNAIL_VIDEO_LIST = ['mp4', 'mkv', 'avi', 'rm', 'rmvb']
 export const GEN_THUMBNAIL_IMAGE_LIST = [
   'jpg',
@@ -67,6 +68,7 @@ export const SERVER_MESSAGE_MAP = {
   ERROR_USER_DISABLED: 'ERROR_USER_DISABLED',
   ERROR_USER_EXPIRED: 'ERROR_USER_EXPIRED',
   ERROR_TOKEN_INVALID: 'ERROR_TOKEN_INVALID',
+  ERROR_TUNNEL_NOT_EXISTED: 'ERROR_TUNNEL_NOT_EXISTED',
   ERROR_EXIF: 'ERROR_EXIF',
   ERROR_TAGS: 'ERROR_TAGS',
 }

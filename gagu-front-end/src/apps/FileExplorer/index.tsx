@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import EntryIcon from './EntryIcon'
 import { useFetch, useDragSelect, useDragOperations, useHotKey } from '../../hooks'
-import { FsApi } from '../../api'
+import { FsApi, DownloadApi } from '../../api'
 import PathLink from './PathLink'
 import ToolBar, { IToolBarDisabledMap } from './ToolBar'
 import NameLine, { NameFailType } from './NameLine'
@@ -13,7 +13,6 @@ import { pick, throttle } from 'lodash-es'
 import { Pagination, SvgIcon } from '../../components/base'
 import { CALLABLE_APP_LIST } from '..'
 import toast from 'react-hot-toast'
-
 import {
   getReadableSize,
   getDownloadInfo,
@@ -96,6 +95,7 @@ export default function FileExplorer(props: AppComponentProps) {
   const { fetch: getEntryList, loading: fetching, data, setData } = useFetch(FsApi.getEntryList)
   const { fetch: deleteEntry, loading: deleting } = useFetch(FsApi.deleteEntry)
   const { fetch: getDirectorySize, loading: getting } = useFetch(FsApi.getDirectorySize)
+  const { fetch: createTunnel } = useFetch(DownloadApi.create)
 
   const { rootEntryList, rootEntryPathList } = useMemo(() => {
     const { rootEntryList } = rootInfo
@@ -298,8 +298,8 @@ export default function FileExplorer(props: AppComponentProps) {
   }, [])
 
   const handleDownloadClick = useCallback((contextEntryList?: IEntry[]) => {
-    const processList = contextEntryList || selectedEntryList
-    const { message, downloadName } = getDownloadInfo(currentPath, processList)
+    const entryList = contextEntryList || selectedEntryList
+    const { message, downloadName } = getDownloadInfo(currentPath, entryList)
     const close = () => setDownloadConfirmorProps({ show: false })
 
     setDownloadConfirmorProps({
@@ -307,12 +307,21 @@ export default function FileExplorer(props: AppComponentProps) {
       icon: <SvgIcon.Download size={36} />,
       content: message,
       onCancel: close,
-      onConfirm: () => {
+      onConfirm: async () => {
         close()
-        FsApi.startDownload(currentPath, downloadName)
+        const res = await createTunnel({
+          entryList,
+          downloadName,
+          leftTimes: 1,
+          // expiredAt?,
+          // code?,
+        })
+        if (res && res.success) {
+          DownloadApi.download(res.id)
+        }
       },
     })
-  }, [currentPath, selectedEntryList])
+  }, [currentPath, selectedEntryList, createTunnel])
 
   const handleDeleteClick = useCallback(async (contextEntryList?: IEntry[]) => {
     const processList = contextEntryList || selectedEntryList

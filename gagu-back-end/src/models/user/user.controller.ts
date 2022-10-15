@@ -73,7 +73,7 @@ export class UserController {
         message: SERVER_MESSAGE_MAP.ERROR_USER_NOT_EXISTED,
       }
     } else {
-      if (password || getIsExpired(userForm)) {
+      if (password || getIsExpired(userForm.expiredAt)) {
         this.authService.removeUser(username)
       }
       this.fsService.uploadAvatar(username, avatar)

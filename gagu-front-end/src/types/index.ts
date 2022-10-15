@@ -2,6 +2,7 @@ export * from './app.type'
 export * from './entry.type'
 export * from './transfer.type'
 export * from './user.type'
+export * from './download.type'
 
 export interface IHistory {
   position: number

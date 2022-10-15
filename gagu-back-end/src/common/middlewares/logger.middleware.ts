@@ -10,7 +10,7 @@ export class LoggerMiddleware implements NestMiddleware {
 
   use(req: Request, res: Response, next: NextFunction) {
     const token = getReqToken(req)
-    const username = this.authService.findOneUsername(token) || 'unknown'
+    const username = this.authService.findOneUsername(token) || 'UNKNOWN'
     const { method, originalUrl, ip } = req
     const { statusCode } = res
     if (
