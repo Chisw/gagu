@@ -1,27 +1,36 @@
 ---
+import Block from '../components/Block.astro'
+import iconGAGU from '../img/icons/gagu.svg'
+import iconGitHub from '../img/icons/github.svg'
+
 const navList = [
-  { label: 'Home', url: '/' },
-  { label: 'Docs', url: '/docs' },
-  { label: 'GitHub', url: 'https://github.com/Chisw/gagu' },
+  // { label: 'Docs', url: '/docs' },
+  { label: 'GitHub', url: 'https://github.com/Chisw/gagu', icon: iconGitHub },
 ]
 ---
 
-<div class="mx-auto max-w-7xl h-12 flex justify-between items-center">
-  <a href="/">
-    <img
-      class="h-12"
-      src="/logo.svg"
-    />
-  </a>
-  <div class="flex items-center">
-    {navList.map(({ label, url }) => (
-      <a
-        class="ml-6 font-bold text-yellow-500 hover:text-yellow-600"
-        href={url}
-        target={url.startsWith('http') ? '_blank' : '_self'}
-      >
-        {label}
-      </a>
-    ))}
+<Block className="absolute top-0 right-0 left-0 bg-gray-600">
+  <div class="h-12 flex justify-between items-center">
+    <a href="/">
+      <img
+        src={iconGAGU}
+        class="h-5"
+      />
+    </a>
+    <div class="flex items-center">
+      {navList.map(({ label, url, icon }) => (
+        <a
+          class="ml-6 font-bold text-gray-200 hover:text-white flex items-center"
+          href={url}
+          target={url.startsWith('http') ? '_blank' : '_self'}
+        >
+          {icon ? (
+            <img src={icon} class="w-6 h-6" />
+          ) : (
+            <span>{label}</span>
+          )}
+        </a>
+      ))}
+    </div>
   </div>
-</div>
+</Block>

@@ -1,0 +1,21 @@
+---
+export interface Props {
+  id?: string
+  className?: string
+  innerClassName?: string
+}
+
+const {
+  id,
+  className = '',
+  innerClassName = '',
+} = Astro.props as Props
+---
+<div
+  id={id}
+  class={className}
+>
+  <div class={`container mx-auto px-4 ${innerClassName}`}>
+    <slot />
+  </div>
+</div>

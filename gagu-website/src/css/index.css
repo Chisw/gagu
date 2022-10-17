@@ -5,3 +5,8 @@
 html, body {
   @apply w-full h-full;
 }
+
+*::selection {
+  color: #fff;
+  background-color: rgba(0, 102, 255, .8);
+}
