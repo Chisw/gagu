@@ -2,11 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "g-sans";
+  src: url("./g-sans.woff") format("woff");
+}
+
 html, body {
   @apply w-full h-full;
+  font-family: "g-sans";
 }
 
 *::selection {
-  color: #fff;
-  background-color: rgba(0, 102, 255, .8);
+  @apply text-white bg-gray-900;
 }

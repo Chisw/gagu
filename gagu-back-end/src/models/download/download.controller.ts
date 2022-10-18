@@ -9,10 +9,15 @@ import {
   Post,
   Res,
 } from '@nestjs/common'
-import { UserPermission, DownloadTunnelBase, User } from 'src/types'
+import {
+  UserPermission,
+  DownloadTunnelBase,
+  User,
+  ZipResponse,
+  ZipResponseFile,
+} from 'src/types'
 import { Permission } from 'src/common/decorators/permission.decorator'
 import 'express-zip'
-import { ZipResponse, ZipResponseFile } from 'typing/express-zip'
 import { AuthService } from '../auth/auth.service'
 import { HEADERS_AUTH_KEY, SERVER_MESSAGE_MAP, getEntryPath } from 'src/utils'
 

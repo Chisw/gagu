@@ -3,82 +3,121 @@ import Block from '../components/Block.astro'
 import Layout from '../layouts/Layout.astro'
 import iconNPM from '../img/icons/npm.svg'
 import iconDownload from '../img/icons/download.svg'
+import iconCopy from '../img/icons/copy.svg'
+import iconSound from '../img/icons/sound.svg'
 import '../css/index.css'
+
+const codeList = [
+  { title: 'Install GAGU by typing in the terminal', code: 'npm i -g gagu' },
+  { title: 'Start GAGU service', code: 'gagu' },
+]
 ---
 
-<Layout title="GAGU - A cool web file management system">
+<Layout title="GAGU - A web-based file management system">
 
   <Block className="bg-gradient-to-br from-gray-500 to-gray-800 bg-fixed">
-    <div class="h-100vh flex flex-wrap items-center">
+    <div class="pt-24 xl:pt-0 h-100vh flex flex-wrap items-start md:items-center">
       <div class="w-full lg:w-1/2 flex justify-center lg:justify-start items-center">
         <div class="text-center lg:text-left text-white">
-          <p class="opacity-60 text-xs md:text-base">/'gʌgu/</p>
-          <p class="text-5xl lg:text-7xl font-bold">GAGU</p>
-          <p class="mt-3 text-xl md:text-3xl opacity-60">A cool web file management system</p>
+          <p
+            class="opacity-60 text-xs md:text-base flex justify-center lg:justify-start items-center group cursor-pointer"
+            onclick="document.querySelector('#audio').currentTime = 0;document.querySelector('#audio').play();"
+          >
+            <span>/'gʌgu/</span>
+            <img src={iconSound} class="md:hidden group-hover:block ml-2 w-4 h-4" />
+          </p>
+          <p class="mt-2 md:mt-1 text-5xl lg:text-7xl font-bold">GAGU</p>
+          <p class="mt-3 text-xl md:text-3xl opacity-60">A web-based file management system</p>
           <p class="mt-2 text-sm md:text-lg opacity-60">Manage your different device files in browser.</p>
           <p class="text-sm md:text-lg opacity-60">Support Windows, macOS, Linux and Termux(Android).</p>
-          <div class="mt-12 flex">
+          <div class="mt-12 flex justify-center lg:justify-start">
             <a
-              href="#npm"
-              class="mr-4 px-6 h-10 text-sm bg-gray-100 text-gray-600 flex justify-center items-center rounded-full cursor-pointer shadow-lg"
+              onclick="jumpTo('npm')"
+              class="mr-4 px-4 md:px-6 h-10 text-xs md:text-sm bg-gray-100 text-gray-600
+                flex justify-center items-center rounded-full cursor-pointer shadow-lg select-none
+                hover:opacity-80 transition-opacity duration-200"
             >
               <img src={iconNPM} class="w-6 h-6" />
-              <span class="ml-2">Install with NPM</span>
+              <span class="ml-1 md:ml-2">Install with NPM</span>
             </a>
             <a
-              href="#npm"
-              class="mr-4 px-6 h-10 text-sm bg-gray-100 text-gray-600 flex justify-center items-center rounded-full cursor-pointer shadow-lg"
+              onclick="jumpTo('download')"
+              class="px-4 md:px-6 h-10 text-xs md:text-sm bg-gray-100 text-gray-600
+                flex justify-center items-center rounded-full cursor-pointer shadow-lg select-none
+                hover:opacity-80 transition-opacity duration-200"
             >
               <img src={iconDownload} class="w-6 h-6" />
-              <span class="ml-2">Download</span>
+              <span class="ml-1 md:ml-2">Download</span>
             </a>
           </div>
-          <p class="mt-4 text-xs opacity-60">Version: 0.0.26(Beta)</p>
+          <p class="mt-4 text-xs opacity-60">Version: {import.meta.env.PUBLIC_VERSION}(Beta)</p>
         </div>
       </div>
-      <div class="w-full lg:w-1/2 mt-10 lg:mt-0">
+      <div class="w-full lg:w-1/2">
         <img
           alt="developing"
           src="https://jisuowei.com/file/gagu.png"
-          class="w-full h-full"
+          class="w-full h-full max-w-full max-h-full"
         />
       </div>
     </div>
   </Block>
 
-  <Block
-    id="npm"
-    className="bg-gradient-to-br from-gray-400 to-white bg-fixed"
-  >
+  <Block className="bg-gradient-to-br from-gray-400 to-white bg-fixed">
     <div class="py-32 flex flex-wrap justify-center">
-      <div class="w-full lg:w-1/2 px-0 md:px-12 lg:px-24">
+      <div id="npm" class="w-full lg:w-1/2 px-0 md:px-12 lg:px-24">
         <h2 class="text-2xl md:text-4xl text-center font-bold">Install with NPM</h2>
+        <p class="mt-4 text-lg md:text-xl font-bold text-gray-600 text-center">Windows · macOS · Linux · Termux</p>
         <div class="mt-12">
-          <p class="text-gray-500 text-sm">Install on your terminal:</p>
-          <code
-            class="block mt-2 px-4 py-2 rounded-md bg-gray-900 text-gray-400"
-          >
-            $ npm i -g gagu
-          </code>
-        </div>
-        <div class="mt-4">
-          <p class="text-gray-500 text-sm">Start service:</p>
-          <code
-            class="block mt-2 px-4 py-2 rounded-md bg-gray-900 text-gray-400"
-          >
-            $ gagu
-          </code>
+          {codeList.map(({ title, code }) => (
+            <div class="mb-4">
+              <p class="text-gray-500 text-sm">{title}:</p>
+              <code class="relative block mt-2 px-4 py-2 rounded-md bg-gray-400 text-gray-800 before:content-['$'] group">
+                {code}
+                <div
+                  class="md:hidden group-hover:flex
+                    absolute top-0 right-0 bottom-0 w-12
+                    flex justify-center items-center cursor-pointer active:opacity-30"
+                  onclick={`copy('${code}')`}
+                >
+                  <img src={iconCopy} class="w-4 h-4" />
+                </div>
+              </code>
+            </div>
+          ))}
         </div>
       </div>
-      <div class="mt-24 lg:mt-0 w-full lg:w-1/2">
+      <div id="download" class="mt-24 lg:mt-0 w-full lg:w-1/2">
         <h2 class="text-2xl md:text-4xl text-center font-bold">Download</h2>
-        <div class="mt-12 text-center">
-          <p class="mb-8 text-xl font-bold text-gray-600">Windows · macOS · Linux</p>
-          <p>Package built via Vercel/pkg</p>
-          <p>will be available after v1.0.0 released</p>
+        <p class="mt-4 text-lg md:text-xl font-bold text-gray-600 text-center">Windows · macOS · Linux</p>
+        <div class="mt-16 text-center">
+          <p>Stable package built via Vercel/pkg,</p>
+          <p>will be available after v1.0.0 released.</p>
+          <p class="block mt-8 text-xs text-gray-500">Build beta package by yourself with</p>
+          <code class="block mt-1 text-xs text-gray-500">`npm run build:bin && npm run pkg`</code>
+          <p class="block mt-1 text-xs text-gray-500">in local development.</p>
         </div>
       </div>
     </div>
   </Block>
 
+  <div class="w-0 h-0 overflow-hidden">
+    <audio id="audio" preload="preload" src="/gagu.mp3" />
+  </div>
+
 </Layout>
+<script is:inline>
+const copy = (str) => {
+  const input = document.createElement('textarea')
+  document.body.appendChild(input)
+  input.value = str
+  input.select()
+  document.execCommand('Copy')
+  document.body.removeChild(input)
+}
+
+const jumpTo = (id) => {
+  const top = document.getElementById(id).getBoundingClientRect().top
+  window.scrollTo({ top, behavior: 'smooth' })
+}
+</script>
