@@ -1,16 +1,17 @@
 <div align="center">
-<img src="https://gagu.io/logo.svg" style="height: 96px;" >
+<img src="https://gagu.io/logo.svg" style="height: 64px;" >
 <br>
 <br>
 <h1>GAGU (Beta)</h1>
 <p>Website: <a href="https://gagu.io" target="_blank">gagu.io</a></p>
 <p>A web-based file management system.</p>
 <p>Manage your different device files in browser.</p>
-<p>Support Windows, macOS, Linux and Android/Termux.</p>
+<p>Works on Windows, macOS, Linux and Android/Termux.</p>
 <p>Inspired by <a href="https://play.google.com/store/apps/details?id=com.lonelycatgames.Xplore" target="_blank">Android/X-plore</a> and <a href="https://www.npmjs.com/package/anywhere" target="_blank">NPM/anywhere</a>.</p>
 <img src="https://img.shields.io/badge/NPM-0.0.26-orange">
 <img src="https://img.shields.io/badge/Package Size-494KB-success">
 <img src="https://img.shields.io/badge/License-MIT-blue">
+<img src="https://api.netlify.com/api/v1/badges/43a65c74-6640-4341-a3fd-b0bc8f52e670/deploy-status">
 <br>
 <br>
 </div>
