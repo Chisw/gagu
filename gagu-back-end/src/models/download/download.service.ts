@@ -1,17 +1,19 @@
-import { IDownloadTunnel, User } from '../../types'
+import { EntryType, IDownloadTunnel, IEntry, User } from '../../types'
 import { Injectable } from '@nestjs/common'
 import { DownloadTunnelBase } from 'src/types'
 import {
   genHashId,
+  getEntryPath,
   readDownloadTunnelData,
   writeDownloadTunnelData,
 } from 'src/utils'
+import { FsService } from '../fs/fs.service'
 
 @Injectable()
 export class DownloadService {
   private downloadTunnelList: IDownloadTunnel[] = []
 
-  constructor() {
+  constructor(private readonly fsService: FsService) {
     this.downloadTunnelList = readDownloadTunnelData()
   }
 
@@ -34,5 +36,22 @@ export class DownloadService {
     this.downloadTunnelList.push(tunnel)
     this.sync()
     return id
+  }
+
+  getFlattenRecursiveEntryList(entryList: IEntry[], parentList?: IEntry[]) {
+    const list: IEntry[] = []
+    entryList.forEach((entry) => {
+      if (entry.type === EntryType.file) {
+        if (parentList) {
+          parentList.push(entry)
+        } else {
+          list.push(entry)
+        }
+      } else {
+        const subEntryList = this.fsService.getEntryList(getEntryPath(entry))
+        this.getFlattenRecursiveEntryList(subEntryList, list)
+      }
+    })
+    return list
   }
 }

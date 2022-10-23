@@ -46,8 +46,8 @@ export class FsService {
     let entryNameList: string[] = []
     try {
       const isWindowsDisk = OS.isWindows && !path.includes('/')
-      const p = isWindowsDisk ? `${path}/` : path
-      entryNameList = readdirSync(p)
+      const _path = isWindowsDisk ? `${path}/` : path
+      entryNameList = readdirSync(_path)
     } catch (err) {
       return []
     }

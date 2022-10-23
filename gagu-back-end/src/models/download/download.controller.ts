@@ -13,6 +13,7 @@ import {
   UserPermission,
   DownloadTunnelBase,
   User,
+  EntryType,
   ZipResponse,
   ZipResponseFile,
 } from 'src/types'
@@ -28,34 +29,6 @@ export class DownloadController {
     private readonly authService: AuthService,
   ) {}
 
-  @Public()
-  @Get(':id')
-  @Permission(UserPermission.read)
-  downloads(@Param('id') id: string, @Res() response: ZipResponse) {
-    const tunnel = this.downloadService.findOne(id)
-    if (tunnel) {
-      const { entryList, downloadName, expiredAt, leftTimes } = tunnel
-      const isExpired = expiredAt && expiredAt < Date.now()
-      const isNoLeft = leftTimes === 0
-      // TODO: handle share
-      console.log({ isExpired, isNoLeft })
-      if (entryList.length === 1) {
-        return response.download(getEntryPath(entryList[0]))
-      }
-      const files: ZipResponseFile[] = entryList.map((entry) => {
-        const name = entry.name
-        const path = getEntryPath(entry)
-        return { name, path }
-      })
-      response.zip(files, downloadName)
-    } else {
-      return {
-        success: false,
-        message: SERVER_MESSAGE_MAP.ERROR_TUNNEL_NOT_EXISTED,
-      }
-    }
-  }
-
   @Post()
   @Permission(UserPermission.read)
   create(
@@ -69,6 +42,35 @@ export class DownloadController {
         success: true,
         message: SERVER_MESSAGE_MAP.OK,
         id,
+      }
+    }
+  }
+
+  @Public()
+  @Get(':id')
+  @Permission(UserPermission.read)
+  downloads(@Param('id') id: string, @Res() response: ZipResponse) {
+    const tunnel = this.downloadService.findOne(id)
+    if (tunnel) {
+      const { entryList, downloadName, expiredAt, leftTimes } = tunnel
+      const isExpired = expiredAt && expiredAt < Date.now()
+      const isNoLeft = leftTimes === 0
+      // TODO: handle share
+      console.log({ isExpired, isNoLeft })
+      if (entryList.length === 1 && entryList[0].type === EntryType.file) {
+        return response.download(getEntryPath(entryList[0]))
+      }
+      const list = this.downloadService.getFlattenRecursiveEntryList(entryList)
+      const files: ZipResponseFile[] = list.map((entry) => {
+        const name = entry.name
+        const path = getEntryPath(entry)
+        return { name, path }
+      })
+      response.zip(files, downloadName)
+    } else {
+      return {
+        success: false,
+        message: SERVER_MESSAGE_MAP.ERROR_TUNNEL_NOT_EXISTED,
       }
     }
   }
