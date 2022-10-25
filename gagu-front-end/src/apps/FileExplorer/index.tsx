@@ -299,6 +299,7 @@ export default function FileExplorer(props: AppComponentProps) {
 
   const handleDownloadClick = useCallback((contextEntryList?: IEntry[]) => {
     const entryList = contextEntryList || selectedEntryList
+    const basePath = entryList[0].parentPath
     const { message, downloadName } = getDownloadInfo(currentPath, entryList)
     const close = () => setDownloadConfirmorProps({ show: false })
 
@@ -311,6 +312,7 @@ export default function FileExplorer(props: AppComponentProps) {
         close()
         const res = await createTunnel({
           entryList,
+          basePath,
           downloadName,
           leftTimes: 1,
           // expiredAt?,

@@ -52,7 +52,7 @@ export class DownloadController {
   downloads(@Param('id') id: string, @Res() response: ZipResponse) {
     const tunnel = this.downloadService.findOne(id)
     if (tunnel) {
-      const { entryList, downloadName, expiredAt, leftTimes } = tunnel
+      const { entryList, basePath, downloadName, expiredAt, leftTimes } = tunnel
       const isExpired = expiredAt && expiredAt < Date.now()
       const isNoLeft = leftTimes === 0
       // TODO: handle share
@@ -62,8 +62,8 @@ export class DownloadController {
       }
       const list = this.downloadService.getFlattenRecursiveEntryList(entryList)
       const files: ZipResponseFile[] = list.map((entry) => {
-        const name = entry.name
         const path = getEntryPath(entry)
+        const name = path.replace(basePath, '')
         return { name, path }
       })
       response.zip(files, downloadName)

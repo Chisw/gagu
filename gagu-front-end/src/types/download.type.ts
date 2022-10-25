@@ -4,6 +4,7 @@ import { User } from './user.type'
 
 export interface DownloadTunnelBase {
   entryList: IEntry[]
+  basePath: string
   downloadName: string
   leftTimes: number
   expiredAt?: number
