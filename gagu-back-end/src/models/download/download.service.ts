@@ -38,18 +38,15 @@ export class DownloadService {
     return id
   }
 
-  getFlattenRecursiveEntryList(entryList: IEntry[], parentList?: IEntry[]) {
+  getFlattenRecursiveEntryList(entryList: IEntry[]) {
     const list: IEntry[] = []
     entryList.forEach((entry) => {
       if (entry.type === EntryType.file) {
-        if (parentList) {
-          parentList.push(entry)
-        } else {
-          list.push(entry)
-        }
+        list.push(entry)
       } else {
         const subEntryList = this.fsService.getEntryList(getEntryPath(entry))
-        this.getFlattenRecursiveEntryList(subEntryList, list)
+        const subList = this.getFlattenRecursiveEntryList(subEntryList)
+        list.push(...subList)
       }
     })
     return list
