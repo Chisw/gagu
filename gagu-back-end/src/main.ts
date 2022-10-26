@@ -22,6 +22,10 @@ const argv = minimist(process.argv.slice(2), {
   default: {
     port: 9293,
   },
+  unknown() {
+    console.log(HELP_INFO)
+    process.exit(0)
+  },
 })
 
 async function bootstrap() {
