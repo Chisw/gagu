@@ -1,0 +1,64 @@
+---
+const navList = [
+  {
+    group: 'Introduction',
+    children: [
+      {
+        title: 'What is GAGU?',
+        path: 'what-is-gagu',
+      },
+      {
+        title: 'Installation',
+        path: 'installation',
+      },
+    ],
+  },
+  {
+    group: 'Usage',
+    children: [
+      {
+        title: 'Preparation',
+        path: 'preparation',
+      },
+      {
+        title: 'Modify admin',
+        path: 'modify-admin',
+      },
+    ],
+  },
+  {
+    group: 'Change Log',
+    children: [
+      {
+        title: 'V1',
+        path: 'change-log-v-1',
+      },
+      {
+        title: 'Beta',
+        path: 'change-log-v-beta',
+      },
+    ],
+  },
+]
+
+---
+
+<div>
+  <div>
+    {navList.map(({ group, children }) => (
+      <div class="mb-6">
+        <h2 class="font-bold">{group}</h2>
+        <div>
+          {children.map(({ title, path }) => (
+            <a
+              class="mt-4 block text-sm text-gray-400 hover:text-gray-600"
+              href={`/docs/${path}`}
+            >
+              {title}
+            </a>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
