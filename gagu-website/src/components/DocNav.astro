@@ -21,18 +21,14 @@ const navList = [
         path: 'preparation',
       },
       {
-        title: 'Modify admin',
-        path: 'modify-admin',
+        title: 'Scenes',
+        path: 'scenes',
       },
     ],
   },
   {
     group: 'Change Log',
     children: [
-      {
-        title: 'V1',
-        path: 'change-log-v-1',
-      },
       {
         title: 'Beta',
         path: 'change-log-v-beta',
@@ -46,12 +42,12 @@ const navList = [
 <div>
   <div>
     {navList.map(({ group, children }) => (
-      <div class="mb-6">
-        <h2 class="font-bold">{group}</h2>
+      <div class="mb-8">
+        <h2 class="mb-2 font-bold">{group}</h2>
         <div>
           {children.map(({ title, path }) => (
             <a
-              class="mt-4 block text-sm text-gray-400 hover:text-gray-600"
+              class="py-1 block text-sm text-gray-400 hover:text-gray-600"
               href={`/docs/${path}`}
             >
               {title}
@@ -60,5 +56,5 @@ const navList = [
         </div>
       </div>
     ))}
-  </div>
+    </div>
 </div>
