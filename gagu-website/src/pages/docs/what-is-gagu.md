@@ -5,6 +5,12 @@ layout: ../../layouts/DocLayout.astro
 
 ## What is GAGU ?
 
+GAGU 是一个发布在 NPM 上的软件包，在支持 Node.js 的设备上通过 NPM 全局安装并运行，即可在局域网内的浏览器中管理该设备上的文件。
+
+GAGU 也将提供可直接双击运行的程序包，它使用 Vercel/pkg 打包而成，内置了 Node.js 环境和 GAGU 构建后的程序代码以及依赖包，但只支持 Windows、macOS 和 Linux 平台，而无法在 Android 上使用。
+
+GAGU 选用了 NestJS 来将一些文件的 I/O 操作开放为可通过 HTTP 请求控制的 Web 接口，选用 React 开发了可在浏览器中操作的 Web 界面，并交由 NestJS 来承载。
+
 ### Origin
 
 起因还要从我在 2021 年买了块便携屏说起，13.3 英寸却拥有 4K 分辨率，无论是外接 Switch 还是当作开发时的副屏，显示效果都非常的棒。
@@ -43,6 +49,4 @@ layout: ../../layouts/DocLayout.astro
 WFMS `/ˈdʌbəlju-ɛf-ɛm-ɛs/` is too looong to speak, but
 
 GAGU `/'gʌgu/` is short.
-
-### Summary
 
