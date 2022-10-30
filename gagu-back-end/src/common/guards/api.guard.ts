@@ -1,11 +1,16 @@
-import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common'
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
 import { Observable } from 'rxjs'
 import { Request } from 'express'
 import { PUBLIC_DECORATOR_KEY } from '../decorators/public.decorator'
-import { AuthService } from 'src/models/auth/auth.service'
+import { AuthService } from 'src/modules/auth/auth.service'
 import { PERMISSION_DECORATOR_KEY } from '../decorators/permission.decorator'
-import { UserService } from 'src/models/user/user.service'
+import { UserService } from 'src/modules/user/user.service'
 import { UserPermissionType } from 'src/types'
 import { getReqToken } from 'src/utils'
 
@@ -22,13 +27,16 @@ export class ApiGuard implements CanActivate {
   ): boolean | Promise<boolean> | Observable<boolean> {
     const handler = context.getHandler()
     const isPublic = this.reflector.get(PUBLIC_DECORATOR_KEY, handler)
-    const requiredPermission: UserPermissionType | undefined = this.reflector.get(PERMISSION_DECORATOR_KEY, handler)
+    const requiredPermission: UserPermissionType | undefined =
+      this.reflector.get(PERMISSION_DECORATOR_KEY, handler)
     if (isPublic) {
       return true
     } else {
       const req = context.switchToHttp().getRequest<Request>()
       const token = getReqToken(req)
-      const username = token ? this.authService.findOneUsername(token) : undefined
+      const username = token
+        ? this.authService.findOneUsername(token)
+        : undefined
       const isLoggedIn = !!username
 
       if (isLoggedIn) {

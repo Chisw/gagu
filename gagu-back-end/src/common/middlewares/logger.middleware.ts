@@ -1,7 +1,7 @@
 import { Injectable, NestMiddleware } from '@nestjs/common'
 import { Request, Response, NextFunction } from 'express'
 import { DateTime } from 'luxon'
-import { AuthService } from 'src/models/auth/auth.service'
+import { AuthService } from 'src/modules/auth/auth.service'
 import { getReqToken } from 'src/utils'
 
 @Injectable()
