@@ -20,7 +20,8 @@ const rootPath = IS_DEV ? devRootPath : prodRootPath
     ServeStaticModule.forRoot(
       { rootPath, serveRoot: '/' },
       { rootPath, serveRoot: '/login' },
-      { rootPath, serveRoot: '/mobile' },
+      { rootPath, serveRoot: '/explore' },
+      { rootPath, serveRoot: '/touch' },
     ),
     AuthModule,
     UserModule,

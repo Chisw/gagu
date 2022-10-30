@@ -66,7 +66,7 @@ export default function Dock() {
         icon: <SvgIcon.Links />,
         label: '新建连接',
         isShow: app.id === APP_ID_MAP.fileExplorer,
-        onClick: () => toast.error('开发中'),
+        onClick: () => toast('开发中'),
       },
       {
         icon: <SvgIcon.Close />,

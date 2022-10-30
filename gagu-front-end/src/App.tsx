@@ -5,6 +5,7 @@ import DesktopPage from './pages/DesktopPage'
 import LoginPage from './pages/LoginPage'
 import { useFavicon } from './hooks'
 import defaultFavicon from './img/favicon.png'
+import ExplorePage from './pages/DesktopPage/ExplorePage'
 
 export default function App() {
 
@@ -16,6 +17,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<DesktopPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/explore" element={<ExplorePage />} />
         {/* <Route path="*" render={() => <Redirect to="/404" />} /> */}
       </Routes>
     </BrowserRouter>

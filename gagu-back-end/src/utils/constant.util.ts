@@ -2,7 +2,7 @@ import * as os from 'os'
 
 const platform = os.platform()
 
-export const GAGU_VERSION = '0.0.28'
+export const GAGU_VERSION = '0.0.29'
 export const IS_DEV = process.env.NODE_ENV === 'development'
 export const OS = {
   username: process.env.USER || os.userInfo().username,

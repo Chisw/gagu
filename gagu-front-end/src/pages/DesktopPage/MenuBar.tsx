@@ -2,7 +2,7 @@ import { Dropdown } from '@douyinfe/semi-ui'
 import { DateTime } from 'luxon'
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
 import { AuthApi, FsApi } from '../../api'
 import { SvgIcon } from '../../components/base'
@@ -15,6 +15,7 @@ import TransferPanel from './TransferPanel'
 export default function MenuBar() {
 
   const navigate = useNavigate()
+  const { pathname } = useLocation()
 
   const [isEffected, setIsEffected] = useState(false)
   const [timeStr, setTimerStr] = useState('----/--/-- 周- --:--')
@@ -149,6 +150,30 @@ export default function MenuBar() {
                 >
                   {isFullScreen ? '退出全屏' : '进入全屏'}
                 </Dropdown.Item>
+                <Dropdown
+                  position="rightTop"
+                  render={(
+                    <Dropdown.Menu className="w-48">
+                      <Dropdown.Item
+                        onClick={() => navigate(pathname === '/explore' ? '/' : '/explore')}
+                      >
+                        {pathname === '/explore' ? 'Desktop' : 'Explore'} 模式
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        onClick={() => toast('开发中')}
+                      >
+                        Touch 模式（开发中）
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  )}
+                >
+                  <Dropdown.Item icon={<SvgIcon.Flash />}>
+                    <div className="w-full flex justify-between items-center">
+                      <span>切换</span>
+                      <SvgIcon.ChevronRight className="text-gray-400"/>
+                    </div>
+                  </Dropdown.Item>
+                </Dropdown>
                 <Dropdown.Item
                   icon={<SvgIcon.Refresh />}
                   onClick={() => {
@@ -188,10 +213,9 @@ export default function MenuBar() {
               <Dropdown.Menu className="w-48">
                 <div className="mb-2px px-2 pt-1 pb-1 border-b">
                   <div className="flex items-center">
-                    <img
-                      alt={userInfo?.nickname}
-                      src={FsApi.getAvatarStreamUrl(userInfo?.username || '')}
-                      className="w-10 h-10 rounded-full border-2 border-white shadow"
+                    <div
+                      className="w-10 h-10 rounded-full border-2 border-white shadow bg-center bg-cover"
+                      style={{ backgroundImage: `url("${FsApi.getAvatarStreamUrl(userInfo?.username || '')}")` }}
                     />
                     <div className="ml-2 text-sm leading-none">
                       <p>{userInfo?.nickname}</p>
@@ -219,10 +243,9 @@ export default function MenuBar() {
             >
               {userInfo ? (
                 <>
-                  <img
-                    alt={userInfo.nickname}
-                    src={FsApi.getAvatarStreamUrl(userInfo.username)}
-                    className="w-3 h-3 rounded-full filter grayscale opacity-80"
+                  <div
+                    className="w-3 h-3 rounded-full filter grayscale opacity-80 bg-center bg-cover"
+                    style={{ backgroundImage: `url("${FsApi.getAvatarStreamUrl(userInfo?.username || '')}")` }}
                   />
                   <span className="ml-1 font-din">{userInfo.nickname}</span>
                 </>

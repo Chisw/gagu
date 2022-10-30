@@ -81,9 +81,9 @@ export default function LoginPage() {
             rel="noreferrer"
             href="https://gagu.io"
             target="_blank"
-            className="underline opacity-50 hover:opacity-70"
+            className="opacity-50 hover:opacity-70"
           >
-            https://gagu.io
+            GAGU.IO
           </a>
         </div>
       </div>
