@@ -10,13 +10,13 @@ const { frontmatter } = Astro.props
 <Layout title={frontmatter.title}>
   <Block className="pt-12 bg-gray-100">
     <div class="flex">
-      <div class="hidden lg:block py-10 w-[280px] flex-shrink-0 sticky top-0">
+      <div class="hidden lg:block py-10 w-[320px] flex-shrink-0 sticky top-0">
         <DocNav />
       </div>
-      <div class="markdown-body py-10 px-8 md:px-10 lg:px-12 xl:px-16 min-h-[100vh] flex-grow">
+      <div class="markdown-body py-10 px-8 md:px-10 lg:px-16 xl:px-20 min-h-[100vh] flex-grow leading-loose">
         <slot />
       </div>
-      <div id="contents" class="hidden xl:block py-10 px-4 w-[280px] flex-shrink-0 sticky top-0">
+      <div id="contents" class="hidden xl:block py-10 px-4 w-[320px] flex-shrink-0 sticky top-0">
         
       </div>
     </div>
