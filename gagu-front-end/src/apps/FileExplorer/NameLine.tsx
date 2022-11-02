@@ -98,7 +98,8 @@ export default function NameLine(props: NameLineProps) {
           const suffix = newName.includes('.') ? '' : '.txt'
           const name = newName + suffix
           const file = new File([blob], name)
-          const { success } = await uploadFile(currentPath, file)
+          const fullPath = `${currentPath}/${name}`
+          const { success } = await uploadFile(fullPath, file)
           if (success) {
             onSuccess({
               name,
