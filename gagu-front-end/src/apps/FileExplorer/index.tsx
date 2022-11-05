@@ -320,6 +320,8 @@ export default function FileExplorer(props: AppComponentProps) {
         })
         if (res && res.success) {
           DownloadApi.download(res.id)
+        } else {
+          toast.error(res.message)
         }
       },
     })

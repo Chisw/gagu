@@ -38,11 +38,15 @@ export class DownloadController {
     const username = this.authService.findOneUsername(token)
     if (username) {
       const id = this.downloadService.create(username, tunnelBase)
-      console.log({ downloadTunnelId: id })
       return {
         success: true,
         message: SERVER_MESSAGE_MAP.OK,
         id,
+      }
+    } else {
+      return {
+        success: false,
+        message: SERVER_MESSAGE_MAP.ERROR_USER_NOT_EXISTED,
       }
     }
   }

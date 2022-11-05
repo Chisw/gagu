@@ -22,8 +22,8 @@ export class LoggerMiddleware implements NestMiddleware {
       const dateTime = DateTime.now().toFormat('yyyy-MM-dd HH:mm:ss')
       const ipStr = String(ip).replace('::ffff:', '')
       const urlStr = decodeURIComponent(originalUrl)
-      const log = `[${dateTime}] ${username}@${ipStr} [${method}/${statusCode}] ${urlStr}`
-      console.log(log)
+      const logRow = `[${dateTime}] ${username}@${ipStr} [${method}/${statusCode}] ${urlStr}`
+      console.log(logRow)
     }
     next()
   }
