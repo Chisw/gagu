@@ -12,9 +12,6 @@ const instance = axios.create({
 })
 
 instance.interceptors.request.use(config => {
-  // TODO
-  // const { url, method } = config
-  // if (method === 'post' && url?.includes('?cmd=file')) config.timeout = 0
   config.headers = {
     ...config.headers,
     [HEADERS_AUTH_KEY]: USER_INFO.getToken(),
@@ -36,8 +33,6 @@ instance.interceptors.response.use(response => response, (error: AxiosError) => 
     window.location.href = '/login'
   } else if (status === 403) {
     toast.error('ERROR_403')
-    // TODO
-    // response.data.success = false
   } else if (status >= 500) {
     toast.error(`ERROR_${status}: ${message}`)
   }

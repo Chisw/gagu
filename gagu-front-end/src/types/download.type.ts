@@ -8,7 +8,7 @@ export interface DownloadTunnelBase {
   downloadName: string
   leftTimes: number
   expiredAt?: number
-  code?: string
+  password?: string
 }
 
 export interface IDownloadTunnel extends DownloadTunnelBase {

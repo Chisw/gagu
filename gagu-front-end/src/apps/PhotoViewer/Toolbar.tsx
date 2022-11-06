@@ -1,5 +1,6 @@
 import { useMemo, useCallback, useEffect, useState } from 'react'
-import { FsApi } from '../../api'
+import toast from 'react-hot-toast'
+import { DownloadApi, FsApi } from '../../api'
 import { SvgIcon } from '../../components/base'
 import { IconButton } from '../../components/base/IconButton'
 import { useFetch } from '../../hooks'
@@ -44,6 +45,7 @@ export default function Toolbar(props: ToolbarProps) {
   }, [imgEl, activeEntry])
 
   const { fetch: getExif, data: ExifData, setData } = useFetch(FsApi.getExif)
+  const { fetch: createTunnel } = useFetch(DownloadApi.create)
 
   const getExifData = useCallback(() => {
     if (activeEntry && ['jpg', 'jpeg'].includes(activeEntry.extension)) {
@@ -73,11 +75,23 @@ export default function Toolbar(props: ToolbarProps) {
         icon: <SvgIcon.Download size={14} />,
         title: '下载',
         disabled: !activeEntry,
-        onClick: () => {
+        onClick: async () => {
           if (activeEntry) {
-            // TODO
-            // const { name, parentPath } = activeEntry
-            // DownloadApi.download()
+            const { name: downloadName, parentPath: basePath } = activeEntry
+            const res = await createTunnel({
+              entryList: [activeEntry],
+              basePath,
+              downloadName,
+              leftTimes: 1,
+              // TODO
+              // expiredAt?,
+              // password?,
+            })
+            if (res && res.success) {
+              DownloadApi.download(res.code)
+            } else {
+              toast.error(res.message)
+            }
           }
         },
       },
@@ -99,7 +113,7 @@ export default function Toolbar(props: ToolbarProps) {
         onClick: () => handlePrevOrNext(1),
       },
     ]
-  }, [thumbnailListShow, isLight, getExifData, activeEntry, matchedEntryList, setIsLight, setThumbnailListShow, handlePrevOrNext])
+  }, [thumbnailListShow, isLight, getExifData, activeEntry, matchedEntryList, setIsLight, setThumbnailListShow, handlePrevOrNext, createTunnel])
 
   return (
     <>

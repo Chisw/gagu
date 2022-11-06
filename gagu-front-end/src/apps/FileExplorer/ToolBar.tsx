@@ -111,44 +111,51 @@ export default function ToolBar(props: ToolBarProps) {
           onClick={onBackToTop}
         />
 
-        <div className="mx-2 h-3 border-l" />
+        <div className="hidden md:block mx-2 h-3 border-l" />
         {windowWidth > 720 && (
           <>
             <ToolButton
               title="新建文件夹 [Shift + N]"
+              className="hidden md:flex"
               icon={<SvgIcon.FolderAdd />}
               disabled={disabledMap.newDir}
               onClick={onNewDir}
             />
             <ToolButton
               title="新建文本文件 [Shift + T]"
+              className="hidden md:flex"
               icon={<SvgIcon.FileAdd />}
               disabled={disabledMap.newTxt}
               onClick={onNewTxt}
             />
             <ToolButton
               title="上传 [Shift + U]"
+              className="hidden md:flex"
               icon={<SvgIcon.Upload />}
               onClick={onUpload}
             />
             <ToolButton
               title="下载 [Shift + D]"
+              className="hidden md:flex"
               icon={<SvgIcon.Download />}
               disabled={disabledMap.download}
               onClick={onDownload}
             />
             {/* <ToolButton
               title="收藏 [Shift + S]"
+              className="hidden md:flex"
               icon={<SvgIcon.Star />}
             /> */}
             <ToolButton
               title="重命名 [Shift + E]"
+              className="hidden md:flex"
               icon={<SvgIcon.Edit />}
               disabled={disabledMap.rename}
               onClick={onRename}
             />
             <ToolButton
               title="删除 [Del]"
+              className="hidden md:flex"
               icon={<SvgIcon.Delete />}
               disabled={disabledMap.delete}
               onClick={onDelete}

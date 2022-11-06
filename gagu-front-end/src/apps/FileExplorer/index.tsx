@@ -315,8 +315,9 @@ export default function FileExplorer(props: AppComponentProps) {
           basePath,
           downloadName,
           leftTimes: 1,
+          // TODO
           // expiredAt?,
-          // code?,
+          // password?,
         })
         if (res && res.success) {
           DownloadApi.download(res.code)
