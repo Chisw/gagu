@@ -1,4 +1,3 @@
-import { readSettingsData } from './../../utils/setting.util';
 import { Injectable } from '@nestjs/common'
 import {
   EntryType,
@@ -86,7 +85,7 @@ export class FsService {
     return entryList
   }
 
-  getRootInfo() {
+  getRootInfo(presetDeviceName?: string) {
     const rootEntryList: IRootEntry[] = []
     if (OS.isMacOS) {
       const driveList = nodeDiskInfo
@@ -164,12 +163,10 @@ export class FsService {
       )
     }
 
-    const setDeviceName = readSettingsData().deviceName
-
     const rootInfo: IRootInfo = {
       version: GAGU_VERSION,
       platform: OS.platform,
-      deviceName: setDeviceName || OS.hostname,
+      deviceName: presetDeviceName || OS.hostname,
       desktopEntryList: this.getEntryList(`${GAGU_PATH.ROOT}/desktop`),
       rootEntryList,
     }

@@ -1,4 +1,4 @@
-import { ISetting } from '../../types'
+import { ISetting, SettingKeys } from '../../types'
 import { Injectable } from '@nestjs/common'
 import { readSettingsData, writeSettingsData } from '../../utils'
 
@@ -16,6 +16,10 @@ export class SettingService {
 
   findAll() {
     return this.settings
+  }
+
+  findOne(key: SettingKeys) {
+    return this.settings[key]
   }
 
   update(settings: ISetting) {

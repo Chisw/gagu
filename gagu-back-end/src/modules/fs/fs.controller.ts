@@ -1,3 +1,4 @@
+import { SettingService } from './../setting/setting.service'
 import { Response } from 'express'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { deleteEntry, getExists, SERVER_MESSAGE_MAP } from '../../utils'
@@ -15,22 +16,26 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common'
-import { User, UserPermission } from '../../types'
+import { SettingKey, User, UserPermission } from '../../types'
 import { mkdirSync, renameSync } from 'fs'
 import { Permission } from '../../common/decorators/permission.decorator'
 import 'express-zip'
 
 @Controller('fs')
 export class FsController {
-  constructor(private readonly fsService: FsService) {}
+  constructor(
+    private readonly fsService: FsService,
+    private readonly settingService: SettingService,
+  ) {}
 
   @Get('root')
   @Permission(UserPermission.read)
   getRoot() {
+    const deviceName = this.settingService.findOne(SettingKey.deviceName)
     return {
       success: true,
       message: SERVER_MESSAGE_MAP.OK,
-      rootInfo: this.fsService.getRootInfo(),
+      rootInfo: this.fsService.getRootInfo(deviceName),
     }
   }
 

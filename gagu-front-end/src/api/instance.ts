@@ -27,7 +27,10 @@ instance.interceptors.response.use(response => response, (error: AxiosError) => 
   if (message === ERROR_TIMEOUT) {
     toast.error(message)
   }
-  if (!response) return
+  if (!response) {
+    toast.error('服务没有响应')
+    return
+  }
   const { status } = response
   if (status === 401) {
     window.location.href = '/login'

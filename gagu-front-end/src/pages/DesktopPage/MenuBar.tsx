@@ -18,7 +18,7 @@ export default function MenuBar() {
   const { pathname } = useLocation()
 
   const [isEffected, setIsEffected] = useState(false)
-  const [timeStr, setTimerStr] = useState('----/--/-- 周- --:--')
+  const [timeStr, setTimerStr] = useState('--:--')
   const [systemPopoverShow, setSystemPopoverShow] = useState(false)
   const [userPopoverShow, setUserPopoverShow] = useState(false)
   const [isFullScreen, setIsFullScreen] = useState(false)
@@ -200,7 +200,7 @@ export default function MenuBar() {
               onClick={() => setSystemPopoverShow(true)}
             >
               <SvgIcon.G size={12} />
-              <span className="ml-2 text-gray-600 font-din">
+              <span className="ml-2 text-gray-700 font-din">
                 {loading ? 'Loading..' : `${rootInfo.deviceName}`}
               </span>
             </div>
@@ -222,7 +222,13 @@ export default function MenuBar() {
                       <p className="text-xs text-gray-500">@{userInfo?.username}</p>
                     </div>
                   </div>
-                  <div className="mt-2 font-din capitalize text-xs text-gray-500">{userInfo?.permissions.join(' ')}</div>
+                  <div className="mt-2 font-din capitalize text-white font-din flex">
+                    {userInfo?.permissions.map((p) => (
+                      <div key={p} className="mr-1 px-1 rounded text-xs bg-blue-600">
+                        {p}
+                      </div>
+                    ))}  
+                  </div>
                 </div>
                 <Dropdown.Item
                   icon={<SvgIcon.Logout />}
@@ -244,10 +250,10 @@ export default function MenuBar() {
               {userInfo ? (
                 <>
                   <div
-                    className="w-3 h-3 rounded-full filter grayscale opacity-80 bg-center bg-cover bg-white"
+                    className="w-3 h-3 rounded-full filter grayscale opacity-80 bg-center bg-cover bg-black-200"
                     style={{ backgroundImage: `url("${FsApi.getAvatarStreamUrl(userInfo?.username || '')}")` }}
                   />
-                  <span className="ml-1 font-din">{userInfo.nickname}</span>
+                  <span className="ml-1 font-din text-gray-700">{userInfo.nickname}</span>
                 </>
               ) : (
                 <SvgIcon.User />

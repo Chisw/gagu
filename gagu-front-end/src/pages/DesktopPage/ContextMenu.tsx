@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
 import { SvgIcon } from '../../components/base'
 import { useClickAway } from '../../hooks'
@@ -8,6 +9,12 @@ import { contextMenuDataState } from '../../states'
 export default function ContextMenu() {
 
   const [menuShow, setMenuShow] = useState(false)
+
+  const { pathname } = useLocation()
+
+  useEffect(() => {
+    setTimeout(() => setMenuShow(false))
+  }, [pathname])
 
   const handleClose = useCallback(() => {
     setMenuShow(false)

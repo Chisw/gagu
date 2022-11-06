@@ -1,7 +1,14 @@
 // Sync following code to BE & FE
+export enum SettingKey {
+  port = 'port',
+  deviceName = 'deviceName',
+}
+
+export type SettingKeys = keyof typeof SettingKey
+
 export interface ISetting {
-  port?: string
-  deviceName?: string
+  [SettingKey.port]?: string
+  [SettingKey.deviceName]?: string
 }
 
 export class SettingForm implements ISetting {

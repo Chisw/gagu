@@ -149,6 +149,7 @@ export default function UserFormModal(props: UserFormModalProps) {
               label="昵称"
               placeholder="Nickname"
               field="nickname"
+              autoComplete="off"
               maxLength={16}
               suffix={<span className="pr-1 text-xs font-din text-gray-500">{form.nickname.length}/16</span>}
               onChange={value => setForm({ ...form, nickname: value.trim() })}
@@ -164,6 +165,7 @@ export default function UserFormModal(props: UserFormModalProps) {
               label="用户名"
               placeholder="Username"
               field="username"
+              autoComplete="off"
               maxLength={16}
               suffix={<span className="pr-1 text-xs font-din text-gray-500">{form.username.length}/16</span>}
               extraText="创建后无法修改，只能使用小写英文字母和数字，不能以数字开头，不区分大小写"
@@ -180,6 +182,7 @@ export default function UserFormModal(props: UserFormModalProps) {
               placeholder="Password"
               type="password"
               field="password"
+              autoComplete="off"
               maxLength={16}
               suffix={<span className="pr-1 text-xs font-din text-gray-500">{form.password.length}/16</span>}
               extraText={MODE.isEdit ? '不修改请留空' : undefined}
@@ -196,6 +199,7 @@ export default function UserFormModal(props: UserFormModalProps) {
               placeholder="Password"
               type="password"
               field="password2"
+              autoComplete="off"
               maxLength={16}
               suffix={<span className="pr-1 text-xs font-din text-gray-500">{form.password2.length}/16</span>}
               extraText={MODE.isEdit ? '不修改请留空' : undefined}
@@ -248,7 +252,7 @@ export default function UserFormModal(props: UserFormModalProps) {
                 </div>
               ))}
             </Form.CheckboxGroup>
-            <div className="flex justify-end">
+            <div className="pt-2 flex justify-end">
               <Button
                 type="tertiary"
                 children="取消"
@@ -261,7 +265,7 @@ export default function UserFormModal(props: UserFormModalProps) {
                 htmlType="submit"
                 className="w-32"
                 loading={creating || updating}
-                children={MODE.isCreate ? '创建' : '修改'}
+                children={MODE.isCreate ? '创建' : '保存'}
                 onClick={handleScrollToError}
               />
             </div>
