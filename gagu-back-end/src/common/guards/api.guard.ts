@@ -8,11 +8,11 @@ import { Reflector } from '@nestjs/core'
 import { Observable } from 'rxjs'
 import { Request } from 'express'
 import { PUBLIC_DECORATOR_KEY } from '../decorators/public.decorator'
-import { AuthService } from 'src/modules/auth/auth.service'
+import { AuthService } from '../../modules/auth/auth.service'
 import { PERMISSION_DECORATOR_KEY } from '../decorators/permission.decorator'
-import { UserService } from 'src/modules/user/user.service'
-import { UserPermissionType } from 'src/types'
-import { getReqToken } from 'src/utils'
+import { UserService } from '../../modules/user/user.service'
+import { UserPermissionType } from '../../types'
+import { getReqToken } from '../../utils'
 
 @Injectable()
 export class ApiGuard implements CanActivate {

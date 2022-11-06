@@ -1,4 +1,4 @@
-import { Public } from 'src/common/decorators/public.decorator'
+import { Public } from '../../common/decorators/public.decorator'
 import { DownloadService } from './download.service'
 import {
   Body,
@@ -16,11 +16,11 @@ import {
   EntryType,
   ZipResponse,
   ZipResponseFile,
-} from 'src/types'
-import { Permission } from 'src/common/decorators/permission.decorator'
+} from '../../types'
+import { Permission } from '../../common/decorators/permission.decorator'
 import 'express-zip'
 import { AuthService } from '../auth/auth.service'
-import { HEADERS_AUTH_KEY, SERVER_MESSAGE_MAP, getEntryPath } from 'src/utils'
+import { HEADERS_AUTH_KEY, SERVER_MESSAGE_MAP, getEntryPath } from '../../utils'
 
 @Controller('download')
 export class DownloadController {
@@ -37,11 +37,11 @@ export class DownloadController {
   ) {
     const username = this.authService.findOneUsername(token)
     if (username) {
-      const id = this.downloadService.create(username, tunnelBase)
+      const code = this.downloadService.create(username, tunnelBase)
       return {
         success: true,
         message: SERVER_MESSAGE_MAP.OK,
-        id,
+        code,
       }
     } else {
       return {
@@ -52,16 +52,16 @@ export class DownloadController {
   }
 
   @Public()
-  @Get(':id')
+  @Get(':code')
   @Permission(UserPermission.read)
-  downloads(@Param('id') id: string, @Res() response: ZipResponse) {
-    const tunnel = this.downloadService.findOne(id)
+  downloads(@Param('code') code: string, @Res() response: ZipResponse) {
+    const tunnel = this.downloadService.findOne(code)
     if (tunnel) {
       const { entryList, basePath, downloadName, expiredAt, leftTimes } = tunnel
       const isExpired = expiredAt && expiredAt < Date.now()
       const isNoLeft = leftTimes === 0
       // TODO: handle share
-      console.log({ isExpired, isNoLeft })
+      console.log({ code, isExpired, isNoLeft })
       if (entryList.length === 1 && entryList[0].type === EntryType.file) {
         return response.download(getEntryPath(entryList[0]))
       }

@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync } from 'fs'
-import { IAuthRecord, IUser, IUserInfo, User } from 'src/types'
+import { IAuthRecord, IUser, IUserInfo, User } from '../types'
 import { GAGU_PATH, HEADERS_AUTH_KEY } from './constant.util'
 import { Request } from 'express'
 

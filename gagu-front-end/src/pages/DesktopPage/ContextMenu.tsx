@@ -55,7 +55,7 @@ export default function ContextMenu() {
         ref={menuRef}
         className={line(`
           gg-contextmenu
-          absolute z-30 py-1 w-44 bg-white shadow-lg border rounded-sm
+          absolute z-30 py-1 w-44 bg-white shadow-lg border rounded-lg
           ${menuShow ? 'block' : 'hidden'}
         `)}
         style={{ top, left }}
@@ -64,7 +64,7 @@ export default function ContextMenu() {
           return (
             <div
               key={label}
-              className="relative z-10 px-2 py-1 hover:bg-blue-600 hover:text-white cursor-pointer text-sm group"
+              className="relative z-10 px-2 py-1 hover:bg-gray-200 cursor-pointer text-sm group"
               onClick={() => {
                 onClick()
                 !children && handleClose()
@@ -79,7 +79,7 @@ export default function ContextMenu() {
                     {children.map(({ icon, label, onClick }) => (
                       <div
                         key={label}
-                        className="px-2 py-1 text-black hover:bg-blue-600 hover:text-white cursor-pointer text-sm flex items-center"
+                        className="px-2 py-1 text-black hover:bg-gray-200 cursor-pointer text-sm flex items-center"
                         onClick={() => {
                           onClick()
                           handleClose()

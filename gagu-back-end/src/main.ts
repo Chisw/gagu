@@ -1,3 +1,4 @@
+import { readSettingsData } from './utils'
 import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
 import {
@@ -19,9 +20,6 @@ const argv = minimist(process.argv.slice(2), {
   },
   string: ['port'],
   boolean: ['help', 'open', 'reset', 'version'],
-  default: {
-    port: 9293,
-  },
   unknown() {
     console.log(HELP_INFO)
     process.exit(0)
@@ -47,14 +45,17 @@ async function bootstrap() {
 
   initialize()
 
+  const settings = readSettingsData()
+  const port = argv.port || settings.port || 9293
+
   const app = await NestFactory.create(AppModule)
 
   app.enableCors()
   app.setGlobalPrefix('api')
 
-  await app.listen(argv.port)
+  await app.listen(port)
 
-  const url = `http://127.0.0.1:${argv.port}`
+  const url = `http://127.0.0.1:${port}`
 
   console.log(`\n✨  GAGU service is running on: ${url}\n`)
 

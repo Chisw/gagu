@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync } from 'fs'
-import { IDownloadTunnel } from 'src/types/download.type'
+import { IDownloadTunnel } from '../types'
 import { GAGU_PATH } from './constant.util'
 
 export const writeDownloadTunnelData = (

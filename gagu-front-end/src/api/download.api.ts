@@ -8,7 +8,7 @@ export class DownloadApi {
     return data
   }
 
-  static download = (id: string) => {
-    window.open(`${BASE_URL}/api/download/${id}`, '_self')
+  static download = (code: string) => {
+    window.open(`${BASE_URL}/api/download/${code}`, '_self')
   }
 }

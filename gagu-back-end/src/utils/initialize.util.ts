@@ -1,8 +1,9 @@
-import { IUser, UserPermission } from 'src/types'
+import { IUser, UserPermission } from '../types'
 import { GAGU_PATH } from './constant.util'
 import { writeAuthData, writeUsersData } from './user.util'
 import { completeNestedPath, getExists } from './fs.util'
 import { writeDownloadTunnelData } from './download.util'
+import { writeSettingsData } from './setting.util'
 import * as md5 from 'md5'
 
 export const initialize = () => {
@@ -39,5 +40,9 @@ export const initialize = () => {
 
   if (!getExists(GAGU_PATH.DATA_DOWNLOADS)) {
     writeDownloadTunnelData([])
+  }
+
+  if (!getExists(GAGU_PATH.DATA_SETTINGS)) {
+    writeSettingsData({})
   }
 }

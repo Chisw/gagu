@@ -1,8 +1,8 @@
 import { Injectable, NestMiddleware } from '@nestjs/common'
 import { Request, Response, NextFunction } from 'express'
 import { DateTime } from 'luxon'
-import { AuthService } from 'src/modules/auth/auth.service'
-import { getReqToken } from 'src/utils'
+import { AuthService } from '../../modules/auth/auth.service'
+import { getReqToken } from '../../utils'
 
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {

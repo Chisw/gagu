@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
-import { User, IAuthRecord } from 'src/types'
-import { readAuthData, writeAuthData } from 'src/utils'
+import { User, IAuthRecord } from '../../types'
+import { readAuthData, writeAuthData } from '../../utils'
 
 @Injectable()
 export class AuthService {

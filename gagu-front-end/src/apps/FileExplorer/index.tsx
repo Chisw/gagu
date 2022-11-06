@@ -319,7 +319,7 @@ export default function FileExplorer(props: AppComponentProps) {
           // code?,
         })
         if (res && res.success) {
-          DownloadApi.download(res.id)
+          DownloadApi.download(res.code)
         } else {
           toast.error(res.message)
         }

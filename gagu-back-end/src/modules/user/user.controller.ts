@@ -8,16 +8,16 @@ import {
   Patch,
 } from '@nestjs/common'
 import { UserService } from './user.service'
-import { User, IUserForm, UserPermission, UserAbilityType } from 'src/types'
+import { User, IUserForm, UserPermission, UserAbilityType } from '../../types'
 import {
   deleteEntry,
   GAGU_PATH,
   getIsExpired,
   PULSE_INTERVAL,
   SERVER_MESSAGE_MAP,
-} from 'src/utils'
+} from '../../utils'
 import { FsService } from '../fs/fs.service'
-import { Permission } from 'src/common/decorators/permission.decorator'
+import { Permission } from '../../common/decorators/permission.decorator'
 import { AuthService } from '../auth/auth.service'
 
 @Controller('user')

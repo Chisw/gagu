@@ -1,6 +1,6 @@
 import { Response } from 'express'
 import { FileInterceptor } from '@nestjs/platform-express'
-import { deleteEntry, getExists, SERVER_MESSAGE_MAP } from 'src/utils'
+import { deleteEntry, getExists, SERVER_MESSAGE_MAP } from '../../utils'
 import { FsService } from './fs.service'
 import {
   Body,
@@ -15,9 +15,9 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common'
-import { User, UserPermission } from 'src/types'
+import { User, UserPermission } from '../../types'
 import { mkdirSync, renameSync } from 'fs'
-import { Permission } from 'src/common/decorators/permission.decorator'
+import { Permission } from '../../common/decorators/permission.decorator'
 import 'express-zip'
 
 @Controller('fs')

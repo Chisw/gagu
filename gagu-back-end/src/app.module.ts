@@ -7,6 +7,7 @@ import { LoggerMiddleware } from './common/middlewares/logger.middleware'
 import { AuthModule } from './modules/auth/auth.module'
 import { DownloadModule } from './modules/download/download.module'
 import { FsModule } from './modules/fs/fs.module'
+import { SettingModule } from './modules/setting/setting.module'
 import { UserModule } from './modules/user/user.module'
 import { IS_DEV } from './utils'
 
@@ -27,6 +28,7 @@ const rootPath = IS_DEV ? devRootPath : prodRootPath
     UserModule,
     FsModule,
     DownloadModule,
+    SettingModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: ApiGuard }],
 })

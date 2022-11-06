@@ -12,7 +12,7 @@ export interface DownloadTunnelBase {
 }
 
 export interface IDownloadTunnel extends DownloadTunnelBase {
-  id: string
+  code: string
   creator: User.Username
   createdAt: number
 }

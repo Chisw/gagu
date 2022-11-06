@@ -1,16 +1,16 @@
 import { Controller, Post, Body, Headers, Get } from '@nestjs/common'
-import { Public } from 'src/common/decorators/public.decorator'
+import { Public } from '../../common/decorators/public.decorator'
 import { AuthService } from './auth.service'
-import { User, UserPermission } from 'src/types'
+import { User, UserPermission } from '../../types'
 import {
-  genHashId,
+  genHashCode,
   genUserInfo,
   SERVER_MESSAGE_MAP,
   HEADERS_AUTH_KEY,
   getIsExpired,
-} from 'src/utils'
+} from '../../utils'
 import { UserService } from '../user/user.service'
-import { Permission } from 'src/common/decorators/permission.decorator'
+import { Permission } from '../../common/decorators/permission.decorator'
 
 @Controller('auth')
 export class AuthController {
@@ -29,7 +29,7 @@ export class AuthController {
     if (user) {
       const { disabled } = user
       if (password === user.password) {
-        const token = genHashId()
+        const token = genHashCode()
         this.authService.create(token, username)
         if (disabled) {
           return {

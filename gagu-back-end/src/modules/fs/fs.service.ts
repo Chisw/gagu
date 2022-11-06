@@ -6,7 +6,7 @@ import {
   IRootEntry,
   IRootInfo,
   User,
-} from 'src/types'
+} from '../../types'
 import {
   createReadStream,
   readdirSync,
@@ -24,7 +24,7 @@ import {
   getExists,
   completeNestedPath,
   dataURLtoBuffer,
-} from 'src/utils'
+} from '../../utils'
 import * as nodeDiskInfo from 'node-disk-info'
 import * as md5 from 'md5'
 import * as jsmediatags from 'jsmediatags'

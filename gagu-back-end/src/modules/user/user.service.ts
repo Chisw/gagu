@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
-import { User, IUser, IUserForm } from 'src/types'
-import { readUsersData, writeUsersData } from 'src/utils'
+import { User, IUser, IUserForm } from '../../types'
+import { readUsersData, writeUsersData } from '../../utils'
 
 @Injectable()
 export class UserService {
