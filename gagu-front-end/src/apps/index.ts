@@ -100,8 +100,8 @@ export const APP_LIST: IApp[] = [
     runningId: 0,
     title: '设置',
     AppComponent: Settings,
-    width: 600,
-    height: 500,
+    width: 800,
+    height: 600,
     resizeRange: {
       minWidth: 600,
       minHeight: 300,

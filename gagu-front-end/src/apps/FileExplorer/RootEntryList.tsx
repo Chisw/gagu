@@ -42,7 +42,7 @@ export default function RootEntryList(props: RootEntryListProps) {
             >
               <div className="flex justify-between items-center">
                 <Tooltip
-                  position="left"
+                  position="right"
                   content={(
                     <span className="text-xs font-din">
                       {rootEntryPath}

@@ -60,7 +60,7 @@ export default function ExplorePage() {
   return (
     <>
       <div
-        className="fixed z-0 inset-0 bg-gray-100"
+        className="fixed z-0 inset-0 bg-gray-200"
         onContextMenuCapture={e => e.preventDefault()}
       >
         <MenuBar />

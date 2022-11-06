@@ -31,7 +31,7 @@ export default function AdvancedSettings() {
 
   return (
     <>
-      <div>
+      <div className="mx-auto max-w-md">
         {!getting && (
           <Form
             initValues={form}
@@ -58,7 +58,16 @@ export default function AdvancedSettings() {
                 },
               ]}
             />
-            <div className="abso lute bott om-0">
+            <Form.Input
+              showClear
+              label="设备名称"
+              placeholder="Device name"
+              field="deviceName"
+              maxLength={16}
+              suffix={<span className="pr-1 text-xs font-din text-gray-500">{form.port.length}/16</span>}
+              onChange={value => setForm({ ...form, deviceName: value })}
+            />
+            <div className="flex justify-end">
               <Button
                 theme="solid"
                 type="primary"

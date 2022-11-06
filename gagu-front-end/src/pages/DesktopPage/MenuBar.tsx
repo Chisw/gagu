@@ -222,7 +222,7 @@ export default function MenuBar() {
                       <p className="text-xs text-gray-500">@{userInfo?.username}</p>
                     </div>
                   </div>
-                  <div className="mt-2 font-din capitalize text-xs text-gray-500">{userInfo?.permissionList.join(' ')}</div>
+                  <div className="mt-2 font-din capitalize text-xs text-gray-500">{userInfo?.permissions.join(' ')}</div>
                 </div>
                 <Dropdown.Item
                   icon={<SvgIcon.Logout />}
@@ -244,7 +244,7 @@ export default function MenuBar() {
               {userInfo ? (
                 <>
                   <div
-                    className="w-3 h-3 rounded-full filter grayscale opacity-80 bg-center bg-cover"
+                    className="w-3 h-3 rounded-full filter grayscale opacity-80 bg-center bg-cover bg-white"
                     style={{ backgroundImage: `url("${FsApi.getAvatarStreamUrl(userInfo?.username || '')}")` }}
                   />
                   <span className="ml-1 font-din">{userInfo.nickname}</span>

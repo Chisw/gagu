@@ -1,3 +1,4 @@
+import { readSettingsData } from './../../utils/setting.util';
 import { Injectable } from '@nestjs/common'
 import {
   EntryType,
@@ -163,10 +164,12 @@ export class FsService {
       )
     }
 
+    const setDeviceName = readSettingsData().deviceName
+
     const rootInfo: IRootInfo = {
       version: GAGU_VERSION,
       platform: OS.platform,
-      deviceName: OS.hostname,
+      deviceName: setDeviceName || OS.hostname,
       desktopEntryList: this.getEntryList(`${GAGU_PATH.ROOT}/desktop`),
       rootEntryList,
     }

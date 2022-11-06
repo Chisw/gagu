@@ -13,7 +13,7 @@ export const USER_INFO = {
         username: storeUserInfo.username || 'UNKNOWN',
         disabled: storeUserInfo.disabled || false,
         expiredAt: storeUserInfo.expiredAt,
-        permissionList: storeUserInfo.permissionList || [],
+        permissions: storeUserInfo.permissions || [],
       }
       return userInfo
     } else {

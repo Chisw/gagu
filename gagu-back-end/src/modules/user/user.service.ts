@@ -30,7 +30,7 @@ export class UserService {
       username,
       password,
       expiredAt,
-      permissionList,
+      permissions,
       rootEntryPathList,
     } = userForm
 
@@ -41,7 +41,7 @@ export class UserService {
       disabled: false,
       createdAt: Date.now(),
       expiredAt,
-      permissionList,
+      permissions,
       rootEntryPathList,
     }
 
@@ -55,7 +55,7 @@ export class UserService {
       username,
       password,
       expiredAt,
-      permissionList,
+      permissions,
       rootEntryPathList,
     } = userForm
 
@@ -64,7 +64,7 @@ export class UserService {
     if (user) {
       user.nickname = nickname
       user.expiredAt = expiredAt
-      user.permissionList = permissionList
+      user.permissions = permissions
       user.rootEntryPathList = rootEntryPathList
       if (password) {
         user.password = password

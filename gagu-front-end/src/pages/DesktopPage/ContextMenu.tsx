@@ -64,7 +64,7 @@ export default function ContextMenu() {
           return (
             <div
               key={label}
-              className="relative z-10 px-2 py-1 hover:bg-gray-200 cursor-pointer text-sm group"
+              className="relative z-10 px-3 py-2 hover:bg-gray-100 cursor-pointer text-sm group"
               onClick={() => {
                 onClick()
                 !children && handleClose()
@@ -75,11 +75,11 @@ export default function ContextMenu() {
                 <span className="ml-2 flex-grow">{label}</span>
                 {children && <SvgIcon.ChevronRight />}
                 {children && (
-                  <div className="absolute top-0 left-0 w-44 -mt-1 ml-40 hidden group-hover:block py-1 bg-white shadow-lg border">
+                  <div className="absolute top-0 left-0 w-44 -mt-1 ml-40 hidden group-hover:block py-1 bg-white shadow-lg border rounded-lg">
                     {children.map(({ icon, label, onClick }) => (
                       <div
                         key={label}
-                        className="px-2 py-1 text-black hover:bg-gray-200 cursor-pointer text-sm flex items-center"
+                        className="px-3 py-2 text-black hover:bg-gray-100 cursor-pointer text-sm flex items-center"
                         onClick={() => {
                           onClick()
                           handleClose()

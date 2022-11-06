@@ -72,7 +72,7 @@ export default function UserFormModal(props: UserFormModalProps) {
       password,
       disabled,
       expiredAt,
-      permissionList,
+      permissions,
       rootEntryPathList,
     } = form
 
@@ -85,7 +85,7 @@ export default function UserFormModal(props: UserFormModalProps) {
       disabled,
       createdAt: 0,
       expiredAt,
-      permissionList: permissionList.sort(permissionSorter),
+      permissions: permissions.sort(permissionSorter),
       rootEntryPathList,
     })
 
@@ -114,31 +114,35 @@ export default function UserFormModal(props: UserFormModalProps) {
       >
         <div className="gg-app-settings-user-form-container mx-auto py-4 max-w-md overflow-y-auto">
           <Form
+            labelPosition="left"
+            labelWidth={100}
             initValues={form}
             onSubmit={() => handleSubmit()}
           >
-            <Form.Label>头像</Form.Label>
-            <div
-              className={line(`
-                relative mt-1 p-1 w-24 h-24
-                border-2 border-dashed border-gray-300 hover:border-blue-500 hover:border-solid
-                text-gray-500 rounded-lg flex justify-center items-center
-              `)}
-            >
-              <input
-                ref={fileInputRef}
-                type="file"
-                className="absolute z-10 block w-full h-full opacity-0 cursor-pointer"
-                onChange={handleFileChange}
-              />
-              {form.avatar ? (
-                <div
-                  className="w-full h-full rounded-full bg-center bg-cover bg-no-repeat bg-gray-300"
-                  style={{ backgroundImage: `url("${form.avatar}")` }}
+            <div className="pb-3 flex">
+              <Form.Label width={100}>头像</Form.Label>
+              <div
+                className={line(`
+                  relative p-1 w-24 h-24
+                  border-2 border-dashed border-gray-300 hover:border-blue-500 hover:border-solid
+                  text-gray-500 rounded-lg flex justify-center items-center
+                `)}
+              >
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  className="absolute z-10 block w-full h-full opacity-0 cursor-pointer"
+                  onChange={handleFileChange}
                 />
-              ) : (
-                <SvgIcon.Avatar size={96} className="text-gray-200" />
-              )}
+                {form.avatar ? (
+                  <div
+                    className="w-full h-full rounded-full bg-center bg-cover bg-no-repeat bg-gray-300"
+                    style={{ backgroundImage: `url("${form.avatar}")` }}
+                  />
+                ) : (
+                  <SvgIcon.Avatar size={96} className="text-gray-200" />
+                )}
+              </div>
             </div>
             <Form.Input
               showClear
@@ -227,8 +231,8 @@ export default function UserFormModal(props: UserFormModalProps) {
             />
             <Form.CheckboxGroup
               label="权限"
-              field="permissionList"
-              onChange={value => setForm({ ...form, permissionList: value })}
+              field="permissions"
+              onChange={value => setForm({ ...form, permissions: value })}
             >
               {[
                 { label: '系统管理 Administer', value: UserPermission.administer, extra: '使用设置（系统、用户管理、日志）、关闭系统等功能，该用户无法被禁用' },
@@ -244,7 +248,13 @@ export default function UserFormModal(props: UserFormModalProps) {
                 </div>
               ))}
             </Form.CheckboxGroup>
-            <div className="abso lute bott om-0">
+            <div className="flex justify-end">
+              <Button
+                type="tertiary"
+                children="取消"
+                onClick={() => setFormMode('CLOSE')}
+              />
+              &emsp;
               <Button
                 theme="solid"
                 type="primary"
@@ -253,12 +263,6 @@ export default function UserFormModal(props: UserFormModalProps) {
                 loading={creating || updating}
                 children={MODE.isCreate ? '创建' : '修改'}
                 onClick={handleScrollToError}
-              />
-              &emsp;
-              <Button
-                type="tertiary"
-                children="取消"
-                onClick={() => setFormMode('CLOSE')}
               />
             </div>
           </Form>

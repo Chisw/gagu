@@ -23,7 +23,7 @@ export const initialize = () => {
       disabled: false,
       createdAt: Date.now(),
       expiredAt: undefined,
-      permissionList: [
+      permissions: [
         UserPermission.administer,
         UserPermission.read,
         UserPermission.write,

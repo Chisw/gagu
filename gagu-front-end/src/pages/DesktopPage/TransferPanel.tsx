@@ -121,7 +121,7 @@ export default function TransferPanel() {
         title={(
           <div className="flex items-center">
             <SvgIcon.Transfer size={24} />
-            <span className="ml-2 font-din">{transferTaskList.length}</span>
+            <span className="ml-2 font-din text-base">{transferTaskList.length}</span>
             <div className="flex-grow flex justify-end">
               {transferTaskList.length > 0 && (
                 <Button

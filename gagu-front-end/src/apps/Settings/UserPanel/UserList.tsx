@@ -53,7 +53,7 @@ export default function UserList(props: UserListProps) {
   }, [refresh, removeUser])
 
   const getButtonList = useCallback((user: IUser) => {
-    const isAdmin = user.permissionList.includes(UserPermission.administer)
+    const isAdmin = user.permissions.includes(UserPermission.administer)
     const buttonList = [
       {
         label: '编辑',
@@ -93,7 +93,7 @@ export default function UserList(props: UserListProps) {
   return (
     <>
       {list.map((user) => {
-        const { nickname, username, expiredAt, createdAt, disabled, permissionList } = user
+        const { nickname, username, expiredAt, createdAt, disabled, permissions } = user
         const isLoggedIn = loggedInList.includes(username)
         const showExpire = !!expiredAt
         const isExpired = getIsExpired(expiredAt)
@@ -144,7 +144,7 @@ export default function UserList(props: UserListProps) {
                 <p>{getAtTime(expiredAt)} 过期</p>
               )}
               <div className="mt-1 transform scale-90 origin-top-left">
-                {permissionList.map(p => (
+                {permissions.map(p => (
                   <span
                     key={p}
                     className="inline-block mr-2px px-1 py-0 text-xs text-white bg-blue-600 rounded select-none capitalize"
