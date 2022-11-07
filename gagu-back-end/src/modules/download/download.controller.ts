@@ -53,8 +53,7 @@ export class DownloadController {
 
   @Public()
   @Get(':code')
-  @Permission(UserPermission.read)
-  downloads(@Param('code') code: string, @Res() response: ZipResponse) {
+  download(@Param('code') code: string, @Res() response: ZipResponse) {
     const tunnel = this.downloadService.findOne(code)
     if (tunnel) {
       const { entryList, basePath, downloadName, expiredAt, leftTimes } = tunnel
@@ -72,6 +71,28 @@ export class DownloadController {
         return { name, path }
       })
       response.zip(files, downloadName)
+    } else {
+      return {
+        success: false,
+        message: SERVER_MESSAGE_MAP.ERROR_TUNNEL_NOT_EXISTED,
+      }
+    }
+  }
+
+  @Public()
+  @Get(':code/tunnel')
+  findOne(@Param('code') code: string) {
+    const tunnel = this.downloadService.findOne(code)
+    if (tunnel) {
+      const { entryList } = tunnel
+      const flattenList =
+        this.downloadService.getFlattenRecursiveEntryList(entryList)
+      return {
+        success: true,
+        message: SERVER_MESSAGE_MAP.OK,
+        tunnel,
+        flattenList,
+      }
     } else {
       return {
         success: false,

@@ -8,6 +8,11 @@ export class DownloadApi {
     return data
   }
 
+  static getTunnel = async (code: string) => {
+    const { data } = await instance.get(`/api/download/${code}/tunnel`)
+    return data
+  }
+
   static download = (code: string) => {
     window.open(`${BASE_URL}/api/download/${code}`, '_self')
   }

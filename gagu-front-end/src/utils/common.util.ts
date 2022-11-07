@@ -15,7 +15,7 @@ export const line = (str: string) => str
   .replace(/\s+/g, ' ')
   .trim()
 
-export const getAtTime = (millis: number) => {
+export const getDateTime = (millis: number) => {
   if (!millis) return ''
   return DateTime.fromMillis(millis).toFormat('yyyy-MM-dd HH:mm:ss')
 }

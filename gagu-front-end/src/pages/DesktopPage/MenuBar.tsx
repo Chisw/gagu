@@ -1,4 +1,4 @@
-import { Dropdown } from '@douyinfe/semi-ui'
+import { Dropdown, Modal } from '@douyinfe/semi-ui'
 import { DateTime } from 'luxon'
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
@@ -22,6 +22,7 @@ export default function MenuBar() {
   const [systemPopoverShow, setSystemPopoverShow] = useState(false)
   const [userPopoverShow, setUserPopoverShow] = useState(false)
   const [isFullScreen, setIsFullScreen] = useState(false)
+  const [passwordModalShow, setPasswordModalShow] = useState(false)
 
   const [userInfo, setUserInfo] = useRecoilState(userInfoState)
   const [rootInfo, setRootInfo] = useRecoilState(rootInfoState)
@@ -114,7 +115,7 @@ export default function MenuBar() {
               <Dropdown.Menu className="w-48">
                 <div className="mb-2px px-2 pb-1 border-b text-xs font-din flex justify-between">
                   <div>
-                    GAGU Version {rootInfo.version}
+                    GAGU v{rootInfo.version}
                   </div>
                   <div className="flex">
                     <a
@@ -231,6 +232,15 @@ export default function MenuBar() {
                   </div>
                 </div>
                 <Dropdown.Item
+                  icon={<SvgIcon.Key />}
+                  onClick={() => {
+                    setUserPopoverShow(false)
+                    setTimeout(() => setPasswordModalShow(true))
+                  }}
+                >
+                  修改密码
+                </Dropdown.Item>
+                <Dropdown.Item
                   icon={<SvgIcon.Logout />}
                   onClick={async () => {
                     await logout()
@@ -268,6 +278,15 @@ export default function MenuBar() {
           <TransferPanel />
         </div>
       </div>
+
+      <Modal
+        title="修改密码"
+        visible={passwordModalShow}
+        onCancel={() => setPasswordModalShow(false)}
+      >
+
+        
+      </Modal>
     </>
   )
 }

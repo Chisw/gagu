@@ -23,6 +23,7 @@ const rootPath = IS_DEV ? devRootPath : prodRootPath
       { rootPath, serveRoot: '/login' },
       { rootPath, serveRoot: '/explore' },
       { rootPath, serveRoot: '/touch' },
+      { rootPath, serveRoot: '/share' },
     ),
     AuthModule,
     UserModule,

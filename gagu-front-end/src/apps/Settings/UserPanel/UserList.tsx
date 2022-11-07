@@ -6,7 +6,7 @@ import { SvgIcon } from '../../../components/base'
 import Confirmor from '../../../components/Confirmor'
 import { useFetch } from '../../../hooks'
 import { IUser, IUserForm, User, UserAbilityType, UserForm, UserPermission } from '../../../types'
-import { getAtTime, getIsExpired } from '../../../utils'
+import { getDateTime, getIsExpired } from '../../../utils'
 
 interface UserListProps {
   list: IUser[]
@@ -139,9 +139,9 @@ export default function UserList(props: UserListProps) {
               )}
             </div>
             <div className="flex-shrink-0 text-xs leading-none font-din text-gray-500">
-              <p>{getAtTime(createdAt)} 创建</p>
+              <p>{getDateTime(createdAt)} 创建</p>
               {showExpire && (
-                <p>{getAtTime(expiredAt)} 过期</p>
+                <p>{getDateTime(expiredAt)} 过期</p>
               )}
               <div className="mt-1 transform scale-90 origin-top-left">
                 {permissions.map(p => (
