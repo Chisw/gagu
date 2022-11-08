@@ -7,5 +7,6 @@ import { SettingModule } from '../setting/setting.module'
   imports: [SettingModule],
   controllers: [FsController],
   providers: [FsService],
+  exports: [FsService],
 })
 export class FsModule {}

@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common'
 import {
   UserPermission,
-  DownloadTunnelBase,
+  DownloadTunnelForm,
   User,
   EntryType,
   ZipResponse,
@@ -33,7 +33,7 @@ export class DownloadController {
   @Permission(UserPermission.read)
   create(
     @Headers(HEADERS_AUTH_KEY) token: User.Token,
-    @Body() tunnelBase: DownloadTunnelBase,
+    @Body() tunnelBase: DownloadTunnelForm,
   ) {
     const username = this.authService.findOneUsername(token)
     if (username) {
@@ -56,7 +56,8 @@ export class DownloadController {
   download(@Param('code') code: string, @Res() response: ZipResponse) {
     const tunnel = this.downloadService.findOne(code)
     if (tunnel) {
-      const { entryList, basePath, downloadName, expiredAt, leftTimes } = tunnel
+      const { entryList, rootParentPath, downloadName, expiredAt, leftTimes } =
+        tunnel
       const isExpired = expiredAt && expiredAt < Date.now()
       const isNoLeft = leftTimes === 0
       // TODO: handle share
@@ -67,7 +68,7 @@ export class DownloadController {
       const list = this.downloadService.getFlattenRecursiveEntryList(entryList)
       const files: ZipResponseFile[] = list.map((entry) => {
         const path = getEntryPath(entry)
-        const name = path.replace(basePath, '')
+        const name = path.replace(rootParentPath, '')
         return { name, path }
       })
       response.zip(files, downloadName)
@@ -80,7 +81,7 @@ export class DownloadController {
   }
 
   @Public()
-  @Get(':code/tunnel')
+  @Get('/:code/share')
   findOne(@Param('code') code: string) {
     const tunnel = this.downloadService.findOne(code)
     if (tunnel) {

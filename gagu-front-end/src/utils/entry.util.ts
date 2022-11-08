@@ -41,8 +41,8 @@ export const getDownloadInfo = (parentPath: string, selectedEntryList: IEntry[])
     ? `${pathName}.zip`
     : isDownloadSingle
       ? isDownloadSingleDir
-        ? `${singleEntryName}/${singleEntryName}.zip`
-        : `${singleEntryName}`
+        ? `${singleEntryName}.zip`
+        : singleEntryName
       : `${pathName}.zip`
 
   const message = isDownloadAll

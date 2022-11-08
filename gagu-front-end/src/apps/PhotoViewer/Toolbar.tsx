@@ -5,7 +5,7 @@ import { SvgIcon } from '../../components/base'
 import { IconButton } from '../../components/base/IconButton'
 import { useFetch } from '../../hooks'
 import { IEntry } from '../../types'
-import { getPaddedNo, getReadableSize, line } from '../../utils'
+import { DOWNLOAD_PERIOD, getPaddedNo, getReadableSize, line } from '../../utils'
 
 interface ToolbarProps {
   imgEl: HTMLImageElement | null
@@ -77,20 +77,18 @@ export default function Toolbar(props: ToolbarProps) {
         disabled: !activeEntry,
         onClick: async () => {
           if (activeEntry) {
-            const { name: downloadName, parentPath: basePath } = activeEntry
+            const { name: downloadName, parentPath: rootParentPath } = activeEntry
             const res = await createTunnel({
               entryList: [activeEntry],
-              basePath,
+              rootParentPath,
               downloadName,
               leftTimes: 1,
-              // TODO
-              // expiredAt?,
-              // password?,
+              expiredAt: Date.now() + DOWNLOAD_PERIOD,
             })
-            if (res && res.success) {
+            if (res && res.success && res.code) {
               DownloadApi.download(res.code)
             } else {
-              toast.error(res.message)
+              res && toast.error(res.message)
             }
           }
         },

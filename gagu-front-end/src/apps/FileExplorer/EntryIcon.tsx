@@ -8,6 +8,7 @@ interface IconProps {
   entry: IEntry
   isSmall?: boolean
   scrollHook?: { top: number, height: number }
+  hideApp?: boolean
 }
 
 export default function Icon(props: IconProps) {
@@ -15,6 +16,7 @@ export default function Icon(props: IconProps) {
     entry,
     isSmall = false,
     scrollHook,
+    hideApp = false,
   } = props
 
   const [isInView, setIsInView] = useState(false)
@@ -63,7 +65,7 @@ export default function Icon(props: IconProps) {
         ${`--i-${entryIconType || 'unknown'}`}
       `)}
     >
-      {callableAppId && (
+      {(!hideApp && callableAppId) && (
         <div
           data-app-id={callableAppId}
           className={line(`

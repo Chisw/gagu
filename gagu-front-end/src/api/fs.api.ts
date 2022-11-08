@@ -77,6 +77,6 @@ export class FsApi {
   }
 
   static getAvatarStreamUrl = (username: string) => {
-    return `${BASE_URL}/api/fs/avatar?username=${username}&token=${USER_INFO.getToken()}`
+    return `${BASE_URL}/api/fs/avatar?username=${username}`
   }
 }

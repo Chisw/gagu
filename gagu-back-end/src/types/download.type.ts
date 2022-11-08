@@ -13,17 +13,19 @@ export interface ZipResponse extends Response {
 import { IEntry } from './entry.type'
 import { User } from './user.type'
 
-export interface DownloadTunnelBase {
+export interface DownloadTunnelForm {
   entryList: IEntry[]
-  basePath: string
+  rootParentPath: string
   downloadName: string
   leftTimes: number
   expiredAt?: number
   password?: string
 }
 
-export interface IDownloadTunnel extends DownloadTunnelBase {
+export interface IDownloadTunnel extends DownloadTunnelForm {
   code: string
-  creator: User.Username
+  username: User.Username
+  nickname: User.Nickname
   createdAt: number
+  hasPassword: boolean
 }

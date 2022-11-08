@@ -7,6 +7,7 @@ export class SettingService {
   private settings: ISetting = {}
 
   constructor() {
+    console.log('  - init SettingService')
     this.settings = readSettingsData()
   }
 

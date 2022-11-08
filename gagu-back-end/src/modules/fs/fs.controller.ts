@@ -19,6 +19,7 @@ import {
 import { SettingKey, User, UserPermission } from '../../types'
 import { mkdirSync, renameSync } from 'fs'
 import { Permission } from '../../common/decorators/permission.decorator'
+import { Public } from 'src/common/decorators/public.decorator'
 import 'express-zip'
 
 @Controller('fs')
@@ -120,8 +121,8 @@ export class FsController {
     }
   }
 
+  @Public()
   @Get('avatar')
-  @Permission(UserPermission.read)
   @Header('Content-Type', 'image/jpg')
   readAvatar(
     @Query('username') username: User.Username,

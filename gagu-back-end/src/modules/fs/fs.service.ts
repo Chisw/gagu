@@ -34,6 +34,10 @@ import * as thumbsupply from 'thumbsupply'
 
 @Injectable()
 export class FsService {
+  constructor() {
+    console.log('  - init FsService')
+  }
+
   getHasChildren(path: string) {
     try {
       return readdirSync(path).some((name) => !name.startsWith('.'))

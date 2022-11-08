@@ -1,6 +1,6 @@
 import { EntryType, IDownloadTunnel, IEntry, User } from '../../types'
 import { Injectable } from '@nestjs/common'
-import { DownloadTunnelBase } from '../../types'
+import { DownloadTunnelForm } from '../../types'
 import {
   genHashCode,
   getEntryPath,
@@ -8,12 +8,17 @@ import {
   writeDownloadTunnelData,
 } from '../../utils'
 import { FsService } from '../fs/fs.service'
+import { UserService } from '../user/user.service'
 
 @Injectable()
 export class DownloadService {
   private downloadTunnelList: IDownloadTunnel[] = []
 
-  constructor(private readonly fsService: FsService) {
+  constructor(
+    private readonly fsService: FsService,
+    private readonly userService: UserService,
+  ) {
+    console.log('  - init DownloadService')
     this.downloadTunnelList = readDownloadTunnelData()
   }
 
@@ -25,13 +30,17 @@ export class DownloadService {
     return this.downloadTunnelList.find((tunnel) => tunnel.code === code)
   }
 
-  create(creator: User.Username, tunnelBase: DownloadTunnelBase) {
+  create(username: User.Username, tunnelBase: DownloadTunnelForm) {
     const code = genHashCode()
+    const nickname = this.userService.findOne(username)?.nickname || 'UNKNOWN'
     const tunnel: IDownloadTunnel = {
       code,
-      creator,
+      username,
+      nickname,
       createdAt: Date.now(),
       ...tunnelBase,
+      password: undefined,
+      hasPassword: !!tunnelBase.password,
     }
     this.downloadTunnelList.push(tunnel)
     this.sync()

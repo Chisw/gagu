@@ -6,6 +6,7 @@ export const DOCUMENT_TITLE = 'GAGU.IO'
 export const INVALID_NAME_CHAR_LIST = ['/', '|', '\\', '?', ':', '"', '<', '>', '*']
 export const MAX_PAGE_SIZE = 200
 export const ERROR_TIMEOUT = 'ERROR_TIMEOUT'
+export const DOWNLOAD_PERIOD = 10 * 60 * 1000
 
 export const ENTRY_ICON_LIST = [
   { type: 'folder', matchList: ['_dir'] },

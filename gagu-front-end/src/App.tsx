@@ -21,8 +21,9 @@ export default function App() {
         <Route path="/" element={<DesktopPage />} />
         <Route path="/explore" element={<ExplorePage />} />
         <Route path="/touch" element={<TouchPage />} />
+        <Route path="/share" element={<DesktopPage />} />
         <Route path="/share/:code" element={<SharePage />} />
-        {/* <Route path="*" render={() => <Redirect to="/404" />} /> */}
+        <Route path="*" element={<DesktopPage />} />
       </Routes>
     </BrowserRouter>
   )

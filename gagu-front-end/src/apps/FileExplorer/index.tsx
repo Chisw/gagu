@@ -24,6 +24,7 @@ import {
   openInIINA,
   getEntryPath,
   MAX_PAGE_SIZE,
+  DOWNLOAD_PERIOD,
 } from '../../utils'
 import {
   contextMenuDataState,
@@ -299,7 +300,7 @@ export default function FileExplorer(props: AppComponentProps) {
 
   const handleDownloadClick = useCallback((contextEntryList?: IEntry[]) => {
     const entryList = contextEntryList || selectedEntryList
-    const basePath = entryList[0].parentPath
+    const rootParentPath = entryList[0].parentPath
     const { message, downloadName } = getDownloadInfo(currentPath, entryList)
     const close = () => setDownloadConfirmorProps({ show: false })
 
@@ -312,17 +313,15 @@ export default function FileExplorer(props: AppComponentProps) {
         close()
         const res = await createTunnel({
           entryList,
-          basePath,
+          rootParentPath,
           downloadName,
           leftTimes: 1,
-          // TODO
-          // expiredAt?,
-          // password?,
+          expiredAt: Date.now() + DOWNLOAD_PERIOD,
         })
-        if (res && res.success) {
+        if (res && res.success && res.code) {
           DownloadApi.download(res.code)
         } else {
-          toast.error(res.message)
+          res && toast.error(res.message)
         }
       },
     })

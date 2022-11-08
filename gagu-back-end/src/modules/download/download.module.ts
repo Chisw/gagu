@@ -1,12 +1,13 @@
 import { AuthModule } from './../auth/auth.module'
-import { FsService } from '../fs/fs.service'
 import { Module } from '@nestjs/common'
 import { DownloadController } from './download.controller'
 import { DownloadService } from './download.service'
+import { UserModule } from '../user/user.module'
+import { FsModule } from '../fs/fs.module'
 
 @Module({
-  imports: [AuthModule],
+  imports: [AuthModule, UserModule, FsModule],
   controllers: [DownloadController],
-  providers: [DownloadService, FsService],
+  providers: [DownloadService],
 })
 export class DownloadModule {}

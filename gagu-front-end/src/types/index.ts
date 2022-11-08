@@ -1,3 +1,4 @@
+export * from './common.type'
 export * from './app.type'
 export * from './entry.type'
 export * from './transfer.type'
