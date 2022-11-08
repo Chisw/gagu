@@ -1,5 +1,6 @@
-import { Button } from '@douyinfe/semi-ui'
+import { Button, Input } from '@douyinfe/semi-ui'
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import toast from 'react-hot-toast'
 import { useParams } from 'react-router-dom'
 import { DownloadApi, FsApi } from '../api'
 import Icon from '../apps/FileExplorer/EntryIcon'
@@ -15,6 +16,7 @@ export default function SharePage() {
   const [allMode, setAllMode] = useState(false)
 
   const { fetch: getTunnel, loading, data } = useFetch(DownloadApi.getTunnel)
+  const { fetch: callTunnel, loading: calling } = useFetch(DownloadApi.callTunnel)
 
   useEffect(() => {
     code && getTunnel(code)
@@ -32,7 +34,9 @@ export default function SharePage() {
     expiredAt,
     leftTimes,
     downloadName,
+    hasPassword,
     hasFolder,
+    disabled,
   } = useMemo(() => {
     const {
       flattenList,
@@ -47,7 +51,11 @@ export default function SharePage() {
       expiredAt,
       leftTimes,
       downloadName,
+      hasPassword,
     } = data?.tunnel || {}
+    const isNoLeft = leftTimes === 0
+    const isExpired = !!(expiredAt && expiredAt < Date.now())
+
     return {
       success,
       message,
@@ -59,15 +67,25 @@ export default function SharePage() {
       expiredAt,
       leftTimes,
       downloadName,
+      hasPassword,
       hasFolder: entryList?.some(e => e.type === EntryType.directory),
+      disabled: isNoLeft || isExpired,
     }
   }, [data])
 
   const handleDownloadClick = useCallback(async () => {
     if (code) {
-      DownloadApi.download(code)
+      const res = await callTunnel(code)
+      if (res && res.success) {
+        DownloadApi.download(code)
+        setTimeout(() => {
+          getTunnel(code)
+        }, 1000)
+      } else {
+        toast.error(res?.message || 'ERROR')
+      }
     }
-  }, [code])
+  }, [code, callTunnel, getTunnel])
 
   return (
     <>
@@ -91,8 +109,13 @@ export default function SharePage() {
                 </div>
               </div>
               <div className="my-6 backdrop-filter backdrop-blur-sm">
-                <div className="px-3 py-2 text-xs bg-white-500 border border-b-0 border-gray-100 font-din text-gray-600 flex justify-between items-center">
-                  <span>{downloadName}</span>
+                <div className="px-3 py-2 text-xs bg-white-500 border border-b-0 border-gray-100 font-din flex justify-between items-center">
+                  <span>
+                    <span className="text-gray-600">{downloadName}</span>
+                    <span className="text-gray-400">
+                      &emsp;{getReadableSize(flattenList.map(e => e.size).filter(Boolean).reduce((a, b) => a! + b!, 0) as number)}
+                    </span>
+                  </span>
                   {hasFolder && (
                     <span
                       className="text-xs text-blue-500 cursor-pointer font-bold"
@@ -121,19 +144,31 @@ export default function SharePage() {
               {code && (
                 <div className="flex flex-wrap justify-between items-center">
                   <div className="w-full md:w-auto text-center md:text-left text-xs text-gray-500">
-                    <p>有效期至： {expiredAt && getDateTime(expiredAt).slice(0, -3)}</p>
                     <p>剩余保存次数：{leftTimes}</p>
+                    <p>有效期至：{expiredAt ? getDateTime(expiredAt).slice(0, -3) : '无限期'}</p>
                   </div>
-                  <Button
-                    size="large"
-                    type="primary"
-                    theme="solid"
-                    className="mx-auto mt-4 md:m-0"
-                    icon={<SvgIcon.Download />}
-                    onClick={handleDownloadClick}
-                  >
-                    保存到本地
-                  </Button>
+                  <div className="mt-4 mx-auto md:m-0 w-full md:w-auto flex justify-center">
+                    {hasPassword && (
+                      <Input
+                        size="large"
+                        placeholder="输入密码"
+                        className="mr-4 w-36"
+                        type="password"
+                      />
+                    )}
+                    <Button
+                      size="large"
+                      type="primary"
+                      theme="solid"
+                      className="w-36"
+                      loading={calling}
+                      disabled={disabled}
+                      icon={<SvgIcon.Download />}
+                      onClick={handleDownloadClick}
+                    >
+                      保存至本地
+                    </Button>
+                  </div>
                 </div>
               )}
             </div>

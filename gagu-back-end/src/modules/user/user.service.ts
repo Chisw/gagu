@@ -7,7 +7,7 @@ export class UserService {
   private userList: IUser[] = []
 
   constructor() {
-    console.log('  - init UserService')
+    console.log('  - init User')
     this.userList = readUsersData()
   }
 

@@ -58,10 +58,12 @@ export class DownloadController {
     if (tunnel) {
       const { entryList, rootParentPath, downloadName, expiredAt, leftTimes } =
         tunnel
-      const isExpired = expiredAt && expiredAt < Date.now()
       const isNoLeft = leftTimes === 0
+      const isExpired = !!(expiredAt && expiredAt < Date.now())
       // TODO: handle share
       console.log({ code, isExpired, isNoLeft })
+
+      this.downloadService.minusTimes(code)
       if (entryList.length === 1 && entryList[0].type === EntryType.file) {
         return response.download(getEntryPath(entryList[0]))
       }
@@ -93,6 +95,42 @@ export class DownloadController {
         message: SERVER_MESSAGE_MAP.OK,
         tunnel,
         flattenList,
+      }
+    } else {
+      return {
+        success: false,
+        message: SERVER_MESSAGE_MAP.ERROR_TUNNEL_NOT_EXISTED,
+      }
+    }
+  }
+
+  @Public()
+  @Get('/:code/call/:password')
+  call(@Param('code') code: string, @Param('password') callPassword?: string) {
+    const tunnel = this.downloadService.findOne(code)
+    if (tunnel) {
+      const { leftTimes, expiredAt, password } = tunnel
+
+      if (leftTimes === 0) {
+        return {
+          success: false,
+          message: SERVER_MESSAGE_MAP.ERROR_TUNNEL_NO_LEFT,
+        }
+      } else if (expiredAt && expiredAt < Date.now()) {
+        return {
+          success: false,
+          message: SERVER_MESSAGE_MAP.ERROR_TUNNEL_EXPIRED,
+        }
+      } else if (password && callPassword !== password) {
+        return {
+          success: false,
+          message: SERVER_MESSAGE_MAP.ERROR_TUNNEL_PASSWORD_WRONG,
+        }
+      } else {
+        return {
+          success: true,
+          message: SERVER_MESSAGE_MAP.OK,
+        }
       }
     } else {
       return {

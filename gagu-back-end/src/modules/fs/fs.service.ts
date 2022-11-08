@@ -35,7 +35,7 @@ import * as thumbsupply from 'thumbsupply'
 @Injectable()
 export class FsService {
   constructor() {
-    console.log('  - init FsService')
+    console.log('  - init Fs')
   }
 
   getHasChildren(path: string) {

@@ -30,6 +30,7 @@ instance.interceptors.response.use(response => response, (error: AxiosError) => 
   }
   const { status } = response
   if (status === 401) {
+    USER_INFO.remove()
     window.location.href = '/login'
   } else if (status === 403) {
     toast.error('ERROR_403')

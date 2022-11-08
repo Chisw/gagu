@@ -7,7 +7,7 @@ export class AuthService {
   private authRecordList: IAuthRecord[] = []
 
   constructor() {
-    console.log('  - init AuthService')
+    console.log('  - init Auth')
     this.authRecordList = readAuthData()
   }
 

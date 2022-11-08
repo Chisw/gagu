@@ -18,7 +18,7 @@ export class DownloadService {
     private readonly fsService: FsService,
     private readonly userService: UserService,
   ) {
-    console.log('  - init DownloadService')
+    console.log('  - init Download')
     this.downloadTunnelList = readDownloadTunnelData()
   }
 
@@ -28,6 +28,14 @@ export class DownloadService {
 
   findOne(code: string) {
     return this.downloadTunnelList.find((tunnel) => tunnel.code === code)
+  }
+
+  minusTimes(code: string) {
+    const tunnel = this.findOne(code)
+    if (tunnel && tunnel.leftTimes) {
+      tunnel.leftTimes--
+      this.sync()
+    }
   }
 
   create(username: User.Username, tunnelBase: DownloadTunnelForm) {

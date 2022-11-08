@@ -1,3 +1,4 @@
+import md5 from 'md5'
 import { DownloadTunnelForm, IDownloadTunnel, IEntry, ResponseBase } from '../types'
 import { BASE_URL } from '../utils'
 import instance from './instance'
@@ -19,6 +20,11 @@ export class DownloadApi {
 
   static getTunnel = async (code: string) => {
     const { data } = await instance.get<TunnelResponse>(`/api/download/${code}/share`)
+    return data
+  }
+
+  static callTunnel = async (code: string, password?: string) => {
+    const { data } = await instance.get<ResponseBase>(`/api/download/${code}/call/${md5(password || '')}`)
     return data
   }
 
