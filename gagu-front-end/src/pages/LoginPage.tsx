@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useFetch } from '../hooks'
 import { AuthApi } from '../api'
 import md5 from 'md5'
@@ -15,6 +15,12 @@ export default function LoginPage() {
   const navigate = useNavigate()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+
+  useEffect(() => {
+    if (USER_INFO.get()) {
+      navigate('/')
+    }
+  }, [navigate])
 
   const [, setUserInfo] = useRecoilState(userInfoState)
 
@@ -39,13 +45,14 @@ export default function LoginPage() {
     <>
       <div className="fixed z-0 inset-0 overflow-hidden bg-gradient-to-br from-gray-500 to-black">
         <div className="absolute inset-0 flex justify-center items-center">
-          <div className="semi-always-dark w-56">
+          <div className="semi-always-dark w-64">
             <div className="text-white flex justify-center items-center">
               <SvgIcon.G size={64} />
             </div>
             <Input
               autofocus
               showClear
+              size="large"
               placeholder="Username"
               className="mt-12 hover:border-white focus-within:border-white"
               maxLength={16}
@@ -54,6 +61,7 @@ export default function LoginPage() {
             />
             <Input
               showClear
+              size="large"
               type="password"
               placeholder="Password"
               className="mt-4 hover:border-white focus-within:border-white"
@@ -64,7 +72,7 @@ export default function LoginPage() {
               suffix={(
                 <button
                   disabled={!username || !password}
-                  className="mr-2px w-6 h-6 rounded hover:bg-black-200 text-white flex justify-center items-center"
+                  className="mr-2px w-8 h-8 rounded hover:bg-black-200 text-white flex justify-center items-center"
                   onClick={handleLogin}
                 >
                   {loading

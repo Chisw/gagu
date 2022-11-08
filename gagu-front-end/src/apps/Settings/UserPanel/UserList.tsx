@@ -147,7 +147,7 @@ export default function UserList(props: UserListProps) {
                 {permissions.map(p => (
                   <span
                     key={p}
-                    className="inline-block mr-2px px-1 py-0 text-xs text-white bg-blue-600 rounded select-none capitalize"
+                    className="inline-block mr-2px px-1 py-0 text-xs text-blue-600 bg-blue-100 rounded select-none capitalize"
                   >
                     {p}
                   </span>

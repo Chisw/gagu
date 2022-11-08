@@ -1,5 +1,5 @@
 import { Button } from '@douyinfe/semi-ui'
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { DownloadApi, FsApi } from '../api'
 import Icon from '../apps/FileExplorer/EntryIcon'
@@ -18,6 +18,7 @@ export default function SharePage() {
 
   useEffect(() => {
     code && getTunnel(code)
+    document.title = 'Share - GAGU.IO'
   }, [getTunnel, code])
 
   const {
@@ -62,12 +63,21 @@ export default function SharePage() {
     }
   }, [data])
 
+  const handleDownloadClick = useCallback(async () => {
+    if (code) {
+      DownloadApi.download(code)
+    }
+  }, [code])
+
   return (
     <>
-      <div className="absolute z-0 inset-0 bg-gradient-to-b from-gray-200 to-gray-400 flex justify-center items-center">
-        <div className="m-4 md:m-0 px-4 md:px-10 py-8 bg-white rounded-2xl shadow-2xl">
+      <div className="absolute z-0 inset-0 bg-gradient-to-b from-gray-600 to-gray-400 flex justify-center items-center">
+        <div className="relative m-4 md:m-0 px-4 md:px-10 py-8 w-full md:w-160 bg-white rounded-2xl shadow-2xl overflow-hidden">
+          <div className="absolute z-0 top-0 right-0 -mt-16 -mr-16">
+            <SvgIcon.Share className="text-gray-100" size={320} />
+          </div>
           {success ? (
-            <div>
+            <div className="relative z-10">
               <div className="flex items-center">
                 <div
                   className="w-10 h-10 rounded-full border-2 border-white shadow bg-center bg-cover flex-shrink-0"
@@ -75,50 +85,52 @@ export default function SharePage() {
                 />
                 <div className="ml-4 flex-grow">
                   <p className="text-sm md:text-base">{nickname} 的分享</p>
-                  <p className="flex justify-between text-xs text-gray-400">
+                  <p className="flex justify-between text-xs text-gray-500">
                     {createdAt && getDateTime(createdAt).slice(0, -3)}
                   </p>
-
                 </div>
-                {hasFolder && (
-                  <span
-                    className="text-xs text-blue-500 cursor-pointer font-bold"
-                    onClick={() => setAllMode(!allMode)}
-                  >
-                    {allMode ? '显示目录' : `显示全部 ${flattenList.length} 个文件`}
-                  </span>
-                )}
               </div>
-              <div className="mt-6 px-2 py-1 text-xs bg-white border border-b-0 border-gray-100 font-din text-gray-600">
-                {downloadName}
-              </div>
-              <div className="mb-6 max-h-50vh overflow-x-hidden overflow-y-auto">
-                <div className="px-4 md:px-8 py-3 md:py-6 md:w-128 grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4 bg-gray-100">
-                  {(allMode ? flattenList : entryList).map((entry: IEntry) => (
-                    <div
-                      key={entry.parentPath + entry.name}
-                      title={entry.name}
-                      className="text-center"
+              <div className="my-6 backdrop-filter backdrop-blur-sm">
+                <div className="px-3 py-2 text-xs bg-white-500 border border-b-0 border-gray-100 font-din text-gray-600 flex justify-between items-center">
+                  <span>{downloadName}</span>
+                  {hasFolder && (
+                    <span
+                      className="text-xs text-blue-500 cursor-pointer font-bold"
+                      onClick={() => setAllMode(!allMode)}
                     >
-                      <Icon hideApp entry={entry} />
-                      <p className="line-clamp-2 mt-1 text-xs break-all max-w-32">{entry.name}</p>
-                      <p className="text-xs text-gray-400">{entry.type === 'file' && getReadableSize(entry.size || 0)}</p>
-                    </div>
-                  ))}
+                      {allMode ? '显示根目录' : `显示全部 ${flattenList.length} 个文件`}
+                    </span>
+                  )}
+                </div>
+                <div className="max-h-50vh overflow-x-hidden overflow-y-auto transition-all duration-200">
+                  <div className="px-4 md:px-8 py-3 md:py-6 grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4 bg-gray-100 bg-opacity-40">
+                    {(allMode ? flattenList : entryList).map((entry: IEntry) => (
+                      <div
+                        key={entry.parentPath + entry.name}
+                        title={entry.name}
+                        className="text-center"
+                      >
+                        <Icon hideApp entry={entry} />
+                        <p className="line-clamp-2 mt-1 text-xs break-all max-w-32">{entry.name}</p>
+                        <p className="text-xs text-gray-400">{entry.type === 'file' && getReadableSize(entry.size || 0)}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
               {code && (
                 <div className="flex flex-wrap justify-between items-center">
-                  <div className="w-full md:w-auto text-center md:text-left text-xs text-gray-400">
-                    <p>有效期至 {expiredAt && getDateTime(expiredAt).slice(0, -3)}</p>
-                    <p>剩余保存次数 {leftTimes}</p>
+                  <div className="w-full md:w-auto text-center md:text-left text-xs text-gray-500">
+                    <p>有效期至： {expiredAt && getDateTime(expiredAt).slice(0, -3)}</p>
+                    <p>剩余保存次数：{leftTimes}</p>
                   </div>
                   <Button
+                    size="large"
                     type="primary"
                     theme="solid"
                     className="mx-auto mt-4 md:m-0"
                     icon={<SvgIcon.Download />}
-                    onClick={() => DownloadApi.download(code)}
+                    onClick={handleDownloadClick}
                   >
                     保存到本地
                   </Button>
@@ -126,14 +138,14 @@ export default function SharePage() {
               )}
             </div>
           ) : (
-            <div className="px-20 py-8 font-din text-gray-500">
-              <SvgIcon.G className="mx-auto text-gray-200" size={32} />
-              <p className="mt-8">{message}</p>
+            <div className="relative z-10 py-12 font-din">
+              <SvgIcon.G className="mx-auto text-gray-800" size={32} />
+              <p className="mt-8 text-center text-gray-400">{message}</p>
             </div>
           )}
           {loading && (
-            <div>
-              <Spinner />
+            <div className="flex justify-center items-center">
+              <Spinner size={30} />
             </div>
           )}
         </div>

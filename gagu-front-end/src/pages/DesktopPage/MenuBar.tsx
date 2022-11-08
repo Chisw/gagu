@@ -225,12 +225,20 @@ export default function MenuBar() {
                   </div>
                   <div className="mt-2 font-din capitalize text-white font-din flex">
                     {userInfo?.permissions.map((p) => (
-                      <div key={p} className="mr-1 px-1 rounded text-xs bg-blue-600">
+                      <div key={p} className="mr-1 px-1 rounded text-xs text-blue-600 bg-blue-100">
                         {p}
                       </div>
                     ))}  
                   </div>
                 </div>
+                <Dropdown.Item
+                  icon={<SvgIcon.Share />}
+                  onClick={() => {
+                    setUserPopoverShow(false)
+                  }}
+                >
+                  我的分享
+                </Dropdown.Item>
                 <Dropdown.Item
                   icon={<SvgIcon.Key />}
                   onClick={() => {
