@@ -57,7 +57,7 @@ export class DownloadController {
   }
 
   @Public()
-  @Get(':code/:password')
+  @Get(':code/password/:password')
   download(
     @Param('code') code: string,
     @Param('password') inputtedPassword: string,
@@ -111,7 +111,7 @@ export class DownloadController {
 
   @Public()
   @Get(':code/check/:password')
-  call(
+  check(
     @Param('code') code: string,
     @Param('password') inputtedPassword?: string,
   ) {

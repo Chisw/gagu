@@ -24,11 +24,11 @@ export class DownloadApi {
   }
 
   static checkTunnel = async (code: string, password?: string) => {
-    const { data } = await instance.get<ResponseBase>(`/api/download/${code}/call/${md5(password || '')}`)
+    const { data } = await instance.get<ResponseBase>(`/api/download/${code}/check/${md5(password || '')}`)
     return data
   }
 
-  static download = (code: string) => {
-    window.open(`${BASE_URL}/api/download/${code}`, '_self')
+  static download = (code: string, password?: string) => {
+    window.open(`${BASE_URL}/api/download/${code}/password/${password}`, '_self')
   }
 }

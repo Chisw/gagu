@@ -70,12 +70,19 @@ export default function SharePage() {
     }
   }, [data])
 
-  const disabled = useMemo(() => {
+  const {
+    showPasswordInput,
+    disabled,
+  } = useMemo(() => {
     const isNoLeft = leftTimes === 0
     const isExpired = !!(expiredAt && expiredAt < Date.now())
     const isNoInputPassword = hasPassword && !passwordVal
+    const showPasswordInput = hasPassword && !isNoLeft && !isExpired
     const disabled = isNoLeft || isExpired || isNoInputPassword
-    return disabled
+    return {
+      showPasswordInput,
+      disabled,
+    }
   }, [expiredAt, leftTimes, hasPassword, passwordVal])
 
   const handleDownloadClick = useCallback(async () => {
@@ -153,7 +160,7 @@ export default function SharePage() {
                     <p>有效期至：{expiredAt ? getDateTime(expiredAt).slice(0, -3) : '无限期'}</p>
                   </div>
                   <div className="mt-4 mx-auto md:m-0 w-full md:w-auto flex justify-center">
-                    {hasPassword && (
+                    {showPasswordInput && (
                       <Input
                         autofocus
                         size="large"
