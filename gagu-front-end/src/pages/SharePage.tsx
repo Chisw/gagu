@@ -14,9 +14,10 @@ export default function SharePage() {
   const { code } = useParams()
 
   const [allMode, setAllMode] = useState(false)
+  const [passwordVal, setPasswordVal] = useState('')
 
   const { fetch: getTunnel, loading, data } = useFetch(DownloadApi.getTunnel)
-  const { fetch: callTunnel, loading: calling } = useFetch(DownloadApi.callTunnel)
+  const { fetch: checkTunnel, loading: calling } = useFetch(DownloadApi.checkTunnel)
 
   useEffect(() => {
     code && getTunnel(code)
@@ -36,7 +37,6 @@ export default function SharePage() {
     downloadName,
     hasPassword,
     hasFolder,
-    disabled,
   } = useMemo(() => {
     const {
       flattenList,
@@ -53,8 +53,6 @@ export default function SharePage() {
       downloadName,
       hasPassword,
     } = data?.tunnel || {}
-    const isNoLeft = leftTimes === 0
-    const isExpired = !!(expiredAt && expiredAt < Date.now())
 
     return {
       success,
@@ -69,13 +67,20 @@ export default function SharePage() {
       downloadName,
       hasPassword,
       hasFolder: entryList?.some(e => e.type === EntryType.directory),
-      disabled: isNoLeft || isExpired,
     }
   }, [data])
 
+  const disabled = useMemo(() => {
+    const isNoLeft = leftTimes === 0
+    const isExpired = !!(expiredAt && expiredAt < Date.now())
+    const isNoInputPassword = hasPassword && !passwordVal
+    const disabled = isNoLeft || isExpired || isNoInputPassword
+    return disabled
+  }, [expiredAt, leftTimes, hasPassword, passwordVal])
+
   const handleDownloadClick = useCallback(async () => {
     if (code) {
-      const res = await callTunnel(code)
+      const res = await checkTunnel(code)
       if (res && res.success) {
         DownloadApi.download(code)
         setTimeout(() => {
@@ -85,7 +90,7 @@ export default function SharePage() {
         toast.error(res?.message || 'ERROR')
       }
     }
-  }, [code, callTunnel, getTunnel])
+  }, [code, checkTunnel, getTunnel])
 
   return (
     <>
@@ -150,17 +155,20 @@ export default function SharePage() {
                   <div className="mt-4 mx-auto md:m-0 w-full md:w-auto flex justify-center">
                     {hasPassword && (
                       <Input
+                        autofocus
                         size="large"
                         placeholder="输入密码"
                         className="mr-4 w-36"
                         type="password"
+                        value={passwordVal}
+                        onChange={setPasswordVal}
                       />
                     )}
                     <Button
                       size="large"
                       type="primary"
                       theme="solid"
-                      className="w-36"
+                      className="w-36 md:w-auto"
                       loading={calling}
                       disabled={disabled}
                       icon={<SvgIcon.Download />}

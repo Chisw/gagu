@@ -20,7 +20,12 @@ import {
 import { Permission } from '../../common/decorators/permission.decorator'
 import 'express-zip'
 import { AuthService } from '../auth/auth.service'
-import { HEADERS_AUTH_KEY, SERVER_MESSAGE_MAP, getEntryPath } from '../../utils'
+import {
+  HEADERS_AUTH_KEY,
+  SERVER_MESSAGE_MAP,
+  getEntryPath,
+  checkTunnel,
+} from '../../utils'
 
 @Controller('download')
 export class DownloadController {
@@ -52,20 +57,23 @@ export class DownloadController {
   }
 
   @Public()
-  @Get(':code')
-  download(@Param('code') code: string, @Res() response: ZipResponse) {
+  @Get(':code/:password')
+  download(
+    @Param('code') code: string,
+    @Param('password') inputtedPassword: string,
+    @Res() response: ZipResponse,
+  ) {
     const tunnel = this.downloadService.findOne(code)
-    if (tunnel) {
-      const { entryList, rootParentPath, downloadName, expiredAt, leftTimes } =
-        tunnel
-      const isNoLeft = leftTimes === 0
-      const isExpired = !!(expiredAt && expiredAt < Date.now())
-      // TODO: handle share
-      console.log({ code, isExpired, isNoLeft })
+    const checkRes = checkTunnel(tunnel, inputtedPassword)
 
+    if (checkRes.success && tunnel) {
+      const { entryList, rootParentPath, downloadName } = tunnel
+      const firstEntry = entryList[0]
+      const isSingleFile =
+        entryList.length === 1 && firstEntry.type === EntryType.file
       this.downloadService.minusTimes(code)
-      if (entryList.length === 1 && entryList[0].type === EntryType.file) {
-        return response.download(getEntryPath(entryList[0]))
+      if (isSingleFile) {
+        return response.download(getEntryPath(firstEntry))
       }
       const list = this.downloadService.getFlattenRecursiveEntryList(entryList)
       const files: ZipResponseFile[] = list.map((entry) => {
@@ -75,15 +83,12 @@ export class DownloadController {
       })
       response.zip(files, downloadName)
     } else {
-      return {
-        success: false,
-        message: SERVER_MESSAGE_MAP.ERROR_TUNNEL_NOT_EXISTED,
-      }
+      return checkRes
     }
   }
 
   @Public()
-  @Get('/:code/share')
+  @Get(':code/share')
   findOne(@Param('code') code: string) {
     const tunnel = this.downloadService.findOne(code)
     if (tunnel) {
@@ -105,38 +110,13 @@ export class DownloadController {
   }
 
   @Public()
-  @Get('/:code/call/:password')
-  call(@Param('code') code: string, @Param('password') callPassword?: string) {
+  @Get(':code/check/:password')
+  call(
+    @Param('code') code: string,
+    @Param('password') inputtedPassword?: string,
+  ) {
     const tunnel = this.downloadService.findOne(code)
-    if (tunnel) {
-      const { leftTimes, expiredAt, password } = tunnel
-
-      if (leftTimes === 0) {
-        return {
-          success: false,
-          message: SERVER_MESSAGE_MAP.ERROR_TUNNEL_NO_LEFT,
-        }
-      } else if (expiredAt && expiredAt < Date.now()) {
-        return {
-          success: false,
-          message: SERVER_MESSAGE_MAP.ERROR_TUNNEL_EXPIRED,
-        }
-      } else if (password && callPassword !== password) {
-        return {
-          success: false,
-          message: SERVER_MESSAGE_MAP.ERROR_TUNNEL_PASSWORD_WRONG,
-        }
-      } else {
-        return {
-          success: true,
-          message: SERVER_MESSAGE_MAP.OK,
-        }
-      }
-    } else {
-      return {
-        success: false,
-        message: SERVER_MESSAGE_MAP.ERROR_TUNNEL_NOT_EXISTED,
-      }
-    }
+    const checkRes = checkTunnel(tunnel, inputtedPassword)
+    return checkRes
   }
 }

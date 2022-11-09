@@ -23,7 +23,7 @@ export class DownloadApi {
     return data
   }
 
-  static callTunnel = async (code: string, password?: string) => {
+  static checkTunnel = async (code: string, password?: string) => {
     const { data } = await instance.get<ResponseBase>(`/api/download/${code}/call/${md5(password || '')}`)
     return data
   }
