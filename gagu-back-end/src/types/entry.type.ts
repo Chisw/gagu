@@ -1,4 +1,6 @@
 // Sync following code to BE & FE
+import { IServerOS } from './common.type'
+
 export enum EntryType {
   directory = 'directory',
   file = 'file',
@@ -29,7 +31,7 @@ export interface IDisk extends IRootEntry {
 
 export interface IRootInfo {
   version: string
-  platform: string
+  serverOS: IServerOS
   deviceName: string
   desktopEntryList: IEntry[]
   rootEntryList: IRootEntry[]

@@ -1,6 +1,6 @@
 import { exec } from 'child_process'
 import { accessSync, constants, mkdirSync, statSync, unlinkSync } from 'fs'
-import { OS } from './constant.util'
+import { ServerOS } from './constant.util'
 
 export const getExtension = (name: string) => {
   if (!name || !name.includes('.') || name.startsWith('.')) return ''
@@ -37,7 +37,7 @@ export const completeNestedPath = (path: string) => {
     return `${prefix}/${dirName}`
   })
   nestedPathList.forEach((path) => {
-    const p = OS.isWindows ? path.replace('/', '') : path
+    const p = ServerOS.isWindows ? path.replace('/', '') : path
     const exists = getExists(p)
     !exists && mkdirSync(p)
   })

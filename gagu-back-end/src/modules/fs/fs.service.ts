@@ -19,7 +19,7 @@ import {
   GAGU_PATH,
   GAGU_VERSION,
   getExtension,
-  OS,
+  ServerOS,
   GEN_THUMBNAIL_VIDEO_LIST,
   getExists,
   completeNestedPath,
@@ -49,7 +49,7 @@ export class FsService {
   getEntryList(path: string) {
     let entryNameList: string[] = []
     try {
-      const isWindowsDisk = OS.isWindows && !path.includes('/')
+      const isWindowsDisk = ServerOS.isWindows && !path.includes('/')
       const _path = isWindowsDisk ? `${path}/` : path
       entryNameList = readdirSync(_path)
     } catch (err) {
@@ -91,13 +91,13 @@ export class FsService {
 
   getRootInfo(presetDeviceName?: string) {
     const rootEntryList: IRootEntry[] = []
-    if (OS.isMacOS) {
+    if (ServerOS.isMacOS) {
       const driveList = nodeDiskInfo
         .getDiskInfoSync()
         .filter((d) => d.mounted.startsWith('/Volumes/'))
 
       const homeEntry: IRootEntry = {
-        name: OS.username,
+        name: ServerOS.username,
         type: EntryType.directory,
         hidden: false,
         lastModified: 0,
@@ -123,7 +123,7 @@ export class FsService {
       }))
 
       rootEntryList.push(homeEntry, ...diskList)
-    } else if (OS.isWindows) {
+    } else if (ServerOS.isWindows) {
       const driveList = nodeDiskInfo.getDiskInfoSync()
       const diskList: IDisk[] = driveList.map((drive) => ({
         name: drive.mounted,
@@ -140,7 +140,7 @@ export class FsService {
       }))
 
       rootEntryList.push(...diskList)
-    } else if (OS.isAndroid) {
+    } else if (ServerOS.isAndroid) {
       rootEntryList.push(
         {
           name: 'home',
@@ -169,8 +169,8 @@ export class FsService {
 
     const rootInfo: IRootInfo = {
       version: GAGU_VERSION,
-      platform: OS.platform,
-      deviceName: presetDeviceName || OS.hostname,
+      serverOS: ServerOS,
+      deviceName: presetDeviceName || ServerOS.hostname,
       desktopEntryList: this.getEntryList(`${GAGU_PATH.ROOT}/desktop`),
       rootEntryList,
     }

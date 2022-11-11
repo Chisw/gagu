@@ -16,7 +16,15 @@ export const rootInfoState = atom<IRootInfo>({
   key: 'rootInfoState',
   default: {
     version: 'v-.-.-',
-    platform: '',
+    serverOS: {
+      username: '',
+      host: '',
+      hostname: '',
+      platform: '',
+      isMacOS: false,
+      isWindows: false,
+      isAndroid: false,
+    },
     deviceName: '--',
     desktopEntryList: [],
     rootEntryList: [],

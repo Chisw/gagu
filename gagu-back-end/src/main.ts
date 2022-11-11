@@ -1,4 +1,4 @@
-import { readSettingsData } from './utils'
+import { HOST, readSettingsData } from './utils'
 import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
 import {
@@ -47,6 +47,7 @@ async function bootstrap() {
 
   const settings = readSettingsData()
   const port = argv.port || settings.port || 9293
+  const url = `http://${HOST}:${port}`
 
   const app = await NestFactory.create(AppModule)
 
@@ -54,8 +55,6 @@ async function bootstrap() {
   app.setGlobalPrefix('api')
 
   await app.listen(port)
-
-  const url = `http://127.0.0.1:${port}`
 
   console.log(`\n✨  GAGU service is running on: ${url}\n`)
 

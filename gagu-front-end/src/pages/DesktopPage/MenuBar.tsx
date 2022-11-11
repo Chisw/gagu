@@ -1,6 +1,6 @@
 import { Dropdown, Modal } from '@douyinfe/semi-ui'
 import { DateTime } from 'luxon'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
@@ -91,6 +91,11 @@ export default function MenuBar() {
     document.title = `${rootInfo ? `${rootInfo.deviceName} - ` : ''}${DOCUMENT_TITLE}`
   }, [rootInfo])
 
+  const localAddress = useMemo(() => {
+    const { protocol, port } = window.location
+    return `${protocol}//${rootInfo.serverOS.host}:${port}`
+  }, [rootInfo])
+
   return (
     <>
       <div
@@ -151,6 +156,30 @@ export default function MenuBar() {
                 >
                   {isFullScreen ? '退出全屏' : '进入全屏'}
                 </Dropdown.Item>
+                <Dropdown.Item
+                  icon={<SvgIcon.Refresh />}
+                  onClick={() => {
+                    setSystemPopoverShow(false)
+                    getRootInfo()
+                  }}
+                >
+                  刷新
+                </Dropdown.Item>
+                <Dropdown
+                  position="rightTop"
+                  render={(
+                    <div className="w-48">
+                      {localAddress}
+                    </div>
+                  )}
+                >
+                  <Dropdown.Item icon={<SvgIcon.Scan />}>
+                    <div className="w-full flex justify-between items-center">
+                      <span>扫一扫</span>
+                      <SvgIcon.ChevronRight className="text-gray-400"/>
+                    </div>
+                  </Dropdown.Item>
+                </Dropdown>
                 <Dropdown
                   position="rightTop"
                   render={(
@@ -170,20 +199,11 @@ export default function MenuBar() {
                 >
                   <Dropdown.Item icon={<SvgIcon.Flash />}>
                     <div className="w-full flex justify-between items-center">
-                      <span>切换</span>
+                      <span>切换至</span>
                       <SvgIcon.ChevronRight className="text-gray-400"/>
                     </div>
                   </Dropdown.Item>
                 </Dropdown>
-                <Dropdown.Item
-                  icon={<SvgIcon.Refresh />}
-                  onClick={() => {
-                    setSystemPopoverShow(false)
-                    getRootInfo()
-                  }}
-                >
-                  刷新
-                </Dropdown.Item>
                 <Dropdown.Item
                   icon={<SvgIcon.ShutDown className="text-red-500" />}
                   onClick={() => {
