@@ -11,6 +11,13 @@ import { rootInfoState, userInfoState } from '../../states'
 import { IRootInfo } from '../../types'
 import { DOCUMENT_TITLE, line, PULSE_INTERVAL, USER_INFO } from '../../utils'
 import TransferPanel from './TransferPanel'
+import QrCode from 'qrcode.react'
+
+const modeList = [
+  { key: 'desktop', icon: <SvgIcon.Desktop /> },
+  { key: 'explore', icon: <SvgIcon.Layout /> },
+  { key: 'touch', icon: <SvgIcon.Phone /> },
+]
 
 export default function MenuBar() {
 
@@ -31,6 +38,16 @@ export default function MenuBar() {
   const { fetch: logout } = useFetch(AuthApi.logout)
   const { fetch: getRootInfo, loading, data } = useFetch(FsApi.getRootInfo)
   const { fetch: shutdown } = useFetch(AuthApi.shutdown)
+
+  const activeMode = useMemo(() => {
+    if (pathname.startsWith('/explore')) {
+      return 'explore'
+    } else if (pathname.startsWith('/touch')) {
+      return 'touch'
+    } else {
+      return 'desktop'
+    }
+  }, [pathname])
 
   useEffect(() => {
     setTimeout(() => setIsEffected(true))
@@ -168,8 +185,11 @@ export default function MenuBar() {
                 <Dropdown
                   position="rightTop"
                   render={(
-                    <div className="w-48">
-                      {localAddress}
+                    <div className="p-4">
+                      <div className="flex justify-center">
+                        <QrCode value={localAddress} />
+                      </div>
+                      <p className="mt-2 text-xs text-center font-din">{localAddress}</p>
                     </div>
                   )}
                 >
@@ -184,16 +204,15 @@ export default function MenuBar() {
                   position="rightTop"
                   render={(
                     <Dropdown.Menu className="w-48">
-                      <Dropdown.Item
-                        onClick={() => navigate(pathname === '/explore' ? '/' : '/explore')}
-                      >
-                        {pathname === '/explore' ? 'Desktop' : 'Explore'} 模式
-                      </Dropdown.Item>
-                      <Dropdown.Item
-                        onClick={() => toast('开发中')}
-                      >
-                        Touch 模式（开发中）
-                      </Dropdown.Item>
+                      {modeList.filter(m => m.key !== activeMode).map(({ key, icon }) => (
+                        <Dropdown.Item
+                          key={key}
+                          icon={icon}
+                          onClick={() => navigate(`/${key}`)}
+                        >
+                          <span className="capitalize">{key}</span>&nbsp;模式
+                        </Dropdown.Item>
+                      ))}
                     </Dropdown.Menu>
                   )}
                 >

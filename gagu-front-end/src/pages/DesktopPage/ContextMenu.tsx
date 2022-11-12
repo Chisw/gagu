@@ -36,7 +36,7 @@ export default function ContextMenu() {
 
     if (isDock) {
       const { top: targetTop, left: targetLeft } = (target as any).getBoundingClientRect()
-      const offset = filteredMenuItemList.length * 28 + 10 + 20
+      const offset = filteredMenuItemList.length * 36 + 10 + 20
       top = targetTop - offset
       left = targetLeft
     } else {
