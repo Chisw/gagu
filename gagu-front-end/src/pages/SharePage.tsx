@@ -137,7 +137,7 @@ export default function SharePage() {
                     </span>
                   )}
                 </div>
-                <div className="max-h-50vh overflow-x-hidden overflow-y-auto transition-all duration-200">
+                <div className="max-h-50vh overflow-x-hidden overflow-y-auto">
                   <div className="px-4 md:px-8 py-3 md:py-6 grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4 bg-gray-100 bg-opacity-40">
                     {(allMode ? flattenList : entryList).map((entry: IEntry) => (
                       <div

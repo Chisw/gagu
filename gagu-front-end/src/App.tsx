@@ -19,6 +19,7 @@ export default function App() {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/" element={<DesktopPage />} />
+        <Route path="/desktop" element={<DesktopPage />} />
         <Route path="/explore" element={<ExplorePage />} />
         <Route path="/touch" element={<TouchPage />} />
         <Route path="/share" element={<DesktopPage />} />

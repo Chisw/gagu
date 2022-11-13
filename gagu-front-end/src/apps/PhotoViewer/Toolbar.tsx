@@ -4,7 +4,7 @@ import { DownloadApi, FsApi } from '../../api'
 import { SvgIcon } from '../../components/base'
 import { IconButton } from '../../components/base/IconButton'
 import { useFetch } from '../../hooks'
-import { IEntry } from '../../types'
+import { DownloadTunnelType, IEntry } from '../../types'
 import { DOWNLOAD_PERIOD, getPaddedNo, getReadableSize, line } from '../../utils'
 
 interface ToolbarProps {
@@ -79,6 +79,7 @@ export default function Toolbar(props: ToolbarProps) {
           if (activeEntry) {
             const { name: downloadName, parentPath: rootParentPath } = activeEntry
             const res = await createTunnel({
+              type: DownloadTunnelType.download,
               entryList: [activeEntry],
               rootParentPath,
               downloadName,

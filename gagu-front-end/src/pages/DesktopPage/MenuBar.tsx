@@ -1,4 +1,4 @@
-import { Dropdown, Modal } from '@douyinfe/semi-ui'
+import { Dropdown, Modal, Tooltip } from '@douyinfe/semi-ui'
 import { DateTime } from 'luxon'
 import { useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
@@ -251,23 +251,30 @@ export default function MenuBar() {
             visible={userPopoverShow}
             render={(
               <Dropdown.Menu className="w-48">
-                <div className="mb-2px px-2 pt-1 pb-1 border-b">
+                <div className="mb-2px px-2 pt-1 pb-2 border-b group">
                   <div className="flex items-center">
                     <div
                       className="w-10 h-10 rounded-full border-2 border-white shadow bg-center bg-cover"
                       style={{ backgroundImage: `url("${FsApi.getAvatarStreamUrl(userInfo?.username || '')}")` }}
                     />
-                    <div className="ml-2 text-sm leading-none">
+                    <div className="ml-2 text-sm leading-none flex-grow">
                       <p>{userInfo?.nickname}</p>
                       <p className="text-xs text-gray-500">@{userInfo?.username}</p>
                     </div>
-                  </div>
-                  <div className="mt-2 font-din capitalize text-white font-din flex">
-                    {userInfo?.permissions.map((p) => (
-                      <div key={p} className="mr-1 px-1 rounded text-xs text-blue-600 bg-blue-100">
-                        {p}
-                      </div>
-                    ))}  
+                    <div className="hidden group-hover:block">
+                      <Tooltip
+                        position="right"
+                        content={(
+                          <div className="font-din capitalize text-white font-din">
+                            Permissions: {userInfo?.permissions.join(' ')}
+                          </div>
+                        )}
+                      >
+                        <span>
+                          <SvgIcon.Info className="text-gray-400" />
+                        </span>
+                      </Tooltip>
+                    </div>
                   </div>
                 </div>
                 <Dropdown.Item

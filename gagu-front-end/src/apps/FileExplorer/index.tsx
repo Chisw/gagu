@@ -48,7 +48,9 @@ import {
   IUploadTransferTask,
   TransferTaskType,
   TransferTaskStatus,
+  DownloadTunnelType,
 } from '../../types'
+import ShareModal from '../../components/ShareModal'
 
 export default function FileExplorer(props: AppComponentProps) {
 
@@ -87,6 +89,8 @@ export default function FileExplorer(props: AppComponentProps) {
   const [hiddenShow, setHiddenShow] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
   const [abortController, setAbortController] = useState<AbortController | null>(null)
+  const [shareModalVisible, setShareModalVisible] = useState(false)
+  const [sharedEntryList, setSharedEntryList] = useState<IEntry[]>([])
 
   const rectRef = useRef(null)
   const containerRef = useRef(null)       // containerInnerRef 的容器，y-scroll-auto
@@ -312,6 +316,7 @@ export default function FileExplorer(props: AppComponentProps) {
       onConfirm: async () => {
         close()
         const res = await createTunnel({
+          type: DownloadTunnelType.download,
           entryList,
           rootParentPath,
           downloadName,
@@ -326,6 +331,11 @@ export default function FileExplorer(props: AppComponentProps) {
       },
     })
   }, [currentPath, selectedEntryList, createTunnel])
+
+  const handleShareClick = useCallback((entryList: IEntry[]) => {
+    setSharedEntryList(entryList)
+    setShareModalVisible(true)
+  }, [])
 
   const handleDeleteClick = useCallback(async (contextEntryList?: IEntry[]) => {
     const processList = contextEntryList || selectedEntryList
@@ -649,6 +659,12 @@ export default function FileExplorer(props: AppComponentProps) {
         onClick: () => handleDownloadClick(contextEntryList),
       },
       {
+        icon: <SvgIcon.Share />,
+        label: '创建分享',
+        isShow: !isOnBlank,
+        onClick: () => handleShareClick(contextEntryList),
+      },
+      {
         icon: <SvgIcon.Delete />,
         label: '删除',
         isShow: !isOnBlank,
@@ -668,6 +684,7 @@ export default function FileExplorer(props: AppComponentProps) {
     handleUploadClick,
     handleDownloadClick,
     handleDeleteClick,
+    handleShareClick,
   ])
 
   return (
@@ -856,6 +873,12 @@ export default function FileExplorer(props: AppComponentProps) {
 
       <Confirmor {...downloadConfirmorProps} />
       <Confirmor {...deleteConfirmorProps} />
+
+      <ShareModal
+        visible={shareModalVisible}
+        entryList={sharedEntryList}
+        onClose={() => setShareModalVisible(false)}
+      />
       
     </>
   )

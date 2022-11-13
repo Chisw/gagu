@@ -39,6 +39,7 @@ export default function Confirmor(props: ConfirmorProps) {
           <div className="flex">
             <Button
               className="w-full"
+              style={{ margin: 0 }}
               onClick={onCancel}
             >
               {cancelText}
