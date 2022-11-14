@@ -1,4 +1,4 @@
-import { Button, DatePicker, Input, InputNumber, Modal } from '@douyinfe/semi-ui'
+import { Button, Form, Modal } from '@douyinfe/semi-ui'
 import { useState } from 'react'
 import Icon from '../apps/FileExplorer/EntryIcon'
 import { IEntry } from '../types'
@@ -17,9 +17,6 @@ export default function ShareModal(props: ShareModalProps) {
     entryList,
     onClose,
   } = props
-
-  const [password, setPassword] = useState('')
-  const [leftTimes, setLeftTimes] = useState<number | undefined>(undefined)
 
   return (
     <>
@@ -67,30 +64,38 @@ export default function ShareModal(props: ShareModalProps) {
             </div>
           </div>
         </div>
-        <div className="mt-4 flex">
-          <Input
-            showClear
-            placeholder="访问密码（留空无）"
-            type="password"
-            className="w-1/3"
-            value={password}
-            onChange={setPassword}
-          />
-          <InputNumber
-            showClear
-            placeholder="可下载次数（留空不限）"
-            className="mx-2 w-1/3"
-            value={leftTimes}
-            min={1}
-            onChange={times => setLeftTimes(times as number)}
-          />
-          <DatePicker
-            showClear
-            placeholder="有效期（留空不限）"
-            type="dateTime"
-            format="yyyy-MM-dd HH:mm"
-            className="w-1/3"
-          />
+        <div className="mt-4">
+          <Form initValues={{}}>
+            <div className="flex">
+              <div className="w-1/3">
+                <Form.DatePicker
+                  showClear
+                  field="dateTime"
+                  label="有效期"
+                  placeholder="留空不限"
+                  format="yyyy-MM-dd HH:mm"
+                />
+              </div>
+              <div className="mx-3 w-1/3">
+                <Form.Input
+                  showClear
+                  field="password"
+                  label="访问密码"
+                  placeholder="留空不限"
+                  type="password"
+                />
+              </div>
+              <div className="w-1/3">
+                <Form.InputNumber
+                  showClear
+                  field="leftTimes"
+                  label="可下载次数"
+                  placeholder="留空不限"
+                  min={1}
+              />
+              </div>
+            </div>
+          </Form>
         </div>
       </Modal>
     </>
