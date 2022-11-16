@@ -3,17 +3,15 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useParams } from 'react-router-dom'
 import { DownloadApi, FsApi } from '../api'
-import Icon from '../apps/FileExplorer/EntryIcon'
 import { Spinner, SvgIcon } from '../components/base'
+import EntryListPanel from '../components/EntryListPanel'
 import { useFetch } from '../hooks'
-import { EntryType, IEntry } from '../types'
-import { getDateTime, getReadableSize } from '../utils'
+import { getDateTime } from '../utils'
 
 export default function SharePage() {
 
   const { code } = useParams()
 
-  const [allMode, setAllMode] = useState(false)
   const [passwordVal, setPasswordVal] = useState('')
 
   const { fetch: getTunnel, loading, data } = useFetch(DownloadApi.getTunnel)
@@ -36,7 +34,6 @@ export default function SharePage() {
     leftTimes,
     downloadName,
     hasPassword,
-    hasFolder,
   } = useMemo(() => {
     const {
       flattenList,
@@ -66,7 +63,6 @@ export default function SharePage() {
       leftTimes,
       downloadName,
       hasPassword,
-      hasFolder: entryList?.some(e => e.type === EntryType.directory),
     }
   }, [data])
 
@@ -120,39 +116,11 @@ export default function SharePage() {
                   </p>
                 </div>
               </div>
-              <div className="my-6 backdrop-filter backdrop-blur-sm">
-                <div className="px-3 py-2 text-xs bg-white-500 border border-b-0 border-gray-100 font-din flex justify-between items-center">
-                  <span>
-                    <span className="text-gray-600">{downloadName}</span>
-                    <span className="text-gray-400">
-                      &emsp;{getReadableSize(flattenList.map(e => e.size).filter(Boolean).reduce((a, b) => a! + b!, 0) as number)}
-                    </span>
-                  </span>
-                  {hasFolder && (
-                    <span
-                      className="text-xs text-blue-500 cursor-pointer font-bold"
-                      onClick={() => setAllMode(!allMode)}
-                    >
-                      {allMode ? '显示根目录' : `显示全部 ${flattenList.length} 个文件`}
-                    </span>
-                  )}
-                </div>
-                <div className="max-h-50vh overflow-x-hidden overflow-y-auto">
-                  <div className="px-4 md:px-8 py-3 md:py-6 grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4 bg-gray-100 bg-opacity-40">
-                    {(allMode ? flattenList : entryList).map((entry: IEntry) => (
-                      <div
-                        key={entry.parentPath + entry.name}
-                        title={entry.name}
-                        className="text-center"
-                      >
-                        <Icon hideApp entry={entry} />
-                        <p className="line-clamp-2 mt-1 text-xs break-all max-w-32">{entry.name}</p>
-                        <p className="text-xs text-gray-400">{entry.type === 'file' && getReadableSize(entry.size || 0)}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
+              <EntryListPanel
+                downloadName={downloadName || ''}
+                entryList={entryList}
+                flattenList={flattenList}
+              />
               {code && (
                 <div className="flex flex-wrap justify-between items-center">
                   <div className="w-full md:w-auto text-center md:text-left text-xs text-gray-500">
@@ -206,7 +174,7 @@ export default function SharePage() {
           rel="noreferrer"
           href="https://gagu.io"
           target="_blank"
-          className="opacity-70 hover:opacity-100"
+          className="opacity-30 hover:opacity-70"
         >
           GAGU.IO
         </a>
