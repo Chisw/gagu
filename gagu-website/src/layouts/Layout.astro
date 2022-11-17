@@ -1,28 +1,19 @@
 ---
+import Page from './Page.astro'
 import Header from './Header.astro'
 import Footer from './Footer.astro'
 import '../css/index.css'
 
 export interface LayoutProps {
-	title?: string;
+  title?: string;
 }
 
 const { title } = Astro.props as LayoutProps
 ---
 
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0" />
-		<link rel="icon" type="image/x-icon" href="/favicon.png" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{title} - GAGU.IO</title>
-	</head>
-	<body>
-		<Header />
-		<slot />
-		<Footer />
-	</body>
-</html>
+<Page title={title}>
+  <Header />
+    <slot />
+  <Footer />
+</Page>
 

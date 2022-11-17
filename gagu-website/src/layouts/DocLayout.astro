@@ -1,27 +1,28 @@
 ---
-import Layout from './Layout.astro'
-import Block from '../components/Block.astro'
+import Page from './Page.astro'
 import DocNav from '../components/DocNav.astro'
 import '../css/markdown.css'
 
 const { frontmatter } = Astro.props
 ---
 
-<Layout title={frontmatter.title}>
-  <Block className="pt-12 bg-gray-100">
-    <div class="flex">
-      <div class="hidden lg:block py-10 w-[320px] flex-shrink-0 sticky top-0">
-        <DocNav />
-      </div>
-      <div class="markdown-body py-10 px-8 md:px-10 lg:px-16 xl:px-20 min-h-[100vh] flex-grow leading-loose">
-        <slot />
-      </div>
-      <div id="contents" class="hidden xl:block py-10 px-4 w-[320px] flex-shrink-0 sticky top-0">
-        
+<Page title={frontmatter.title}>
+  <div class="absolute z-0 inset-0 flex">
+    <div class="hidden lg:block px-14 py-10 w-[320px] h-full flex-shrink-0 border-r overflow-y-auto bg-gray-100">
+      <DocNav />
+    </div>
+    <div class="px-4 py-10 h-full overflow-y-auto flex-grow">
+      <div class="mx-auto max-w-[640px]">
+        <div class="markdown-body">
+          <slot />
+        </div>
       </div>
     </div>
-  </Block>
-</Layout>
+    <div id="contents" class="hidden xl:block py-10 px-14 w-[320px] flex-shrink-0">
+      
+    </div>
+  </div>
+</Page>
 <script is:inline>
 const headings = Array.from(document.querySelectorAll('.markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4, .markdown-body h5, .markdown-body h6'))
 document.getElementById('contents').innerHTML = headings.map(h => `<div>${h.textContent}</div>`).join('')
