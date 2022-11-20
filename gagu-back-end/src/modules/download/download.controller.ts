@@ -100,10 +100,17 @@ export class DownloadController {
     const tunnel = this.downloadService.findOne(code)
     if (tunnel) {
       const { entryList, password } = tunnel
-      if (password && inputtedPassword !== password) {
-        return {
-          success: false,
-          message: SERVER_MESSAGE_MAP.ERROR_TUNNEL_PASSWORD_WRONG,
+      if (password) {
+        if (!inputtedPassword) {
+          return {
+            success: true,
+            message: SERVER_MESSAGE_MAP.ERROR_TUNNEL_PASSWORD_NEEDED,
+          }
+        } else if (inputtedPassword !== password) {
+          return {
+            success: false,
+            message: SERVER_MESSAGE_MAP.ERROR_TUNNEL_PASSWORD_WRONG,
+          }
         }
       }
       const flattenList = this.fsService.getFlattenRecursiveEntryList(entryList)
