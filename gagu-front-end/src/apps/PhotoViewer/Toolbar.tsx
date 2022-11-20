@@ -77,11 +77,10 @@ export default function Toolbar(props: ToolbarProps) {
         disabled: !activeEntry,
         onClick: async () => {
           if (activeEntry) {
-            const { name: downloadName, parentPath: rootParentPath } = activeEntry
+            const { name: downloadName } = activeEntry
             const res = await createTunnel({
               type: DownloadTunnelType.download,
               entryList: [activeEntry],
-              rootParentPath,
               downloadName,
               leftTimes: 1,
               expiredAt: Date.now() + DOWNLOAD_PERIOD,

@@ -14,6 +14,11 @@ export class FsApi {
     return data
   }
 
+  static getFlattenEntryList = async (entryList: IEntry[], config?: AxiosRequestConfig) => {
+    const { data } = await instance.post(`/api/fs/list/flatten`, { entryList }, config)
+    return data
+  }
+
   static getDirectorySize = async (path: string, config?: AxiosRequestConfig) => {
     const { data } = await instance.get(`/api/fs/size?path=${path}`, config)
     return data

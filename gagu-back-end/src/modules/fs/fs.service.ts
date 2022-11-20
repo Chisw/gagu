@@ -24,6 +24,7 @@ import {
   getExists,
   completeNestedPath,
   dataURLtoBuffer,
+  getEntryPath,
 } from '../../utils'
 import * as nodeDiskInfo from 'node-disk-info'
 import * as md5 from 'md5'
@@ -87,6 +88,20 @@ export class FsService {
       })
       .filter(Boolean) as IEntry[]
     return entryList
+  }
+
+  getFlattenRecursiveEntryList(entryList: IEntry[]) {
+    const list: IEntry[] = []
+    entryList.forEach((entry) => {
+      if (entry.type === EntryType.file) {
+        list.push(entry)
+      } else {
+        const subEntryList = this.getEntryList(getEntryPath(entry))
+        const subList = this.getFlattenRecursiveEntryList(subEntryList)
+        list.push(...subList)
+      }
+    })
+    return list
   }
 
   getRootInfo(presetDeviceName?: string) {

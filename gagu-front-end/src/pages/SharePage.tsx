@@ -88,7 +88,7 @@ export default function SharePage() {
         DownloadApi.download(code)
         setTimeout(() => {
           getTunnel(code)
-        }, 1000)
+        }, 50)
       } else {
         toast.error(res?.message || 'ERROR')
       }
@@ -124,7 +124,7 @@ export default function SharePage() {
               {code && (
                 <div className="flex flex-wrap justify-between items-center">
                   <div className="w-full md:w-auto text-center md:text-left text-xs text-gray-500">
-                    <p>剩余保存次数：{leftTimes}</p>
+                    <p>剩余保存次数：{leftTimes === undefined ? '无限次' : leftTimes}</p>
                     <p>有效期至：{expiredAt ? getDateTime(expiredAt).slice(0, -3) : '无限期'}</p>
                   </div>
                   <div className="mt-4 mx-auto md:m-0 w-full md:w-auto flex justify-center">

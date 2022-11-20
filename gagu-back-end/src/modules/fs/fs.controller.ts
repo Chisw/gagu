@@ -16,7 +16,7 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common'
-import { SettingKey, User, UserPermission } from '../../types'
+import { IEntry, SettingKey, User, UserPermission } from '../../types'
 import { mkdirSync, renameSync } from 'fs'
 import { Permission } from '../../common/decorators/permission.decorator'
 import { Public } from 'src/common/decorators/public.decorator'
@@ -48,6 +48,17 @@ export class FsController {
       success: true,
       message: SERVER_MESSAGE_MAP.OK,
       entryList,
+    }
+  }
+
+  @Post('list/flatten')
+  @Permission(UserPermission.read)
+  findFlattenAll(@Body('entryList') entryList: IEntry[]) {
+    const flattenList = this.fsService.getFlattenRecursiveEntryList(entryList)
+    return {
+      success: true,
+      message: SERVER_MESSAGE_MAP.OK,
+      flattenList,
     }
   }
 

@@ -226,12 +226,9 @@ export default function UserFormModal(props: UserFormModalProps) {
               field="expiredAt"
               className="w-full"
               extraText="永不过期请留空"
-              onChange={date => setForm({ ...form, expiredAt: new Date(date as Date).getTime() })}
-              transform={date => new Date(date).getTime()}
               format="yyyy-MM-dd HH:mm"
-              timePickerOpts={{
-                minuteStep: 10,
-              }}
+              timePickerOpts={{ minuteStep: 10 }}
+              onChange={date => setForm({ ...form, expiredAt: new Date(date as Date).getTime() })}
             />
             <Form.CheckboxGroup
               label="权限"

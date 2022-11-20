@@ -12,9 +12,8 @@ export type DownloadTunnelTypeType = keyof typeof DownloadTunnelType
 export interface DownloadTunnelForm {
   type: DownloadTunnelTypeType
   entryList: IEntry[]
-  rootParentPath: string
   downloadName: string
-  leftTimes: number
+  leftTimes?: number
   expiredAt?: number
   password?: string
 }

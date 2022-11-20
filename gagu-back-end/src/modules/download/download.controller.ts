@@ -1,3 +1,4 @@
+import { FsService } from './../fs/fs.service'
 import { Public } from '../../common/decorators/public.decorator'
 import { DownloadService } from './download.service'
 import {
@@ -7,6 +8,7 @@ import {
   Headers,
   Param,
   Post,
+  Query,
   Res,
 } from '@nestjs/common'
 import {
@@ -32,17 +34,18 @@ export class DownloadController {
   constructor(
     private readonly downloadService: DownloadService,
     private readonly authService: AuthService,
+    private readonly fsService: FsService,
   ) {}
 
   @Post()
   @Permission(UserPermission.read)
   create(
     @Headers(HEADERS_AUTH_KEY) token: User.Token,
-    @Body() tunnelBase: DownloadTunnelForm,
+    @Body() tunnelForm: DownloadTunnelForm,
   ) {
     const username = this.authService.findOneUsername(token)
     if (username) {
-      const code = this.downloadService.create(username, tunnelBase)
+      const code = this.downloadService.create(username, tunnelForm)
       return {
         success: true,
         message: SERVER_MESSAGE_MAP.OK,
@@ -57,17 +60,17 @@ export class DownloadController {
   }
 
   @Public()
-  @Get(':code/password/:password')
+  @Get(':code')
   download(
     @Param('code') code: string,
-    @Param('password') inputtedPassword: string,
+    @Query('password') inputtedPassword: string,
     @Res() response: ZipResponse,
   ) {
     const tunnel = this.downloadService.findOne(code)
     const checkRes = checkTunnel(tunnel, inputtedPassword)
 
     if (checkRes.success && tunnel) {
-      const { entryList, rootParentPath, downloadName } = tunnel
+      const { entryList, downloadName } = tunnel
       const firstEntry = entryList[0]
       const isSingleFile =
         entryList.length === 1 && firstEntry.type === EntryType.file
@@ -75,7 +78,8 @@ export class DownloadController {
       if (isSingleFile) {
         return response.download(getEntryPath(firstEntry))
       }
-      const list = this.downloadService.getFlattenRecursiveEntryList(entryList)
+      const rootParentPath = firstEntry.parentPath
+      const list = this.fsService.getFlattenRecursiveEntryList(entryList)
       const files: ZipResponseFile[] = list.map((entry) => {
         const path = getEntryPath(entry)
         const name = path.replace(rootParentPath, '')
@@ -89,12 +93,20 @@ export class DownloadController {
 
   @Public()
   @Get(':code/share')
-  findOne(@Param('code') code: string) {
+  findOne(
+    @Param('code') code: string,
+    @Query('password') inputtedPassword?: string,
+  ) {
     const tunnel = this.downloadService.findOne(code)
     if (tunnel) {
-      const { entryList } = tunnel
-      const flattenList =
-        this.downloadService.getFlattenRecursiveEntryList(entryList)
+      const { entryList, password } = tunnel
+      if (password && inputtedPassword !== password) {
+        return {
+          success: false,
+          message: SERVER_MESSAGE_MAP.ERROR_TUNNEL_PASSWORD_WRONG,
+        }
+      }
+      const flattenList = this.fsService.getFlattenRecursiveEntryList(entryList)
       return {
         success: true,
         message: SERVER_MESSAGE_MAP.OK,
@@ -110,10 +122,10 @@ export class DownloadController {
   }
 
   @Public()
-  @Get(':code/check/:password')
+  @Get(':code/check')
   check(
     @Param('code') code: string,
-    @Param('password') inputtedPassword?: string,
+    @Query('password') inputtedPassword?: string,
   ) {
     const tunnel = this.downloadService.findOne(code)
     const checkRes = checkTunnel(tunnel, inputtedPassword)

@@ -135,7 +135,7 @@ export default function NameLine(props: NameLineProps) {
           <input
             id="file-explorer-name-input"
             autoFocus
-            autoComplete="false"
+            autoComplete="off"
             placeholder="请输入名称"
             className="block px-1 max-w-full h-full bg-transparent text-xs text-left text-gray-700 border-none shadow-inner"
             value={inputValue}

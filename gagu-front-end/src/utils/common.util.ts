@@ -1,5 +1,6 @@
 import { DateTime } from 'luxon'
 import { IOffsetInfo, IRectInfo } from '../types'
+import md5 from 'md5'
 
 export const copy = (str: string) => {
   const input = document.createElement('textarea')
@@ -115,6 +116,10 @@ export const getPaddedNo = (currentIndex: number, total: number, options?: { min
   const currentNo = String(i + 1).padStart(width, '0')
   const totalNo = total.toString().padStart(width, '0')
   return `${currentNo}${hideTotal ? '' : ` / ${totalNo}`}`
+}
+
+export const getPasswordParam = (password?: string) => {
+  return password ? `?password=${md5(password)}` : ''
 }
 
 // Sync following code to BE & FE
