@@ -1,8 +1,8 @@
 import { runningAppListState } from '../../states'
 import { useRecoilState } from 'recoil'
-import AppWindow from '../../components/AppWindow'
+import Window from '../../components/Window'
 
-export default function AppWindowContainer() {
+export default function WindowContainer() {
 
   const [runningAppList] = useRecoilState(runningAppListState)
 
@@ -10,7 +10,7 @@ export default function AppWindowContainer() {
     <>
       <div className="gg-app-window-container absolute z-10">
         {runningAppList.map(app => (
-          <AppWindow
+          <Window
             key={app.runningId}
             app={app}
           />

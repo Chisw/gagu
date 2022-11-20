@@ -1,5 +1,5 @@
 import ContextMenu from './ContextMenu'
-import AppWindowContainer from './AppWindowContainer'
+import WindowContainer from './WindowContainer'
 import Desktop from './Desktop'
 import Dock from './Dock'
 import MenuBar from './MenuBar'
@@ -8,7 +8,7 @@ import MenuBar from './MenuBar'
 // - absolute z-30 ContextMenu
 // - absolute z-20 MenuBar & /TransferAssistant
 // - absolute z-20 Dock
-// - absolute z-10 AppWindowContainer
+// - absolute z-10 WindowContainer
 // - absolute z-0  Desktop
 
 export default function DesktopPage() {
@@ -20,7 +20,7 @@ export default function DesktopPage() {
       <ContextMenu />
       <MenuBar />
       <Dock />
-      <AppWindowContainer />
+      <WindowContainer />
       <Desktop />
     </div>
   )

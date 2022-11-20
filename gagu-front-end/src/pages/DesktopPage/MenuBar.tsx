@@ -193,9 +193,9 @@ export default function MenuBar() {
                     </div>
                   )}
                 >
-                  <Dropdown.Item icon={<SvgIcon.Scan />}>
+                  <Dropdown.Item icon={<SvgIcon.QrCode />}>
                     <div className="w-full flex justify-between items-center">
-                      <span>扫一扫</span>
+                      <span>二维码</span>
                       <SvgIcon.ChevronRight className="text-gray-400"/>
                     </div>
                   </Dropdown.Item>

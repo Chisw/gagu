@@ -13,7 +13,7 @@ interface WindowProps {
   app: IApp
 }
 
-export default function AppWindow(props: WindowProps) {
+export default function Window(props: WindowProps) {
 
   const {
     app: {
