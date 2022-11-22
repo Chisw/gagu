@@ -1,4 +1,5 @@
-import { Button, Input } from '@douyinfe/semi-ui'
+import { Button, Input, Tooltip } from '@douyinfe/semi-ui'
+import { Duration } from 'luxon'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useParams } from 'react-router-dom'
@@ -13,6 +14,7 @@ export default function SharePage() {
   const { code } = useParams()
 
   const [passwordVal, setPasswordVal] = useState('')
+  const [expiredAtTip, setExpiredAtTip] = useState('')
 
   const { fetch: getTunnel, loading, data } = useFetch(DownloadApi.getTunnel)
   const { fetch: checkTunnel, loading: calling } = useFetch(DownloadApi.checkTunnel)
@@ -78,6 +80,32 @@ export default function SharePage() {
     }
   }, [data])
 
+  useEffect(() => {
+    const timer = setInterval(() => {
+      let tip = '无限期'
+      if (expiredAt !== undefined) {
+        const restMillis = expiredAt - Date.now()
+        if (restMillis > 0) {
+          const { months, days, hours, minutes } = Duration.fromMillis(restMillis).shiftTo('month', 'day', 'hour', 'minute').toObject()
+          tip = [
+            { unit: '个月', count: months },
+            { unit: '天', count: days },
+            { unit: '小时', count: hours },
+            { unit: '分钟', count: minutes? Math.floor(minutes) : 0 },
+          ]
+            .map(({ unit, count }) => count ? `${count} ${unit}` : '')
+            .filter(Boolean)
+            .slice(0, 2)
+            .join(' ')
+        } else {
+          tip = '已过期'
+        }
+      }
+      setExpiredAtTip(tip)
+    }, 1000)
+    return () => clearInterval(timer)
+  }, [expiredAt])
+
   const disabled = useMemo(() => {
     const isNoLeft = leftTimes === 0
     const isExpired = !!(expiredAt && expiredAt < Date.now())
@@ -121,7 +149,7 @@ export default function SharePage() {
                 </div>
               </div>
               {isShowInput ? (
-                <div className="my-6 px-8 py-20 border backdrop-filter backdrop-blur-sm">
+                <div className="my-6 px-8 py-16 border backdrop-filter backdrop-blur-sm">
                   <p className="text-sm text-gray-500 text-center">啊喔，分享者设置了访问密码</p>
                   <div className="mt-4 flex justify-center">
                     <Input
@@ -156,7 +184,16 @@ export default function SharePage() {
                 <div className="flex flex-wrap justify-between items-center">
                   <div className="w-full md:w-auto text-center md:text-left text-xs text-gray-500">
                     <p>剩余保存次数：{leftTimes === undefined ? '无限次' : leftTimes}</p>
-                    <p>有效期至：{expiredAt ? getDateTime(expiredAt).slice(0, -3) : '无限期'}</p>
+                    <p>
+                      <span className="mr-1">剩余有效期：{expiredAtTip}</span>
+                      <Tooltip
+                        position="right"
+                        className="text-xs"
+                        content={expiredAt ? getDateTime(expiredAt).slice(0, -3) : undefined}
+                      >
+                        <span><SvgIcon.Info className="-mt-2px inline text-gray-300" size={14} /></span>
+                      </Tooltip>
+                    </p>
                   </div>
                   <div className="mt-4 mx-auto md:m-0 w-full md:w-auto flex justify-center">
                     <Button

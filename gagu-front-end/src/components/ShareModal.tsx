@@ -69,10 +69,11 @@ export default function ShareModal(props: ShareModalProps) {
   }, [data])
 
   const handleCreate = useCallback(async () => {
-    if (form.downloadName && entryList.length) {
+    const { downloadName, password } = form
+    if (downloadName && entryList.length) {
       const res = await createTunnel({
         ...form,
-        password: md5(form.password),
+        password: password ? md5(password) : undefined,
         type: DownloadTunnelType.share,
         entryList,
       })
