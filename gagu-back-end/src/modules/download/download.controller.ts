@@ -105,6 +105,12 @@ export class DownloadController {
           return {
             success: true,
             message: SERVER_MESSAGE_MAP.ERROR_TUNNEL_PASSWORD_NEEDED,
+            tunnel: {
+              ...tunnel,
+              password: undefined,
+              entryList: [],
+            },
+            flattenList: [],
           }
         } else if (inputtedPassword !== password) {
           return {
@@ -117,7 +123,10 @@ export class DownloadController {
       return {
         success: true,
         message: SERVER_MESSAGE_MAP.OK,
-        tunnel,
+        tunnel: {
+          ...tunnel,
+          password: undefined,
+        },
         flattenList,
       }
     } else {

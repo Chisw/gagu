@@ -34,5 +34,4 @@ export interface IDownloadTunnel extends DownloadTunnelForm {
   username: User.Username
   nickname: User.Nickname
   createdAt: number
-  hasPassword: boolean
 }

@@ -42,7 +42,6 @@ export class DownloadService {
       nickname,
       createdAt: Date.now(),
       ...tunnelForm,
-      hasPassword: !!tunnelForm.password,
     }
     this.downloadTunnelList.push(tunnel)
     this.sync()

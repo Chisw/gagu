@@ -8,6 +8,7 @@ import EntryListPanel from './EntryListPanel'
 import QrCode from 'qrcode.react'
 import { SvgIcon } from './base'
 import toast from 'react-hot-toast'
+import md5 from 'md5'
 
 const newForm = () => ({
   downloadName: '',
@@ -71,6 +72,7 @@ export default function ShareModal(props: ShareModalProps) {
     if (form.downloadName && entryList.length) {
       const res = await createTunnel({
         ...form,
+        password: md5(form.password),
         type: DownloadTunnelType.share,
         entryList,
       })
@@ -86,6 +88,7 @@ export default function ShareModal(props: ShareModalProps) {
     <>
       <Modal
         centered
+        maskClosable={false}
         title={isCreating ? '创建分享链接' : '创建成功'}
         width={isCreating ? 640 : 480}
         visible={visible}

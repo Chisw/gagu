@@ -6,7 +6,7 @@ import { DownloadApi, FsApi } from '../api'
 import { Spinner, SvgIcon } from '../components/base'
 import EntryListPanel from '../components/EntryListPanel'
 import { useFetch } from '../hooks'
-import { getDateTime } from '../utils'
+import { getDateTime, SERVER_MESSAGE_MAP } from '../utils'
 
 export default function SharePage() {
 
@@ -17,13 +17,22 @@ export default function SharePage() {
   const { fetch: getTunnel, loading, data } = useFetch(DownloadApi.getTunnel)
   const { fetch: checkTunnel, loading: calling } = useFetch(DownloadApi.checkTunnel)
 
+  const updateTunnelData = useCallback(() => {
+    if (code) {
+      getTunnel(code, passwordVal)
+    }
+  }, [code, getTunnel, passwordVal])
+
   useEffect(() => {
-    code && getTunnel(code)
+    updateTunnelData()
     document.title = 'Share - GAGU.IO'
-  }, [getTunnel, code])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const {
-    success,
+    isSuccess,
+    isShowInput,
+    isShowError,
     message,
     flattenList,
     entryList,
@@ -33,7 +42,6 @@ export default function SharePage() {
     expiredAt,
     leftTimes,
     downloadName,
-    hasPassword,
   } = useMemo(() => {
     const {
       flattenList,
@@ -48,11 +56,16 @@ export default function SharePage() {
       expiredAt,
       leftTimes,
       downloadName,
-      hasPassword,
     } = data?.tunnel || {}
 
+    const isSuccess = success
+    const isShowInput = success && message === SERVER_MESSAGE_MAP.ERROR_TUNNEL_PASSWORD_NEEDED
+    const isShowError = !success
+
     return {
-      success,
+      isSuccess,
+      isShowInput,
+      isShowError,
       message,
       flattenList: flattenList || [],
       entryList: entryList || [],
@@ -62,38 +75,29 @@ export default function SharePage() {
       expiredAt,
       leftTimes,
       downloadName,
-      hasPassword,
     }
   }, [data])
 
-  const {
-    showPasswordInput,
-    disabled,
-  } = useMemo(() => {
+  const disabled = useMemo(() => {
     const isNoLeft = leftTimes === 0
     const isExpired = !!(expiredAt && expiredAt < Date.now())
-    const isNoInputPassword = hasPassword && !passwordVal
-    const showPasswordInput = hasPassword && !isNoLeft && !isExpired
-    const disabled = isNoLeft || isExpired || isNoInputPassword
-    return {
-      showPasswordInput,
-      disabled,
-    }
-  }, [expiredAt, leftTimes, hasPassword, passwordVal])
+    const disabled = isNoLeft || isExpired || isShowInput
+    return disabled
+  }, [expiredAt, leftTimes, isShowInput])
 
   const handleDownloadClick = useCallback(async () => {
     if (code) {
-      const res = await checkTunnel(code)
+      const res = await checkTunnel(code, passwordVal)
       if (res && res.success) {
-        DownloadApi.download(code)
+        DownloadApi.download(code, passwordVal)
         setTimeout(() => {
-          getTunnel(code)
+          getTunnel(code, passwordVal)
         }, 50)
       } else {
         toast.error(res?.message || 'ERROR')
       }
     }
-  }, [code, checkTunnel, getTunnel])
+  }, [code, passwordVal, checkTunnel, getTunnel])
 
   return (
     <>
@@ -102,7 +106,7 @@ export default function SharePage() {
           <div className="absolute z-0 top-0 right-0 -mt-16 -mr-16">
             <SvgIcon.Share className="text-gray-100" size={320} />
           </div>
-          {success ? (
+          {isSuccess && (
             <div className="relative z-10">
               <div className="flex items-center">
                 <div
@@ -116,11 +120,38 @@ export default function SharePage() {
                   </p>
                 </div>
               </div>
-              <EntryListPanel
-                downloadName={downloadName || ''}
-                entryList={entryList}
-                flattenList={flattenList}
-              />
+              {isShowInput ? (
+                <div className="my-6 px-8 py-20 border backdrop-filter backdrop-blur-sm">
+                  <p className="text-sm text-gray-500 text-center">啊喔，分享者设置了访问密码</p>
+                  <div className="mt-4 flex justify-center">
+                    <Input
+                      autofocus
+                      showClear
+                      placeholder="请输入访问密码"
+                      className="w-48"
+                      type="password"
+                      value={passwordVal}
+                      onChange={setPasswordVal}
+                    />
+                      <Button
+                        type="primary"
+                        theme="solid"
+                        className="ml-2 w-24"
+                        disabled={!passwordVal}
+                        loading={loading}
+                        onClick={updateTunnelData}
+                      >
+                        确定
+                      </Button>
+                  </div>
+                </div>
+              ) : (
+                <EntryListPanel
+                  downloadName={downloadName || ''}
+                  entryList={entryList}
+                  flattenList={flattenList}
+                />
+              )}
               {code && (
                 <div className="flex flex-wrap justify-between items-center">
                   <div className="w-full md:w-auto text-center md:text-left text-xs text-gray-500">
@@ -128,17 +159,6 @@ export default function SharePage() {
                     <p>有效期至：{expiredAt ? getDateTime(expiredAt).slice(0, -3) : '无限期'}</p>
                   </div>
                   <div className="mt-4 mx-auto md:m-0 w-full md:w-auto flex justify-center">
-                    {showPasswordInput && (
-                      <Input
-                        autofocus
-                        size="large"
-                        placeholder="输入密码"
-                        className="mr-4 w-36"
-                        type="password"
-                        value={passwordVal}
-                        onChange={setPasswordVal}
-                      />
-                    )}
                     <Button
                       size="large"
                       type="primary"
@@ -155,7 +175,8 @@ export default function SharePage() {
                 </div>
               )}
             </div>
-          ) : (
+          )}
+          {isShowError && (
             <div className="relative z-10 py-12 font-din">
               <SvgIcon.G className="mx-auto text-gray-800" size={32} />
               <p className="mt-8 text-center text-gray-400">{message}</p>
