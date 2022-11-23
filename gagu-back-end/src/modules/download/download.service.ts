@@ -47,4 +47,8 @@ export class DownloadService {
     this.sync()
     return code
   }
+
+  findUserTunnels(username: User.Username) {
+    return this.downloadTunnelList.filter((t) => t.username === username)
+  }
 }

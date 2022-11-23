@@ -11,7 +11,7 @@ import { PUBLIC_DECORATOR_KEY } from '../decorators/public.decorator'
 import { AuthService } from '../../modules/auth/auth.service'
 import { PERMISSION_DECORATOR_KEY } from '../decorators/permission.decorator'
 import { UserService } from '../../modules/user/user.service'
-import { UserPermissionType } from '../../types'
+import { IUser, UserPermissionType } from '../../types'
 import { getReqToken } from '../../utils'
 
 @Injectable()
@@ -32,8 +32,10 @@ export class ApiGuard implements CanActivate {
     if (isPublic) {
       return true
     } else {
-      const req = context.switchToHttp().getRequest<Request>()
-      const token = getReqToken(req)
+      const request = context
+        .switchToHttp()
+        .getRequest<Request & { user: IUser | undefined }>()
+      const token = getReqToken(request)
       const username = token
         ? this.authService.findOneUsername(token)
         : undefined
@@ -42,6 +44,7 @@ export class ApiGuard implements CanActivate {
       if (isLoggedIn) {
         if (requiredPermission) {
           const user = this.userService.findOne(username)
+          request.user = user
           return !!user?.permissions.includes(requiredPermission)
         } else {
           return true

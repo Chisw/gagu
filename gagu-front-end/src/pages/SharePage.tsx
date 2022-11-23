@@ -16,14 +16,14 @@ export default function SharePage() {
   const [passwordVal, setPasswordVal] = useState('')
   const [expiredAtTip, setExpiredAtTip] = useState('')
 
-  const { fetch: getTunnel, loading, data } = useFetch(DownloadApi.getTunnel)
+  const { fetch: getTunnelInfo, loading, data } = useFetch(DownloadApi.getTunnelInfo)
   const { fetch: checkTunnel, loading: calling } = useFetch(DownloadApi.checkTunnel)
 
   const updateTunnelData = useCallback(() => {
     if (code) {
-      getTunnel(code, passwordVal)
+      getTunnelInfo(code, passwordVal)
     }
-  }, [code, getTunnel, passwordVal])
+  }, [code, getTunnelInfo, passwordVal])
 
   useEffect(() => {
     updateTunnelData()
@@ -119,13 +119,13 @@ export default function SharePage() {
       if (res && res.success) {
         DownloadApi.download(code, passwordVal)
         setTimeout(() => {
-          getTunnel(code, passwordVal)
+          getTunnelInfo(code, passwordVal)
         }, 50)
       } else {
         toast.error(res?.message || 'ERROR')
       }
     }
-  }, [code, passwordVal, checkTunnel, getTunnel])
+  }, [code, passwordVal, checkTunnel, getTunnelInfo])
 
   return (
     <>

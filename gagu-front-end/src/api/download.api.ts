@@ -17,8 +17,8 @@ export class DownloadApi {
     return data
   }
 
-  static getTunnel = async (code: string, password?: string) => {
-    const { data } = await instance.get<TunnelResponse>(`/api/download/${code}/share${getPasswordParam(password)}`)
+  static getTunnelInfo = async (code: string, password?: string) => {
+    const { data } = await instance.get<TunnelResponse>(`/api/download/${code}/info${getPasswordParam(password)}`)
     return data
   }
 
@@ -29,5 +29,10 @@ export class DownloadApi {
 
   static download = (code: string, password?: string) => {
     window.open(`${BASE_URL}/api/download/${code}${getPasswordParam(password)}`, '_self')
+  }
+
+  static getTunnels = async (username?: string) => {
+    const { data } = await instance.get(`/api/download/tunnels${username ? `/${username}` : ''}`)
+    return data
   }
 }

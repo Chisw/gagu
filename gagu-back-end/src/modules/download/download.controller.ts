@@ -1,61 +1,58 @@
 import { FsService } from './../fs/fs.service'
 import { Public } from '../../common/decorators/public.decorator'
 import { DownloadService } from './download.service'
-import {
-  Body,
-  Controller,
-  Get,
-  Headers,
-  Param,
-  Post,
-  Query,
-  Res,
-} from '@nestjs/common'
+import { Body, Controller, Get, Param, Post, Query, Res } from '@nestjs/common'
 import {
   UserPermission,
   DownloadTunnelForm,
-  User,
   EntryType,
   ZipResponse,
   ZipResponseFile,
+  IUser,
 } from '../../types'
 import { Permission } from '../../common/decorators/permission.decorator'
 import 'express-zip'
-import { AuthService } from '../auth/auth.service'
-import {
-  HEADERS_AUTH_KEY,
-  SERVER_MESSAGE_MAP,
-  getEntryPath,
-  checkTunnel,
-} from '../../utils'
+import { SERVER_MESSAGE_MAP, getEntryPath, checkTunnel } from '../../utils'
+import { UserGetter } from 'src/common/decorators/user.decorator'
 
 @Controller('download')
 export class DownloadController {
   constructor(
     private readonly downloadService: DownloadService,
-    private readonly authService: AuthService,
     private readonly fsService: FsService,
   ) {}
 
   @Post()
   @Permission(UserPermission.read)
-  create(
-    @Headers(HEADERS_AUTH_KEY) token: User.Token,
-    @Body() tunnelForm: DownloadTunnelForm,
-  ) {
-    const username = this.authService.findOneUsername(token)
-    if (username) {
-      const code = this.downloadService.create(username, tunnelForm)
-      return {
-        success: true,
-        message: SERVER_MESSAGE_MAP.OK,
-        code,
-      }
-    } else {
-      return {
-        success: false,
-        message: SERVER_MESSAGE_MAP.ERROR_USER_NOT_EXISTED,
-      }
+  create(@Body() tunnelForm: DownloadTunnelForm, @UserGetter() user: IUser) {
+    const code = this.downloadService.create(user.username, tunnelForm)
+    return {
+      success: true,
+      message: SERVER_MESSAGE_MAP.OK,
+      code,
+    }
+  }
+
+  @Get('tunnels')
+  @Permission(UserPermission.read)
+  findSelfTunnels(@UserGetter() user: IUser) {
+    console.log({ user })
+    const tunnels = this.downloadService.findUserTunnels(user.username)
+    return {
+      success: true,
+      message: SERVER_MESSAGE_MAP.OK,
+      tunnels,
+    }
+  }
+
+  @Get('tunnels/:username')
+  @Permission(UserPermission.administer)
+  findUserTunnels(@Param('username') username: string) {
+    const tunnels = this.downloadService.findUserTunnels(username)
+    return {
+      success: true,
+      message: SERVER_MESSAGE_MAP.OK,
+      tunnels,
     }
   }
 
@@ -92,7 +89,7 @@ export class DownloadController {
   }
 
   @Public()
-  @Get(':code/share')
+  @Get(':code/info')
   findOne(
     @Param('code') code: string,
     @Query('password') inputtedPassword?: string,
