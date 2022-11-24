@@ -10,8 +10,9 @@ import { useFetch } from '../../hooks'
 import { rootInfoState, userInfoState } from '../../states'
 import { IRootInfo } from '../../types'
 import { DOCUMENT_TITLE, line, PULSE_INTERVAL, USER_INFO } from '../../utils'
-import TransferPanel from './TransferPanel'
 import QrCode from 'qrcode.react'
+import TransferPanel from './TransferPanel'
+import MySharePanel from '../../components/MySharePanel'
 
 const modeList = [
   { key: 'desktop', icon: <SvgIcon.Desktop /> },
@@ -341,6 +342,8 @@ export default function MenuBar() {
 
         
       </Modal>
+
+      <MySharePanel />
     </>
   )
 }

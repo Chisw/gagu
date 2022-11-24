@@ -36,7 +36,6 @@ export class DownloadController {
   @Get('tunnels')
   @Permission(UserPermission.read)
   findSelfTunnels(@UserGetter() user: IUser) {
-    console.log({ user })
     const tunnels = this.downloadService.findUserTunnels(user.username)
     return {
       success: true,

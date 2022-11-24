@@ -81,7 +81,7 @@ export default function SharePage() {
   }, [data])
 
   useEffect(() => {
-    const timer = setInterval(() => {
+    const tick = () => {
       let tip = '无限期'
       if (expiredAt !== undefined) {
         const restMillis = expiredAt - Date.now()
@@ -102,7 +102,9 @@ export default function SharePage() {
         }
       }
       setExpiredAtTip(tip)
-    }, 1000)
+    }
+    tick()
+    const timer = setInterval(tick, 1000)
     return () => clearInterval(timer)
   }, [expiredAt])
 
@@ -189,7 +191,7 @@ export default function SharePage() {
                       <Tooltip
                         position="right"
                         className="text-xs"
-                        content={expiredAt ? getDateTime(expiredAt).slice(0, -3) : undefined}
+                        content={expiredAt ? `有效期至：${getDateTime(expiredAt).slice(0, -3)}` : undefined}
                       >
                         <span><SvgIcon.Info className="-mt-2px inline text-gray-300" size={14} /></span>
                       </Tooltip>
