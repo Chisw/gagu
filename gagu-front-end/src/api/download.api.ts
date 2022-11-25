@@ -35,4 +35,9 @@ export class DownloadApi {
     const { data } = await instance.get(`/api/download/tunnels${username ? `/${username}` : ''}`)
     return data
   }
+
+  static deleteTunnel = async (code: string) => {
+    const { data } = await instance.delete(`/api/download/tunnels/${code}`)
+    return data
+  }
 }

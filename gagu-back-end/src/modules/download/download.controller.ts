@@ -1,7 +1,16 @@
 import { FsService } from './../fs/fs.service'
 import { Public } from '../../common/decorators/public.decorator'
 import { DownloadService } from './download.service'
-import { Body, Controller, Get, Param, Post, Query, Res } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+  Res,
+} from '@nestjs/common'
 import {
   UserPermission,
   DownloadTunnelForm,
@@ -52,6 +61,24 @@ export class DownloadController {
       success: true,
       message: SERVER_MESSAGE_MAP.OK,
       tunnels,
+    }
+  }
+
+  @Delete('tunnels/:code')
+  @Permission(UserPermission.read)
+  delete(@Param('code') code: string, @UserGetter() user: IUser) {
+    const tunnel = this.downloadService.findOne(code)
+    if (tunnel?.username === user.username) {
+      this.downloadService.remove(code)
+      return {
+        success: true,
+        message: SERVER_MESSAGE_MAP.OK,
+      }
+    } else {
+      return {
+        success: false,
+        messsage: SERVER_MESSAGE_MAP.ERROR_403,
+      }
     }
   }
 

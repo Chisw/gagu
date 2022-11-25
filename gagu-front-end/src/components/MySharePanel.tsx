@@ -1,20 +1,31 @@
 import { SideSheet } from '@douyinfe/semi-ui'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 import { DownloadApi } from '../api'
 import { useFetch } from '../hooks'
 import { IDownloadTunnel } from '../types'
 import { getDateTime } from '../utils'
-import EntryListPanel from './EntryListPanel'
+import { SvgIcon } from './base'
+import { IconButton } from './base/IconButton'
 
 export default function MySharePanel() {
 
-  const [visible, setVisible] = useState(false)
+  const [visible, setVisible] = useState(true)
 
   const { fetch: getTunnels, data } = useFetch(DownloadApi.getTunnels)
+  const { fetch: deleteTunnel } = useFetch(DownloadApi.deleteTunnel)
 
   useEffect(() => {
     getTunnels()
   }, [getTunnels])
+
+  const handleDelete = useCallback(async (code: string) => {
+    const res = await deleteTunnel(code)
+    if (res?.success) {
+      toast.success('删除成功')
+      getTunnels()
+    }
+  }, [deleteTunnel, getTunnels])
 
   return (
     <>
@@ -35,17 +46,24 @@ export default function MySharePanel() {
               return (
                 <div
                   key={code}
-                  className="mt-4 border-b"
+                  className="mt-4 flex justify-between items-center group"
                 >
-                  <div className="font-bold">{downloadName}</div>
-                  <div className="text-xs text-gray-400">
-                    {getDateTime(createdAt)}
+                  <div>
+                    <div className="font-bold">{downloadName}</div>
+                    <div className="text-xs text-gray-400">
+                      {getDateTime(createdAt)}
+                    </div>
                   </div>
-                  <EntryListPanel
-                    downloadName={downloadName}
-                    entryList={entryList}
-                    flattenList={[]}
-                  />
+                  <div>
+                    <IconButton
+                      icon={<SvgIcon.ExternalLink className="text-blue-500" />}
+                      onClick={() => window.open(`/share/${code}`)}
+                    />
+                    <IconButton
+                      icon={<SvgIcon.Delete className="text-red-500" />}
+                      onClick={() => handleDelete(code)}
+                    />
+                  </div>
                 </div>
               )
             })}
