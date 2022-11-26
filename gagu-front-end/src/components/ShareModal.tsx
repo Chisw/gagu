@@ -2,7 +2,7 @@ import { Button, Form, Modal } from '@douyinfe/semi-ui'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { DownloadApi, FsApi } from '../api'
 import { useFetch } from '../hooks'
-import { IEntry, DownloadTunnelType } from '../types'
+import { IEntry, TunnelType } from '../types'
 import { copy, getDownloadInfo } from '../utils'
 import EntryListPanel from './EntryListPanel'
 import QrCode from 'qrcode.react'
@@ -74,7 +74,7 @@ export default function ShareModal(props: ShareModalProps) {
       const res = await createTunnel({
         ...form,
         password: password ? md5(password) : undefined,
-        type: DownloadTunnelType.share,
+        type: TunnelType.share,
         entryList,
       })
       if (res?.success && res.code) {

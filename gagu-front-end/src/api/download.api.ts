@@ -1,4 +1,4 @@
-import { DownloadTunnelForm, IDownloadTunnel, IEntry, ResponseBase } from '../types'
+import { TunnelForm, ITunnel, IEntry, ResponseBase } from '../types'
 import { BASE_URL, getPasswordParam } from '../utils'
 import instance from './instance'
 
@@ -8,12 +8,12 @@ interface CreateResponse extends ResponseBase {
 
 interface TunnelResponse extends ResponseBase {
   flattenList?: IEntry[]
-  tunnel?: IDownloadTunnel
+  tunnel?: ITunnel
 }
 
 export class DownloadApi {
-  static create = async (downloadTunnelForm: DownloadTunnelForm) => {
-    const { data } = await instance.post<CreateResponse>('/api/download', downloadTunnelForm)
+  static create = async (tunnelForm: TunnelForm) => {
+    const { data } = await instance.post<CreateResponse>('/api/download', tunnelForm)
     return data
   }
 

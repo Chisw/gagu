@@ -48,7 +48,7 @@ import {
   IUploadTransferTask,
   TransferTaskType,
   TransferTaskStatus,
-  DownloadTunnelType,
+  TunnelType,
 } from '../../types'
 import ShareModal from '../../components/ShareModal'
 
@@ -315,7 +315,7 @@ export default function FileExplorer(props: AppComponentProps) {
       onConfirm: async () => {
         close()
         const res = await createTunnel({
-          type: DownloadTunnelType.download,
+          type: TunnelType.download,
           entryList,
           downloadName,
           leftTimes: 1,

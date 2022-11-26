@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { DownloadApi } from '../api'
 import { useFetch } from '../hooks'
-import { IDownloadTunnel } from '../types'
+import { ITunnel } from '../types'
 import { getDateTime } from '../utils'
 import { SvgIcon } from './base'
 import { IconButton } from './base/IconButton'
@@ -41,7 +41,7 @@ export default function MySharePanel() {
       >
         <div>
           <div>
-            {data?.tunnels.map((tunnel: IDownloadTunnel) => {
+            {data?.tunnels.map((tunnel: ITunnel) => {
               const { code, createdAt, downloadName, entryList, expiredAt, leftTimes, password } = tunnel
               return (
                 <div

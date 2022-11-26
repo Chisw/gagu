@@ -13,15 +13,15 @@ export interface ZipResponse extends Response {
 import { IEntry } from './entry.type'
 import { User } from './user.type'
 
-export enum DownloadTunnelType {
+export enum TunnelType {
   download = 'download',
   share = 'share',
 }
 
-export type DownloadTunnelTypeType = keyof typeof DownloadTunnelType
+export type TunnelTypeType = keyof typeof TunnelType
 
-export interface DownloadTunnelForm {
-  type: DownloadTunnelTypeType
+export interface TunnelForm {
+  type: TunnelTypeType
   entryList: IEntry[]
   downloadName: string
   leftTimes?: number
@@ -29,7 +29,7 @@ export interface DownloadTunnelForm {
   password?: string
 }
 
-export interface IDownloadTunnel extends DownloadTunnelForm {
+export interface ITunnel extends TunnelForm {
   code: string
   username: User.Username
   nickname: User.Nickname

@@ -1,21 +1,21 @@
 import { readFileSync, writeFileSync } from 'fs'
-import { IDownloadTunnel } from '../types'
+import { ITunnel } from '../types'
 import { GAGU_PATH, SERVER_MESSAGE_MAP } from './constant.util'
 
-export const writeDownloadTunnelData = (
-  downloadTunnelList: IDownloadTunnel[],
+export const writeTunnelData = (
+  tunnelList: ITunnel[],
 ) => {
-  writeFileSync(GAGU_PATH.DATA_DOWNLOADS, JSON.stringify(downloadTunnelList))
+  writeFileSync(GAGU_PATH.DATA_DOWNLOADS, JSON.stringify(tunnelList))
 }
 
-export const readDownloadTunnelData = () => {
+export const readTunnelData = () => {
   const dataStr = readFileSync(GAGU_PATH.DATA_DOWNLOADS).toString('utf-8')
-  const downloadTunnelList: IDownloadTunnel[] = JSON.parse(dataStr)
-  return downloadTunnelList
+  const tunnelList: ITunnel[] = JSON.parse(dataStr)
+  return tunnelList
 }
 
 export const checkTunnel = (
-  tunnel: IDownloadTunnel | undefined,
+  tunnel: ITunnel | undefined,
   inputtedPassword?: string,
 ) => {
   if (tunnel) {

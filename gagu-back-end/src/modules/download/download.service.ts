@@ -1,28 +1,28 @@
-import { IDownloadTunnel, User } from '../../types'
+import { ITunnel, User } from '../../types'
 import { Injectable } from '@nestjs/common'
-import { DownloadTunnelForm } from '../../types'
+import { TunnelForm } from '../../types'
 import {
   genHashCode,
-  readDownloadTunnelData,
-  writeDownloadTunnelData,
+  readTunnelData,
+  writeTunnelData,
 } from '../../utils'
 import { UserService } from '../user/user.service'
 
 @Injectable()
 export class DownloadService {
-  private downloadTunnelList: IDownloadTunnel[] = []
+  private tunnelList: ITunnel[] = []
 
   constructor(private readonly userService: UserService) {
     console.log('  - init Download')
-    this.downloadTunnelList = readDownloadTunnelData()
+    this.tunnelList = readTunnelData()
   }
 
   sync() {
-    writeDownloadTunnelData(this.downloadTunnelList)
+    writeTunnelData(this.tunnelList)
   }
 
   findOne(code: string) {
-    return this.downloadTunnelList.find((tunnel) => tunnel.code === code)
+    return this.tunnelList.find((tunnel) => tunnel.code === code)
   }
 
   minusTimes(code: string) {
@@ -33,29 +33,29 @@ export class DownloadService {
     }
   }
 
-  create(username: User.Username, tunnelForm: DownloadTunnelForm) {
+  create(username: User.Username, tunnelForm: TunnelForm) {
     const code = genHashCode()
     const nickname = this.userService.findOne(username)?.nickname || 'UNKNOWN'
-    const tunnel: IDownloadTunnel = {
+    const tunnel: ITunnel = {
       code,
       username,
       nickname,
       createdAt: Date.now(),
       ...tunnelForm,
     }
-    this.downloadTunnelList.push(tunnel)
+    this.tunnelList.push(tunnel)
     this.sync()
     return code
   }
 
   remove(code: string) {
-    this.downloadTunnelList = this.downloadTunnelList.filter(
+    this.tunnelList = this.tunnelList.filter(
       (t) => t.code !== code,
     )
     this.sync()
   }
 
   findUserTunnels(username: User.Username) {
-    return this.downloadTunnelList.filter((t) => t.username === username)
+    return this.tunnelList.filter((t) => t.username === username)
   }
 }

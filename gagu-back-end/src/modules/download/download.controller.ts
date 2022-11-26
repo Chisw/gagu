@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common'
 import {
   UserPermission,
-  DownloadTunnelForm,
+  TunnelForm,
   EntryType,
   ZipResponse,
   ZipResponseFile,
@@ -33,7 +33,7 @@ export class DownloadController {
 
   @Post()
   @Permission(UserPermission.read)
-  create(@Body() tunnelForm: DownloadTunnelForm, @UserGetter() user: IUser) {
+  create(@Body() tunnelForm: TunnelForm, @UserGetter() user: IUser) {
     const code = this.downloadService.create(user.username, tunnelForm)
     return {
       success: true,
