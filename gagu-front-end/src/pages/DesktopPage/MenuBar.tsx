@@ -31,6 +31,7 @@ export default function MenuBar() {
   const [userPopoverShow, setUserPopoverShow] = useState(false)
   const [isFullScreen, setIsFullScreen] = useState(false)
   const [passwordModalShow, setPasswordModalShow] = useState(false)
+  const [shareVisible, setShareVisible] = useState(false)
 
   const [userInfo, setUserInfo] = useRecoilState(userInfoState)
   const [rootInfo, setRootInfo] = useRecoilState(rootInfoState)
@@ -282,11 +283,12 @@ export default function MenuBar() {
                   icon={<SvgIcon.Share />}
                   onClick={() => {
                     setUserPopoverShow(false)
+                    setShareVisible(true)
                   }}
                 >
                   我的分享
                 </Dropdown.Item>
-                <Dropdown.Item
+                {/* <Dropdown.Item
                   icon={<SvgIcon.Key />}
                   onClick={() => {
                     setUserPopoverShow(false)
@@ -294,7 +296,7 @@ export default function MenuBar() {
                   }}
                 >
                   修改密码
-                </Dropdown.Item>
+                </Dropdown.Item> */}
                 <Dropdown.Item
                   icon={<SvgIcon.Logout />}
                   onClick={async () => {
@@ -343,7 +345,7 @@ export default function MenuBar() {
         
       </Modal>
 
-      <MySharePanel />
+      <MySharePanel visible={shareVisible} onClose={() => setShareVisible(false)} />
     </>
   )
 }

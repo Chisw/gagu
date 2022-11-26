@@ -7,10 +7,9 @@ import PathLink from './PathLink'
 import ToolBar, { IToolBarDisabledMap } from './ToolBar'
 import NameLine, { NameFailType } from './NameLine'
 import { DateTime } from 'luxon'
-import Confirmor, { ConfirmorProps } from '../../components/Confirmor'
 import Side from './Side'
 import { pick, throttle } from 'lodash-es'
-import { Pagination, SvgIcon } from '../../components/base'
+import { Confirmor, Pagination, SvgIcon } from '../../components/base'
 import { CALLABLE_APP_LIST } from '..'
 import toast from 'react-hot-toast'
 import {
@@ -84,8 +83,6 @@ export default function FileExplorer(props: AppComponentProps) {
   const [scrollWaiter, setScrollWaiter] = useState<{ wait: boolean, smooth?: boolean }>({ wait: false })
   const [scrollHook, setScrollHook] = useState({ top: 0, height: 0 })
   const [waitDropToCurrentPath, setWaitDropToCurrentPath] = useState(false)
-  const [downloadConfirmorProps, setDownloadConfirmorProps] = useState<ConfirmorProps>({ show: false })
-  const [deleteConfirmorProps, setDeleteConfirmorProps] = useState<ConfirmorProps>({ show: false })
   const [hiddenShow, setHiddenShow] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
   const [abortController, setAbortController] = useState<AbortController | null>(null)
@@ -305,15 +302,10 @@ export default function FileExplorer(props: AppComponentProps) {
   const handleDownloadClick = useCallback((contextEntryList?: IEntry[]) => {
     const entryList = contextEntryList || selectedEntryList
     const { message, downloadName } = getDownloadInfo(currentPath, entryList)
-    const close = () => setDownloadConfirmorProps({ show: false })
-
-    setDownloadConfirmorProps({
-      show: true,
-      icon: <SvgIcon.Download size={36} />,
+    Confirmor({
+      type: 'download',
       content: message,
-      onCancel: close,
-      onConfirm: async () => {
-        close()
+      onConfirm: async close => {
         const res = await createTunnel({
           type: TunnelType.download,
           entryList,
@@ -326,6 +318,7 @@ export default function FileExplorer(props: AppComponentProps) {
         } else {
           res && toast.error(res.message)
         }
+        close()
       },
     })
   }, [currentPath, selectedEntryList, createTunnel])
@@ -340,15 +333,11 @@ export default function FileExplorer(props: AppComponentProps) {
     const len = processList.length
     if (!len) return
     const message = len === 1 ? processList[0].name : `${len} 个项目`
-    const close = () => setDeleteConfirmorProps({ show: false })
 
-    setDeleteConfirmorProps({
-      show: true,
-      icon: <SvgIcon.Delete size={36} />,
-      content: <>删除 <span className="font-bold">{message}</span> ？</>,
-      onCancel: close,
-      onConfirm: async () => {
-        close()
+    Confirmor({
+      type: 'delete',
+      content: message,
+      onConfirm: async close => {
         const successList: boolean[] = []
         for (const entry of processList) {
           const { name } = entry
@@ -359,6 +348,7 @@ export default function FileExplorer(props: AppComponentProps) {
         if (successList.every(Boolean)) {
           handleRefresh()
         }
+        close()
       },
     })
   }, [deleteEntry, currentPath, selectedEntryList, handleRefresh])
@@ -868,9 +858,6 @@ export default function FileExplorer(props: AppComponentProps) {
         className="hidden"
         onChange={(e: any) => addUploadTransferTask([...e.target.files])}
       />
-
-      <Confirmor {...downloadConfirmorProps} />
-      <Confirmor {...deleteConfirmorProps} />
 
       <ShareModal
         visible={shareModalVisible}

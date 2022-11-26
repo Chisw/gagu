@@ -1,9 +1,8 @@
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
 import toast from 'react-hot-toast'
 import { formModeType } from '.'
 import { FsApi, UserApi } from '../../../api'
-import { SvgIcon } from '../../../components/base'
-import Confirmor from '../../../components/Confirmor'
+import { Confirmor, SvgIcon } from '../../../components/base'
 import { useFetch } from '../../../hooks'
 import { IUser, IUserForm, User, UserAbilityType, UserForm, UserPermission } from '../../../types'
 import { getDateTime, getIsExpired } from '../../../utils'
@@ -26,11 +25,8 @@ export default function UserList(props: UserListProps) {
     setFormMode,
   } = props
 
-  const [activeUser, setActiveUser] = useState<IUser | null>(null)
-  const [deleteModalShow, setDeleteModalShow] = useState(false)
-
   const { fetch: updateUserAbility } = useFetch(UserApi.updateUserAbility)
-  const { fetch: removeUser, loading } = useFetch(UserApi.removeUser)
+  const { fetch: removeUser } = useFetch(UserApi.removeUser)
 
   const handleUpdateAbility = useCallback(async (username: User.Username, ability: UserAbilityType) => {
     const res = await updateUserAbility(username, ability)
@@ -82,13 +78,25 @@ export default function UserList(props: UserListProps) {
         icon: <SvgIcon.Delete className="text-red-500" />,
         show: true, // !isAdmin,
         onClick: () => {
-          setActiveUser(user)
-          setDeleteModalShow(true)
+          Confirmor({
+            type: 'delete',
+            content: (
+              <div>
+                <p className="font-bold">Sure to delete this user?</p>
+                <p>{user.nickname} @{user.username}</p>
+              </div>
+            ),
+            onConfirm: async close => {
+              await handleRemove(user.username)
+              close()
+            },
+          })
+
         },
       },
     ].filter(b => b.show)
     return buttonList
-  }, [setForm, setFormMode, handleUpdateAbility])
+  }, [setForm, setFormMode, handleUpdateAbility, handleRemove])
 
   return (
     <>
@@ -169,24 +177,6 @@ export default function UserList(props: UserListProps) {
           </div>
         )
       })}
-
-      <Confirmor
-        show={deleteModalShow}
-        icon={<SvgIcon.Delete size={36} />}
-        content={(
-          <div>
-            <p className="font-bold">Sure to delete this user?</p>
-            <p>{activeUser?.nickname} @{activeUser?.username}</p>
-          </div>
-        )}
-        confirmLoading={loading}
-        onCancel={() => setDeleteModalShow(false)}
-        onConfirm={async () => {
-          await handleRemove(activeUser!.username)
-          setDeleteModalShow(false)
-        }}
-      />
-
     </>
   )
 }
