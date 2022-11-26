@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import EntryIcon from './EntryIcon'
 import { useFetch, useDragSelect, useDragOperations, useHotKey } from '../../hooks'
-import { FsApi, DownloadApi } from '../../api'
+import { FsApi, DownloadApi, TunnelApi } from '../../api'
 import PathLink from './PathLink'
 import ToolBar, { IToolBarDisabledMap } from './ToolBar'
 import NameLine, { NameFailType } from './NameLine'
@@ -100,7 +100,7 @@ export default function FileExplorer(props: AppComponentProps) {
   const { fetch: getEntryList, loading: fetching, data, setData } = useFetch(FsApi.getEntryList)
   const { fetch: deleteEntry, loading: deleting } = useFetch(FsApi.deleteEntry)
   const { fetch: getDirectorySize, loading: getting } = useFetch(FsApi.getDirectorySize)
-  const { fetch: createTunnel } = useFetch(DownloadApi.create)
+  const { fetch: createTunnel } = useFetch(TunnelApi.createTunnel)
 
   const { rootEntryList, rootEntryPathList } = useMemo(() => {
     const { rootEntryList } = rootInfo

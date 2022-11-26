@@ -7,6 +7,7 @@ import { LoggerMiddleware } from './common/middlewares/logger.middleware'
 import { AuthModule } from './modules/auth/auth.module'
 import { DownloadModule } from './modules/download/download.module'
 import { FsModule } from './modules/fs/fs.module'
+import { TunnelModule } from './modules/tunnel/tunnel.module'
 import { SettingModule } from './modules/setting/setting.module'
 import { UserModule } from './modules/user/user.module'
 import { IS_DEV } from './utils'
@@ -28,6 +29,7 @@ const rootPath = IS_DEV ? devRootPath : prodRootPath
     AuthModule,
     UserModule,
     FsModule,
+    TunnelModule,
     DownloadModule,
     SettingModule,
   ],

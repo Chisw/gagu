@@ -1,7 +1,7 @@
 import { SideSheet } from '@douyinfe/semi-ui'
 import { useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { DownloadApi } from '../api'
+import { TunnelApi } from '../api'
 import { useFetch } from '../hooks'
 import { ITunnel } from '../types'
 import { getDateTime } from '../utils'
@@ -12,8 +12,8 @@ export default function MySharePanel() {
 
   const [visible, setVisible] = useState(true)
 
-  const { fetch: getTunnels, data } = useFetch(DownloadApi.getTunnels)
-  const { fetch: deleteTunnel } = useFetch(DownloadApi.deleteTunnel)
+  const { fetch: getTunnels, data } = useFetch(TunnelApi.getTunnels)
+  const { fetch: deleteTunnel } = useFetch(TunnelApi.deleteTunnel)
 
   useEffect(() => {
     getTunnels()

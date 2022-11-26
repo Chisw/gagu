@@ -3,7 +3,7 @@ import { Duration } from 'luxon'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useParams } from 'react-router-dom'
-import { DownloadApi, FsApi } from '../api'
+import { DownloadApi, FsApi, TunnelApi } from '../api'
 import { Spinner, SvgIcon } from '../components/base'
 import EntryListPanel from '../components/EntryListPanel'
 import { useFetch } from '../hooks'
@@ -16,14 +16,14 @@ export default function SharePage() {
   const [passwordVal, setPasswordVal] = useState('')
   const [expiredAtTip, setExpiredAtTip] = useState('')
 
-  const { fetch: getTunnelInfo, loading, data } = useFetch(DownloadApi.getTunnelInfo)
-  const { fetch: checkTunnel, loading: calling } = useFetch(DownloadApi.checkTunnel)
+  const { fetch: getTunnel, loading, data } = useFetch(TunnelApi.getTunnel)
+  const { fetch: checkTunnel, loading: calling } = useFetch(TunnelApi.checkTunnel)
 
   const updateTunnelData = useCallback(() => {
     if (code) {
-      getTunnelInfo(code, passwordVal)
+      getTunnel(code, passwordVal)
     }
-  }, [code, getTunnelInfo, passwordVal])
+  }, [code, getTunnel, passwordVal])
 
   useEffect(() => {
     updateTunnelData()
@@ -121,13 +121,13 @@ export default function SharePage() {
       if (res && res.success) {
         DownloadApi.download(code, passwordVal)
         setTimeout(() => {
-          getTunnelInfo(code, passwordVal)
+          getTunnel(code, passwordVal)
         }, 50)
       } else {
         toast.error(res?.message || 'ERROR')
       }
     }
-  }, [code, passwordVal, checkTunnel, getTunnelInfo])
+  }, [code, passwordVal, checkTunnel, getTunnel])
 
   return (
     <>

@@ -1,19 +1,14 @@
 import { ITunnel, User } from '../../types'
 import { Injectable } from '@nestjs/common'
 import { TunnelForm } from '../../types'
-import {
-  genHashCode,
-  readTunnelData,
-  writeTunnelData,
-} from '../../utils'
-import { UserService } from '../user/user.service'
+import { genHashCode, readTunnelData, writeTunnelData } from '../../utils'
 
 @Injectable()
-export class DownloadService {
+export class TunnelService {
   private tunnelList: ITunnel[] = []
 
-  constructor(private readonly userService: UserService) {
-    console.log('  - init Download')
+  constructor() {
+    console.log('  - init Tunnel')
     this.tunnelList = readTunnelData()
   }
 
@@ -33,9 +28,12 @@ export class DownloadService {
     }
   }
 
-  create(username: User.Username, tunnelForm: TunnelForm) {
+  create(
+    username: User.Username,
+    nickname: User.Nickname,
+    tunnelForm: TunnelForm,
+  ) {
     const code = genHashCode()
-    const nickname = this.userService.findOne(username)?.nickname || 'UNKNOWN'
     const tunnel: ITunnel = {
       code,
       username,
@@ -49,9 +47,7 @@ export class DownloadService {
   }
 
   remove(code: string) {
-    this.tunnelList = this.tunnelList.filter(
-      (t) => t.code !== code,
-    )
+    this.tunnelList = this.tunnelList.filter((t) => t.code !== code)
     this.sync()
   }
 
