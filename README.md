@@ -54,7 +54,7 @@ $ gagu -p 8888
 # Show version
 $ gagu -v
 
-# Reset with removing GAGU root directory
+# Reset with removing GAGU data directory
 $ gagu --reset
 
 # Stop service

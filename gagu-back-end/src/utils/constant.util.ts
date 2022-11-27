@@ -41,6 +41,7 @@ export const ROOT_PATH =
 
 export const GAGU_PATH = {
   ROOT: ROOT_PATH,
+  DATA: `${ROOT_PATH}/data`,
   DATA_USERS: `${ROOT_PATH}/data/users.json`,
   DATA_AUTH: `${ROOT_PATH}/data/auth.json`,
   DATA_TUNNELS: `${ROOT_PATH}/data/tunnels.json`,
@@ -55,7 +56,7 @@ Usage:
   gagu -o       // Start and open in browser, --open
   gagu -p 8888  // Start with customized port, --port
   gagu -v       // Show version, --version
-  gagu --reset  // Reset with removing GAGU root directory
+  gagu --reset  // Reset with removing GAGU data directory
 `
 
 // Sync following code to BE & FE

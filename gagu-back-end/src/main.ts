@@ -19,7 +19,7 @@ const argv = minimist(process.argv.slice(2), {
     version: 'v',
   },
   string: ['port'],
-  boolean: ['help', 'open', 'reset', 'version'],
+  boolean: ['help', 'open', 'reset', 'reset-all', 'version'],
   unknown() {
     console.log(HELP_INFO)
     process.exit(0)
@@ -33,6 +33,12 @@ async function bootstrap() {
   }
 
   if (argv.reset) {
+    deleteEntry(GAGU_PATH.DATA)
+    console.log('\n🔔 GAGU_DATA', GAGU_PATH.DATA, 'removed successfully.\n')
+    process.exit(0)
+  }
+
+  if (argv['reset-all']) {
     deleteEntry(GAGU_PATH.ROOT)
     console.log('\n🔔 GAGU_ROOT', GAGU_PATH.ROOT, 'removed successfully.\n')
     process.exit(0)
