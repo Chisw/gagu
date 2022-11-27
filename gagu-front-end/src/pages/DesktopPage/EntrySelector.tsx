@@ -31,16 +31,16 @@ const entryToTree = (entryList: IRootEntry[], hiddenShow: boolean) => {
 
 const updateTreeData = (list: TreeNodeData[], key: string, children: TreeNodeData[]) => {
   return list.map((node: TreeNodeData) => {
-      let newNode: TreeNodeData = node
-      if (node.key === key) {
-        newNode = { ...node, children }
-      }
-      if (node.children) {
-        newNode = { ...node, children: updateTreeData(node.children, key, children) }
-      }
-      return newNode
-    })
-  }
+    let newNode: TreeNodeData = node
+    if (node.key === key) {
+      newNode = { ...node, children }
+    }
+    if (node.children) {
+      newNode = { ...node, children: updateTreeData(node.children, key, children) }
+    }
+    return newNode
+  })
+}
 
 export default function EntrySelector() {
 

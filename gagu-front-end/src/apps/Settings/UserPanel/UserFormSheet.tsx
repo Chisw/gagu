@@ -249,6 +249,13 @@ export default function UserFormModal(props: UserFormModalProps) {
                 </div>
               ))}
             </Form.CheckboxGroup>
+            {/* <Form.TagInput
+              label="根目录"
+              placeholder="请选择根目录"
+              field="rootEntryPathList"
+              className="w-full"
+              // onChange={value => setForm({ ...form, rootEntryPathList: value as string[] })}
+            /> */}
             <div className="pt-2 flex justify-end">
               <Button
                 type="tertiary"

@@ -18,7 +18,7 @@ export const HOST = (() => {
   return ipList[0] || '127.0.0.1'
 })()
 
-export const GAGU_VERSION = '0.0.32'
+export const GAGU_VERSION = '0.0.33'
 export const IS_DEV = process.env.NODE_ENV === 'development'
 export const ServerOS: IServerOS = {
   username: process.env.USER || os.userInfo().username,
