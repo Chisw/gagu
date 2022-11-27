@@ -1,15 +1,16 @@
 import { SvgIcon } from '../../components/base'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { APP_ID_MAP } from '..'
+import { APP_ID_MAP, APP_LIST } from '..'
 import { AppComponentProps } from '../../types'
 import { useFetch, useOpenOperation, usePlayInfo } from '../../hooks'
 import { FsApi } from '../../api'
 import { getPaddedNo, getReadableSize } from '../../utils'
 import SpectrumCanvas from './common/SpectrumCanvas'
-import EntrySelector from '../../components/EntrySelector'
 import VolumeSlider from './common/VolumeSlider'
 import ProgressSlider from './common/ProgressSlider'
-import { IconButton } from '../../components/base/IconButton'
+import { IconButton } from '../../components/base'
+import { useRecoilState } from 'recoil'
+import { entrySelectorState } from '../../states'
 
 const nextPlayMode: any = {
   order: 'repeat',
@@ -34,6 +35,8 @@ export default function MusicPlayer(props: AppComponentProps) {
     activeEntryStreamUrl,
     setActiveIndex,
   } = useOpenOperation(APP_ID_MAP.musicPlayer)
+
+  const [, setEntrySelector] = useRecoilState(entrySelectorState)
 
   const [isPlaying, setIsPlaying] = useState(false)
   const [playMode, setPlayMode] = useState('order')
@@ -169,13 +172,12 @@ export default function MusicPlayer(props: AppComponentProps) {
     <>
       <div className="absolute inset-0 flex flex-col bg-gradient-to-br from-pink-700 to-pink-900 select-none">
         {!activeEntry && (
-          <EntrySelector
-            trigger={(
-              <div className="m-2 p-2 border border-pink-500 cursor-pointer text-xs text-white rounded-sm text-center hover:border-pink-300">
-                打开文件或目录
-              </div>
-            )}
-          />
+          <div
+            className="m-2 p-2 border border-pink-500 cursor-pointer text-xs text-white rounded-sm text-center hover:border-pink-300"
+            onClick={() => setEntrySelector({ show: true, app: APP_LIST.find(a => a.id === APP_ID_MAP.musicPlayer) })}
+          >
+            打开文件
+          </div>
         )}
         {/* list */}
         <div className="relative flex-grow pb-3 overflow-y-auto">

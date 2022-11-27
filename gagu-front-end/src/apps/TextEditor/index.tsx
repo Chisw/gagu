@@ -1,12 +1,14 @@
 import { useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import ToolButton from '../../components/ToolButton'
-import { copy, ENTRY_ICON_LIST } from '../../utils'
+import { copy, ENTRY_ICON_LIST, getEntryPath } from '../../utils'
 import { FsApi } from '../../api'
-import { APP_ID_MAP } from '..'
+import { APP_ID_MAP, APP_LIST } from '..'
 import { AppComponentProps } from '../../types'
 import { SvgIcon } from '../../components/base'
 import { useOpenOperation, useFetch } from '../../hooks'
+import { useRecoilState } from 'recoil'
+import { entrySelectorState } from '../../states'
 
 export default function TextEditor(props: AppComponentProps) {
 
@@ -19,6 +21,9 @@ export default function TextEditor(props: AppComponentProps) {
     // activeEntryStreamUrl,
     // setActiveIndex,
   } = useOpenOperation(APP_ID_MAP.textEditor)
+
+
+  const [, setEntrySelector] = useRecoilState(entrySelectorState)
 
   const [value, setValue] = useState('')
   const [monoMode, setMonoMode] = useState(false)
@@ -47,7 +52,7 @@ export default function TextEditor(props: AppComponentProps) {
     if (activeEntry) {
       const blob = new Blob([value], { type: 'text/plain;charset=utf-8' })
       const file = new File([blob], activeEntry.name)
-      const { success } = await uploadFile(activeEntry.parentPath, file)
+      const { success } = await uploadFile(getEntryPath(activeEntry), file)
       if (success) {
         toast.success('保存成功')
         setTextContent(value)
@@ -62,7 +67,7 @@ export default function TextEditor(props: AppComponentProps) {
           <ToolButton
             title="保存"
             icon={<SvgIcon.Save />}
-            disabled={value === textContent && !saving}
+            disabled={(value === textContent && !saving )|| !activeEntry}
             loading={saving}
             onClick={handleSave}
           />
@@ -75,11 +80,13 @@ export default function TextEditor(props: AppComponentProps) {
           <ToolButton
             title="等宽显示"
             icon={<SvgIcon.CodeSlash />}
+            disabled={!activeEntry}
             onClick={() => setMonoMode(!monoMode)}
           />
           <ToolButton
             title="复制文本"
             icon={<SvgIcon.Copy />}
+            disabled={!activeEntry}
             onClick={() => {
               copy(value)
               toast.success('文本复制成功')
@@ -87,13 +94,22 @@ export default function TextEditor(props: AppComponentProps) {
           />
         </div>
         <div className="flex-grow">
-          <code style={monoMode ? undefined : { fontFamily: 'unset' }}>
-            <textarea
-              className="p-2 w-full h-full outline-none resize-none bg-transparent text-xs"
-              value={value}
-              onChange={e => setValue(e.target.value)}
-            />
-          </code>
+          {activeEntry ? (
+            <code style={monoMode ? undefined : { fontFamily: 'unset' }}>
+              <textarea
+                className="p-2 w-full h-full outline-none resize-none bg-transparent text-xs"
+                value={value}
+                onChange={e => setValue(e.target.value)}
+              />
+            </code>
+          ) : (
+            <div
+              className="m-2 p-2 border border-gray-400 cursor-pointer text-xs rounded-sm text-center hover:border-gray-600"
+              onClick={() => setEntrySelector({ show: true, app: APP_LIST.find(a => a.id === APP_ID_MAP.textEditor) })}
+            >
+              打开文件
+            </div>
+          )}
         </div>
       </div>
     </>

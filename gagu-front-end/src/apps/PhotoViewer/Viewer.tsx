@@ -1,7 +1,7 @@
 import { PhotoSlider } from 'react-photo-view'
 import { FsApi } from '../../api'
 import { SvgIcon } from '../../components/base'
-import { IconButton } from '../../components/base/IconButton'
+import { IconButton } from '../../components/base'
 import { IEntry } from '../../types'
 import { getPaddedNo } from '../../utils'
 

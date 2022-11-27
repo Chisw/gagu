@@ -103,8 +103,8 @@ export const getDataTransferNestedFileList = async (dataTransfer: DataTransfer) 
 
 
 // Sync following code to BE & FE
-export const getEntryPath = (rootEntry: IEntry | null) => {
-  if (!rootEntry) return ''
-  const { name, parentPath } = rootEntry
+export const getEntryPath = (entry: IEntry | null) => {
+  if (!entry) return ''
+  const { name, parentPath } = entry
   return `${parentPath ? `${parentPath}/` : ''}${name}`
 }

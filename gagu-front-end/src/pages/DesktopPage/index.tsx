@@ -3,8 +3,10 @@ import WindowContainer from './WindowContainer'
 import Desktop from './Desktop'
 import Dock from './Dock'
 import MenuBar from './MenuBar'
+import EntrySelector from './EntrySelector'
 
 // fixed z-0 DesktopPage
+// -               EntrySelector
 // - absolute z-30 ContextMenu
 // - absolute z-20 MenuBar & /TransferAssistant
 // - absolute z-20 Dock
@@ -14,9 +16,10 @@ import MenuBar from './MenuBar'
 export default function DesktopPage() {
   return (
     <div
-      className="gg-desktop-page fixed z-0 inset-0 overflow-hidden bg-gradient-to-br from-gray-400 to-gray-900"
+      className="gg-desktop-page fixed z-0 inset-0 overflow-hidden bg-gradient-to-b from-gray-600 to-gray-400"
       onContextMenuCapture={e => e.preventDefault()}
     >
+      <EntrySelector />
       <ContextMenu />
       <MenuBar />
       <Dock />

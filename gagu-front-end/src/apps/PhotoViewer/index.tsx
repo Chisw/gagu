@@ -1,12 +1,14 @@
 import { Spinner } from '../../components/base'
 import { useEffect, useMemo, useRef, useState, useCallback } from 'react'
-import { APP_ID_MAP } from '..'
+import { APP_ID_MAP, APP_LIST } from '..'
 import { AppComponentProps } from '../../types'
 import { useOpenOperation, useHotKey } from '../../hooks'
 import ThumbnailList from './ThumbnailList'
 import Toolbar from './Toolbar'
 import Viewer from './Viewer'
 import { line } from '../../utils'
+import { useRecoilState } from 'recoil'
+import { entrySelectorState } from '../../states'
 
 export default function PhotoViewer(props: AppComponentProps) {
 
@@ -24,6 +26,8 @@ export default function PhotoViewer(props: AppComponentProps) {
     activeEntryStreamUrl,
     setActiveIndex,
   } = useOpenOperation(APP_ID_MAP.photoViewer)
+
+  const [, setEntrySelector] = useRecoilState(entrySelectorState)
 
   const [loading, setLoading] = useState(false)
   const [isLight, setIsLight] = useState(false)
@@ -80,15 +84,25 @@ export default function PhotoViewer(props: AppComponentProps) {
           onClick={() => activeEntry && setViewerShow(true)}
         >
           {loading && <Spinner />}
-          <div className="absolute z-0 inset-0 flex justify-center items-center">
-            <img
-              ref={imgRef}
-              src={activeEntryStreamUrl}
-              alt="img"
-              className="max-w-full max-h-full"
-              onLoadedData={() => setLoading(false)}
-              onLoadedDataCapture={() => setLoading(false)}
-            />
+          <div className={`absolute z-0 inset-0 ${activeEntry ? 'flex justify-center items-center' : ''}`}>
+            {!activeEntry && (
+              <div
+                className="m-2 p-2 border border-gray-500 cursor-pointer text-xs text-white rounded-sm text-center hover:border-gray-300"
+                onClick={() => setEntrySelector({ show: true, app: APP_LIST.find(a => a.id === APP_ID_MAP.photoViewer) })}
+              >
+                打开文件
+              </div>
+            )}
+            {activeEntry && (
+              <img
+                ref={imgRef}
+                src={activeEntryStreamUrl}
+                alt="img"
+                className="max-w-full max-h-full"
+                onLoadedData={() => setLoading(false)}
+                onLoadedDataCapture={() => setLoading(false)}
+              />
+            )}
           </div>
 
           <Toolbar
