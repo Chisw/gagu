@@ -1,5 +1,6 @@
-import { Button, Input, Tooltip } from '@douyinfe/semi-ui'
+import { Button, Input, Popover, Tooltip } from '@douyinfe/semi-ui'
 import { Duration } from 'luxon'
+import { QRCodeCanvas } from 'qrcode.react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useParams } from 'react-router-dom'
@@ -148,6 +149,22 @@ export default function SharePage() {
                   <p className="flex justify-between text-xs text-gray-500">
                     {createdAt && getDateTime(createdAt).slice(0, -3)}
                   </p>
+                </div>
+                <div>
+                  <Popover
+                    showArrow
+                    trigger="hover"
+                    position="leftTop"
+                    content={(
+                      <div className="">
+                        <QRCodeCanvas value={window.location.href} />
+                      </div>
+                    )}
+                  >
+                    <span>
+                      <SvgIcon.QrCode className="text-gray-400" />
+                    </span>
+                  </Popover>
                 </div>
               </div>
               {isShowInput ? (
