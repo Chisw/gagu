@@ -5,15 +5,15 @@ layout: ../../layouts/DocLayout.astro
 
 ## What is GAGU ?
 
-GAGU 是一个发布在 NPM 上的软件包，在支持 Node.js 的设备上通过 NPM 全局安装并运行，即可在局域网内的浏览器中管理该设备上的文件。
+GAGU 是一个发布在 NPM 的软件包，在支持 Node.js 的设备上通过 NPM 全局安装，并以命令行的形式运行，即可在局域网内的浏览器中管理该设备上的文件。
 
-当然，如果想在公共网络中的服务器上运行 GAGU 也是可以的，但尚未进行过测试，请谨慎使用。
+当然，如果你想在公共网络中的计算机上运行 GAGU 也是可行的，但尚未进行过安全测试，请谨慎使用。
 
-GAGU 也将提供可直接双击运行的程序，它使用 Vercel/pkg 打包而成，内置了 Node.js 环境、依赖包以及构建后的 GAGU 程序代码，但只支持 Windows、macOS 和 Linux 平台，而无法在 Android 上使用。
+GAGU 也将提供可直接双击运行的程序，它使用 Vercel/pkg 打包而成，内置了 Node.js 环境、依赖包以及构建后的 GAGU 程序代码。只支持 Windows、macOS 和 Linux 平台，而无法在 Android 上使用。
 
 GAGU 选用了 NestJS 来将一些文件系统的 I/O 操作开放为可通过 HTTP 请求控制的 Web 接口，选用 React 开发了可在浏览器中操作的 Web 界面，并交由 NestJS 来承载。
 
-GAGU 的灵感来源于 Android/X-plore 和 NPM/anywhere。
+GAGU 的灵感来源于 Android/X-plore 中的“无线文件共享”功能，借鉴了 NPM/anywhere 随启随用的运行方式。
 
 ### Origin
 
@@ -46,7 +46,7 @@ GAGU 的灵感来源于 Android/X-plore 和 NPM/anywhere。
 
 #### 3.反编译调整阶段
 
-粗略学习了下安卓的反编译，将样式代码直接写到 APP 里，并尝试优化内部 JS 代码，然后重新编译安装。
+粗略学习了下安卓的反编译，将样式代码直接写到 App 里，并尝试优化内部 JS 代码，然后重新编译安装。
 
 #### 4.反编译重写阶段
 
@@ -58,9 +58,9 @@ GAGU 的灵感来源于 Android/X-plore 和 NPM/anywhere。
 
 逐渐发现接口部分不太统一，还存在 bug，且尚有众多期望中的功能未能实现。
 
-随意篡改他人 APP 似乎也不太礼貌。
+随意篡改他人 App 似乎也不太礼貌。
 
-决定完全脱离 Android APP，效仿 anywhere 的形式，用 NestJS 实现后端部分，发布在 NPM 上，跨平台使用。
+决定完全脱离 Android App，效仿 anywhere 的形式，用 NestJS 实现后端部分，发布在 NPM 上，跨平台使用。
 
 
 ### Name of GAGU

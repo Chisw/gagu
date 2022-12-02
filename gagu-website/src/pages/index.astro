@@ -18,6 +18,10 @@ import iconAppPhotoViewer from '../img/icons/app-photo-viewer.svg'
 import iconAppMusicPlayer from '../img/icons/app-music-player.svg'
 import iconAppVideoPlayer from '../img/icons/app-video-player.svg'
 import iconAppSettings from '../img/icons/app-settings.svg'
+import iconAppMessager from '../img/icons/app-messager.svg'
+import iconAppTerminal from '../img/icons/app-terminal.svg'
+import iconAppReader from '../img/icons/app-reader.svg'
+import iconAppVsCoder from '../img/icons/app-vs-coder.svg'
 
 const featureList = [
   { icon: iconFeatureWeb, title: 'Web-based', desc: 'Use in PC or Mobile browser' },
@@ -36,6 +40,13 @@ const appList = [
   { icon: iconAppMusicPlayer, title: 'Music Player', desc: 'MP3 / FLAC' },
   { icon: iconAppVideoPlayer, title: 'Video Player', desc: 'MP4 / MKV' },
   { icon: iconAppSettings, title: 'Settings', desc: 'System setting / Users management / Log' },
+]
+
+const planningAppList = [
+  { icon: iconAppMessager, title: 'Messager', desc: 'Talk and send text' },
+  { icon: iconAppTerminal, title: 'Terminal', desc: 'Simulator lib' },
+  { icon: iconAppReader, title: 'Reader', desc: 'PDF / EPUB' },
+  { icon: iconAppVsCoder, title: 'VS Coder', desc: 'Professional code editor' },
 ]
 
 const codeList = [
@@ -126,6 +137,24 @@ const codeList = [
       </p>
       <div class="mt-12 flex flex-wrap select-none">
         {appList.map(({ icon, title, desc }) => (
+          <div class="px-8 md:px-12 py-4 md:py-8 lg:py-12 w-full md:w-1/2 lg:w-1/3 xl:w-1/4 rounded-2xl flex justify-start cursor-pointer hover:bg-gray-600">
+            <div
+              class="flex-shrink-0 w-12 md:w-20 h-12 md:h-20 rounded-lg md:rounded-2xl bg-center bg-no-repeat bg-cover shadow-lg"
+              style={`background-image: url("${icon}");`}
+            >
+            </div>
+            <div class="ml-4">
+              <p class="text-base md:text-lg font-bold text-gray-100">{title}</p>  
+              <p class="mt-1 text-xs md:text-sm text-gray-400">{desc}</p>  
+            </div>
+          </div>
+        ))}
+      </div>
+      <p class="mt-12 text-sm md:text-base lg:text-lg text-center text-gray-300">
+        Apps in planning
+      </p>
+      <div class="mt-12 flex flex-wrap select-none">
+        {planningAppList.map(({ icon, title, desc }) => (
           <div class="px-8 md:px-12 py-4 md:py-8 lg:py-12 w-full md:w-1/2 lg:w-1/3 xl:w-1/4 rounded-2xl flex justify-start cursor-pointer hover:bg-gray-600">
             <div
               class="flex-shrink-0 w-12 md:w-20 h-12 md:h-20 rounded-lg md:rounded-2xl bg-center bg-no-repeat bg-cover shadow-lg"
