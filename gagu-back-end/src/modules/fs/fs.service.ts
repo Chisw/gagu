@@ -119,7 +119,6 @@ export class FsService {
         extension: '_dir',
         parentPath: '/Users',
         hasChildren: true,
-        label: 'Home',
         isDisk: false,
       }
 
@@ -165,7 +164,6 @@ export class FsService {
           parentPath: '/data/data/com.termux/files',
           hasChildren: true,
           extension: '_dir',
-          label: 'Home',
           isDisk: false,
         },
         {
@@ -176,7 +174,6 @@ export class FsService {
           extension: '_dir',
           parentPath: '/data/data/com.termux/files/home/storage',
           hasChildren: true,
-          label: 'Shared',
           isDisk: false,
         },
       )

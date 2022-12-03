@@ -18,7 +18,6 @@ export interface IEntry {
 }
 
 export interface IRootEntry extends IEntry {
-  label: string
   isDisk: boolean
   spaceFree?: number
   spaceTotal?: number

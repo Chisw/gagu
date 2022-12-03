@@ -23,7 +23,7 @@ export default function RootEntryList(props: RootEntryListProps) {
     <>
       <div>
         {rootEntryList.map(rootEntry => {
-          const { spaceFree, spaceTotal, label, isDisk } = rootEntry
+          const { spaceFree, spaceTotal, name, isDisk } = rootEntry
           const rootEntryPath = getEntryPath(rootEntry)
           const isActive = rootEntryPath === getEntryPath(activeRootEntry)
           const canRootEntryClick = currentPath !== rootEntryPath
@@ -51,7 +51,7 @@ export default function RootEntryList(props: RootEntryListProps) {
                 >
                   <span className="flex items-center">
                     {isDisk ? <SvgIcon.HardDrive /> : <SvgIcon.Folder />}
-                    <span className="ml-1 truncate flex-grow">{label}</span>
+                    <span className="ml-1 truncate flex-grow">{name}</span>
                   </span>
                 </Tooltip>
                 {isDisk && (

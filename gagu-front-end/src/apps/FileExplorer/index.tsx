@@ -109,7 +109,7 @@ export default function FileExplorer(props: AppComponentProps) {
 
   useEffect(() => {
     const title = isInRoot
-      ? (activeRootEntry?.label || currentPath)
+      ? (activeRootEntry?.name || currentPath)
       : currentPath.split('/').pop() as string
     setWindowTitle(title)
   }, [currentPath, setWindowTitle, isInRoot, activeRootEntry])

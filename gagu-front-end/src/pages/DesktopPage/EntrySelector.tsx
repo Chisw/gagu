@@ -11,12 +11,12 @@ import { entrySorter, getEntryPath } from '../../utils'
 
 const entryToTree = (entryList: IRootEntry[], hiddenShow: boolean) => {
   const treeList: TreeNodeData[] = entryList.map(entry => {
-    const { name, label, type, hidden } = entry
+    const { name, type, hidden } = entry
     const isFile = type === EntryType.file
     const path = getEntryPath(entry)
     return {
       key: path,
-      label: label || name,
+      label: name,
       value: path,
       icon: isFile
         ? <SvgIcon.File className="mr-1" />
