@@ -251,7 +251,7 @@ export default function SharePage() {
           rel="noreferrer"
           href="https://gagu.io"
           target="_blank"
-          className="opacity-30 hover:opacity-70"
+          className="opacity-30 hover:opacity-70 font-g"
         >
           GAGU.IO
         </a>

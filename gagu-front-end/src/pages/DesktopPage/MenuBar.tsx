@@ -112,7 +112,7 @@ export default function MenuBar() {
 
   const localAddress = useMemo(() => {
     const { protocol, port } = window.location
-    return `${protocol}//${rootInfo.serverOS.host}:${port}`
+    return `${protocol}//${rootInfo.serverOS.host}:${port}/touch`
   }, [rootInfo])
 
   return (
@@ -187,7 +187,7 @@ export default function MenuBar() {
                 <Dropdown
                   position="rightTop"
                   render={(
-                    <div className="p-4">
+                    <div className="p-4 w-48">
                       <div className="flex justify-center">
                         <QrCode value={localAddress} />
                       </div>
@@ -328,7 +328,7 @@ export default function MenuBar() {
             </div>
           </Dropdown>
         </div>
-        <div className="w-1/3  flex-shrink-0 text-center text-xs leading-none font-din">
+        <div className="w-1/3 flex-shrink-0 text-center text-xs leading-none font-din">
           {timeStr}
         </div>
         <div className="w-1/3 h-full flex justify-end">

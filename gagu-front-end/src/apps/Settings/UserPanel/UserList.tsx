@@ -76,7 +76,7 @@ export default function UserList(props: UserListProps) {
       {
         label: '删除',
         icon: <SvgIcon.Delete className="text-red-500" />,
-        show: true, // !isAdmin,
+        show: true,
         onClick: () => {
           Confirmor({
             type: 'delete',
@@ -87,6 +87,10 @@ export default function UserList(props: UserListProps) {
               </div>
             ),
             onConfirm: async close => {
+              if (list.filter(u => u.permissions.includes(UserPermission.administer)).length === 1) {
+                toast.error('最后一个管理员无法删除')
+                return
+              }
               await handleRemove(user.username)
               close()
             },
@@ -96,7 +100,7 @@ export default function UserList(props: UserListProps) {
       },
     ].filter(b => b.show)
     return buttonList
-  }, [setForm, setFormMode, handleUpdateAbility, handleRemove])
+  }, [setForm, setFormMode, handleUpdateAbility, handleRemove, list])
 
   return (
     <>

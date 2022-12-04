@@ -99,7 +99,8 @@ $ yarn start
 - `GAGU_VERSION` in `./gagu-back-end/src/utils/constant.util.ts`
 - `version field` in `./package.json`
 - `version tag` in `./README.md`
-- `version env` in `./gagu-website/.env`
+- `version field` in `./gagu-website/.env`
+- `version file` in `./gagu-website/public/version`
 
 2. Sync back-end package dependencies to root package.
 

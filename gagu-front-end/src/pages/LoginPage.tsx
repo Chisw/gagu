@@ -43,7 +43,7 @@ export default function LoginPage() {
   
   return (
     <>
-      <div className="fixed z-0 inset-0 overflow-hidden bg-gradient-to-br from-gray-500 to-black">
+      <div className="fixed z-0 inset-0 overflow-hidden bg-gradient-to-b from-gray-800 to-gray-600">
         <div className="absolute inset-0 flex justify-center items-center">
           <div className="semi-always-dark w-64">
             <div className="text-white flex justify-center items-center">
@@ -89,7 +89,7 @@ export default function LoginPage() {
             rel="noreferrer"
             href="https://gagu.io"
             target="_blank"
-            className="opacity-50 hover:opacity-70"
+            className="opacity-50 hover:opacity-70 font-g"
           >
             GAGU.IO
           </a>
