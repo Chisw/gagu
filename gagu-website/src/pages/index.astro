@@ -4,6 +4,7 @@ import Layout from '../layouts/Layout.astro'
 import iconNPM from '../img/icons/npm.svg'
 import iconDownload from '../img/icons/download.svg'
 import iconCopy from '../img/icons/copy.svg'
+// import iconCheck from '../img/icons/check.svg'
 import iconSound from '../img/icons/sound.svg'
 import iconFeatureWeb from '../img/icons/feature-web.svg'
 import iconFeaturePlatform from '../img/icons/feature-platform.svg'
@@ -44,7 +45,7 @@ const appList = [
 
 const planningAppList = [
   { icon: iconAppMessager, title: 'Messager', desc: 'Talk and send text' },
-  { icon: iconAppTerminal, title: 'Terminal', desc: 'Simulator lib' },
+  { icon: iconAppTerminal, title: 'Terminal', desc: 'Simulator' },
   { icon: iconAppReader, title: 'Reader', desc: 'PDF / EPUB' },
   { icon: iconAppVsCoder, title: 'VS Coder', desc: 'Professional code editor' },
 ]
@@ -151,7 +152,7 @@ const codeList = [
         ))}
       </div>
       <p class="mt-12 text-sm md:text-base lg:text-lg text-center text-gray-300">
-        Apps in planning
+        Planned applications implemented using third-party libraries
       </p>
       <div class="mt-12 flex flex-wrap select-none">
         {planningAppList.map(({ icon, title, desc }) => (
@@ -185,7 +186,7 @@ const codeList = [
               <code class="relative block mt-2 px-4 py-2 rounded-md bg-gray-300 text-gray-700 before:content-['$'] group">
                 {code}
                 <div
-                  class="md:hidden group-hover:flex
+                  class="md:hidden group-hover:flex select-none
                     absolute top-0 right-0 bottom-0 w-12
                     flex justify-center items-center cursor-pointer active:opacity-30 group"
                   onclick={`copy('${code}')`}
