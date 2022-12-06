@@ -13,5 +13,5 @@ html, body {
 }
 
 *::selection {
-  @apply text-white bg-gray-900;
+  @apply text-black bg-gray-200;
 }

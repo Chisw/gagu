@@ -1,6 +1,6 @@
 ---
 title: "Installation"
-layout: ../../layouts/DocLayout.astro
+layout: ../../../layouts/DocLayout.astro
 ---
 
 ## Installation
