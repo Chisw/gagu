@@ -1,26 +1,47 @@
 ---
 import Page from './Page.astro'
-import DocNav from '../components/DocNav.astro'
+import Header from './Header.astro'
+import DocSider from './DocSider.astro'
 import '../css/markdown.css'
+import { docList } from '../data'
 
 const { frontmatter } = Astro.props
+const pathname = new URL(Astro.request.url).pathname;
+const activePath = pathname.split('/')[3]
+const activeIndex = docList.findIndex(n => n.path === activePath)
+const prevDoc = docList[activeIndex - 1]
+const nextDoc = docList[activeIndex + 1]
 ---
 
 <Page title={frontmatter.title}>
-  <div class="absolute z-0 inset-0 flex">
-    <div class="hidden lg:block px-14 py-10 w-[320px] h-full flex-shrink-0 border-r overflow-y-auto bg-gray-100">
-      <DocNav />
+  <Header />
+  <DocSider />
+  <div class="mx-auto px-4 pt-10 pb-20 max-w-[640px]">
+    <div class="markdown-body">
+      <slot />
     </div>
-    <div class="px-4 pt-10 pb-20 h-full overflow-y-auto flex-grow">
-      <div class="mx-auto max-w-[640px]">
-        <div class="markdown-body">
-          <slot />
-        </div>
-      </div>
+    <div class="mt-12 flex justify-between">
+      {prevDoc ? (
+        <a
+          href={`/docs/${prevDoc.group.replaceAll(' ', '-').toLowerCase()}/${prevDoc.path}`}
+          class="border px-4 py-2 w-40 rounded-lg text-xs group hover:border-blue-700"
+        >
+          <p class="text-gray-400">← Previous</p>
+          <p class="font-bold group-hover:text-blue-700">{prevDoc.title}</p>
+        </a>
+      ) : <span />}
+      {nextDoc ? (
+        <a
+          href={`/docs/${nextDoc.group.replaceAll(' ', '-').toLowerCase()}/${nextDoc.path}`}
+          class="border px-4 py-2 w-40 rounded-lg text-xs group hover:border-blue-700 text-right"
+        >
+          <p class="text-gray-400">Next →</p>
+          <p class="font-bold group-hover:text-blue-700">{nextDoc.title}</p>
+        </a>
+      ) : <span />}
     </div>
-    <div id="contents" class="hidden xl:block py-10 px-14 w-[320px] flex-shrink-0">
-      
-    </div>
+  </div>
+  <div id="contents" class="fixed top-0 right-0 hidden xl:block mt-12 py-10 px-14 w-[300px] flex-shrink-0">
   </div>
 </Page>
 <script is:inline>

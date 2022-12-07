@@ -1,0 +1,43 @@
+---
+import { docList } from '../data'
+
+const pathname = new URL(Astro.request.url).pathname;
+const activePath = pathname.split('/')[3]
+
+const groupedDocList = Array.from(new Set(docList.map(o => o.group))).map(group => {
+  return {
+    group,
+    children: docList.filter(o => o.group === group),
+  }
+})
+
+---
+
+<!-- <label for="doc-sider-switch">
+</label>
+<input id="doc-sider-switch" type="checkbox" class="w-0 h-0 opacity-0" /> -->
+<div class="fixed z-10 top-0 left-0 bottom-0 hidden xl:block mt-12 px-12 py-10 w-[300px] overflow-y-auto bg-gray-100">
+  <div class="">
+    {groupedDocList.map(({ group, children }) => (
+      <div class="mb-8">
+        <h2 class="mb-2 font-bold">{group}</h2>
+        <div>
+          {children.map(({ group, title, path }) => (
+            <a
+              class={`
+                mb-2 block text-sm text-gray-400 hover:text-blue-500
+                ${path === activePath ? 'font-bold text-blue-700' : ''}
+              `}
+              href={`/docs/${group.replaceAll(' ', '-').toLowerCase()}/${path}`}
+            >
+              {title}
+            </a>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+  <div>
+    <span class="text-xs text-gray-300">©2022 GAGU.IO</span>
+  </div>
+</div>

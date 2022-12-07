@@ -1,13 +1,13 @@
 ---
-import Block from '../components/Block.astro'
+import Block from './Block.astro'
 import iconGAGU from '../img/icons/gagu.svg'
 ---
 
 <Block className="bg-gray-900">
-  <div class="py-8 text-gray-400 text-xs flex justify-between items-center">
+  <div class="py-8 text-gray-400 text-xs flex justify-center md:justify-between items-center">
     <img
       src={iconGAGU}
-      class="h-3"
+      class="hidden md:block h-3"
     />
     <span>©2022 GAGU.IO</span>
   </div>
