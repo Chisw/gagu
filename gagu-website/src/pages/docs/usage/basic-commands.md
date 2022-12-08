@@ -1,9 +1,9 @@
 ---
-title: Basic Usage
+title: Basic Commands
 layout: ../../../layouts/DocLayout.astro
 ---
 
-# Basic Usage
+# Basic Commands
 
 Start service
 

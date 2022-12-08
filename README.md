@@ -4,9 +4,9 @@
 <br>
 <h1>GAGU (Beta)</h1>
 <p>Website: <a href="https://gagu.io" target="_blank">gagu.io</a></p>
-<p>A web-based file management system.</p>
-<p>Manage files on your different devices in the browser.</p>
-<p>Works on Windows, macOS, Linux and Android/Termux.</p>
+<p>A web-based file management system</p>
+<p>Manage files on your different devices in the browser</p>
+<p>Works on Windows, macOS, Linux and Android/Termux</p>
 <p>Inspired by <a href="https://play.google.com/store/apps/details?id=com.lonelycatgames.Xplore" target="_blank">Android/X-plore</a> and <a href="https://www.npmjs.com/package/anywhere" target="_blank">NPM/anywhere</a>.</p>
 <img src="https://img.shields.io/badge/NPM-0.0.33-orange">
 <img src="https://img.shields.io/badge/Package Size-517KB-success">
@@ -100,7 +100,6 @@ $ yarn start
 - `version field` in `./package.json`
 - `version tag` in `./README.md`
 - `version field` in `./gagu-website/.env`
-- `version file` in `./gagu-website/public/version.txt`
 
 2. Sync back-end package dependencies to root package.
 
