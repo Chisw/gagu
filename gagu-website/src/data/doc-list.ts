@@ -2,7 +2,7 @@ export const docList = [
   { group: 'Introduction', title: 'What is GAGU?', path: 'what-is-gagu' },
   { group: 'Introduction', title: 'Origin', path: 'origin' },
   { group: 'Usage', title: 'Installation', path: 'installation' },
-  { group: 'Usage', title: 'Basic Commands', path: 'basic-commands' },
+  { group: 'Usage', title: 'Commands', path: 'commands' },
   { group: 'Usage', title: 'Features', path: 'features' },
   { group: 'Usage', title: 'Scenes', path: 'scenes' },
   { group: 'Usage', title: 'Comparison', path: 'comparison' },

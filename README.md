@@ -16,13 +16,11 @@
 <br>
 </div>
 
-## 🔔 Preparation
+## 📦 Installation
 
 GAGU is published on NPM, so install [Node.js](https://nodejs.org/) on your device first.
 
 You need to install [ffmpeg](https://ffmpeg.org/) and [GraphicsMagick](http://www.graphicsmagick.org/) to support thumbnail api.
-
-## 📦 Installation
 
 Install GAGU as a command line tool:
 
@@ -45,18 +43,6 @@ $ gagu
 # Show help info
 $ gagu -h
 
-# Start and open in browser
-$ gagu -o
-
-# Start with customized port
-$ gagu -p 8888
-
-# Show version
-$ gagu -v
-
-# Reset with removing GAGU data directory
-$ gagu --reset
-
 # Stop service
 # Ctrl + C
 ```
@@ -64,9 +50,11 @@ $ gagu --reset
 Default admin:
 
 ```
-username: gagu
-password: 9293
+Username: gagu
+Password: 9293
 ```
+
+[Docs here](https://gagu.io/docs)
 
 ## 🛠 Development
 

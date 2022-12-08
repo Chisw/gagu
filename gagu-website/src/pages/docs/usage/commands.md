@@ -1,9 +1,9 @@
 ---
-title: Basic Commands
+title: Commands
 layout: ../../../layouts/DocLayout.astro
 ---
 
-# Basic Commands
+# Commands
 
 Start service
 
