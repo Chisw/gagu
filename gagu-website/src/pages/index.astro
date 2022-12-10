@@ -4,8 +4,6 @@ import Layout from '../layouts/Layout.astro'
 import iconGAGU from '../img/icons/gagu.svg'
 import iconNPM from '../img/icons/npm.svg'
 import iconDownload from '../img/icons/download.svg'
-import iconCopy from '../img/icons/copy.svg'
-// import iconCheck from '../img/icons/check.svg'
 import iconSound from '../img/icons/sound.svg'
 import iconFeatureWeb from '../img/icons/feature-web.svg'
 import iconFeaturePlatform from '../img/icons/feature-platform.svg'
@@ -25,16 +23,17 @@ import iconAppMessager from '../img/icons/app-messager.svg'
 import iconAppTerminal from '../img/icons/app-terminal.svg'
 import iconAppReader from '../img/icons/app-reader.svg'
 import iconAppVsCoder from '../img/icons/app-vs-coder.svg'
+import '../css/home.css'
 
 const featureList = [
   { icon: iconFeatureWeb, bg: 'bg-cyan-400', title: 'Web-based', desc: 'Use in browser' },
   { icon: iconFeaturePlatform, bg: 'bg-purple-400', title: 'Multi-platform', desc: 'Where server-side works' },
   { icon: iconFeatureUsers, bg: 'bg-orange-400', title: 'Multi-user', desc: 'Access and permission control' },
-  { icon: iconFeatureLang, bg: 'bg-blue-400', title: 'Multi-lang', desc: 'Supports multiple languages' },
+  { icon: iconFeatureLang, bg: 'bg-blue-400', title: 'I18n', desc: 'Supports multiple languages' },
   { icon: iconFeatureShare, bg: 'bg-yellow-400', title: 'File Sharing', desc: 'Generate download link' },
   { icon: iconFeatureLight, bg: 'bg-sky-400', title: 'Lightweight', desc: 'Package size is less then 1 MB' },
   { icon: iconFeatureOpen, bg: 'bg-green-400', title: 'Open Source', desc: 'All code is on GitHub' },
-  { icon: iconFeatureNoAds, bg: 'bg-red-400', title: 'No Ads', desc: 'Tiny and simple' },
+  { icon: iconFeatureNoAds, bg: 'bg-red-400', title: 'No Ads', desc: 'Pure and simple' },
 ]
 
 const appList = [
@@ -65,14 +64,14 @@ const commandList = [
     <audio id="audio" preload="preload" src="/gagu.mp3" />
   </div>
 
-  <Block className="bg-gradient-to-b from-gray-800 to-gray-500">
+  <Block className="bg-gradient-to-b from-gray-800 to-gray-500 overflow-hidden">
     <div class="py-12 md:py-24 lg:py-32">
       <div class="text-center text-white">
         <div
           class="relative z-10 group cursor-pointer"
           onclick="document.querySelector('#audio').currentTime = 0;document.querySelector('#audio').play();"
         >
-          <span class="opacity-60 text-xs md:text-base flex justify-center items-center">
+          <span class="text-gray-400 text-xs md:text-base flex justify-center items-center">
             <span>/'gʌgu/</span>
             <img src={iconSound} class="md:opacity-30 group-hover:opacity-100 group-active:opacity-80 ml-2 w-4 h-4" />
           </span>
@@ -86,8 +85,8 @@ const commandList = [
           <div class="mt-20 md:mt-0 absolute rounded-full opacity-80 blur-2xl"></div>
         </div>
         <p class="relative z-10 mt-12 text-3xl md:text-6xl lg:text-7xl font-bold">A web-based<br/>file management system</p>
-        <p class="relative z-10 mt-12 text-sm md:text-lg lg:text-xl opacity-60 font-thin">Manage files on your different devices in the browser</p>
-        <p class="relative z-10 text-sm md:text-lg lg:text-xl opacity-60 font-thin">Works on Windows, macOS, Linux and Android/Termux</p>
+        <p class="relative z-10 mt-12 text-sm md:text-lg lg:text-xl text-gray-400 font-thin">Manage files on your different devices in the browser</p>
+        <p class="relative z-10 text-sm md:text-lg lg:text-xl text-gray-400 font-thin">Works on Windows, macOS, Linux and Android/Termux</p>
         <div class="relative z-10 mt-12 flex justify-center">
           <a
             onclick="jumpTo('npm')"
@@ -108,7 +107,7 @@ const commandList = [
             <span class="ml-1 md:ml-2">Download</span>
           </a>
         </div>
-        <p class="relative z-10 mt-4 text-xs opacity-60">Version: {import.meta.env.PUBLIC_VERSION}(Beta)</p>
+        <p class="relative z-10 mt-4 text-xs text-gray-400">Version: {import.meta.env.PUBLIC_VERSION}(Beta)</p>
       </div>
     </div>
     <div class="h-24 md:h-48 lg:h-64"></div>
@@ -204,13 +203,11 @@ const commandList = [
               <code class="relative block mt-2 px-4 py-2 rounded-md bg-gray-200 text-gray-700 before:content-['$'] group">
                 {code}
                 <div
-                  class="md:hidden group-hover:flex select-none
-                    absolute top-0 right-0 bottom-0 w-12
-                    flex justify-center items-center cursor-pointer active:opacity-30 group"
+                  class="copy-button md:hidden group-hover:block select-none
+                    absolute top-0 right-0 bottom-0 w-12 cursor-pointer
+                    bg-center bg-no-repeat"
                   onclick={`copy('${code}')`}
-                >
-                  <img src={iconCopy} class="w-4 h-4" />
-                </div>
+                />
               </code>
             </div>
           ))}

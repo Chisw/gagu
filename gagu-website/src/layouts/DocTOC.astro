@@ -1,0 +1,37 @@
+<div class="doc-toc fixed z-10 top-0 left-1/2 translate-x-[360px] hidden xl:block mt-12 py-10 px-14 w-[300px] flex-shrink-0" />
+<script is:inline>
+const headingSelector = Array(6).fill(null).map((n, i) => `.markdown-body h${i + 1}`).join(', ')
+const headings = Array.from(document.querySelectorAll(headingSelector))
+
+document.querySelector('.doc-toc').innerHTML = headings
+  .map((heading, headingIndex) => {
+    const { nodeName, textContent } = heading
+    const level = Number(nodeName[1])
+    const style = `style="padding-left: ${level - 1}rem;"`
+    heading.setAttribute('id', textContent)
+    // heading.setAttribute('id', `heading-${headingIndex}`)
+    // heading.innerHTML = heading.getBoundingClientRect().top
+    return `
+      <a
+        class="doc-toc-item block mb-2 text-sm text-gray-500 hover:text-blue-700 cursor-pointer"
+        ${style}
+        data-index="${headingIndex}"
+        href="#${textContent}"
+      >
+        ${textContent}
+      </a>
+    `
+  })
+  .join('')
+
+// document.addEventListener('click', e => {
+//   const { target } = e
+//   if (Array.from(target.classList).includes('doc-toc-item')) {
+//     const index = target.getAttribute('data-index')
+//     const targetHeading = document.querySelector(`#heading-${index}`)
+//     console.log(targetHeading)
+//     const { top } = targetHeading.getBoundingClientRect()
+//     window.scrollTo({ top, behavior: 'smooth' })
+//   }
+// })
+</script>

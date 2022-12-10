@@ -1,7 +1,5 @@
 ---
 import { docList } from '../data'
-import iconMenu from '../img/icons/icon-menu.svg'
-import iconClose from '../img/icons/icon-close.svg'
 
 const pathname = new URL(Astro.request.url).pathname;
 const activePath = pathname.split('/')[3]
@@ -37,12 +35,12 @@ const groupedDocList = Array.from(new Set(docList.map(o => o.group))).map(group 
     ))}
   </div>
   <div>
-    <span class="text-xs text-gray-300">©2022 GAGU.IO</span>
+    <span class="text-xs text-gray-400">©2022 GAGU.IO</span>
   </div>
 </div>
 
 <input id="doc-sider-switch" type="checkbox" class="w-0 h-0 opacity-0" />
-<div id="mobile-doc-sider" class="block xl:hidden fixed z-20 top-0 bottom-0 left-0 px-4 py-8 w-[240px] bg-white bg-opacity-90 backdrop-blur transition-transform duration-300 shadow-xl">
+<div id="mobile-doc-sider" class="block xl:hidden fixed z-20 top-0 bottom-0 left-0 p-4 pb-24 w-[240px] bg-white bg-opacity-90 backdrop-blur transition-transform duration-300 shadow-xl overflow-y-auto">
   <div>
     {groupedDocList.map(({ group, children }) => (
       <div class="mb-8">

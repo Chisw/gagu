@@ -3,9 +3,9 @@ title: "Installation"
 layout: ../../../layouts/DocLayout.astro
 ---
 
-## Installation
+# Installation
 
-### Install with NPM
+# Install with NPM
 
 ```sh
 $ npm i -g gagu

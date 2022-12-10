@@ -2,8 +2,9 @@
 import Page from './Page.astro'
 import Header from './Header.astro'
 import DocSider from './DocSider.astro'
-import '../css/markdown.css'
+import DocTOC from './DocTOC.astro'
 import { docList } from '../data'
+import '../css/markdown.css'
 
 const { frontmatter } = Astro.props
 const pathname = new URL(Astro.request.url).pathname;
@@ -41,10 +42,5 @@ const nextDoc = docList[activeIndex + 1]
       ) : <span />}
     </div>
   </div>
-  <div id="contents" class="fixed top-0 right-0 hidden xl:block mt-12 py-10 px-14 w-[300px] flex-shrink-0">
-  </div>
+  <DocTOC />
 </Page>
-<script is:inline>
-const headings = Array.from(document.querySelectorAll('.markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4, .markdown-body h5, .markdown-body h6'))
-document.getElementById('contents').innerHTML = headings.map(h => `<div>${h.textContent}</div>`).join('')
-</script>

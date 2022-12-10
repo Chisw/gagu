@@ -8,89 +8,9 @@
 }
 
 html, body {
-  @apply w-full h-full;
   font-family: "g-sans";
 }
 
 *::selection {
   @apply text-black bg-gray-300;
-}
-
-@keyframes spin-1 {
-  0% {
-    width: 200px;
-    height: 200px;
-    transform: rotate(0deg);
-  }
-  30% {
-    width: 100px;
-    height: 100px;
-  }
-  100% {
-    width: 200px;
-    height: 200px;
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes spin-2 {
-  0% {
-    width: 100px;
-    height: 100px;
-    transform: rotate(0deg);
-  }
-
-  30% {
-    width: 200px;
-    height: 200px;
-  }
-
-  100% {
-    width: 100px;
-    height: 100px;
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes spin-3 {
-  0% {
-    width: 100px;
-    height: 100px;
-    transform: rotate(0deg);
-  }
-
-  70% {
-    width: 200px;
-    height: 200px;
-  }
-
-  100% {
-    width: 100px;
-    height: 100px;
-    transform: rotate(360deg);
-  }
-}
-
-.circle-animation div:nth-child(1) {
-  @apply bg-gray-400;
-  top: -60px;
-  left: 40%;
-  transform-origin: 35%;
-  animation: spin-1 5s infinite linear;
-}
-
-.circle-animation div:nth-child(2) {
-  @apply bg-gray-500;
-  top: 0;
-  left: 50%;
-  transform-origin: 30%;
-    animation: spin-2 5s infinite linear;
-}
-
-.circle-animation div:nth-child(3) {
-  @apply bg-gray-800;
-  top: 60px;
-  left: 60%;
-  transform-origin: 40%;
-  animation: spin-3 5s infinite linear;
 }
