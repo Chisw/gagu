@@ -7,7 +7,7 @@
 <p>A web-based file management system</p>
 <p>Manage files on your different devices in the browser</p>
 <p>Works on Windows, macOS, Linux and Android/Termux</p>
-<p>Inspired by <a href="https://play.google.com/store/apps/details?id=com.lonelycatgames.Xplore" target="_blank">Android/X-plore</a> and <a href="https://www.npmjs.com/package/anywhere" target="_blank">NPM/anywhere</a>.</p>
+<p>Inspired by <a href="https://play.google.com/store/apps/details?id=com.lonelycatgames.Xplore" target="_blank">Android/X-plore</a> and <a href="https://www.npmjs.com/package/anywhere" target="_blank">NPM/anywhere</a></p>
 <img src="https://img.shields.io/badge/NPM-0.0.33-orange">
 <img src="https://img.shields.io/badge/Package Size-517KB-success">
 <img src="https://img.shields.io/badge/License-MIT-blue">
@@ -16,35 +16,18 @@
 <br>
 </div>
 
-## 📦 Installation
+## 📦 Getting started
 
 GAGU is published on NPM, so install [Node.js](https://nodejs.org/) on your device first.
 
 You need to install [ffmpeg](https://ffmpeg.org/) and [GraphicsMagick](http://www.graphicsmagick.org/) to support thumbnail api.
 
-Install GAGU as a command line tool:
-
 ```sh
+# Install with NPM
 $ npm i -g gagu
-```
-
-In macOS, you may need command `sudo`:
-
-```sh
-$ sudo npm i -g gagu
-```
-
-## 📝  Usage
-
-```sh
-# Start service
-$ gagu
 
 # Show help info
 $ gagu -h
-
-# Stop service
-# Ctrl + C
 ```
 
 Default admin:
@@ -54,7 +37,7 @@ Username: gagu
 Password: 9293
 ```
 
-[Docs here](https://gagu.io/docs)
+[Docs here](https://gagu.io/docs/getting-started/usage)
 
 ## 🛠 Development
 

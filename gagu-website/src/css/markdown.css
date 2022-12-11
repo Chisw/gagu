@@ -938,3 +938,9 @@
 .markdown-body ::-webkit-calendar-picker-indicator {
   filter: invert(50%);
 }
+
+.markdown-body .ol,
+.markdown-body ul,
+.markdown-body menu {
+  list-style: initial;
+}

@@ -18,7 +18,7 @@ const nextDoc = docList[activeIndex + 1]
   <Header />
   <DocSider />
   <div class="mx-auto px-4 pt-10 pb-20 max-w-[640px]">
-    <div class="markdown-body">
+    <div class="markdown-body unreset">
       <slot />
     </div>
     <div class="mt-12 flex justify-between">
@@ -44,3 +44,6 @@ const nextDoc = docList[activeIndex + 1]
   </div>
   <DocTOC />
 </Page>
+<script is:inline>
+Array.from(document.querySelectorAll('.markdown-body a')).forEach(a => a.setAttribute('target', '_blank'));
+</script>

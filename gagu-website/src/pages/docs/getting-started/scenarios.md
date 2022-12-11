@@ -1,6 +1,6 @@
 ---
-title: "Scenes"
+title: "Scenarios"
 layout: ../../../layouts/DocLayout.astro
 ---
 
-# Scenes
+# Scenarios
