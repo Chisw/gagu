@@ -1,10 +1,12 @@
 ---
 import iconGAGU from '../img/icons/gagu.svg'
 import iconGitHub from '../img/icons/github.svg'
+import iconI18n from '../img/icons/i18n.svg'
 
 const navList = [
+  { label: 'i18n', url: 'javascript:switchLang();', icon: iconI18n },
   { label: 'Docs', url: '/docs/introduction/what-is-gagu' },
-  { label: 'GitHub', url: 'https://github.com/Chisw/gagu', icon: iconGitHub },
+  { label: 'github', url: 'https://github.com/Chisw/gagu', icon: iconGitHub },
 ]
 ---
 
@@ -21,7 +23,8 @@ const navList = [
       <div class="flex items-center">
         {navList.map(({ label, url, icon }) => (
           <a
-            class="ml-6 text-gray-200 hover:text-white flex items-center"
+            id={`header-${label}`}
+            class="ml-6 text-white opacity-70 hover:opacity-90 active:opacity-80"
             href={url}
             target={url.startsWith('http') ? '_blank' : '_self'}
           >
@@ -36,3 +39,10 @@ const navList = [
     </div>
   </div>
 </div>
+<script is:inline>
+function switchLang() {
+  location.href = location.pathname.endsWith('.zh')
+    ? location.pathname.replace('.zh', '')
+    : location.pathname + '.zh'
+}
+</script>

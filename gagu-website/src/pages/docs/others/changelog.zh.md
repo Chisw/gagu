@@ -1,9 +1,9 @@
 ---
-title: "Change Log"
+title: "更新日志"
 layout: ../../../layouts/DocLayout.astro
 ---
 
-# Change Log
+# 更新日志
 
 ## v0.0.*
 

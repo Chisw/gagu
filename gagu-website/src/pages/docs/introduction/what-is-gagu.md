@@ -5,22 +5,20 @@ layout: ../../../layouts/DocLayout.astro
 
 # What is GAGU ?
 
-GAGU 是一个通过 NPM 平台发布的软件包，在支持 Node.js 的设备上使用 `npm` 全局安装，以命令行的形式运行，即可在局域网内的浏览器中管理该设备上的文件。
+GAGU is a package published on the NPM platform, It can be installed globally using `npm` on a device that supports Node.js, and run as a command line to manage files on the device in a browser on the LAN.
 
-GAGU 也可以运行在公共网络中的设备上，但尚未对此进行过安全测试，请谨慎使用。
+GAGU can also run on devices in public networks, but this has not been tested for safety, please use with caution.
 
 ## Web-based
 
 ![gagu-diagram](/assets/diagram.svg)
 
-GAGU 选用 NestJS 来将一些文件系统的 I/O 操作开放为可通过 HTTP 请求控制的 Web 接口，选用 React 开发了可在浏览器中操作的 Web 界面，并交由 NestJS 来承载。
+GAGU chose NestJS to open some file system I/O operations as a web interface that can be controlled through HTTP requests, and chose React to develop a web interface that can be operated in a browser, and it was hosted by NestJS.
 
-## Desktop App
+## Desktop Version
 
-GAGU 会在 v0.1.0 发布后提供可直接双击运行的桌面版程序，它借助 Vercel/pkg 打包而成，内含 Node.js 执行环境、依赖包以及构建后的 GAGU 程序代码。桌面版无法在 Android 上使用。
+GAGU will provide a desktop program that can be directly double-clicked to run after v0.1.0 is released. It is packaged with Vercel/pkg, including the Node.js execution environment, dependency packages, and the built GAGU program code. The desktop version is not available on Android.
 
 ## Inspiration
 
-GAGU 的灵感来源于 [Android/X-plore](https://play.google.com/store/apps/details?id=com.lonelycatgames.Xplore) 中的“无线文件共享”功能，借鉴了 [NPM/anywhere](https://www.npmjs.com/package/anywhere) 随启随用的运行方式。
-
-
+GAGU is inspired by the "Wireless File Sharing" function in [Android/X-plore](https://play.google.com/store/apps/details?id=com.lonelycatgames.Xplore), and borrows from the operation mode of [NPM/anywhere](https://www.npmjs.com/package/anywhere) that can be used as soon as it is activated.

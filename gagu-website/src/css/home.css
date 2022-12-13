@@ -87,3 +87,7 @@
 .copy-button:active {
   background-image: url("../img/icons/check.svg");
 }
+
+#header-i18n {
+  @apply hidden;
+}

@@ -1,12 +1,15 @@
 ---
 import { docList } from '../data'
+import '../css/sider.css'
 
 const pathname = new URL(Astro.request.url).pathname;
-const activePath = pathname.split('/')[3]
+const activePath = pathname.split('/')[3].replace('.zh', '')
+const isZh = pathname.endsWith('.zh')
 
 const groupedDocList = Array.from(new Set(docList.map(o => o.group))).map(group => {
   return {
     group,
+    groupZh: docList.find(o => o.group === group).groupZh,
     children: docList.filter(o => o.group === group),
   }
 })
@@ -15,19 +18,19 @@ const groupedDocList = Array.from(new Set(docList.map(o => o.group))).map(group 
 
 <div class="fixed z-10 top-0 left-0 bottom-0 hidden xl:block mt-12 px-12 py-10 w-[300px] overflow-y-auto bg-gray-100">
   <div>
-    {groupedDocList.map(({ group, children }) => (
+    {groupedDocList.map(({ group, groupZh, children }) => (
       <div class="mb-8">
-        <h2 class="mb-2 font-bold">{group}</h2>
+        <h2 class="mb-2 font-bold">{isZh ? groupZh : group}</h2>
         <div>
-          {children.map(({ group, title, path }) => (
+          {children.map(({ group, title, titleZh, path }) => (
             <a
               class={`
                 mb-2 block text-sm text-gray-400 hover:text-blue-500
                 ${path === activePath ? 'font-bold text-blue-700' : ''}
               `}
-              href={`/docs/${group.replaceAll(' ', '-').toLowerCase()}/${path}`}
+              href={`/docs/${group.replaceAll(' ', '-').toLowerCase()}/${path}${isZh ? '.zh' : ''}`}
             >
-              {title}
+              {isZh ? titleZh : title}
             </a>
           ))}
         </div>
@@ -42,19 +45,19 @@ const groupedDocList = Array.from(new Set(docList.map(o => o.group))).map(group 
 <input id="doc-sider-switch" type="checkbox" class="w-0 h-0 opacity-0" />
 <div id="mobile-doc-sider" class="block xl:hidden fixed z-20 top-0 bottom-0 left-0 p-4 pb-24 w-[240px] bg-white bg-opacity-90 backdrop-blur transition-transform duration-300 shadow-xl overflow-y-auto">
   <div>
-    {groupedDocList.map(({ group, children }) => (
+    {groupedDocList.map(({ group, groupZh, children }) => (
       <div class="mb-8">
-        <h2 class="mb-2 font-bold">{group}</h2>
+        <h2 class="mb-2 font-bold">{isZh ? groupZh : group}</h2>
         <div>
-          {children.map(({ group, title, path }) => (
+          {children.map(({ group, title, titleZh, path }) => (
             <a
               class={`
                 mb-2 block text-sm text-gray-400 hover:text-blue-500
                 ${path === activePath ? 'font-bold text-blue-700' : ''}
               `}
-              href={`/docs/${group.replaceAll(' ', '-').toLowerCase()}/${path}`}
+              href={`/docs/${group.replaceAll(' ', '-').toLowerCase()}/${path}${isZh ? '.zh' : ''}`}
             >
-              {title}
+              {isZh ? titleZh : title}
             </a>
           ))}
         </div>
@@ -67,21 +70,3 @@ const groupedDocList = Array.from(new Set(docList.map(o => o.group))).map(group 
   for="doc-sider-switch"
   class="doc-sider-switch-button block xl:hidden fixed z-30 left-0 bottom-0 m-4 w-12 h-12 rounded-full bg-white shadow select-none bg-center bg-no-repeat cursor-pointer border"
 />
-
-<style>
-#mobile-doc-sider {
-  transform: translateX(-300px);
-}
-
-#doc-sider-switch:checked + #mobile-doc-sider {
-  transform: translateX(0);
-}
-
-#doc-sider-switch ~ .doc-sider-switch-button {
-  background-image: url("../img/icons/icon-menu.svg");
-}
-
-#doc-sider-switch:checked ~ .doc-sider-switch-button {
-  background-image: url("../img/icons/icon-close.svg");
-}
-</style>
