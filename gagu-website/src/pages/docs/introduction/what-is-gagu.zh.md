@@ -17,7 +17,11 @@ GAGU 选用 NestJS 来将一些文件系统的 I/O 操作开放为可通过 HTTP
 
 ## 桌面版
 
-GAGU 会在 v0.1.0 发布后提供可直接双击运行的桌面版程序，它借助 Vercel/pkg 打包而成，内含 Node.js 执行环境、依赖包以及构建后的 GAGU 程序代码。桌面版无法在 Android 上使用。
+GAGU 会在 v0.1.0 发布后提供可直接双击运行的桌面版程序，它借助 Vercel/pkg 打包而成，包含了 Node.js 执行环境、依赖包以及构建后的 GAGU 程序代码。
+
+<div class="apply-tip">
+桌面版无法在 Android 上使用。
+</div>
 
 ## 灵感来源
 

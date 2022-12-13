@@ -41,8 +41,9 @@ const navList = [
 </div>
 <script is:inline>
 function switchLang() {
-  location.href = location.pathname.endsWith('.zh')
-    ? location.pathname.replace('.zh', '')
-    : location.pathname + '.zh'
+  const pathname = location.pathname.replace(/\/$/, '')
+  location.href = pathname.endsWith('.zh')
+    ? pathname.replace('.zh', '')
+    : pathname + '.zh'
 }
 </script>

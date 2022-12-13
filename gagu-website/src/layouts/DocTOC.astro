@@ -1,4 +1,4 @@
-<div class="doc-toc fixed z-10 top-0 left-1/2 translate-x-[360px] hidden xl:block mt-12 py-10 px-14 w-[300px] flex-shrink-0" />
+<div class="doc-toc fixed z-10 top-0 left-1/2 translate-x-[360px] hidden xl:block mt-12 py-10 px-14 w-[360px] flex-shrink-0" />
 <script is:inline>
 const headingSelector = Array(6).fill(null).map((n, i) => `.markdown-body h${i + 1}`).join(', ')
 const headings = Array.from(document.querySelectorAll(headingSelector))
@@ -7,7 +7,7 @@ document.querySelector('.doc-toc').innerHTML = headings
   .map((heading, headingIndex) => {
     const { nodeName, textContent } = heading
     const level = Number(nodeName[1])
-    const style = `style="padding-left: ${level - 1}rem;"`
+    const style = `style="padding-left: ${level - 1}rem;${level > 2 ? 'font-size: 12px;' : ''}"`
     heading.setAttribute('id', textContent)
     // heading.setAttribute('id', `heading-${headingIndex}`)
     // heading.innerHTML = heading.getBoundingClientRect().top

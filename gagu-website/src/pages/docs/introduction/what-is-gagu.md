@@ -17,7 +17,11 @@ GAGU chose NestJS to open some file system I/O operations as a web interface tha
 
 ## Desktop Version
 
-GAGU will provide a desktop program that can be directly double-clicked to run after v0.1.0 is released. It is packaged with Vercel/pkg, including the Node.js execution environment, dependency packages, and the built GAGU program code. The desktop version is not available on Android.
+GAGU will provide a desktop program that can be directly double-clicked to run after v0.1.0 is released. It is packaged with Vercel/pkg, including the Node.js execution environment, dependency packages, and the built GAGU program code. 
+
+<div class="apply-tip">
+The desktop version is not available on Android.
+</div>
 
 ## Inspiration
 

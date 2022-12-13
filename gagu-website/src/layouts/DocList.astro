@@ -1,0 +1,35 @@
+---
+import { docList } from '../data'
+
+const pathname = new URL(Astro.request.url).pathname;
+const activePath = pathname.split('/')[3].replace('.zh', '')
+const isZh = pathname.endsWith('.zh')
+
+const groupedDocList = Array.from(new Set(docList.map(o => o.group))).map(group => {
+  return {
+    group,
+    groupZh: docList.find(o => o.group === group).groupZh,
+    children: docList.filter(o => o.group === group),
+  }
+})
+---
+<div>
+  {groupedDocList.map(({ group, groupZh, children }) => (
+    <div class="mb-8">
+      <h2 class="mb-2 font-bold">{isZh ? groupZh : group}</h2>
+      <div>
+        {children.map(({ group, title, titleZh, path }) => (
+          <a
+            class={`
+              mb-2 block text-sm text-gray-400 hover:text-blue-500
+              ${path === activePath ? 'font-bold text-blue-700' : ''}
+            `}
+            href={`/docs/${group.replaceAll(' ', '-').toLowerCase()}/${path}${isZh ? '.zh' : ''}`}
+          >
+            {isZh ? titleZh : title}
+          </a>
+        ))}
+      </div>
+    </div>
+  ))}
+</div>

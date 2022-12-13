@@ -944,3 +944,9 @@
 .markdown-body menu {
   list-style: initial;
 }
+
+/* apply class */
+
+.apply-tip {
+  @apply px-6 py-4 font-bold rounded-lg border border-yellow-300 text-yellow-600 bg-yellow-100 text-xs;
+}
