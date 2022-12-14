@@ -3,13 +3,13 @@ import Page from './Page.astro'
 import Header from './Header.astro'
 import DocSider from './DocSider.astro'
 import DocTOC from './DocTOC.astro'
-import { docList } from '../data'
+import { getDocList, getIsActive } from '../utils'
 import '../css/markdown.css'
 
 const { frontmatter } = Astro.props
 const pathname = new URL(Astro.request.url).pathname;
-const activePath = pathname.split('/')[3]
-const activeIndex = docList.findIndex(n => n.path === activePath)
+const docList = getDocList(pathname)
+const activeIndex = docList.findIndex(n => getIsActive(n.path, pathname))
 const prevDoc = docList[activeIndex - 1]
 const nextDoc = docList[activeIndex + 1]
 ---
@@ -24,7 +24,7 @@ const nextDoc = docList[activeIndex + 1]
     <div class="mt-12 flex justify-between">
       {prevDoc ? (
         <a
-          href={`/docs/${prevDoc.group.replaceAll(' ', '-').toLowerCase()}/${prevDoc.path}`}
+          href={prevDoc.path}
           class="border px-4 py-2 w-40 rounded-lg text-xs group hover:border-blue-700"
         >
           <p class="text-gray-400">← Previous</p>
@@ -33,7 +33,7 @@ const nextDoc = docList[activeIndex + 1]
       ) : <span />}
       {nextDoc ? (
         <a
-          href={`/docs/${nextDoc.group.replaceAll(' ', '-').toLowerCase()}/${nextDoc.path}`}
+          href={nextDoc.path}
           class="border px-4 py-2 w-40 rounded-lg text-xs group hover:border-blue-700 text-right"
         >
           <p class="text-gray-400">Next →</p>

@@ -24,7 +24,7 @@ const navList = [
         {navList.map(({ label, url, icon }) => (
           <a
             id={`header-${label}`}
-            class="ml-6 text-white opacity-70 hover:opacity-90 active:opacity-80"
+            class="ml-3 md:ml-6 text-white opacity-70 hover:opacity-90 active:opacity-80"
             href={url}
             target={url.startsWith('http') ? '_blank' : '_self'}
           >
@@ -41,7 +41,7 @@ const navList = [
 </div>
 <script is:inline>
 function switchLang() {
-  const pathname = location.pathname.replace(/\/$/, '')
+  const pathname = location.pathname.replace(/\/*$/, '')
   location.href = pathname.endsWith('.zh')
     ? pathname.replace('.zh', '')
     : pathname + '.zh'

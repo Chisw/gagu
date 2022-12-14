@@ -73,7 +73,3 @@ layout: ../../../layouts/DocLayout.astro
 - 在线交互示例
 - 视频介绍
 - 英文版
-
-# Buy me a coke
-
-如果你觉得 GAGU 用起来还不错，那就请我喝一瓶可乐吧！

@@ -1,5 +1,5 @@
 <div align="center">
-<img src="https://gagu.io/logo.svg" style="height: 64px;" >
+<img src="https://gagu.io/assets/logo.svg" style="height: 64px;" >
 <br>
 <br>
 <h1>GAGU (Beta)</h1>

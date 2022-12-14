@@ -84,7 +84,8 @@
   background-image: url("../img/icons/copy.svg");
 }
 
-.copy-button:active {
+.copy-button[data-clicked="true"] {
+  display: block;
   background-image: url("../img/icons/check.svg");
 }
 
