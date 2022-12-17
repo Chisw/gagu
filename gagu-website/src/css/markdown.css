@@ -945,8 +945,16 @@
   list-style: initial;
 }
 
+.markdown-body iframe {
+  width: 100%;
+  height: 52vw;
+  max-height: 24rem;
+  border: 1px solid #ddd;
+  margin-bottom: 1rem;
+}
+
 /* apply class */
 
 .apply-tip {
-  @apply px-4 py-2 font-bold rounded-lg  text-yellow-600 bg-yellow-100 text-xs;
+  @apply px-4 py-3 rounded-lg  text-yellow-600 bg-yellow-100 text-xs md:text-sm;
 }

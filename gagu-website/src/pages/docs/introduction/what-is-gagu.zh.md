@@ -29,4 +29,4 @@ GAGU 会在 v0.1.0 发布后提供可双击运行的桌面版程序，它借助 
 
 GAGU 的灵感来源于 [Android/X-plore](https://play.google.com/store/apps/details?id=com.lonelycatgames.Xplore) 中的“无线文件共享”功能，借鉴了 [NPM/anywhere](https://www.npmjs.com/package/anywhere) 随启随用的运行方式。
 
-访问下一节可以了解更过信息。
+阅读下一节可以了解更多信息。

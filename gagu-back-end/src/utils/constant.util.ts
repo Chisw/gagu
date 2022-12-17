@@ -53,7 +53,7 @@ export const HELP_INFO = `
 Usage:
   gagu              // Start service
   gagu -o           // Start and open in browser, --open
-  gagu -p 8888      // Start with customized port, --port
+  gagu -p 8888      // Start with a customized port, --port
   gagu -h           // Show help info, --help
   gagu -v           // Show version, --version
   gagu --reset      // Remove GAGU data directory

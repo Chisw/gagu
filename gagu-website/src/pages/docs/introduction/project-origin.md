@@ -60,6 +60,7 @@ It can be said that this is a ‘system’ that combines macOS layout, Windows w
 
 As the development process continued to deepen, some new problems were discovered:
 
+- One-time request for all thumbnails in the directory
 - The data fields are not uniform and the format is confusing
 - Cross-domain access is not allowed (cannot customize hosts to modify access domain)
 - Passwords are transmitted in clear text via GET requests
@@ -94,6 +95,8 @@ It's really not easy to name it. When I was troubled by it, my one-year-old litt
 
 I then searched for 'GAGU', and it wasn't registered yet, great! This is where the name of the GAGU project comes from.
 
+The default port number and password of the default account are both `9293`, one is because `9293` looks similar to `gagu`, and the other is because my wife and I were born in 1993 and 1992 respectively.
+
 <div class="apply-tip">
-The name of GAGU has only two writing formats: GAGU and gagu, the former is used for text description, and the latter is used for code.
+The name of GAGU has only two writing formats: 'GAGU' and 'gagu', the former is used for text description, and the latter is used for code.
 </div>

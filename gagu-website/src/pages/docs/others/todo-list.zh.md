@@ -11,7 +11,7 @@ GAGU 目前还处于 Beta 阶段，很多未实现的 Ideas 会被记录在此�
 
 如果发生此情形，可以通过执行 `gagu --reset` 命令，来清除 GAGU 在本地生成的数据目录，然后重新执行 `gagu` 启动服务。
 
-不同设备生成的数据目录位置有所不同，具体可以参考[这里](/docs/getting-started/usage.zh)。
+不同设备生成的数据目录位置有所不同，具体可以参考[这里](/docs/getting-started/features.zh)。
 
 <div class="apply-tip">
 清除数据目录：所有的用户信息、下载通道等数据都会被清除。
@@ -80,6 +80,7 @@ GAGU 目前还处于 Beta 阶段，很多未实现的 Ideas 会被记录在此�
 - 高级设置
   - IP 白名单、黑名单
   - 主动生成缩略图
+  - 清除缩略图数据
 
 - 日志管理
 

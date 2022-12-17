@@ -9,7 +9,6 @@ import * as md5 from 'md5'
 export const initialize = () => {
   completeNestedPath(`${GAGU_PATH.ROOT}/data/_`)
   completeNestedPath(`${GAGU_PATH.ROOT}/desktop/_`)
-  completeNestedPath(`${GAGU_PATH.ROOT}/log/_`)
   completeNestedPath(`${GAGU_PATH.ROOT}/public/_`)
   completeNestedPath(`${GAGU_PATH.ROOT}/public/avatar/_`)
   completeNestedPath(`${GAGU_PATH.ROOT}/public/lib/_`)

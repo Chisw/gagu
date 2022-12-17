@@ -5,19 +5,27 @@ layout: ../../../layouts/DocLayout.astro
 
 # Usage
 
-GAGU is published on NPM, so install [Node.js](https://nodejs.org/) on your device first.
+<iframe
+  src="//player.bilibili.com/player.html"
+  scrolling="no"
+  border="0"
+  frameborder="no"
+  framespacing="0"
+  allowfullscreen="true"
+>
+</iframe>
 
-You need to install [ffmpeg](https://ffmpeg.org/) and [GraphicsMagick](http://www.graphicsmagick.org/) to support thumbnail api.
+## Getting
 
-## Installation
+### NPM Install
 
-### Install with NPM
+Globally install with `npm`：
 
 ```sh
 $ npm i -g gagu
 ```
 
-In macOS, you may need command `sudo`:
+You may need command `sudo` in macOS:
 
 ```sh
 $ sudo npm i -g gagu
@@ -25,9 +33,18 @@ $ sudo npm i -g gagu
 
 ### Download
 
-Stable package built via Vercel/pkg will be available after v0.1.0 released.
+<div class="apply-tip">
+Stable package built via Vercel/pkg will be available after v0.1.0 is released.
+</div>
 
-## Commands
+## Available Parameters
+
+Show help info:
+
+```sh
+$ gagu -h
+$ gagu --help
+```
 
 Start service:
 
@@ -35,45 +52,45 @@ Start service:
 $ gagu
 ```
 
-Show help info:
-
-```sh
-$ gagu -h
-```
-
 Start and open in browser:
 
 ```sh
 $ gagu -o
+$ gagu --open
 ```
 
-Start with customized port:
+Start with a customized port:
 
 ```sh
 $ gagu -p 8888
+$ gagu --port 8888
 ```
 
 Show version:
 
 ```sh
 $ gagu -v
+$ gagu --version
 ```
 
-Remove GAGU data directory:
+Remove GAGU data directory `WORK_SPACE/.io.gagu/data`:
 
 ```sh
 $ gagu --reset
 ```
 
-Remove GAGU root directory:
+Remove GAGU root directory `WORK_SPACE/.io.gagu`:
 
 ```sh
 $ gagu --reset-all
 ```
 
-Stop service:
+Stop service：
 
 ```sh
-# Ctrl + C or close terminal
+# `Ctrl + C` or close terminal
 ```
 
+<div class="apply-tip">
+The `WORK_SPACE` selected by GAGU on different devices is different, more instructions in the next section.
+</div>
