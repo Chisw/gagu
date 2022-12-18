@@ -11,12 +11,19 @@ import '../css/sider.css'
 </div>
 
 <input id="doc-sider-switch" type="checkbox" class="absolute w-0 h-0 opacity-0" />
+
 <div
   id="mobile-doc-sider"
   class="block xl:hidden fixed z-20 top-0 bottom-0 left-0 p-4 pb-24 w-[240px] bg-white bg-opacity-90 backdrop-blur transition-transform duration-300 shadow-xl overflow-y-auto"
 >
   <DocList />
 </div>
+
+<label
+  for="doc-sider-switch"
+  id="mobile-doc-sider-mask"
+  class="fixed z-10 inset-0 bg-black bg-opacity-10"
+/>
 
 <label
   for="doc-sider-switch"

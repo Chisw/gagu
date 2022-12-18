@@ -45,5 +45,5 @@ const nextDoc = docList[activeIndex + 1]
   <DocTOC />
 </Page>
 <script is:inline>
-Array.from(document.querySelectorAll('.markdown-body a')).forEach(a => a.setAttribute('target', '_blank'));
+Array.from(document.querySelectorAll('.markdown-body a[href^=http]')).forEach(a => a.setAttribute('target', '_blank'));
 </script>

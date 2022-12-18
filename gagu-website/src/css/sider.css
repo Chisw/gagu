@@ -2,15 +2,23 @@
   transform: translateX(-300px);
 }
 
-#doc-sider-switch:checked+#mobile-doc-sider {
+#doc-sider-switch:checked + #mobile-doc-sider {
   transform: translateX(0);
 }
 
-#doc-sider-switch~.doc-sider-switch-button {
+#doc-sider-switch ~ #mobile-doc-sider-mask {
+  display: none;
+}
+
+#doc-sider-switch:checked ~ #mobile-doc-sider-mask {
+  display: block;
+}
+
+#doc-sider-switch ~ .doc-sider-switch-button {
   background-image: url("../img/icons/icon-menu.svg");
 }
 
-#doc-sider-switch:checked~.doc-sider-switch-button {
+#doc-sider-switch:checked ~ .doc-sider-switch-button {
   background-image: url("../img/icons/icon-close.svg");
 }
 
