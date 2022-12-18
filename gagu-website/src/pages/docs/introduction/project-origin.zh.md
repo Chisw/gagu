@@ -100,3 +100,7 @@ Anywhere 在 Termux 上能够正常地运行，那我能不能效仿它的方式
 <div class="apply-tip">
 GAGU 的名称只有两种书写格式：“GAGU” 和 “gagu”，前者用于文本叙述，后者用于代码之中。
 </div>
+
+## 请我喝可乐
+
+如果你觉得 GAGU 用起来还不错，可以[请我喝瓶可乐🥤](https://jisuowei.com/cola?from=gagu)哟！

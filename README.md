@@ -67,16 +67,16 @@ $ yarn start
 
 1. Update following version tags:
 
-- `GAGU_VERSION` in `./gagu-back-end/src/utils/constant.util.ts`
-- `version field` in `./package.json`
-- `version tag` in `./README.md`
-- `version field` in `./gagu-website/.env`
+- `GAGU_VERSION` in `gagu/gagu-back-end/src/utils/constant.util.ts`
+- `version field` in `gagu/package.json`
+- `version tag` in `gagu/README.md`
+- `version field` in `gagu/gagu-website/.env`
 
-2. Sync back-end package dependencies to root package.
+2. Sync dependencies in `gagu/gagu-back-end/package.json` to `gagu/package.json`.
 
 3. Run build script `yarn build:bin`, refer to [./build.sh](./build.sh).
 
-4. Publish to NPM.
+4. Dry run publish, update package size info, publish to NPM.
 
 ## 📜  License
 

@@ -5,57 +5,101 @@ layout: ../../../layouts/DocLayout.astro
 
 # 开发与构建
 
-## 项目选型
+GAGU 所有的代码都在同一个[仓库](https://github.com/Chisw/gagu)里，由三大部分构成并分散在三个目录下。
+
+```
+gagu
+|- gagu-back-end
+|- gagu-front-end
+|- gagu-website
+```
+
+## 构成
 
 ### 前端
 
-为了最大程度地减少包的体积，项目独立出来后，逐步移除了原本使用的 UI 组件库 BlueprintJS，换成了可以按需加载的 SemiUI。
+为了最大程度地减少包的体积，项目独立出来后，逐步移除了原本使用的 UI 组件库 [BlueprintJS](https://blueprintjs.com)，换成了可以按需加载的 [SemiUI](https://semi.design)。
 
-同时移除的还有 Windows 的壁纸和 MIUI V5 图标，单色图标也从 Carbon Design System 换成了 RemixIcon。几乎所有的图标都使用自 RemixIcon，即使是内部应用的图标也是从中选取至 Figma 编辑而来。
+同时移除的还有 Windows 的壁纸和 MIUI V5 图标，单色图标也从 [Carbon Design System](https://carbondesignsystem.com/guidelines/icons/library/) 换成了 [RemixIcon](https://remixicon.com/)。几乎所有的图标都使用自 RemixIcon，即使是内部应用的图标也是从中选取至 Figma 编辑而来。
 
-整体仍然使用了 React + TailwindCSS 的组合，构建后的体积非常小。
-
-### 后端
-
-在选型时对比了几种常见的框架，最终选择 NestJS 的原因很简单，因为它采用了 ES6 的模块语法，且对 TS 有着良好的支持；还有就是考虑到前、后端的代码会放在同一个仓库，切换上下文时，统一风格或多或少能降低一些切换成本。
-
-### 网站
-
-尝试一下 Astro，第一次使用它。
-
-GAGU app code consists of two parts: `./gagu-back-end` and `./gagu-front-end`.
+整体仍然使用了 React + [TailwindCSS](https://tailwindcss.com) 的组合，构建后的体积非常小。
 
 ```sh
-# Back-end
-$ cd gagu-back-end
-$ yarn
-$ yarn start:dev
-
-# Font-end
+# dev
 $ cd gagu-front-end
 $ yarn
 $ yarn start
 ```
 
-GAGU website code is in `./gagu-website`.
+### 后端
+
+在选型时对比了几种常见的框架，最终选择 [NestJS](https://nestjs.com) 的原因很简单，因为它采用了 ES6 的模块语法，且对 TS 有着良好的支持。
+
+还有就是考虑到前、后端的代码会放在同一个仓库，切换上下文时，统一的代码风格或多或少能降低一些切换成本。
 
 ```sh
+# dev
+$ cd gagu-back-end
+$ yarn
+$ yarn start:dev
+```
+
+### 网站
+
+尝试一下 [Astro](https://astro.build)，第一次使用它。
+
+```sh
+# dev
 $ cd gagu-website
 $ yarn
 $ yarn start
 ```
 
-## Build NPM package
+## 构建 NPM 包
 
-1. Update following version tags:
+1. 更新一下版本信息：
 
-- `GAGU_VERSION` in `./gagu-back-end/src/utils/constant.util.ts`
-- `version field` in `./package.json`
-- `version tag` in `./README.md`
-- `version field` in `./gagu-website/.env`
+- `GAGU_VERSION` 位于 `gagu/gagu-back-end/src/utils/constant.util.ts`
+- `version field` 位于 `gagu/package.json`
+- `version tag` 位于 `gagu/README.md`
+- `version field` 位于 `gagu/gagu-website/.env`
 
-2. Sync back-end package dependencies to root package.
+2. 同步 `gagu/gagu-back-end/package.json` 中的依赖项到 `gagu/package.json` 中。
 
-3. Run build script `yarn build:bin`, refer to [./build.sh](./build.sh).
+3. 执行构建脚本 `yarn build:bin`，参考 [build.sh](https://github.com/Chisw/gagu/blob/main/build.sh)。
 
-4. Publish to NPM.
+4. 预发布检查，更新包体积信息，发布到 NPM。
+
+## 构建桌面版
+
+1. 桌面版的构建需要先将上一步骤完成。
+
+2. 然后安装好 `gagu/package.json` 中的依赖，是的，这有点冗余，这是最初决定将三大部分放至同一仓库造成的，好在问题不大。
+
+3. 在 `gagu` 目录下执行 `yarn pkg`，实际上执行的是 `pkg . --out-path=pkg`，你需要事先全局安装好 Vercel/pkg `npm install -g pkg`。
+
+4. 构建后的内容会出现在 `gagu/pkg` 中。
+
+## 感谢
+
+整个项目中还用到了很多依赖：
+
+[@craco/craco](https://npmjs.com/package/@craco/craco)&emsp;
+[axios](https://npmjs.com/package/axios)&emsp;
+[lodash](https://npmjs.com/package/lodash)&emsp;
+[luxon](https://npmjs.com/package/luxon)&emsp;
+[md5](https://npmjs.com/package/md5)&emsp;
+[qrcode.react](https://npmjs.com/package/qrcode.react)&emsp;
+[react-hot-toast](https://npmjs.com/package/react-hot-toast)&emsp;
+[react-photo-view](https://npmjs.com/package/react-photo-view)&emsp;
+[react-rnd](https://npmjs.com/package/react-rnd)&emsp;
+[recoil](https://npmjs.com/package/recoil)&emsp;
+[express-zip](https://npmjs.com/package/express-zip)&emsp;
+[gm](https://npmjs.com/package/gm)&emsp;
+[jsmediatags](https://npmjs.com/package/jsmediatags)&emsp;
+[minimist](https://npmjs.com/package/minimist)&emsp;
+[node-disk-info](https://npmjs.com/package/node-disk-info)&emsp;
+[piexifjs](https://npmjs.com/package/piexifjs)&emsp;
+[thumbsupply](https://npmjs.com/package/thumbsupply)&emsp;
+
+如果没有他们，我的工作量将是巨大的，十分感谢。
