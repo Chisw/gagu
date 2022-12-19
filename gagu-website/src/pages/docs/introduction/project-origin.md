@@ -40,7 +40,7 @@ What about computers that don't have Git installed? Can I put the code directly 
 
 After roughly learning the decompilation of Android, it doesn't seem that difficult.
 
-I tried optimizing some internal JS code again, recompiling, installing, running, and now, forget about browser extension, I installed the tweaked version on all my Android devices.
+I tried optimizing some internal JS code again, recompiling, installing, running, and now, forget about browser extension!
 
 ### 3. Decompilation and Rewriting Stage
 
@@ -79,7 +79,7 @@ I thought of an NPM package "Anywhere" that I often use. If you install it globa
 
 Anywhere can run normally on Termux, so can I follow its example and make a package with more features?
 
-This way I can uninstall another App, and it seems impolite to tamper with other people's App at will.
+This way I can uninstall the App, and it seems impolite to tamper with other people's App at will.
 
 After studying the source code of Anywhere and trying out the NestJS online course, I decided to spend no more time on the apk anymore, let's start again! 
 
@@ -93,7 +93,9 @@ It is best to have only two syllables and fewer letters, and the corresponding N
 
 It's really not easy to name it. When I was troubled by it, my one-year-old little daughter gave me inspiration. She has been muttering something like `/'gʌgu/` lately (the pronunciation at the top of the homepage is contributed by her 😜).
 
-I then searched for 'GAGU', and it wasn't registered yet, great! This is where the name of the GAGU project comes from.
+I then searched for 'GAGU', and it wasn't registered yet, great!
+
+This is where the name of the GAGU project comes from.
 
 The default port number and password of the default account are both `9293`, one is because `9293` looks similar to `gagu`, and the other is because my wife and I were born in 1993 and 1992 respectively.
 
