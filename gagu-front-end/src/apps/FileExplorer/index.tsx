@@ -308,6 +308,7 @@ export default function FileExplorer(props: AppComponentProps) {
     Confirmor({
       type: 'download',
       content: message,
+      t,
       onConfirm: async close => {
         const res = await createTunnel({
           type: TunnelType.download,
@@ -324,7 +325,7 @@ export default function FileExplorer(props: AppComponentProps) {
         close()
       },
     })
-  }, [currentPath, selectedEntryList, createTunnel])
+  }, [currentPath, selectedEntryList, createTunnel, t])
 
   const handleShareClick = useCallback((entryList: IEntry[]) => {
     setSharedEntryList(entryList)
@@ -340,6 +341,7 @@ export default function FileExplorer(props: AppComponentProps) {
     Confirmor({
       type: 'delete',
       content: message,
+      t,
       onConfirm: async close => {
         const successList: boolean[] = []
         for (const entry of processList) {
@@ -354,7 +356,7 @@ export default function FileExplorer(props: AppComponentProps) {
         close()
       },
     })
-  }, [deleteEntry, currentPath, selectedEntryList, handleRefresh])
+  }, [deleteEntry, currentPath, selectedEntryList, handleRefresh, t])
 
   useEffect(() => setWindowLoading(fetching), [setWindowLoading, fetching])
 
@@ -623,7 +625,7 @@ export default function FileExplorer(props: AppComponentProps) {
         onClick: () => { },
         children: CALLABLE_APP_LIST.map(app => ({
           icon: <div className="gg-app-icon w-4 h-4" data-app-id={app.id} />,
-          label: app.name,
+          label: t(`app.${app.id}`),
           onClick: () => handleOpenEntry(app),
         })).concat({
           icon: <div className="gg-app-icon w-4 h-4" data-app-id="iina" />,

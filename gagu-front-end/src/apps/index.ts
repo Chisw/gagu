@@ -7,7 +7,6 @@ import VideoPlayer from './Player/VideoPlayer'
 import Settings from './Settings'
 import BaiduMap from './BaiduMap'
 import PQINA from './PQINA'
-import { _t } from '../i18n'
 
 export const APP_ID_MAP = {
   fileExplorer: 'file-explorer',
@@ -19,14 +18,12 @@ export const APP_ID_MAP = {
   settings: 'settings',
   baiduMap: 'baidu-map',
   pqina: 'pqina',
-  webamp: 'webamp',
 }
 
 export const APP_LIST: IApp[] = [
   {
     id: APP_ID_MAP.fileExplorer,
     runningId: 0,
-    name: _t`app.fileExplorer`,
     AppComponent: FileExplorer,
     width: 980,
     height: 640,
@@ -39,7 +36,6 @@ export const APP_LIST: IApp[] = [
   {
     id: APP_ID_MAP.textEditor,
     runningId: 0,
-    name: _t`app.textEditor`,
     AppComponent: TextEditor,
     width: 960,
     height: 720,
@@ -53,7 +49,6 @@ export const APP_LIST: IApp[] = [
   {
     id: APP_ID_MAP.photoViewer,
     runningId: 0,
-    name: _t`app.photoViewer`,
     AppComponent: PhotoViewer,
     width: 720,
     height: 480,
@@ -68,7 +63,6 @@ export const APP_LIST: IApp[] = [
   {
     id: APP_ID_MAP.musicPlayer,
     runningId: 0,
-    name: _t`app.musicPlayer`,
     AppComponent: MusicPlayer,
     width: 480,
     height: 640,
@@ -82,7 +76,6 @@ export const APP_LIST: IApp[] = [
   {
     id: APP_ID_MAP.videoPlayer,
     runningId: 0,
-    name: _t`app.videoPlayer`,
     AppComponent: VideoPlayer,
     width: 640,
     height: 400,
@@ -97,7 +90,6 @@ export const APP_LIST: IApp[] = [
   {
     id: APP_ID_MAP.settings,
     runningId: 0,
-    name: _t`app.settings`,
     AppComponent: Settings,
     width: 800,
     height: 600,
@@ -109,7 +101,6 @@ export const APP_LIST: IApp[] = [
   {
     id: APP_ID_MAP.baiduMap,
     runningId: 0,
-    name: _t`app.baiduMap`,
     AppComponent: BaiduMap,
     width: 800,
     height: 600,
@@ -121,7 +112,6 @@ export const APP_LIST: IApp[] = [
   {
     id: APP_ID_MAP.pqina,
     runningId: 0,
-    name: _t`app.pqina`,
     AppComponent: PQINA,
     width: 800,
     height: 600,

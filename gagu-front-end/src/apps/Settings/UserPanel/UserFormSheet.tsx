@@ -109,7 +109,10 @@ export default function UserFormModal(props: UserFormModalProps) {
         height="100%"
         placement="top"
         maskClosable={false}
-        title={MODE.isCreate ? t`title.newUser` : `${t`title.editUser`}${form.username}`}
+        title={MODE.isCreate
+          ? t`title.settings_users_newUser`
+          : `${t`title.settings_users_editUser`}${form.username}`
+        }
         headerStyle={{ padding: '8px 20px', borderBottom: '1px solid #efefef' }}
         visible={formMode !== 'CLOSE'}
         onCancel={() => setFormMode('CLOSE')}

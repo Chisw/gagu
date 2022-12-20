@@ -1,5 +1,6 @@
 import { useCallback } from 'react'
 import toast from 'react-hot-toast'
+import { useTranslation } from 'react-i18next'
 import { formModeType } from '.'
 import { FsApi, UserApi } from '../../../api'
 import { Confirmor, SvgIcon } from '../../../components/base'
@@ -24,6 +25,8 @@ export default function UserList(props: UserListProps) {
     setForm,
     setFormMode,
   } = props
+
+  const { t } = useTranslation()
 
   const { fetch: updateUserAbility } = useFetch(UserApi.updateUserAbility)
   const { fetch: removeUser } = useFetch(UserApi.removeUser)
@@ -52,7 +55,7 @@ export default function UserList(props: UserListProps) {
     const isAdmin = user.permissions.includes(UserPermission.administer)
     const buttonList = [
       {
-        label: '编辑',
+        label: t`action.edit`,
         icon: <SvgIcon.Edit className="text-gray-500" />,
         show: true,
         onClick: () => {
@@ -62,19 +65,19 @@ export default function UserList(props: UserListProps) {
         },
       },
       {
-        label: '禁用',
+        label: t`action.disable`,
         icon: <SvgIcon.Forbid className="text-yellow-500" />,
         show: !isAdmin && !user.disabled,
         onClick: () => handleUpdateAbility(user.username, 'disable'),
       },
       {
-        label: '启用',
+        label: t`action.enable`,
         icon: <SvgIcon.CheckCircle className="text-green-500" />,
         show: !isAdmin && user.disabled,
         onClick: () => handleUpdateAbility(user.username, 'enable'),
       },
       {
-        label: '删除',
+        label: t`action.delete`,
         icon: <SvgIcon.Delete className="text-red-500" />,
         show: true,
         onClick: () => {
@@ -86,6 +89,7 @@ export default function UserList(props: UserListProps) {
                 <p>{user.nickname} @{user.username}</p>
               </div>
             ),
+            t,
             onConfirm: async close => {
               if (list.filter(u => u.permissions.includes(UserPermission.administer)).length === 1) {
                 toast.error('最后一个管理员无法删除')
@@ -100,7 +104,7 @@ export default function UserList(props: UserListProps) {
       },
     ].filter(b => b.show)
     return buttonList
-  }, [setForm, setFormMode, handleUpdateAbility, handleRemove, list])
+  }, [setForm, setFormMode, handleUpdateAbility, handleRemove, list, t])
 
   return (
     <>

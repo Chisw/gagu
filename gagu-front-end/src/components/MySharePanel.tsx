@@ -1,6 +1,7 @@
 import { Button, SideSheet } from '@douyinfe/semi-ui'
 import { useCallback, useEffect } from 'react'
 import toast from 'react-hot-toast'
+import { useTranslation } from 'react-i18next'
 import { TunnelApi } from '../api'
 import { useFetch } from '../hooks'
 import { ITunnel } from '../types'
@@ -17,6 +18,8 @@ export default function MySharePanel(props: MySharePanelProps) {
 
   const { visible, onClose } = props
 
+  const { t } = useTranslation()
+
   const { fetch: getTunnels, data } = useFetch(TunnelApi.getTunnels)
   const { fetch: deleteTunnel } = useFetch(TunnelApi.deleteTunnel)
 
@@ -30,6 +33,7 @@ export default function MySharePanel(props: MySharePanelProps) {
     Confirmor({
       type: 'delete',
       content: '确定要删除分享吗？',
+      t,
       onConfirm: async close => {
         const res = await deleteTunnel(code)
         if (res?.success) {
@@ -39,7 +43,7 @@ export default function MySharePanel(props: MySharePanelProps) {
         close()
       },
     })
-  }, [deleteTunnel, getTunnels])
+  }, [deleteTunnel, getTunnels, t])
 
   return (
     <>

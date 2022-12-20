@@ -12,8 +12,10 @@
       "copy": "Copy",
       "create": "Create",
       "delete": "Delete",
+      "disable": "Disable",
       "download": "Download",
       "edit": "Edit",
+      "enable": "Enable",
       "exifInfo": "Exif Info",
       "filter": "Filter",
       "folderSize": "Folder Size",
@@ -61,12 +63,12 @@
       "volume": "Volume"
     },
     "app": {
-      "fileExplorer": "File Explorer",
-      "musicPlayer": "Music Player",
-      "photoViewer": "Photo Viewer",
+      "file-explorer": "File Explorer",
+      "music-player": "Music Player",
+      "photo-viewer": "Photo Viewer",
       "settings": "Settings",
-      "textEditor": "Text Editor",
-      "videoPlayer": "Video Player"
+      "text-editor": "Text Editor",
+      "video-player": "Video Player"
     },
     "hint": {
 
@@ -88,14 +90,14 @@
       "totalUsers": "{count} user(s) in total"
     },
     "title": {
-      "advanced": "Advanced",
       "changePassword": "Change Password",
-      "editUser": "Edit User: ",
-      "general": "General",
-      "log": "Log",
-      "newUser": "New User",
-      "system": "System",
-      "users": "Users"
+      "settings_log": "Log",
+      "settings_system": "System",
+      "settings_system_advanced": "Advanced",
+      "settings_system_general": "General",
+      "settings_users": "Users",
+      "settings_users_editUser": "Edit User: ",
+      "settings_users_newUser": "New User"
     }
   }
 }

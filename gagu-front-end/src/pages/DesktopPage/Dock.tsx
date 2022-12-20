@@ -112,7 +112,7 @@ export default function Dock() {
                 <div
                   className="gg-app-icon filter hover:brightness-110 active:brightness-75 transition-all duration-50 w-full h-full cursor-pointer shadow rounded-lg"
                   data-app-id={app.id}
-                  title={app.name}
+                  title={t(`app.${app.id}`)}
                   onClick={() => handleOpenApp(app)}
                   onContextMenu={event => handleContextMenu(event, app)}
                 />

@@ -1,6 +1,7 @@
 import { TabPane, Tabs } from '@douyinfe/semi-ui'
 import { useTranslation } from 'react-i18next'
 import { IPanelProps } from '..'
+import GeneralSettings from './GeneralSettings'
 import AdvancedSettings from './AdvancedSettings'
 
 export default function SystemPanel(props: IPanelProps) {
@@ -11,10 +12,10 @@ export default function SystemPanel(props: IPanelProps) {
     <>
       <div className="absolute inset-0 px-4">
         <Tabs type="line">
-          <TabPane tab={t`title.general`} itemKey="general">
-            ⏳
+          <TabPane tab={t`title.settings_system_general`} itemKey="general">
+            <GeneralSettings />
           </TabPane>
-          <TabPane tab={t`title.advanced`} itemKey="advanced">
+          <TabPane tab={t`title.settings_system_advanced`} itemKey="advanced">
             <AdvancedSettings />
           </TabPane>
         </Tabs>

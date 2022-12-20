@@ -1,11 +1,11 @@
 import { Button, Modal } from '@douyinfe/semi-ui'
 import { ReactNode } from 'react'
 import { SvgIcon } from './SvgIcon'
-import { _t } from '../../i18n'
 
 interface ConfirmorProps {
   type: 'download' | 'delete'
   content: ReactNode
+  t: (key: string | TemplateStringsArray) => string
   onConfirm: (close: () => void) => void
 }
 
@@ -19,6 +19,7 @@ export function Confirmor(props: ConfirmorProps) {
   const {
     type,
     content,
+    t,
     onConfirm,
   } = props
 
@@ -46,14 +47,14 @@ export function Confirmor(props: ConfirmorProps) {
           style={{ margin: 0 }}
           onClick={() => confirm.destroy()}
         >
-          {_t`action.cancel`}
+          {t`action.cancel`}
         </Button>
         <Button
           theme="solid"
           className="w-full"
           onClick={() => onConfirm(confirm.destroy)}
         >
-          {_t`action.confirm`}
+          {t`action.confirm`}
         </Button>
       </div>
     ),

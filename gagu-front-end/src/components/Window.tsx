@@ -5,6 +5,7 @@ import { useRecoilState } from 'recoil'
 import { runningAppListState, topWindowIndexState } from '../states'
 import { line } from '../utils'
 import { SvgIcon } from './base'
+import { useTranslation } from 'react-i18next'
 
 const SAME_CLASS_NAME = `w-8 h-8 flex justify-center items-center cursor-pointer transition-all duration-200`
 const DURATION = 200
@@ -19,7 +20,6 @@ export default function Window(props: WindowProps) {
     app: {
       id: appId,
       runningId,
-      name,
       width,
       height,
       resizeRange,
@@ -27,6 +27,8 @@ export default function Window(props: WindowProps) {
       AppComponent,
     },
   } = props
+
+  const { t } = useTranslation()
 
   const [topWindowIndex, setTopWindowIndex] = useRecoilState(topWindowIndexState)
   const [runningAppList, setRunningAppList] = useRecoilState(runningAppListState)
@@ -174,7 +176,7 @@ export default function Window(props: WindowProps) {
                 data-app-id={appId}
               />
               <span className="ml-2 text-xs">
-                {windowTitle || name}
+                {windowTitle || t`app.${appId}`}
               </span>
             </div>
             {/* Mask: prevent out of focus in iframe */}

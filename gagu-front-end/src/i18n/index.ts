@@ -6,8 +6,8 @@ import zh_CN from './locales/zh-CN.json'
 const I18N_LOCALE_KEY = 'GAGU_I18N_LOCALE'
 
 const languageList = [
-  { key: 'en-US', name: 'English', resource: en_US },
-  { key: 'zh-CN', name: '简体中文', resource: zh_CN },
+  { key: 'en-US', icon: '🇬🇧', name: 'English', resource: en_US },
+  { key: 'zh-CN', icon: '🇨🇳', name: '简体中文', resource: zh_CN },
 ]
 
 const resources: Resource = Object.fromEntries(languageList.map(lang => [lang.key, lang.resource]))
@@ -37,12 +37,9 @@ const setLocale = (locale: string) => {
   i18n.changeLanguage(locale)
 }
 
-const { t: _t } = i18n
-
 export default i18n
 
 export {
-  _t,
   languageList,
   setLocale,
 }
