@@ -49,10 +49,11 @@ Many unrealized ideas will be recorded here, waiting for development.
 - Code highlighting
 - Generate pictures for sharing
 
-### Image Viewer
+### Photo Viewer
 
 - Support panorama pictures
 - Crop
+- View location on map
 
 ### Music Player
 

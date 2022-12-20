@@ -1,11 +1,14 @@
 import { Button, Form } from '@douyinfe/semi-ui'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
+import { useTranslation } from 'react-i18next'
 import { SettingApi } from '../../../api'
 import { useFetch } from '../../../hooks'
 import { ISetting, SettingForm } from '../../../types'
 
 export default function AdvancedSettings() {
+
+  const { t } = useTranslation()
 
   const [form, setForm] = useState<SettingForm>(new SettingForm())
   const [formCache, setFormCache] = useState<SettingForm>(new SettingForm())
@@ -43,13 +46,13 @@ export default function AdvancedSettings() {
         {!getting && (
           <Form
             labelPosition="left"
-            labelWidth={100}
+            labelWidth={120}
             initValues={form}
             onSubmit={() => handleSubmit()}
           >
             <Form.Input
               showClear
-              label="服务端口号"
+              label={t`label.servicePort`}
               placeholder="9293 (default)"
               field="port"
               autoComplete="off"
@@ -71,7 +74,7 @@ export default function AdvancedSettings() {
             />
             <Form.Input
               showClear
-              label="设备名称"
+              label={t`label.deviceName`}
               placeholder="Device name"
               field="deviceName"
               autoComplete="off"
@@ -86,7 +89,7 @@ export default function AdvancedSettings() {
                 htmlType="submit"
                 className="w-32"
                 loading={updating}
-                children="保存"
+                children={t`action.save`}
                 disabled={disabled}
               />
             </div>

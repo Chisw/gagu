@@ -53,6 +53,7 @@ layout: ../../../layouts/DocLayout.astro
 
 - 支持全景图片
 - 裁切
+- 显示照片位置
 
 ### 音乐播放器
 

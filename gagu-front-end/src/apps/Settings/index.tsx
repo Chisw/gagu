@@ -5,15 +5,16 @@ import { line } from '../../utils'
 import SystemPanel from './SystemPanel'
 import UserPanel from './UserPanel'
 import LogPanel from './LogPanel'
+import { _t } from '../../i18n'
 
 export interface IPanelProps {
   setWindowLoading: (loading: boolean) => void
 }
 
 const tabList = [
-  { key: 'system', icon: <SvgIcon.Settings size={14} />, label: '系统', Panel: SystemPanel },
-  { key: 'user', icon: <SvgIcon.User size={14} />, label: '用户管理', Panel: UserPanel},
-  { key: 'log', icon: <SvgIcon.Booklet size={14} />, label: '日志', Panel: LogPanel},
+  { key: 'system', icon: <SvgIcon.Settings size={14} />, label: _t`title.system`, Panel: SystemPanel },
+  { key: 'user', icon: <SvgIcon.User size={14} />, label: _t`title.users`, Panel: UserPanel},
+  { key: 'log', icon: <SvgIcon.Booklet size={14} />, label: _t`title.log`, Panel: LogPanel},
 ]
 
 export default function Settings (props: AppComponentProps) {

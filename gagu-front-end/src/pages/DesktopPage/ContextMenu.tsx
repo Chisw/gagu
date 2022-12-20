@@ -8,9 +8,9 @@ import { contextMenuDataState } from '../../states'
 
 export default function ContextMenu() {
 
-  const [menuShow, setMenuShow] = useState(false)
-
   const { pathname } = useLocation()
+
+  const [menuShow, setMenuShow] = useState(false)
 
   useEffect(() => {
     setTimeout(() => setMenuShow(false))

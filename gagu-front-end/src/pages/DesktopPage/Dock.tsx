@@ -6,8 +6,11 @@ import { IApp, IContextMenuItem } from '../../types'
 import { line } from '../../utils'
 import { SvgIcon } from '../../components/base'
 import toast from 'react-hot-toast'
+import { useTranslation } from 'react-i18next'
 
 export default function Dock() {
+
+  const { t } = useTranslation()
 
   const [isEffected, setIsEffected] = useState(false)
 
@@ -58,19 +61,19 @@ export default function Dock() {
     const menuItemList: IContextMenuItem[] = [
       {
         icon: <SvgIcon.Add />,
-        label: hasRunning ? '新建窗口' : '打开',
+        label: hasRunning ? t`action.newWindow` : t`action.open`,
         isShow: !hasRunning || app.multiple,
         onClick: () => handleOpenApp(app, true),
       },
       {
         icon: <SvgIcon.Links />,
-        label: '新建连接',
+        label: t`action.newConnection` + ' ⏳',
         isShow: app.id === APP_ID_MAP.fileExplorer,
-        onClick: () => toast('开发中'),
+        onClick: () => toast('⏳'),
       },
       {
         icon: <SvgIcon.Close />,
-        label: '关闭所有窗口',
+        label: t`action.closeAllWindows`,
         isShow: hasRunning,
         onClick: () => {
           const list = runningAppList.filter(app => app.id !== appId)
@@ -80,7 +83,7 @@ export default function Dock() {
     ]
 
     setContextMenuData({ eventData, menuItemList, isDock: true })
-  }, [runningAppList, setRunningAppList, handleOpenApp, setContextMenuData])
+  }, [runningAppList, setRunningAppList, handleOpenApp, setContextMenuData, t])
 
   return (
     <>
@@ -109,7 +112,7 @@ export default function Dock() {
                 <div
                   className="gg-app-icon filter hover:brightness-110 active:brightness-75 transition-all duration-50 w-full h-full cursor-pointer shadow rounded-lg"
                   data-app-id={app.id}
-                  title={app.title}
+                  title={app.name}
                   onClick={() => handleOpenApp(app)}
                   onContextMenu={event => handleContextMenu(event, app)}
                 />

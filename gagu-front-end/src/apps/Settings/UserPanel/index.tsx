@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { IPanelProps } from '..'
 import { UserApi } from '../../../api'
 import { SvgIcon } from '../../../components/base'
@@ -14,6 +15,8 @@ export default function UserPanel(props: IPanelProps) {
   const {
     setWindowLoading,
   } = props
+
+  const { t } = useTranslation()
 
   const [formMode, setFormMode] = useState<formModeType>('CLOSE')
   const [form, setForm] = useState<IUserForm>(new UserForm())
@@ -39,7 +42,7 @@ export default function UserPanel(props: IPanelProps) {
       <div className="gg-app-settings-user-form absolute z-0 inset-0 px-4 py-2 overflow-x-hidden overflow-y-auto">
 
         <div className="text-sm flex justify-between items-center">
-          <div>共 {userList.length} 位用户</div>
+          <div>{t('tip.totalUsers', { count: userList.length })}</div>
           <div className="flex items-center">
             <div
               title="刷新"

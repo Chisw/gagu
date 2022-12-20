@@ -22,5 +22,5 @@
   },
   "include": [
     "src"
-  ]
+, "typing/react-i18next.d.ts", "typing/react-i18next.d.ts"  ]
 }

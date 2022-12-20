@@ -50,6 +50,7 @@ import {
   TunnelType,
 } from '../../types'
 import ShareModal from '../../components/ShareModal'
+import { useTranslation } from 'react-i18next'
 
 export default function FileExplorer(props: AppComponentProps) {
 
@@ -59,6 +60,8 @@ export default function FileExplorer(props: AppComponentProps) {
     setWindowTitle,
     setWindowLoading,
   } = props
+
+  const { t } = useTranslation()
 
   const [rootInfo] = useRecoilState(rootInfoState)
   const [sizeMap, setSizeMap] = useRecoilState(sizeMapState)
@@ -591,36 +594,36 @@ export default function FileExplorer(props: AppComponentProps) {
     const menuItemList: IContextMenuItem[] = [
       {
         icon: <SvgIcon.FolderAdd />,
-        label: '新建文件夹',
+        label: t`action.newFolder`,
         isShow: isOnBlank,
         onClick: () => setNewDirMode(true),
       },
       {
         icon: <SvgIcon.FileAdd />,
-        label: '新建文本文件',
+        label: t`action.newTextFile`,
         isShow: isOnBlank,
         onClick: () => setNewTxtMode(true),
       },
       {
         icon: <SvgIcon.Refresh />,
-        label: '刷新',
+        label: t`action.refresh`,
         isShow: isOnBlank,
         onClick: handleRefresh,
       },
       {
         icon: <SvgIcon.Edit />,
-        label: '重命名',
+        label: t`action.rename`,
         isShow: isSingleConfirmed,
         onClick: () => setTimeout(handleRename, 0),
       },
       {
         icon: <SvgIcon.Apps />,
-        label: '打开方式',
+        label: t`action.openWith`,
         isShow: !isOnDir && isSingleConfirmed,
         onClick: () => { },
         children: CALLABLE_APP_LIST.map(app => ({
           icon: <div className="gg-app-icon w-4 h-4" data-app-id={app.id} />,
-          label: app.title,
+          label: app.name,
           onClick: () => handleOpenEntry(app),
         })).concat({
           icon: <div className="gg-app-icon w-4 h-4" data-app-id="iina" />,
@@ -630,31 +633,31 @@ export default function FileExplorer(props: AppComponentProps) {
       },
       {
         icon: <SvgIcon.FolderInfo />,
-        label: '文件夹大小',
+        label: t`action.folderSize`,
         isShow: isOnDir,
         onClick: () => updateDirSize(contextEntryList[0]),
       },
       {
         icon: <SvgIcon.Upload />,
-        label: '上传',
+        label: t`action.upload`,
         isShow: isOnBlank,
         onClick: handleUploadClick,
       },
       {
         icon: <SvgIcon.Download />,
-        label: '下载',
+        label: t`action.download`,
         isShow: true,
         onClick: () => handleDownloadClick(contextEntryList),
       },
       {
         icon: <SvgIcon.Share />,
-        label: '创建分享',
+        label: t`action.newSharing`,
         isShow: !isOnBlank,
         onClick: () => handleShareClick(contextEntryList),
       },
       {
         icon: <SvgIcon.Delete />,
-        label: '删除',
+        label: t`action.delete`,
         isShow: !isOnBlank,
         onClick: () => handleDeleteClick(contextEntryList),
       },
@@ -673,6 +676,7 @@ export default function FileExplorer(props: AppComponentProps) {
     handleDownloadClick,
     handleDeleteClick,
     handleShareClick,
+    t,
   ])
 
   return (
@@ -702,7 +706,7 @@ export default function FileExplorer(props: AppComponentProps) {
             onSelectAll={handleSelectAll}
           />
           <div
-            title={sideCollapse ? '展开' : '收起'}
+            title={sideCollapse ? t`action.unfold` : t`action.fold`}
             className={line(`
               absolute z-10 top-1/2 left-0 w-2 h-12 bg-gray-200 rounded-r-sm
               opacity-40 hover:bg-gray-300

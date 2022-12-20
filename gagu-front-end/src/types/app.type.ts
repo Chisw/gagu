@@ -14,7 +14,7 @@ interface IAppComponent {
 export interface IApp {
   id: string
   runningId: number
-  title: string
+  name: string
   AppComponent: IAppComponent
   width: number
   height: number

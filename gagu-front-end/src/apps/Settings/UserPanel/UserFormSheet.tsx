@@ -8,6 +8,7 @@ import { useFetch } from '../../../hooks'
 import { IUserForm, UserPermission } from '../../../types'
 import { getImageTypeBase64ByURL, line, permissionSorter } from '../../../utils'
 import { Button, Form, SideSheet } from '@douyinfe/semi-ui'
+import { useTranslation } from 'react-i18next'
 
 const handleScrollToError = () => {
   const top = document.querySelector('.gg-app-settings-user-form .semi-form-field-error-message')?.closest('.semi-form-field')?.getBoundingClientRect()?.top
@@ -33,6 +34,8 @@ export default function UserFormModal(props: UserFormModalProps) {
     setForm,
     setFormMode,
   } = props
+
+  const { t } = useTranslation()
 
   const MODE = useMemo(() => {
     return {
@@ -106,7 +109,7 @@ export default function UserFormModal(props: UserFormModalProps) {
         height="100%"
         placement="top"
         maskClosable={false}
-        title={MODE.isCreate ? '创建用户' : `编辑用户：${form.username}`}
+        title={MODE.isCreate ? t`title.newUser` : `${t`title.editUser`}${form.username}`}
         headerStyle={{ padding: '8px 20px', borderBottom: '1px solid #efefef' }}
         visible={formMode !== 'CLOSE'}
         onCancel={() => setFormMode('CLOSE')}
@@ -120,7 +123,7 @@ export default function UserFormModal(props: UserFormModalProps) {
             onSubmit={() => handleSubmit()}
           >
             <div className="pb-3 flex">
-              <Form.Label width={100}>头像</Form.Label>
+              <Form.Label width={100}>{t`label.avatar`}</Form.Label>
               <div
                 className={line(`
                   relative p-1 w-24 h-24
@@ -146,7 +149,7 @@ export default function UserFormModal(props: UserFormModalProps) {
             </div>
             <Form.Input
               showClear
-              label="昵称"
+              label={t`label.nickname`}
               placeholder="Nickname"
               field="nickname"
               autoComplete="off"
@@ -162,7 +165,7 @@ export default function UserFormModal(props: UserFormModalProps) {
             <Form.Input
               showClear
               disabled={MODE.isEdit}
-              label="用户名"
+              label={t`label.username`}
               placeholder="Username"
               field="username"
               autoComplete="off"
@@ -178,7 +181,7 @@ export default function UserFormModal(props: UserFormModalProps) {
             />
             <Form.Input
               showClear
-              label="密码"
+              label={t`label.password`}
               placeholder="Password"
               type="password"
               field="password"
@@ -195,7 +198,7 @@ export default function UserFormModal(props: UserFormModalProps) {
             />
             <Form.Input
               showClear
-              label="确认密码"
+              label={t`label.passwordConfirmed`}
               placeholder="Password"
               type="password"
               field="password2"
@@ -222,7 +225,7 @@ export default function UserFormModal(props: UserFormModalProps) {
             />
             <Form.DatePicker
               type="dateTime"
-              label="有效期至"
+              label={t`label.validUntil`}
               field="expiredAt"
               className="w-full"
               extraText="永不过期请留空"
@@ -231,7 +234,7 @@ export default function UserFormModal(props: UserFormModalProps) {
               onChange={date => setForm({ ...form, expiredAt: new Date(date as Date).getTime() })}
             />
             <Form.CheckboxGroup
-              label="权限"
+              label={t`label.permissions`}
               field="permissions"
               onChange={value => setForm({ ...form, permissions: value })}
             >
@@ -259,7 +262,7 @@ export default function UserFormModal(props: UserFormModalProps) {
             <div className="pt-2 flex justify-end">
               <Button
                 type="tertiary"
-                children="取消"
+                children={t`action.cancel`}
                 onClick={() => setFormMode('CLOSE')}
               />
               &emsp;
@@ -269,7 +272,7 @@ export default function UserFormModal(props: UserFormModalProps) {
                 htmlType="submit"
                 className="w-32"
                 loading={creating || updating}
-                children={MODE.isCreate ? '创建' : '保存'}
+                children={MODE.isCreate ? t`action.create` : t`action.save`}
                 onClick={handleScrollToError}
               />
             </div>

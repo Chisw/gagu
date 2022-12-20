@@ -13,6 +13,7 @@ import { DOCUMENT_TITLE, line, PULSE_INTERVAL, USER_INFO } from '../../utils'
 import QrCode from 'qrcode.react'
 import TransferPanel from './TransferPanel'
 import MySharePanel from '../../components/MySharePanel'
+import { useTranslation } from 'react-i18next'
 
 const modeList = [
   { key: 'desktop', icon: <SvgIcon.Desktop /> },
@@ -23,6 +24,7 @@ const modeList = [
 export default function MenuBar() {
 
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const { pathname } = useLocation()
 
   const [isEffected, setIsEffected] = useState(false)
@@ -143,7 +145,7 @@ export default function MenuBar() {
                   </div>
                   <div className="flex">
                     <a
-                      title="访问网站"
+                      title={t`action.visitWebsite`}
                       target="_blank"
                       rel="noreferrer"
                       className="text-gray-400 hover:text-blue-600"
@@ -152,7 +154,7 @@ export default function MenuBar() {
                       <SvgIcon.Earth />
                     </a>
                     <a
-                      title="代码仓库"
+                      title={t`action.visitGithub`}
                       target="_blank"
                       rel="noreferrer"
                       className="ml-1 text-gray-400 hover:text-blue-600"
@@ -173,7 +175,7 @@ export default function MenuBar() {
                     }
                   }}
                 >
-                  {isFullScreen ? '退出全屏' : '进入全屏'}
+                  {isFullScreen ? t`action.fullScreenExit` : t`action.fullScreenEnter`}
                 </Dropdown.Item>
                 <Dropdown.Item
                   icon={<SvgIcon.Refresh />}
@@ -182,7 +184,7 @@ export default function MenuBar() {
                     getRootInfo()
                   }}
                 >
-                  刷新
+                  {t`action.refresh`}
                 </Dropdown.Item>
                 <Dropdown
                   position="rightTop"
@@ -197,7 +199,7 @@ export default function MenuBar() {
                 >
                   <Dropdown.Item icon={<SvgIcon.QrCode />}>
                     <div className="w-full flex justify-between items-center">
-                      <span>二维码</span>
+                      <span>{t`action.qrCode`}</span>
                       <SvgIcon.ChevronRight className="text-gray-400"/>
                     </div>
                   </Dropdown.Item>
@@ -212,7 +214,7 @@ export default function MenuBar() {
                           icon={icon}
                           onClick={() => navigate(`/${key}`)}
                         >
-                          <span className="capitalize">{key}</span>&nbsp;模式
+                          <span className="capitalize">{key}</span>&nbsp;{t`label.mode`}
                         </Dropdown.Item>
                       ))}
                     </Dropdown.Menu>
@@ -220,7 +222,7 @@ export default function MenuBar() {
                 >
                   <Dropdown.Item icon={<SvgIcon.Flash />}>
                     <div className="w-full flex justify-between items-center">
-                      <span>切换至</span>
+                      <span>{t`action.switchTo`}</span>
                       <SvgIcon.ChevronRight className="text-gray-400"/>
                     </div>
                   </Dropdown.Item>
@@ -232,7 +234,7 @@ export default function MenuBar() {
                     window.close()
                   }}
                 >
-                  关闭系统
+                  {t`action.shutdown`}
                 </Dropdown.Item>
               </Dropdown.Menu>
             )}
@@ -286,7 +288,7 @@ export default function MenuBar() {
                     setShareVisible(true)
                   }}
                 >
-                  我的分享
+                  {t`action.mySharing`}
                 </Dropdown.Item>
                 {/* <Dropdown.Item
                   icon={<SvgIcon.Key />}
@@ -295,7 +297,7 @@ export default function MenuBar() {
                     setTimeout(() => setPasswordModalShow(true))
                   }}
                 >
-                  修改密码
+                  {t`action.changePassword`}
                 </Dropdown.Item> */}
                 <Dropdown.Item
                   icon={<SvgIcon.Logout />}
@@ -305,7 +307,7 @@ export default function MenuBar() {
                     navigate('/login')
                   }}
                 >
-                  退出登录
+                  {t`action.logout`}
                 </Dropdown.Item>
               </Dropdown.Menu>
             )}
@@ -337,11 +339,10 @@ export default function MenuBar() {
       </div>
 
       <Modal
-        title="修改密码"
+        title={t`title.changePassword`}
         visible={passwordModalShow}
         onCancel={() => setPasswordModalShow(false)}
       >
-
         
       </Modal>
 

@@ -19,7 +19,7 @@ export default function Window(props: WindowProps) {
     app: {
       id: appId,
       runningId,
-      title,
+      name,
       width,
       height,
       resizeRange,
@@ -174,7 +174,7 @@ export default function Window(props: WindowProps) {
                 data-app-id={appId}
               />
               <span className="ml-2 text-xs">
-                {windowTitle || title}
+                {windowTitle || name}
               </span>
             </div>
             {/* Mask: prevent out of focus in iframe */}
