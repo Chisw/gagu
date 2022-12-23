@@ -91,6 +91,7 @@ $ yarn start
 [md5](https://npmjs.com/package/md5)&emsp;
 [qrcode.react](https://npmjs.com/package/qrcode.react)&emsp;
 [react-hot-toast](https://npmjs.com/package/react-hot-toast)&emsp;
+[react-i18next](https://npmjs.com/package/react-i18next)&emsp;
 [react-photo-view](https://npmjs.com/package/react-photo-view)&emsp;
 [react-rnd](https://npmjs.com/package/react-rnd)&emsp;
 [recoil](https://npmjs.com/package/recoil)&emsp;

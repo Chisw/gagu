@@ -95,22 +95,22 @@ $ gagu --reset-all
 
 ### 工作空间
 
-GAGU 的运行需要本地提供一个根目录（GAGU_PATH.ROOT）来存储一些数据。
+GAGU 的运行需要本地提供一个属于自己的根目录（GAGU_PATH.ROOT）来存储一些数据。
 
 每次启动服务时，GAGU 会检测这个根目录是否存在，如不存在，则会自动在工作空间创建一个名为 `.io.gagu` 的根目录。
 
-在不同的平台会选择不同的工作空间来创建，此处假设登录设备的用户名为 `mia`：
+在不同的平台会选择不同的工作空间来创建，此处假设登录设备的用户名为 `jay`：
 
 - Windows:
 
 ```
-C:/Users/mia/.io.gagu
+C:/Users/jay/.io.gagu
 ```
 
 - macOS:
 
 ```
-/Users/mia/.io.gagu
+/Users/jay/.io.gagu
 ```
 
 - Linux:
@@ -127,11 +127,11 @@ C:/Users/mia/.io.gagu
 
 `/data/data/com.termux/files/home/storage/shared` 指向的是安卓系统挂载的内部存储，在 Termux 中需要通过 `termux-setup-storage` 获取。
 
-Termux 的使用可以参考 [Termux Wiki](https://wiki.termux.com/) 或者 [国光 Termux 高级终端安装使用配置教程](https://www.sqlsec.com/2018/05/termux.html)。
+Termux 的使用可以参考 [Termux Wiki](https://wiki.termux.com/) 或者 [Termux 高级终端安装使用配置教程](https://www.sqlsec.com/2018/05/termux.html)。
 
 ### 根目录
 
-属于 GAGU 自己的根目录 `.io.gagu` 是一个以 `.` 开头命名的隐藏文件夹，在设备上可以通过具体的设置显示出来，但在 GAGU 的 API 中会被强制过滤，即使是拥有管理员权限的用户也无法在 GAGU 的 Web 页面中访问到它。
+GAGU 的根目录 `.io.gagu` 是一个以 `.` 开头命名的隐藏文件夹，在设备上可以通过具体的设置显示出来，但在 GAGU 的 API 中会被强制过滤，即使是拥有管理员权限的用户也无法在 GAGU 的 Web 页面中访问到它。
 
 根目录创建成功后，会继续创建以下子目录：
 
@@ -150,7 +150,7 @@ Termux 的使用可以参考 [Termux Wiki](https://wiki.termux.com/) 或者 [国
 - `thumbnail` 用于存放使用中生成的缩略图。
 
 <div class="apply-tip">
-如果是在本地开发时启动服务，根目录会被创建为 `WORKSPACE/.io.gagu.dev`。
+本地开发时，根目录会被创建为 `WORKSPACE/.io.gagu.dev`。
 </div>
 
 ### 缩略图

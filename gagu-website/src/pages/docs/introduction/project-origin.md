@@ -48,7 +48,7 @@ The internal code is written in jQuery, the overall readability is not high, and
 
 After several adjustments, I found that errors have begun to be reported and it cannot run normally.
 
-In this way, I had to give up on continuing to improve it, keep the server-side interface part, and then use React to rewrite the front-end part.
+In this way, I had to give up on continuing to improve it. Keep the server-side interface part, and then use React to rewrite the front-end part.
 
 I built a new repository, simulates a desktop system design, named it WFMS (Web File Management System), and started a new round of development.
 
@@ -60,7 +60,6 @@ It can be said that this is a ‘system’ that combines macOS layout, Windows w
 
 As the development process continued to deepen, some new problems were discovered:
 
-- One-time request for all thumbnails in the directory
 - The data fields are not uniform and the format is confusing
 - Cross-domain access is not allowed (cannot customize hosts to modify access domain)
 - Passwords are transmitted in clear text via GET requests
@@ -79,7 +78,7 @@ I thought of an NPM package "Anywhere" that I often use. If you install it globa
 
 Anywhere can run normally on Termux, so can I follow its example and make a package with more features?
 
-This way I can uninstall the App, and it seems impolite to tamper with other people's App at will.
+This way I can uninstall X-plore, and it seems impolite to tamper with other people's App at will.
 
 After studying the source code of Anywhere and trying out the NestJS online course, I decided to spend no more time on the apk anymore, let's start again! 
 
@@ -91,7 +90,7 @@ When I planned to completely separate the project, I thought of renaming it, bec
 
 It is best to have only two syllables and fewer letters, and the corresponding NPM package name and domain name cannot be registered.
 
-It's really not easy to name it. When I was troubled by it, my one-year-old little daughter gave me inspiration. She has been muttering something like `/'gʌgu/` lately (the pronunciation at the top of the homepage is contributed by her 😜).
+It's really not easy to name it. When I was troubled by it, my one-year-old little daughter gave me inspiration. She has been muttering something like `/'gʌgu/` lately (the pronunciation at the top of the homepage is contributed by her 😜), we don't understand it.
 
 I then searched for 'GAGU', and it wasn't registered yet, great!
 

@@ -95,22 +95,22 @@ Stop service：
 
 ### Workspace
 
-The running of GAGU requires a local root directory (GAGU_PATH.ROOT) to store some data.
+The running of GAGU needs to provide a local root directory of its own (GAGU_PATH.ROOT) to store some data.
 
 Every time the service is started, GAGU will detect whether the root directory exists, and if it does not exist, it will automatically create a root directory named `.io.gagu` in the workspace.
 
-Different platforms will choose different workspaces to create. Here, it is assumed that the user name of the login device is `mia`:
+Different platforms will choose different workspaces to create. Here, it is assumed that the user name of the login device is `jay`:
 
 - Windows:
 
 ```
-C:/Users/mia/.io.gagu
+C:/Users/jay/.io.gagu
 ```
 
 - macOS:
 
 ```
-/Users/mia/.io.gagu
+/Users/jay/.io.gagu
 ```
 
 - Linux:
@@ -127,11 +127,11 @@ C:/Users/mia/.io.gagu
 
 `/data/data/com.termux/files/home/storage/shared` points to the internal storage mounted by the Android system, which needs to be obtained through `termux-setup-storage` in Termux.
 
-For the use of Termux, please refer to [Termux Wiki](https://wiki.termux.com/) or [Guoguang Termux Advanced Terminal Installation and Configuration Tutorial](https://www.sqlsec.com/2018/05/termux.html ).
+For the use of Termux, please refer to [Termux Wiki](https://wiki.termux.com/) or [Termux Advanced Terminal Installation and Configuration Tutorial](https://www.sqlsec.com/2018/05/termux.html ).
 
 ### Root Directory
 
-GAGU's own root directory `.io.gagu` is a hidden folder named at the beginning of `.`, which can be displayed on the device through specific settings, but will be forcibly filtered in GAGU's API, even if it has Users with administrator rights cannot access it in GAGU's Web page.
+GAGU's root directory `.io.gagu` is a hidden folder named at the beginning of `.`, which can be displayed on the device through specific settings, but will be forcibly filtered in GAGU's API, even if it has Users with administrator rights cannot access it in GAGU's Web page.
 
 After the root directory is successfully created, the following subdirectories will continue to be created:
 
