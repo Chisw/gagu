@@ -22,7 +22,7 @@
       "fullScreenEnter": "进入全屏",
       "fullScreenExit": "退出全屏",
       "gridView": "网格视图",
-      "hideHiddenItems": "隐藏隐藏项",
+      "hideHiddenItems": "不显示隐藏项",
       "listView": "列表视图",
       "logout": "退出",
       "maximize": "最大化",
@@ -59,7 +59,7 @@
       "unfold": "展开",
       "upload": "上传",
       "visitWebsite": "访问网站",
-      "visitGithub": "访问 Github",
+      "visitGithub": "访问 GitHub",
       "volume": "音量"
     },
     "app": {
@@ -85,6 +85,23 @@
       "servicePort": "服务端口号",
       "username": "用户名",
       "validUntil": "有效期至"
+    },
+    "server": {
+      "OK": "OK",
+      "ERROR_PASSWORD_WRONG": "密码错误",
+      "ERROR_USER_NOT_EXISTED": "用户不存在",
+      "ERROR_USER_EXISTED": "用户已存在",
+      "ERROR_USER_DISABLED": "用户已禁用",
+      "ERROR_USER_EXPIRED": "用户已过期",
+      "ERROR_TOKEN_INVALID": "非法令牌",
+      "ERROR_TUNNEL_NOT_EXISTED": "通道不存在",
+      "ERROR_TUNNEL_NO_LEFT": "通道无可下载次数",
+      "ERROR_TUNNEL_EXPIRED": "通道已过期",
+      "ERROR_TUNNEL_PASSWORD_WRONG": "通道密码错误",
+      "ERROR_TUNNEL_PASSWORD_NEEDED": "通道需要密码",
+      "ERROR_EXIF": "EXIF 获取失败",
+      "ERROR_TAGS": "音乐信息获取失败",
+      "ERROR_403": "权限不足"
     },
     "tip": {
       "totalUsers": "共 {count} 位用户"

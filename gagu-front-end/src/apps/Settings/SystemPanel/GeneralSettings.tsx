@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { languageList, setLocale } from '../../../i18n'
+import { languageList, setLanguage } from '../../../i18n'
 import { line } from '../../../utils'
 
 export default function GeneralSettings() {
@@ -17,7 +17,7 @@ export default function GeneralSettings() {
                 inline-block mr-2 px-3 py-1 border rounded cursor-pointer select-none
                 ${key === language ? 'border-blue-600' : 'hover:border-blue-300'}
               `)}
-              onClick={() => setLocale(key)}
+              onClick={() => setLanguage(key)}
             >
               {icon} {name}
             </div>

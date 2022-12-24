@@ -86,6 +86,23 @@
       "username": "Username",
       "validUntil": "Valid Until"
     },
+    "server": {
+      "OK": "OK",
+      "ERROR_PASSWORD_WRONG": "Wrong password",
+      "ERROR_USER_NOT_EXISTED": "User does not exist",
+      "ERROR_USER_EXISTED": "User already exists",
+      "ERROR_USER_DISABLED": "User disabled",
+      "ERROR_USER_EXPIRED": "User expired",
+      "ERROR_TOKEN_INVALID": "Invalid token",
+      "ERROR_TUNNEL_NOT_EXISTED": "Tunnel does not exist",
+      "ERROR_TUNNEL_NO_LEFT": "Tunnel has no left download times",
+      "ERROR_TUNNEL_EXPIRED": "Tunnel expired",
+      "ERROR_TUNNEL_PASSWORD_WRONG": "Wrong tunnel password",
+      "ERROR_TUNNEL_PASSWORD_NEEDED": "Tunnel needs password",
+      "ERROR_EXIF": "Failed to get EXIF info",
+      "ERROR_TAGS": "Failed to get music tags",
+      "ERROR_403": "Insufficient permissions"
+    },
     "tip": {
       "totalUsers": "{count} user(s) in total"
     },

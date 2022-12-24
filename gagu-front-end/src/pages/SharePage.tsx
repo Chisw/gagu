@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom'
 import { DownloadApi, FsApi, TunnelApi } from '../api'
 import { Spinner, SvgIcon } from '../components/base'
 import EntryListPanel from '../components/EntryListPanel'
+import PublicFooter from '../components/PublicFooter'
 import { useFetch } from '../hooks'
 import { getDateTime, SERVER_MESSAGE_MAP } from '../utils'
 
@@ -132,7 +133,7 @@ export default function SharePage() {
 
   return (
     <>
-      <div className="absolute z-0 inset-0 bg-gradient-to-b from-gray-600 to-gray-400 flex justify-center items-center">
+      <div className="absolute z-0 inset-0 bg-gradient-to-b from-gray-700 to-gray-500 flex justify-center items-center">
         <div className="relative m-4 md:m-0 px-4 md:px-10 py-8 w-full md:w-160 bg-white rounded-2xl shadow-2xl overflow-hidden">
           <div className="absolute z-0 top-0 right-0 -mt-16 -mr-16">
             <SvgIcon.Share className="text-gray-100" size={320} />
@@ -246,16 +247,7 @@ export default function SharePage() {
         </div>
       </div>
 
-      <div className="absolute bottom-0 py-4 w-full text-center text-xs">
-        <a
-          rel="noreferrer"
-          href="https://gagu.io"
-          target="_blank"
-          className="opacity-30 hover:opacity-70 font-g"
-        >
-          GAGU.IO
-        </a>
-      </div>
+      <PublicFooter />
     </>
   )
 }
