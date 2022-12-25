@@ -25,17 +25,17 @@ export default function PublicFooter() {
           className="semi-always-dark"
           trigger="click"
           content={(
-            <div>
-              {languageList.map(({ key, icon, name }) => (
+            <div className="-my-2">
+              {languageList.map(({ key, name }) => (
                 <div
                   key={key}
                   className={line(`
-                    my-2 px-2 cursor-pointer select-none text-sm text-white
+                    my-2 px-1 cursor-pointer select-none text-sm text-white text-center
                     ${key === language ? 'opacity-100' : 'opacity-50 hover:opacity-100'}
                   `)}
                   onClick={() => setLanguage(key)}
                 >
-                  {icon} {name}
+                  {name}
                 </div>
               ))}
             </div>

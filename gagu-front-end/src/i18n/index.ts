@@ -8,10 +8,10 @@ import ja_JP from './locales/ja-JP.json'
 const I18N_LANGUAGE_KEY = 'GAGU_I18N_LANGUAGE'
 
 const languageList = [
-  { key: 'zh-HS', icon: '🇨🇳', name: '简体中文', resource: zh_hans },
-  { key: 'zh-HT', icon: '🇨🇳', name: '繁體中文', resource: zh_hant },
-  { key: 'en-US', icon: '🇺🇸', name: 'English', resource: en_US },
-  { key: 'ja-JP', icon: '🇯🇵', name: '日本語', resource: ja_JP },
+  { key: 'zh-HS', name: '简体中文', resource: zh_hans },
+  { key: 'zh-HT', name: '繁體中文', resource: zh_hant },
+  { key: 'en-US', name: 'English', resource: en_US },
+  { key: 'ja-JP', name: '日本語', resource: ja_JP },
 ]
 
 const resources: Resource = Object.fromEntries(languageList.map(lang => [lang.key, lang.resource]))

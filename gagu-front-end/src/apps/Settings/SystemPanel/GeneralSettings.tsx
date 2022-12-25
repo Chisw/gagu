@@ -10,7 +10,7 @@ export default function GeneralSettings() {
       <div>
         <div></div>
         <div>
-          {languageList.map(({ key, icon, name }) => (
+          {languageList.map(({ key, name }) => (
             <div
               key={key}
               className={line(`
@@ -19,7 +19,7 @@ export default function GeneralSettings() {
               `)}
               onClick={() => setLanguage(key)}
             >
-              {icon} {name}
+              {name}
             </div>
           ))}
         </div>
