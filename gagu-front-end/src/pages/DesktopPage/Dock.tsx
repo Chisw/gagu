@@ -73,7 +73,7 @@ export default function Dock() {
       },
       {
         icon: <SvgIcon.Close />,
-        label: t`action.closeAllWindows`,
+        label: t`action.closeAllOpenedWindows`,
         isShow: hasRunning,
         onClick: () => {
           const list = runningAppList.filter(app => app.id !== appId)

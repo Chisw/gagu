@@ -2,7 +2,7 @@ import { IUserInfo, UserPermission, UserPermissionType } from '../types'
 
 export const GAGU_USER_INFO_KEY = 'GAGU_USER_INFO_KEY'
 
-export const USER_INFO = {
+export const UserInfoStore = {
   get() {
     const userInfoStr = localStorage.getItem(GAGU_USER_INFO_KEY) || ''
     if (userInfoStr) {

@@ -116,7 +116,7 @@ C:/Users/jay/.io.gagu
 - Linux:
 
 ```
-
+/home/jay/.io.gagu
 ```
 
 - Android:

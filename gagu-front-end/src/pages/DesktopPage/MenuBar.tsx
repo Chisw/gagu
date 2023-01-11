@@ -9,7 +9,7 @@ import { SvgIcon } from '../../components/base'
 import { useFetch } from '../../hooks'
 import { rootInfoState, userInfoState } from '../../states'
 import { IRootInfo } from '../../types'
-import { DOCUMENT_TITLE, line, PULSE_INTERVAL, USER_INFO } from '../../utils'
+import { DOCUMENT_TITLE, line, PULSE_INTERVAL, UserInfoStore } from '../../utils'
 import QrCode from 'qrcode.react'
 import TransferPanel from './TransferPanel'
 import MySharePanel from '../../components/MySharePanel'
@@ -65,7 +65,7 @@ export default function MenuBar() {
 
   useEffect(() => {
     if (!userInfo) {
-      const info = USER_INFO.get()
+      const info = UserInfoStore.get()
       if (info) {
         setUserInfo(info)
       } else {
@@ -79,7 +79,7 @@ export default function MenuBar() {
       const res = await pulse()
       if (res.success) {
         setUserInfo(res.userInfo)
-        USER_INFO.set(res.userInfo)
+        UserInfoStore.set(res.userInfo)
       } else {
         toast.error(res.message)
       }
@@ -303,7 +303,7 @@ export default function MenuBar() {
                   icon={<SvgIcon.Logout />}
                   onClick={async () => {
                     await logout()
-                    USER_INFO.remove()
+                    UserInfoStore.remove()
                     navigate('/login')
                   }}
                 >

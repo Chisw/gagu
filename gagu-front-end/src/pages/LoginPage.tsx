@@ -5,7 +5,7 @@ import { AuthApi } from '../api'
 import md5 from 'md5'
 import toast from 'react-hot-toast'
 import { SvgIcon } from '../components/base'
-import { USER_INFO } from '../utils'
+import { UserInfoStore } from '../utils'
 import { Input } from '@douyinfe/semi-ui'
 import { useRecoilState } from 'recoil'
 import { userInfoState } from '../states'
@@ -21,7 +21,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
 
   useEffect(() => {
-    if (USER_INFO.get()) {
+    if (UserInfoStore.get()) {
       navigate('/')
     }
   }, [navigate])
@@ -38,7 +38,7 @@ export default function LoginPage() {
     const res = await login(formData)
     if (res.success) {
       setUserInfo(res.userInfo)
-      USER_INFO.set(res.userInfo)
+      UserInfoStore.set(res.userInfo)
       navigate('/')
     } else {
       toast.error(t(`server.${res.message}`))
@@ -75,7 +75,7 @@ export default function LoginPage() {
             className="mt-4 hover:border-white focus-within:border-white"
             maxLength={16}
             value={password}
-            onChange={(value) => setPassword(value)}
+            onChange={setPassword}
             onKeyUp={(e: any) => e.key === 'Enter' && handleLogin()}
             suffix={(
               <button

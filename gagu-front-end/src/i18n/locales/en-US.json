@@ -51,6 +51,7 @@
       "reset": "Reset",
       "rename": "Rename",
       "save": "Save",
+      "saveToLocal": "Save to local",
       "selectAll": "Select All",
       "showHiddenItems": "Show hidden items",
       "shutdown": "Shutdown",
@@ -71,7 +72,7 @@
       "video-player": "Video Player"
     },
     "hint": {
-
+      "inputAccessPassword": "Input access password"
     },
     "label": {
       "accesses": "Accesses",
@@ -82,6 +83,8 @@
       "password": "Password",
       "passwordConfirmed": "Password Confirmed",
       "permissions": "Permissions",
+      "remainingSaves": "Remaining Saves: ",
+      "remainingValidityPeriod": "Remaining Validity Period: ",
       "servicePort": "Service Port",
       "username": "Username",
       "validUntil": "Valid Until"
@@ -104,10 +107,16 @@
       "ERROR_403": "Insufficient permissions"
     },
     "tip": {
-      "totalUsers": "{count} user(s) in total"
+      "expired": "Expired",
+      "sharingWithPassword": "Ops, the sharer has set an access password",
+      "totalUsers": "{{count}} user(s) in total",
+      "unlimited": "Unlimited"
     },
     "title": {
       "changePassword": "Change Password",
+      "page_login": "Login",
+      "page_share": "Sharing",
+      "page_share_by": "{{name}}'s Sharing",
       "settings_log": "Log",
       "settings_system": "System",
       "settings_system_advanced": "Advanced",

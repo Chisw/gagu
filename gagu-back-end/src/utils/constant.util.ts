@@ -4,6 +4,9 @@ import { IServerOS } from 'src/types'
 const platform = os.platform()
 const hostname = os.hostname()
 
+export const GAGU_VERSION = '0.0.34'
+export const IS_DEV = process.env.NODE_ENV === 'development'
+
 export const HOST = (() => {
   const iFaces = os.networkInterfaces()
   const ipList: string[] = []
@@ -18,8 +21,6 @@ export const HOST = (() => {
   return ipList[0] || '127.0.0.1'
 })()
 
-export const GAGU_VERSION = '0.0.33'
-export const IS_DEV = process.env.NODE_ENV === 'development'
 export const ServerOS: IServerOS = {
   username: process.env.USER || os.userInfo().username,
   host: HOST,
@@ -27,6 +28,7 @@ export const ServerOS: IServerOS = {
   platform,
   isMacOS: platform === 'darwin',
   isWindows: platform === 'win32',
+  isLinux: platform === 'linux',
   isAndroid: platform === 'android',
 }
 

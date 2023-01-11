@@ -154,6 +154,35 @@ export class FsService {
       }))
 
       rootEntryList.push(...diskList)
+    } else if (ServerOS.isLinux) {
+      const homeEntry: IRootEntry = {
+        name: ServerOS.username,
+        type: EntryType.directory,
+        hidden: false,
+        lastModified: 0,
+        extension: '_dir',
+        parentPath: '/home',
+        hasChildren: true,
+        isDisk: false,
+      }
+
+      const driveList = nodeDiskInfo.getDiskInfoSync()
+
+      const diskList: IDisk[] = driveList.map((drive) => ({
+        name: drive.mounted.replace('/Volumes/', ''),
+        type: EntryType.directory,
+        hidden: false,
+        lastModified: 0,
+        parentPath: '/Volumes',
+        hasChildren: true,
+        extension: '_dir',
+        label: drive.mounted.replace('/Volumes/', ''),
+        isDisk: true,
+        spaceFree: drive.available * 512,
+        spaceTotal: drive.blocks * 512,
+      }))
+
+      rootEntryList.push(homeEntry, ...diskList)
     } else if (ServerOS.isAndroid) {
       rootEntryList.push(
         {

@@ -51,6 +51,7 @@
       "reset": "重置",
       "rename": "重命名",
       "save": "保存",
+      "saveToLocal": "保存至本地",
       "selectAll": "全選",
       "showHiddenItems": "顯示隱藏項",
       "shutdown": "關閉系統",
@@ -71,7 +72,7 @@
       "video-player": "視頻播放器"
     },
     "hint": {
-
+      "inputAccessPassword": "請輸入訪問密碼"
     },
     "label": {
       "accesses": "入口目錄",
@@ -82,6 +83,8 @@
       "password": "密碼",
       "passwordConfirmed": "確認密碼",
       "permissions": "權限",
+      "remainingSaves": "剩餘保存次數：",
+      "remainingValidityPeriod": "剩餘有效期：",
       "servicePort": "服務端口號",
       "username": "用戶名",
       "validUntil": "有效期至"
@@ -104,10 +107,16 @@
       "ERROR_403": "權限不足"
     },
     "tip": {
-      "totalUsers": "共 {count} 位用戶"
+      "expired": "已過期",
+      "sharingWithPassword": "啊喔，分享者設置的訪問密碼",
+      "totalUsers": "共 {{count}} 位用戶",
+      "unlimited": "無限制"
     },
     "title": {
       "changePassword": "修改密碼",
+      "page_login": "登录",
+      "page_share": "分享",
+      "page_share_by": "{{name}} 的分享",
       "settings_log": "日誌",
       "settings_system": "系統",
       "settings_system_advanced": "高級",

@@ -1,5 +1,5 @@
 import axios, { AxiosError } from 'axios'
-import { BASE_URL, ERROR_TIMEOUT, HEADERS_AUTH_KEY, USER_INFO } from '../utils'
+import { BASE_URL, ERROR_TIMEOUT, HEADERS_AUTH_KEY, UserInfoStore } from '../utils'
 import toast from 'react-hot-toast'
 
 const instance = axios.create({
@@ -14,7 +14,7 @@ const instance = axios.create({
 instance.interceptors.request.use(config => {
   config.headers = {
     ...config.headers,
-    [HEADERS_AUTH_KEY]: USER_INFO.getToken(),
+    [HEADERS_AUTH_KEY]: UserInfoStore.getToken(),
   }
   return config
 })
@@ -30,7 +30,7 @@ instance.interceptors.response.use(response => response, (error: AxiosError) => 
   }
   const { status } = response
   if (status === 401) {
-    USER_INFO.remove()
+    UserInfoStore.remove()
     window.location.href = '/login'
   } else if (status === 403) {
     toast.error('ERROR_403')

@@ -3,6 +3,7 @@ import { Duration } from 'luxon'
 import { QRCodeCanvas } from 'qrcode.react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
+import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 import { DownloadApi, FsApi, TunnelApi } from '../api'
 import { Spinner, SvgIcon } from '../components/base'
@@ -14,6 +15,7 @@ import { getDateTime, SERVER_MESSAGE_MAP } from '../utils'
 export default function SharePage() {
 
   const { code } = useParams()
+  const { t } = useTranslation()
 
   const [passwordVal, setPasswordVal] = useState('')
   const [expiredAtTip, setExpiredAtTip] = useState('')
@@ -29,9 +31,12 @@ export default function SharePage() {
 
   useEffect(() => {
     updateTunnelData()
-    document.title = 'Share - GAGU.IO'
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    document.title = `${t`title.page_share`} - GAGU.IO`
+  }, [t])
 
   const {
     isSuccess,
@@ -84,23 +89,23 @@ export default function SharePage() {
 
   useEffect(() => {
     const tick = () => {
-      let tip = '无限期'
+      let tip = t`tip.unlimited`
       if (expiredAt !== undefined) {
         const restMillis = expiredAt - Date.now()
         if (restMillis > 0) {
           const { months, days, hours, minutes } = Duration.fromMillis(restMillis).shiftTo('month', 'day', 'hour', 'minute').toObject()
           tip = [
-            { unit: '个月', count: months },
-            { unit: '天', count: days },
-            { unit: '小时', count: hours },
-            { unit: '分钟', count: minutes? Math.floor(minutes) : 0 },
+            { unit: 'M', count: months },
+            { unit: 'D', count: days },
+            { unit: 'H', count: hours },
+            { unit: 'min', count: minutes? Math.floor(minutes) : 0 },
           ]
-            .map(({ unit, count }) => count ? `${count} ${unit}` : '')
+            .map(({ unit, count }) => count ? `${count}${unit}` : '')
             .filter(Boolean)
             .slice(0, 2)
             .join(' ')
         } else {
-          tip = '已过期'
+          tip = t`tip.expired`
         }
       }
       setExpiredAtTip(tip)
@@ -108,7 +113,7 @@ export default function SharePage() {
     tick()
     const timer = setInterval(tick, 1000)
     return () => clearInterval(timer)
-  }, [expiredAt])
+  }, [expiredAt, t])
 
   const disabled = useMemo(() => {
     const isNoLeft = leftTimes === 0
@@ -146,7 +151,7 @@ export default function SharePage() {
                   style={{ backgroundImage: `url("${FsApi.getAvatarStreamUrl(username)}")` }}
                 />
                 <div className="ml-4 flex-grow">
-                  <p className="text-sm md:text-base">{nickname} 的分享</p>
+                  <p className="text-sm md:text-base">{t('title.page_share_by', { name: nickname })}</p>
                   <p className="flex justify-between text-xs text-gray-500">
                     {createdAt && getDateTime(createdAt).slice(0, -3)}
                   </p>
@@ -159,6 +164,7 @@ export default function SharePage() {
                     content={(
                       <div className="">
                         <QRCodeCanvas value={window.location.href} />
+                        <p className="mt-2 w-32 break-all text-xs text-gray-400">{window.location.href}</p>
                       </div>
                     )}
                   >
@@ -170,12 +176,12 @@ export default function SharePage() {
               </div>
               {isShowInput ? (
                 <div className="my-6 px-8 py-16 border backdrop-filter backdrop-blur-sm">
-                  <p className="text-sm text-gray-500 text-center">啊喔，分享者设置了访问密码</p>
+                  <p className="text-sm text-gray-500 text-center">{t`tip.sharingWithPassword`}</p>
                   <div className="mt-4 flex justify-center">
                     <Input
                       autofocus
                       showClear
-                      placeholder="请输入访问密码"
+                      placeholder={t`hint.inputAccessPassword`}
                       className="w-48"
                       type="password"
                       value={passwordVal}
@@ -189,7 +195,7 @@ export default function SharePage() {
                         loading={loading}
                         onClick={updateTunnelData}
                       >
-                        确定
+                        {t`action.confirm`}
                       </Button>
                   </div>
                 </div>
@@ -203,16 +209,18 @@ export default function SharePage() {
               {code && (
                 <div className="flex flex-wrap justify-between items-center">
                   <div className="w-full md:w-auto text-center md:text-left text-xs text-gray-500">
-                    <p>剩余保存次数：{leftTimes === undefined ? '无限次' : leftTimes}</p>
+                    <p>{t`label.remainingSaves`}{leftTimes === undefined ? t`tip.unlimited` : leftTimes}</p>
                     <p>
-                      <span className="mr-1">剩余有效期：{expiredAtTip}</span>
-                      <Tooltip
-                        position="right"
-                        className="text-xs"
-                        content={expiredAt ? `有效期至：${getDateTime(expiredAt).slice(0, -3)}` : undefined}
-                      >
-                        <span><SvgIcon.Info className="-mt-2px inline text-gray-300" size={14} /></span>
-                      </Tooltip>
+                      <span className="mr-1">{t`label.remainingValidityPeriod`}{expiredAtTip}</span>
+                      {expiredAt && (
+                        <Tooltip
+                          position="right"
+                          className="text-xs"
+                          content={getDateTime(expiredAt).slice(0, -3)}
+                        >
+                          <span><SvgIcon.Info className="-mt-2px inline text-gray-300" size={14} /></span>
+                        </Tooltip>
+                      )}
                     </p>
                   </div>
                   <div className="mt-4 mx-auto md:m-0 w-full md:w-auto flex justify-center">
@@ -226,7 +234,7 @@ export default function SharePage() {
                       icon={<SvgIcon.Download />}
                       onClick={handleDownloadClick}
                     >
-                      保存至本地
+                      {t`action.saveToLocal`}
                     </Button>
                   </div>
                 </div>

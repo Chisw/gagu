@@ -23,6 +23,7 @@ export const rootInfoState = atom<IRootInfo>({
       platform: '',
       isMacOS: false,
       isWindows: false,
+      isLinux: false,
       isAndroid: false,
     },
     deviceName: '--',

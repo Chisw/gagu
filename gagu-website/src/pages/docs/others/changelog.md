@@ -19,6 +19,9 @@ Clear data directory means that all users, download channels and other data will
 
 ## v0.0.*
 
+- v0.0.34
+  - Add：I18n
+
 - v0.0.33
   - Add：Entry selector
   - Add：QrCode of sharing

@@ -176,7 +176,7 @@ export default function Window(props: WindowProps) {
                 data-app-id={appId}
               />
               <span className="ml-2 text-xs">
-                {windowTitle || t`app.${appId}`}
+                {windowTitle || t(`app.${appId}`)}
               </span>
             </div>
             {/* Mask: prevent out of focus in iframe */}

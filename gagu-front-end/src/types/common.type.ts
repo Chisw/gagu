@@ -11,5 +11,6 @@ export interface IServerOS {
   platform: NodeJS.Platform | ''
   isMacOS: boolean
   isWindows: boolean
+  isLinux: boolean
   isAndroid: boolean
 }
