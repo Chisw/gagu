@@ -101,7 +101,3 @@ The default port number and password of the default account are both `9293`, one
 <div class="apply-tip">
 The name of GAGU has only two writing formats: 'GAGU' and 'gagu', the former is used for text description, and the latter is used for code.
 </div>
-
-## Buy me a cola
-
-If you think GAGU is good to use, you can [buy me a bottle of cola 🥤](https://jisuowei.com/cola?from=gagu)!

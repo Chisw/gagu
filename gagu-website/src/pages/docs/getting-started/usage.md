@@ -95,7 +95,7 @@ Stop service：
 
 ### Workspace
 
-The running of GAGU needs to provide a local root directory of its own (GAGU_PATH.ROOT) to store some data.
+The running of GAGU needs to provide a local root directory of its own `GAGU_PATH.ROOT` to store some data.
 
 Every time the service is started, GAGU will detect whether the root directory exists, and if it does not exist, it will automatically create a root directory named `.io.gagu` in the workspace.
 
@@ -144,10 +144,10 @@ After the root directory is successfully created, the following subdirectories w
   |- thumbnail
 ```
 
-- `data` is used to persistently store some data files in JSON format such as users, logins, download channels, settings, logs, etc.
-- `public/avatar` is used to store the user's avatar, and the file name is the username.
-- `public/lib` is used to store third-party js libraries that may be used in the future.
-- `thumbnail` is used to store thumbnails generated in use.
+- `data` is used to persistently store some data files in JSON format such as users, logins, download channels, settings, logs, etc
+- `public/avatar` is used to store the user's avatar, and the file name is the username
+- `public/lib` is used to store third-party js libraries that may be used in the future
+- `thumbnail` is used to store thumbnails generated in use
 
 <div class="apply-tip">
 The root directory will be created as `WORKSPACE/.io.gagu.dev` in local development.

@@ -86,3 +86,7 @@ Many unrealized ideas will be recorded here, waiting for development.
 - Demo of online interaction
 - Video introduction
 - Algolia search
+
+## Buy me a cola
+
+If you want to encourage the work of GAGU, you can [buy me a bottle of cola 🥤](https://jisuowei.com/cola?from=gagu)!

@@ -5,7 +5,7 @@ layout: ../../../layouts/DocLayout.astro
 
 # 开发与构建
 
-GAGU 所有的代码都在同一个[仓库](https://github.com/Chisw/gagu)里，由三部分构成并分散在三个目录下。
+GAGU 所有的代码都在同一个[仓库](https://github.com/Chisw/gagu)里，由三部分构成：
 
 ```
 gagu
@@ -64,21 +64,21 @@ $ yarn start
 - `version tag` 位于 `gagu/README.md`
 - `version field` 位于 `gagu/gagu-website/.env`
 
-2. 同步 `gagu/gagu-back-end/package.json` 中的依赖项到 `gagu/package.json` 中。
+2. 同步 `gagu/gagu-back-end/package.json` 中的依赖项到 `gagu/package.json` 中
 
-3. 执行构建脚本 `yarn build:bin`，参考 [build.sh](https://github.com/Chisw/gagu/blob/main/build.sh)。
+3. 执行构建脚本 `yarn build:bin`，参考 [build.sh](https://github.com/Chisw/gagu/blob/main/build.sh)
 
-4. 预发布检查，更新包体积信息，发布到 NPM。
+4. 预发布检查，更新包体积信息，发布到 NPM
 
 ## 构建桌面版
 
-1. 桌面版的构建需要先将上一步骤完成。
+1. 桌面版的构建需要先完成上一步骤
 
-2. 然后安装好 `gagu/package.json` 中的依赖，是的，这有点冗余，这是最初决定将三部分放至同一仓库造成的，好在问题不大。
+2. 然后安装好 `gagu/package.json` 中的依赖，是的，这有点冗余，这是最初决定将三部分放至同一仓库造成的，好在问题不大
 
-3. 在 `gagu` 目录下执行 `yarn pkg`，实际上执行的是 `pkg . --out-path=pkg`，你需要事先全局安装好 Vercel/pkg `npm install -g pkg`。
+3. 在 `gagu` 目录下执行 `yarn pkg`，实际上执行的是 `pkg . --out-path=pkg`，你需要事先全局安装好 Vercel/pkg `npm i -g pkg`
 
-4. 构建后的内容会出现在 `gagu/pkg` 中。
+4. 构建后的内容会出现在 `gagu/pkg` 中
 
 ## 感谢
 

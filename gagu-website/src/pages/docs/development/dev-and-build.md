@@ -5,7 +5,7 @@ layout: ../../../layouts/DocLayout.astro
 
 # Dev & Build
 
-All the codes of GAGU are in the same [repository](https://github.com/Chisw/gagu), which consists of three parts and is scattered under three directories.
+All the codes of GAGU are in the same [repository](https://github.com/Chisw/gagu), which consists of three parts:
 
 ```
 gagu
@@ -64,21 +64,21 @@ $ yarn start
 - `version tag` in `gagu/README.md`
 - `version field` in `gagu/gagu-website/.env`
 
-2. Sync dependencies in `gagu/gagu-back-end/package.json` to `gagu/package.json`.
+2. Sync dependencies in `gagu/gagu-back-end/package.json` to `gagu/package.json`
 
-3. Run build script `yarn build:bin`, refer to [./build.sh](https://github.com/Chisw/gagu/blob/main/build.sh).
+3. Run build script `yarn build:bin`, refer to [./build.sh](https://github.com/Chisw/gagu/blob/main/build.sh)
 
-4. Dry run publish, update package size info, publish to NPM.
+4. Dry run publish, update package size info, publish to NPM
 
 ## Build Desktop Version
 
-1. The desktop version needs to complete the previous built step above.
+1. The desktop version needs to complete the previous built step above
 
-2. Install the dependencies in `gagu/package.json`, yes, this is a bit redundant, this is caused by the original decision to put the three parts in the same repository, fortunately, it is not a big problem.
+2. Install the dependencies in `gagu/package.json`, yes, this is a bit redundant, this is caused by the original decision to put the three parts in the same repository, fortunately, it is not a big problem
 
-3. Execute `yarn pkg` in the `gagu` directory, actually execute `pkg . --out-path=pkg`, you need to install Vercel/pkg globally in advance `npm install -g pkg`.
+3. Execute `yarn pkg` in the `gagu` directory, actually execute `pkg . --out-path=pkg`, you need to install Vercel/pkg globally in advance `npm i -g pkg`
 
-4. The built content will appear in `gagu/pkg`.
+4. The built content will appear in `gagu/pkg`
 
 ## Thanks
 

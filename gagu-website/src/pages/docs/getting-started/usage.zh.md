@@ -95,7 +95,7 @@ $ gagu --reset-all
 
 ### 工作空间
 
-GAGU 的运行需要本地提供一个属于自己的根目录（GAGU_PATH.ROOT）来存储一些数据。
+GAGU 的运行需要本地提供一个属于自己的根目录 `GAGU_PATH.ROOT` 来存储一些数据。
 
 每次启动服务时，GAGU 会检测这个根目录是否存在，如不存在，则会自动在工作空间创建一个名为 `.io.gagu` 的根目录。
 
@@ -144,10 +144,10 @@ GAGU 的根目录 `.io.gagu` 是一个以 `.` 开头命名的隐藏文件夹，�
   |- thumbnail
 ```
 
-- `data` 用于持久化存储一些用户、登录、下载通道、设置、日志等 JSON 格式的数据文件。
-- `public/avatar` 用于存放用户的头像，文件名即用户名。
-- `public/lib` 用于存放将来可能会用到的第三方 js 库。
-- `thumbnail` 用于存放使用中生成的缩略图。
+- `data` 用于持久化存储一些用户、登录、下载通道、设置、日志等 JSON 格式的数据文件
+- `public/avatar` 用于存放用户头像，文件名即用户名
+- `public/lib` 用于存放将来可能会用到的第三方 js 库
+- `thumbnail` 用于存放使用中生成的缩略图
 
 <div class="apply-tip">
 本地开发时，根目录会被创建为 `WORKSPACE/.io.gagu.dev`。
@@ -164,7 +164,7 @@ const thumbnailId = md5(`${path}-${mtimeMs}`)
 
 所以，在文件没有发生变化（移动位置、修改）时，第一次获取缩略图需要一定的时间，你可以在“设置”中对包含需要展示缩略图文件的目录使用“缩略图主动生成”的功能，以提高浏览体验。
 
-GAGU 在生成缩略图时会借助 [ffmpeg](https://ffmpeg.org/) 和 [GraphicsMagick](http://www.graphicsmagick.org/) 的接口，你可以选择性地安装它们，不安装并不会影响到 GAGU 主要功能的使用，所有的文件都有默认的类型图标展示。
+GAGU 在生成缩略图时需要借助 [ffmpeg](https://ffmpeg.org/) 和 [GraphicsMagick](http://www.graphicsmagick.org/) 的接口，你可以选择性地安装它们，不安装并不会影响到 GAGU 主要功能的使用，所有的文件都有默认的类型图标展示。
 
 ## 默认端口号
 
