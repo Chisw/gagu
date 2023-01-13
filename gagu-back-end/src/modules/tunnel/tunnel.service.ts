@@ -8,7 +8,6 @@ export class TunnelService {
   private tunnelList: ITunnel[] = []
 
   constructor() {
-    console.log('  - init Tunnel')
     this.tunnelList = readTunnelData()
   }
 
