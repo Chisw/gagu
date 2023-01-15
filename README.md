@@ -2,7 +2,7 @@
 <img src="https://gagu.io/assets/logo.svg" style="height: 64px;" >
 <br>
 <br>
-<h1>GAGU (Beta)</h1>
+<h1>GAGU (Alpha)</h1>
 <p>Website: <a href="https://gagu.io" target="_blank">gagu.io</a></p>
 <p>A web-based file management system</p>
 <p>Manage files on your different devices in the browser</p>

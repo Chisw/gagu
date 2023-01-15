@@ -5,7 +5,7 @@ layout: ../../../layouts/DocLayout.astro
 
 # Changelog
 
-GAGU is currently in the Beta stage, and a version is updated about every three weeks, depending on the progress of work and study.
+GAGU is currently in the Alpha stage, and a version is updated about every three weeks, depending on the progress of work and study.
 
 Before the release of v1.0.0, the data fields may be adjusted several times, and GAGU will not automatically convert the data generated in the old version for the time being, which may cause it to fail to run normally after installing the new version.
 
@@ -20,18 +20,18 @@ Clear data directory means that all users, download channels and other data will
 ## v0.0.*
 
 - v0.0.34
-  - Add：I18n
+  - Feat：I18n
 
 - v0.0.33
-  - Add：Entry selector
-  - Add：QrCode of sharing
-  - Add：Command `--reset-all`
+  - Feat：Entry selector
+  - Feat：QrCode of sharing
+  - Feat：Command `--reset-all`
 
 - v0.0.32
-  - Add：Sharing Page
+  - Feat：Sharing Page
 
 - v0.0.31
-  - Add：Support for custom device names
+  - Feat：Support for custom device names
   - Fix：Auth Module repeated initialization
 
 - v0.0.30
