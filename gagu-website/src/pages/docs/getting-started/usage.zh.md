@@ -6,7 +6,7 @@ layout: ../../../layouts/DocLayout.astro
 # 使用
 
 <iframe
-  src="//player.bilibili.com/player.html"
+  src="//player.bilibili.com/player.html?bvid=BV1W84y1h71d"
   scrolling="no"
   border="0"
   frameborder="no"
