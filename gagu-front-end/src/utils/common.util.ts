@@ -122,6 +122,29 @@ export const getPasswordParam = (password?: string) => {
   return password ? `?password=${md5(password)}` : ''
 }
 
+export const getBaiduMapPinUrl = (ExifData: any, content?: string) => {
+  const { GPS } = ExifData || {}
+  const { GPSLatitude, GPSLongitude } = GPS || {}
+  if (GPSLatitude && GPSLongitude) {
+    const [[a, b], [c, d], [e, f]] = GPSLatitude as any
+    const [[g, h], [i, j], [k, l]] = GPSLongitude as any
+    const lat = a / b + c / d / 60 + e / f / 3600
+    const lon = g / h + i / j / 60 + k / l / 3600
+
+    const query = new URLSearchParams({
+      location: `${lat},${lon}`,
+      title: '图片位置-GAGU',
+      content,
+      output: 'html',
+      coord_type: 'wgs84',
+    } as any)
+
+    return `https://api.map.baidu.com/marker?${query.toString()}`
+  } else {
+    return ''
+  }
+}
+
 // Sync following code to BE & FE
 export const getIsExpired = (expiredAt?: number) => {
   return expiredAt && expiredAt < Date.now()

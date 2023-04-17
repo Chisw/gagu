@@ -6,7 +6,7 @@ import { IconButton } from '../../components/base'
 import { useFetch } from '../../hooks'
 import { TunnelType, IEntry } from '../../types'
 import { DOWNLOAD_PERIOD, getPaddedNo, getReadableSize, line } from '../../utils'
-import { getGPSBaiduMapUrl } from '../../utils'
+import { getBaiduMapPinUrl } from '../../utils'
 
 interface ToolbarProps {
   imgEl: HTMLImageElement | null
@@ -51,7 +51,7 @@ export default function Toolbar(props: ToolbarProps) {
 
 
   useEffect(() => {
-    setMapPinUrl(getGPSBaiduMapUrl(ExifData, activeEntry?.name))
+    setMapPinUrl(getBaiduMapPinUrl(ExifData, activeEntry?.name))
   }, [ExifData, activeEntry])
 
   const getExifData = useCallback(() => {
