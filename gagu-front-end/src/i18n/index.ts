@@ -34,7 +34,6 @@ const matchedStoredLanguage =
   storedLanguage && languageList.map(lang => lang.key).includes(storedLanguage) ? storedLanguage : ''
 
 const language = matchedStoredLanguage || navLanguage
-console.log(resources[language], language)
 
 i18n
   .use(initReactI18next)

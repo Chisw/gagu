@@ -6,6 +6,7 @@ import { IconButton } from '../../components/base'
 import { useFetch } from '../../hooks'
 import { TunnelType, IEntry } from '../../types'
 import { DOWNLOAD_PERIOD, getPaddedNo, getReadableSize, line } from '../../utils'
+import { getGPSBaiduMapUrl } from '../../utils'
 
 interface ToolbarProps {
   imgEl: HTMLImageElement | null
@@ -33,7 +34,11 @@ export default function Toolbar(props: ToolbarProps) {
     handlePrevOrNext,
   } = props
 
+  const { fetch: getExif, data: ExifData, setData } = useFetch(FsApi.getExif)
+  const { fetch: createTunnel } = useFetch(TunnelApi.createTunnel)
+
   const [sizeInfo, setSizeInfo] = useState({ width: 0, height: 0 })
+  const [mapPinUrl, setMapPinUrl] = useState('')
 
   useEffect(() => {
     if (imgEl) {
@@ -44,8 +49,10 @@ export default function Toolbar(props: ToolbarProps) {
     }
   }, [imgEl, activeEntry])
 
-  const { fetch: getExif, data: ExifData, setData } = useFetch(FsApi.getExif)
-  const { fetch: createTunnel } = useFetch(TunnelApi.createTunnel)
+
+  useEffect(() => {
+    setMapPinUrl(getGPSBaiduMapUrl(ExifData, activeEntry?.name))
+  }, [ExifData, activeEntry])
 
   const getExifData = useCallback(() => {
     if (activeEntry && ['jpg', 'jpeg'].includes(activeEntry.extension)) {
@@ -163,6 +170,16 @@ export default function Toolbar(props: ToolbarProps) {
         `)}
         onClick={e => e.stopPropagation()}
       >
+        {mapPinUrl && (
+          <a
+            target="_blank"
+            rel="noreferrer"
+            className="inline-block m-2 p-1 rounded-full bg-gray-100 hover:bg-white"
+            href={mapPinUrl}
+          >
+            <SvgIcon.Pin className="text-red-500" />
+          </a>
+        )}
         <code>
           {JSON.stringify(ExifData)}
         </code>
