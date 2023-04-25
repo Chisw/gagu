@@ -144,7 +144,7 @@ After the root directory is successfully created, the following subdirectories w
   |- thumbnail
 ```
 
-- `data` is used to persistently store some data files in JSON format such as users, logins, download channels, settings, logs, etc
+- `data` is used to persistently store some data files in JSON format such as users, logins, download tunnels, settings, logs, etc
 - `public/avatar` is used to store the user's avatar, and the file name is the username
 - `public/lib` is used to store third-party js libraries that may be used in the future
 - `thumbnail` is used to store thumbnails generated in use

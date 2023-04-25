@@ -39,7 +39,7 @@ export class DownloadController {
         const name = path.replace(rootParentPath, '')
         return { name, path }
       })
-      response.zip(files, downloadName)
+      response.zip(files, encodeURIComponent(downloadName))
     } else {
       return checkRes
     }

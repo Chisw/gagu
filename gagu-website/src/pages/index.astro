@@ -23,6 +23,7 @@ import iconAppMessager from '../img/icons/app-messager.svg'
 import iconAppTerminal from '../img/icons/app-terminal.svg'
 import iconAppReader from '../img/icons/app-reader.svg'
 import iconAppVsCoder from '../img/icons/app-vs-coder.svg'
+import iconAppGameEmulator from '../img/icons/app-game-emulator.svg'
 import '../css/home.css'
 
 const featureList = [
@@ -50,6 +51,7 @@ const planningAppList = [
   { icon: iconAppTerminal, title: 'Terminal', desc: 'Simulator' },
   { icon: iconAppReader, title: 'Reader', desc: 'PDF / EPUB' },
   { icon: iconAppVsCoder, title: 'VS Coder', desc: 'Code editor' },
+  { icon: iconAppGameEmulator, title: 'Game Emulator', desc: 'NES / GBA / ..' },
 ]
 
 const commandList = [
@@ -107,7 +109,10 @@ const commandList = [
             <span class="ml-1 md:ml-2">Download</span>
           </a>
         </div>
-        <p class="relative z-10 mt-4 text-xs text-gray-400">Version: {import.meta.env.PUBLIC_VERSION}(Alpha)</p>
+        <p class="relative z-10 mt-4 text-xs text-gray-400">
+          <span>Version: {import.meta.env.PUBLIC_VERSION}(Alpha)</span>
+          <a class="ml-2 underline" href="/docs/others/changelog">Changelog</a>
+        </p>
       </div>
     </div>
     <div class="h-24 md:h-48 lg:h-64"></div>

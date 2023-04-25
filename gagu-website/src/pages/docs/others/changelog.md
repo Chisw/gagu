@@ -19,20 +19,24 @@ Clear data directory means that all users, download channels and other data will
 
 ## v0.0.*
 
-- v0.0.34
-  - Feat：I18n
+- v0.0.35 (2023-04-25)
+  - feat：parses image GPS location and displays it on a map
+  - fix：folder named chinese character download failed
 
-- v0.0.33
-  - Feat：Entry selector
-  - Feat：QrCode of sharing
-  - Feat：Command `--reset-all`
+- v0.0.34 (2023-01-12)
+  - feat：i18n
 
-- v0.0.32
-  - Feat：Sharing Page
+- v0.0.33 (2022-11-27)
+  - feat：entry selector
+  - feat：QrCode of sharing
+  - feat：command `--reset-all`
 
-- v0.0.31
-  - Feat：Support for custom device names
-  - Fix：Auth Module repeated initialization
+- v0.0.32 (2022-11-26)
+  - feat：sharing Page
 
-- v0.0.30
-  - Fix：Error of upload txt file 
+- v0.0.31 (2022-11-06)
+  - feat：support for custom device names
+  - fix：auth Module repeated initialization
+
+- v0.0.30 (2022-11-04)
+  - fix：error of upload txt file 
