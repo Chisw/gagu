@@ -59,6 +59,13 @@ $ gagu -o
 $ gagu --open
 ```
 
+Start with a customized host:
+
+```sh
+$ gagu -H 0.0.0.0
+$ gagu --Host 0.0.0.0
+```
+
 Start with a customized port:
 
 ```sh

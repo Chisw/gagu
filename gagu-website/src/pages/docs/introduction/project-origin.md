@@ -96,7 +96,7 @@ I then searched for 'GAGU', and it wasn't registered yet, great!
 
 This is where the name of the GAGU project comes from.
 
-The default port number and password of the default account are both `9293`, one is because `9293` looks similar to `gagu`, and the other is because baby's mom and I were born in 1993 and 1992 respectively.
+The default port number and password of the default account are both `9293`, one is because `9293` looks similar to `gagu`, and the other is because the baby's mom and I were born in 1993 and 1992 respectively.
 
 <div class="apply-tip">
 The name of GAGU has only two writing formats: 'GAGU' and 'gagu', the former is used for text description, and the latter is used for code.

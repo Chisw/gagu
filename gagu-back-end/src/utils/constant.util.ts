@@ -4,7 +4,7 @@ import { IServerOS } from 'src/types'
 const platform = os.platform()
 const hostname = os.hostname()
 
-export const GAGU_VERSION = '0.0.35'
+export const GAGU_VERSION = '0.0.36'
 export const IS_DEV = process.env.NODE_ENV === 'development'
 
 export const HOST = (() => {
@@ -55,6 +55,7 @@ export const HELP_INFO = `
 Usage:
   gagu              // Start service
   gagu -o           // Start and open in browser, --open
+  gagu -H           // Start with a customized host, --Host
   gagu -p 8888      // Start with a customized port, --port
   gagu -h           // Show help info, --help
   gagu -v           // Show version, --version

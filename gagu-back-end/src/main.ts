@@ -14,6 +14,7 @@ import * as minimist from 'minimist'
 const argv = minimist(process.argv.slice(2), {
   alias: {
     help: 'h',
+    Host: 'H',
     open: 'o',
     port: 'p',
     version: 'v',
@@ -52,15 +53,16 @@ async function bootstrap() {
   initialize()
 
   const settings = readSettingsData()
+  const Host = argv.Host || undefined
   const port = argv.port || settings.port || 9293
-  const url = `http://${HOST}:${port}`
+  const url = `http://${Host || HOST}:${port}`
 
   const app = await NestFactory.create(AppModule)
 
   app.enableCors()
   app.setGlobalPrefix('api')
 
-  await app.listen(port)
+  await app.listen(port, Host)
 
   console.log(`\n✨  GAGU service is running on: ${url}\n`)
 
