@@ -49,7 +49,7 @@ $ cd gagu-back-end
 $ yarn
 $ yarn start:dev
 
-# Font-end
+# Front-end
 $ cd gagu-front-end
 $ yarn
 $ yarn start
