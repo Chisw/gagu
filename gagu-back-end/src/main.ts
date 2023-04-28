@@ -19,7 +19,7 @@ const argv = minimist(process.argv.slice(2), {
     port: 'p',
     version: 'v',
   },
-  string: ['port'],
+  string: ['Host', 'port'],
   boolean: ['help', 'open', 'reset', 'reset-all', 'version'],
   unknown() {
     console.log(HELP_INFO)

@@ -52,15 +52,16 @@ export const GAGU_PATH = {
 }
 
 export const HELP_INFO = `
-Usage:
-  gagu              // Start service
-  gagu -o           // Start and open in browser, --open
-  gagu -H           // Start with a customized host, --Host
-  gagu -p 8888      // Start with a customized port, --port
-  gagu -h           // Show help info, --help
-  gagu -v           // Show version, --version
-  gagu --reset      // Remove GAGU data directory
-  gagu --reset-all  // Remove GAGU root directory
+  Usage:
+
+  gagu              Start service
+  gagu -o           Start and open in browser, --open
+  gagu -H 0.0.0.0   Start with a customized host, --Host
+  gagu -p 8888      Start with a customized port, --port
+  gagu -h           Show help info, --help
+  gagu -v           Show version, --version
+  gagu --reset      Remove GAGU data directory
+  gagu --reset-all  Remove GAGU root directory
 `
 
 // Sync following code to BE & FE
