@@ -70,7 +70,7 @@ export const APP_LIST: IApp[] = [
       minWidth: 480,
       minHeight: 240,
     },
-    matchList: ['mp3', 'aac', 'flac'],
+    matchList: ['mp3', 'flac', 'wav', 'aac', 'ogg'],
     headerClassName: 'bg-pink-900 text-pink-100 border-black-100',
   },
   {

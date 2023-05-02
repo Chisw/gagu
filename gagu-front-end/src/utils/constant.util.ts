@@ -13,7 +13,7 @@ export const ENTRY_ICON_LIST = [
   { type: 'folder-empty', matchList: ['_dir_new', '_dir_empty'] },
   { type: 'application', matchList: ['apk'] },
   { type: 'archive', matchList: ['zip', 'rar', '7z'] },
-  { type: 'audio', matchList: ['mp3', 'flac', 'wav', 'aac'] },
+  { type: 'audio', matchList: ['mp3', 'flac', 'wav', 'aac', 'ogg'] },
   { type: 'code', matchList: ['html', 'css', 'js', 'php', 'ts', 'tsx'] },
   { type: 'data', matchList: ['dat', 'db', 'sql', 'json', 'log'] },
   { type: 'document', matchList: ['_txt_new', 'txt', 'md'] },
