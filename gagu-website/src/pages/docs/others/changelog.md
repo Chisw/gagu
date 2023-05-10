@@ -19,6 +19,9 @@ Clear data directory means that all users, download tunnels and other data will 
 
 ## v0.0.*
 
+- v0.0.38 (2023-05-10)
+  - hotfix: error path in Termux
+
 - v0.0.37 (2023-05-10)
   - feat: desktop wallpaper
   - feat: detect whether the thumbnail interface is supported

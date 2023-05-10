@@ -187,7 +187,7 @@ export class FsService {
     } else if (ServerOS.isAndroid) {
       rootEntryList.push(
         {
-          name: 'storage',
+          name: 'shared',
           type: EntryType.directory,
           hidden: false,
           lastModified: 0,
@@ -197,7 +197,7 @@ export class FsService {
           isDisk: false,
         },
         {
-          name: 'Home',
+          name: 'home',
           type: EntryType.directory,
           hidden: false,
           lastModified: 0,
