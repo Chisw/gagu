@@ -347,7 +347,7 @@ export default function FileExplorer(props: AppComponentProps) {
         for (const entry of processList) {
           const { name } = entry
           const { success } = await deleteEntry(`${currentPath}/${name}`)
-          document.querySelector(`.gg-entry-node[data-entry-name="${name}"]`)?.setAttribute('style', 'opacity:0;')
+          document.querySelector(`.gagu-entry-node[data-entry-name="${name}"]`)?.setAttribute('style', 'opacity:0;')
           successList.push(success)
         }
         if (successList.every(Boolean)) {
@@ -375,7 +375,7 @@ export default function FileExplorer(props: AppComponentProps) {
   useEffect(() => {
     const container: any = containerRef.current
     if (container && scrollWaiter.wait && !fetching) {
-      const target: any = document.querySelector('.gg-entry-node[data-selected="true"]')
+      const target: any = document.querySelector('.gagu-entry-node[data-selected="true"]')
       const top = target ? target.offsetTop - 10 : 0
       container!.scrollTo({ top, behavior: scrollWaiter.smooth ? 'smooth' : undefined })
       setScrollWaiter({ wait: false })
@@ -468,7 +468,7 @@ export default function FileExplorer(props: AppComponentProps) {
   }, [setSelectedEntryList, entryList, selectedEntryList])
 
   const handleRectSelect = useCallback((info: IRectInfo) => {
-    const entryElements = document.querySelectorAll('.gg-entry-node')
+    const entryElements = document.querySelectorAll('.gagu-entry-node')
     const pageOffset = (currentPage - 1) * MAX_PAGE_SIZE
     if (!entryElements.length) return
     const indexList: number[] = []
@@ -561,7 +561,7 @@ export default function FileExplorer(props: AppComponentProps) {
 
     const unconfirmedLen = contextEntryList.length
     const { target, clientX, clientY } = event
-    const targetEntry = target.closest('.gg-entry-node')
+    const targetEntry = target.closest('.gagu-entry-node')
     const eventData = { target, clientX, clientY }
 
     if (targetEntry) {
@@ -613,7 +613,7 @@ export default function FileExplorer(props: AppComponentProps) {
         onClick: handleRefresh,
       },
       {
-        icon: <SvgIcon.Edit />,
+        icon: <SvgIcon.Rename />,
         label: t`action.rename`,
         isShow: isSingleConfirmed,
         onClick: () => setTimeout(handleRename, 0),
@@ -624,11 +624,11 @@ export default function FileExplorer(props: AppComponentProps) {
         isShow: !isOnDir && isSingleConfirmed,
         onClick: () => { },
         children: CALLABLE_APP_LIST.map(app => ({
-          icon: <div className="gg-app-icon w-4 h-4" data-app-id={app.id} />,
+          icon: <div className="gagu-app-icon w-4 h-4" data-app-id={app.id} />,
           label: t(`app.${app.id}`),
           onClick: () => handleOpenEntry(app),
         })).concat({
-          icon: <div className="gg-app-icon w-4 h-4" data-app-id="iina" />,
+          icon: <div className="gagu-app-icon w-4 h-4" data-app-id="iina" />,
           label: 'IINA',
           onClick: () => openInIINA(contextEntryList[0]),
         }),
@@ -792,7 +792,7 @@ export default function FileExplorer(props: AppComponentProps) {
                     data-selected={isSelected}
                     // draggable
                     className={line(`
-                      gg-entry-node
+                      gagu-entry-node
                       relative overflow-hidden rounded-sm
                       ${gridMode ? 'm-1 px-1 py-2 w-28' : 'px-2 py-2px w-full flex items-center'}
                       ${!gridMode && isSelected ? 'bg-blue-600' : ' hover:bg-gray-100'}
@@ -804,7 +804,7 @@ export default function FileExplorer(props: AppComponentProps) {
                     onClick={e => handleEntryClick(e, entry)}
                     onDoubleClick={() => handleEntryDoubleClick(entry)}
                   >
-                    <EntryIcon {...{ isSmall, entry, scrollHook }} />
+                    <EntryIcon {...{ isSmall, entry, scrollHook, thumbnailSupported: rootInfo.thumbnailSupported }} />
                     <NameLine
                       showInput={renameMode && isSelected}
                       entry={entry}

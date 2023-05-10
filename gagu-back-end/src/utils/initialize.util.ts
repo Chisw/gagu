@@ -1,10 +1,11 @@
 import { IUser, UserPermission } from '../types'
-import { GAGU_PATH } from './constant.util'
+import { DEPENDENCIES_MAP, GAGU_PATH, ServerOS } from './constant.util'
 import { writeAuthData, writeUsersData } from './user.util'
 import { completeNestedPath, getExists } from './fs.util'
 import { writeTunnelData } from './tunnel.util'
 import { writeSettingsData } from './setting.util'
 import * as md5 from 'md5'
+import { exec } from 'child_process'
 
 export const initialize = () => {
   completeNestedPath(`${GAGU_PATH.ROOT}/data/_`)
@@ -44,4 +45,15 @@ export const initialize = () => {
   if (!getExists(GAGU_PATH.DATA_SETTINGS)) {
     writeSettingsData({})
   }
+
+  const cmd = ServerOS.isWindows ? 'where' : 'type'
+
+  Object.keys(DEPENDENCIES_MAP).forEach((key) => {
+    exec(`${cmd} ${key}`, (err, out) => {
+      if (err) return
+      if (out && out.includes('not found')) {
+        DEPENDENCIES_MAP[key] = false
+      }
+    })
+  })
 }

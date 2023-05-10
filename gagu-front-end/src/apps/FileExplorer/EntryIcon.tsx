@@ -9,6 +9,7 @@ interface IconProps {
   isSmall?: boolean
   scrollHook?: { top: number, height: number }
   hideApp?: boolean
+  thumbnailSupported?: boolean
 }
 
 export default function Icon(props: IconProps) {
@@ -17,9 +18,10 @@ export default function Icon(props: IconProps) {
     isSmall = false,
     scrollHook,
     hideApp = false,
+    thumbnailSupported = false,
   } = props
 
-  const [isInView, setIsInView] = useState(false)
+  const [isViewable, setIsViewable] = useState(false)
   const [thumbnailErr, setThumbnailErr] = useState(false)
 
   const iconRef = useRef<any>(null)
@@ -30,7 +32,7 @@ export default function Icon(props: IconProps) {
     const { top, height } = scrollHook
     const { top: iconTop } = icon.getBoundingClientRect()
     if ((top - 20) <= iconTop && iconTop <= (top + height)) {
-      setIsInView(true)
+      setIsViewable(true)
     }
   }, [scrollHook])
 
@@ -46,8 +48,8 @@ export default function Icon(props: IconProps) {
   }, [entry])
 
   const showThumbnail = useMemo(() => {
-    return useThumbnail && isInView && !thumbnailErr
-  }, [useThumbnail, isInView, thumbnailErr])
+    return thumbnailSupported && useThumbnail && isViewable && !thumbnailErr
+  }, [thumbnailSupported, useThumbnail, isViewable, thumbnailErr])
 
   return (
     <div
@@ -56,7 +58,7 @@ export default function Icon(props: IconProps) {
       data-folder-name={isFolder ? entry.name.toLowerCase() : undefined}
       data-show-thumbnail={String(showThumbnail)}
       className={line(`
-        gg-entry-icon
+        gagu-entry-icon
         relative mx-auto max-w-16 pointer-events-none
         flex justify-center items-center flex-shrink-0
         bg-no-repeat bg-contain bg-center
@@ -69,7 +71,7 @@ export default function Icon(props: IconProps) {
         <div
           data-app-id={callableAppId}
           className={line(`
-            gg-app-icon absolute z-0 right-0 bottom-0 left-1/2 w-3 h-3 rounded-sm shadow-sm
+            gagu-app-icon absolute z-0 right-0 bottom-0 left-1/2 w-3 h-3 rounded-sm shadow-sm
             ${isSmall ? 'ml-2px' : 'ml-4'}
           `)}
         />

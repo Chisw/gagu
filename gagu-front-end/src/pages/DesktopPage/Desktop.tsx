@@ -17,7 +17,7 @@ export default function Desktop() {
 
   return (
     <>
-      <div className="gg-desktop absolute z-0 inset-0 pb-12">
+      <div className="gagu-desktop absolute z-0 inset-0 pb-12">
         <div
           className={line(`
             w-full h-full p-4 flex flex-col flex-wrap content-start

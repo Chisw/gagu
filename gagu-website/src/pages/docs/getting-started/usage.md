@@ -173,6 +173,10 @@ Therefore, when the file does not change (move location or modify), it will take
 
 GAGU will use [ffmpeg](https://ffmpeg.org/) and [GraphicsMagick](http://www.graphicsmagick.org/) interfaces when generating thumbnails, you can decide whether you need to install them, if not, it will not affect the use of GAGU's main functions, and all files will be displayed with default type icons.
 
+<div class="apply-tip">
+You need to restart GAGU service after you have installed ffmpeg and GraphicsMagick.
+</div>
+
 ## Default Port Number
 
 The default port number of the GAGU service is `9293`. After the service is started, it can be accessed locally through `http://127.0.0.1:9293`. When accessing other devices in the LAN, replace the IP in it with the intranet IP of the server device.

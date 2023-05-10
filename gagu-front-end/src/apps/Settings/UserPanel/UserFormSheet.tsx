@@ -11,9 +11,9 @@ import { Button, Form, SideSheet } from '@douyinfe/semi-ui'
 import { useTranslation } from 'react-i18next'
 
 const handleScrollToError = () => {
-  const top = document.querySelector('.gg-app-settings-user-form .semi-form-field-error-message')?.closest('.semi-form-field')?.getBoundingClientRect()?.top
+  const top = document.querySelector('.gagu-app-settings-user-form .semi-form-field-error-message')?.closest('.semi-form-field')?.getBoundingClientRect()?.top
   if (top) {
-    document.querySelector('.gg-app-settings-user-form .semi-sidesheet-body')?.scrollTo({ top: Math.abs(top), behavior: 'smooth' })
+    document.querySelector('.gagu-app-settings-user-form .semi-sidesheet-body')?.scrollTo({ top: Math.abs(top), behavior: 'smooth' })
   }
 }
 
@@ -116,9 +116,9 @@ export default function UserFormModal(props: UserFormModalProps) {
         headerStyle={{ padding: '8px 20px', borderBottom: '1px solid #efefef' }}
         visible={formMode !== 'CLOSE'}
         onCancel={() => setFormMode('CLOSE')}
-        getPopupContainer={() => document.querySelector('.gg-app-settings-user-form')!}
+        getPopupContainer={() => document.querySelector('.gagu-app-settings-user-form')!}
       >
-        <div className="gg-app-settings-user-form-container mx-auto py-4 max-w-md overflow-y-auto">
+        <div className="gagu-app-settings-user-form-container mx-auto py-4 max-w-md overflow-y-auto">
           <Form
             labelPosition="left"
             labelWidth={100}

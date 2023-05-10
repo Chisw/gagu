@@ -39,7 +39,7 @@ export default function VolumeSlider(props: VolumeSliderProps) {
       >
         <input
           type="range"
-          className="gg-volume-slider"
+          className="gagu-volume-slider"
           step={.01}
           min={0}
           max={1}

@@ -39,7 +39,7 @@ export default function UserPanel(props: IPanelProps) {
 
   return (
     <>
-      <div className="gg-app-settings-user-form absolute z-0 inset-0 px-4 py-2 overflow-x-hidden overflow-y-auto">
+      <div className="gagu-app-settings-user-form absolute z-0 inset-0 px-4 py-2 overflow-x-hidden overflow-y-auto">
 
         <div className="text-sm flex justify-between items-center">
           <div>{t('tip.totalUsers', { count: userList.length })}</div>

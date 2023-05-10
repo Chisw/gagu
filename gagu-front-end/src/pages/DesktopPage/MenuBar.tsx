@@ -121,7 +121,7 @@ export default function MenuBar() {
     <>
       <div
         className={line(`
-          gg-menu-bar
+          gagu-menu-bar
           absolute z-20 top-0 right-0 left-0
           px-1 h-6
           flex justify-between items-center

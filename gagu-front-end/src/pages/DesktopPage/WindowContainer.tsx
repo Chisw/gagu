@@ -8,7 +8,7 @@ export default function WindowContainer() {
 
   return (
     <>
-      <div className="gg-app-window-container absolute z-10">
+      <div className="gagu-app-window-container absolute z-10">
         {runningAppList.map(app => (
           <Window
             key={app.runningId}

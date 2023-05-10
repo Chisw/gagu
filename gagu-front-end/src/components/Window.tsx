@@ -80,7 +80,7 @@ export default function Window(props: WindowProps) {
     const newTopIndex = topWindowIndex + 1
     setCurrentIndex(newTopIndex)
     setTopWindowIndex(newTopIndex)
-    document.getElementById(`gg-app-window-${runningId}`)!.style.zIndex = String(newTopIndex)
+    document.getElementById(`gagu-app-window-${runningId}`)!.style.zIndex = String(newTopIndex)
   }, [isTopWindow, runningId, topWindowIndex, setTopWindowIndex])
 
   const handleHide = useCallback(() => {
@@ -123,10 +123,10 @@ export default function Window(props: WindowProps) {
     <>
       <Rnd
         ref={setRndInstance}
-        id={`gg-app-window-${runningId}`}
-        dragHandleClassName="gg-drag-handler"
+        id={`gagu-app-window-${runningId}`}
+        dragHandleClassName="gagu-drag-handler"
         data-hidden={hidden}
-        className="gg-app-window"
+        className="gagu-app-window"
         default={defaultInfo}
         style={{
           zIndex: initIndex,
@@ -150,7 +150,7 @@ export default function Window(props: WindowProps) {
       >
         <div
           className={line(`
-            gg-move-to-front-trigger
+            gagu-move-to-front-trigger
             absolute inset-0 bg-white-800 backdrop-filter backdrop-blur-sm overflow-hidden
             transition-box-shadow duration-200 flex flex-col
             ${isFullScreen ? '' : 'rounded-md border border-gray-500 border-opacity-30 bg-clip-padding'}
@@ -168,11 +168,11 @@ export default function Window(props: WindowProps) {
           >
             {windowLoading && (<div className="absolute z-0 right-0 bottom-0 left-0 h-2px bg-loading" />)}
             <div
-              className="gg-drag-handler flex items-center flex-grow px-2 h-full truncate"
+              className="gagu-drag-handler flex items-center flex-grow px-2 h-full truncate"
               onDoubleClick={handleFullScreen}
             >
               <div
-                className="gg-app-icon w-4 h-4 bg-center bg-no-repeat bg-contain"
+                className="gagu-app-icon w-4 h-4 bg-center bg-no-repeat bg-contain"
                 data-app-id={appId}
               />
               <span className="ml-2 text-xs">
@@ -182,7 +182,7 @@ export default function Window(props: WindowProps) {
             {/* Mask: prevent out of focus in iframe */}
             <div
               className={line(`
-                gg-drag-handler-hover-mask
+                gagu-drag-handler-hover-mask
                 absolute z-10 inset-0 mt-8
                 ${isTopWindow ? 'hidden' : ''}
               `)}
@@ -192,7 +192,7 @@ export default function Window(props: WindowProps) {
                 title="最小化"
                 prevent-move-to-front="true"
                 className={line(`
-                  gg-hidden-switch-trigger
+                  gagu-hidden-switch-trigger
                 hover:bg-gray-200 hover:text-black active:bg-gray-400
                   ${headerClassName ? 'text-gray-200' : 'text-gray-400'}
                   ${SAME_CLASS_NAME}
@@ -216,7 +216,7 @@ export default function Window(props: WindowProps) {
                 title="关闭"
                 prevent-move-to-front="true"
                 className={line(`
-                  gg-app-close-trigger
+                  gagu-app-close-trigger
                   text-red-500 hover:bg-red-500 hover:text-white active:bg-red-700
                   ${SAME_CLASS_NAME}
                 `)}

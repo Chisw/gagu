@@ -149,7 +149,7 @@ export default function ToolBar(props: ToolBarProps) {
             <ToolButton
               title="重命名 [Shift + E]"
               className="hidden md:flex"
-              icon={<SvgIcon.Edit />}
+              icon={<SvgIcon.Rename />}
               disabled={disabledMap.rename}
               onClick={onRename}
             />

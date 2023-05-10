@@ -28,12 +28,12 @@ export default function Dock() {
     const isRunning = !!sameRunningAppList.length
     if (isRunning && !openNew) {
       sameRunningAppList.forEach(app => {
-        const windowId = `gg-app-window-${app.runningId}`
+        const windowId = `gagu-app-window-${app.runningId}`
         if (document.getElementById(windowId)!.getAttribute('data-hidden') === 'true') {
-          const hiddenSwitchTrigger = document.querySelector(`#${windowId} .gg-hidden-switch-trigger`) as any
+          const hiddenSwitchTrigger = document.querySelector(`#${windowId} .gagu-hidden-switch-trigger`) as any
           hiddenSwitchTrigger.click()
         }
-        const moveToFrontTrigger = document.querySelector(`#${windowId} .gg-move-to-front-trigger`) as Element
+        const moveToFrontTrigger = document.querySelector(`#${windowId} .gagu-move-to-front-trigger`) as Element
         const mouseDownEvent = new MouseEvent('mousedown')
         moveToFrontTrigger.dispatchEvent(mouseDownEvent)
       })
@@ -89,7 +89,7 @@ export default function Dock() {
     <>
       <div
         className={line(`
-          gg-dock
+          gagu-dock
           absolute z-20 left-1/2 bottom-0 px-2 h-12
           flex items-center
           border border-b-0 border-gray-500 border-opacity-20
@@ -110,7 +110,7 @@ export default function Dock() {
                 className="relative mx-2 w-8 h-8"
               >
                 <div
-                  className="gg-app-icon filter hover:brightness-110 active:brightness-75 transition-all duration-50 w-full h-full cursor-pointer shadow rounded-lg"
+                  className="gagu-app-icon filter hover:brightness-110 active:brightness-75 transition-all duration-50 w-full h-full cursor-pointer shadow rounded-lg"
                   data-app-id={app.id}
                   title={t(`app.${app.id}`)}
                   onClick={() => handleOpenApp(app)}

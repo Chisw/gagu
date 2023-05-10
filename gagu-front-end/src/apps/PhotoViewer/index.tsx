@@ -73,7 +73,7 @@ export default function PhotoViewer(props: AppComponentProps) {
 
   return (
     <>
-      <div className="gg-app-photo-viewer absolute inset-0 flex flex-col select-none">
+      <div className="gagu-app-photo-viewer absolute inset-0 flex flex-col select-none">
 
         <div
           className={line(`

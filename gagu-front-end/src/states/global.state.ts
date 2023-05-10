@@ -29,6 +29,7 @@ export const rootInfoState = atom<IRootInfo>({
     deviceName: '--',
     desktopEntryList: [],
     rootEntryList: [],
+    thumbnailSupported: false,
   },
 })
 

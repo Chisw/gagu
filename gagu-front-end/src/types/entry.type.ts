@@ -34,4 +34,5 @@ export interface IRootInfo {
   deviceName: string
   desktopEntryList: IEntry[]
   rootEntryList: IRootEntry[]
+  thumbnailSupported: boolean
 }

@@ -1,7 +1,12 @@
 import { SettingService } from './../setting/setting.service'
 import { Response } from 'express'
 import { FileInterceptor } from '@nestjs/platform-express'
-import { deleteEntry, getExists, SERVER_MESSAGE_MAP } from '../../utils'
+import {
+  deleteEntry,
+  DEPENDENCIES_MAP,
+  getExists,
+  SERVER_MESSAGE_MAP,
+} from '../../utils'
 import { FsService } from './fs.service'
 import {
   Body,
@@ -124,11 +129,15 @@ export class FsController {
   @Permission(UserPermission.read)
   @Header('Content-Type', 'image/jpg')
   async readThumbnail(@Query('path') path: string, @Res() response: Response) {
-    try {
-      const filePath = await this.fsService.getThumbnailPath(path)
-      response.sendFile(filePath)
-    } catch (err) {
-      response.end('ERROR')
+    if (DEPENDENCIES_MAP.ffmpeg && DEPENDENCIES_MAP.gm) {
+      try {
+        const filePath = await this.fsService.getThumbnailPath(path)
+        response.sendFile(filePath)
+      } catch (err) {
+        response.end(`ERROR: ${err}`)
+      }
+    } else {
+      response.end('FFMPEG and GM are required.')
     }
   }
 

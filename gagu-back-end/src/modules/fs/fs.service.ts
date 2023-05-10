@@ -25,6 +25,8 @@ import {
   completeNestedPath,
   dataURLtoBuffer,
   getEntryPath,
+  FORBIDDEN_ENTRY_NAME_LIST,
+  DEPENDENCIES_MAP,
 } from '../../utils'
 import * as nodeDiskInfo from 'node-disk-info'
 import * as md5 from 'md5'
@@ -53,6 +55,9 @@ export class FsService {
       return []
     }
     const entryList = entryNameList
+      .filter((entryName: string) => {
+        return !FORBIDDEN_ENTRY_NAME_LIST.includes(entryName)
+      })
       .map((entryName: string) => {
         try {
           const entryPath = `${path}/${entryName}`
@@ -182,17 +187,7 @@ export class FsService {
     } else if (ServerOS.isAndroid) {
       rootEntryList.push(
         {
-          name: 'home',
-          type: EntryType.directory,
-          hidden: false,
-          lastModified: 0,
-          parentPath: '/data/data/com.termux/files',
-          hasChildren: true,
-          extension: '_dir',
-          isDisk: false,
-        },
-        {
-          name: 'shared',
+          name: 'storage',
           type: EntryType.directory,
           hidden: false,
           lastModified: 0,
@@ -201,8 +196,20 @@ export class FsService {
           hasChildren: true,
           isDisk: false,
         },
+        {
+          name: 'Home',
+          type: EntryType.directory,
+          hidden: false,
+          lastModified: 0,
+          parentPath: '/data/data/com.termux/files',
+          hasChildren: true,
+          extension: '_dir',
+          isDisk: false,
+        },
       )
     }
+
+    const thumbnailSupported = DEPENDENCIES_MAP.ffmpeg && DEPENDENCIES_MAP.gm
 
     const rootInfo: IRootInfo = {
       version: GAGU_VERSION,
@@ -210,6 +217,7 @@ export class FsService {
       deviceName: presetDeviceName || ServerOS.hostname,
       desktopEntryList: this.getEntryList(`${GAGU_PATH.ROOT}/desktop`),
       rootEntryList,
+      thumbnailSupported,
     }
 
     return rootInfo
@@ -354,10 +362,6 @@ export class FsService {
     }
 
     return thumbnailFilePath
-
-    // const bitmap = readFileSync(thumbnailFilePath)
-    // const base64 = Buffer.from(bitmap).toString('base64')
-    // return `data:image/png;base64,${base64}`
   }
 
   getAvatarPath(username: User.Username) {

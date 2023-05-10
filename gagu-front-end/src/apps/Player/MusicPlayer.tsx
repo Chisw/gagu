@@ -237,7 +237,7 @@ export default function MusicPlayer(props: AppComponentProps) {
             {/* info */}
             <div className="flex items-center pr-2 w-3/5">
               <div
-                className="gg-app-icon w-12 h-12 rounded shadow-lg"
+                className="gagu-app-icon w-12 h-12 rounded shadow-lg"
                 data-app-id="music-player"
                 style={base64 ? { backgroundImage: `url("${base64}")` } : undefined}
               />

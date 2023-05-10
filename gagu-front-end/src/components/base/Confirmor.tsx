@@ -28,7 +28,7 @@ export function Confirmor(props: ConfirmorProps) {
     centered: true,
     maskClosable: true,
     width: 300,
-    className: 'gg-confirmor',
+    className: 'gagu-confirmor',
     icon: undefined,
     content: (
       <>

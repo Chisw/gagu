@@ -16,7 +16,7 @@ import EntrySelector from './EntrySelector'
 export default function DesktopPage() {
   return (
     <div
-      className="gg-desktop-page fixed z-0 inset-0 overflow-hidden bg-gradient-to-b from-gray-600 to-gray-400"
+      className="gagu-desktop-page fixed z-0 inset-0 overflow-hidden bg-gradient-to-b from-gray-600 to-gray-400"
       onContextMenuCapture={e => e.preventDefault()}
     >
       <EntrySelector />

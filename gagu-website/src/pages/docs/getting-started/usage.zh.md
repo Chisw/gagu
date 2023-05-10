@@ -173,6 +173,10 @@ const thumbnailId = md5(`${path}-${mtimeMs}`)
 
 GAGU 在生成缩略图时需要借助 [ffmpeg](https://ffmpeg.org/) 和 [GraphicsMagick](http://www.graphicsmagick.org/) 的接口，你可以选择性地安装它们，不安装并不会影响到 GAGU 主要功能的使用，所有的文件都有默认的类型图标展示。
 
+<div class="apply-tip">
+当你安装完 ffmpeg、GraphicsMagick 后，需要重启 GAGU 服务。
+</div>
+
 ## 默认端口号
 
 GAGU 服务的默认端口号为 `9293`，服务启动后，在本地可以通过 `http://127.0.0.1:9293` 访问，局域网内其它设备访问则将其中的 IP 替换为服务设备的内网 IP 即可。

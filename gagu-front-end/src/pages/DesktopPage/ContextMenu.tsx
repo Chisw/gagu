@@ -61,7 +61,7 @@ export default function ContextMenu() {
       <div
         ref={menuRef}
         className={line(`
-          gg-contextmenu
+          gagu-contextmenu
           absolute z-30 py-1 w-44 bg-white shadow-lg border rounded-lg
           ${menuShow ? 'block' : 'hidden'}
         `)}

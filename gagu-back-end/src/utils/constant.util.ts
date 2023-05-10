@@ -7,6 +7,11 @@ const hostname = os.hostname()
 export const GAGU_VERSION = '0.0.36'
 export const IS_DEV = process.env.NODE_ENV === 'development'
 
+export const DEPENDENCIES_MAP: { [KEY: string]: boolean } = {
+  ffmpeg: true,
+  gm: true,
+}
+
 export const HOST = (() => {
   const iFaces = os.networkInterfaces()
   const ipList: string[] = []
@@ -40,6 +45,8 @@ export const PATH_MAP: { [PLATFORM: string]: string } = {
 
 export const ROOT_PATH =
   (PATH_MAP[ServerOS.platform] || '') + (IS_DEV ? '.dev' : '')
+
+export const FORBIDDEN_ENTRY_NAME_LIST = ['.io.gagu', '.io.gagu.dev']
 
 export const GAGU_PATH = {
   ROOT: ROOT_PATH,
