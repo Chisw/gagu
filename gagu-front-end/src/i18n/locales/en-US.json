@@ -53,6 +53,7 @@
       "save": "Save",
       "saveToLocal": "Save to local",
       "selectAll": "Select All",
+      "setAs": "Set as",
       "showHiddenItems": "Show hidden items",
       "shutdown": "Shutdown",
       "switchBackground": "Switch Background",
@@ -77,7 +78,9 @@
     "label": {
       "accesses": "Accesses",
       "avatar": "Avatar",
+      "desktopWallpaper": "Desktop Wallpaper",
       "deviceName": "Device Name",
+      "language": "Language",
       "mode": "Mode",
       "nickname": "Nickname",
       "password": "Password",

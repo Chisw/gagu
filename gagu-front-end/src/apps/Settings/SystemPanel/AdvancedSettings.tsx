@@ -42,11 +42,12 @@ export default function AdvancedSettings() {
 
   return (
     <>
-      <div className="mx-auto max-w-md">
+      <div className="mx-auto max-w-lg">
         {!getting && (
           <Form
             labelPosition="left"
-            labelWidth={120}
+            labelAlign="right"
+            labelWidth={200}
             initValues={form}
             onSubmit={() => handleSubmit()}
           >

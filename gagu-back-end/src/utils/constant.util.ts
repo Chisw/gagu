@@ -4,7 +4,7 @@ import { IServerOS } from 'src/types'
 const platform = os.platform()
 const hostname = os.hostname()
 
-export const GAGU_VERSION = '0.0.36'
+export const GAGU_VERSION = '0.0.37'
 export const IS_DEV = process.env.NODE_ENV === 'development'
 
 export const DEPENDENCIES_MAP: { [KEY: string]: boolean } = {
@@ -56,6 +56,7 @@ export const GAGU_PATH = {
   DATA_TUNNELS: `${ROOT_PATH}/data/tunnels.json`,
   DATA_SETTINGS: `${ROOT_PATH}/data/settings.json`,
   PUBLIC_AVATAR: `${ROOT_PATH}/public/avatar`,
+  PUBLIC_BACKGROUND: `${ROOT_PATH}/public/background`,
 }
 
 export const HELP_INFO = `

@@ -53,7 +53,6 @@ Many unrealized ideas will be recorded here, waiting for development.
 
 - Support panorama pictures
 - Crop
-- View location on map
 
 ### Music Player
 
@@ -68,8 +67,7 @@ Many unrealized ideas will be recorded here, waiting for development.
 ### Settings
 
 - General settings
-   - Wallpaper
-   - Default language
+   - Default mode
 
 - Advanced settings
    - IP whitelist, blacklist

@@ -256,6 +256,20 @@ export class FsService {
     }
   }
 
+  uploadBackground(name: string, buffer: Buffer) {
+    try {
+      writeFileSync(`${GAGU_PATH.PUBLIC_BACKGROUND}/${name}`, buffer)
+      return {
+        success: true,
+      }
+    } catch (err) {
+      return {
+        success: false,
+        message: err.toString(),
+      }
+    }
+  }
+
   uploadAvatar(username: User.Username, avatar: string) {
     if (avatar) {
       const avatarBuffer = dataURLtoBuffer(avatar)
@@ -366,5 +380,9 @@ export class FsService {
 
   getAvatarPath(username: User.Username) {
     return `${GAGU_PATH.ROOT}/public/avatar/${username}`
+  }
+
+  getBackgroundPath(name: string) {
+    return `${GAGU_PATH.ROOT}/public/background/${name}`
   }
 }

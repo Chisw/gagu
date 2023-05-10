@@ -53,6 +53,7 @@
       "save": "セーブ",
       "saveToLocal": "ローカルに保存",
       "selectAll": "すべて選択",
+      "setAs": "に設定",
       "showHiddenItems": "非表示のアイテムを表示する",
       "shutdown": "システムのシャットダウン",
       "switchBackground": "背景を切り替える",
@@ -77,7 +78,9 @@
     "label": {
       "accesses": "エントリ ディレクトリ",
       "avatar": "アバター",
+      "desktopWallpaper": "デスクトップの壁紙",
       "deviceName": "装置名",
+      "language": "言語",
       "mode": "モデル",
       "nickname": "ニックネーム",
       "password": "パスワード",

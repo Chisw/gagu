@@ -52,6 +52,7 @@
       "rename": "重命名",
       "save": "保存",
       "saveToLocal": "保存至本地",
+      "setAs": "設為",
       "selectAll": "全選",
       "showHiddenItems": "顯示隱藏項",
       "shutdown": "關閉系統",
@@ -77,7 +78,9 @@
     "label": {
       "accesses": "入口目錄",
       "avatar": "頭像",
+      "desktopWallpaper": "桌面壁紙",
       "deviceName": "設備名稱",
+      "language": "語言",
       "mode": "模式",
       "nickname": "暱稱",
       "password": "密碼",

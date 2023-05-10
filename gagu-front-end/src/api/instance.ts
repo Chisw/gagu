@@ -4,7 +4,7 @@ import toast from 'react-hot-toast'
 
 const instance = axios.create({
   baseURL: BASE_URL,
-  timeout: 10 * 1000,
+  timeout: 30 * 1000,
   timeoutErrorMessage: ERROR_TIMEOUT,
   headers: {
     'Content-Type': 'application/json; charset=UTF-8',

@@ -12,6 +12,7 @@ export const initialize = () => {
   completeNestedPath(`${GAGU_PATH.ROOT}/desktop/_`)
   completeNestedPath(`${GAGU_PATH.ROOT}/public/_`)
   completeNestedPath(`${GAGU_PATH.ROOT}/public/avatar/_`)
+  completeNestedPath(`${GAGU_PATH.ROOT}/public/background/_`)
   completeNestedPath(`${GAGU_PATH.ROOT}/public/lib/_`)
   completeNestedPath(`${GAGU_PATH.ROOT}/thumbnail/_`)
 

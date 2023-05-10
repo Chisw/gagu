@@ -19,6 +19,10 @@ Clear data directory means that all users, download tunnels and other data will 
 
 ## v0.0.*
 
+- v0.0.37 (2023-05-10)
+  - feat: desktop wallpaper
+  - feat: detect whether the thumbnail interface is supported
+
 - v0.0.36 (2023-04-26)
   - feat: add param `-H`,`--Host` to specify host
 

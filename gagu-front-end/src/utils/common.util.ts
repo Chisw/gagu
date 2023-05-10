@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon'
 import { IOffsetInfo, IRectInfo } from '../types'
 import md5 from 'md5'
+import { FsApi } from '../api'
 
 export const copy = (str: string) => {
   const input = document.createElement('textarea')
@@ -142,6 +143,15 @@ export const getBaiduMapPinUrl = (ExifData: any, content?: string) => {
     return `https://api.map.baidu.com/marker?${query.toString()}`
   } else {
     return ''
+  }
+}
+
+export const refreshBackground = (name: 'desktop' | 'login' | 'share' | 'favicon') => {
+  if (name === 'desktop') {
+    document.querySelectorAll('.gagu-background-desktop').forEach((el) => {
+      el.removeAttribute('style')
+      el.setAttribute('style', `background-image: url("${`${FsApi.getBackgroundStreamUrl('desktop')}?temp=${Date.now()}`}")`)
+    })
   }
 }
 

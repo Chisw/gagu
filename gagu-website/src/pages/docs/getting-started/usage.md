@@ -147,12 +147,14 @@ After the root directory is successfully created, the following subdirectories w
   |- data
   |- public
   |  |- avatar
+  |  |- background
   |  |- lib
   |- thumbnail
 ```
 
 - `data` is used to persistently store some data files in JSON format such as users, logins, download tunnels, settings, logs, etc
 - `public/avatar` is used to store the user's avatar, and the file name is the username
+- `public/background` is used to store some background images
 - `public/lib` is used to store third-party js libraries that may be used in the future
 - `thumbnail` is used to store thumbnails generated in use
 

@@ -17,6 +17,7 @@ export class LoggerMiddleware implements NestMiddleware {
       originalUrl.startsWith('/api/') &&
       !originalUrl.startsWith('/api/fs/thumbnail') &&
       !originalUrl.startsWith('/api/fs/avatar') &&
+      !originalUrl.startsWith('/api/fs/background') &&
       !originalUrl.startsWith('/api/fs/tags')
     ) {
       const dateTime = DateTime.now().toFormat('yyyy-MM-dd HH:mm:ss')

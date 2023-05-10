@@ -4,6 +4,7 @@ import Desktop from './Desktop'
 import Dock from './Dock'
 import MenuBar from './MenuBar'
 import EntrySelector from './EntrySelector'
+import { FsApi } from '../../api'
 
 // fixed z-0 DesktopPage
 // -               EntrySelector
@@ -16,9 +17,13 @@ import EntrySelector from './EntrySelector'
 export default function DesktopPage() {
   return (
     <div
-      className="gagu-desktop-page fixed z-0 inset-0 overflow-hidden bg-gradient-to-b from-gray-600 to-gray-400"
+      className="gagu-desktop-page fixed z-0 inset-0 overflow-hidden bg-gradient-to-b from-gray-800 to-gray-600"
       onContextMenuCapture={e => e.preventDefault()}
     >
+      <div
+        className="gagu-background-desktop absolute z-0 inset-0 bg-cover bg-center"
+        style={{ backgroundImage: `url("${FsApi.getBackgroundStreamUrl('desktop')}")` }}
+      />
       <EntrySelector />
       <ContextMenu />
       <MenuBar />

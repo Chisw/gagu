@@ -118,15 +118,15 @@ export default function UserFormModal(props: UserFormModalProps) {
         onCancel={() => setFormMode('CLOSE')}
         getPopupContainer={() => document.querySelector('.gagu-app-settings-user-form')!}
       >
-        <div className="gagu-app-settings-user-form-container mx-auto py-4 max-w-md overflow-y-auto">
+        <div className="gagu-app-settings-user-form-container py-4 mx-auto max-w-lg overflow-y-auto">
           <Form
             labelPosition="left"
-            labelWidth={100}
+            labelAlign="right"
+            labelWidth={200}
             initValues={form}
             onSubmit={() => handleSubmit()}
           >
-            <div className="pb-3 flex">
-              <Form.Label width={100}>{t`label.avatar`}</Form.Label>
+            <Form.Slot label={t`label.avatar`}>
               <div
                 className={line(`
                   relative p-1 w-24 h-24
@@ -146,10 +146,11 @@ export default function UserFormModal(props: UserFormModalProps) {
                     style={{ backgroundImage: `url("${form.avatar}")` }}
                   />
                 ) : (
-                  <SvgIcon.Avatar size={96} className="text-gray-200" />
+                  <SvgIcon.ImageAdd size={48} className="text-gray-200" />
                 )}
               </div>
-            </div>
+            </Form.Slot>
+
             <Form.Input
               showClear
               label={t`label.nickname`}

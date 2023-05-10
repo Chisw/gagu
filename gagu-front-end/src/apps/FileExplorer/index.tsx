@@ -24,6 +24,7 @@ import {
   getEntryPath,
   MAX_PAGE_SIZE,
   DOWNLOAD_PERIOD,
+  GEN_THUMBNAIL_IMAGE_LIST,
 } from '../../utils'
 import {
   contextMenuDataState,
@@ -557,6 +558,7 @@ export default function FileExplorer(props: AppComponentProps) {
   const handleContextMenu = useCallback((event: any) => {
     let isOnBlank = true
     let isOnDir = false
+    let isOnImage = false
     let contextEntryList: IEntry[] = [...selectedEntryList]
 
     const unconfirmedLen = contextEntryList.length
@@ -572,6 +574,9 @@ export default function FileExplorer(props: AppComponentProps) {
       const entry = entryList.find(o => o.name === entryName)
 
       if (isDir) isOnDir = true
+      if (GEN_THUMBNAIL_IMAGE_LIST.includes(targetEntry.getAttribute('data-extension'))) {
+        isOnImage = true
+      }
       if (unconfirmedLen <= 1 && entry) {
         contextEntryList = [entry]
         setSelectedEntryList(contextEntryList)
@@ -632,6 +637,22 @@ export default function FileExplorer(props: AppComponentProps) {
           label: 'IINA',
           onClick: () => openInIINA(contextEntryList[0]),
         }),
+      },
+      {
+        icon: <SvgIcon.Settings />,
+        label: t`action.setAs`,
+        isShow: isOnImage,
+        onClick: () => {},
+        children: [
+          { name: 'desktop', title: 'Desktop Wallpaper' },
+          { name: 'login', title: 'Login Wallpaper' },
+          { name: 'share', title: 'Sharing Wallpaper' },
+          { name: 'favicon', title: 'Favicon' },
+        ].map(o => ({
+          icon: <div className="w-4 h-4">⏳</div>,
+          label: t(`${o.title}`),
+          onClick: () => toast.error('⏳'),
+        }))
       },
       {
         icon: <SvgIcon.FolderInfo />,
@@ -778,7 +799,7 @@ export default function FileExplorer(props: AppComponentProps) {
               )}
               {/* entry list */}
               {displayEntryList.map(entry => {
-                const { name, type, hidden, size, lastModified } = entry
+                const { name, type, extension, hidden, size, lastModified } = entry
                 const isSelected = !!selectedEntryList.find(o => isSameEntry(o, entry))
                 const isSmall = !gridMode
                 const bytes = size === undefined ? sizeMap[`${currentPath}/${name}`] : size
@@ -790,6 +811,7 @@ export default function FileExplorer(props: AppComponentProps) {
                     data-entry-name={name}
                     data-is-directory={type === EntryType.directory}
                     data-selected={isSelected}
+                    data-extension={extension}
                     // draggable
                     className={line(`
                       gagu-entry-node

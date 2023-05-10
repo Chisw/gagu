@@ -14,6 +14,7 @@ import {
   Delete,
   Get,
   Header,
+  Param,
   Post,
   Put,
   Query,
@@ -142,10 +143,10 @@ export class FsController {
   }
 
   @Public()
-  @Get('avatar')
+  @Get('avatar/:username')
   @Header('Content-Type', 'image/jpg')
   readAvatar(
-    @Query('username') username: User.Username,
+    @Param('username') username: User.Username,
     @Res() response: Response,
   ) {
     try {
@@ -157,6 +158,25 @@ export class FsController {
       }
     } catch (err) {
       response.end('ERROR_AVATAR')
+    }
+  }
+
+  @Public()
+  @Get('background/:name')
+  @Header('Content-Type', 'image/jpg')
+  readBackground(
+    @Param('name') name: User.Username,
+    @Res() response: Response,
+  ) {
+    try {
+      const path = this.fsService.getBackgroundPath(name)
+      if (getExists(path)) {
+        response.sendFile(path)
+      } else {
+        response.end('ERROR_BACKGROUND_NOT_EXISTED')
+      }
+    } catch (err) {
+      response.end('ERROR_BACKGROUND')
     }
   }
 
@@ -208,5 +228,15 @@ export class FsController {
     @UploadedFile() file: Express.Multer.File,
   ) {
     return this.fsService.uploadFile(path, file.buffer)
+  }
+
+  @Post('upload/background/:name')
+  @Permission(UserPermission.administer)
+  @UseInterceptors(FileInterceptor('file'))
+  uploadBackground(
+    @Param('name') name: string,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return this.fsService.uploadBackground(name, file.buffer)
   }
 }

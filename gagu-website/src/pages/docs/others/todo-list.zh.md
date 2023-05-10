@@ -53,7 +53,6 @@ layout: ../../../layouts/DocLayout.astro
 
 - 支持全景图片
 - 裁切
-- 显示照片位置
 
 ### 音乐播放器
 
@@ -68,8 +67,7 @@ layout: ../../../layouts/DocLayout.astro
 ### 设置
 
 - 通用设置
-  - 设置壁纸
-  - 国际化
+  - 默认模式
 
 - 高级设置
   - IP 白名单、黑名单
