@@ -1,4 +1,4 @@
-import { HOST, readSettingsData } from './utils'
+import { HOST, LOGO_TEXT, readSettingsData } from './utils'
 import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
 import {
@@ -10,6 +10,7 @@ import {
   deleteEntry,
 } from './utils'
 import * as minimist from 'minimist'
+import * as chalk from 'chalk'
 
 const argv = minimist(process.argv.slice(2), {
   alias: {
@@ -64,7 +65,10 @@ async function bootstrap() {
 
   await app.listen(port, Host)
 
-  console.log(`\n✨  GAGU service is running on: ${url}\n`)
+  console.log(chalk.green.bold(LOGO_TEXT))
+  console.log(`    GAGU (v${GAGU_VERSION}) service is started successfully.\n`)
+  console.log(`    PID: ${process.pid}`)
+  console.log(`👉🏻  URL: ${chalk.underline(url)}\n`)
 
   argv.open && openInBrowser(`${url}/login`)
 }

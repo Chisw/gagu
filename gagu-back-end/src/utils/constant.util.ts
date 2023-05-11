@@ -72,6 +72,13 @@ export const HELP_INFO = `
   gagu --reset-all  Remove GAGU root directory
 `
 
+export const LOGO_TEXT = `
+     _______ _______ _______ ____ __ 
+    |     __|    _  |     __|    |  |
+    |    |  |       |    |  |    |  |
+    |_______|____|__|_______|_______|
+`
+
 // Sync following code to BE & FE
 export const PULSE_INTERVAL = 60 * 1000
 export const HEADERS_AUTH_KEY = 'Authorization'

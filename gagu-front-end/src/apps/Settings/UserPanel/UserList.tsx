@@ -19,7 +19,7 @@ interface UserListProps {
 export default function UserList(props: UserListProps) {
 
   const {
-    list,
+    list: userList,
     loggedInList,
     refresh,
     setForm,
@@ -91,7 +91,10 @@ export default function UserList(props: UserListProps) {
             ),
             t,
             onConfirm: async close => {
-              if (list.filter(u => u.permissions.includes(UserPermission.administer)).length === 1) {
+              const isCurrentAdmin = user.permissions.includes(UserPermission.administer)
+              const isOnlyOneAdmin = userList.filter(u => u.permissions.includes(UserPermission.administer)).length === 1
+
+              if (isCurrentAdmin && isOnlyOneAdmin) {
                 toast.error('最后一个管理员无法删除')
                 return
               }
@@ -104,12 +107,12 @@ export default function UserList(props: UserListProps) {
       },
     ].filter(b => b.show)
     return buttonList
-  }, [setForm, setFormMode, handleUpdateAbility, handleRemove, list, t])
+  }, [setForm, setFormMode, handleUpdateAbility, handleRemove, userList, t])
 
   return (
     <>
       <div className="relative z-0 flex flex-wrap -mx-2">
-        {list.map((user) => {
+        {userList.map((user) => {
           const { nickname, username, expiredAt, createdAt, disabled, permissions } = user
           const isLoggedIn = loggedInList.includes(username)
           const showExpire = !!expiredAt

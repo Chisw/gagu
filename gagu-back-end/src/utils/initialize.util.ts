@@ -51,7 +51,6 @@ export const initialize = () => {
 
   Object.keys(DEPENDENCIES_MAP).forEach((key) => {
     exec(`${cmd} ${key}`, (err, out) => {
-      if (err) return
       if (out && out.includes('not found')) {
         DEPENDENCIES_MAP[key] = false
       }
