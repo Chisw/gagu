@@ -59,12 +59,17 @@ export default function PathLink(props: PathLinkProps) {
           className={isRootEntryDisabled ? '' : 'cursor-pointer hover:text-black'}
           onClick={() => !isRootEntryDisabled && rootEntry && onRootEntryClick(rootEntry)}
         >
+          <SvgIcon.Folder className="-mt-2px mr-1 inline-block" size={12} />
           {rootEntry.name}
         </span>
         {centerPathList.map((path, pathIndex) => {
           const prefix = centerPathList.filter((p, pIndex) => pIndex < pathIndex).join('/')
           const fullPath = `${rootEntryPath}/${prefix ? `${prefix}/` : ''}${path}`
-          const disabled = pathIndex > centerPathList.length - 2 - (selectedLen === 1 ? 1 : 0)
+          const oneSelected = selectedLen === 1
+          const isLast = pathIndex === centerPathList.length - 1
+          const showFileIcon = oneSelected && isLast && !selectedEntryList[0].extension.startsWith('_dir')
+          const disabled = pathIndex > centerPathList.length - 2 - (oneSelected ? 1 : 0)
+
           return (
             <span key={encodeURIComponent(fullPath)}>
               <SvgIcon.ChevronRight size={14} className="inline -mt-2px" />
@@ -73,6 +78,10 @@ export default function PathLink(props: PathLinkProps) {
                 className={disabled ? '' : 'cursor-pointer hover:text-black'}
                 onClick={() => !disabled && onDirClick(fullPath)}
               >
+                {showFileIcon
+                  ? <SvgIcon.File className="-mt-2px mr-1 inline-block" size={12} />
+                  : <SvgIcon.Folder className="-mt-2px mr-1 inline-block" size={12} />
+                }
                 {path}
               </span>
             </span>

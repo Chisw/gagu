@@ -80,6 +80,7 @@
       "avatar": "Avatar",
       "desktopWallpaper": "Desktop Wallpaper",
       "deviceName": "Device Name",
+      "favicon": "Tab Icon",
       "language": "Language",
       "mode": "Mode",
       "nickname": "Nickname",
@@ -110,6 +111,7 @@
       "ERROR_403": "Insufficient permissions"
     },
     "tip": {
+      "deleteUser": "Delete this user?",
       "expired": "Expired",
       "sharingWithPassword": "Ops, the sharer has set an access password",
       "totalUsers": "{{count}} user(s) in total",

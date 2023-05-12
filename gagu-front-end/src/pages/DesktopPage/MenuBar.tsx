@@ -148,7 +148,7 @@ export default function MenuBar() {
                       title={t`action.visitWebsite`}
                       target="_blank"
                       rel="noreferrer"
-                      className="text-gray-400 hover:text-blue-600"
+                      className="text-gray-400 hover:text-gray-600"
                       href="https://gagu.io"
                     >
                       <SvgIcon.Earth />
@@ -157,7 +157,7 @@ export default function MenuBar() {
                       title={t`action.visitGithub`}
                       target="_blank"
                       rel="noreferrer"
-                      className="ml-1 text-gray-400 hover:text-blue-600"
+                      className="ml-1 text-gray-400 hover:text-gray-600"
                       href="https://github.com/Chisw/gagu"
                     >
                       <SvgIcon.Github />
@@ -189,7 +189,7 @@ export default function MenuBar() {
                 <Dropdown
                   position="rightTop"
                   render={(
-                    <div className="p-4 w-48">
+                    <div className="px-4 py-8 w-48">
                       <div className="flex justify-center">
                         <QrCode value={localAddress} />
                       </div>
@@ -220,7 +220,7 @@ export default function MenuBar() {
                     </Dropdown.Menu>
                   )}
                 >
-                  <Dropdown.Item icon={<SvgIcon.Flash />}>
+                  <Dropdown.Item icon={<SvgIcon.Device />}>
                     <div className="w-full flex justify-between items-center">
                       <span>{t`action.switchTo`}</span>
                       <SvgIcon.ChevronRight className="text-gray-400"/>

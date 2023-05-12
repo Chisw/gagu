@@ -66,9 +66,9 @@ async function bootstrap() {
   await app.listen(port, Host)
 
   console.log(chalk.green.bold(LOGO_TEXT))
-  console.log(`    GAGU (v${GAGU_VERSION}) service is started successfully.\n`)
+  console.log(`    GAGU (v${GAGU_VERSION}) service successfully started.\n`)
   console.log(`    PID: ${process.pid}`)
-  console.log(`👉🏻  URL: ${chalk.underline(url)}\n`)
+  console.log(`    URL: ${chalk.underline.bold(url)}\n\n`)
 
   argv.open && openInBrowser(`${url}/login`)
 }

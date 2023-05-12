@@ -85,7 +85,7 @@ export default function UserList(props: UserListProps) {
             type: 'delete',
             content: (
               <div>
-                <p className="font-bold">Sure to delete this user?</p>
+                <p className="font-bold">{t`tip.deleteUser`}</p>
                 <p>{user.nickname} @{user.username}</p>
               </div>
             ),

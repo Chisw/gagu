@@ -80,6 +80,7 @@
       "avatar": "頭像",
       "desktopWallpaper": "桌面壁紙",
       "deviceName": "設備名稱",
+      "favicon": "標簽圖標",
       "language": "語言",
       "mode": "模式",
       "nickname": "暱稱",
@@ -110,6 +111,7 @@
       "ERROR_403": "權限不足"
     },
     "tip": {
+      "deleteUser": "刪除用戶？",
       "expired": "已過期",
       "sharingWithPassword": "啊喔，分享者設置的訪問密碼",
       "totalUsers": "共 {{count}} 位用戶",

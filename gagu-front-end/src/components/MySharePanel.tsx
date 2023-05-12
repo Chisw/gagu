@@ -70,8 +70,8 @@ export default function MySharePanel(props: MySharePanelProps) {
         <div>
           <div>
             {!data?.tunnels.length && (
-              <div className="py-10 text-center text-gray-400">
-                空空如也
+              <div className="py-20 flex justify-center text-gray-100">
+                <SvgIcon.G size={64} />
               </div>
             )}
           </div>

@@ -80,6 +80,7 @@
       "avatar": "アバター",
       "desktopWallpaper": "デスクトップの壁紙",
       "deviceName": "装置名",
+      "favicon": "タブアイコン",
       "language": "言語",
       "mode": "モデル",
       "nickname": "ニックネーム",
@@ -110,6 +111,7 @@
       "ERROR_403": "不十分な権限"
     },
     "tip": {
+      "deleteUser": "このユーザーを削除しますか?",
       "expired": "期限切れ",
       "sharingWithPassword": "共有者がアクセスパスワードを設定しました",
       "totalUsers": "合計 {{count}} ユーザー",

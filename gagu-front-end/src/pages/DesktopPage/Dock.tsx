@@ -90,11 +90,11 @@ export default function Dock() {
       <div
         className={line(`
           gagu-dock
-          absolute z-20 left-1/2 bottom-0 px-2 h-12
+          absolute z-20 left-1/2 bottom-0 mb-2 px-1 h-12 overflow-hidden
           flex items-center
-          border border-b-0 border-gray-500 border-opacity-20
+          border border-gray-500 border-opacity-20
           bg-clip-padding bg-white-600
-          rounded-t-lg
+          rounded-lg
           backdrop-filter backdrop-blur
           transition-all duration-500
           transform -translate-x-1/2
@@ -107,7 +107,7 @@ export default function Dock() {
             return (
               <div
                 key={app.id}
-                className="relative mx-2 w-8 h-8"
+                className="relative mx-1 w-8 h-8"
               >
                 <div
                   className="gagu-app-icon filter hover:brightness-110 active:brightness-75 transition-all duration-50 w-full h-full cursor-pointer shadow rounded-lg"
@@ -118,8 +118,8 @@ export default function Dock() {
                 />
                 <span
                   className={line(`
-                    absolute left-1/2 bottom-0 w-4 h-2 bg-blue-600
-                    transform -translate-x-1/2 translate-y-3
+                    absolute left-1/2 bottom-0 w-4 h-1 bg-blue-600
+                    transform -translate-x-1/2 translate-y-2
                     transition-all duration-300
                     ${isRunning ? 'opacity-100' : 'opacity-0'}
                   `)}

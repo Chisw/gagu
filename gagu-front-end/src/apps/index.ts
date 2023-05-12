@@ -25,8 +25,8 @@ export const APP_LIST: IApp[] = [
     id: APP_ID_MAP.fileExplorer,
     runningId: 0,
     AppComponent: FileExplorer,
-    width: 980,
-    height: 640,
+    width: 1240,
+    height: 720,
     resizeRange: {
       minWidth: 640,
       minHeight: 480,

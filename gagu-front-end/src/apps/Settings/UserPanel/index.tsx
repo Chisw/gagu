@@ -45,14 +45,14 @@ export default function UserPanel(props: IPanelProps) {
           <div>{t('tip.totalUsers', { count: userList.length })}</div>
           <div className="flex items-center">
             <div
-              title="刷新"
+              title={t`action.refresh`}
               className="w-6 h-6 cursor-pointer hover:bg-gray-100 flex justify-center items-center rounded"
               onClick={refresh}
             >
               <SvgIcon.Refresh className="text-gray-500" />
             </div>
             <div
-              title="新增用户"
+              title={t`action.newUser`}
               className="w-6 h-6 cursor-pointer hover:bg-gray-100 flex justify-center items-center rounded"
               onClick={() => {
                 setForm(new UserForm())

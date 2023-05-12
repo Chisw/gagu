@@ -2,6 +2,7 @@ import { DateTime } from 'luxon'
 import { IOffsetInfo, IRectInfo } from '../types'
 import md5 from 'md5'
 import { FsApi } from '../api'
+import default_favicon from '../img/favicon.png'
 
 export const copy = (str: string) => {
   const input = document.createElement('textarea')
@@ -84,12 +85,17 @@ export const getImageTypeBase64ByURL = async (url: string, options?: { width?: n
     usePNG = false,
   } = options || {}
 
-  return new Promise((resolve, reject) => {
+  return new Promise<string>((resolve, reject) => {
     const img = document.createElement('img')
     img.setAttribute('crossOrigin', 'anonymous')
     img.onload = () => {
+      const ratio = img.naturalWidth / img.naturalHeight
       const w = width || img.naturalWidth
-      const h = height || img.naturalHeight
+      const h = width
+        ? height
+          ? height
+          : width / ratio
+        : img.naturalHeight
       const canvas = document.createElement('canvas')
       canvas.width = w
       canvas.height = h
@@ -101,7 +107,7 @@ export const getImageTypeBase64ByURL = async (url: string, options?: { width?: n
       resolve(base64)
     }
     img.onerror = (error) => {
-      reject(error)
+      reject(`error`)
     }
     img.src = url
   })
@@ -147,11 +153,26 @@ export const getBaiduMapPinUrl = (ExifData: any, content?: string) => {
 }
 
 export const refreshBackground = (name: 'desktop' | 'login' | 'share' | 'favicon') => {
-  if (name === 'desktop') {
-    document.querySelectorAll('.gagu-background-desktop').forEach((el) => {
-      el.removeAttribute('style')
-      el.setAttribute('style', `background-image: url("${`${FsApi.getBackgroundStreamUrl('desktop')}?temp=${Date.now()}`}")`)
-    })
+  document.querySelectorAll(`.gagu-background-${name}`).forEach((el) => {
+    el.removeAttribute('style')
+    el.setAttribute('style', `background-image: url("${`${FsApi.getBackgroundStreamUrl(name)}?temp=${Date.now()}`}")`)
+  })
+}
+
+export const setFavicon = async (imgUrl: string) => {
+  const set = (dataURL: string) => {
+    const link: any = document.querySelector('link[rel*=icon]') || document.createElement('link')
+    link.type = 'image/x-icon'
+    link.rel = 'shortcut icon'
+    link.href = dataURL
+    document.getElementsByTagName('head')[0].appendChild(link)
+  }
+  const options = { width: 32, usePNG: true }
+  try {
+    const base64 = await getImageTypeBase64ByURL(imgUrl, options)
+    set(base64)
+  } catch (err) {
+    set(default_favicon)
   }
 }
 

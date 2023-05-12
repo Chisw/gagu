@@ -1,17 +1,20 @@
+import { useEffect } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { useFavicon } from './hooks'
 import { Toaster } from 'react-hot-toast'
 import LoginPage from './pages/LoginPage'
 import DesktopPage from './pages/DesktopPage'
 import ExplorePage from './pages/ExplorePage'
 import TouchPage from './pages/TouchPage'
 import SharePage from './pages/SharePage'
-import defaultFavicon from './img/favicon.png'
+import { FsApi } from './api'
+import { setFavicon } from './utils'
 import './css/index.css'
 
 export default function App() {
 
-  useFavicon(defaultFavicon)
+  useEffect(() => {
+    setFavicon(FsApi.getBackgroundStreamUrl('favicon'))
+  }, [])
 
   return (
     <BrowserRouter>

@@ -754,8 +754,8 @@ export default function FileExplorer(props: AppComponentProps) {
             />
             {/* empty tip */}
             {(!fetching && isEntryListEmpty) && (
-              <div className="absolute inset-0 p-10 flex justify-center items-center text-gray-200 text-lg">
-                空空如也
+              <div className="absolute inset-0 p-10 flex justify-center items-center text-gray-100 text-lg">
+                <SvgIcon.G size={64} />
               </div>
             )}
             <div
