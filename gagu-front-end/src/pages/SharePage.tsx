@@ -9,7 +9,7 @@ import { DownloadApi, FsApi, TunnelApi } from '../api'
 import { Spinner, SvgIcon } from '../components/base'
 import EntryListPanel from '../components/EntryListPanel'
 import PublicFooter from '../components/PublicFooter'
-import { useFetch } from '../hooks'
+import { useRequest } from '../hooks'
 import { getDateTime, SERVER_MESSAGE_MAP } from '../utils'
 
 export default function SharePage() {
@@ -20,8 +20,8 @@ export default function SharePage() {
   const [passwordVal, setPasswordVal] = useState('')
   const [expiredAtTip, setExpiredAtTip] = useState('')
 
-  const { fetch: getTunnel, loading, data } = useFetch(TunnelApi.getTunnel)
-  const { fetch: checkTunnel, loading: calling } = useFetch(TunnelApi.checkTunnel)
+  const { request: getTunnel, loading, data } = useRequest(TunnelApi.getTunnel)
+  const { request: checkTunnel, loading: calling } = useRequest(TunnelApi.checkTunnel)
 
   const updateTunnelData = useCallback(() => {
     if (code) {

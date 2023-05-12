@@ -1,14 +1,14 @@
 import { ISetting } from '../types'
-import instance from './instance'
+import service from './service'
 
 export class SettingApi {
-  static getAll = async () => {
-    const { data } = await instance.get('/api/setting')
+  static querySettingAll = async () => {
+    const { data } = await service.get('/api/setting')
     return data
   }
 
-  static update = async (settings: ISetting) => {
-    const { data } = await instance.put('/api/setting', settings)
+  static updateSetting = async (settings: ISetting) => {
+    const { data } = await service.put('/api/setting', settings)
     return data
   }
 }

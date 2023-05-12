@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import ToolButton from '../../components/ToolButton'
 import { SvgIcon } from '../../components/base'
 
@@ -46,6 +47,8 @@ interface ToolBarProps {
 
 export default function ToolBar(props: ToolBarProps) {
 
+  const { t } = useTranslation()
+
   const {
     windowWidth,
     disabledMap,
@@ -78,7 +81,7 @@ export default function ToolBar(props: ToolBarProps) {
 
   return (
     <>
-      <div className="h-8 flex-shrink-0 flex items-center border-b">
+      <div className="h-8 flex-shrink-0 flex items-center border-b border-gray-100">
         <ToolButton
           title="后退 [Shift + ←]"
           icon={<SvgIcon.ArrowLeft />}
@@ -167,10 +170,10 @@ export default function ToolBar(props: ToolBarProps) {
 
         <div className={`${filterMode ? 'w-40' : 'w-8'} h-full transition-all duration-200`}>
           {filterMode ? (
-            <div className="h-full flex justify-between items-center border-r">
+            <div className="h-full flex justify-between items-center border-r border-gray-100">
               <input
                 autoFocus
-                placeholder="在当前目录筛选"
+                placeholder={t`hint.filter`}
                 className="w-full px-2 py-1 text-xs outline-none"
                 value={filterText}
                 onChange={e => setFilterText(e.target.value)}

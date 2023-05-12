@@ -5,6 +5,7 @@
       "backToTop": "返回上級",
       "cancel": "取消",
       "changePassword": "修改密碼",
+      "clear": "清空",
       "close": "關閉",
       "closeAllOpenedWindows": "關閉所有窗口",
       "codeView": "等寬顯示",
@@ -17,7 +18,6 @@
       "edit": "編輯",
       "enable": "啟用",
       "exifInfo": "Exif 信息",
-      "filter": "篩選",
       "folderSize": "文件夾大小",
       "fullScreenEnter": "進入全屏",
       "fullScreenExit": "退出全屏",
@@ -73,6 +73,7 @@
       "video-player": "視頻播放器"
     },
     "hint": {
+      "filter": "篩選",
       "inputAccessPassword": "請輸入訪問密碼"
     },
     "label": {

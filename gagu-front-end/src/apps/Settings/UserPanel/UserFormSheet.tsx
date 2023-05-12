@@ -4,7 +4,7 @@ import toast from 'react-hot-toast'
 import { formModeType } from '.'
 import { UserApi } from '../../../api'
 import { SvgIcon } from '../../../components/base'
-import { useFetch } from '../../../hooks'
+import { useRequest } from '../../../hooks'
 import { IUserForm, UserPermission } from '../../../types'
 import { getImageTypeBase64ByURL, line, permissionSorter } from '../../../utils'
 import { Button, Form, SideSheet } from '@douyinfe/semi-ui'
@@ -45,8 +45,8 @@ export default function UserFormModal(props: UserFormModalProps) {
   }
   }, [formMode])
 
-  const { fetch: createUser, loading: creating } = useFetch(UserApi.createUser)
-  const { fetch: updateUser, loading: updating } = useFetch(UserApi.updateUser)
+  const { request: createUser, loading: creating } = useRequest(UserApi.createUser)
+  const { request: updateUser, loading: updating } = useRequest(UserApi.updateUser)
 
   const fileInputRef = useRef<any>(null)
 

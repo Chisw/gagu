@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { IPanelProps } from '..'
 import { UserApi } from '../../../api'
 import { SvgIcon } from '../../../components/base'
-import { useFetch } from '../../../hooks'
+import { useRequest } from '../../../hooks'
 import { IUser, IUserForm, User, UserForm } from '../../../types'
 import UserFormSheet from './UserFormSheet'
 import UserList from './UserList'
@@ -21,7 +21,7 @@ export default function UserPanel(props: IPanelProps) {
   const [formMode, setFormMode] = useState<formModeType>('CLOSE')
   const [form, setForm] = useState<IUserForm>(new UserForm())
 
-  const { fetch: refresh, data, loading } = useFetch(UserApi.getUserData)
+  const { request: refresh, data, loading } = useRequest(UserApi.getUserData)
 
   useEffect(() => {
     refresh()

@@ -1,24 +1,27 @@
 import { useCallback, useEffect, useState } from 'react'
-// import toast from 'react-hot-toast'
 import { useRecoilState } from 'recoil'
 import { FsApi } from '../../api'
 import { SvgIcon } from '../../components/base'
-import { useFetch } from '../../hooks'
-import { ITransferTask, IUploadTransferTask, TransferTaskStatus, TransferTaskStatusType, TransferTaskType } from '../../types'
+import { useRequest } from '../../hooks'
+import { IUploadTransferTask } from '../../types'
 import { getReadableSize, line } from '../../utils'
 import { lastUploadedPathState, transferSignalState, transferTaskListState } from '../../states'
 import { Button, SideSheet } from '@douyinfe/semi-ui'
+import { useTranslation } from 'react-i18next'
+import { cloneDeep } from 'lodash-es'
 
 const statusIconMap = {
-  waiting: <SvgIcon.Time />,
-  uploading: <SvgIcon.Loader />,
-  moving: <SvgIcon.Loader />,
-  success: <SvgIcon.Check />,
-  fail: <SvgIcon.Close />,
-  cancel: <SvgIcon.Warning />,
+  waiting: { icon: <SvgIcon.Time />, bg: 'bg-yellow-400' },
+  uploading: { icon: <SvgIcon.Loader />, bg: 'bg-blue-500' },
+  moving: { icon: <SvgIcon.Loader />, bg: 'bg-blue-500' },
+  success: { icon: <SvgIcon.Check />, bg: 'bg-green-500' },
+  fail: { icon: <SvgIcon.Close />, bg: 'bg-red-500' },
+  cancel: { icon: <SvgIcon.Warning />, bg: 'bg-pink-500' },
 }
 
 export default function TransferPanel() {
+
+  const { t } = useTranslation()
 
   const [transferTaskList, setTransferTaskList] = useRecoilState(transferTaskListState)
   const [transferSignal] = useRecoilState(transferSignalState)
@@ -27,8 +30,9 @@ export default function TransferPanel() {
   const [visible, setVisible] = useState(false)
   const [uploadInfo, setUploadInfo] = useState({ ratio: 0, speed: '' })
   const [transferSignalCache, setTransferSignalCache] = useState(0)
+  const [activeId, setActiveId] = useState('')
 
-  const { fetch: uploadFile, loading: uploading } = useFetch(FsApi.uploadFile)
+  const { request: uploadFile, loading: uploading } = useRequest(FsApi.uploadFile)
 
   useEffect(() => {
     if (uploading) {
@@ -36,23 +40,11 @@ export default function TransferPanel() {
     }
   }, [uploading])
 
-  const updateTaskStatus = useCallback((tasks: ITransferTask[], status: TransferTaskStatusType) => {
-    const list = [...transferTaskList]
-    tasks.forEach(({ id: taskId }) => {
-      const foundTask = list.find(t => t.id === taskId)!
-      const foundTaskIndex = list.findIndex(t => t.id === taskId)
-      list.splice(foundTaskIndex, 1, { ...foundTask, status })
-    })
+  const handleUploadStart = useCallback(async (uploadingTaskList: IUploadTransferTask[]) => {
+    for (const task of uploadingTaskList) {
+      const { id, newPath, file } = task
+      setActiveId(id)
 
-    setTransferTaskList(list)
-  }, [transferTaskList, setTransferTaskList])
-
-  const handleUploadStart = useCallback(async (uploadTaskList: IUploadTransferTask[]) => {
-
-    updateTaskStatus(uploadTaskList, TransferTaskStatus.uploading)
-
-    for (const task of uploadTaskList) {
-      const { newPath, file } = task
       let lastUpload = { time: Date.now(), size: 0 }
 
       const onUploadProgress = (e: ProgressEvent) => {
@@ -65,22 +57,25 @@ export default function TransferPanel() {
         setUploadInfo({ ratio: loaded / total, speed })
         lastUpload = { time: now, size: loaded }
       }
-      const { success } = await uploadFile(newPath, file, { onUploadProgress })
-      updateTaskStatus([task], success ? TransferTaskStatus.success : TransferTaskStatus.fail)
-      // TODO: cut from end
-      setLastUploadedPath({ path: newPath.replace(`/${file.name}`, ''), timestamp: Date.now() })
-    }
-    // updateTaskStatus(uploadTaskList, TransferTaskStatus.success)
 
-    // handleRefresh()
-    // ; (uploadInputRef.current as any).value = ''
-  }, [updateTaskStatus, uploadFile, setLastUploadedPath])
+      const { success } = await uploadFile(newPath, file, { onUploadProgress })
+      if (success) {
+        setUploadInfo({ ratio: 0, speed: '' })
+        const match = file.fullPath || `/${file.name}`
+        setLastUploadedPath({ path: newPath.replace(match, ''), timestamp: Date.now() })
+      }
+    }
+
+    const list = cloneDeep(transferTaskList)
+    list.forEach(t => t.status = 'success')
+    setTransferTaskList(list)
+    setActiveId('')
+  }, [uploadFile, setLastUploadedPath, transferTaskList, setTransferTaskList])
 
   useEffect(() => {
     if (transferSignal !== transferSignalCache) {
-      const uploadTaskList = transferTaskList.filter(t => t.type === TransferTaskType.upload && t.status === TransferTaskStatus.waiting) as IUploadTransferTask[]
-      console.log(uploadTaskList)
-      uploadTaskList.length && handleUploadStart(uploadTaskList)
+      const uploadingTaskList = transferTaskList.filter(t => t.type === 'upload' && t.status === 'waiting') as IUploadTransferTask[]
+      uploadingTaskList.length && handleUploadStart(uploadingTaskList)
       setTransferSignalCache(transferSignal)
     }
   }, [transferSignal, transferTaskList, handleUploadStart, transferSignalCache])
@@ -127,9 +122,12 @@ export default function TransferPanel() {
                 <Button
                   size="small"
                   icon={<SvgIcon.Brush />}
-                  onClick={() => setTransferTaskList([])}
+                  onClick={() => {
+                    setTransferTaskList([])
+                    setTimeout(() => setVisible(false), 400)
+                  }}
                 >
-                  清空
+                  {t`action.clear`}
                 </Button>
               )}
               &nbsp;
@@ -143,37 +141,55 @@ export default function TransferPanel() {
           </div>
         )}
         closable={false}
-        headerStyle={{ padding: '8px 20px', borderBottom: '1px solid #efefef' }}
+        headerStyle={{ padding: '8px 12px', borderBottom: '1px solid #efefef' }}
         maskStyle={{ background: 'rgba(0, 0, 0, .1)' }}
-        width={300}
+        bodyStyle={{ padding: 0 }}
+        width={400}
         visible={visible}
         onCancel={() => setVisible(false)}
       >
+        {!transferTaskList.length && (
+          <div className="py-20 text-gray-100 flex justify-center">
+            <SvgIcon.G size={64} />
+          </div>
+        )}
         <div>
           {transferTaskList.map((task, taskIndex) => {
             const { id, file, status, newPath } = task
+            const isActive = id === activeId
             const name = file ? file.name : ''
-            const isSuccess = status === 'success'
             const len = transferTaskList.length.toString().length
             const indexStr = `${(taskIndex + 1).toString().padStart(len, '0')}`
+            const { icon, bg } = statusIconMap[status]
             return (
               <div
                 key={id}
-                className="py-1 text-xs flex justify-between items-center"
+                className="relative px-4 py-2 flex justify-between items-center border-b border-gray-100"
               >
-                <div className="truncate">
-                  <p>{indexStr}. {name}</p>
-                  <p className="text-gray-500">{newPath}</p>
+                <div>
+                  <p className={`mb-1 text-sm font-bold ${isActive ? 'text-green-500' : ''}`}>{indexStr}. {name}</p>
+                  <p className="text-xs text-gray-500 break-all">{newPath}</p>
                 </div>
                 &nbsp;
                 <span
                   className={line(`
-                    inline-block p-1 rounded-full text-white
-                    ${isSuccess ? 'bg-green-500' : 'bg-yellow-400'}
+                    inline-block ml-4 p-1 rounded-full text-white
+                    ${bg}
                   `)}
                 >
-                  {statusIconMap[status]}
+                  {icon}
                 </span>
+                {isActive && (
+                  <div
+                    className={`
+                      absolute left-0 bottom-0 right-0
+                      h-1 bg-green-400
+                      transition-width duration-200
+                      ${uploading ? 'block' : 'hidden'}
+                    `}
+                    style={{ width: `${uploadInfo.ratio * 100}%` }}
+                  />
+                )}
               </div>
             )
           })}

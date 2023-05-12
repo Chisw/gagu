@@ -10,6 +10,7 @@ import { exec } from 'child_process'
 export const initialize = () => {
   completeNestedPath(`${GAGU_PATH.ROOT}/data/_`)
   completeNestedPath(`${GAGU_PATH.ROOT}/desktop/_`)
+  completeNestedPath(`${GAGU_PATH.ROOT}/log/_`)
   completeNestedPath(`${GAGU_PATH.ROOT}/public/_`)
   completeNestedPath(`${GAGU_PATH.ROOT}/public/avatar/_`)
   completeNestedPath(`${GAGU_PATH.ROOT}/public/background/_`)

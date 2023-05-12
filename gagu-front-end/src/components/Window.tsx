@@ -164,7 +164,7 @@ export default function Window(props: WindowProps) {
           {/* header */}
           <div
             className={line(`
-              relative w-full h-8 flex items-center select-none border-b
+              relative w-full h-8 flex items-center select-none border-b border-gray-100
               ${headerClassName || 'bg-white text-gray-500'}
             `)}
           >

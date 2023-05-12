@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { useCallback, useEffect, useState } from 'react'
-import { useFetch } from '../hooks'
+import { useRequest } from '../hooks'
 import { AuthApi } from '../api'
 import md5 from 'md5'
 import toast from 'react-hot-toast'
@@ -28,7 +28,7 @@ export default function LoginPage() {
 
   const [, setUserInfo] = useRecoilState(userInfoState)
 
-  const { fetch: login, loading } = useFetch(AuthApi.login)
+  const { request: login, loading } = useRequest(AuthApi.login)
 
   const handleLogin = useCallback(async () => {
     const formData = {

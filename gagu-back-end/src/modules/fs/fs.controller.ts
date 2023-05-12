@@ -202,7 +202,6 @@ export class FsController {
       const data = await this.fsService.getTags(path)
       return data
     } catch (err) {
-      console.log('ERR: EXIF')
       return {
         success: false,
         message: SERVER_MESSAGE_MAP.ERROR_TAGS,

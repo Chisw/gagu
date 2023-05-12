@@ -19,6 +19,14 @@ Clear data directory means that all users, download tunnels and other data will 
 
 ## v0.0.*
 
+- v0.0.39 (2023-05-12)
+  - feat: customized favicon
+  - feat: terminal and UI beautification
+  - feat: add API log
+  - fix: duplicate upload
+  - fix: folder does not refresh after upload
+  - fix: user deletion error
+
 - v0.0.38 (2023-05-10)
   - hotfix: error path in Termux
 

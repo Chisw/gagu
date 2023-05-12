@@ -4,7 +4,7 @@ import { Form } from '@douyinfe/semi-ui'
 import { SvgIcon } from '../../../components/base'
 import { line, refreshBackground, setFavicon } from '../../../utils'
 import { useCallback, useRef } from 'react'
-import { useFetch } from '../../../hooks'
+import { useRequest } from '../../../hooks'
 import { FsApi } from '../../../api'
 
 export default function GeneralSettings() {
@@ -13,7 +13,7 @@ export default function GeneralSettings() {
   const faviconFileInputRef = useRef<any>(null)
   const desktopWallpaperFileInputRef = useRef<any>(null)
 
-  const { fetch: uploadBackground } = useFetch(FsApi.uploadBackground)
+  const { request: uploadBackground } = useRequest(FsApi.uploadBackground)
 
   const handleFaviconChange = useCallback(async () => {
     const file = faviconFileInputRef?.current?.files[0]

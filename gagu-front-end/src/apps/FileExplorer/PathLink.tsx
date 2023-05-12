@@ -52,7 +52,7 @@ export default function PathLink(props: PathLinkProps) {
   if (!rootEntry) return <div />
 
   return (
-    <div className="flex-shrink-0 px-2 py-1 text-xs text-gray-400 select-none flex justify-between items-center bg-gray-100 border-t">
+    <div className="flex-shrink-0 px-2 py-1 text-xs text-gray-500 select-none flex justify-between items-center bg-gray-100 border-t">
       <div className="group">
         <span
           title={rootEntryPath}
@@ -89,7 +89,7 @@ export default function PathLink(props: PathLinkProps) {
         })}
         <span
           title="复制"
-          className="invisible ml-1 cursor-pointer group-hover:visible text-xs hover:text-gray-500 active:opacity-50"
+          className="invisible ml-1 cursor-pointer group-hover:visible text-xs hover:text-gray-500 active:opacity-70"
           onClick={() => {
             copy(`${rootEntryPath}/${centerPathList.join('/')}`)
             toast.success('路径复制成功')
@@ -98,16 +98,16 @@ export default function PathLink(props: PathLinkProps) {
           <SvgIcon.Copy size={14} className="inline -mt-2px" />
         </span>
       </div>
-      <div className="flex-shrink-0 flex items-center pl-4 pr-1 font-din">
+      <div className="flex-shrink-0 flex items-center pl-4 pr-1 font-din text-gray-400">
         {!!selectedLen && (
           <>
-            <SvgIcon.Check />&nbsp;<span>{loading ? '-' : selectedLen}</span>
+            <SvgIcon.Check size={14} />&nbsp;<span>{loading ? '-' : selectedLen}</span>
             &emsp;
           </>
         )}
-        <SvgIcon.Folder />&nbsp;<span>{loading ? '-' : folderCount}</span>
+        <SvgIcon.Folder size={14} />&nbsp;<span>{loading ? '-' : folderCount}</span>
         &emsp;
-        <SvgIcon.File />&nbsp;<span>{loading ? '-' : fileCount}</span>
+        <SvgIcon.File size={14} />&nbsp;<span>{loading ? '-' : fileCount}</span>
       </div>
     </div>
   )

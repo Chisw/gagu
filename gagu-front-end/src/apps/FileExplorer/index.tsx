@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import EntryIcon from './EntryIcon'
-import { useFetch, useDragSelect, useDragOperations, useHotKey } from '../../hooks'
+import { useRequest, useDragSelect, useDragOperations, useHotKey } from '../../hooks'
 import { FsApi, DownloadApi, TunnelApi } from '../../api'
 import PathLink from './PathLink'
 import ToolBar, { IToolBarDisabledMap } from './ToolBar'
@@ -98,10 +98,10 @@ export default function FileExplorer(props: AppComponentProps) {
   const containerInnerRef = useRef(null)  // entryList 容器，最小高度与 containerRef 的一致，自动撑高
   const uploadInputRef = useRef(null)
 
-  const { fetch: getEntryList, loading: fetching, data, setData } = useFetch(FsApi.getEntryList)
-  const { fetch: deleteEntry, loading: deleting } = useFetch(FsApi.deleteEntry)
-  const { fetch: getDirectorySize, loading: getting } = useFetch(FsApi.getDirectorySize)
-  const { fetch: createTunnel } = useFetch(TunnelApi.createTunnel)
+  const { request: getEntryList, loading: fetching, data, setData } = useRequest(FsApi.getEntryList)
+  const { request: deleteEntry, loading: deleting } = useRequest(FsApi.deleteEntry)
+  const { request: getDirectorySize, loading: getting } = useRequest(FsApi.getDirectorySize)
+  const { request: createTunnel } = useRequest(TunnelApi.createTunnel)
 
   const { rootEntryList, rootEntryPathList } = useMemo(() => {
     const { rootEntryList } = rootInfo

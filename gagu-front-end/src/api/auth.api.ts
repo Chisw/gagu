@@ -1,23 +1,23 @@
-import instance from './instance'
+import service from './service'
 
 export class AuthApi {
   static login = async (formData: { username: string, password: string }) => {
-    const { data } = await instance.post('/api/auth/login', formData)
+    const { data } = await service.post('/api/auth/login', formData)
     return data
   }
 
   static pulse = async () => {
-    const { data } = await instance.get('/api/auth/pulse')
+    const { data } = await service.get('/api/auth/pulse')
     return data
   }
 
   static logout = async () => {
-    const { data } = await instance.post('/api/auth/logout')
+    const { data } = await service.post('/api/auth/logout')
     return data
   }
 
   static shutdown = async () => {
-    const { data } = await instance.post('/api/auth/shutdown')
+    const { data } = await service.post('/api/auth/shutdown')
     return data
   }
 }

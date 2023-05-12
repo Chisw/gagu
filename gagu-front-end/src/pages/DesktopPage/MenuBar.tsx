@@ -6,7 +6,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
 import { AuthApi, FsApi } from '../../api'
 import { SvgIcon } from '../../components/base'
-import { useFetch } from '../../hooks'
+import { useRequest } from '../../hooks'
 import { rootInfoState, userInfoState } from '../../states'
 import { IRootInfo } from '../../types'
 import { DOCUMENT_TITLE, line, PULSE_INTERVAL, UserInfoStore } from '../../utils'
@@ -38,10 +38,10 @@ export default function MenuBar() {
   const [userInfo, setUserInfo] = useRecoilState(userInfoState)
   const [rootInfo, setRootInfo] = useRecoilState(rootInfoState)
 
-  const { fetch: pulse } = useFetch(AuthApi.pulse)
-  const { fetch: logout } = useFetch(AuthApi.logout)
-  const { fetch: getRootInfo, loading, data } = useFetch(FsApi.getRootInfo)
-  const { fetch: shutdown } = useFetch(AuthApi.shutdown)
+  const { request: pulse } = useRequest(AuthApi.pulse)
+  const { request: logout } = useRequest(AuthApi.logout)
+  const { request: getRootInfo, loading, data } = useRequest(FsApi.getRootInfo)
+  const { request: shutdown } = useRequest(AuthApi.shutdown)
 
   const activeMode = useMemo(() => {
     if (pathname.startsWith('/explore')) {

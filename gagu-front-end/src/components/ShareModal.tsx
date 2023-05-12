@@ -1,7 +1,7 @@
 import { Button, Form, Modal } from '@douyinfe/semi-ui'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { FsApi, TunnelApi } from '../api'
-import { useFetch } from '../hooks'
+import { useRequest } from '../hooks'
 import { IEntry, TunnelType } from '../types'
 import { copy, getDownloadInfo } from '../utils'
 import EntryListPanel from './EntryListPanel'
@@ -40,8 +40,8 @@ export default function ShareModal(props: ShareModalProps) {
 
   const [tunnelLink, setTunnelLink] = useState('')
 
-  const { fetch: getFlattenEntryList, loading, data } = useFetch(FsApi.getFlattenEntryList)
-  const { fetch: createTunnel, loading: creating } = useFetch(TunnelApi.createTunnel)
+  const { request: getFlattenEntryList, loading, data } = useRequest(FsApi.getFlattenEntryList)
+  const { request: createTunnel, loading: creating } = useRequest(TunnelApi.createTunnel)
 
   useEffect(() => {
     if (!visible) {

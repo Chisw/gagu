@@ -2,7 +2,7 @@ import axios, { AxiosError } from 'axios'
 import { BASE_URL, ERROR_TIMEOUT, HEADERS_AUTH_KEY, UserInfoStore } from '../utils'
 import toast from 'react-hot-toast'
 
-const instance = axios.create({
+const service = axios.create({
   baseURL: BASE_URL,
   timeout: 30 * 1000,
   timeoutErrorMessage: ERROR_TIMEOUT,
@@ -11,7 +11,7 @@ const instance = axios.create({
   },
 })
 
-instance.interceptors.request.use(config => {
+service.interceptors.request.use(config => {
   config.headers = {
     ...config.headers,
     [HEADERS_AUTH_KEY]: UserInfoStore.getToken(),
@@ -19,7 +19,7 @@ instance.interceptors.request.use(config => {
   return config
 })
 
-instance.interceptors.response.use(response => response, (error: AxiosError) => {
+service.interceptors.response.use(response => response, (error: AxiosError) => {
   const { message, response } = error
   if (message === ERROR_TIMEOUT) {
     toast.error(message)
@@ -39,4 +39,4 @@ instance.interceptors.response.use(response => response, (error: AxiosError) => 
   }
 })
 
-export default instance
+export default service

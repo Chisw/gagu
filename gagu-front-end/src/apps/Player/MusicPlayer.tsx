@@ -2,7 +2,7 @@ import { SvgIcon } from '../../components/base'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { APP_ID_MAP, APP_LIST } from '..'
 import { AppComponentProps } from '../../types'
-import { useFetch, useOpenOperation, usePlayInfo } from '../../hooks'
+import { useRequest, useOpenOperation, usePlayInfo } from '../../hooks'
 import { FsApi } from '../../api'
 import { getPaddedNo, getReadableSize } from '../../utils'
 import SpectrumCanvas from './common/SpectrumCanvas'
@@ -43,7 +43,7 @@ export default function MusicPlayer(props: AppComponentProps) {
   const [volume, setVolume] = useState(1)
   const [volumeSliderShow, setVolumeSliderShow] = useState(false)
 
-  const { fetch: getTags, data, loading } = useFetch(FsApi.getTags)
+  const { request: getTags, data, loading } = useRequest(FsApi.getTags)
 
   const audioRef = useRef<HTMLAudioElement>(null)
   const audioEl = useMemo(() => {

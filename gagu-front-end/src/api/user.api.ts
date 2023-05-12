@@ -1,30 +1,30 @@
 import { IUserForm, UserAbilityType } from '../types'
-import instance from './instance'
+import service from './service'
 
 export class UserApi {
 
   static getUserData = async () => {
-    const { data } = await instance.get('/api/user')
+    const { data } = await service.get('/api/user')
     return data
   }
 
   static createUser = async (formData: IUserForm) => {
-    const { data } = await instance.post('/api/user', formData)
+    const { data } = await service.post('/api/user', formData)
     return data
   }
 
   static updateUser = async (formData: IUserForm) => {
-    const { data } = await instance.patch('/api/user', formData)
+    const { data } = await service.patch('/api/user', formData)
     return data
   }
 
   static removeUser = async (username: string) => {
-    const { data } = await instance.delete(`/api/user/${username}`)
+    const { data } = await service.delete(`/api/user/${username}`)
     return data
   }
 
   static updateUserAbility = async (username: string, ability: UserAbilityType) => {
-    const { data } = await instance.post(`/api/user/${username}/${ability}`)
+    const { data } = await service.post(`/api/user/${username}/${ability}`)
     return data
   }
 }

@@ -3,7 +3,7 @@ import toast from 'react-hot-toast'
 import { DownloadApi, FsApi, TunnelApi } from '../../api'
 import { SvgIcon } from '../../components/base'
 import { IconButton } from '../../components/base'
-import { useFetch } from '../../hooks'
+import { useRequest } from '../../hooks'
 import { TunnelType, IEntry } from '../../types'
 import { DOWNLOAD_PERIOD, getPaddedNo, getReadableSize, line } from '../../utils'
 import { getBaiduMapPinUrl } from '../../utils'
@@ -34,8 +34,8 @@ export default function Toolbar(props: ToolbarProps) {
     handlePrevOrNext,
   } = props
 
-  const { fetch: getExif, data: ExifData, setData } = useFetch(FsApi.getExif)
-  const { fetch: createTunnel } = useFetch(TunnelApi.createTunnel)
+  const { request: getExif, data: ExifData, setData } = useRequest(FsApi.getExif)
+  const { request: createTunnel } = useRequest(TunnelApi.createTunnel)
 
   const [sizeInfo, setSizeInfo] = useState({ width: 0, height: 0 })
   const [mapPinUrl, setMapPinUrl] = useState('')

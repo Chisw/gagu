@@ -1,6 +1,13 @@
 import { exec } from 'child_process'
-import { accessSync, constants, mkdirSync, statSync, unlinkSync } from 'fs'
-import { ServerOS } from './constant.util'
+import {
+  accessSync,
+  appendFile,
+  constants,
+  mkdirSync,
+  statSync,
+  unlinkSync,
+} from 'fs'
+import { GAGU_PATH, ServerOS } from './constant.util'
 
 export const getExtension = (name: string) => {
   if (!name || !name.includes('.') || name.startsWith('.')) return ''
@@ -79,4 +86,12 @@ export const dataURLtoBuffer = (base64: string) => {
   } else {
     return null
   }
+}
+
+export const writeLog = (date: string, log: string) => {
+  const logFileName = `${date}.log`
+  const logFilePath = `${GAGU_PATH.LOG}/${logFileName}`
+  appendFile(logFilePath, log, (err) => {
+    err && console.log(err)
+  })
 }

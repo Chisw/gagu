@@ -23,6 +23,7 @@ export default function Icon(props: IconProps) {
 
   const [isViewable, setIsViewable] = useState(false)
   const [thumbnailErr, setThumbnailErr] = useState(false)
+  const [thumbnailLoading, setThumbnailLoading] = useState(false)
 
   const iconRef = useRef<any>(null)
 
@@ -63,8 +64,8 @@ export default function Icon(props: IconProps) {
         flex justify-center items-center flex-shrink-0
         bg-no-repeat bg-contain bg-center
         ${isSmall ? 'w-6 h-6 --small-icon' : 'h-12'}
-        ${isFolder ? '--e-folder' : '--e-file'}
-        ${`--i-${entryIconType || 'unknown'}`}
+        ${isFolder ? '--entry-folder' : '--entry-file'}
+        ${`--icon-${entryIconType || 'unknown'}`}
       `)}
     >
       {(!hideApp && callableAppId) && (
@@ -80,10 +81,15 @@ export default function Icon(props: IconProps) {
         <img
           alt=""
           src={FsApi.getThumbnailUrl(entry)}
-          onError={() => setThumbnailErr(true)}
+          onError={() => {
+            setThumbnailErr(true)
+            setThumbnailLoading(false)
+          }}
+          onLoadStart={() => setThumbnailLoading(true)}
+          onLoad={() => setThumbnailLoading(false)}
           className={line(`
             max-w-full max-h-full
-            ${false  // TODO: handle loading bg
+            ${thumbnailLoading
               ? 'w-6 h-6 bg-loading'
               : isVideo
                 ? `${isSmall ? 'border-l-2 border-r-2' : 'border-l-4 border-r-4'} border-black rounded-sm`

@@ -5,6 +5,7 @@
       "backToTop": "Back to Top",
       "cancel": "Cancel",
       "changePassword": "Change Password",
+      "clear": "Clear",
       "close": "Close",
       "closeAllOpenedWindows": "Close All Opened Windows",
       "codeView": "Code View",
@@ -17,7 +18,6 @@
       "edit": "Edit",
       "enable": "Enable",
       "exifInfo": "Exif Info",
-      "filter": "Filter",
       "folderSize": "Folder Size",
       "fullScreenEnter": "Enter Full Screen",
       "fullScreenExit": "Exit Full Screen",
@@ -73,6 +73,7 @@
       "video-player": "Video Player"
     },
     "hint": {
+      "filter": "Filter",
       "inputAccessPassword": "Input access password"
     },
     "label": {

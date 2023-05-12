@@ -145,6 +145,7 @@ GAGU 的根目录 `.io.gagu` 是一个以 `.` 开头命名的隐藏文件夹，�
 ```
 .io.gagu
   |- data
+  |- log
   |- public
   |  |- avatar
   |  |- background
@@ -153,6 +154,7 @@ GAGU 的根目录 `.io.gagu` 是一个以 `.` 开头命名的隐藏文件夹，�
 ```
 
 - `data` 用于持久化存储一些用户、登录、下载通道、设置、日志等 JSON 格式的数据文件
+- `log` 用于存放 API 日志
 - `public/avatar` 用于存放用户头像，文件名即用户名
 - `public/background` 用于存放一些背景图片
 - `public/lib` 用于存放将来可能会用到的第三方 js 库

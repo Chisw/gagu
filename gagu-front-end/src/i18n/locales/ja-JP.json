@@ -5,6 +5,7 @@
       "backToTop": "上官に戻る",
       "cancel": "キャンセル",
       "changePassword": "パスワードを変更する",
+      "clear": "空",
       "close": "閉鎖",
       "closeAllOpenedWindows": "すべてのウィンドウを閉じる",
       "codeView": "等幅表示",
@@ -17,7 +18,6 @@
       "edit": "編集",
       "enable": "有効",
       "exifInfo": "Exif 情報",
-      "filter": "フィルター",
       "folderSize": "フォルダサイズ",
       "fullScreenEnter": "フルスクリーンに入る",
       "fullScreenExit": "全画面表示を終了",
@@ -73,6 +73,7 @@
       "video-player": "ビデオプレーヤー"
     },
     "hint": {
+      "filter": "フィルター",
       "inputAccessPassword": "アクセスパスワードを入力してください"
     },
     "label": {

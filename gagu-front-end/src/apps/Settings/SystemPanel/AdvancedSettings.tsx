@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
 import { SettingApi } from '../../../api'
-import { useFetch } from '../../../hooks'
+import { useRequest } from '../../../hooks'
 import { ISetting, SettingForm } from '../../../types'
 
 export default function AdvancedSettings() {
@@ -13,12 +13,12 @@ export default function AdvancedSettings() {
   const [form, setForm] = useState<SettingForm>(new SettingForm())
   const [formCache, setFormCache] = useState<SettingForm>(new SettingForm())
 
-  const { fetch: getAll, loading: getting, data } = useFetch(SettingApi.getAll)
-  const { fetch: update, loading: updating } = useFetch(SettingApi.update)
+  const { request: querySettingAll, loading: getting, data } = useRequest(SettingApi.querySettingAll)
+  const { request: updateSetting, loading: updating } = useRequest(SettingApi.updateSetting)
 
   useEffect(() => {
-    getAll()
-  }, [getAll])
+    querySettingAll()
+  }, [querySettingAll])
 
   useEffect(() => {
     if (data && data.settings) {
@@ -33,12 +33,12 @@ export default function AdvancedSettings() {
   }, [form, formCache])
 
   const handleSubmit = useCallback(async () => {
-    const data: any = await update(form)
+    const data: any = await updateSetting(form)
     if (data?.success) {
       toast.success('OK')
-      getAll()
+      querySettingAll()
     }
-  }, [update, form, getAll])
+  }, [updateSetting, form, querySettingAll])
 
   return (
     <>

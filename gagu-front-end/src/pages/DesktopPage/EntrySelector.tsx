@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { FsApi } from '../../api'
 import { SvgIcon } from '../../components/base'
-import { useFetch } from '../../hooks'
+import { useRequest } from '../../hooks'
 import { entrySelectorState, openOperationState, rootInfoState } from '../../states'
 import { EntryType, IEntry, IRootEntry } from '../../types'
 import { entrySorter, getEntryPath } from '../../utils'
@@ -52,7 +52,7 @@ export default function EntrySelector() {
   const [hiddenShow] = useState(false)
   const [activeEntry, setActiveEntry] = useState<IEntry | null>(null)
 
-  const { fetch: getEntryList } = useFetch(FsApi.getEntryList)
+  const { request: getEntryList } = useRequest(FsApi.getEntryList)
 
   useEffect(() => {
     setTreeData(entryToTree(rootInfo.rootEntryList, hiddenShow))

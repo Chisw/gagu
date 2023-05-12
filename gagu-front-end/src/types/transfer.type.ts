@@ -22,7 +22,7 @@ export interface ITransferTask {
   id: string
   type: keyof typeof TransferTaskType
   status: keyof typeof TransferTaskStatus
-  file?: File
+  file?: File & { fullPath?: string }
   newPath: string
   oldPath?: string
   abortController?: AbortController
@@ -30,7 +30,7 @@ export interface ITransferTask {
 
 export interface IUploadTransferTask extends ITransferTask {
   type: TransferTaskType.upload
-  file: File
+  file: File & { fullPath?: string }
 }
 
 export interface IMoveTransferTask extends ITransferTask {

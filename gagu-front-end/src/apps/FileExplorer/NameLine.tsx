@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 import toast from 'react-hot-toast'
-import { useFetch } from '../../hooks'
+import { useRequest } from '../../hooks'
 import { line } from '../../utils'
 import { FsApi } from '../../api'
 import { INVALID_NAME_CHAR_LIST } from '../../utils'
@@ -38,10 +38,10 @@ export default function NameLine(props: NameLineProps) {
     setInputValue(e.target.value)
   }, [])
 
-  const { fetch: getExists, loading: loadingExist } = useFetch(FsApi.getExists)
-  const { fetch: addDirectory, loading: loadingNewDir } = useFetch(FsApi.addDirectory)
-  const { fetch: renameEntry, loading: loadingRename } = useFetch(FsApi.renameEntry)
-  const { fetch: uploadFile } = useFetch(FsApi.uploadFile)
+  const { request: getExists, loading: loadingExist } = useRequest(FsApi.getExists)
+  const { request: addDirectory, loading: loadingNewDir } = useRequest(FsApi.addDirectory)
+  const { request: renameEntry, loading: loadingRename } = useRequest(FsApi.renameEntry)
+  const { request: uploadFile } = useRequest(FsApi.uploadFile)
 
   const handleName = useCallback(async (e: any) => {
     const oldName = entry?.name

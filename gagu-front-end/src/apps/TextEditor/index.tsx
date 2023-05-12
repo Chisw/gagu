@@ -6,7 +6,7 @@ import { FsApi } from '../../api'
 import { APP_ID_MAP, APP_LIST } from '..'
 import { AppComponentProps } from '../../types'
 import { SvgIcon } from '../../components/base'
-import { useOpenOperation, useFetch } from '../../hooks'
+import { useOpenOperation, useRequest } from '../../hooks'
 import { useRecoilState } from 'recoil'
 import { entrySelectorState } from '../../states'
 
@@ -28,8 +28,8 @@ export default function TextEditor(props: AppComponentProps) {
   const [value, setValue] = useState('')
   const [monoMode, setMonoMode] = useState(false)
 
-  const { fetch: getTextContent, loading: fetching, data: textContent, setData: setTextContent } = useFetch(FsApi.getTextContent)
-  const { fetch: uploadFile, loading: saving } = useFetch(FsApi.uploadFile)
+  const { request: getTextContent, loading: fetching, data: textContent, setData: setTextContent } = useRequest(FsApi.getTextContent)
+  const { request: uploadFile, loading: saving } = useRequest(FsApi.uploadFile)
 
   useEffect(() => setWindowLoading(fetching), [setWindowLoading, fetching])
 

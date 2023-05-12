@@ -3,7 +3,7 @@ import { useCallback, useEffect } from 'react'
 import toast from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
 import { TunnelApi } from '../api'
-import { useFetch } from '../hooks'
+import { useRequest } from '../hooks'
 import { ITunnel } from '../types'
 import { getDateTime } from '../utils'
 import { SvgIcon } from './base'
@@ -20,8 +20,8 @@ export default function MySharePanel(props: MySharePanelProps) {
 
   const { t } = useTranslation()
 
-  const { fetch: getTunnels, data } = useFetch(TunnelApi.getTunnels)
-  const { fetch: deleteTunnel } = useFetch(TunnelApi.deleteTunnel)
+  const { request: getTunnels, data } = useRequest(TunnelApi.getTunnels)
+  const { request: deleteTunnel } = useRequest(TunnelApi.deleteTunnel)
 
   useEffect(() => {
     if (visible) {

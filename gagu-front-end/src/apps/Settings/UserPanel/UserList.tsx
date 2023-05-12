@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { formModeType } from '.'
 import { FsApi, UserApi } from '../../../api'
 import { Confirmor, SvgIcon } from '../../../components/base'
-import { useFetch } from '../../../hooks'
+import { useRequest } from '../../../hooks'
 import { IUser, IUserForm, User, UserAbilityType, UserForm, UserPermission } from '../../../types'
 import { getDateTime, getIsExpired } from '../../../utils'
 
@@ -28,8 +28,8 @@ export default function UserList(props: UserListProps) {
 
   const { t } = useTranslation()
 
-  const { fetch: updateUserAbility } = useFetch(UserApi.updateUserAbility)
-  const { fetch: removeUser } = useFetch(UserApi.removeUser)
+  const { request: updateUserAbility } = useRequest(UserApi.updateUserAbility)
+  const { request: removeUser } = useRequest(UserApi.removeUser)
 
   const handleUpdateAbility = useCallback(async (username: User.Username, ability: UserAbilityType) => {
     const res = await updateUserAbility(username, ability)

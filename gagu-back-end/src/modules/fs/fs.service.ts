@@ -302,16 +302,17 @@ export class FsService {
       jsmediatags.read(path, {
         onSuccess: (tagInfo: any) => {
           const {
-            tags: {
-              title,
-              artist,
-              album,
-              track,
-              picture: { data, format },
-              TDRC: { data: recordingTime },
-              TDRL: { data: releaseTime },
-            },
+            tags: { title, artist, album, track, picture, TDRC, TDRL },
           } = tagInfo
+
+          if (!picture) {
+            reject(null)
+            return
+          }
+
+          const { data, format } = picture
+          const { data: recordingTime } = TDRC
+          const { data: releaseTime } = TDRL
 
           let base64String = ''
           for (let i = 0; i < data.length; i++) {
