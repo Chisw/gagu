@@ -83,7 +83,7 @@ export const APP_LIST: IApp[] = [
       minWidth: 640,
       minHeight: 400,
     },
-    matchList: ['mp4', 'mkv'],
+    matchList: ['mp4', 'mkv', 'webm'],
     headerClassName: 'bg-gray-800 text-gray-100 border-black-100',
     multiple: true,
   },

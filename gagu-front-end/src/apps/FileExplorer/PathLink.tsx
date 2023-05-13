@@ -52,7 +52,7 @@ export default function PathLink(props: PathLinkProps) {
   if (!rootEntry) return <div />
 
   return (
-    <div className="flex-shrink-0 px-2 py-1 text-xs text-gray-500 select-none flex justify-between items-center bg-gray-100 border-t">
+    <div className="flex-shrink-0 px-2 py-1 text-xs text-gray-500 select-none flex justify-between items-center bg-gray-100">
       <div className="group">
         <span
           title={rootEntryPath}
@@ -72,7 +72,7 @@ export default function PathLink(props: PathLinkProps) {
 
           return (
             <span key={encodeURIComponent(fullPath)}>
-              <SvgIcon.ChevronRight size={14} className="inline -mt-2px" />
+              <SvgIcon.ChevronRight size={14} className="inline -mt-2px text-gray-300" />
               <span
                 title={fullPath}
                 className={disabled ? '' : 'cursor-pointer hover:text-black'}

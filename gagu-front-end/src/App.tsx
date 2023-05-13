@@ -13,7 +13,7 @@ import './css/index.css'
 export default function App() {
 
   useEffect(() => {
-    setFavicon(FsApi.getBackgroundStreamUrl('favicon'))
+    setFavicon(FsApi.getImageStreamUrl('favicon'))
   }, [])
 
   return (

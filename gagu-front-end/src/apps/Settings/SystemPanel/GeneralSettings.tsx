@@ -13,20 +13,20 @@ export default function GeneralSettings() {
   const faviconFileInputRef = useRef<any>(null)
   const desktopWallpaperFileInputRef = useRef<any>(null)
 
-  const { request: uploadBackground } = useRequest(FsApi.uploadBackground)
+  const { request: uploadImage } = useRequest(FsApi.uploadImage)
 
   const handleFaviconChange = useCallback(async () => {
     const file = faviconFileInputRef?.current?.files[0]
-    await uploadBackground('favicon', file)
+    await uploadImage('favicon', file)
     refreshBackground('favicon')
-    setFavicon(FsApi.getBackgroundStreamUrl('favicon'))
-  }, [uploadBackground])
+    setFavicon(FsApi.getImageStreamUrl('favicon'))
+  }, [uploadImage])
 
   const handleDesktopWallpaperChange = useCallback(async () => {
     const file = desktopWallpaperFileInputRef?.current?.files[0]
-    await uploadBackground('desktop', file)
-    refreshBackground('desktop')
-  }, [uploadBackground])
+    await uploadImage('bg-desktop', file)
+    refreshBackground('bg-desktop')
+  }, [uploadImage])
 
   return (
     <>
@@ -57,7 +57,7 @@ export default function GeneralSettings() {
               </div>
               <div
                 className="gagu-background-favicon absolute z-10 inset-0 m-1 bg-cover bg-no-repeat bg-top rounded-sm"
-                style={{ backgroundImage: `url("${FsApi.getBackgroundStreamUrl('favicon')}")` }}
+                style={{ backgroundImage: `url("${FsApi.getImageStreamUrl('favicon')}")` }}
               />
               <input
                 ref={faviconFileInputRef}
@@ -80,7 +80,7 @@ export default function GeneralSettings() {
               </div>
               <div
                 className="gagu-background-desktop absolute z-10 inset-0 m-1 bg-cover bg-no-repeat bg-center rounded-sm"
-                style={{ backgroundImage: `url("${FsApi.getBackgroundStreamUrl('desktop')}")` }}
+                style={{ backgroundImage: `url("${FsApi.getImageStreamUrl('bg-desktop')}")` }}
               />
               <input
                 ref={desktopWallpaperFileInputRef}

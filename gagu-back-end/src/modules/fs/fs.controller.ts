@@ -162,21 +162,18 @@ export class FsController {
   }
 
   @Public()
-  @Get('background/:name')
+  @Get('image/:name')
   @Header('Content-Type', 'image/jpg')
-  readBackground(
-    @Param('name') name: User.Username,
-    @Res() response: Response,
-  ) {
+  readImage(@Param('name') name: User.Username, @Res() response: Response) {
     try {
-      const path = this.fsService.getBackgroundPath(name)
+      const path = this.fsService.getImagePath(name)
       if (getExists(path)) {
         response.sendFile(path)
       } else {
-        response.end('ERROR_BACKGROUND_NOT_EXISTED')
+        response.end('ERROR_IMAGE_NOT_EXISTED')
       }
     } catch (err) {
-      response.end('ERROR_BACKGROUND')
+      response.end('ERROR_IMAGE')
     }
   }
 
@@ -229,13 +226,13 @@ export class FsController {
     return this.fsService.uploadFile(path, file.buffer)
   }
 
-  @Post('upload/background/:name')
+  @Post('upload/image/:name')
   @Permission(UserPermission.administer)
   @UseInterceptors(FileInterceptor('file'))
-  uploadBackground(
+  uploadImage(
     @Param('name') name: string,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    return this.fsService.uploadBackground(name, file.buffer)
+    return this.fsService.uploadImage(name, file.buffer)
   }
 }

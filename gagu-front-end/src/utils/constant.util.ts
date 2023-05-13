@@ -19,13 +19,22 @@ export const ENTRY_ICON_LIST = [
   { type: 'document', matchList: ['_txt_new', 'txt', 'md'] },
   { type: 'image', matchList: ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'insp', 'svg', 'ico', 'pbm'] },
   { type: 'pdf', matchList: ['pdf'] },
-  { type: 'video', matchList: ['mp4', 'mov', 'wmv', 'insv', 'mkv', 'avi', 'rm', 'rmvb'] },
+  { type: 'video', matchList: ['mp4', 'mov', 'wmv', 'insv', 'mkv', 'avi', 'rm', 'rmvb', 'webm'] },
 ]
 
 // Sync following code to BE & FE
 export const PULSE_INTERVAL = 60 * 1000
 export const HEADERS_AUTH_KEY = 'Authorization'
-export const GEN_THUMBNAIL_VIDEO_LIST = ['mp4', 'mkv', 'avi', 'rm', 'rmvb']
+
+export const GEN_THUMBNAIL_VIDEO_LIST = [
+  'mp4',
+  'mkv',
+  'avi',
+  'rm',
+  'rmvb',
+  'webm',
+]
+
 export const GEN_THUMBNAIL_IMAGE_LIST = [
   'jpg',
   'jpeg',

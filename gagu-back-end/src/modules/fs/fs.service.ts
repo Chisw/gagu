@@ -256,9 +256,9 @@ export class FsService {
     }
   }
 
-  uploadBackground(name: string, buffer: Buffer) {
+  uploadImage(name: string, buffer: Buffer) {
     try {
-      writeFileSync(`${GAGU_PATH.PUBLIC_BACKGROUND}/${name}`, buffer)
+      writeFileSync(`${GAGU_PATH.PUBLIC_IMAGE}/${name}`, buffer)
       return {
         success: true,
       }
@@ -383,7 +383,7 @@ export class FsService {
     return `${GAGU_PATH.ROOT}/public/avatar/${username}`
   }
 
-  getBackgroundPath(name: string) {
-    return `${GAGU_PATH.ROOT}/public/background/${name}`
+  getImagePath(name: string) {
+    return `${GAGU_PATH.ROOT}/public/image/${name}`
   }
 }

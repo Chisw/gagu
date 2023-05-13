@@ -57,7 +57,7 @@ export const GAGU_PATH = {
   DATA_SETTINGS: `${ROOT_PATH}/data/settings.json`,
   LOG: `${ROOT_PATH}/log`,
   PUBLIC_AVATAR: `${ROOT_PATH}/public/avatar`,
-  PUBLIC_BACKGROUND: `${ROOT_PATH}/public/background`,
+  PUBLIC_IMAGE: `${ROOT_PATH}/public/image`,
 }
 
 export const HELP_INFO = `
@@ -83,7 +83,16 @@ export const LOGO_TEXT = `
 // Sync following code to BE & FE
 export const PULSE_INTERVAL = 60 * 1000
 export const HEADERS_AUTH_KEY = 'Authorization'
-export const GEN_THUMBNAIL_VIDEO_LIST = ['mp4', 'mkv', 'avi', 'rm', 'rmvb']
+
+export const GEN_THUMBNAIL_VIDEO_LIST = [
+  'mp4',
+  'mkv',
+  'avi',
+  'rm',
+  'rmvb',
+  'webm',
+]
+
 export const GEN_THUMBNAIL_IMAGE_LIST = [
   'jpg',
   'jpeg',

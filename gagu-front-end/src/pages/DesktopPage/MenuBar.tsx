@@ -125,7 +125,7 @@ export default function MenuBar() {
           absolute z-20 top-0 right-0 left-0
           px-1 h-6
           flex justify-between items-center
-           bg-white-600 shadow-sm
+           bg-white-500 shadow-sm
           backdrop-filter backdrop-blur
           transition-all duration-500
           transform

@@ -56,10 +56,10 @@ export class FsApi {
     return data
   }
 
-  static uploadBackground = async (name: string, file: File, config?: AxiosRequestConfig) => {
+  static uploadImage = async (name: string, file: File, config?: AxiosRequestConfig) => {
     let formData = new FormData()
     formData.append('file', file)
-    const { data } = await service.post(`/api/fs/upload/background/${name}`, formData, { ...config, timeout: 0 })
+    const { data } = await service.post(`/api/fs/upload/image/${name}`, formData, { ...config, timeout: 0 })
     return data
   }
 
@@ -93,8 +93,8 @@ export class FsApi {
     return `${BASE_URL}/api/fs/avatar/${username}`
   }
 
-  static getBackgroundStreamUrl = (name: string) => {
+  static getImageStreamUrl = (name: string) => {
     if (!name) return ''
-    return `${BASE_URL}/api/fs/background/${name}`
+    return `${BASE_URL}/api/fs/image/${name}`
   }
 }
