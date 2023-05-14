@@ -50,8 +50,8 @@ export const APP_LIST: IApp[] = [
     id: APP_ID_MAP.photoViewer,
     runningId: 0,
     AppComponent: PhotoViewer,
-    width: 720,
-    height: 480,
+    width: 960,
+    height: 520,
     resizeRange: {
       minWidth: 480,
       minHeight: 480,
@@ -77,8 +77,8 @@ export const APP_LIST: IApp[] = [
     id: APP_ID_MAP.videoPlayer,
     runningId: 0,
     AppComponent: VideoPlayer,
-    width: 640,
-    height: 400,
+    width: 1280,
+    height: 751,
     resizeRange: {
       minWidth: 640,
       minHeight: 400,

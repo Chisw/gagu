@@ -176,6 +176,23 @@ export const setFavicon = async (imgUrl: string) => {
   }
 }
 
+export const setSelection = (input: HTMLInputElement, start: number, end: number) => {
+  input.focus()
+
+  const selection = document as any
+  if (typeof input.selectionStart != 'undefined') {
+    input.selectionStart = start
+    input.selectionEnd = end
+  } else if (selection && selection.createRange) {
+    input.select()
+    var range = selection.createRange()
+    range.collapse(true)
+    range.moveEnd('character', end)
+    range.moveStart('character', start)
+    range.select()
+  }
+}
+
 // Sync following code to BE & FE
 export const getIsExpired = (expiredAt?: number) => {
   return expiredAt && expiredAt < Date.now()

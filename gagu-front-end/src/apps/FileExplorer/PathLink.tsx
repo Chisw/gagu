@@ -3,6 +3,7 @@ import toast from 'react-hot-toast'
 import { SvgIcon } from '../../components/base'
 import { copy, getEntryPath } from '../../utils'
 import { IEntry, IRootEntry } from '../../types'
+import { useTranslation } from 'react-i18next'
 
 interface PathLinkProps {
   loading: boolean
@@ -27,6 +28,8 @@ export default function PathLink(props: PathLinkProps) {
     onDirClick,
     onRootEntryClick,
   } = props
+
+  const { t } = useTranslation()
 
   const {
     selectedLen,
@@ -88,11 +91,12 @@ export default function PathLink(props: PathLinkProps) {
           )
         })}
         <span
-          title="复制"
+          title={t`action.copy`}
           className="invisible ml-1 cursor-pointer group-hover:visible text-xs hover:text-gray-500 active:opacity-70"
           onClick={() => {
-            copy(`${rootEntryPath}/${centerPathList.join('/')}`)
-            toast.success('路径复制成功')
+            const value = `${rootEntryPath}/${centerPathList.join('/')}`
+            copy(value)
+            toast.success(t('tip.copied', { value }))
           }}
         >
           <SvgIcon.Copy size={14} className="inline -mt-2px" />

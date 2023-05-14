@@ -170,7 +170,7 @@ export default function FileExplorer(props: AppComponentProps) {
       navBack: position <= 0,
       navForward: list.length === position + 1,
       refresh: fetching || !currentPath,
-      backToTop: !currentPath || isInRoot,
+      backToParentDirectory: !currentPath || isInRoot,
       newDir: newDirMode || newTxtMode,
       newTxt: newDirMode || newTxtMode,
       rename: selectedEntryList.length !== 1,
@@ -292,7 +292,7 @@ export default function FileExplorer(props: AppComponentProps) {
   }, [handleRefresh])
 
   const handleNameFail = useCallback((failType: NameFailType) => {
-    if (['escape', 'empty', 'no_change'].includes(failType)) {
+    if (['cancel', 'empty'].includes(failType)) {
       setNewDirMode(false)
       setNewTxtMode(false)
       setRenameMode(false)
@@ -348,7 +348,7 @@ export default function FileExplorer(props: AppComponentProps) {
         for (const entry of processList) {
           const { name } = entry
           const { success } = await deleteEntry(`${currentPath}/${name}`)
-          document.querySelector(`.gagu-entry-node[data-entry-name="${name}"]`)?.setAttribute('style', 'opacity:0;')
+          success && document.querySelector(`.gagu-entry-node[data-entry-name="${name}"]`)?.setAttribute('style', 'opacity:0;')
           successList.push(success)
         }
         if (successList.every(Boolean)) {
@@ -546,7 +546,7 @@ export default function FileExplorer(props: AppComponentProps) {
       'Shift+S': disabledMap.store ? null : null,
       'Shift+T': disabledMap.newTxt ? null : () => handleCreate('txt'),
       'Shift+U': disabledMap.upload ? null : handleUploadClick,
-      'Shift+ArrowUp': disabledMap.backToTop ? null : handleBackToTop,
+      'Shift+ArrowUp': disabledMap.backToParentDirectory ? null : handleBackToTop,
       'Shift+ArrowRight': disabledMap.navForward ? null : handleNavForward,
       'Shift+ArrowLeft': disabledMap.navBack ? null : handleNavBack,
       'Shift+ArrowDown': (selectedEntryList.length === 1 && selectedEntryList[0].type === EntryType.directory)
@@ -778,7 +778,7 @@ export default function FileExplorer(props: AppComponentProps) {
                   <EntryIcon
                     isSmall={!gridMode}
                     entry={{
-                      name: 'temp-entry',
+                      name: 'mock-entry',
                       type: newDirMode ? EntryType.directory : EntryType.file,
                       lastModified: 0,
                       hidden: false,
@@ -788,8 +788,8 @@ export default function FileExplorer(props: AppComponentProps) {
                     }}
                   />
                   <NameLine
-                    showInput
-                    create={newDirMode ? 'dir' : 'txt'}
+                    inputMode
+                    creationType={newDirMode ? 'dir' : 'txt'}
                     gridMode={gridMode}
                     currentPath={currentPath}
                     onSuccess={handleNameSuccess}
@@ -828,7 +828,7 @@ export default function FileExplorer(props: AppComponentProps) {
                   >
                     <EntryIcon {...{ isSmall, entry, scrollHook, thumbnailSupported: rootInfo.thumbnailSupported }} />
                     <NameLine
-                      showInput={renameMode && isSelected}
+                      inputMode={renameMode && isSelected}
                       entry={entry}
                       isSelected={isSelected}
                       gridMode={gridMode}

@@ -69,7 +69,7 @@ export default function AdvancedSettings() {
                       return true
                     }
                   },
-                  message: 'Invalid'
+                  message: t`hint.invalid`,
                 },
               ]}
             />

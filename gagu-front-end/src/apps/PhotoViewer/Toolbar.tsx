@@ -7,6 +7,7 @@ import { useRequest } from '../../hooks'
 import { TunnelType, IEntry } from '../../types'
 import { DOWNLOAD_PERIOD, getPaddedNo, getReadableSize, line } from '../../utils'
 import { getBaiduMapPinUrl } from '../../utils'
+import { useTranslation } from 'react-i18next'
 
 interface ToolbarProps {
   imgEl: HTMLImageElement | null
@@ -33,6 +34,8 @@ export default function Toolbar(props: ToolbarProps) {
     setThumbnailListShow,
     handlePrevOrNext,
   } = props
+
+  const { t } = useTranslation()
 
   const { request: getExif, data: ExifData, setData } = useRequest(FsApi.getExif)
   const { request: createTunnel } = useRequest(TunnelApi.createTunnel)
@@ -64,23 +67,23 @@ export default function Toolbar(props: ToolbarProps) {
     return [
       {
         icon: <SvgIcon.ChevronLeft size={14} />,
-        title: '上一张',
+        title: t`action.previousPicture`,
         onClick: () => handlePrevOrNext(-1),
       },
       {
         icon: <SvgIcon.LayoutBottom size={14} />,
-        title: '更多',
+        title: t`action.more`,
         disabled: !matchedEntryList.length,
         onClick: () => setThumbnailListShow(!thumbnailListShow),
       },
       {
         icon: <SvgIcon.Contrast size={14} />,
-        title: '背景切换',
+        title: t`action.switchBackground`,
         onClick: () => setIsLight(!isLight),
       },
       {
         icon: <SvgIcon.Download size={14} />,
-        title: '下载',
+        title: t`action.download`,
         disabled: !activeEntry,
         onClick: async () => {
           if (activeEntry) {
@@ -102,23 +105,23 @@ export default function Toolbar(props: ToolbarProps) {
       },
       {
         icon: <SvgIcon.Info size={14} />,
-        title: 'Exif 信息',
+        title: t`action.exifInfo`,
         disabled: !activeEntry || !['jpg', 'jpeg'].includes(activeEntry.extension),
         onClick: getExifData,
       },
       {
         icon: <SvgIcon.Delete size={14} />,
-        title: '删除',
+        title: t`action.delete`,
         disabled: !activeEntry,
         onClick: () => { },
       },
       {
         icon: <SvgIcon.ChevronRight size={14} />,
-        title: '下一张',
+        title: t`action.nextPicture`,
         onClick: () => handlePrevOrNext(1),
       },
     ]
-  }, [thumbnailListShow, isLight, getExifData, activeEntry, matchedEntryList, setIsLight, setThumbnailListShow, handlePrevOrNext, createTunnel])
+  }, [thumbnailListShow, isLight, getExifData, activeEntry, matchedEntryList, setIsLight, setThumbnailListShow, handlePrevOrNext, createTunnel, t])
 
   return (
     <>

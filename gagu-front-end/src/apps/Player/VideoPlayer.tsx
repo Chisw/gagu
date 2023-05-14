@@ -8,10 +8,13 @@ import { SvgIcon } from '../../components/base'
 import VolumeSlider from './common/VolumeSlider'
 import { useRecoilState } from 'recoil'
 import { entrySelectorState } from '../../states'
+import { useTranslation } from 'react-i18next'
 
 export default function VideoPlayer(props: AppComponentProps) {
 
   const { setWindowTitle, setWindowLoading } = props
+
+  const { t } = useTranslation()
 
   const {
     // matchedEntryList,
@@ -42,7 +45,7 @@ export default function VideoPlayer(props: AppComponentProps) {
 
   useEffect(() => {
     if (activeEntry) {
-      setLoading(true)
+      setLoading(false)
       setWindowTitle(activeEntry.name)
     }
   }, [activeEntry, setWindowTitle])
@@ -79,28 +82,13 @@ export default function VideoPlayer(props: AppComponentProps) {
 
   const buttonList = useMemo(() => {
     return [
-      // {
-      //   title: '播放模式',
-      //   icon: playModeIcon[playMode],
-      //   onClick: () => setPlayMode(nextPlayMode[playMode]),
-      // },
-      // {
-      //   title: '上一首',
-      //   icon: <SvgIcon.PlayRewind size={14} />,
-      //   onClick: () => {},
-      // },
       {
-        title: isPlaying ? '暂停' : '播放',
+        title: isPlaying ? t`action.pause` : t`action.play`,
         icon: isPlaying ? <SvgIcon.Pause size={24} /> : <SvgIcon.Play size={20} />,
         onClick: handlePlayOrPause,
       },
-      // {
-      //   title: '下一首',
-      //   icon: <SvgIcon.PlaySpeed size={14} />,
-      //   onClick: () =>{},
-      // },
     ]
-  }, [isPlaying, handlePlayOrPause])
+  }, [isPlaying, handlePlayOrPause, t])
 
 
   const volumeIcon = useMemo(() => {
@@ -126,7 +114,7 @@ export default function VideoPlayer(props: AppComponentProps) {
               className="m-2 p-2 border border-gray-500 cursor-pointer text-xs text-white rounded-sm text-center hover:border-gray-300"
               onClick={() => setEntrySelector({ show: true, app: APP_LIST.find(a => a.id === APP_ID_MAP.videoPlayer) })}
             >
-              打开文件
+              {t`action.openFile`}
             </div>
           )}
           <video
@@ -181,7 +169,7 @@ export default function VideoPlayer(props: AppComponentProps) {
           </div>
           <div className="w-24 flex justify-end">
             <div
-              title="调整音量"
+              title={t`action.volume`}
               className="w-8 h-8 text-white cursor-pointer hover:bg-white-200 active:bg-white-100 flex justify-center items-center rounded"
               onClick={() => setVolumeSliderShow(true)}
             >

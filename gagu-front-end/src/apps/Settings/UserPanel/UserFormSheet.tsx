@@ -54,7 +54,7 @@ export default function UserFormModal(props: UserFormModalProps) {
     const file = fileInputRef?.current?.files[0]
     if (file) {
       if (!/image\/\w+/.test(file.type)) {
-        toast.error('ERROR_SELECT_IMAGE_FIRST')
+        toast.error(t`error.notImage`)
         return
       }
       const FR = new FileReader()
@@ -65,7 +65,7 @@ export default function UserFormModal(props: UserFormModalProps) {
         setForm({ ...form, avatar })
       }
     }
-  }, [form, setForm])
+  }, [form, setForm, t])
 
   const handleSubmit = useCallback(async () => {
     const {
@@ -154,7 +154,7 @@ export default function UserFormModal(props: UserFormModalProps) {
             <Form.Input
               showClear
               label={t`label.nickname`}
-              placeholder="Nickname"
+              placeholder={t`hint.input`}
               field="nickname"
               autoComplete="off"
               maxLength={16}
@@ -162,59 +162,59 @@ export default function UserFormModal(props: UserFormModalProps) {
               onChange={value => setForm({ ...form, nickname: value.trim() })}
               trigger="blur"
               rules={[
-                { required: true, message: 'Required' },
-                { min: 2, message: 'At least 2 characters'},
+                { required: true, message: t`hint.required` },
+                { min: 2, message: t('hint.atLeastCharacters', { count: 2 }) },
               ]}
             />
             <Form.Input
               showClear
               disabled={MODE.isEdit}
               label={t`label.username`}
-              placeholder="Username"
+              placeholder={t`hint.input`}
               field="username"
               autoComplete="off"
               maxLength={16}
               suffix={<span className="pr-1 text-xs font-din text-gray-500">{form.username.length}/16</span>}
-              extraText="创建后无法修改，只能使用小写英文字母和数字，不能以数字开头，不区分大小写"
+              extraText={t`hint.username_extra`}
               onChange={value => setForm({ ...form, username: value.toLowerCase().trim() })}
               trigger="blur"
               rules={[
-                { required: MODE.isCreate, message: 'Required' },
-                { min: 1, message: 'At least 1 character'},
+                { required: MODE.isCreate, message: t`hint.required` },
+                { min: 1, message: t('hint.atLeastCharacters', { count: 1 }) },
               ]}
             />
             <Form.Input
               showClear
               label={t`label.password`}
-              placeholder="Password"
+              placeholder={t`hint.input`}
               type="password"
               field="password"
               autoComplete="off"
               maxLength={16}
               suffix={<span className="pr-1 text-xs font-din text-gray-500">{form.password.length}/16</span>}
-              extraText={MODE.isEdit ? '不修改请留空' : undefined}
+              extraText={MODE.isEdit ? t`hint.noInputNoModification` : undefined}
               onChange={value => setForm({ ...form, password: value })}
               trigger="blur"
               rules={[
-                { required: MODE.isCreate, message: 'Required' },
-                { min: 4, message: 'At least 4 characters'},
+                { required: MODE.isCreate, message: t`hint.required` },
+                { min: 4, message: t('hint.atLeastCharacters', { count: 4 }) },
               ]}
             />
             <Form.Input
               showClear
               label={t`label.passwordConfirmed`}
-              placeholder="Password"
+              placeholder={t`hint.input`}
               type="password"
               field="password2"
               autoComplete="off"
               maxLength={16}
               suffix={<span className="pr-1 text-xs font-din text-gray-500">{form.password2.length}/16</span>}
-              extraText={MODE.isEdit ? '不修改请留空' : undefined}
+              extraText={MODE.isEdit ? t`hint.noInputNoModification` : undefined}
               onChange={value => setForm({ ...form, password2: value })}
               trigger="blur"
               rules={[
-                { required: MODE.isCreate, message: 'Required' },
-                { min: 4, message: 'At least 4 characters'},
+                { required: MODE.isCreate, message: t`hint.required` },
+                { min: 4, message: t('hint.atLeastCharacters', { count: 4 }) },
                 {
                   validator(rule, value, callback, source, options) {
                     if (value || form.password) {
@@ -223,16 +223,17 @@ export default function UserFormModal(props: UserFormModalProps) {
                       return true
                     }
                   },
-                  message: 'Not matched'
+                  message: t`hint.notMatched`,
                 },
               ]}
             />
             <Form.DatePicker
               type="dateTime"
               label={t`label.validUntil`}
+              placeholder={t`hint.choose`}
               field="expiredAt"
               className="w-full"
-              extraText="永不过期请留空"
+              extraText={t`hint.noLimitLeaveBlank`}
               format="yyyy-MM-dd HH:mm"
               timePickerOpts={{ minuteStep: 10 }}
               onChange={date => setForm({ ...form, expiredAt: new Date(date as Date).getTime() })}
@@ -243,10 +244,10 @@ export default function UserFormModal(props: UserFormModalProps) {
               onChange={value => setForm({ ...form, permissions: value })}
             >
               {[
-                { label: '系统管理 Administer', value: UserPermission.administer, extra: '使用设置（系统、用户管理、日志）、关闭系统等功能，该用户无法被禁用' },
-                { label: '读取 Read（必选）', value: UserPermission.read, extra: '读取目录，下载文件，获取缩略图、Exif 信息等', disabled: true, checked: true },
-                { label: '写入 Write', value: UserPermission.write, extra: '新建文件夹，上传文件，移动文件、文件夹等' },
-                { label: '删除 Delete', value: UserPermission.delete, extra: '删除文件、文件夹（若无删除权限，上传时无法覆盖同名文件）' },
+                { label: t`label.permission_administer`, value: UserPermission.administer, extra: t`hint.permission_administer_extra` },
+                { label: t`label.permission_read`, value: UserPermission.read, extra: t`hint.permission_read_extra`, disabled: true, checked: true },
+                { label: t`label.permission_write`, value: UserPermission.write, extra: t`hint.permission_write_extra` },
+                { label: t`label.permission_delete`, value: UserPermission.delete, extra: t`hint.permission_delete_extra` },
               ].map(({ label, value, extra, disabled }) => (
                 <div
                   key={value}

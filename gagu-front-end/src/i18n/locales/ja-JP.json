@@ -2,7 +2,7 @@
   "translation": {
     "action": {
       "backward": "あとずさりする",
-      "backToTop": "上官に戻る",
+      "backToParentDirectory": "親ディレクトリに戻る",
       "cancel": "キャンセル",
       "changePassword": "パスワードを変更する",
       "clear": "空",
@@ -37,9 +37,11 @@
       "newWindow": "新しい窓",
       "nextPicture": "次",
       "nextSong": "次の曲",
+      "filter": "フィルター",
       "forward": "どうぞ",
       "fold": "片付ける",
       "open": "開ける",
+      "openFile": "ファイルを開く",
       "openWith": "オープンメソッド",
       "pause": "一時停止",
       "play": "演奏する",
@@ -72,9 +74,27 @@
       "text-editor": "テキストエディタ",
       "video-player": "ビデオプレーヤー"
     },
+    "error": {
+      "notImage": "画像ファイルを選択してください",
+      "illegalCharacters": "不正な文字があります：{{characters}}",
+      "targetExists": "ターゲットはすでに存在します：{{name}}"
+    },
     "hint": {
+      "atLeastCharacters": "少なくとも {{count}} 文字",
+      "choose": "選んでください",
       "filter": "フィルター",
-      "inputAccessPassword": "アクセスパスワードを入力してください"
+      "input": "入ってください",
+      "inputAccessPassword": "アクセスパスワードを入力してください",
+      "invalid": "無効",
+      "notMatched": "ミスマッチ",
+      "noLimitLeaveBlank": "制限なし 空白のままにしてください",
+      "noInputNoModification": "変更せず、空白のままにしてください",
+      "permission_administer_extra": "このユーザーは、設定 (システム、ユーザー管理、ログ) を使用したり、システムをシャットダウンしたりすることによって無効にすることはできません",
+      "permission_read_extra": "ディレクトリの読み取り、ファイルのダウンロード、サムネイル、Exif 情報などの取得",
+      "permission_write_extra": "新しいフォルダーの作成、ファイルのアップロード、ファイルやフォルダーの移動などを行います。",
+      "permission_delete_extra": "ファイルとフォルダーを削除します（削除権限がない場合、アップロード時に同名のファイルは上書きできません）",
+      "required": "必要",
+      "username_extra": "作成後に変更することはできません。使用できるのは小文字の英字と数字のみです。数字で始めることはできません。大文字と小文字は区別されません"
     },
     "label": {
       "accesses": "エントリ ディレクトリ",
@@ -88,6 +108,10 @@
       "password": "パスワード",
       "passwordConfirmed": "パスワードを認証する",
       "permissions": "パーミッション",
+      "permission_administer": "システムマネジメント",
+      "permission_read": "読む（必要）",
+      "permission_write": "書く",
+      "permission_delete": "消去",
       "remainingSaves": "残りのセーブ：",
       "remainingValidityPeriod": "残り有効期間：",
       "servicePort": "サービス ポート番号",
@@ -96,6 +120,7 @@
     },
     "server": {
       "OK": "OK",
+      "ERROR_NO_RESPONSE": "サービスが応答しない",
       "ERROR_PASSWORD_WRONG": "間違ったパスワード",
       "ERROR_USER_NOT_EXISTED": "ユーザーは存在しません",
       "ERROR_USER_EXISTED": "このユーザーは既に存在します",
@@ -109,9 +134,15 @@
       "ERROR_TUNNEL_PASSWORD_NEEDED": "チャンネルにはパスワードが必要です",
       "ERROR_EXIF": "EXIF フェッチに失敗しました",
       "ERROR_TAGS": "音楽情報の取得に失敗しました",
-      "ERROR_403": "不十分な権限"
+      "ERROR_403": "[403] 不十分な権限"
+    },
+    "text": {
+      "noTitle": "タイトルなし",
+      "unknownAlbum": "未知のアルバム",
+      "unknownArtist": "無名の画家"
     },
     "tip": {
+      "copied": "コピーされました：{{value}}",
       "deleteUser": "このユーザーを削除しますか?",
       "expired": "期限切れ",
       "sharingWithPassword": "共有者がアクセスパスワードを設定しました",

@@ -1,16 +1,17 @@
 import { useCallback, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useRequest } from '../../hooks'
-import { line } from '../../utils'
+import { line, setSelection } from '../../utils'
 import { FsApi } from '../../api'
 import { INVALID_NAME_CHAR_LIST } from '../../utils'
 import { EntryType, IEntry } from '../../types'
+import { useTranslation } from 'react-i18next'
 
-export type NameFailType = 'escape' | 'empty' | 'exist' | 'no_change' | 'net_error' | 'invalid'
+export type NameFailType = 'cancel' | 'empty' | 'existed' | 'net_error' | 'invalid'
 
 interface NameLineProps {
-  create?: 'dir' | 'txt' 
-  showInput?: boolean
+  creationType?: 'dir' | 'txt' 
+  inputMode?: boolean
   entry?: IEntry,
   isSelected?: boolean
   gridMode: boolean
@@ -21,8 +22,8 @@ interface NameLineProps {
 
 export default function NameLine(props: NameLineProps) {
   const {
-    create,
-    showInput = false,
+    creationType = 'dir',
+    inputMode = false,
     entry = undefined,
     isSelected = false,
     gridMode,
@@ -30,6 +31,8 @@ export default function NameLine(props: NameLineProps) {
     onSuccess,
     onFail,
   } = props
+
+  const { t } = useTranslation()
 
   const entryName = entry?.name
   const [inputValue, setInputValue] = useState(entryName)
@@ -54,35 +57,40 @@ export default function NameLine(props: NameLineProps) {
 
     if (INVALID_NAME_CHAR_LIST.some(char => newName.includes(char))) {
       onFail('invalid')
-      toast.error(`存在非法字符：${INVALID_NAME_CHAR_LIST.join(' ')}`)
+      toast.error(t('error.illegalCharacters', { characters: INVALID_NAME_CHAR_LIST.join(' ') }))
       return
     }
 
     if (oldName && (newName === oldName)) {
-      onFail('no_change')
+      onFail('cancel')
       return
     }
 
-    const newPath = `${currentPath}/${newName}`
+    const finalName = creationType === 'dir' || newName.includes('.')
+      ? newName
+      : `${newName}.txt`
+
+    const newPath = `${currentPath}/${finalName}`
     const { exists } = await getExists(newPath)
+
     if (exists) {
-      onFail('exist')
-      toast.error('已存在')
+      onFail('existed')
+      toast.error(t('error.targetExists', { name: finalName }))
     } else {
       if (oldName) {  // rename
         const oldPath = `${currentPath}/${oldName}`
         const { success } = await renameEntry(oldPath, newPath)
         if (success) {
-          onSuccess({ ...entry!, name: newName })
+          onSuccess({ ...entry!, name: finalName })
         } else {
           onFail('net_error')
         }
       } else {  // new dir
-        if (create === 'dir') {
+        if (creationType === 'dir') {
           const { success } = await addDirectory(newPath)
           if (success) {
             onSuccess({
-              name: newName,
+              name: finalName,
               type: EntryType.directory,
               parentPath: currentPath,
               lastModified: 0,
@@ -93,16 +101,14 @@ export default function NameLine(props: NameLineProps) {
           } else {
             onFail('net_error')
           }
-        } else if (create === 'txt') {
+        } else if (creationType === 'txt') {
           const blob = new Blob([''], { type: 'text/plain;charset=utf-8' })
-          const suffix = newName.includes('.') ? '' : '.txt'
-          const name = newName + suffix
-          const file = new File([blob], name)
-          const fullPath = `${currentPath}/${name}`
+          const file = new File([blob], finalName)
+          const fullPath = `${currentPath}/${finalName}`
           const { success } = await uploadFile(fullPath, file)
           if (success) {
             onSuccess({
-              name,
+              name: finalName,
               type: EntryType.file,
               parentPath: currentPath,
               lastModified: 0,
@@ -116,7 +122,7 @@ export default function NameLine(props: NameLineProps) {
         }
       }
     }
-  }, [entry, currentPath, create, getExists, addDirectory, renameEntry, uploadFile, onSuccess, onFail])
+  }, [entry, currentPath, creationType, getExists, addDirectory, renameEntry, uploadFile, onSuccess, onFail, t])
 
   return (
     <div
@@ -125,23 +131,32 @@ export default function NameLine(props: NameLineProps) {
         ${gridMode ? 'mt-1 text-center' : 'ml-4 flex justify-center items-center'}
       `)}
     >
-      {showInput ? (
+      {inputMode ? (
         <div
           className={line(`
-            relative h-4 bg-white border border-gray-300 rounded
+            relative h-8 bg-white border border-gray-300 rounded
             ${(loadingExist || loadingNewDir || loadingRename) ? 'bg-loading' : ''}
           `)}
         >
-          <input
+          <textarea
             id="file-explorer-name-input"
             autoFocus
             autoComplete="off"
-            placeholder="请输入名称"
-            className="block px-1 max-w-full h-full bg-transparent text-xs text-left text-gray-700 border-none shadow-inner"
+            placeholder={t`hint.input`}
+            className="
+              block px-1 max-w-full h-full bg-transparent break-words
+              text-center text-xs text-gray-700 border-none shadow-inner
+              resize-none overflow-x-hidden overflow-y-auto scrollbar-hidden
+            "
             value={inputValue}
             onChange={handleInputChange}
             onFocus={() => {
-              ;(document.getElementById('file-explorer-name-input') as any)?.select()
+              const input = document.getElementById('file-explorer-name-input') as HTMLInputElement | undefined
+              if (input && entry) {
+                const { name, extension } = entry
+                const end = extension ? name.replace(`.${extension}`, '').length : name.length
+                setSelection(input, 0, end)
+              }
             }}
             onBlur={handleName}
             onKeyUp={e => {
@@ -149,7 +164,7 @@ export default function NameLine(props: NameLineProps) {
               if (key === 'Enter') {
                 handleName(e)
               } else if (key === 'Escape') {
-                onFail('escape')
+                onFail('cancel')
               }
             }}
           />

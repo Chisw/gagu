@@ -28,7 +28,6 @@ export default function Side(props: SideProps) {
       `)}
     >
       <div className="w-56 h-full border-r border-gray-100 overflow-x-hidden overflow-y-auto">
-        {/* <p className="p-1 text-xs text-gray-400">收藏</p> */}
         <RootEntryList
           {...{ currentPath, activeRootEntry, rootEntryList }}
           onRootEntryClick={onRootEntryClick}

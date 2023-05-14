@@ -8,11 +8,11 @@ import { rootInfoState } from '../../states'
 export default function Desktop() {
 
   const [rootInfo] = useRecoilState(rootInfoState)
-  const [isEffected, setIsEffected] = useState(false)
+  const [initialized, setInitialized] = useState(false)
 
-  // Show Dock and then show Desktop
+  // Show MenuBar & Dock and then show Desktop
   useEffect(() => {
-    setTimeout(() => setIsEffected(true), 500)
+    setTimeout(() => setInitialized(true), 500)
   }, [])
 
   return (
@@ -22,7 +22,7 @@ export default function Desktop() {
           className={line(`
             w-full h-full p-4 flex flex-col flex-wrap content-start
             transition-opacity duration-500
-            ${isEffected ? 'opacity-100' : 'opacity-0'}
+            ${initialized ? 'opacity-100' : 'opacity-0'}
           `)}
         >
           {rootInfo.desktopEntryList.map(entry => {
@@ -36,11 +36,9 @@ export default function Desktop() {
                   scrollHook={{ top: 0, height: window.innerHeight }}
                 />
                 <NameLine
-                  showInput={false}
                   entry={entry}
-                  isSelected={false}
-                  gridMode={true}
-                  currentPath={''}
+                  gridMode
+                  currentPath=""
                   onSuccess={() => { }}
                   onFail={() => { }}
                 />

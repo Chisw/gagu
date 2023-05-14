@@ -11,6 +11,7 @@ import ProgressSlider from './common/ProgressSlider'
 import { IconButton } from '../../components/base'
 import { useRecoilState } from 'recoil'
 import { entrySelectorState } from '../../states'
+import { useTranslation } from 'react-i18next'
 
 const nextPlayMode: any = {
   order: 'repeat',
@@ -27,6 +28,8 @@ const playModeIcon: any = {
 export default function MusicPlayer(props: AppComponentProps) {
 
   const { setWindowTitle, setWindowLoading } = props
+
+  const { t } = useTranslation()
 
   const {
     matchedEntryList,
@@ -124,13 +127,13 @@ export default function MusicPlayer(props: AppComponentProps) {
 
   const { title, artist, album, base64 } = useMemo(() => {
     const { title, artist, album, base64 } = data || {
-      title: activeEntry?.name || '无标题',
-      artist: '未知作家',
-      album: '未知专辑',
+      title: activeEntry?.name || t`text.noTitle`,
+      artist: t`text.unknownArtist`,
+      album: t`text.unknownAlbum`,
       base64: '',
     }
     return { title, artist, album, base64 }
-  }, [data, activeEntry])
+  }, [data, activeEntry, t])
 
   const buttonList = useMemo(() => {
     let volumeIcon = <SvgIcon.VolumeDown size={14} />
@@ -141,32 +144,32 @@ export default function MusicPlayer(props: AppComponentProps) {
     }
     return [
       {
-        title: '播放模式',
+        title: t`action.playMode`,
         icon: playModeIcon[playMode],
         onClick: () => setPlayMode(nextPlayMode[playMode]),
       },
       {
-        title: '上一首',
+        title: t`action.previousSong`,
         icon: <SvgIcon.SkipBack size={14} />,
         onClick: () => handlePrevOrNext(-1),
       },
       {
-        title: isPlaying ? '暂停' : '播放',
+        title: isPlaying ? t`action.pause` : t`action.play`,
         icon: isPlaying ? <SvgIcon.Pause size={24} /> : <SvgIcon.Play size={20} />,
         onClick: handlePlayOrPause,
       },
       {
-        title: '下一首',
+        title: t`action.nextSong`,
         icon: <SvgIcon.SkipForward size={14} />,
         onClick: () => handlePrevOrNext(1),
       },
       {
-        title: '调整音量',
+        title: t`action.volume`,
         icon: volumeIcon,
         onClick: () => setVolumeSliderShow(true),
       },
     ]
-  }, [volume, playMode, isPlaying, handlePlayOrPause, handlePrevOrNext])
+  }, [volume, playMode, isPlaying, handlePlayOrPause, handlePrevOrNext, t])
 
   return (
     <>
@@ -176,7 +179,7 @@ export default function MusicPlayer(props: AppComponentProps) {
             className="m-2 p-2 border border-pink-500 cursor-pointer text-xs text-white rounded-sm text-center hover:border-pink-300"
             onClick={() => setEntrySelector({ show: true, app: APP_LIST.find(a => a.id === APP_ID_MAP.musicPlayer) })}
           >
-            打开文件
+            {t`action.openFile`}
           </div>
         )}
         {/* list */}

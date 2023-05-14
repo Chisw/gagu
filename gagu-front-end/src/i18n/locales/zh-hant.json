@@ -2,7 +2,7 @@
   "translation": {
     "action": {
       "backward": "後退",
-      "backToTop": "返回上級",
+      "backToParentDirectory": "返回上級",
       "cancel": "取消",
       "changePassword": "修改密碼",
       "clear": "清空",
@@ -18,6 +18,7 @@
       "edit": "編輯",
       "enable": "啟用",
       "exifInfo": "Exif 信息",
+      "filter": "篩選",
       "folderSize": "文件夾大小",
       "fullScreenEnter": "進入全屏",
       "fullScreenExit": "退出全屏",
@@ -40,6 +41,7 @@
       "forward": "前進",
       "fold": "收起",
       "open": "打開",
+      "openFile": "打開文件",
       "openWith": "打開方式",
       "pause": "暫停",
       "play": "播放",
@@ -72,9 +74,27 @@
       "text-editor": "文本編輯器",
       "video-player": "視頻播放器"
     },
+    "error": {
+      "notImage": "請選擇圖片",
+      "illegalCharacters": "存在非法字符：{{characters}}",
+      "targetExists": "目標已存在：{{name}}"
+    },
     "hint": {
+      "atLeastCharacters": "至少 {{count}} 個字符",
+      "choose": "請選擇",
       "filter": "篩選",
-      "inputAccessPassword": "請輸入訪問密碼"
+      "input": "請輸入",
+      "inputAccessPassword": "請輸入訪問密碼",
+      "invalid": "不合法",
+      "notMatched": "不匹配",
+      "noLimitLeaveBlank": "留空不限",
+      "noInputNoModification": "不修改請留空",
+      "permission_administer_extra": "使用設置（系統、用戶管理、日誌）、關閉系統等功能，該用戶無法被禁用",
+      "permission_read_extra": "讀取目錄，下載文件，獲取縮略圖、Exif 信息等",
+      "permission_write_extra": "新建文件夾，上傳文件，移動文件、文件夾等",
+      "permission_delete_extra": "刪除文件、文件夾（若無刪除權限，上傳時無法覆蓋同名文件）",
+      "required": "必填",
+      "username_extra": "創建後無法修改，只能使用小寫英文字母和數字，不能以數字開頭，不區分大小寫"
     },
     "label": {
       "accesses": "入口目錄",
@@ -88,6 +108,10 @@
       "password": "密碼",
       "passwordConfirmed": "確認密碼",
       "permissions": "權限",
+      "permission_administer": "系統管理",
+      "permission_read": "讀取（必選）",
+      "permission_write": "寫入",
+      "permission_delete": "刪除",
       "remainingSaves": "剩餘保存次數：",
       "remainingValidityPeriod": "剩餘有效期：",
       "servicePort": "服務端口號",
@@ -96,6 +120,7 @@
     },
     "server": {
       "OK": "OK",
+      "ERROR_NO_RESPONSE": "服務未響應",
       "ERROR_PASSWORD_WRONG": "密碼錯誤",
       "ERROR_USER_NOT_EXISTED": "用戶不存在",
       "ERROR_USER_EXISTED": "用戶已存在",
@@ -109,9 +134,15 @@
       "ERROR_TUNNEL_PASSWORD_NEEDED": "通道需要密碼",
       "ERROR_EXIF": "EXIF 獲取失敗",
       "ERROR_TAGS": "音樂信息獲取失敗",
-      "ERROR_403": "權限不足"
+      "ERROR_403": "[403] 權限不足"
+    },
+    "text": {
+      "noTitle": "無標題",
+      "unknownAlbum": "未知專輯",
+      "unknownArtist": "未知藝術家"
     },
     "tip": {
+      "copied": "已複製：{{value}}",
       "deleteUser": "刪除用戶？",
       "expired": "已過期",
       "sharingWithPassword": "啊喔，分享者設置的訪問密碼",

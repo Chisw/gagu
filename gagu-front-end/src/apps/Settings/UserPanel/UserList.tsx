@@ -42,12 +42,12 @@ export default function UserList(props: UserListProps) {
   }, [updateUserAbility, refresh])
 
   const handleRemove = useCallback(async (username: string) => {
-    const res = await removeUser(username)
-    if (res.success) {
+    const { success, message } = await removeUser(username)
+    if (success) {
       refresh()
-      toast.success('OK_USER_DELETED')
+      toast.success('OK')
     } else {
-      toast.error(res.message)
+      toast.error(message)
     }
   }, [refresh, removeUser])
 

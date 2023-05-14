@@ -12,7 +12,7 @@ export default function Dock() {
 
   const { t } = useTranslation()
 
-  const [isEffected, setIsEffected] = useState(false)
+  const [initialized, setInitialized] = useState(false)
 
   const [topWindowIndex, setTopWindowIndex] = useRecoilState(topWindowIndexState)
   const [runningAppList, setRunningAppList] = useRecoilState(runningAppListState)
@@ -20,7 +20,7 @@ export default function Dock() {
   const [, setContextMenuData] = useRecoilState(contextMenuDataState)
 
   useEffect(() => {
-    setTimeout(() => setIsEffected(true))
+    setTimeout(() => setInitialized(true))
   }, [])
 
   const handleOpenApp = useCallback((app: IApp, openNew?: boolean) => {
@@ -96,9 +96,9 @@ export default function Dock() {
           bg-clip-padding bg-white-400
           rounded-xl
           backdrop-filter backdrop-blur
-          transition-all duration-500
+          transition-all duration-500 ease-out
           transform -translate-x-1/2
-          ${isEffected ? 'translate-y-0' : 'translate-y-20'}
+          ${initialized ? 'translate-y-0' : 'translate-y-20'}
         `)}
       >
         <div className="flex items-center">

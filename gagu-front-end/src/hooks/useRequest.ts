@@ -11,11 +11,14 @@ export function useRequest<A extends any[], D>(requestFn: RequestApi<A, D>, init
     try {
       setLoading(true)
       const data = await requestFn(...args)
-      setData(data)
       setLoading(false)
+      setData(data)
       return data
     } catch (error) {
       setLoading(false)
+      const fallbackData: any = { success: false, message: `${error}`}
+      setData(fallbackData)
+      return fallbackData
     }
   }, [requestFn])
 

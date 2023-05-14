@@ -64,13 +64,13 @@ export default function Window(props: WindowProps) {
 
   const transformStyle = useMemo(() => {
     return {
-      opening: { transition: 'none', transitionDuration: '0', transform: 'perspective(1000px) rotateX(-30deg) scale(.6)', opacity: 0 },
+      opening: { transition: 'none', transitionDuration: '0', transform: 'perspective(1000px) rotateX(-50deg) scale(.5)', opacity: 0 },
       opened: { transition: 'all', transitionDuration: `${DURATION}ms`, transform: '', opacity: 1 },
       hiding: { transition: 'all', transitionDuration: `${DURATION}ms`, transform: 'perspective(1000px) rotateX(0) scale(1) translateY(20vh)', opacity: 0 },
       hidden: { transition: 'all', transitionDuration: `${DURATION}ms`, transform: 'perspective(1000px) rotateX(0) scale(1) translateY(20vh)', opacity: 0 },
       showing: { transition: 'all', transitionDuration: '0', transform: 'perspective(1000px) rotateX(0) scale(1) translateY(20vh)', opacity: 0 },
       shown: { transition: 'all', transitionDuration: `${DURATION}ms`, transform: 'perspective(1000px) rotateX(0) scale(1) translateY(0)', opacity: 1 },
-      closing: { transition: 'all', transitionDuration: `${DURATION}ms`, transform: 'perspective(1000px) rotateX(-30deg) scale(.6)', opacity: 0 },
+      closing: { transition: 'all', transitionDuration: `${DURATION}ms`, transform: 'perspective(1000px) rotateX(-50deg) scale(.5)', opacity: 0 },
       closed: undefined,
     }[windowStatus]
   }, [windowStatus])
@@ -155,7 +155,7 @@ export default function Window(props: WindowProps) {
             gagu-move-to-front-trigger
             absolute inset-0 bg-white-800 backdrop-filter backdrop-blur-sm overflow-hidden
             transition-box-shadow duration-200 flex flex-col
-            ${isFullScreen ? '' : 'rounded-md border border-gray-500 border-opacity-30 bg-clip-padding'}
+            ${isFullScreen ? '' : 'rounded-lg border border-gray-500 border-opacity-30 bg-clip-padding'}
             ${isTopWindow ? 'shadow-xl' : 'shadow'}
           `)}
           style={transformStyle}
@@ -164,7 +164,7 @@ export default function Window(props: WindowProps) {
           {/* header */}
           <div
             className={line(`
-              relative w-full h-8 flex items-center select-none border-b border-gray-100
+              relative w-full h-8 flex items-center select-none border-b border-gray-100 group
               ${headerClassName || 'bg-white text-gray-500'}
             `)}
           >
@@ -189,7 +189,7 @@ export default function Window(props: WindowProps) {
                 ${isTopWindow ? 'hidden' : ''}
               `)}
             />
-            <div className="flex items-center flex-shrink-0">
+            <div className="flex items-center flex-shrink-0 opacity-30 group-hover:opacity-100 transition-opacity duration-100">
               <span
                 title="最小化"
                 prevent-move-to-front="true"

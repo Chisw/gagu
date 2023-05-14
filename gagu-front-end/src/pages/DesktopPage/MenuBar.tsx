@@ -27,7 +27,7 @@ export default function MenuBar() {
   const { t } = useTranslation()
   const { pathname } = useLocation()
 
-  const [isEffected, setIsEffected] = useState(false)
+  const [initialized, setInitialized] = useState(false)
   const [timeStr, setTimerStr] = useState('--:--')
   const [systemPopoverShow, setSystemPopoverShow] = useState(false)
   const [userPopoverShow, setUserPopoverShow] = useState(false)
@@ -54,7 +54,7 @@ export default function MenuBar() {
   }, [pathname])
 
   useEffect(() => {
-    setTimeout(() => setIsEffected(true))
+    setTimeout(() => setInitialized(true))
   }, [])
 
   useEffect(() => {
@@ -127,9 +127,9 @@ export default function MenuBar() {
           flex justify-between items-center
            bg-white-500 shadow-sm
           backdrop-filter backdrop-blur
-          transition-all duration-500
+          transition-all duration-500 ease-out
           transform
-          ${isEffected ? 'translate-y-0' : '-translate-y-20'}
+          ${initialized ? 'translate-y-0' : '-translate-y-20'}
         `)}
       >
         <div className="w-1/3 h-full flex items-center text-xs">
@@ -148,7 +148,7 @@ export default function MenuBar() {
                       title={t`action.visitWebsite`}
                       target="_blank"
                       rel="noreferrer"
-                      className="text-gray-400 hover:text-gray-600"
+                      className="text-gray-300 hover:text-gray-500"
                       href="https://gagu.io"
                     >
                       <SvgIcon.Earth />
@@ -157,7 +157,7 @@ export default function MenuBar() {
                       title={t`action.visitGithub`}
                       target="_blank"
                       rel="noreferrer"
-                      className="ml-1 text-gray-400 hover:text-gray-600"
+                      className="ml-1 text-gray-300 hover:text-gray-500"
                       href="https://github.com/Chisw/gagu"
                     >
                       <SvgIcon.Github />
@@ -244,7 +244,7 @@ export default function MenuBar() {
               onClick={() => setSystemPopoverShow(true)}
             >
               <SvgIcon.G size={12} />
-              <span className="ml-2 text-gray-700 font-din">
+              <span className="hidden md:inline ml-2 text-gray-700 font-din">
                 {loading ? 'Loading..' : `${rootInfo.deviceName}`}
               </span>
             </div>
@@ -322,7 +322,7 @@ export default function MenuBar() {
                     className="w-3 h-3 rounded-full filter grayscale opacity-80 bg-center bg-cover bg-black-200"
                     style={{ backgroundImage: `url("${FsApi.getAvatarStreamUrl(userInfo?.username || '')}")` }}
                   />
-                  <span className="ml-1 font-din text-gray-700">{userInfo.nickname}</span>
+                  <span className="hidden md:inline ml-2 font-din text-gray-700">{userInfo.nickname}</span>
                 </>
               ) : (
                 <SvgIcon.User />

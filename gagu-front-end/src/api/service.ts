@@ -1,6 +1,7 @@
 import axios, { AxiosError } from 'axios'
 import { BASE_URL, ERROR_TIMEOUT, HEADERS_AUTH_KEY, UserInfoStore } from '../utils'
 import toast from 'react-hot-toast'
+import { t } from 'i18next'
 
 const service = axios.create({
   baseURL: BASE_URL,
@@ -25,7 +26,7 @@ service.interceptors.response.use(response => response, (error: AxiosError) => {
     toast.error(message)
   }
   if (!response) {
-    toast.error('服务没有响应')
+    toast.error(t`server.ERROR_NO_RESPONSE`)
     return
   }
   const { status } = response
@@ -33,7 +34,7 @@ service.interceptors.response.use(response => response, (error: AxiosError) => {
     UserInfoStore.remove()
     window.location.href = '/login'
   } else if (status === 403) {
-    toast.error('ERROR_403')
+    toast.error(t`server.ERROR_403`)
   } else if (status >= 500) {
     toast.error(`ERROR_${status}: ${message}`)
   }

@@ -6,7 +6,7 @@ export interface IToolBarDisabledMap {
   navBack: boolean
   navForward: boolean
   refresh: boolean
-  backToTop: boolean
+  backToParentDirectory: boolean
   newDir: boolean
   newTxt: boolean
   rename: boolean
@@ -83,34 +83,34 @@ export default function ToolBar(props: ToolBarProps) {
     <>
       <div className="h-8 flex-shrink-0 flex items-center border-b border-gray-100">
         <ToolButton
-          title="后退 [Shift + ←]"
+          title={`${t`action.backward`} [Shift + ←]`}
           icon={<SvgIcon.ArrowLeft />}
           disabled={disabledMap.navBack}
           onClick={onNavBack}
         />
         <ToolButton
-          title="前进 [Shift + →]"
+          title={`${t`action.forward`} [Shift + →]`}
           icon={<SvgIcon.ArrowRight />}
           disabled={disabledMap.navForward}
           onClick={onNavForward}
         />
         {disabledMap.refresh ? (
           <ToolButton
-            title="停止"
+            title={t`action.cancel`}
             icon={<SvgIcon.Close />}
             onClick={onAbort}
           />
         ) : (
           <ToolButton
-            title="刷新 [Shift + R]"
+            title={`${t`action.refresh`} [Shift + R]`}
             icon={<SvgIcon.Refresh />}
             onClick={onRefresh}
           />
         )}
         <ToolButton
-          title="上级目录 [Shift + ↑]"
+          title={`${t`action.backToParentDirectory`} [Shift + ↑]`}
           icon={<SvgIcon.ArrowUp />}
-          disabled={disabledMap.backToTop}
+          disabled={disabledMap.backToParentDirectory}
           onClick={onBackToTop}
         />
 
@@ -118,46 +118,41 @@ export default function ToolBar(props: ToolBarProps) {
         {windowWidth > 720 && (
           <>
             <ToolButton
-              title="新建文件夹 [Shift + N]"
+              title={`${t`action.newFolder`} [Shift + N]`}
               className="hidden md:flex"
               icon={<SvgIcon.FolderAdd />}
               disabled={disabledMap.newDir}
               onClick={onNewDir}
             />
             <ToolButton
-              title="新建文本文件 [Shift + T]"
+              title={`${t`action.newTextFile`} [Shift + T]`}
               className="hidden md:flex"
               icon={<SvgIcon.FileAdd />}
               disabled={disabledMap.newTxt}
               onClick={onNewTxt}
             />
             <ToolButton
-              title="上传 [Shift + U]"
+              title={`${t`action.upload`} [Shift + U]`}
               className="hidden md:flex"
               icon={<SvgIcon.Upload />}
               onClick={onUpload}
             />
             <ToolButton
-              title="下载 [Shift + D]"
+              title={`${t`action.download`} [Shift + D]`}
               className="hidden md:flex"
               icon={<SvgIcon.Download />}
               disabled={disabledMap.download}
               onClick={onDownload}
             />
-            {/* <ToolButton
-              title="收藏 [Shift + S]"
-              className="hidden md:flex"
-              icon={<SvgIcon.Star />}
-            /> */}
             <ToolButton
-              title="重命名 [Shift + E]"
+              title={`${t`action.rename`} [Shift + e]`}
               className="hidden md:flex"
               icon={<SvgIcon.Rename />}
               disabled={disabledMap.rename}
               onClick={onRename}
             />
             <ToolButton
-              title="删除 [Del]"
+              title={`${t`action.delete`} [Del]`}
               className="hidden md:flex"
               icon={<SvgIcon.Delete />}
               disabled={disabledMap.delete}
@@ -181,14 +176,14 @@ export default function ToolBar(props: ToolBarProps) {
                 onKeyUp={e => e.key === 'Escape' && cancel()}
               />
               <ToolButton
-                title="取消"
+                title={t`action.cancel`}
                 icon={<SvgIcon.CloseCircle />}
                 onClick={cancel}
               />
             </div>
           ) : (
             <ToolButton
-              title="筛选 [Shift + F]"
+              title={`${t`action.filter`} [Shift + F]`}
               icon={<SvgIcon.Filter />}
               disabled={disabledMap.filter}
               onClick={() => setFilterMode(true)}
@@ -197,18 +192,18 @@ export default function ToolBar(props: ToolBarProps) {
         </div>
 
         <ToolButton
-          title="全选 [Shift + A]"
+          title={`${t`action.selectAll`} [Shift + A]`}
           icon={<SvgIcon.Check />}
           disabled={disabledMap.selectAll}
           onClick={onSelectAll}
         />
         <ToolButton
-          title={`${hiddenShow ? '不' : ''}显示隐藏项 [Shift + H]`}
+          title={`${hiddenShow ? t`action.hideHiddenItems` : t`action.showHiddenItems`} [Shift + H]`}
           icon={hiddenShow ? <SvgIcon.EyeOff /> : <SvgIcon.Eye />}
           onClick={() => setHiddenShow(!hiddenShow)}
         />
         <ToolButton
-          title={gridMode ? '显示为列表 [Shift + L]' : '显示为图标 [Shift + G]'}
+          title={gridMode ? `${t`action.listView`} [Shift + L]` : `${t`action.gridView`} [Shift + G]`}
           icon={gridMode ? <SvgIcon.ViewList /> : <SvgIcon.ViewGrid />}
           onClick={() => setGridMode(!gridMode)}
         /> 

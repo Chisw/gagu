@@ -2,7 +2,7 @@
   "translation": {
     "action": {
       "backward": "后退",
-      "backToTop": "返回上级",
+      "backToParentDirectory": "返回上级",
       "cancel": "取消",
       "changePassword": "修改密码",
       "clear": "清空",
@@ -37,9 +37,11 @@
       "newWindow": "新建窗口",
       "nextPicture": "下一张",
       "nextSong": "下一首",
+      "filter": "筛选",
       "forward": "前进",
       "fold": "收起",
       "open": "打开",
+      "openFile": "打开文件",
       "openWith": "打开方式",
       "pause": "暂停",
       "play": "播放",
@@ -72,9 +74,27 @@
       "text-editor": "文本编辑器",
       "video-player": "视频播放器"
     },
+    "error": {
+      "notImage": "请选择图片",
+      "illegalCharacters": "存在非法字符：{{characters}}",
+      "targetExists": "目标已存在：{{name}}"
+    },
     "hint": {
+      "atLeastCharacters": "至少 {{count}} 个字符",
+      "choose": "请选择",
       "filter": "筛选",
-      "inputAccessPassword": "请输入访问密码"
+      "input": "请输入",
+      "inputAccessPassword": "请输入访问密码",
+      "invalid": "不合法",
+      "notMatched": "不匹配",
+      "noLimitLeaveBlank": "留空不限",
+      "noInputNoModification": "不修改请留空",
+      "permission_administer_extra": "使用设置（系统、用户管理、日志）、关闭系统等功能，该用户无法被禁用",
+      "permission_read_extra": "读取目录，下载文件，获取缩略图、Exif 信息等",
+      "permission_write_extra": "新建文件夹，上传文件，移动文件、文件夹等",
+      "permission_delete_extra": "删除文件、文件夹（若无删除权限，上传时无法覆盖同名文件）",
+      "required": "必填",
+      "username_extra": "创建后无法修改，只能使用小写英文字母和数字，不能以数字开头，不区分大小写"
     },
     "label": {
       "accesses": "入口目录",
@@ -88,6 +108,10 @@
       "password": "密码",
       "passwordConfirmed": "确认密码",
       "permissions": "权限",
+      "permission_administer": "系统管理",
+      "permission_read": "读取（必选）",
+      "permission_write": "写入",
+      "permission_delete": "删除",
       "remainingSaves": "剩余保存次数：",
       "remainingValidityPeriod": "剩余有效期：",
       "servicePort": "服务端口号",
@@ -96,6 +120,7 @@
     },
     "server": {
       "OK": "OK",
+      "ERROR_NO_RESPONSE": "服务未响应",
       "ERROR_PASSWORD_WRONG": "密码错误",
       "ERROR_USER_NOT_EXISTED": "用户不存在",
       "ERROR_USER_EXISTED": "用户已存在",
@@ -109,9 +134,15 @@
       "ERROR_TUNNEL_PASSWORD_NEEDED": "通道需要密码",
       "ERROR_EXIF": "EXIF 获取失败",
       "ERROR_TAGS": "音乐信息获取失败",
-      "ERROR_403": "权限不足"
+      "ERROR_403": "[403] 权限不足"
+    },
+    "text": {
+      "noTitle": "无标题",
+      "unknownAlbum": "未知专辑",
+      "unknownArtist": "未知艺术家"
     },
     "tip": {
+      "copied": "已复制：{{value}}",
       "deleteUser": "删除用户？",
       "expired": "已过期",
       "sharingWithPassword": "啊喔，分享者设置了访问密码",

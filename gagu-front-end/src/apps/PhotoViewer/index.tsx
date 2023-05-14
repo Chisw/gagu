@@ -9,6 +9,7 @@ import Viewer from './Viewer'
 import { line } from '../../utils'
 import { useRecoilState } from 'recoil'
 import { entrySelectorState } from '../../states'
+import { useTranslation } from 'react-i18next'
 
 export default function PhotoViewer(props: AppComponentProps) {
 
@@ -18,6 +19,8 @@ export default function PhotoViewer(props: AppComponentProps) {
     setWindowTitle,
     setWindowLoading,
   } = props
+
+  const { t } = useTranslation()
 
   const {
     matchedEntryList,
@@ -90,7 +93,7 @@ export default function PhotoViewer(props: AppComponentProps) {
                 className="m-2 p-2 border border-gray-500 cursor-pointer text-xs text-white rounded-sm text-center hover:border-gray-300"
                 onClick={() => setEntrySelector({ show: true, app: APP_LIST.find(a => a.id === APP_ID_MAP.photoViewer) })}
               >
-                打开文件
+                {t`action.openFile`}
               </div>
             )}
             {activeEntry && (

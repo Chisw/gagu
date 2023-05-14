@@ -9,6 +9,7 @@ import QrCode from 'qrcode.react'
 import { SvgIcon } from './base'
 import toast from 'react-hot-toast'
 import md5 from 'md5'
+import { useTranslation } from 'react-i18next'
 
 const newForm = () => ({
   downloadName: '',
@@ -30,6 +31,8 @@ export default function ShareModal(props: ShareModalProps) {
     entryList,
     onClose,
   } = props
+
+  const { t } = useTranslation()
 
   const [form, setForm] = useState<{
     downloadName: string
@@ -129,7 +132,7 @@ export default function ShareModal(props: ShareModalProps) {
                       placeholder="请输入保存名称"
                       onChange={downloadName => setForm({ ...form, downloadName })}
                       rules={[
-                        { required: true, message: 'Required' },
+                        { required: true, message: t`hint.required` },
                       ]}
                     />
                   </div>
@@ -138,7 +141,7 @@ export default function ShareModal(props: ShareModalProps) {
                       showClear
                       field="password"
                       label="访问密码"
-                      placeholder="留空不限"
+                      placeholder={t`hint.noLimitLeaveBlank`}
                       mode="password"
                       onChange={password => setForm({ ...form, password })}
                     />
@@ -149,7 +152,7 @@ export default function ShareModal(props: ShareModalProps) {
                       autoComplete="off"
                       field="leftTimes"
                       label="可下载次数"
-                      placeholder="留空不限"
+                      placeholder={t`hint.noLimitLeaveBlank`}
                       className="w-full"
                       min={1}
                       onChange={val => setForm({ ...form, leftTimes: Number(val) })}
@@ -161,7 +164,7 @@ export default function ShareModal(props: ShareModalProps) {
                       type="dateTime"
                       field="expiredAt"
                       label="有效期"
-                      placeholder="留空不限"
+                      placeholder={t`hint.noLimitLeaveBlank`}
                       className="w-full"
                       format="yyyy-MM-dd HH:mm"
                       disabledDate={date => date ? date?.getTime() <= (Date.now() - 24 * 60 * 60 * 1000) : false}
