@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useRecoilState } from 'recoil'
-import { openOperationState, runningAppListState, topWindowIndexState, contextMenuDataState } from '../../states'
+import { openOperationState, runningAppListState, topWindowIndexState, contextMenuDataState, activePageState } from '../../states'
 import { APP_LIST, APP_ID_MAP } from '../../apps'
 import { IApp, IContextMenuItem } from '../../types'
 import { line } from '../../utils'
@@ -12,16 +12,11 @@ export default function Dock() {
 
   const { t } = useTranslation()
 
-  const [initialized, setInitialized] = useState(false)
-
   const [topWindowIndex, setTopWindowIndex] = useRecoilState(topWindowIndexState)
   const [runningAppList, setRunningAppList] = useRecoilState(runningAppListState)
   const [openOperation] = useRecoilState(openOperationState)
   const [, setContextMenuData] = useRecoilState(contextMenuDataState)
-
-  useEffect(() => {
-    setTimeout(() => setInitialized(true))
-  }, [])
+  const [activePage] = useRecoilState(activePageState)
 
   const handleOpenApp = useCallback((app: IApp, openNew?: boolean) => {
     const sameRunningAppList = runningAppList.filter(a => a.id === app.id)
@@ -98,7 +93,7 @@ export default function Dock() {
           backdrop-filter backdrop-blur
           transition-all duration-500 ease-out
           transform -translate-x-1/2
-          ${initialized ? 'translate-y-0' : 'translate-y-20'}
+          ${activePage === 'desktop' ? 'translate-y-0' : 'translate-y-20'}
         `)}
       >
         <div className="flex items-center">

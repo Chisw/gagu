@@ -5,7 +5,9 @@ import Dock from './Dock'
 import MenuBar from './MenuBar'
 import EntrySelector from './EntrySelector'
 import { FsApi } from '../../api'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
+import { useRecoilState } from 'recoil'
+import { activePageState } from '../../states'
 
 // fixed z-0 DesktopPage
 // -               EntrySelector
@@ -16,11 +18,12 @@ import { useEffect, useState } from 'react'
 // - absolute z-0  Desktop
 
 export default function DesktopPage() {
-  const [initialized, setInitialized] = useState(false)
+
+  const [activePage, setActivePage] = useRecoilState(activePageState)
 
   useEffect(() => {
-    setTimeout(() => setInitialized(true))
-  }, [])
+    setTimeout(() => setActivePage('desktop'))
+  }, [setActivePage])
 
   return (
     <div
@@ -32,7 +35,7 @@ export default function DesktopPage() {
           gagu-background-desktop absolute z-0 inset-0 bg-cover bg-center
           transition-all duration-1000 ease-out
           transform
-          ${initialized ? 'scale-100 bg-opacity-100' : 'scale-110 opacity-50'}
+          ${activePage === 'desktop' ? 'scale-100 bg-opacity-100' : 'scale-110 opacity-50'}
         `}
         style={{ backgroundImage: `url("${FsApi.getImageStreamUrl('bg-desktop')}")` }}
       />

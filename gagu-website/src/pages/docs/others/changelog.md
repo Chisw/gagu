@@ -19,6 +19,12 @@ Clear data directory means that all users, download tunnels and other data will 
 
 ## v0.0.*
 
+- v0.0.40 (2023-05-15)
+  - feat: do not check extensions when renaming
+  - feat: page switching transition effect
+  - fix: global i18n
+  - fix: ./public/background -> ./public/image
+
 - v0.0.39 (2023-05-12)
   - feat: customized favicon
   - feat: terminal and UI beautification

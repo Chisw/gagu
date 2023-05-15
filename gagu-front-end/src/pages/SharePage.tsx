@@ -11,6 +11,8 @@ import EntryListPanel from '../components/EntryListPanel'
 import PublicFooter from '../components/PublicFooter'
 import { useRequest } from '../hooks'
 import { getDateTime, SERVER_MESSAGE_MAP } from '../utils'
+import { useRecoilState } from 'recoil'
+import { activePageState } from '../states'
 
 export default function SharePage() {
 
@@ -19,6 +21,12 @@ export default function SharePage() {
 
   const [passwordVal, setPasswordVal] = useState('')
   const [expiredAtTip, setExpiredAtTip] = useState('')
+
+  const [, setActivePage] = useRecoilState(activePageState)
+
+  useEffect(() => {
+    setTimeout(() => setActivePage('share'))
+  }, [setActivePage])
 
   const { request: getTunnel, loading, data } = useRequest(TunnelApi.getTunnel)
   const { request: checkTunnel, loading: calling } = useRequest(TunnelApi.checkTunnel)

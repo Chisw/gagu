@@ -21,8 +21,6 @@ Many unrealized ideas will be recorded here, waiting for development.
 
 - Support personal modification of avatar, nickname, password
 - Sharing link can be edited
-- Preferences
-  - Language
 
 ## Apps
 

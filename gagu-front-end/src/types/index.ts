@@ -6,6 +6,8 @@ export * from './user.type'
 export * from './tunnel.type'
 export * from './setting.type'
 
+export type PageType = 'PENDING' | 'login' | 'desktop' | 'explore' | 'touch' | 'share'
+
 export interface IHistory {
   position: number
   list: string[]

@@ -1,8 +1,18 @@
+import { useRecoilState } from 'recoil'
 import FileExplorer from '../apps/FileExplorer'
 import ContextMenu from './DesktopPage/ContextMenu'
 import MenuBar from './DesktopPage/MenuBar'
+import { activePageState } from '../states'
+import { useEffect } from 'react'
 
 export default function ExplorePage() {
+
+  const [, setActivePage] = useRecoilState(activePageState)
+
+  useEffect(() => {
+    setTimeout(() => setActivePage('explore'))
+  }, [setActivePage])
+
   return (
     <>
       <div

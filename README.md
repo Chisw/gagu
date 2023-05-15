@@ -8,8 +8,8 @@
 <p>Manage files on your different devices in the browser</p>
 <p>Works on Windows, macOS, Linux and Android/Termux</p>
 <p>Inspired by <a href="https://play.google.com/store/apps/details?id=com.lonelycatgames.Xplore" target="_blank">Android/X-plore</a> and <a href="https://www.npmjs.com/package/anywhere" target="_blank">NPM/anywhere</a></p>
-<img src="https://img.shields.io/badge/NPM-0.0.39-orange">
-<img src="https://img.shields.io/badge/Package Size-607KB-success">
+<img src="https://img.shields.io/badge/NPM-0.0.40-orange">
+<img src="https://img.shields.io/badge/Package Size-610KB-success">
 <img src="https://img.shields.io/badge/License-MIT-blue">
 <img src="https://api.netlify.com/api/v1/badges/43a65c74-6640-4341-a3fd-b0bc8f52e670/deploy-status">
 <br>

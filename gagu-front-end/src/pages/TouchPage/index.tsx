@@ -1,9 +1,18 @@
 import { Button } from '@douyinfe/semi-ui'
 import { useNavigate } from 'react-router-dom'
 import { SvgIcon } from '../../components/base'
+import { useRecoilState } from 'recoil'
+import { activePageState } from '../../states'
+import { useEffect } from 'react'
 
 export default function TouchPage() {
   const navigate = useNavigate()
+
+  const [, setActivePage] = useRecoilState(activePageState)
+
+  useEffect(() => {
+    setTimeout(() => setActivePage('touch'))
+  }, [setActivePage])
 
   return (
     <>

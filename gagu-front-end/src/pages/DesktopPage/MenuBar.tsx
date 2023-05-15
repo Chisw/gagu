@@ -1,13 +1,13 @@
 import { Dropdown, Modal, Tooltip } from '@douyinfe/semi-ui'
 import { DateTime } from 'luxon'
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
 import { AuthApi, FsApi } from '../../api'
 import { SvgIcon } from '../../components/base'
 import { useRequest } from '../../hooks'
-import { rootInfoState, userInfoState } from '../../states'
+import { activePageState, rootInfoState, userInfoState } from '../../states'
 import { IRootInfo } from '../../types'
 import { DOCUMENT_TITLE, line, PULSE_INTERVAL, UserInfoStore } from '../../utils'
 import QrCode from 'qrcode.react'
@@ -27,7 +27,6 @@ export default function MenuBar() {
   const { t } = useTranslation()
   const { pathname } = useLocation()
 
-  const [initialized, setInitialized] = useState(false)
   const [timeStr, setTimerStr] = useState('--:--')
   const [systemPopoverShow, setSystemPopoverShow] = useState(false)
   const [userPopoverShow, setUserPopoverShow] = useState(false)
@@ -37,6 +36,7 @@ export default function MenuBar() {
 
   const [userInfo, setUserInfo] = useRecoilState(userInfoState)
   const [rootInfo, setRootInfo] = useRecoilState(rootInfoState)
+  const [activePage, setActivePage] = useRecoilState(activePageState)
 
   const { request: pulse } = useRequest(AuthApi.pulse)
   const { request: logout } = useRequest(AuthApi.logout)
@@ -52,10 +52,6 @@ export default function MenuBar() {
       return 'desktop'
     }
   }, [pathname])
-
-  useEffect(() => {
-    setTimeout(() => setInitialized(true))
-  }, [])
 
   useEffect(() => {
     if (systemPopoverShow) {
@@ -117,6 +113,16 @@ export default function MenuBar() {
     return `${protocol}//${rootInfo.serverOS.host}:${port}/touch`
   }, [rootInfo])
 
+  const handleLogout = useCallback(async () => {
+    setUserPopoverShow(false)
+    await logout()
+    UserInfoStore.remove()
+    setActivePage('PENDING')
+    setTimeout(() => {
+      navigate('/login')
+    }, 500)
+  }, [logout, navigate, setActivePage])
+
   return (
     <>
       <div
@@ -129,7 +135,7 @@ export default function MenuBar() {
           backdrop-filter backdrop-blur
           transition-all duration-500 ease-out
           transform
-          ${initialized ? 'translate-y-0' : '-translate-y-20'}
+          ${['desktop', 'explore'].includes(activePage) ? 'translate-y-0' : '-translate-y-20'}
         `)}
       >
         <div className="w-1/3 h-full flex items-center text-xs">
@@ -212,7 +218,10 @@ export default function MenuBar() {
                         <Dropdown.Item
                           key={key}
                           icon={icon}
-                          onClick={() => navigate(`/${key}`)}
+                          onClick={() => {
+                            setActivePage('PENDING')
+                            navigate(`/${key}`)
+                          }}
                         >
                           <span className="capitalize">{key}</span>&nbsp;{t`label.mode`}
                         </Dropdown.Item>
@@ -301,11 +310,7 @@ export default function MenuBar() {
                 </Dropdown.Item> */}
                 <Dropdown.Item
                   icon={<SvgIcon.Logout />}
-                  onClick={async () => {
-                    await logout()
-                    UserInfoStore.remove()
-                    navigate('/login')
-                  }}
+                  onClick={handleLogout}
                 >
                   {t`action.logout`}
                 </Dropdown.Item>
