@@ -191,7 +191,7 @@ export default function Window(props: WindowProps) {
             />
             <div className="flex items-center flex-shrink-0 opacity-30 group-hover:opacity-100 transition-opacity duration-100">
               <span
-                title="最小化"
+                title={t`action.minimize`}
                 prevent-move-to-front="true"
                 className={line(`
                   gagu-hidden-switch-trigger
@@ -204,7 +204,7 @@ export default function Window(props: WindowProps) {
                 <SvgIcon.Subtract size={12} />
               </span>
               <span
-                title={isFullScreen ? '退出全屏' : '全屏'}
+                title={isFullScreen ? t`action.fullScreenExit` : t`action.fullScreenEnter`}
                 className={line(`
                 hover:bg-gray-200 hover:text-black active:bg-gray-400
                   ${headerClassName ? 'text-gray-200' : 'text-gray-400'}
@@ -215,7 +215,7 @@ export default function Window(props: WindowProps) {
                 {isFullScreen ? <SvgIcon.FullscreenExit size={12} /> : <SvgIcon.Fullscreen size={12} />}
               </span>
               <span
-                title="关闭"
+                title={t`action.close`}
                 prevent-move-to-front="true"
                 className={line(`
                   gagu-app-close-trigger

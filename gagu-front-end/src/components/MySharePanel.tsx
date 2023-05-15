@@ -32,12 +32,12 @@ export default function MySharePanel(props: MySharePanelProps) {
   const handleDeleteClick = useCallback((code: string) => {
     Confirmor({
       type: 'delete',
-      content: '确定要删除分享吗？',
+      content: t`tip.sureToDelete`,
       t,
       onConfirm: async close => {
-        const res = await deleteTunnel(code)
-        if (res?.success) {
-          toast.success('删除成功')
+        const { success } = await deleteTunnel(code)
+        if (success) {
+          toast.success('OK')
           getTunnels()
         }
         close()
@@ -50,7 +50,7 @@ export default function MySharePanel(props: MySharePanelProps) {
       <SideSheet
         title={(
           <div className="flex justify-between">
-            <div>我的分享</div>
+            <div>{t`title.mySharing`}</div>
             <Button
               type="danger"
               size="small"
@@ -87,8 +87,13 @@ export default function MySharePanel(props: MySharePanelProps) {
                     <div className="font-bold">{downloadName}</div>
                     <div className="mt-1 text-xs text-gray-400">
                       {getDateTime(createdAt)}
-                      &emsp;{leftTimes === undefined ? '无限次' : leftTimes}
-                      &emsp;{expiredAt ? `有效期至 ${getDateTime(expiredAt).slice(0, -3)}` : '无限期'}
+                      &emsp;
+                      {leftTimes === undefined ? t`tip.noTimesLimit` : leftTimes}
+                      &emsp;
+                      {expiredAt
+                        ? `有效期至 ${t('tip.validUntil', { time: getDateTime(expiredAt).slice(0, -3) })}`
+                        : t`tip.noTimeLimit`
+                      }
                     </div>
                   </div>
                   <div>

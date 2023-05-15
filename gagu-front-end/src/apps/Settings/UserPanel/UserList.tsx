@@ -95,7 +95,7 @@ export default function UserList(props: UserListProps) {
               const isOnlyOneAdmin = userList.filter(u => u.permissions.includes(UserPermission.administer)).length === 1
 
               if (isCurrentAdmin && isOnlyOneAdmin) {
-                toast.error('最后一个管理员无法删除')
+                toast.error(t`tip.lastAdminCannotDelete`)
                 return
               }
               await handleRemove(user.username)
@@ -130,7 +130,7 @@ export default function UserList(props: UserListProps) {
                       border border-white text-red-500 bg-red-200
                     `}
                   >
-                    Expired
+                    {t`tip.expired`}
                   </span>
                 )}
                 {disabled && (
@@ -141,7 +141,7 @@ export default function UserList(props: UserListProps) {
                       text-yellow-600 bg-yellow-200
                     `}
                   >
-                    Disabled
+                    {t`tip.disabled`}
                   </span>
                 )}
               </div>
@@ -177,9 +177,9 @@ export default function UserList(props: UserListProps) {
                 <div className="mt-2 min-h-6 transform scale-90 origin-top-left leading-none">
                 </div>
                 <div className="flex-shrink-0 text-xs leading-none font-din text-gray-400 text-center group-hover:opacity-0">
-                  <p>{getDateTime(createdAt)} 创建</p>
+                  <p>{t('tip.createdAt', { time: getDateTime(createdAt) })}</p>
                   {showExpire && (
-                    <p>{getDateTime(expiredAt)} 过期</p>
+                    <p>{t('tip.expiredAt', { time: getDateTime(expiredAt) })}</p>
                   )}
                 </div>
               </div>

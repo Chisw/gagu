@@ -57,7 +57,7 @@ export default function NameLine(props: NameLineProps) {
 
     if (INVALID_NAME_CHAR_LIST.some(char => newName.includes(char))) {
       onFail('invalid')
-      toast.error(t('error.illegalCharacters', { characters: INVALID_NAME_CHAR_LIST.join(' ') }))
+      toast.error(t('tip.illegalCharacters', { characters: INVALID_NAME_CHAR_LIST.join(' ') }))
       return
     }
 
@@ -75,7 +75,7 @@ export default function NameLine(props: NameLineProps) {
 
     if (exists) {
       onFail('existed')
-      toast.error(t('error.targetExists', { name: finalName }))
+      toast.error(t('tip.targetExists', { name: finalName }))
     } else {
       if (oldName) {  // rename
         const oldPath = `${currentPath}/${oldName}`

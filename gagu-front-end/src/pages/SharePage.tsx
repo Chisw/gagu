@@ -124,14 +124,14 @@ export default function SharePage() {
 
   const handleDownloadClick = useCallback(async () => {
     if (code) {
-      const res = await checkTunnel(code, passwordVal)
-      if (res && res.success) {
+      const { success, message } = await checkTunnel(code, passwordVal)
+      if (success) {
         DownloadApi.download(code, passwordVal)
         setTimeout(() => {
           getTunnel(code, passwordVal)
         }, 50)
       } else {
-        toast.error(res?.message || 'ERROR')
+        toast.error(message || 'ERROR')
       }
     }
   }, [code, passwordVal, checkTunnel, getTunnel])
@@ -164,7 +164,9 @@ export default function SharePage() {
                     content={(
                       <div className="">
                         <QRCodeCanvas value={window.location.href} />
-                        <p className="mt-2 w-32 break-all text-xs text-gray-400">{window.location.href}</p>
+                        <p className="mt-2 w-32 break-all text-xs text-gray-400">
+                          {window.location.href}
+                        </p>
                       </div>
                     )}
                   >

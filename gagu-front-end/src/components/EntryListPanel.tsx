@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import Icon from '../apps/FileExplorer/EntryIcon'
 import { EntryType, IEntry } from '../types'
 import { getReadableSize } from '../utils'
+import { useTranslation } from 'react-i18next'
 
 interface EntryListPanelProps {
   downloadName: string
@@ -16,6 +17,8 @@ export default function EntryListPanel(props: EntryListPanelProps) {
     entryList,
     flattenList,
   } = props
+
+  const { t } = useTranslation()
 
   const [allMode, setAllMode] = useState(false)
 
@@ -38,7 +41,7 @@ export default function EntryListPanel(props: EntryListPanelProps) {
               className="text-xs text-blue-500 cursor-pointer font-bold select-none"
               onClick={() => setAllMode(!allMode)}
             >
-              {allMode ? '显示根目录' : `显示全部 ${flattenList.length} 个文件`}
+              {allMode ? t`action.showRootDirectory` : t('action.showAllFiles', { count: flattenList.length })}
             </span>
           )}
         </div>

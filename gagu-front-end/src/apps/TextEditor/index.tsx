@@ -9,10 +9,13 @@ import { SvgIcon } from '../../components/base'
 import { useOpenOperation, useRequest } from '../../hooks'
 import { useRecoilState } from 'recoil'
 import { entrySelectorState } from '../../states'
+import { useTranslation } from 'react-i18next'
 
 export default function TextEditor(props: AppComponentProps) {
 
   const { setWindowTitle, setWindowLoading } = props
+
+  const { t } = useTranslation()
 
   const {
     // matchedEntryList,
@@ -54,7 +57,7 @@ export default function TextEditor(props: AppComponentProps) {
       const file = new File([blob], activeEntry.name)
       const { success } = await uploadFile(getEntryPath(activeEntry), file)
       if (success) {
-        toast.success('保存成功')
+        toast.success('OK')
         setTextContent(value)
       }
     }
@@ -65,31 +68,31 @@ export default function TextEditor(props: AppComponentProps) {
       <div className="absolute inset-0 flex flex-col">
         <div className="h-8 flex-shrink-0 flex items-center border-b bg-white">
           <ToolButton
-            title="保存"
+            title={t`action.save`}
             icon={<SvgIcon.Save />}
             disabled={(value === textContent && !saving )|| !activeEntry}
             loading={saving}
             onClick={handleSave}
           />
           <ToolButton
-            title="重置"
+            title={t`action.reset`}
             icon={<SvgIcon.Restart />}
             disabled={value === textContent}
             onClick={() => setValue(textContent)}
           />
           <ToolButton
-            title="等宽显示"
+            title={t`action.codeView`}
             icon={<SvgIcon.CodeSlash />}
             disabled={!activeEntry}
             onClick={() => setMonoMode(!monoMode)}
           />
           <ToolButton
-            title="复制文本"
+            title={t`action.copy`}
             icon={<SvgIcon.Copy />}
             disabled={!activeEntry}
             onClick={() => {
               copy(value)
-              toast.success('文本复制成功')
+              toast.success('OK')
             }}
           />
         </div>
@@ -107,7 +110,7 @@ export default function TextEditor(props: AppComponentProps) {
               className="m-2 p-2 border border-gray-400 cursor-pointer text-xs rounded-sm text-center hover:border-gray-600"
               onClick={() => setEntrySelector({ show: true, app: APP_LIST.find(a => a.id === APP_ID_MAP.textEditor) })}
             >
-              打开文件
+              {t`action.openFile`}
             </div>
           )}
         </div>

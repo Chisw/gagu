@@ -8,6 +8,7 @@ import { useRequest } from '../../hooks'
 import { entrySelectorState, openOperationState, rootInfoState } from '../../states'
 import { EntryType, IEntry, IRootEntry } from '../../types'
 import { entrySorter, getEntryPath } from '../../utils'
+import { useTranslation } from 'react-i18next'
 
 const entryToTree = (entryList: IRootEntry[], hiddenShow: boolean) => {
   const treeList: TreeNodeData[] = entryList.map(entry => {
@@ -43,6 +44,8 @@ const updateTreeData = (list: TreeNodeData[], key: string, children: TreeNodeDat
 }
 
 export default function EntrySelector() {
+
+  const { t } = useTranslation()
 
   const [entrySelector, setEntrySelector] = useRecoilState(entrySelectorState)
   const [rootInfo] = useRecoilState(rootInfoState)
@@ -82,7 +85,7 @@ export default function EntrySelector() {
     <>
       <Modal
         centered
-        title="请选择"
+        title={t`action.choose`}
         closable={false}
         width={500}
         visible={entrySelector.show}
@@ -93,7 +96,7 @@ export default function EntrySelector() {
               style={{ margin: 0 }}
               onClick={() => setEntrySelector({ show: false })}
             >
-              取消
+              {t`action.cancel`}
             </Button>
             <Button
               theme="solid"
@@ -101,7 +104,7 @@ export default function EntrySelector() {
               disabled={!activeEntry}
               onClick={handleConfirm}
             >
-              确定
+              {t`action.confirm`}
             </Button>
           </div>
         )}

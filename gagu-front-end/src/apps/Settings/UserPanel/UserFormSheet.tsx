@@ -54,7 +54,7 @@ export default function UserFormModal(props: UserFormModalProps) {
     const file = fileInputRef?.current?.files[0]
     if (file) {
       if (!/image\/\w+/.test(file.type)) {
-        toast.error(t`error.notImage`)
+        toast.error(t`tip.notImage`)
         return
       }
       const FR = new FileReader()

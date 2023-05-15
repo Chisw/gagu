@@ -93,7 +93,11 @@ export default function ShareModal(props: ShareModalProps) {
       <Modal
         centered
         maskClosable={false}
-        title={isCreating ? '创建分享链接' : '创建成功'}
+        title={(
+          <span className="relative z-10">
+            {isCreating ? t`title.createSharingLink` : t`title.createdSuccessfully`}
+          </span>
+        )}
         width={isCreating ? 640 : 480}
         visible={visible}
         footer={isCreating ? (
@@ -101,7 +105,7 @@ export default function ShareModal(props: ShareModalProps) {
             <Button
               onClick={onClose}
             >
-              取消
+              {t`action.cancel`}
             </Button>
             <Button
               theme="solid"
@@ -109,7 +113,7 @@ export default function ShareModal(props: ShareModalProps) {
               loading={loading || creating}
               onClick={handleCreate}
             >
-              创建
+              {t`action.confirm`}
             </Button>
           </div>
         ) : undefined}
@@ -128,8 +132,8 @@ export default function ShareModal(props: ShareModalProps) {
                       showClear
                       autoComplete="off"
                       field="downloadName"
-                      label="保存名称"
-                      placeholder="请输入保存名称"
+                      label={t`label.downloadName`}
+                      placeholder={t`hint.input`}
                       onChange={downloadName => setForm({ ...form, downloadName })}
                       rules={[
                         { required: true, message: t`hint.required` },
@@ -140,7 +144,7 @@ export default function ShareModal(props: ShareModalProps) {
                     <Form.Input
                       showClear
                       field="password"
-                      label="访问密码"
+                      label={t`label.password`}
                       placeholder={t`hint.noLimitLeaveBlank`}
                       mode="password"
                       onChange={password => setForm({ ...form, password })}
@@ -151,7 +155,7 @@ export default function ShareModal(props: ShareModalProps) {
                       showClear
                       autoComplete="off"
                       field="leftTimes"
-                      label="可下载次数"
+                      label={t`label.downloadTimes`}
                       placeholder={t`hint.noLimitLeaveBlank`}
                       className="w-full"
                       min={1}
@@ -163,7 +167,7 @@ export default function ShareModal(props: ShareModalProps) {
                       showClear
                       type="dateTime"
                       field="expiredAt"
-                      label="有效期"
+                      label={t`label.validUntil`}
                       placeholder={t`hint.noLimitLeaveBlank`}
                       className="w-full"
                       format="yyyy-MM-dd HH:mm"
@@ -192,7 +196,7 @@ export default function ShareModal(props: ShareModalProps) {
                   icon={<SvgIcon.ExternalLink />}
                   onClick={() => window.open(tunnelLink)}
                 >
-                  查看
+                  {t`action.view`}
                 </Button>
                 <Button
                   type="primary"
@@ -200,11 +204,11 @@ export default function ShareModal(props: ShareModalProps) {
                   icon={<SvgIcon.Copy />}
                   onClick={() => {
                     copy(tunnelLink)
-                    toast.success('链接已复制到剪贴板')
+                    toast.success(t('copied', { value: tunnelLink }))
                     onClose()
                   }}
                 >
-                  复制链接并关闭
+                  {t`action.copyAndClose`}
                 </Button>
               </div>
             </div>
