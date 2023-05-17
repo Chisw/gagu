@@ -142,7 +142,6 @@ export default function NameLine(props: NameLineProps) {
             id="file-explorer-name-input"
             autoFocus
             autoComplete="off"
-            placeholder={t`hint.input`}
             className="
               block px-1 max-w-full h-full bg-transparent break-words
               text-center text-xs text-gray-700 border-none shadow-inner

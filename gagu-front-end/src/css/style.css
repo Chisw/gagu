@@ -47,7 +47,7 @@
   width: 100px;
   height: 2px;
   transform: rotate(270deg) translateX(-90px) translateY(16px);
-  @apply bg-white-500 origin-left cursor-pointer;
+  @apply bg-white bg-opacity-50 origin-left cursor-pointer;
 }
 
 .gagu-volume-slider::-webkit-slider-thumb {

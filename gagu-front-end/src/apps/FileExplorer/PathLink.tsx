@@ -62,7 +62,7 @@ export default function PathLink(props: PathLinkProps) {
           className={isRootEntryDisabled ? '' : 'cursor-pointer hover:text-black'}
           onClick={() => !isRootEntryDisabled && rootEntry && onRootEntryClick(rootEntry)}
         >
-          <SvgIcon.Folder className="-mt-2px mr-1 inline-block" size={12} />
+          <SvgIcon.Folder className="-mt-[2px] mr-1 inline-block" size={12} />
           {rootEntry.name}
         </span>
         {centerPathList.map((path, pathIndex) => {
@@ -75,15 +75,15 @@ export default function PathLink(props: PathLinkProps) {
 
           return (
             <span key={encodeURIComponent(fullPath)}>
-              <SvgIcon.ChevronRight size={14} className="inline -mt-2px text-gray-300" />
+              <SvgIcon.ChevronRight size={14} className="inline -mt-[2px] text-gray-300" />
               <span
                 title={fullPath}
                 className={disabled ? '' : 'cursor-pointer hover:text-black'}
                 onClick={() => !disabled && onDirClick(fullPath)}
               >
                 {showFileIcon
-                  ? <SvgIcon.File className="-mt-2px mr-1 inline-block" size={12} />
-                  : <SvgIcon.Folder className="-mt-2px mr-1 inline-block" size={12} />
+                  ? <SvgIcon.File className="-mt-[2px] mr-1 inline-block" size={12} />
+                  : <SvgIcon.Folder className="-mt-[2px] mr-1 inline-block" size={12} />
                 }
                 {path}
               </span>
@@ -99,7 +99,7 @@ export default function PathLink(props: PathLinkProps) {
             toast.success(t('tip.copied', { value }))
           }}
         >
-          <SvgIcon.Copy size={14} className="inline -mt-2px" />
+          <SvgIcon.Copy size={14} className="inline -mt-[2px]" />
         </span>
       </div>
       <div className="flex-shrink-0 flex items-center pl-4 pr-1 font-din text-gray-400">

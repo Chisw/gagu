@@ -75,7 +75,7 @@ export default function Window(props: WindowProps) {
     }[windowStatus]
   }, [windowStatus])
 
-  const handleMoveToFront = useCallback((e) => {
+  const handleMoveToFront = useCallback((e: any) => {
     if (isTopWindow || e.target.closest('[prevent-move-to-front]')) return
     const newTopIndex = topWindowIndex + 1
     setCurrentIndex(newTopIndex)
@@ -153,7 +153,7 @@ export default function Window(props: WindowProps) {
         <div
           className={line(`
             gagu-move-to-front-trigger
-            absolute inset-0 bg-white-800 backdrop-filter backdrop-blur-sm overflow-hidden
+            absolute inset-0 bg-white bg-opacity-80 backdrop-filter backdrop-blur-sm overflow-hidden
             transition-box-shadow duration-200 flex flex-col
             ${isFullScreen ? '' : 'rounded-lg border border-gray-500 border-opacity-30 bg-clip-padding'}
             ${isTopWindow ? 'shadow-xl' : 'shadow'}
@@ -164,11 +164,11 @@ export default function Window(props: WindowProps) {
           {/* header */}
           <div
             className={line(`
-              relative w-full h-8 flex items-center select-none border-b border-gray-100 group
-              ${headerClassName || 'bg-white text-gray-500'}
+              relative w-full h-8 flex items-center select-none border-b group
+              ${headerClassName ? headerClassName : 'border-gray-100 bg-white text-gray-500'}
             `)}
           >
-            {windowLoading && (<div className="absolute z-0 right-0 bottom-0 left-0 h-2px bg-loading" />)}
+            {windowLoading && (<div className="absolute z-0 right-0 bottom-0 left-0 h-[2px] bg-loading" />)}
             <div
               className="gagu-drag-handler flex items-center flex-grow px-2 h-full truncate"
               onDoubleClick={handleFullScreen}
@@ -229,7 +229,7 @@ export default function Window(props: WindowProps) {
             </div>
           </div>
           {/* main */}
-          <div className="relative flex-grow overflow-hidden bg-black-50">
+          <div className="relative flex-grow overflow-hidden bg-black bg-opacity-5">
             <AppComponent
               isTopWindow={isTopWindow}
               windowSize={windowSize}

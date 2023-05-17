@@ -51,7 +51,7 @@ export default function ProgressSlider(props: ProgressSliderProps) {
 
   return (
     <>
-      <div className="hover-show-parent relative z-10 w-full h-2px flex-shrink-0">
+      <div className="hover-show-parent relative z-10 w-full h-[2px] flex-shrink-0">
         <div
           className={line(`
             hover-show-child
@@ -62,7 +62,7 @@ export default function ProgressSlider(props: ProgressSliderProps) {
           style={{ left: `${timeLabelData.distance}px` }}
         >
           {/* TODO: use pseudo after */}
-          <div className="absolute z-0 left-1/2 bottom-0 -mb-2px w-2 h-2 bg-black transform -translate-x-1/2 rotate-45 rounded-sm" />
+          <div className="absolute z-0 left-1/2 bottom-0 -mb-[2px] w-2 h-2 bg-black transform -translate-x-1/2 rotate-45 rounded-sm" />
           <span className="relative ">{timeLabelData.label}</span>
         </div>
 
@@ -72,14 +72,14 @@ export default function ProgressSlider(props: ProgressSliderProps) {
           onMouseMove={handleMouseMoveProgressBar}
         />
 
-        <div className={`absolute bottom-0 right-0 left-0 transform h-2px ${backColor}`}>
+        <div className={`absolute bottom-0 right-0 left-0 transform h-[2px] ${backColor}`}>
           <div
             className={`h-full ${frontColor}`}
             style={{ width: `${playPercent}%` }}
           >
             {/* TODO: use pseudo after */}
             <div
-              className="absolute -mt-3px -ml-1 w-2 h-2 rounded bg-white shadow"
+              className="absolute -mt-[3px] -ml-1 w-2 h-2 rounded bg-white shadow"
               style={{ left: `${playPercent}%` }}
             />
           </div>

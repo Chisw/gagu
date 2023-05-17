@@ -16,7 +16,7 @@ export class SettingController {
     return {
       success: true,
       message: SERVER_MESSAGE_MAP.OK,
-      settings,
+      data: settings,
     }
   }
 

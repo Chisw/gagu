@@ -29,7 +29,7 @@ export default function EntryListPanel(props: EntryListPanelProps) {
   return (
     <>
       <div className="my-6 backdrop-filter backdrop-blur-sm border border-gray-200">
-        <div className="px-3 py-2 text-xs bg-white-500 border-b border-gray-200 font-din flex justify-between items-center">
+        <div className="px-3 py-2 text-xs bg-white bg-opacity-50 border-b border-gray-200 font-din flex justify-between items-center">
           <span>
             <span className="text-gray-600">{downloadName || 'Unknown'}</span>
             <span className="text-gray-400">
@@ -54,7 +54,7 @@ export default function EntryListPanel(props: EntryListPanelProps) {
                 className="text-center"
               >
                 <Icon hideApp entry={entry} />
-                <p className="line-clamp-2 mt-1 text-xs break-all max-w-32">{entry.name}</p>
+                <p className="line-clamp-2 mt-1 text-xs break-all max-w-[8rem]">{entry.name}</p>
                 <p className="text-xs text-gray-400">{entry.type === 'file' && getReadableSize(entry.size || 0)}</p>
               </div>
             ))}

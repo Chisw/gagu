@@ -228,7 +228,7 @@ export default function SharePage() {
                           className="text-xs"
                           content={getDateTime(expiredAt).slice(0, -3)}
                         >
-                          <span><SvgIcon.Info className="-mt-2px inline text-gray-300" size={14} /></span>
+                          <span><SvgIcon.Info className="-mt-[2px] inline text-gray-300" size={14} /></span>
                         </Tooltip>
                       )}
                     </p>

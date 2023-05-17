@@ -6,7 +6,7 @@ import { TunnelApi } from '../api'
 import { useRequest } from '../hooks'
 import { ITunnel } from '../types'
 import { getDateTime } from '../utils'
-import { SvgIcon } from './base'
+import { EmptyPanel, SvgIcon } from './base'
 import { Confirmor } from './base'
 
 interface MySharePanelProps {
@@ -61,27 +61,23 @@ export default function MySharePanel(props: MySharePanelProps) {
         )}
         closable={false}
         placement="left"
-        headerStyle={{ padding: '8px 24px', borderBottom: '1px solid #efefef' }}
+        headerStyle={{ padding: '8px 12px', borderBottom: '1px solid #efefef' }}
+        bodyStyle={{ padding: 0 }}
         maskStyle={{ background: 'rgba(0, 0, 0, .1)' }}
         width={600}
         visible={visible}
         onCancel={onClose}
       >
-        <div>
-          <div>
-            {!data?.tunnels.length && (
-              <div className="py-20 flex justify-center text-gray-100">
-                <SvgIcon.G size={64} />
-              </div>
-            )}
-          </div>
+        <div className="relative w-full h-full overflow-y-auto">
+          <EmptyPanel show={!data?.tunnels.length} />
+
           <div>
             {data?.tunnels.map((tunnel: ITunnel) => {
               const { code, createdAt, downloadName, expiredAt, leftTimes } = tunnel
               return (
                 <div
                   key={code}
-                  className="mt-4 flex justify-between items-center group"
+                  className="px-4 py-2 flex justify-between items-center group"
                 >
                   <div>
                     <div className="font-bold">{downloadName}</div>
@@ -91,7 +87,7 @@ export default function MySharePanel(props: MySharePanelProps) {
                       {leftTimes === undefined ? t`tip.noTimesLimit` : leftTimes}
                       &emsp;
                       {expiredAt
-                        ? `有效期至 ${t('tip.validUntil', { time: getDateTime(expiredAt).slice(0, -3) })}`
+                        ? t('tip.validUntil', { time: getDateTime(expiredAt).slice(0, -3) })
                         : t`tip.noTimeLimit`
                       }
                     </div>

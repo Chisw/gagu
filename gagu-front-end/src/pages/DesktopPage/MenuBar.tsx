@@ -131,7 +131,7 @@ export default function MenuBar() {
           absolute z-20 top-0 right-0 left-0
           px-1 h-6
           flex justify-between items-center
-           bg-white-500 shadow-sm
+           bg-white bg-opacity-50 shadow-sm
           backdrop-filter backdrop-blur
           transition-all duration-500 ease-out
           transform
@@ -145,7 +145,7 @@ export default function MenuBar() {
             visible={systemPopoverShow}
             render={(
               <Dropdown.Menu className="w-48">
-                <div className="mb-2px px-2 pb-1 border-b text-xs font-din flex justify-between">
+                <div className="mb-[2px] px-2 pb-1 border-b text-xs font-din flex justify-between">
                   <div>
                     GAGU v{rootInfo.version}
                   </div>
@@ -249,7 +249,7 @@ export default function MenuBar() {
             )}
           >
             <div
-              className="px-2 h-full flex items-center cursor-pointer hover:bg-white-300 active:bg-black-100"
+              className="px-2 h-full flex items-center cursor-pointer hover:bg-white hover:bg-opacity-30 active:bg-black active:bg-opacity-10"
               onClick={() => setSystemPopoverShow(true)}
             >
               <SvgIcon.G size={12} />
@@ -264,7 +264,7 @@ export default function MenuBar() {
             visible={userPopoverShow}
             render={(
               <Dropdown.Menu className="w-48">
-                <div className="mb-2px px-2 pt-1 pb-2 border-b group">
+                <div className="mb-[2px] px-2 pt-1 pb-2 border-b group">
                   <div className="flex items-center">
                     <div
                       className="w-10 h-10 rounded-full border-2 border-white shadow bg-center bg-cover"
@@ -318,13 +318,13 @@ export default function MenuBar() {
             )}
           >
             <div
-              className="px-2 h-full flex items-center cursor-pointer hover:bg-white-300 active:bg-black-100"
+              className="px-2 h-full flex items-center cursor-pointer hover:bg-white hover:bg-opacity-30 active:bg-black active:bg-opacity-10"
               onClick={() => setUserPopoverShow(true)}
             >
               {userInfo ? (
                 <>
                   <div
-                    className="w-3 h-3 rounded-full filter grayscale opacity-80 bg-center bg-cover bg-black-200"
+                    className="w-3 h-3 rounded-full filter grayscale opacity-80 bg-center bg-cover bg-black bg-opacity-20"
                     style={{ backgroundImage: `url("${FsApi.getAvatarStreamUrl(userInfo?.username || '')}")` }}
                   />
                   <span className="hidden md:inline ml-2 font-din text-gray-700">{userInfo.nickname}</span>

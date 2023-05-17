@@ -192,7 +192,7 @@ export default function MusicPlayer(props: AppComponentProps) {
             return (
               <div
                 key={name}
-                className="px-2 py-1 text-xs text-white even:bg-black-50 hover:bg-black-100 flex items-center group"
+                className="px-2 py-1 text-xs text-white even:bg-black even:bg-opacity-5 hover:bg-black hover:bg-opacity-10 flex items-center group"
                 onDoubleClick={onClick}
               >
                 <div className="mr-2 font-din text-3xl opacity-60 italic">{indexNo}.</div>
@@ -230,7 +230,7 @@ export default function MusicPlayer(props: AppComponentProps) {
         />
 
         {/* bottom */}
-        <div className="relative z-0 w-full h-16 bg-black-100 flex-shrink-0">
+        <div className="relative z-0 w-full h-16 bg-black bg-opacity-10 flex-shrink-0">
           {/* SpectrumCanvas */}
           <div className="absolute z-0 inset-0">
             <SpectrumCanvas audioEl={audioEl} />

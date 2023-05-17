@@ -60,7 +60,7 @@ export default function Icon(props: IconProps) {
       data-show-thumbnail={String(showThumbnail)}
       className={line(`
         gagu-entry-icon
-        relative mx-auto max-w-16 pointer-events-none
+        relative mx-auto max-w-[4rem] pointer-events-none
         flex justify-center items-center flex-shrink-0
         bg-no-repeat bg-contain bg-center
         ${isSmall ? 'w-6 h-6 --small-icon' : 'h-12'}
@@ -73,7 +73,7 @@ export default function Icon(props: IconProps) {
           data-app-id={callableAppId}
           className={line(`
             gagu-app-icon absolute z-0 right-0 bottom-0 left-1/2 w-3 h-3 rounded-sm shadow-sm
-            ${isSmall ? 'ml-2px' : 'ml-4'}
+            ${isSmall ? 'ml-[2px]' : 'ml-4'}
           `)}
         />
       )}

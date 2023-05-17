@@ -36,7 +36,7 @@ export default function ContextMenu() {
 
     if (isDock) {
       const { top: targetTop, left: targetLeft } = (target as any).getBoundingClientRect()
-      const offset = filteredMenuItemList.length * 36 + 10 + 20
+      const offset = filteredMenuItemList.length * 36 + 30
       top = targetTop - offset
       left = targetLeft
     } else {
@@ -62,7 +62,8 @@ export default function ContextMenu() {
         ref={menuRef}
         className={line(`
           gagu-contextmenu
-          absolute z-30 py-1 w-44 bg-white shadow-lg border rounded-lg
+          absolute z-30 py-1 bg-white shadow-lg border rounded-lg
+          ${isDock ? 'w-56' : 'w-44'}
           ${menuShow ? 'block' : 'hidden'}
         `)}
         style={{ top, left }}

@@ -72,7 +72,7 @@ export default function ThumbnailList(props: ThumbnailListProps) {
       onWheel={handleMouseWheel}
     >
       <div
-        className="absolute h-full flex justify-center items-center transition-spacing duration-300 bg-white-100"
+        className="absolute h-full flex justify-center items-center transition-spacing duration-300 bg-white bg-opacity-10"
         style={{
           left,
           width: totalScrollWidth,

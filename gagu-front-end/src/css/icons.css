@@ -49,12 +49,12 @@
 }
 
 .gagu-entry-icon.--entry-folder[data-folder-name]::before {
-  @apply absolute z-0 top-1/2 left-1/2 block mt-2px w-4 h-4 transform -translate-x-1/2 -translate-y-1/2 bg-center bg-contain bg-no-repeat;
+  @apply absolute z-0 top-1/2 left-1/2 block mt-[2px] w-4 h-4 transform -translate-x-1/2 -translate-y-1/2 bg-center bg-contain bg-no-repeat;
   content: "";
 }
 
 .gagu-entry-icon.--entry-folder.--small-icon[data-folder-name]::before {
-  @apply mt-1px w-3 h-3;
+  @apply mt-[1px] w-3 h-3;
 }
 
 .gagu-entry-icon.--entry-folder[data-folder-name="alipay"]::before {
@@ -149,12 +149,12 @@
 }
 
 .gagu-entry-icon.--entry-file::before {
-  @apply absolute z-0 top-2/5 left-1/2 block w-3 h-3 bg-no-repeat bg-center bg-contain transform -translate-x-1/2 -translate-y-2;
+  @apply absolute z-0 top-[40%] left-1/2 block w-3 h-3 bg-no-repeat bg-center bg-contain transform -translate-x-1/2 -translate-y-2;
   content: '';
 }
 
 .gagu-entry-icon.--entry-file::after {
-  @apply absolute z-0 top-1/2 left-1/2 block w-1/2 text-center text-xs text-white uppercase rounded-sm transform scale-75 -translate-x-1/2 translate-y-2px;
+  @apply absolute z-0 top-1/2 left-1/2 block w-1/2 text-center text-xs text-white uppercase rounded-sm transform scale-75 -translate-x-1/2 translate-y-[2px];
   content: attr(data-extension-label);
   font-family: din;
 }
@@ -173,7 +173,7 @@
 }
 
 .gagu-entry-icon.--entry-file.--small-icon::after {
-  @apply mt-2px w-2/3 h-1;
+  @apply mt-[2px] w-2/3 h-1;
   content: "";
 }
 

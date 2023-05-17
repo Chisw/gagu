@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { FsApi } from '../../api'
-import { SvgIcon } from '../../components/base'
+import { EmptyPanel, SvgIcon } from '../../components/base'
 import { useRequest } from '../../hooks'
 import { IUploadTransferTask } from '../../types'
 import { getReadableSize, line } from '../../utils'
@@ -87,15 +87,15 @@ export default function TransferPanel() {
           relative px-2 h-full
           text-xs
           transition-width duration-200
-          flex items-center cursor-pointer hover:bg-white-300 active:bg-black-100
-          ${uploading ? 'min-w-32 bg-white-400' : ''}
+          flex items-center cursor-pointer hover:bg-white hover:bg-opacity-30 active:bg-black active:bg-opacity-10
+          ${uploading ? 'min-w-32 bg-white bg-opacity-40' : ''}
         `}
         onClick={() => setVisible(true)}
       >
         <div
           className={`
             absolute left-0 bottom-0 right-0
-            h-2px bg-green-400
+            h-[2px] bg-green-400
             transition-width duration-200
             ${uploading ? 'block' : 'hidden'}
           `}
@@ -124,7 +124,7 @@ export default function TransferPanel() {
                   icon={<SvgIcon.Brush />}
                   onClick={() => {
                     setTransferTaskList([])
-                    setTimeout(() => setVisible(false), 400)
+                    setTimeout(() => setVisible(false), 300)
                   }}
                 >
                   {t`action.clear`}
@@ -142,18 +142,15 @@ export default function TransferPanel() {
         )}
         closable={false}
         headerStyle={{ padding: '8px 12px', borderBottom: '1px solid #efefef' }}
-        maskStyle={{ background: 'rgba(0, 0, 0, .1)' }}
         bodyStyle={{ padding: 0 }}
+        maskStyle={{ background: 'rgba(0, 0, 0, .1)' }}
         width={400}
         visible={visible}
         onCancel={() => setVisible(false)}
       >
-        {!transferTaskList.length && (
-          <div className="py-20 text-gray-100 flex justify-center">
-            <SvgIcon.G size={64} />
-          </div>
-        )}
-        <div>
+        <div className="relative w-full h-full overflow-auto">
+          <EmptyPanel show={!transferTaskList.length} />
+
           {transferTaskList.map((task, taskIndex) => {
             const { id, file, status, newPath } = task
             const isActive = id === activeId

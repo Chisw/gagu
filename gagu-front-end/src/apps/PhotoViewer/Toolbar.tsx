@@ -129,7 +129,7 @@ export default function Toolbar(props: ToolbarProps) {
         className={line(`
           absolute z-10 bottom-0 right-0 left-0
           flex items-center
-          text-xs px-2 py-1 bg-black-500 text-white
+          text-xs px-2 py-1 bg-black bg-opacity-50 text-white
           transition-opacity duration-200
           opacity-0 group-hover:opacity-100
           cursor-default
@@ -167,7 +167,7 @@ export default function Toolbar(props: ToolbarProps) {
           p-2 w-full max-h-1/3
           overflow-y-auto
           text-xs text-white break-words
-          bg-black-300 backdrop-filter backdrop-blur
+          bg-black bg-opacity-30 backdrop-filter backdrop-blur
           cursor-default
           ${ExifData ? 'block' : 'hidden'}
         `)}

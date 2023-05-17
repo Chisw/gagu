@@ -39,7 +39,7 @@ export function IconButton(props: IconButtonProps) {
           transition-bg duration-100
           ${disabled
             ? 'cursor-not-allowed opacity-50'
-            : 'cursor-pointer hover:bg-white-200 active:bg-white-100'
+            : 'cursor-pointer hover:bg-white hover:bg-opacity-20 active:bg-opacity-10'
           }
         `)}
         onClick={() => !disabled && onClick()}

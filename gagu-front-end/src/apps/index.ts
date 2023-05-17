@@ -57,7 +57,7 @@ export const APP_LIST: IApp[] = [
       minHeight: 480,
     },
     matchList: ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'ico'],
-    headerClassName: 'bg-gray-800 text-gray-100 border-black-100',
+    headerClassName: 'bg-gray-800 text-gray-100 border-black border-opacity-10',
     multiple: true,
   },
   {
@@ -71,7 +71,7 @@ export const APP_LIST: IApp[] = [
       minHeight: 240,
     },
     matchList: ['mp3', 'flac', 'wav', 'aac', 'ogg'],
-    headerClassName: 'bg-pink-900 text-pink-100 border-black-100',
+    headerClassName: 'bg-pink-900 text-pink-100 border-black border-opacity-10',
   },
   {
     id: APP_ID_MAP.videoPlayer,
@@ -84,7 +84,7 @@ export const APP_LIST: IApp[] = [
       minHeight: 400,
     },
     matchList: ['mp4', 'mkv', 'webm'],
-    headerClassName: 'bg-gray-800 text-gray-100 border-black-100',
+    headerClassName: 'bg-gray-800 text-gray-100 border-black border-opacity-10',
     multiple: true,
   },
   {

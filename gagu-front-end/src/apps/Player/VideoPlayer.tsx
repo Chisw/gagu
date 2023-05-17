@@ -131,11 +131,11 @@ export default function VideoPlayer(props: AppComponentProps) {
             opacity-0 group-hover:opacity-100
             transition-opacity duration-300
             flex justify-between items-center
-            backdrop-filter backdrop-blur bg-black-500
+            backdrop-filter backdrop-blur bg-black bg-opacity-50
             text-xs text-white
           `)}
         >
-          <div className="absolute top-0 right-0 left-0 -mt-2px">
+          <div className="absolute top-0 right-0 left-0 -mt-[2px]">
             <ProgressSlider
               duration={videoEl?.duration || 0}
               playPercent={playInfo.playPercent}
@@ -160,7 +160,7 @@ export default function VideoPlayer(props: AppComponentProps) {
               <div
                 key={title}
                 title={title}
-                className="w-8 h-8 text-white cursor-pointer hover:bg-white-200 active:bg-white-100 flex justify-center items-center rounded"
+                className="w-8 h-8 text-white cursor-pointer hover:bg-white hover:bg-opacity-20 active:bg-opacity-10 flex justify-center items-center rounded"
                 onClick={onClick}
               >
                 {icon}
@@ -170,7 +170,7 @@ export default function VideoPlayer(props: AppComponentProps) {
           <div className="w-24 flex justify-end">
             <div
               title={t`action.volume`}
-              className="w-8 h-8 text-white cursor-pointer hover:bg-white-200 active:bg-white-100 flex justify-center items-center rounded"
+              className="w-8 h-8 text-white cursor-pointer hover:bg-white hover:bg-opacity-20 active:bg-opacity-10 flex justify-center items-center rounded"
               onClick={() => setVolumeSliderShow(true)}
             >
               {volumeIcon}

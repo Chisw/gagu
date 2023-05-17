@@ -34,7 +34,7 @@ export default function Viewer(props: ViewerProps) {
         bannerVisible={false}
         overlayRender={({ rotate, onRotate, scale, onScale, index, images, onClose }) => {
           return (
-            <div className="absolute z-10 top-0 right-0 left-0 pl-2 pr-1 h-10 flex justify-between items-center bg-black-500">
+            <div className="absolute z-10 top-0 right-0 left-0 pl-2 pr-1 h-10 flex justify-between items-center bg-black bg-opacity-50">
               <span className="text-white font-din text-sm">
                 {getPaddedNo(activeIndex, matchedEntryList.length)}
                 &emsp;

@@ -61,7 +61,9 @@ export default function EntrySelector() {
     setTreeData(entryToTree(rootInfo.rootEntryList, hiddenShow))
   }, [rootInfo, hiddenShow])
 
-  const handleLoadData = useCallback(async ({ key }) => {
+  const handleLoadData = useCallback(async (node?: { key: string }) => {
+    const { key } = node || {}
+    if (!key) return
     const res = await queryEntryList(key)
     if (res.success) {
       const list = updateTreeData(treeData, key, entryToTree(res.entryList.sort(entrySorter), hiddenShow))

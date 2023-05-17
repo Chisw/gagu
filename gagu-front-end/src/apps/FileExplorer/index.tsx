@@ -9,7 +9,7 @@ import NameLine, { NameFailType } from './NameLine'
 import { DateTime } from 'luxon'
 import Side from './Side'
 import { pick, throttle } from 'lodash-es'
-import { Confirmor, Pagination, SvgIcon } from '../../components/base'
+import { Confirmor, EmptyPanel, Pagination, SvgIcon } from '../../components/base'
 import { CALLABLE_APP_LIST } from '..'
 import toast from 'react-hot-toast'
 import {
@@ -750,14 +750,11 @@ export default function FileExplorer(props: AppComponentProps) {
           >
             <div
               ref={rectRef}
-              className="hidden absolute z-10 border box-content border-gray-400 bg-black-100 pointer-events-none"
+              className="hidden absolute z-10 border box-content border-gray-400 bg-black bg-opacity-10 pointer-events-none"
             />
-            {/* empty tip */}
-            {(!fetching && isEntryListEmpty) && (
-              <div className="absolute inset-0 p-10 flex justify-center items-center text-gray-100 text-lg">
-                <SvgIcon.G size={64} />
-              </div>
-            )}
+
+            <EmptyPanel show={!fetching && isEntryListEmpty} />
+
             <div
               ref={containerInnerRef}
               className={line(`
@@ -816,9 +813,9 @@ export default function FileExplorer(props: AppComponentProps) {
                     className={line(`
                       gagu-entry-node
                       relative overflow-hidden rounded-sm
-                      ${gridMode ? 'm-1 px-1 py-2 w-28' : 'px-2 py-2px w-full flex items-center'}
+                      ${gridMode ? 'm-1 px-1 py-2 w-28' : 'px-2 py-[2px] w-full flex items-center'}
                       ${!gridMode && isSelected ? 'bg-blue-600' : ' hover:bg-gray-100'}
-                      ${!gridMode && !isSelected ? 'even:bg-black-30' : ''}
+                      ${!gridMode && !isSelected ? 'even:bg-black even:bg-opacity-[2%]' : ''}
                       ${isSelected ? 'bg-gray-100' : ''}
                       ${(isSelected && deleting) ? 'bg-loading' : ''}
                       ${hidden ? 'opacity-50' : ''}

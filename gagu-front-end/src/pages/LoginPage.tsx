@@ -100,7 +100,7 @@ export default function LoginPage() {
               suffix={(
                 <button
                   disabled={!username || !password}
-                  className="mr-2px w-8 h-8 rounded hover:bg-black-200 text-white flex justify-center items-center"
+                  className="mr-[2px] w-8 h-8 rounded hover:bg-black bg-opacity-20 text-white flex justify-center items-center"
                   onClick={handleLogin}
                 >
                   {loading
