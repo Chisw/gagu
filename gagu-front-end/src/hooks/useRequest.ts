@@ -1,8 +1,8 @@
 import { useCallback, useState } from 'react'
 
-type RequestApi<A extends any[], T> = (...args: A) => Promise<T>
+type RequestFn<A extends any[], T> = (...args: A) => Promise<T>
 
-export function useRequest<A extends any[], D>(requestFn: RequestApi<A, D>, initialValue?: D) {
+export function useRequest<A extends any[], D>(requestFn: RequestFn<A, D>, initialValue?: D) {
 
   const [data, setData] = useState<D | undefined>(initialValue)
   const [loading, setLoading] = useState(false)

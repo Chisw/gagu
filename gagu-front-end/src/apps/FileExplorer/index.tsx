@@ -98,7 +98,7 @@ export default function FileExplorer(props: AppComponentProps) {
   const containerInnerRef = useRef(null)  // entryList 容器，最小高度与 containerRef 的一致，自动撑高
   const uploadInputRef = useRef(null)
 
-  const { request: getEntryList, loading: fetching, data, setData } = useRequest(FsApi.getEntryList)
+  const { request: queryEntryList, loading: fetching, data, setData } = useRequest(FsApi.queryEntryList)
   const { request: deleteEntry, loading: deleting } = useRequest(FsApi.deleteEntry)
   const { request: getDirectorySize, loading: getting } = useRequest(FsApi.getDirectorySize)
   const { request: createTunnel } = useRequest(TunnelApi.createTunnel)
@@ -132,7 +132,7 @@ export default function FileExplorer(props: AppComponentProps) {
   }, [])
 
   const { entryList, entryListLen, showPagination, isEntryListEmpty, folderCount, fileCount } = useMemo(() => {
-    const allEntryList: IEntry[] = data?.entryList.sort(entrySorter) || []
+    const allEntryList: IEntry[] = data?.data.sort(entrySorter) || []
     const ft = filterText.toLowerCase()
     const methodName = ft.startsWith('*') ? 'endsWith' : (ft.endsWith('*') ? 'startsWith' : 'includes')
     const entryList = allEntryList
@@ -190,10 +190,10 @@ export default function FileExplorer(props: AppComponentProps) {
     !keepData && setData(null)
     const controller = new AbortController()
     const config = { signal: controller.signal }
-    getEntryList(path, config)
+    queryEntryList(path, config)
     setAbortController(controller)
     setNewDirMode(false)
-  }, [setData, getEntryList])
+  }, [setData, queryEntryList])
 
   const updateHistory = useCallback((direction: 'forward' | 'back', path?: string) => {
     const map = { forward: 1, back: -1 }
@@ -305,12 +305,12 @@ export default function FileExplorer(props: AppComponentProps) {
 
   const handleDownloadClick = useCallback((contextEntryList?: IEntry[]) => {
     const entryList = contextEntryList || selectedEntryList
-    const { message, downloadName } = getDownloadInfo(currentPath, entryList)
+    const { message, downloadName } = getDownloadInfo(currentPath, entryList, t)
     Confirmor({
       type: 'download',
       content: message,
       t,
-      onConfirm: async close => {
+      onConfirm: async (close) => {
         const res = await createTunnel({
           type: TunnelType.download,
           entryList,
@@ -335,15 +335,17 @@ export default function FileExplorer(props: AppComponentProps) {
 
   const handleDeleteClick = useCallback(async (contextEntryList?: IEntry[]) => {
     const processList = contextEntryList || selectedEntryList
-    const len = processList.length
-    if (!len) return
-    const message = len === 1 ? processList[0].name : `${len} 个项目`
+    const count = processList.length
+    if (!count) return
+    const message = count === 1
+      ? t('tip.deleteItem', { name: processList[0].name })
+      : t('tip.deleteItems', { count })
 
     Confirmor({
       type: 'delete',
       content: message,
       t,
-      onConfirm: async close => {
+      onConfirm: async (close) => {
         const successList: boolean[] = []
         for (const entry of processList) {
           const { name } = entry
@@ -351,9 +353,7 @@ export default function FileExplorer(props: AppComponentProps) {
           success && document.querySelector(`.gagu-entry-node[data-entry-name="${name}"]`)?.setAttribute('style', 'opacity:0;')
           successList.push(success)
         }
-        if (successList.every(Boolean)) {
-          handleRefresh()
-        }
+        handleRefresh()
         close()
       },
     })

@@ -61,7 +61,7 @@ export default function ShareModal(props: ShareModalProps) {
 
   useEffect(() => {
     if (entryList.length) {
-      const { downloadName } = getDownloadInfo(entryList[0].parentPath, entryList)
+      const { downloadName } = getDownloadInfo(entryList[0].parentPath, entryList, t)
       setForm({ ...form, downloadName })
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps

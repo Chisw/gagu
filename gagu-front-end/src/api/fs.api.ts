@@ -1,15 +1,15 @@
 import { AxiosRequestConfig } from 'axios'
 import { BASE_URL, UserInfoStore } from '../utils'
-import { IEntry } from '../types'
+import { IEntry, IResponse, IRootInfo } from '../types'
 import service from './service'
 
 export class FsApi {
-  static getRootInfo = async (config?: AxiosRequestConfig) => {
-    const { data } = await service.get(`/api/fs/root`, config)
+  static queryRootInfo = async (config?: AxiosRequestConfig) => {
+    const { data } = await service.get<IResponse<IRootInfo>>(`/api/fs/root`, config)
     return data
   }
 
-  static getEntryList = async (path: string, config?: AxiosRequestConfig) => {
+  static queryEntryList = async (path: string, config?: AxiosRequestConfig) => {
     const { data } = await service.get(`/api/fs/list?path=${path}`, config)
     return data
   }

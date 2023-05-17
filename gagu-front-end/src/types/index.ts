@@ -8,6 +8,12 @@ export * from './setting.type'
 
 export type PageType = 'PENDING' | 'login' | 'desktop' | 'explore' | 'touch' | 'share'
 
+export interface IResponse<T> {
+  success: boolean
+  message: string
+  data: T
+}
+
 export interface IHistory {
   position: number
   list: string[]

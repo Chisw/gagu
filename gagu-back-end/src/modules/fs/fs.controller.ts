@@ -42,7 +42,7 @@ export class FsController {
     return {
       success: true,
       message: SERVER_MESSAGE_MAP.OK,
-      rootInfo: this.fsService.getRootInfo(deviceName),
+      data: this.fsService.getRootInfo(deviceName),
     }
   }
 
@@ -53,7 +53,7 @@ export class FsController {
     return {
       success: true,
       message: SERVER_MESSAGE_MAP.OK,
-      entryList,
+      data: entryList,
     }
   }
 
@@ -208,11 +208,7 @@ export class FsController {
 
   @Get('stream')
   @Permission(UserPermission.read)
-  readStream(
-    @Query('path') path: string,
-    @Query('token') token: string,
-    @Res() response: Response,
-  ) {
+  readStream(@Query('path') path: string, @Res() response: Response) {
     response.sendFile(path)
   }
 

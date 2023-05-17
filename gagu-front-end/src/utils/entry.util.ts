@@ -28,12 +28,12 @@ export const getMatchedApp = (entry: IEntry) => {
   return CALLABLE_APP_LIST.find(({ matchList }) => matchList!.includes(extension))
 }
 
-export const getDownloadInfo = (parentPath: string, selectedEntryList: IEntry[]) => {
+export const getDownloadInfo = (parentPath: string, selectedEntryList: IEntry[], t: (key: string | TemplateStringsArray, params?: any) => string) => {
   const pathName = parentPath.split('/').reverse()[0]
-  const len = selectedEntryList.length
+  const count = selectedEntryList.length
   const firstEntry: IEntry | undefined = selectedEntryList[0]
-  const isDownloadAll = !len
-  const isDownloadSingle = len === 1
+  const isDownloadAll = !count
+  const isDownloadSingle = count === 1
   const isDownloadSingleDir = isDownloadSingle && firstEntry.type === EntryType.directory
   const singleEntryName = firstEntry?.name
 
@@ -46,12 +46,12 @@ export const getDownloadInfo = (parentPath: string, selectedEntryList: IEntry[])
       : `${pathName}.zip`
 
   const message = isDownloadAll
-    ? `下载当前整个目录为 ${downloadName}?`
+    ? t('tip.downloadAllAs', { name: downloadName })
     : isDownloadSingle
       ? isDownloadSingleDir
-        ? `下载 ${singleEntryName} 为 ${singleEntryName}.zip?`
-        : `下载 ${downloadName}?`
-      : `下载 ${len} 个项目为 ${downloadName}?`
+        ? t('tip.downloadFolderAs', { folderName: singleEntryName, name: downloadName })
+        : t('tip.downloadFile', { name: downloadName })
+      : t('tip.downloadItemsAs', { count, name: downloadName })
   
   return { downloadName, message }
 }

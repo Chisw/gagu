@@ -55,19 +55,19 @@ export default function EntrySelector() {
   const [hiddenShow] = useState(false)
   const [activeEntry, setActiveEntry] = useState<IEntry | null>(null)
 
-  const { request: getEntryList } = useRequest(FsApi.getEntryList)
+  const { request: queryEntryList } = useRequest(FsApi.queryEntryList)
 
   useEffect(() => {
     setTreeData(entryToTree(rootInfo.rootEntryList, hiddenShow))
   }, [rootInfo, hiddenShow])
 
   const handleLoadData = useCallback(async ({ key }) => {
-    const res = await getEntryList(key)
+    const res = await queryEntryList(key)
     if (res.success) {
       const list = updateTreeData(treeData, key, entryToTree(res.entryList.sort(entrySorter), hiddenShow))
       setTreeData(list)
     }
-  }, [treeData, getEntryList, hiddenShow])
+  }, [treeData, queryEntryList, hiddenShow])
 
   const handleConfirm = useCallback(() => {
     const { app } = entrySelector

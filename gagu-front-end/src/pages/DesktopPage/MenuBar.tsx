@@ -8,7 +8,6 @@ import { AuthApi, FsApi } from '../../api'
 import { SvgIcon } from '../../components/base'
 import { useRequest } from '../../hooks'
 import { activePageState, rootInfoState, userInfoState } from '../../states'
-import { IRootInfo } from '../../types'
 import { DOCUMENT_TITLE, line, PULSE_INTERVAL, UserInfoStore } from '../../utils'
 import QrCode from 'qrcode.react'
 import TransferPanel from './TransferPanel'
@@ -40,7 +39,7 @@ export default function MenuBar() {
 
   const { request: pulse } = useRequest(AuthApi.pulse)
   const { request: logout } = useRequest(AuthApi.logout)
-  const { request: getRootInfo, loading, data } = useRequest(FsApi.getRootInfo)
+  const { request: queryRootInfo, loading } = useRequest(FsApi.queryRootInfo)
   const { request: shutdown } = useRequest(AuthApi.shutdown)
 
   const activeMode = useMemo(() => {
@@ -94,15 +93,16 @@ export default function MenuBar() {
     return () => clearInterval(timer)
   }, [])
 
-  useEffect(() => {
-    getRootInfo()
-  }, [getRootInfo])
+  const handleQueryRootInfo = useCallback(async () => {
+    const { success, data } = await queryRootInfo()
+    if (success) {
+      setRootInfo(data)
+    }
+  }, [queryRootInfo, setRootInfo])
 
   useEffect(() => {
-    if (data) {
-      setRootInfo(data.rootInfo as IRootInfo)
-    }
-  }, [data, setRootInfo])
+    handleQueryRootInfo()
+  }, [handleQueryRootInfo])
 
   useEffect(() => {
     document.title = `${rootInfo ? `${rootInfo.deviceName} - ` : ''}${DOCUMENT_TITLE}`
@@ -187,7 +187,7 @@ export default function MenuBar() {
                   icon={<SvgIcon.Refresh />}
                   onClick={() => {
                     setSystemPopoverShow(false)
-                    getRootInfo()
+                    handleQueryRootInfo()
                   }}
                 >
                   {t`action.refresh`}
