@@ -129,7 +129,7 @@ C:/Users/jay/.io.gagu
 - Android:
 
 ```
-/data/data/com.termux/files/home/storage/shared/Android/.io.gagu
+/data/data/com.termux/files/home/.io.gagu
 ```
 
 `/data/data/com.termux/files/home/storage/shared` points to the internal storage mounted by the Android system, which needs to be obtained through `termux-setup-storage` in Termux.

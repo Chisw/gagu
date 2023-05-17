@@ -86,21 +86,22 @@ $ yarn start
 
 [@craco/craco](https://npmjs.com/package/@craco/craco)&emsp;
 [axios](https://npmjs.com/package/axios)&emsp;
+[chalk](https://npmjs.com/package/chalk)&emsp;
+[express-zip](https://npmjs.com/package/express-zip)&emsp;
+[gm](https://npmjs.com/package/gm)&emsp;
+[jsmediatags](https://npmjs.com/package/jsmediatags)&emsp;
 [lodash](https://npmjs.com/package/lodash)&emsp;
 [luxon](https://npmjs.com/package/luxon)&emsp;
 [md5](https://npmjs.com/package/md5)&emsp;
+[minimist](https://npmjs.com/package/minimist)&emsp;
+[node-disk-info](https://npmjs.com/package/node-disk-info)&emsp;
+[piexifjs](https://npmjs.com/package/piexifjs)&emsp;
 [qrcode.react](https://npmjs.com/package/qrcode.react)&emsp;
 [react-hot-toast](https://npmjs.com/package/react-hot-toast)&emsp;
 [react-i18next](https://npmjs.com/package/react-i18next)&emsp;
 [react-photo-view](https://npmjs.com/package/react-photo-view)&emsp;
 [react-rnd](https://npmjs.com/package/react-rnd)&emsp;
 [recoil](https://npmjs.com/package/recoil)&emsp;
-[express-zip](https://npmjs.com/package/express-zip)&emsp;
-[gm](https://npmjs.com/package/gm)&emsp;
-[jsmediatags](https://npmjs.com/package/jsmediatags)&emsp;
-[minimist](https://npmjs.com/package/minimist)&emsp;
-[node-disk-info](https://npmjs.com/package/node-disk-info)&emsp;
-[piexifjs](https://npmjs.com/package/piexifjs)&emsp;
 [thumbsupply](https://npmjs.com/package/thumbsupply)&emsp;
 
 如果没有他们，我的工作量将是巨大的，十分感谢。

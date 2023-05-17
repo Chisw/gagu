@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { IOffsetInfo, IRectInfo } from '../types'
+import { IOffsetInfo, IRectInfo, PublicImageName } from '../types'
 import md5 from 'md5'
 import { FsApi } from '../api'
 import default_favicon from '../img/favicon.png'
@@ -152,8 +152,8 @@ export const getBaiduMapPinUrl = (ExifData: any, content?: string) => {
   }
 }
 
-export const refreshImage = (name: 'bg-desktop' | 'bg-sharing' | 'favicon') => {
-  document.querySelectorAll(`.gagu-image-${name}`).forEach((el) => {
+export const refreshImage = (name: PublicImageName) => {
+  document.querySelectorAll(`.gagu-public-image-${name}`).forEach((el) => {
     el.removeAttribute('style')
     el.setAttribute('style', `background-image: url("${`${FsApi.getImageStreamUrl(name)}?temp=${Date.now()}`}")`)
   })

@@ -114,7 +114,7 @@ export class FsService {
 
       const homeEntry: IRootEntry = {
         name: ServerOS.username,
-        type: EntryType.directory,
+        type: 'directory',
         hidden: false,
         lastModified: 0,
         extension: '_dir',
@@ -125,7 +125,7 @@ export class FsService {
 
       const diskList: IDisk[] = driveList.map((drive) => ({
         name: drive.mounted.replace('/Volumes/', ''),
-        type: EntryType.directory,
+        type: 'directory',
         hidden: false,
         lastModified: 0,
         parentPath: '/Volumes',
@@ -142,7 +142,7 @@ export class FsService {
       const driveList = nodeDiskInfo.getDiskInfoSync()
       const diskList: IDisk[] = driveList.map((drive) => ({
         name: drive.mounted,
-        type: EntryType.directory,
+        type: 'directory',
         hidden: false,
         lastModified: 0,
         parentPath: '',
@@ -158,7 +158,7 @@ export class FsService {
     } else if (ServerOS.isLinux) {
       const homeEntry: IRootEntry = {
         name: ServerOS.username,
-        type: EntryType.directory,
+        type: 'directory',
         hidden: false,
         lastModified: 0,
         extension: '_dir',
@@ -171,7 +171,7 @@ export class FsService {
 
       const diskList: IDisk[] = driveList.map((drive) => ({
         name: drive.mounted.replace('/Volumes/', ''),
-        type: EntryType.directory,
+        type: 'directory',
         hidden: false,
         lastModified: 0,
         parentPath: '/Volumes',
@@ -188,7 +188,7 @@ export class FsService {
       rootEntryList.push(
         {
           name: 'shared',
-          type: EntryType.directory,
+          type: 'directory',
           hidden: false,
           lastModified: 0,
           extension: '_dir',
@@ -198,10 +198,20 @@ export class FsService {
         },
         {
           name: 'home',
-          type: EntryType.directory,
+          type: 'directory',
           hidden: false,
           lastModified: 0,
           parentPath: '/data/data/com.termux/files',
+          hasChildren: true,
+          extension: '_dir',
+          isDisk: false,
+        },
+        {
+          name: 'com.termux',
+          type: 'directory',
+          hidden: false,
+          lastModified: 0,
+          parentPath: '/data/data',
           hasChildren: true,
           extension: '_dir',
           isDisk: false,

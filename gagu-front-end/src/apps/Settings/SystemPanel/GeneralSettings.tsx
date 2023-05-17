@@ -63,7 +63,7 @@ export default function GeneralSettings() {
                 <SvgIcon.ImageAdd size={24} className="text-gray-200" />
               </div>
               <div
-                className="gagu-image-favicon absolute z-10 inset-0 m-1 bg-cover bg-no-repeat bg-top rounded-sm"
+                className="gagu-public-image-favicon absolute z-10 inset-0 m-1 bg-cover bg-no-repeat bg-top rounded-sm"
                 style={{ backgroundImage: `url("${FsApi.getImageStreamUrl('favicon')}")` }}
               />
               <input
@@ -86,7 +86,7 @@ export default function GeneralSettings() {
                 <SvgIcon.ImageAdd size={48} className="text-gray-200" />
               </div>
               <div
-                className="gagu-image-bg-desktop absolute z-10 inset-0 m-1 bg-cover bg-no-repeat bg-center rounded-sm"
+                className="gagu-public-image-bg-desktop absolute z-10 inset-0 m-1 bg-cover bg-no-repeat bg-center rounded-sm"
                 style={{ backgroundImage: `url("${FsApi.getImageStreamUrl('bg-desktop')}")` }}
               />
               <input
@@ -109,7 +109,7 @@ export default function GeneralSettings() {
                 <SvgIcon.ImageAdd size={48} className="text-gray-200" />
               </div>
               <div
-                className="gagu-image-bg-sharing absolute z-10 inset-0 m-1 bg-cover bg-no-repeat bg-center rounded-sm"
+                className="gagu-public-image-bg-sharing absolute z-10 inset-0 m-1 bg-cover bg-no-repeat bg-center rounded-sm"
                 style={{ backgroundImage: `url("${FsApi.getImageStreamUrl('bg-sharing')}")` }}
               />
               <input

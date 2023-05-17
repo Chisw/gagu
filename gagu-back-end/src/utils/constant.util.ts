@@ -4,7 +4,7 @@ import { IServerOS } from 'src/types'
 const platform = os.platform()
 const hostname = os.hostname()
 
-export const GAGU_VERSION = '0.0.40'
+export const GAGU_VERSION = '0.0.41'
 export const IS_DEV = process.env.NODE_ENV === 'development'
 
 export const DEPENDENCIES_MAP: { [KEY: string]: boolean } = {
@@ -40,7 +40,7 @@ export const ServerOS: IServerOS = {
 export const PATH_MAP: { [PLATFORM: string]: string } = {
   darwin: `/Users/${ServerOS.username}/.io.gagu`,
   win32: `C:/Users/${ServerOS.username}/.io.gagu`,
-  android: `/data/data/com.termux/files/home/storage/shared/Android/.io.gagu`,
+  android: `/data/data/com.termux/files/home/.io.gagu`,
 }
 
 export const ROOT_PATH =

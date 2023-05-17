@@ -129,7 +129,7 @@ C:/Users/jay/.io.gagu
 - Android:
 
 ```
-/data/data/com.termux/files/home/storage/shared/Android/.io.gagu
+/data/data/com.termux/files/home/.io.gagu
 ```
 
 `/data/data/com.termux/files/home/storage/shared` 指向的是安卓系统挂载的内部存储，在 Termux 中需要通过 `termux-setup-storage` 获取。

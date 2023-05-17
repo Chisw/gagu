@@ -19,6 +19,15 @@ Clear data directory means that all users, download tunnels and other data will 
 
 ## v0.0.*
 
+- v0.0.41 (2023-05-17)
+  - feat: upgrade dependencies like React 18 and TailwindCSS 3
+  - feat: wallpaper in Login and Sharing page
+  - feat: show root directory `/data/data/com.termux` in Android device
+  - fix: move `.io.gagu` to `/data/data/com.termux/home` in Android device
+  - fix: code optimization
+  - fix: fix known issues
+  - fix: patch i18n
+
 - v0.0.40 (2023-05-15)
   - feat: do not check extensions when renaming
   - feat: page switching transition effect

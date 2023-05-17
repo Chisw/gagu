@@ -32,9 +32,9 @@ export default function DesktopPage() {
     >
       <div
         className={`
-          gagu-image-bg-desktop absolute z-0 inset-0 bg-cover bg-center
+          gagu-public-image-bg-desktop absolute z-0 inset-0 bg-cover bg-center
           transition-all duration-1000 ease-out
-          ${activePage === 'desktop' ? 'scale-100 bg-opacity-100' : 'scale-110 opacity-50'}
+          ${activePage === 'desktop' ? 'scale-100 opacity-100' : 'scale-110 opacity-50'}
         `}
         style={{ backgroundImage: `url("${FsApi.getImageStreamUrl('bg-desktop')}")` }}
       />

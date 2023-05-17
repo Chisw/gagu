@@ -59,8 +59,8 @@ export default function LoginPage() {
         <div
           className={`
             absolute z-0 inset-0 bg-cover bg-center
-            transition-all duration-1000 ease-out blur-lg opacity-60
-            ${activePage === 'login' ? 'scale-105 bg-opacity-100' : 'scale-110 opacity-50'}
+            transition-all duration-1000 blur-lg opacity-50
+            ${activePage === 'login' ? 'scale-[120%]' : 'scale-110'}
           `}
           style={{ backgroundImage: `url("${FsApi.getImageStreamUrl('bg-desktop')}")` }}
         />
@@ -68,7 +68,7 @@ export default function LoginPage() {
           <div
             className={line(`
               text-white flex justify-center items-center
-              transition-all duration-500
+              transition-all duration-700
               ${activePage === 'login' ? '-translate-y-0 opacity-100' : '-translate-y-5 opacity-0'}
             `)}
           >
@@ -81,7 +81,7 @@ export default function LoginPage() {
           </div>
           <div
             className={line(`
-              mt-16 transition-all duration-500
+              mt-16 transition-all duration-700
               ${activePage === 'login' ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}
             `)}
           >

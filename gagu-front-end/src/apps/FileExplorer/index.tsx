@@ -73,7 +73,7 @@ export default function FileExplorer(props: AppComponentProps) {
 
   const [sideCollapse, setSideCollapse] = useState(false)
   const [currentPath, setCurrentPath] = useState('')
-  const [prevDirPath, setPrevDirPath] = useState('')
+  const [lastVisitedPath, setLastVisitedPath] = useState('')
   const [activeRootEntry, setActiveRootEntry] = useState<IRootEntry | null>(null)
   const [gridMode, setGridMode] = useState(true)
   const [visitHistory, setVisitHistory] = useState<IVisitHistory>({ position: -1, list: [] })
@@ -180,14 +180,13 @@ export default function FileExplorer(props: AppComponentProps) {
   }, [visitHistory, querying, currentPath, isInRoot, newDirMode, newTxtMode, selectedEntryList, isEntryListEmpty])
 
   const handleQueryEntryList = useCallback(async (path: string, keepData?: boolean) => {
-    abortController?.abort()
     if (!path) return
     !keepData && setData(null)
     const controller = new AbortController()
     const config = { signal: controller.signal }
     setAbortController(controller)
     await queryEntryList(path, config)
-  }, [abortController, setData, queryEntryList])
+  }, [setData, queryEntryList])
 
   const updateHistory = useCallback((direction: 'forward' | 'backward', path?: string) => {
     const map = { forward: 1, backward: -1 }
@@ -208,8 +207,9 @@ export default function FileExplorer(props: AppComponentProps) {
     updateActiveRootEntry?: boolean
   }) => {
     const { path, direction, pushPath, updateActiveRootEntry } = props
-    setPrevDirPath(currentPath)
+    setLastVisitedPath(currentPath)
     setCurrentPath(path)
+    abortController?.abort()
     handleQueryEntryList(path)
     updateHistory(direction, pushPath ? path : undefined)
     if (updateActiveRootEntry) {
@@ -219,7 +219,7 @@ export default function FileExplorer(props: AppComponentProps) {
         .sort((a, b) => a.path.length > b.path.length ? -1 : 1)[0].entry
       setActiveRootEntry(activeEntry)
     }
-  }, [currentPath, handleQueryEntryList, rootEntryList, updateHistory])
+  }, [abortController, currentPath, handleQueryEntryList, rootEntryList, updateHistory])
 
   const handleRootEntryClick = useCallback((rootEntry: IRootEntry) => {
     const path = getEntryPath(rootEntry)
@@ -371,7 +371,7 @@ export default function FileExplorer(props: AppComponentProps) {
       const top = target ? target.offsetTop - 10 : 0
       container!.scrollTo({ top, behavior: scrollWaiter.smooth ? 'smooth' : undefined })
       setScrollWaiter({ wait: false })
-      setPrevDirPath('')
+      setLastVisitedPath('')
     }
   }, [scrollWaiter, querying])
 
@@ -383,12 +383,12 @@ export default function FileExplorer(props: AppComponentProps) {
   }, [currentPath])
 
   useEffect(() => {
-    const prevEntry = entryList.find(({ name, parentPath }) => `${parentPath}/${name}` === prevDirPath)
+    const prevEntry = entryList.find(({ name, parentPath }) => `${parentPath}/${name}` === lastVisitedPath)
     if (prevEntry) {
       setSelectedEntryList([prevEntry])
       setScrollWaiter({ wait: true })
     }
-  }, [entryList, prevDirPath])
+  }, [entryList, lastVisitedPath])
 
   useEffect(() => {
     setSelectedEntryList([])
