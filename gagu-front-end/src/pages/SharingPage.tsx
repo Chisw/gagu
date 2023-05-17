@@ -22,10 +22,10 @@ export default function SharePage() {
   const [passwordVal, setPasswordVal] = useState('')
   const [expiredAtTip, setExpiredAtTip] = useState('')
 
-  const [, setActivePage] = useRecoilState(activePageState)
+  const [activePage, setActivePage] = useRecoilState(activePageState)
 
   useEffect(() => {
-    setTimeout(() => setActivePage('share'))
+    setTimeout(() => setActivePage('sharing'))
   }, [setActivePage])
 
   const { request: getTunnel, loading, data } = useRequest(TunnelApi.getTunnel)
@@ -43,7 +43,7 @@ export default function SharePage() {
   }, [])
 
   useEffect(() => {
-    document.title = `${t`title.page_share`} - GAGU.IO`
+    document.title = `${t`title.page_sharing`} - GAGU.IO`
   }, [t])
 
   const {
@@ -146,8 +146,16 @@ export default function SharePage() {
 
   return (
     <>
-      <div className="absolute z-0 inset-0 bg-gradient-to-b from-gray-700 to-gray-500 flex justify-center items-center">
-        <div className="relative m-4 md:m-0 px-4 md:px-10 py-8 w-full md:w-160 bg-white rounded-2xl shadow-2xl overflow-hidden">
+      <div className="absolute z-0 inset-0 bg-gradient-to-b from-black to-slate-600 flex justify-center items-center overflow-hidden">
+        <div
+          className={`
+            absolute z-0 inset-0 bg-cover bg-center
+            transition-all duration-1000 ease-out
+            ${activePage === 'sharing' ? 'scale-100 bg-opacity-100' : 'scale-110 opacity-50'}
+          `}
+          style={{ backgroundImage: `url("${FsApi.getImageStreamUrl('bg-sharing')}")` }}
+        />
+        <div className="relative m-4 md:m-0 px-4 md:px-10 py-8 w-full md:w-[40rem] bg-white rounded-2xl shadow-2xl overflow-hidden">
           <div className="absolute z-0 top-0 right-0 -mt-16 -mr-16">
             <SvgIcon.Share className="text-gray-100" size={320} />
           </div>
@@ -159,7 +167,7 @@ export default function SharePage() {
                   style={{ backgroundImage: `url("${FsApi.getAvatarStreamUrl(username)}")` }}
                 />
                 <div className="ml-4 flex-grow">
-                  <p className="text-sm md:text-base">{t('title.page_share_by', { name: nickname })}</p>
+                  <p className="text-sm md:text-base">{t('title.page_shared_by', { name: nickname })}</p>
                   <p className="flex justify-between text-xs text-gray-500">
                     {createdAt && getDateTime(createdAt).slice(0, -3)}
                   </p>
@@ -185,7 +193,7 @@ export default function SharePage() {
                 </div>
               </div>
               {isShowInput ? (
-                <div className="my-6 px-8 py-16 border backdrop-filter backdrop-blur-sm">
+                <div className="my-6 px-8 py-16 border backdrop-filter backdrop-blur">
                   <p className="text-sm text-gray-500 text-center">{t`tip.sharingWithPassword`}</p>
                   <div className="mt-4 flex justify-center">
                     <Input

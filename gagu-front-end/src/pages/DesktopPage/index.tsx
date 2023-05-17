@@ -27,14 +27,13 @@ export default function DesktopPage() {
 
   return (
     <div
-      className="gagu-desktop-page fixed z-0 inset-0 overflow-hidden bg-gradient-to-b from-gray-800 to-gray-600"
+      className="gagu-desktop-page fixed z-0 inset-0 overflow-hidden bg-gradient-to-b from-black to-slate-600"
       onContextMenuCapture={e => e.preventDefault()}
     >
       <div
         className={`
-          gagu-background-desktop absolute z-0 inset-0 bg-cover bg-center
+          gagu-image-bg-desktop absolute z-0 inset-0 bg-cover bg-center
           transition-all duration-1000 ease-out
-          transform
           ${activePage === 'desktop' ? 'scale-100 bg-opacity-100' : 'scale-110 opacity-50'}
         `}
         style={{ backgroundImage: `url("${FsApi.getImageStreamUrl('bg-desktop')}")` }}

@@ -122,7 +122,7 @@ export default function UserList(props: UserListProps) {
               key={username}
               className="relative m-2 w-48 transition-shadow duration-200 hover:shadow-lg group rounded-lg border overflow-hidden"
             >
-              <div className="absolute z-10 top-0 right-0 m-1 transform scale-90 origin-top-right text-xs font-din">
+              <div className="absolute z-10 top-0 right-0 m-1 scale-90 origin-top-right text-xs font-din">
                 {isExpired && (
                   <span
                     className={`
@@ -164,7 +164,7 @@ export default function UserList(props: UserListProps) {
                     <div className="text-xs text-gray-400">@{username}</div>
                   </div>
                 </div>
-                <div className="mt-2 min-h-6 transform scale-90 origin-top-left font-din leading-none">
+                <div className="mt-2 min-h-[1.5rem] scale-90 origin-top-left font-din leading-none">
                   {permissions.map(p => (
                     <span
                       key={p}
@@ -174,7 +174,7 @@ export default function UserList(props: UserListProps) {
                     </span>
                   ))}
                 </div>
-                <div className="mt-2 min-h-6 transform scale-90 origin-top-left leading-none">
+                <div className="mt-2 min-h-[1.5rem] scale-90 origin-top-left leading-none">
                 </div>
                 <div className="flex-shrink-0 text-xs leading-none font-din text-gray-400 text-center group-hover:opacity-0">
                   <p>{t('tip.createdAt', { time: getDateTime(createdAt) })}</p>

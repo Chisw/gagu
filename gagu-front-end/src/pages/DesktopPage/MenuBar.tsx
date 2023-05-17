@@ -134,7 +134,6 @@ export default function MenuBar() {
            bg-white bg-opacity-50 shadow-sm
           backdrop-filter backdrop-blur
           transition-all duration-500 ease-out
-          transform
           ${['desktop', 'explore'].includes(activePage) ? 'translate-y-0' : '-translate-y-20'}
         `)}
       >

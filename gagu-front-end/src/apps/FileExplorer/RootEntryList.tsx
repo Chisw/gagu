@@ -55,7 +55,7 @@ export default function RootEntryList(props: RootEntryListProps) {
                   </span>
                 </Tooltip>
                 {isDisk && (
-                  <div className="font-din transform scale-75 origin-right opacity-60">
+                  <div className="font-din scale-75 origin-right opacity-60">
                     {`${getReadableSize(spaceUsed!)} / ${getReadableSize(spaceTotal!)}`}
                   </div>
                 )}

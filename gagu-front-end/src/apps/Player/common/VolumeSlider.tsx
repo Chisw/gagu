@@ -46,7 +46,7 @@ export default function VolumeSlider(props: VolumeSliderProps) {
           value={volume}
           onChange={(e: any) => onVolumeChange(+e.target.value)}
         />
-        <div className="absolute bottom-0 mb-1 w-full text-center text-white text-xs font-din transform scale-90">
+        <div className="absolute bottom-0 mb-1 w-full text-center text-white text-xs font-din scale-90">
           {(volume * 100).toFixed(0)}%
         </div>
       </div>

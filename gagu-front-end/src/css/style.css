@@ -1,3 +1,7 @@
+body {
+  font-family: PingFang, Arial, Helvetica, sans-serif;
+}
+
 ::-webkit-scrollbar,
 ::-webkit-scrollbar-button,
 ::-webkit-scrollbar-track-piece,
@@ -58,9 +62,10 @@
 }
 
 [data-drag-hover="true"] {
+  @apply animate-pulse;
   outline: 2px solid #3b82f6;
   outline-offset: -2px;
-  animation: pulse 1s ease-in-out infinite;
+  animation-duration: 1s;
 }
 
 .gagu-logo {

@@ -5,7 +5,7 @@ import LoginPage from './pages/LoginPage'
 import DesktopPage from './pages/DesktopPage'
 import ExplorePage from './pages/ExplorePage'
 import TouchPage from './pages/TouchPage'
-import SharePage from './pages/SharePage'
+import SharingPage from './pages/SharingPage'
 import { FsApi } from './api'
 import { setFavicon } from './utils'
 import './css/index.css'
@@ -25,8 +25,8 @@ export default function App() {
         <Route path="/desktop" element={<DesktopPage />} />
         <Route path="/explore" element={<ExplorePage />} />
         <Route path="/touch" element={<TouchPage />} />
-        <Route path="/share" element={<DesktopPage />} />
-        <Route path="/share/:code" element={<SharePage />} />
+        <Route path="/sharing" element={<DesktopPage />} />
+        <Route path="/sharing/:code" element={<SharingPage />} />
         <Route path="*" element={<DesktopPage />} />
       </Routes>
     </BrowserRouter>

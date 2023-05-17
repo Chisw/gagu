@@ -81,7 +81,7 @@ export default function ShareModal(props: ShareModalProps) {
         entryList,
       })
       if (res?.success && res.code) {
-        setTunnelLink(`${window.location.origin}/share/${res.code}`)
+        setTunnelLink(`${window.location.origin}/sharing/${res.code}`)
       }
     }
   }, [form, entryList, createTunnel])

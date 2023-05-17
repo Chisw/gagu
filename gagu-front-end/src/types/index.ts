@@ -6,7 +6,7 @@ export * from './user.type'
 export * from './tunnel.type'
 export * from './setting.type'
 
-export type PageType = 'PENDING' | 'login' | 'desktop' | 'explore' | 'touch' | 'share'
+export type PageType = 'PENDING' | 'login' | 'desktop' | 'explore' | 'touch' | 'sharing'
 
 export interface IResponse<T> {
   success: boolean
@@ -14,7 +14,7 @@ export interface IResponse<T> {
   data: T
 }
 
-export interface IHistory {
+export interface IVisitHistory {
   position: number
   list: string[]
 }

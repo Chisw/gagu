@@ -1,6 +1,5 @@
 export * from './Confirmor'
 export * from './EmptyPanel'
 export * from './IconButton'
-export * from './Pagination'
 export * from './Spinner'
 export * from './SvgIcon'

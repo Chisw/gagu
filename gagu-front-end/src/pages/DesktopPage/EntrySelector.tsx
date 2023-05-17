@@ -111,7 +111,7 @@ export default function EntrySelector() {
           </div>
         )}
       >
-        <div className="max-h-60vh min-h-30vh overflow-y-auto">
+        <div className="max-h-[60vh] min-h-[30vh] overflow-y-auto">
           <Tree
             labelEllipsis
             // filterTreeNode

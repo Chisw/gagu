@@ -9,7 +9,10 @@ export default function PublicFooter() {
 
   return (
     <>
-      <div className="absolute bottom-0 py-4 w-full text-xs text-white flex justify-center items-center">
+      <div
+        className="absolute bottom-0 py-4 w-full text-xs text-white flex justify-center items-center"
+        style={{ textShadow: '0 1px rgba(0, 0, 0, .5), 1px 0 rgba(0, 0, 0, .5), -1px 0 rgba(0, 0, 0, .5), 0 -1px rgba(0, 0, 0, .5)' }}
+      >
         <a
           rel="noreferrer"
           href="https://gagu.io"

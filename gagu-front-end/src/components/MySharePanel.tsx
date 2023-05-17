@@ -63,7 +63,8 @@ export default function MySharePanel(props: MySharePanelProps) {
         placement="left"
         headerStyle={{ padding: '8px 12px', borderBottom: '1px solid #efefef' }}
         bodyStyle={{ padding: 0 }}
-        maskStyle={{ background: 'rgba(0, 0, 0, .1)' }}
+        maskStyle={{ background: 'rgba(0, 0, 0, .2)' }}
+        style={{ background: 'rgba(255, 255, 255, .6)', backdropFilter: 'blur(12px)' }}
         width={600}
         visible={visible}
         onCancel={onClose}
@@ -97,7 +98,7 @@ export default function MySharePanel(props: MySharePanelProps) {
                       size="small"
                       className="ml-2"
                       icon={<SvgIcon.ExternalLink className="text-blue-500" />}
-                      onClick={() => window.open(`/share/${code}`)}
+                      onClick={() => window.open(`/sharing/${code}`)}
                     />
                     <Button
                       size="small"

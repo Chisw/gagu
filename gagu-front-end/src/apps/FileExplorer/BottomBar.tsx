@@ -5,7 +5,7 @@ import { copy, getEntryPath } from '../../utils'
 import { IEntry, IRootEntry } from '../../types'
 import { useTranslation } from 'react-i18next'
 
-interface PathLinkProps {
+interface BottomBarProps {
   loading: boolean
   folderCount: number
   fileCount: number
@@ -16,7 +16,7 @@ interface PathLinkProps {
   onRootEntryClick: (rootEntry: IRootEntry) => void
 }
 
-export default function PathLink(props: PathLinkProps) {
+export default function BottomBar(props: BottomBarProps) {
 
   const {
     loading,

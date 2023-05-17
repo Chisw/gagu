@@ -152,8 +152,8 @@ export const getBaiduMapPinUrl = (ExifData: any, content?: string) => {
   }
 }
 
-export const refreshBackground = (name: 'bg-desktop' | 'bg-login' | 'bg-share' | 'favicon') => {
-  document.querySelectorAll(`.gagu-background-${name}`).forEach((el) => {
+export const refreshImage = (name: 'bg-desktop' | 'bg-sharing' | 'favicon') => {
+  document.querySelectorAll(`.gagu-image-${name}`).forEach((el) => {
     el.removeAttribute('style')
     el.setAttribute('style', `background-image: url("${`${FsApi.getImageStreamUrl(name)}?temp=${Date.now()}`}")`)
   })

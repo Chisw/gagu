@@ -85,7 +85,7 @@ export class FsController {
     return {
       success: true,
       message: SERVER_MESSAGE_MAP.OK,
-      size,
+      data: size,
     }
   }
 

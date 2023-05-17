@@ -164,7 +164,7 @@ export default function Toolbar(props: ToolbarProps) {
       <div
         className={line(`
           absolute z-20 top-0 left-0
-          p-2 w-full max-h-1/3
+          p-2 w-full max-h-[33.33%]
           overflow-y-auto
           text-xs text-white break-words
           bg-black bg-opacity-30 backdrop-filter backdrop-blur

@@ -92,7 +92,7 @@ export default function Dock() {
           rounded-xl
           backdrop-filter backdrop-blur
           transition-all duration-500 ease-out
-          transform -translate-x-1/2
+          -translate-x-1/2
           ${activePage === 'desktop' ? 'translate-y-0' : 'translate-y-20'}
         `)}
       >
@@ -114,7 +114,7 @@ export default function Dock() {
                 <span
                   className={line(`
                     absolute left-1/2 bottom-0 w-1 h-1 rounded-full bg-black
-                    transform -translate-x-1/2 translate-y-[6px]
+                    -translate-x-1/2 translate-y-[6px]
                     transition-all duration-300
                     ${isRunning ? 'opacity-100' : 'opacity-0'}
                   `)}

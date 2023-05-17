@@ -19,7 +19,7 @@ export class FsApi {
     return data
   }
 
-  static getDirectorySize = async (path: string, config?: AxiosRequestConfig) => {
+  static queryDirectorySize = async (path: string, config?: AxiosRequestConfig) => {
     const { data } = await service.get(`/api/fs/size?path=${path}`, config)
     return data
   }

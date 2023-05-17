@@ -1,48 +1,42 @@
 import { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
-import EntryIcon from '../../apps/FileExplorer/EntryIcon'
-import NameLine from '../../apps/FileExplorer/NameLine'
 import { line } from '../../utils'
-import { rootInfoState } from '../../states'
+import { activePageState, rootInfoState } from '../../states'
+import EntryNode from '../../apps/FileExplorer/EntryNode'
 
 export default function Desktop() {
 
   const [rootInfo] = useRecoilState(rootInfoState)
-  const [initialized, setInitialized] = useState(false)
+  const [activePage] = useRecoilState(activePageState)
+
+  const [show, setShow] = useState(false)
 
   // Show MenuBar & Dock and then show Desktop
   useEffect(() => {
-    setTimeout(() => setInitialized(true), 500)
-  }, [])
+    if (activePage === 'desktop') {
+      setTimeout(() => setShow(true), 800)
+    } else {
+      setShow(false)
+    }
+  }, [activePage])
 
   return (
     <>
       <div className="gagu-desktop absolute z-0 inset-0 pb-12">
         <div
           className={line(`
-            w-full h-full p-4 flex flex-col flex-wrap content-start
+            w-full h-full px-3 py-10 flex flex-col flex-wrap content-start
             transition-opacity duration-500
-            ${initialized ? 'opacity-100' : 'opacity-0'}
+            ${show ? 'opacity-100' : 'opacity-0'}
           `)}
         >
           {rootInfo.desktopEntryList.map(entry => {
             return (
-              <div
-                key={entry.name}
-                className="w-28 h-20 m-2"
-              >
-                <EntryIcon
-                  entry={entry}
-                  scrollHook={{ top: 0, height: window.innerHeight }}
-                />
-                <NameLine
-                  entry={entry}
-                  gridMode
-                  currentPath=""
-                  onSuccess={() => { }}
-                  onFail={() => { }}
-                />
-              </div>
+              <EntryNode
+                key={entry.parentPath + entry.name}
+                gridMode
+                entry={entry}
+              />
             )
           })}
         </div>

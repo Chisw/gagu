@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { useCallback, useEffect, useState } from 'react'
 import { useRequest } from '../hooks'
-import { AuthApi } from '../api'
+import { AuthApi, FsApi } from '../api'
 import md5 from 'md5'
 import toast from 'react-hot-toast'
 import { SvgIcon } from '../components/base'
@@ -17,10 +17,10 @@ export default function LoginPage() {
   const navigate = useNavigate()
   const { t } = useTranslation()
 
+  const [activePage, setActivePage] = useRecoilState(activePageState)
+
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-
-  const [activePage, setActivePage] = useRecoilState(activePageState)
 
   useEffect(() => {
     setTimeout(() => setActivePage('login'))
@@ -55,12 +55,20 @@ export default function LoginPage() {
   
   return (
     <>
-      <div className="fixed z-0 inset-0 overflow-hidden bg-gradient-to-b from-gray-800 to-gray-600 flex justify-center items-center">
+      <div className="fixed z-0 inset-0 overflow-hidden bg-gradient-to-b from-black to-slate-600 flex justify-center items-center">
+        <div
+          className={`
+            absolute z-0 inset-0 bg-cover bg-center
+            transition-all duration-1000 ease-out blur-lg opacity-60
+            ${activePage === 'login' ? 'scale-105 bg-opacity-100' : 'scale-110 opacity-50'}
+          `}
+          style={{ backgroundImage: `url("${FsApi.getImageStreamUrl('bg-desktop')}")` }}
+        />
         <div className="semi-always-dark w-64">
           <div
             className={line(`
               text-white flex justify-center items-center
-              transition-all duration-500 transform
+              transition-all duration-500
               ${activePage === 'login' ? '-translate-y-0 opacity-100' : '-translate-y-5 opacity-0'}
             `)}
           >
@@ -73,7 +81,7 @@ export default function LoginPage() {
           </div>
           <div
             className={line(`
-              mt-16 transition-all duration-500 transform
+              mt-16 transition-all duration-500
               ${activePage === 'login' ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}
             `)}
           >

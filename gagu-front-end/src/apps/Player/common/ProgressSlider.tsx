@@ -57,12 +57,12 @@ export default function ProgressSlider(props: ProgressSliderProps) {
             hover-show-child
             absolute top-0 -mt-5 px-1 h-4 bg-black
             text-white font-din text-xs text-center rounded-sm
-            transform scale-90 -translate-x-1/2
+            scale-90 -translate-x-1/2
           `)}
           style={{ left: `${timeLabelData.distance}px` }}
         >
           {/* TODO: use pseudo after */}
-          <div className="absolute z-0 left-1/2 bottom-0 -mb-[2px] w-2 h-2 bg-black transform -translate-x-1/2 rotate-45 rounded-sm" />
+          <div className="absolute z-0 left-1/2 bottom-0 -mb-[2px] w-2 h-2 bg-black -translate-x-1/2 rotate-45 rounded-sm" />
           <span className="relative ">{timeLabelData.label}</span>
         </div>
 
@@ -72,7 +72,7 @@ export default function ProgressSlider(props: ProgressSliderProps) {
           onMouseMove={handleMouseMoveProgressBar}
         />
 
-        <div className={`absolute bottom-0 right-0 left-0 transform h-[2px] ${backColor}`}>
+        <div className={`absolute bottom-0 right-0 left-0 h-[2px] ${backColor}`}>
           <div
             className={`h-full ${frontColor}`}
             style={{ width: `${playPercent}%` }}
