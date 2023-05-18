@@ -56,19 +56,19 @@ export default function Dock() {
     const menuItemList: IContextMenuItem[] = [
       {
         icon: <SvgIcon.Add />,
-        label: hasRunning ? t`action.newWindow` : t`action.open`,
+        name: hasRunning ? t`action.newWindow` : t`action.open`,
         isShow: !hasRunning || app.multiple,
         onClick: () => handleOpenApp(app, true),
       },
       {
         icon: <SvgIcon.Links />,
-        label: t`action.newConnection` + ' ⏳',
+        name: t`action.newConnection` + ' ⏳',
         isShow: app.id === APP_ID_MAP.fileExplorer,
         onClick: () => toast('⏳'),
       },
       {
         icon: <SvgIcon.Close />,
-        label: t`action.closeAllOpenedWindows`,
+        name: t`action.closeAllOpenedWindows`,
         isShow: hasRunning,
         onClick: () => {
           const list = runningAppList.filter(app => app.id !== appId)

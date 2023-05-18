@@ -8,6 +8,7 @@ import { FsApi } from '../../api'
 import { useEffect } from 'react'
 import { useRecoilState } from 'recoil'
 import { activePageState } from '../../states'
+import { line } from '../../utils'
 
 // fixed z-0 DesktopPage
 // -               EntrySelector
@@ -31,11 +32,11 @@ export default function DesktopPage() {
       onContextMenuCapture={e => e.preventDefault()}
     >
       <div
-        className={`
+        className={line(`
           gagu-public-image-bg-desktop absolute z-0 inset-0 bg-cover bg-center
           transition-all duration-1000 ease-out
           ${activePage === 'desktop' ? 'scale-100 opacity-100' : 'scale-110 opacity-50'}
-        `}
+        `)}
         style={{ backgroundImage: `url("${FsApi.getImageStreamUrl('bg-desktop')}")` }}
       />
       <EntrySelector />

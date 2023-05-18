@@ -2,29 +2,18 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
 import { SvgIcon } from '../../components/base'
-import { useClickAway } from '../../hooks'
-import { line } from '../../utils'
 import { contextMenuDataState } from '../../states'
+import { Dropdown } from '@douyinfe/semi-ui'
 
 export default function ContextMenu() {
 
   const { pathname } = useLocation()
 
+  const [contextMenuData] = useRecoilState(contextMenuDataState)
+
   const [menuShow, setMenuShow] = useState(false)
 
-  useEffect(() => {
-    setTimeout(() => setMenuShow(false))
-  }, [pathname])
-
-  const handleClose = useCallback(() => {
-    setMenuShow(false)
-  }, [])
-
   const menuRef = useRef(null)
-
-  useClickAway(menuRef, handleClose)
-
-  const [contextMenuData] = useRecoilState(contextMenuDataState)
 
   const { top, left, menuItemList, isDock } = useMemo(() => {
     const { eventData, menuItemList, isDock } = contextMenuData || { eventData: null, menuItemList: [], isDock: false }
@@ -36,11 +25,11 @@ export default function ContextMenu() {
 
     if (isDock) {
       const { top: targetTop, left: targetLeft } = (target as any).getBoundingClientRect()
-      const offset = filteredMenuItemList.length * 36 + 30
-      top = targetTop - offset
+      const verticalOffset = filteredMenuItemList.length * 36 + 50
+      top = targetTop - verticalOffset
       left = targetLeft
     } else {
-      top = clientY
+      top = clientY - 24
       left = clientX
     }
 
@@ -56,56 +45,62 @@ export default function ContextMenu() {
     setMenuShow(!!contextMenuData?.menuItemList.length)
   }, [contextMenuData])
 
+  useEffect(() => {
+    setTimeout(() => setMenuShow(false))
+  }, [pathname])
+
+  const closeAfterClick = useCallback((onClick: () => void) => {
+    return () => {
+      onClick()
+      setMenuShow(false)
+    }
+  }, [])
+
   return (
     <>
       <div
         ref={menuRef}
-        className={line(`
-          gagu-contextmenu
-          absolute z-30 py-1 bg-white shadow-lg border rounded-lg
-          ${isDock ? 'w-56' : 'w-44'}
-          ${menuShow ? 'block' : 'hidden'}
-        `)}
+        className="gagu-contextmenu absolute z-30 h-0"
         style={{ top, left }}
       >
-        {menuItemList?.map(({ icon, label, children, onClick }) => {
-          return (
-            <div
-              key={label}
-              className="relative z-10 px-3 py-2 hover:bg-gray-100 cursor-pointer text-sm group"
-              onClick={() => {
-                onClick()
-                !children && handleClose()
-              }}
-            >
-              <div className="relative flex items-center">
-                {icon}
-                <span className="ml-2 flex-grow">{label}</span>
-                {children && <SvgIcon.ChevronRight />}
-                {children && (
-                  <div className="absolute top-0 left-0 w-44 -mt-1 ml-40 hidden group-hover:block py-1 bg-white shadow-lg border rounded-lg">
-                    {children.map(({ icon, label, onClick }) => (
-                      <div
-                        key={label}
-                        className="px-3 py-2 text-black hover:bg-gray-100 cursor-pointer text-sm flex items-center"
-                        onClick={() => {
-                          onClick()
-                          handleClose()
-                        }}
-                      >
-                        {icon}
-                        <span className="ml-2 flex-grow">{label}</span>
+        <Dropdown
+          trigger="custom"
+          position="bottomLeft"
+          className="select-none"
+          visible={menuShow}
+          onClickOutSide={() => setMenuShow(false)}
+          render={
+            <Dropdown.Menu className={isDock ? 'w-56' : 'w-44'}>
+              {menuItemList?.map(({ icon, name, children, onClick }) => {
+                return children ? (
+                  <Dropdown
+                    key={name}
+                    position="rightTop"
+                    menu={children.map(m => ({ ...m, node: 'item', onClick: closeAfterClick(m.onClick) }))}
+                  >
+                    <Dropdown.Item icon={icon} >
+                      <div className="w-full flex justify-between items-center">
+                        <span>{name}</span>
+                        <SvgIcon.ChevronRight className="text-gray-400"/>
                       </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-          )
-        })}
-        {isDock && (
-          <div className="absolute z-0 left-0 bottom-0 -mb-1 ml-2 w-3 h-3 bg-white rotate-45 rounded-sm" />
-        )}
+                    </Dropdown.Item>
+                  </Dropdown>
+                ) : (
+                  <Dropdown.Item
+                    key={name}
+                    icon={icon}
+                    onClick={closeAfterClick(onClick)}
+                  >
+                    {name}
+                  </Dropdown.Item>
+                )
+              })}
+              {isDock && (
+                <div className="absolute z-0 left-0 bottom-0 -mb-1 ml-3 w-3 h-3 bg-white rotate-45 rounded-sm" />
+              )}
+            </Dropdown.Menu>
+          }
+        />
       </div>
     </>
   )

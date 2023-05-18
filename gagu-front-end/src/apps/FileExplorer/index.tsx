@@ -267,8 +267,11 @@ export default function FileExplorer(props: AppComponentProps) {
   const handleRename = useCallback(() => setRenameMode(true), [])
 
   const handleCancelSelect = useCallback((e: any) => {
-    if (e.button === 2) return  // oncontextmenu
-    if (  // avoid multiple select and rename
+    // oncontextmenu or same one entry
+    if (e.button === 2 || e.target.closest('.gagu-entry-node')) return
+
+    // avoid multiple select and rename
+    if (
       e.metaKey || e.ctrlKey || e.shiftKey ||
       document.getElementById('file-explorer-name-input')
     ) return
@@ -589,46 +592,46 @@ export default function FileExplorer(props: AppComponentProps) {
     const menuItemList: IContextMenuItem[] = [
       {
         icon: <SvgIcon.FolderAdd />,
-        label: t`action.newFolder`,
+        name: t`action.newFolder`,
         isShow: isOnBlank,
         onClick: () => setNewDirMode(true),
       },
       {
         icon: <SvgIcon.FileAdd />,
-        label: t`action.newTextFile`,
+        name: t`action.newTextFile`,
         isShow: isOnBlank,
         onClick: () => setNewTxtMode(true),
       },
       {
         icon: <SvgIcon.Refresh />,
-        label: t`action.refresh`,
+        name: t`action.refresh`,
         isShow: isOnBlank,
         onClick: handleRefresh,
       },
       {
         icon: <SvgIcon.Rename />,
-        label: t`action.rename`,
+        name: t`action.rename`,
         isShow: isSingleConfirmed,
         onClick: () => setTimeout(handleRename, 0),
       },
       {
         icon: <SvgIcon.Apps />,
-        label: t`action.openWith`,
+        name: t`action.openWith`,
         isShow: !isOnDir && isSingleConfirmed,
         onClick: () => { },
         children: CALLABLE_APP_LIST.map(app => ({
           icon: <div className="gagu-app-icon w-4 h-4" data-app-id={app.id} />,
-          label: t(`app.${app.id}`),
+          name: t(`app.${app.id}`),
           onClick: () => handleOpenEntry(app),
         })).concat({
           icon: <div className="gagu-app-icon w-4 h-4" data-app-id="iina" />,
-          label: 'IINA',
+          name: 'IINA',
           onClick: () => openInIINA(contextEntryList[0]),
         }),
       },
       {
         icon: <SvgIcon.Settings />,
-        label: t`action.setAs`,
+        name: t`action.setAs`,
         isShow: isOnImage,
         onClick: () => {},
         children: [
@@ -637,37 +640,37 @@ export default function FileExplorer(props: AppComponentProps) {
           { name: 'favicon', title: 'Favicon' },
         ].map(o => ({
           icon: <div className="w-4 h-4">⏳</div>,
-          label: t(`${o.title}`),
+          name: t(`${o.title}`),
           onClick: () => toast.error('⏳'),
         }))
       },
       {
         icon: <SvgIcon.FolderInfo />,
-        label: t`action.folderSize`,
+        name: t`action.folderSize`,
         isShow: isOnDir,
         onClick: () => updateDirectorySize(contextEntryList[0]),
       },
       {
         icon: <SvgIcon.Upload />,
-        label: t`action.upload`,
+        name: t`action.upload`,
         isShow: isOnBlank,
         onClick: handleUploadClick,
       },
       {
         icon: <SvgIcon.Download />,
-        label: t`action.download`,
+        name: t`action.download`,
         isShow: true,
         onClick: () => handleDownloadClick(contextEntryList),
       },
       {
         icon: <SvgIcon.Share />,
-        label: t`action.newSharing`,
+        name: t`action.newSharing`,
         isShow: !isOnBlank,
         onClick: () => handleShareClick(contextEntryList),
       },
       {
         icon: <SvgIcon.Delete />,
-        label: t`action.delete`,
+        name: t`action.delete`,
         isShow: !isOnBlank,
         onClick: () => handleDeleteClick(contextEntryList),
       },

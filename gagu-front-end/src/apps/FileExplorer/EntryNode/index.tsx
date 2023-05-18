@@ -75,7 +75,7 @@ export default function EntryNode(props: EntryNodeProps) {
       // draggable
       className={line(`
         gagu-entry-node
-        relative overflow-hidden
+        relative overflow-hidden group
         ${hidden ? 'opacity-50' : ''}
         ${gridMode ? 'm-1 px-1 py-2 w-28 rounded-sm' : 'px-3 py-[6px] w-full flex items-center'}
         ${isSelected && !gridMode ? 'bg-blue-600' : ''}

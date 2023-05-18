@@ -10,7 +10,7 @@ import { Spinner, SvgIcon } from '../components/base'
 import EntryListPanel from '../components/EntryListPanel'
 import PublicFooter from '../components/PublicFooter'
 import { useRequest } from '../hooks'
-import { getDateTime, SERVER_MESSAGE_MAP } from '../utils'
+import { getDateTime, line, SERVER_MESSAGE_MAP } from '../utils'
 import { useRecoilState } from 'recoil'
 import { activePageState } from '../states'
 
@@ -148,11 +148,11 @@ export default function SharePage() {
     <>
       <div className="absolute z-0 inset-0 bg-gradient-to-b from-black to-slate-600 flex justify-center items-center overflow-hidden">
         <div
-          className={`
+          className={line(`
             absolute z-0 inset-0 bg-cover bg-center
             transition-all duration-1000 ease-out
             ${activePage === 'sharing' ? 'scale-100 bg-opacity-100' : 'scale-110 opacity-50'}
-          `}
+          `)}
           style={{ backgroundImage: `url("${FsApi.getImageStreamUrl('bg-sharing')}")` }}
         />
         <div className="relative m-4 md:m-0 px-4 md:px-10 py-8 w-full md:w-[40rem] bg-white rounded-2xl shadow-2xl overflow-hidden">

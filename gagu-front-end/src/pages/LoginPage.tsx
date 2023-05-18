@@ -57,11 +57,11 @@ export default function LoginPage() {
     <>
       <div className="fixed z-0 inset-0 overflow-hidden bg-gradient-to-b from-black to-slate-600 flex justify-center items-center">
         <div
-          className={`
+          className={line(`
             absolute z-0 inset-0 bg-cover bg-center
             transition-all duration-1000 blur-lg opacity-50
             ${activePage === 'login' ? 'scale-[120%]' : 'scale-110'}
-          `}
+          `)}
           style={{ backgroundImage: `url("${FsApi.getImageStreamUrl('bg-desktop')}")` }}
         />
         <div className="semi-always-dark w-64">

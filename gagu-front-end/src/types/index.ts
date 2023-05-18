@@ -36,7 +36,7 @@ export interface IOffsetInfo {
 
 export interface IContextMenuItem {
   icon: JSX.Element
-  label: string
+  name: string
   onClick: () => void
   isShow?: boolean
   children?: IContextMenuItem[]

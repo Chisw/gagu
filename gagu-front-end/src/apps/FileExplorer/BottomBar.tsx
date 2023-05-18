@@ -99,7 +99,7 @@ export default function BottomBar(props: BottomBarProps) {
             toast.success(t('tip.copied', { value }))
           }}
         >
-          <SvgIcon.Copy size={14} className="inline -mt-[2px]" />
+          <SvgIcon.Copy size={12} className="inline -mt-[2px]" />
         </span>
       </div>
       <div className="flex-shrink-0 flex items-center pl-4 pr-1 font-din text-gray-400">

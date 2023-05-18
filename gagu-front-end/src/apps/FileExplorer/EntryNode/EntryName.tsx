@@ -161,9 +161,10 @@ export default function EntryName(props: EntryNameProps) {
               }
             }}
             onBlur={handleName}
-            onKeyUp={e => {
+            onKeyDown={e => {
               const { key } = e
               if (key === 'Enter') {
+                e.preventDefault()
                 handleName(e)
               } else if (key === 'Escape') {
                 onFail('cancel')

@@ -39,7 +39,6 @@ export default function EntryIcon(props: IconProps) {
     return thumbnailSupported && useThumbnail && isViewable && !thumbnailErr
   }, [thumbnailSupported, useThumbnail, isViewable, thumbnailErr])
 
-
   return (
     <div
       data-extension-label={extensionLabel}
@@ -60,7 +59,9 @@ export default function EntryIcon(props: IconProps) {
           data-app-id={callableAppId}
           className={line(`
             gagu-app-icon absolute z-0 right-0 bottom-0 left-1/2 rounded-sm shadow-sm
-            ${isSmall ? 'ml-[4px] w-[8px] h-[8px]' : 'ml-4 w-[10px] h-[10px]'}
+            opacity-0 group-hover:opacity-100
+            transition-opacity duration-200
+            ${isSmall ? 'ml-[4px] w-[8px] h-[8px]' : 'ml-4 w-[12px] h-[12px]'}
           `)}
         />
       )}
