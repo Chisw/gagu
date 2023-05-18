@@ -18,7 +18,7 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      <Toaster containerClassName="break-words" />
+      <Toaster containerClassName="break-all" />
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/" element={<DesktopPage />} />

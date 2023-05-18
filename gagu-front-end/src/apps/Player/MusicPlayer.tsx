@@ -4,7 +4,7 @@ import { APP_ID_MAP, APP_LIST } from '..'
 import { AppComponentProps } from '../../types'
 import { useRequest, useOpenOperation, usePlayInfo } from '../../hooks'
 import { FsApi } from '../../api'
-import { getPaddedNo, getReadableSize, line } from '../../utils'
+import { getEntryPath, getPaddedNo, getReadableSize, line } from '../../utils'
 import SpectrumCanvas from './common/SpectrumCanvas'
 import VolumeSlider from './common/VolumeSlider'
 import ProgressSlider from './common/ProgressSlider'
@@ -81,8 +81,7 @@ export default function MusicPlayer(props: AppComponentProps) {
 
   useEffect(() => {
     if (activeEntry) {
-      const { name, parentPath } = activeEntry
-      queryAudioTags(`${parentPath}/${name}`)
+      queryAudioTags(getEntryPath(activeEntry))
     }
   }, [activeEntry, queryAudioTags])
 

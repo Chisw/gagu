@@ -38,8 +38,8 @@ export default function TextEditor(props: AppComponentProps) {
 
   useEffect(() => {
     if (activeEntry) {
-      const { parentPath, name, extension } = activeEntry
-      getTextContent(`${parentPath}/${name}`)
+      const { name, extension } = activeEntry
+      getTextContent(getEntryPath(activeEntry))
       setWindowTitle(name)
       if (ENTRY_ICON_LIST.find(l => l.type === 'code')?.matchList.includes(extension)) {
         setMonoMode(true)

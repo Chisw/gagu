@@ -29,7 +29,7 @@ import {
   sizeMapState,
   transferTaskListState,
   transferSignalState,
-  lastUploadedPathState,
+  lastChangedPathState,
   // entryListMapState,
 } from '../../states'
 import {
@@ -50,6 +50,7 @@ import {
 import ShareModal from '../../components/ShareModal'
 import { useTranslation } from 'react-i18next'
 import EntryNode from './EntryNode'
+import DnDWrapper from '../../components/DnDWrapper'
 
 export default function FileExplorer(props: AppComponentProps) {
 
@@ -69,7 +70,7 @@ export default function FileExplorer(props: AppComponentProps) {
   const [, setContextMenuData] = useRecoilState(contextMenuDataState)
   const [transferTaskList, setTransferTaskList] = useRecoilState(transferTaskListState)
   const [transferSignal, setTransferSignal] = useRecoilState(transferSignalState)
-  const [lastUploadedPath] = useRecoilState(lastUploadedPathState)
+  const [lastUploadedPath] = useRecoilState(lastChangedPathState)
 
   const [sideCollapse, setSideCollapse] = useState(false)
   const [currentPath, setCurrentPath] = useState('')
@@ -145,18 +146,13 @@ export default function FileExplorer(props: AppComponentProps) {
     let folderCount = 0
     let fileCount = 0
 
-    entryList.forEach(({ type }) => type === EntryType.directory ? folderCount++ : fileCount++)
+    entryList.forEach(({ type }) => type === 'directory' ? folderCount++ : fileCount++)
 
     const entryListCount = entryList.length
     const isEntryListEmpty = entryListCount === 0
 
     return { entryList, entryListCount, isEntryListEmpty, folderCount, fileCount }
   }, [data, filterText, hiddenShow])
-
-  // useEffect(() => {
-  //   const container: any = containerRef.current
-  //   if (container) container.scrollTo({ top: 0 })
-  // }, [currentPage])
 
   const disabledMap: IToolBarDisabledMap = useMemo(() => {
     const { position, list } = visitHistory
@@ -345,7 +341,7 @@ export default function FileExplorer(props: AppComponentProps) {
         const successList: boolean[] = []
         for (const entry of processList) {
           const { name } = entry
-          const { success } = await deleteEntry(`${currentPath}/${name}`)
+          const { success } = await deleteEntry(getEntryPath(entry))
           success && document.querySelector(`.gagu-entry-node[data-entry-name="${name}"]`)?.setAttribute('style', 'opacity:0;')
           successList.push(success)
         }
@@ -353,7 +349,7 @@ export default function FileExplorer(props: AppComponentProps) {
         close()
       },
     })
-  }, [deleteEntry, currentPath, selectedEntryList, handleRefresh, t])
+  }, [deleteEntry, selectedEntryList, handleRefresh, t])
 
   useEffect(() => {
     if (lastUploadedPath.path === currentPath) {
@@ -386,7 +382,7 @@ export default function FileExplorer(props: AppComponentProps) {
   }, [currentPath])
 
   useEffect(() => {
-    const prevEntry = entryList.find(({ name, parentPath }) => `${parentPath}/${name}` === lastVisitedPath)
+    const prevEntry = entryList.find((entry) => getEntryPath(entry) === lastVisitedPath)
     if (prevEntry) {
       setSelectedEntryList([prevEntry])
       setScrollWaiter({ wait: true })
@@ -398,8 +394,7 @@ export default function FileExplorer(props: AppComponentProps) {
   }, [filterText])
 
   const updateDirectorySize = useCallback(async (entry: IEntry) => {
-    const { name, parentPath } = entry
-    const path = `${parentPath}/${name}`
+    const path = getEntryPath(entry)
     const { success, data } = await queryDirectorySize(path)
     success && setSizeMap({ ...sizeMap, [path]: data })
   }, [queryDirectorySize, sizeMap, setSizeMap])
@@ -520,7 +515,6 @@ export default function FileExplorer(props: AppComponentProps) {
 
   useHotKey({
     type: 'keyup',
-    // bindCondition: isTopWindow && !newDirMode && !newTxtMode && !renameMode && !filterMode && !ContextMenu.isOpen(),
     bindCondition: isTopWindow && !newDirMode && !newTxtMode && !renameMode && !filterMode,
     hotKeyMap: {
       'Delete': disabledMap.delete ? null : handleDeleteClick,
@@ -540,7 +534,7 @@ export default function FileExplorer(props: AppComponentProps) {
       'Shift+ArrowUp': disabledMap.backToParentDirectory ? null : handleBackToParentDirectory,
       'Shift+ArrowRight': disabledMap.navForward ? null : handleNavForward,
       'Shift+ArrowLeft': disabledMap.navBack ? null : handleNavBack,
-      'Shift+ArrowDown': (selectedEntryList.length === 1 && selectedEntryList[0].type === EntryType.directory)
+      'Shift+ArrowDown': (selectedEntryList.length === 1 && selectedEntryList[0].type === 'directory')
         ? () => handleDirOpen(selectedEntryList[0])
         : null,
     },
@@ -548,7 +542,7 @@ export default function FileExplorer(props: AppComponentProps) {
 
   const handleContextMenu = useCallback((event: any) => {
     let isOnBlank = true
-    let isOnDir = false
+    let isOnDirectory = false
     let isOnImage = false
     let contextEntryList: IEntry[] = [...selectedEntryList]
 
@@ -564,7 +558,7 @@ export default function FileExplorer(props: AppComponentProps) {
       const entryName = targetEntry.getAttribute('data-entry-name')
       const entry = entryList.find(o => o.name === entryName)
 
-      if (isDir) isOnDir = true
+      if (isDir) isOnDirectory = true
       if (GEN_THUMBNAIL_IMAGE_LIST.includes(targetEntry.getAttribute('data-extension'))) {
         isOnImage = true
       }
@@ -617,7 +611,7 @@ export default function FileExplorer(props: AppComponentProps) {
       {
         icon: <SvgIcon.Apps />,
         name: t`action.openWith`,
-        isShow: !isOnDir && isSingleConfirmed,
+        isShow: !isOnDirectory && isSingleConfirmed,
         onClick: () => { },
         children: CALLABLE_APP_LIST.map(app => ({
           icon: <div className="gagu-app-icon w-4 h-4" data-app-id={app.id} />,
@@ -647,7 +641,7 @@ export default function FileExplorer(props: AppComponentProps) {
       {
         icon: <SvgIcon.FolderInfo />,
         name: t`action.folderSize`,
-        isShow: isOnDir,
+        isShow: isOnDirectory,
         onClick: () => updateDirectorySize(contextEntryList[0]),
       },
       {
@@ -779,18 +773,20 @@ export default function FileExplorer(props: AppComponentProps) {
                 const isSelected = selectedEntryList.some(o => isSameEntry(o, entry))
                 const thumbnailSupported = rootInfo.thumbnailSupported
                 return (
-                  <EntryNode
+                  <DnDWrapper
                     key={encodeURIComponent(`${entry.name}-${entry.type}`)}
-                    {...{ entry, gridMode, renameMode, isSelected, thumbnailSupported, sizeMap, scrollHook }}
-                    requestState={{
-                      deleting,
-                      sizeQuerying,
-                    }}
-                    onClick={handleEntryClick}
-                    onDoubleClick={handleEntryDoubleClick}
-                    onNameSuccess={handleNameSuccess}
-                    onNameFail={handleNameFail}
-                  />
+                    entry={entry}
+                    thumbnailSupported={thumbnailSupported}
+                  >
+                    <EntryNode
+                      {...{ entry, gridMode, renameMode, isSelected, thumbnailSupported, sizeMap, scrollHook }}
+                      requestState={{ deleting, sizeQuerying }}
+                      onClick={handleEntryClick}
+                      onDoubleClick={handleEntryDoubleClick}
+                      onNameSuccess={handleNameSuccess}
+                      onNameFail={handleNameFail}
+                    />
+                  </DnDWrapper>
                 )
               })}
             </div>

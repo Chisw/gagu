@@ -5,7 +5,7 @@ import { EmptyPanel, SvgIcon } from '../../components/base'
 import { useRequest } from '../../hooks'
 import { IUploadTransferTask } from '../../types'
 import { getReadableSize, line } from '../../utils'
-import { lastUploadedPathState, transferSignalState, transferTaskListState } from '../../states'
+import { lastChangedPathState, transferSignalState, transferTaskListState } from '../../states'
 import { Button, SideSheet } from '@douyinfe/semi-ui'
 import { useTranslation } from 'react-i18next'
 import { cloneDeep } from 'lodash-es'
@@ -25,7 +25,7 @@ export default function TransferPanel() {
 
   const [transferTaskList, setTransferTaskList] = useRecoilState(transferTaskListState)
   const [transferSignal] = useRecoilState(transferSignalState)
-  const [, setLastUploadedPath] = useRecoilState(lastUploadedPathState)
+  const [, setLastUploadedPath] = useRecoilState(lastChangedPathState)
 
   const [visible, setVisible] = useState(false)
   const [uploadInfo, setUploadInfo] = useState({ ratio: 0, speed: '' })

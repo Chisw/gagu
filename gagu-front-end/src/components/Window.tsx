@@ -160,6 +160,7 @@ export default function Window(props: WindowProps) {
           `)}
           style={transformStyle}
           onMouseDownCapture={handleMoveToFront}  // click is too late
+          onDragEnterCapture={handleMoveToFront}
         >
           {/* header */}
           <div

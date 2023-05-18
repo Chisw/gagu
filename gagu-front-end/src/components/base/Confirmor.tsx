@@ -3,7 +3,7 @@ import { ReactNode } from 'react'
 import { SvgIcon } from './SvgIcon'
 
 interface ConfirmorProps {
-  type: 'download' | 'delete'
+  type: 'download' | 'delete' | 'tip'
   content: ReactNode
   t: (key: string | TemplateStringsArray) => string
   onConfirm: (close: () => void) => void
@@ -12,6 +12,7 @@ interface ConfirmorProps {
 const iconMap = {
   download: <SvgIcon.Download size={36} />,
   delete: <SvgIcon.Delete size={36} />,
+  tip: <SvgIcon.Warning size={36} />,
 }
 
 export function Confirmor(props: ConfirmorProps) {

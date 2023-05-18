@@ -9,7 +9,7 @@ interface useDragOperationsProps {
   onDrop: (files: INestedFile[], dir?: string) => void
 }
 
-const clear = () => document.querySelectorAll('.gagu-entry-node').forEach(el => el.removeAttribute('data-drag-hover'))
+const clearOutline = () => document.querySelectorAll('.gagu-entry-node').forEach(el => el.removeAttribute('data-drag-hover'))
 
 export function useDragOperations(props: useDragOperationsProps) {
 
@@ -32,10 +32,10 @@ export function useDragOperations(props: useDragOperationsProps) {
       const closestDir = target.closest('[data-is-directory="true"]')
 
       if (closestDir) {
-        clear()
+        clearOutline()
         closestDir.setAttribute('data-drag-hover', 'true')
       } else {
-        clear()
+        clearOutline()
       }
 
       const targetDir = closestDir ? closestDir.getAttribute('data-entry-name') : undefined
@@ -49,7 +49,7 @@ export function useDragOperations(props: useDragOperationsProps) {
       if (type === 'drop') {
         getDataTransferNestedFileList(dataTransfer).then(files => {
           onDrop(files, targetDir)
-          clear()
+          clearOutline()
         })
       }
     }

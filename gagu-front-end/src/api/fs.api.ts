@@ -1,5 +1,5 @@
 import { AxiosRequestConfig } from 'axios'
-import { BASE_URL, UserInfoStore } from '../utils'
+import { BASE_URL, UserInfoStore, getEntryPath } from '../utils'
 import { IEntry, IResponse, IRootInfo } from '../types'
 import service from './service'
 
@@ -74,18 +74,14 @@ export class FsApi {
   }
 
   static getFileStreamUrl = (entry: IEntry) => {
-    const { name, parentPath } = entry
-    const path = `${parentPath}/${name}`
-    return `${BASE_URL}/api/fs/stream?path=${path}&token=${UserInfoStore.getToken()}`
+    return `${BASE_URL}/api/fs/stream?path=${getEntryPath(entry)}&token=${UserInfoStore.getToken()}`
   }
 
   static getThumbnailUrl = (entry: IEntry) => {
     if (entry.extension === 'svg') {
       return this.getFileStreamUrl(entry)
     }
-    const { name, parentPath } = entry
-    const path = `${parentPath}/${name}`
-    return `${BASE_URL}/api/fs/thumbnail?path=${path}&token=${UserInfoStore.getToken()}`
+    return `${BASE_URL}/api/fs/thumbnail?path=${getEntryPath(entry)}&token=${UserInfoStore.getToken()}`
   }
 
   static getAvatarStreamUrl = (username: string) => {

@@ -11,8 +11,8 @@ export const transferTaskListState = atom<ITransferTask[]>({
   default: [],
 })
 
-export const lastUploadedPathState = atom<{ path: string, timestamp: number }>({
-  key: 'lastUploadedPathState',
+export const lastChangedPathState = atom<{ path: string, timestamp: number }>({
+  key: 'lastChangedPathState',
   default: {
     path: '',
     timestamp: 0,

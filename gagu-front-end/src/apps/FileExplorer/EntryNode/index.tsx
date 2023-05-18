@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { IEntry } from '../../../types'
-import { getReadableSize, line } from '../../../utils'
+import { getEntryPath, getReadableSize, line } from '../../../utils'
 import EntryIcon from './EntryIcon'
 import EntryName, { NameCreationType, NameFailType } from './EntryName'
 import { useEffect, useRef, useState } from 'react'
@@ -20,6 +20,7 @@ interface EntryNodeProps {
     sizeQuerying: boolean
     deleting: boolean
   }
+  defaultViewable?: boolean
   onClick?: (e: any, entry: IEntry) => void
   onDoubleClick?: (entry: IEntry) => void
   onNameSuccess?: (entry: IEntry) => void
@@ -39,6 +40,7 @@ export default function EntryNode(props: EntryNodeProps) {
     sizeMap = {},
     scrollHook,
     requestState,
+    defaultViewable = false,
     onClick = () => {},
     onDoubleClick = () => {},
     onNameSuccess = () => {},
@@ -47,11 +49,12 @@ export default function EntryNode(props: EntryNodeProps) {
 
   const { name, type, parentPath, extension, hidden, size, lastModified } = entry
   const isSmall = !gridMode
-  const bytes = size === undefined ? sizeMap[`${parentPath}/${name}`] : size
+  const path = getEntryPath(entry)
+  const bytes = size === undefined ? sizeMap[path] : size
   const sizeLabel = bytes === undefined ? '--' : getReadableSize(bytes)
   const dateLabel = lastModified ? DateTime.fromMillis(lastModified).toFormat('yyyy-MM-dd HH:mm') : ''
 
-  const [isViewable, setIsViewable] = useState(false)
+  const [isViewable, setIsViewable] = useState(defaultViewable)
 
   const nodeRef = useRef<any>(null)
 
@@ -72,7 +75,6 @@ export default function EntryNode(props: EntryNodeProps) {
       data-is-directory={type === 'directory'}
       data-selected={isSelected}
       data-extension={extension}
-      // draggable
       className={line(`
         gagu-entry-node
         relative overflow-hidden group
