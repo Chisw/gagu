@@ -192,11 +192,11 @@ export class FsController {
     }
   }
 
-  @Get('tags')
+  @Get('audio-tags')
   @Permission(UserPermission.read)
-  async getTags(@Query('path') path: string) {
+  async getAudioTags(@Query('path') path: string) {
     try {
-      const data = await this.fsService.getTags(path)
+      const data = await this.fsService.getAudioTags(path)
       return data
     } catch (err) {
       return {

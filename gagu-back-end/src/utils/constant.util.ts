@@ -93,6 +93,8 @@ export const GEN_THUMBNAIL_VIDEO_LIST = [
   'webm',
 ]
 
+export const GEN_THUMBNAIL_AUDIO_LIST = ['mp3']
+
 export const GEN_THUMBNAIL_IMAGE_LIST = [
   'jpg',
   'jpeg',
@@ -107,6 +109,7 @@ export const GEN_THUMBNAIL_IMAGE_LIST = [
 
 export const GEN_THUMBNAIL_LIST = [
   ...GEN_THUMBNAIL_VIDEO_LIST,
+  ...GEN_THUMBNAIL_AUDIO_LIST,
   ...GEN_THUMBNAIL_IMAGE_LIST,
 ]
 

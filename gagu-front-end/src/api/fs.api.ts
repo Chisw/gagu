@@ -68,8 +68,8 @@ export class FsApi {
     return data
   }
 
-  static getTags = async (path: string, config?: AxiosRequestConfig) => {
-    const { data } = await service.get(`/api/fs/tags?path=${path}`, config)
+  static queryAudioTags = async (path: string, config?: AxiosRequestConfig) => {
+    const { data } = await service.get(`/api/fs/audio-tags?path=${path}`, config)
     return data
   }
 

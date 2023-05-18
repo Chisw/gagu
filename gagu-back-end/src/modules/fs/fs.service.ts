@@ -27,6 +27,7 @@ import {
   getEntryPath,
   FORBIDDEN_ENTRY_NAME_LIST,
   DEPENDENCIES_MAP,
+  GEN_THUMBNAIL_AUDIO_LIST,
 } from '../../utils'
 import * as nodeDiskInfo from 'node-disk-info'
 import * as md5 from 'md5'
@@ -307,7 +308,7 @@ export class FsService {
     return exifData
   }
 
-  async getTags(path: string) {
+  async getAudioTags(path: string) {
     return new Promise((resolve, reject) => {
       jsmediatags.read(path, {
         onSuccess: (tagInfo: any) => {
@@ -320,9 +321,9 @@ export class FsService {
             return
           }
 
-          const { data, format } = picture
-          const { data: recordingTime } = TDRC
-          const { data: releaseTime } = TDRL
+          const { data, format } = picture || {}
+          const { data: recordingTime } = TDRC || {}
+          const { data: releaseTime } = TDRL || {}
 
           let base64String = ''
           for (let i = 0; i < data.length; i++) {
@@ -359,6 +360,8 @@ export class FsService {
       let targetPath = path
 
       const isGenVideo = GEN_THUMBNAIL_VIDEO_LIST.includes(extension)
+      const isGenAudio = GEN_THUMBNAIL_AUDIO_LIST.includes(extension)
+
       if (isGenVideo) {
         const cacheThumbnailPath = await thumbsupply.generateThumbnail(path, {
           size: thumbsupply.ThumbSize.MEDIUM,
@@ -367,6 +370,14 @@ export class FsService {
           cacheDir: thumbnailDirPath,
         })
         targetPath = cacheThumbnailPath
+      } else if (isGenAudio) {
+        const tagData: any = await this.getAudioTags(path)
+        const base64 = tagData?.base64
+        if (base64) {
+          const buffer = dataURLtoBuffer(base64)
+          buffer && writeFileSync(thumbnailFilePath, buffer)
+          targetPath = thumbnailFilePath
+        }
       }
 
       await new Promise(async (resolve, reject) => {

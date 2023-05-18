@@ -4,7 +4,7 @@ import { APP_ID_MAP, APP_LIST } from '..'
 import { AppComponentProps } from '../../types'
 import { useRequest, useOpenOperation, usePlayInfo } from '../../hooks'
 import { FsApi } from '../../api'
-import { getPaddedNo, getReadableSize } from '../../utils'
+import { getPaddedNo, getReadableSize, line } from '../../utils'
 import SpectrumCanvas from './common/SpectrumCanvas'
 import VolumeSlider from './common/VolumeSlider'
 import ProgressSlider from './common/ProgressSlider'
@@ -46,7 +46,7 @@ export default function MusicPlayer(props: AppComponentProps) {
   const [volume, setVolume] = useState(1)
   const [volumeSliderShow, setVolumeSliderShow] = useState(false)
 
-  const { request: getTags, data, loading } = useRequest(FsApi.getTags)
+  const { request: queryAudioTags, data, loading } = useRequest(FsApi.queryAudioTags)
 
   const audioRef = useRef<HTMLAudioElement>(null)
   const audioEl = useMemo(() => {
@@ -82,9 +82,9 @@ export default function MusicPlayer(props: AppComponentProps) {
   useEffect(() => {
     if (activeEntry) {
       const { name, parentPath } = activeEntry
-      getTags(`${parentPath}/${name}`)
+      queryAudioTags(`${parentPath}/${name}`)
     }
-  }, [activeEntry, getTags])
+  }, [activeEntry, queryAudioTags])
 
   const handlePlayOrPause = useCallback(() => {
     if (!audioEl) return
@@ -192,18 +192,35 @@ export default function MusicPlayer(props: AppComponentProps) {
             return (
               <div
                 key={name}
-                className="px-2 py-1 text-xs text-white even:bg-black even:bg-opacity-5 hover:bg-black hover:bg-opacity-10 flex items-center group"
+                className="relative p-2 text-xs text-white even:bg-black even:bg-opacity-5 hover:bg-black hover:bg-opacity-10 flex items-center group"
                 onDoubleClick={onClick}
               >
-                <div className="mr-2 font-din text-3xl opacity-60 italic">{indexNo}.</div>
+                <div
+                  className="gagu-app-icon flex-shrink-0 mr-2 w-10 h-10 rounded-sm shadow-lg overflow-hidden"
+                  data-app-id="music-player"
+                >
+                  <div
+                    className="w-full h-full bg-cover bg-center"                    
+                    style={{ backgroundImage: `url("${FsApi.getThumbnailUrl(entry)}")` }}
+                  />
+                </div>
                 <div className="flex-grow">
-                  <div>{name}</div>
                   <div>
-                    <span className="opacity-50">{getReadableSize(size!)}</span>
+                    <span className="font-din opacity-60">{indexNo}. </span>{name}
+                  </div>
+                  <div>
+                    <span className="opacity-50 font-din">{getReadableSize(size!)}</span>
                   </div>
                 </div>
                 <div
-                  className={`px-2 cursor-pointer opacity-80 hover:opacity-100 active:opacity-70 ${isActive ? '' : 'hidden group-hover:block'}`}
+                  className={line(`
+                    absolute top-0 right-0 bottom-0
+                    px-4 cursor-pointer opacity-80
+                    hover:opacity-100 hover:bg-white hover:bg-opacity-10 active:opacity-70
+                    backdrop-blur
+                    flex justify-center items-center
+                    ${isActive ? '' : 'hidden group-hover:flex'}
+                  `)}
                   onClick={onClick}
                 >
                   {activeIndex === entryIndex && isPlaying ? <SvgIcon.Pause size={24} /> : <SvgIcon.Play size={24} />}

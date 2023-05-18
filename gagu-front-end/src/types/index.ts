@@ -8,6 +8,7 @@ export * from './setting.type'
 
 export type PageType = 'PENDING' | 'login' | 'desktop' | 'explore' | 'touch' | 'sharing'
 export type PublicImageName = 'bg-desktop' | 'bg-sharing' | 'favicon'
+export type ThumbnailType = 'video' | 'audio' | 'image'
 
 export interface IResponse<T> {
   success: boolean

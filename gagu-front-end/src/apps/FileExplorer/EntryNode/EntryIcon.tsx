@@ -1,6 +1,6 @@
 import { ReactNode, useMemo, useState } from 'react'
-import { EntryType, IEntry } from '../../../types'
-import { ENTRY_ICON_LIST, GEN_THUMBNAIL_LIST, GEN_THUMBNAIL_VIDEO_LIST, line } from '../../../utils'
+import { EntryType, IEntry, ThumbnailType } from '../../../types'
+import { ENTRY_ICON_LIST, GEN_THUMBNAIL_AUDIO_LIST, GEN_THUMBNAIL_LIST, GEN_THUMBNAIL_VIDEO_LIST, line } from '../../../utils'
 import { CALLABLE_APP_LIST } from '../..'
 import { FsApi } from '../../../api'
 
@@ -24,20 +24,30 @@ export default function EntryIcon(props: IconProps) {
   const [thumbnailErr, setThumbnailErr] = useState(false)
   const [thumbnailLoading, setThumbnailLoading] = useState(true)
 
-  const { extensionLabel, useThumbnail, isVideo, isFolder, entryIconType, callableAppId } = useMemo(() => {
+  const { extensionLabel, useThumbnail, thumbnailType, isFolder, entryIconType, callableAppId } = useMemo(() => {
     const { extension, type } = entry
     const useThumbnail = GEN_THUMBNAIL_LIST.includes(extension)
-    const isVideo = GEN_THUMBNAIL_VIDEO_LIST.includes(extension)
     const isFolder = type === EntryType.directory
     const extensionLabel = isFolder ? '' : (extension.replace('_txt_new', 'txt').substring(0, 4) || 'N/A')
     const entryIconType = ENTRY_ICON_LIST.find(o => o.matchList.includes(extension))?.type
     const callableAppId = CALLABLE_APP_LIST.find(({ matchList }) => matchList!.includes(extension))?.id
-    return { extensionLabel, useThumbnail, isVideo, isFolder, entryIconType, callableAppId }
+    const thumbnailType: ThumbnailType = GEN_THUMBNAIL_VIDEO_LIST.includes(extension)
+      ? 'video'
+      : GEN_THUMBNAIL_AUDIO_LIST.includes(extension)
+        ? 'audio'
+        : 'image'
+    return { extensionLabel, useThumbnail, thumbnailType, isFolder, entryIconType, callableAppId }
   }, [entry])
 
   const showThumbnail = useMemo(() => {
     return thumbnailSupported && useThumbnail && isViewable && !thumbnailErr
   }, [thumbnailSupported, useThumbnail, isViewable, thumbnailErr])
+
+  const imageThumbnailClassName = useMemo(() => {
+    return thumbnailType === 'image'
+    ? `border-white shadow ${isSmall ? 'border' : 'border-2'} ${thumbnailLoading ? 'h-full aspect-square bg-loading' : ''}`
+    : ''
+  }, [thumbnailType, isSmall, thumbnailLoading])
 
   return (
     <div
@@ -66,17 +76,11 @@ export default function EntryIcon(props: IconProps) {
         />
       )}
       {showThumbnail && (
-        <ThumbnailWrapper isVideo={isVideo}>
+        <ThumbnailWrapper type={thumbnailType} loading={thumbnailLoading}>
           <img
             alt=""
             src={FsApi.getThumbnailUrl(entry)}
-            className={line(`
-              max-w-full max-h-full bg-white
-              ${thumbnailLoading
-                ? 'w-6 h-6 bg-loading'
-                : isVideo ? '' : `${isSmall ? 'border' : 'border-2'} border-white shadow`
-              }
-            `)}
+            className={line(`max-w-full max-h-full bg-white ${imageThumbnailClassName}`)}
             onLoad={() => setThumbnailLoading(false)}
             onError={() => {
               setThumbnailErr(true)
@@ -89,13 +93,34 @@ export default function EntryIcon(props: IconProps) {
   )
 }
 
-function ThumbnailWrapper(props: { isVideo: boolean, children: ReactNode }) {
-  const { isVideo, children } = props
-  return isVideo ? (
-    <div className="px-[2px] w-full aspect-[16/9] bg-black flex justify-center items-center">
-      {children}
-    </div>
-  ) : (
-    <>{children}</>
-  )
+function ThumbnailWrapper(props: { type: ThumbnailType, loading: boolean, children: ReactNode }) {
+  const { type, loading, children } = props
+  if (type === 'video') {
+    return (
+      <div
+        className={line(`
+          px-[2px] w-full aspect-[16/9] flex justify-center items-center shadow-lg
+          ${loading ? 'bg-loading' : 'bg-black'}
+        `)}
+      >
+        {children}
+      </div>
+    )
+  } else if (type === 'audio') {
+    return (
+      <div
+        className={line(`
+          relative w-4/5 aspect-square flex justify-center items-center shadow-lg overflow-hidden rounded-sm
+          after:content-[''] after:block after:absolute after:z-[0] after:left-0
+          after:-ml-[60%] after:-mt-[70%] after:w-full after:h-[300%] after:bg-white after:bg-opacity-30
+          ${loading ? 'bg-loading' : 'bg-white'}
+          after:rotate-[60deg]
+        `)}
+      >
+        {children}
+      </div>
+    )
+  } else {
+    return <>{children}</>
+  }
 }
