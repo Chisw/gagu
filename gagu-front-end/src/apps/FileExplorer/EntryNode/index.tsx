@@ -20,7 +20,6 @@ interface EntryNodeProps {
     sizeQuerying: boolean
     deleting: boolean
   }
-  defaultViewable?: boolean
   onClick?: (e: any, entry: IEntry) => void
   onDoubleClick?: (entry: IEntry) => void
   onNameSuccess?: (entry: IEntry) => void
@@ -40,7 +39,6 @@ export default function EntryNode(props: EntryNodeProps) {
     sizeMap = {},
     scrollHook,
     requestState,
-    defaultViewable = false,
     onClick = () => {},
     onDoubleClick = () => {},
     onNameSuccess = () => {},
@@ -54,7 +52,7 @@ export default function EntryNode(props: EntryNodeProps) {
   const sizeLabel = bytes === undefined ? '--' : getReadableSize(bytes)
   const dateLabel = lastModified ? DateTime.fromMillis(lastModified).toFormat('yyyy-MM-dd HH:mm') : ''
 
-  const [isViewable, setIsViewable] = useState(defaultViewable)
+  const [isViewable, setIsViewable] = useState(false)
 
   const nodeRef = useRef<any>(null)
 
@@ -70,11 +68,12 @@ export default function EntryNode(props: EntryNodeProps) {
 
   return (
     <div
+      draggable
       ref={nodeRef}
       data-entry-name={name}
-      data-is-directory={type === 'directory'}
-      data-selected={isSelected}
+      data-entry-type={type}
       data-extension={extension}
+      data-selected={isSelected}
       className={line(`
         gagu-entry-node
         relative overflow-hidden group

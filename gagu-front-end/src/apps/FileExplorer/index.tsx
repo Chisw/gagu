@@ -50,7 +50,6 @@ import {
 import ShareModal from '../../components/ShareModal'
 import { useTranslation } from 'react-i18next'
 import EntryNode from './EntryNode'
-import DnDWrapper from '../../components/DnDWrapper'
 
 export default function FileExplorer(props: AppComponentProps) {
 
@@ -86,7 +85,6 @@ export default function FileExplorer(props: AppComponentProps) {
   const [filterText, setFilterText] = useState('')
   const [scrollWaiter, setScrollWaiter] = useState<{ wait: boolean, smooth?: boolean }>({ wait: false })
   const [scrollHook, setScrollHook] = useState({ top: 0, height: 0 })
-  const [waitDropToCurrentPath, setWaitDropToCurrentPath] = useState(false)
   const [hiddenShow, setHiddenShow] = useState(false)
   const [abortController, setAbortController] = useState<AbortController | null>(null)
   const [shareModalVisible, setShareModalVisible] = useState(false)
@@ -432,7 +430,7 @@ export default function FileExplorer(props: AppComponentProps) {
   const handleEntryDoubleClick = useCallback((entry: IEntry) => {
     if (renameMode) return
     const { type, name } = entry
-    if (type === EntryType.directory) {
+    if (type === 'directory') {
       handleDirOpen(entry)
     } else {
       const app = getMatchedApp(entry)
@@ -501,14 +499,9 @@ export default function FileExplorer(props: AppComponentProps) {
 
   useDragOperations({
     containerInnerRef,
-    onEnter: () => {
-      setWaitDropToCurrentPath(true)
-    },
-    onLeave: () => {
-      setWaitDropToCurrentPath(false)
-    },
+    entryList,
+    selectedEntryList,
     onDrop: (nestedFileList, targetDir) => {
-      setWaitDropToCurrentPath(false)
       addUploadTransferTask(nestedFileList, targetDir)
     },
   })
@@ -554,11 +547,11 @@ export default function FileExplorer(props: AppComponentProps) {
     if (targetEntry) {
       isOnBlank = false
 
-      const isDir = targetEntry.getAttribute('data-is-directory') === 'true'
       const entryName = targetEntry.getAttribute('data-entry-name')
+      const isDirectory = targetEntry.getAttribute('data-entry-type') === EntryType.directory
       const entry = entryList.find(o => o.name === entryName)
 
-      if (isDir) isOnDirectory = true
+      if (isDirectory) isOnDirectory = true
       if (GEN_THUMBNAIL_IMAGE_LIST.includes(targetEntry.getAttribute('data-extension'))) {
         isOnImage = true
       }
@@ -728,7 +721,6 @@ export default function FileExplorer(props: AppComponentProps) {
           </div>
           <div
             ref={containerRef}
-            data-drag-hover={waitDropToCurrentPath}
             className="relative flex-grow overflow-x-hidden overflow-y-auto select-none"
             onMouseDownCapture={handleCancelSelect}
           >
@@ -773,20 +765,15 @@ export default function FileExplorer(props: AppComponentProps) {
                 const isSelected = selectedEntryList.some(o => isSameEntry(o, entry))
                 const thumbnailSupported = rootInfo.thumbnailSupported
                 return (
-                  <DnDWrapper
+                  <EntryNode
                     key={encodeURIComponent(`${entry.name}-${entry.type}`)}
-                    entry={entry}
-                    thumbnailSupported={thumbnailSupported}
-                  >
-                    <EntryNode
-                      {...{ entry, gridMode, renameMode, isSelected, thumbnailSupported, sizeMap, scrollHook }}
-                      requestState={{ deleting, sizeQuerying }}
-                      onClick={handleEntryClick}
-                      onDoubleClick={handleEntryDoubleClick}
-                      onNameSuccess={handleNameSuccess}
-                      onNameFail={handleNameFail}
-                    />
-                  </DnDWrapper>
+                    {...{ entry, gridMode, renameMode, isSelected, thumbnailSupported, sizeMap, scrollHook }}
+                    requestState={{ deleting, sizeQuerying }}
+                    onClick={handleEntryClick}
+                    onDoubleClick={handleEntryDoubleClick}
+                    onNameSuccess={handleNameSuccess}
+                    onNameFail={handleNameFail}
+                  />
                 )
               })}
             </div>

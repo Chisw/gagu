@@ -104,19 +104,14 @@ export function useDragSelect(props: useDragSelectProps) {
       }, 300)
     }
 
-    const bind = () => {
-      container.addEventListener('mousedown', mousedownListener)
-      document.addEventListener('mousemove', mousemoveListener)
-      document.addEventListener('mouseup', mouseupListener)
-    }
+    container.addEventListener('mousedown', mousedownListener)
+    document.addEventListener('mousemove', mousemoveListener)
+    document.addEventListener('mouseup', mouseupListener)
 
-    const unbind = () => {
+    return () => {
       container.removeEventListener('mousedown', mousedownListener)
       document.removeEventListener('mousemove', mousemoveListener)
       document.removeEventListener('mouseup', mouseupListener)
     }
-
-    bind()
-    return unbind
   }, [rectRef, containerRef, containerInnerRef, onDragging])
 }

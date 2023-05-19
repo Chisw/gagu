@@ -43,7 +43,7 @@ export function usePlayInfo(props: usePlayInfoProps) {
         const durationLabel = Duration.fromMillis((duration || 0) * 1000).toFormat(format)
         const playPercent = currentTime / duration * 100
         setPlayInfo({ currentTimeLabel, durationLabel, playPercent })
-      }, 1000)
+      }, 100)
     } else {
       clearInterval(timer)
     }

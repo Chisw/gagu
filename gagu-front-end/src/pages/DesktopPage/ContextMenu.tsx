@@ -96,7 +96,7 @@ export default function ContextMenu() {
                 )
               })}
               {isDock && (
-                <div className="absolute z-0 left-0 bottom-0 -mb-1 ml-3 w-3 h-3 bg-white rotate-45 rounded-sm" />
+                <div className="absolute z-[-1] left-0 bottom-0 -mb-1 ml-3 w-3 h-3 bg-white rotate-45 rounded-sm" />
               )}
             </Dropdown.Menu>
           }

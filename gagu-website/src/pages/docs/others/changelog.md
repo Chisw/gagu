@@ -32,7 +32,7 @@ Clear data directory means that all users, download tunnels and other data will 
   - feat: do not check extensions when renaming
   - feat: page switching transition effect
   - fix: global i18n
-  - fix: ./public/background -> ./public/image
+  - fix: `.io.gagu/public/background` -> `.io.gagu/public/image`
 
 - v0.0.39 (2023-05-12)
   - feat: customized favicon
