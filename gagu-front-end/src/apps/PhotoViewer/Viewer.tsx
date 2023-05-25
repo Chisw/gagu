@@ -26,7 +26,7 @@ export default function Viewer(props: ViewerProps) {
   return (
     <>
       <PhotoSlider
-        images={matchedEntryList.map(entry => ({ src: FsApi.getFileStreamUrl(entry), key: entry.name }))}
+        images={matchedEntryList.map(entry => ({ src: FsApi.getEntryStreamUrl(entry), key: entry.name }))}
         visible={viewerShow}
         onClose={() => setViewerShow(false)}
         index={activeIndex}

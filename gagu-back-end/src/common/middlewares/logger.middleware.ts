@@ -2,19 +2,19 @@ import { Injectable, NestMiddleware } from '@nestjs/common'
 import { Request, Response, NextFunction } from 'express'
 import { DateTime } from 'luxon'
 import { AuthService } from '../../modules/auth/auth.service'
-import { getReqToken, writeLog } from '../../utils'
+import { getRequestToken, writeLog } from '../../utils'
 import * as chalk from 'chalk'
 
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
   constructor(private readonly authService: AuthService) {}
 
-  use(req: Request, res: Response, next: NextFunction) {
+  use(request: Request, response: Response, next: NextFunction) {
     const startTime = Date.now()
-    const token = getReqToken(req)
+    const token = getRequestToken(request)
     const username = this.authService.findOneUsername(token) || 'UNKNOWN'
-    const { method, originalUrl, ip } = req
-    const { statusCode } = res
+    const { method, originalUrl, ip } = request
+    const { statusCode } = response
     if (
       originalUrl.startsWith('/api/') &&
       !originalUrl.startsWith('/api/fs/thumbnail') &&
@@ -29,7 +29,7 @@ export class LoggerMiddleware implements NestMiddleware {
       const status = `${method}/${statusCode}`
       const urlStr = decodeURIComponent(originalUrl)
 
-      res.once('finish', () => {
+      response.once('finish', () => {
         const interval = `${Date.now() - startTime}ms`
 
         const logRowConsole = `${chalk.green('[GAGU-LOG]')} ${dateTime} ${chalk.green(userInfo)} ${status} ${chalk.yellow(interval)} ${urlStr}`

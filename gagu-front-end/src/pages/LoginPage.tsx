@@ -47,7 +47,6 @@ export default function LoginPage() {
       UserInfoStore.set(userInfo)
       setActivePage('PENDING')
       setTimeout(() => navigate('/'), 500)
-      
     } else {
       toast.error(t(`server.${message}`))
     }

@@ -9,7 +9,7 @@ export const isSameEntry = (a: IEntry, b: IEntry) => {
 export const openInIINA = (entry: IEntry) => {
   if (!entry) return
   const a = document.createElement('a')
-  a.href = `iina://open?url=${encodeURIComponent(FsApi.getFileStreamUrl(entry))}`
+  a.href = `iina://open?url=${encodeURIComponent(FsApi.getEntryStreamUrl(entry))}`
   a.click()
 }
 

@@ -1,12 +1,24 @@
 import { readFileSync, writeFileSync } from 'fs'
 import { IAuthRecord, IUser, IUserInfo, User } from '../types'
-import { GAGU_PATH, HEADERS_AUTH_KEY } from './constant.util'
+import {
+  COOKIE_TOKEN_KEY,
+  GAGU_PATH,
+  HEADERS_AUTH_KEY,
+  HEADERS_AUTH_PREFIX,
+  TOKEN_KEY,
+} from './constant.util'
 import { Request } from 'express'
 
-export const getReqToken = (req: Request) => {
-  const authorization = req.header(HEADERS_AUTH_KEY) || ''
-  const queryToken = (req.query.token || '') as string
-  const token = authorization || queryToken
+export const getAuthorizationToken = (authorization: string) => {
+  return (authorization || '').replace(HEADERS_AUTH_PREFIX, '')
+}
+
+export const getRequestToken = (request: Request) => {
+  const authorization = request.header(HEADERS_AUTH_KEY) || ''
+  const authorizationToken = getAuthorizationToken(authorization)
+  const cookieToken = request.cookies[COOKIE_TOKEN_KEY]
+  const queryToken = request.query[TOKEN_KEY]
+  const token = authorizationToken || cookieToken || queryToken
   return token
 }
 

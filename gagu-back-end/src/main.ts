@@ -1,4 +1,4 @@
-import { HOST, LOGO_TEXT, readSettingsData } from './utils'
+import { HOST, IS_DEV, LOGO_TEXT, readSettingsData } from './utils'
 import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
 import {
@@ -11,6 +11,8 @@ import {
 } from './utils'
 import * as minimist from 'minimist'
 import * as chalk from 'chalk'
+import * as cookieParser from 'cookie-parser'
+import { json } from 'express'
 
 const argv = minimist(process.argv.slice(2), {
   alias: {
@@ -58,9 +60,15 @@ async function bootstrap() {
   const port = argv.port || settings.port || 9293
   const url = `http://${Host || HOST}:${port}`
 
-  const app = await NestFactory.create(AppModule)
+  const app = await NestFactory.create(AppModule, {
+    logger: IS_DEV
+      ? ['log', 'error', 'warn', 'debug', 'verbose']
+      : ['error', 'warn'],
+  })
 
   app.enableCors()
+  app.use(cookieParser())
+  app.use(json({ limit: '5mb' }))
   app.setGlobalPrefix('api')
 
   await app.listen(port, Host)

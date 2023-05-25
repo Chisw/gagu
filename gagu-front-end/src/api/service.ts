@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { BASE_URL, ERROR_TIMEOUT, HEADERS_AUTH_KEY, UserInfoStore } from '../utils'
+import { BASE_URL, ERROR_TIMEOUT, HEADERS_AUTH_KEY, HEADERS_AUTH_PREFIX, UserInfoStore } from '../utils'
 import toast from 'react-hot-toast'
 import { t } from 'i18next'
 
@@ -15,7 +15,7 @@ const service = axios.create({
 service.interceptors.request.use(config => {
   config.headers = {
     ...config.headers,
-    [HEADERS_AUTH_KEY]: UserInfoStore.getToken(),
+    [HEADERS_AUTH_KEY]: `${HEADERS_AUTH_PREFIX}${UserInfoStore.getToken()}`,
   }
   return config
 })

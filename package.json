@@ -32,6 +32,7 @@
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/serve-static": "^3.0.0",
     "chalk": "4.1.2",
+    "cookie-parser": "^1.4.6",
     "express-zip": "^3.0.0",
     "gm": "^1.23.1",
     "jsmediatags": "^3.9.7",

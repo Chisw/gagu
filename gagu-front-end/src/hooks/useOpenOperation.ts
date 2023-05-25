@@ -24,7 +24,7 @@ export function useOpenOperation(appId: string) {
   } = useMemo(() => {
     const activeEntry = matchedEntryList[activeIndex] as IEntry | undefined
     const activeEntryStreamUrl = activeEntry
-      ? FsApi.getFileStreamUrl(activeEntry)
+      ? FsApi.getEntryStreamUrl(activeEntry)
       : ''
 
     return {

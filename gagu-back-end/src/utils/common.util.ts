@@ -2,7 +2,7 @@ import { exec, spawn } from 'child_process'
 import { ServerOS } from './constant.util'
 import * as md5 from 'md5'
 
-export const genHashCode = () => md5(Math.random().toString())
+export const genRandomCode = () => md5(Math.random().toString())
 
 export const openInBrowser = (url: string) => {
   if (ServerOS.isMacOS) {

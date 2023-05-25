@@ -12,7 +12,7 @@ import { AuthService } from '../../modules/auth/auth.service'
 import { PERMISSION_DECORATOR_KEY } from '../decorators/permission.decorator'
 import { UserService } from '../../modules/user/user.service'
 import { IUser, UserPermissionType } from '../../types'
-import { getReqToken } from '../../utils'
+import { getRequestToken } from '../../utils'
 
 @Injectable()
 export class ApiGuard implements CanActivate {
@@ -29,16 +29,19 @@ export class ApiGuard implements CanActivate {
     const isPublic = this.reflector.get(PUBLIC_DECORATOR_KEY, handler)
     const requiredPermission: UserPermissionType | undefined =
       this.reflector.get(PERMISSION_DECORATOR_KEY, handler)
+
     if (isPublic) {
       return true
     } else {
       const request = context
         .switchToHttp()
         .getRequest<Request & { user: IUser | undefined }>()
-      const token = getReqToken(request)
+
+      const token = getRequestToken(request)
       const username = token
         ? this.authService.findOneUsername(token)
         : undefined
+
       const isLoggedIn = !!username
 
       if (isLoggedIn) {

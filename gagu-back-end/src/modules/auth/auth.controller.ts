@@ -3,11 +3,12 @@ import { Public } from '../../common/decorators/public.decorator'
 import { AuthService } from './auth.service'
 import { User, UserPermission } from '../../types'
 import {
-  genHashCode,
+  genRandomCode,
   genUserInfo,
   SERVER_MESSAGE_MAP,
   HEADERS_AUTH_KEY,
   getIsExpired,
+  getAuthorizationToken,
 } from '../../utils'
 import { UserService } from '../user/user.service'
 import { Permission } from '../../common/decorators/permission.decorator'
@@ -29,7 +30,7 @@ export class AuthController {
     if (user) {
       const { disabled } = user
       if (password === user.password) {
-        const token = genHashCode()
+        const token = Buffer.from(genRandomCode()).toString('base64')
         this.authService.create(token, username)
         if (disabled) {
           return {
@@ -65,7 +66,8 @@ export class AuthController {
   }
 
   @Get('pulse')
-  pulse(@Headers(HEADERS_AUTH_KEY) token: User.Token) {
+  pulse(@Headers(HEADERS_AUTH_KEY) authorization: string) {
+    const token = getAuthorizationToken(authorization)
     const username = this.authService.findOneUsername(token)
     if (username) {
       const user = this.userService.findOne(username)
@@ -91,7 +93,8 @@ export class AuthController {
   }
 
   @Post('logout')
-  logout(@Headers(HEADERS_AUTH_KEY) token: User.Token) {
+  logout(@Headers(HEADERS_AUTH_KEY) authorization: string) {
+    const token = getAuthorizationToken(authorization)
     this.authService.remove(token)
     return {
       success: true,
