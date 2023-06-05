@@ -37,15 +37,15 @@ export function useDragOperations(props: useDragOperationsProps) {
 
   const { request: renameEntry } = useRequest(FsApi.renameEntry)
 
-  const handleMoveTransfer = useCallback(async (transferEntryList: IEntry[], targetDirectoryEntry: IEntry) => {
+  const handleMoveTransfer = useCallback(async (transferEntryList: IEntry[], targetDirectory: IEntry) => {
     Confirmor({
       type: 'tip',
-      content: `${transferEntryList.map(({ name }) => name).join(', ')} -> ${targetDirectoryEntry.name}`,
+      content: `${transferEntryList.map(({ name }) => name).join(', ')} -> ${targetDirectory.name}`,
       t,
       onConfirm: async (close) => {
         for (const transferEntry of transferEntryList) {
           const oldPath = getEntryPath(transferEntry)
-          const newPathParentPath = getEntryPath(targetDirectoryEntry)
+          const newPathParentPath = getEntryPath(targetDirectory)
           const newPath = `${newPathParentPath}/${transferEntry.name}`
 
           if (oldPath === newPathParentPath) return
@@ -71,6 +71,10 @@ export function useDragOperations(props: useDragOperationsProps) {
       const entryName = closestEntryNode?.getAttribute('data-entry-name')
       const entryType = closestEntryNode?.getAttribute('data-entry-type')
 
+      const closestEntryName = closestEntryNode
+        ? entryName
+        : undefined
+
       if (type !== 'dragstart') {
         e.preventDefault()
         e.stopPropagation()
@@ -82,10 +86,6 @@ export function useDragOperations(props: useDragOperationsProps) {
       } else {
         clearOutline()
       }
-
-      const targetDirectory = closestEntryNode
-        ? entryName
-        : undefined
 
       if (type === 'dragstart') {
         const transferEntryList = selectedEntryList.length
@@ -115,16 +115,21 @@ export function useDragOperations(props: useDragOperationsProps) {
 
       if (type === 'drop') {
         setIsInnerDrag(false)
+        containerInner.setAttribute('data-drag-hover', 'false')
         const transferData = dataTransfer.getData('text/plain')
+        // inner
         if (transferData) {
           const transferEntryList = JSON.parse(transferData)
-          const targetDirectoryEntry = entryList.find(e => e.name === entryName && e.type === entryType)
-          if (targetDirectoryEntry && entryType === 'directory') {
-            handleMoveTransfer(transferEntryList, targetDirectoryEntry)
+          const targetDirectory = entryList.find(e => e.name === entryName && e.type === entryType)
+          if (targetDirectory && entryType === 'directory') {
+            handleMoveTransfer(transferEntryList, targetDirectory)
           }
+        // outer
         } else {
+          const type = entryList.find(e => e.name === closestEntryName)?.type
+          if (type === 'file') return
           getDataTransferNestedFileList(dataTransfer).then(files => {
-            onDrop(files, targetDirectory)
+            onDrop(files, closestEntryName)
             clearOutline()
           })
         }

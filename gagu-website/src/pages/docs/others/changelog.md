@@ -19,6 +19,13 @@ Clear data directory means that all users, download tunnels and other data will 
 
 ## v0.0.*
 
+- v0.0.42 (2023-06-05)
+  - feat: add basic drag and drop file transfer
+  - feat: display MP3 thumbnail
+  - fix: Enter key input line break problem when renaming
+  - fix: optimize the context menu
+  - fix: token format
+
 - v0.0.41 (2023-05-17)
   - feat: upgrade dependencies like React 18 and TailwindCSS 3
   - feat: wallpaper in Login and Sharing page
