@@ -1,5 +1,5 @@
 import { AxiosRequestConfig } from 'axios'
-import { BASE_URL, TOKEN_KEY, UserInfoStore, getEntryPath } from '../utils'
+import { BASE_URL, QUERY_TOKEN_KEY, UserInfoStore, getEntryPath } from '../utils'
 import { IEntry, IResponse, IRootInfo } from '../types'
 import service from './service'
 
@@ -74,14 +74,14 @@ export class FsApi {
   }
 
   static getEntryStreamUrl = (entry: IEntry) => {
-    return `${BASE_URL}/api/fs/stream?path=${getEntryPath(entry)}&${TOKEN_KEY}=${UserInfoStore.getToken()}`
+    return `${BASE_URL}/api/fs/stream?path=${getEntryPath(entry)}&${QUERY_TOKEN_KEY}=${UserInfoStore.getToken()}`
   }
 
   static getThumbnailUrl = (entry: IEntry) => {
     if (entry.extension === 'svg') {
       return this.getEntryStreamUrl(entry)
     }
-    return `${BASE_URL}/api/fs/thumbnail?path=${getEntryPath(entry)}&${TOKEN_KEY}=${UserInfoStore.getToken()}`
+    return `${BASE_URL}/api/fs/thumbnail?path=${getEntryPath(entry)}&${QUERY_TOKEN_KEY}=${UserInfoStore.getToken()}`
   }
 
   static getAvatarStreamUrl = (username: string) => {

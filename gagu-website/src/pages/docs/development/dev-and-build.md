@@ -87,7 +87,6 @@ There are also many dependencies used throughout the project:
 [@craco/craco](https://npmjs.com/package/@craco/craco)&emsp;
 [axios](https://npmjs.com/package/axios)&emsp;
 [chalk](https://npmjs.com/package/chalk)&emsp;
-[cookie-parser](https://npmjs.com/package/cookie-parser)&emsp;
 [express-zip](https://npmjs.com/package/express-zip)&emsp;
 [gm](https://npmjs.com/package/gm)&emsp;
 [jsmediatags](https://npmjs.com/package/jsmediatags)&emsp;

@@ -11,7 +11,6 @@ import {
 } from './utils'
 import * as minimist from 'minimist'
 import * as chalk from 'chalk'
-import * as cookieParser from 'cookie-parser'
 import { json } from 'express'
 
 const argv = minimist(process.argv.slice(2), {
@@ -67,7 +66,6 @@ async function bootstrap() {
   })
 
   app.enableCors()
-  app.use(cookieParser())
   app.use(json({ limit: '5mb' }))
   app.setGlobalPrefix('api')
 

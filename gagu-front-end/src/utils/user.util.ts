@@ -1,5 +1,4 @@
 import { IUserInfo, UserPermission, UserPermissionType } from '../types'
-import { COOKIE_TOKEN_KEY } from './constant.util'
 
 export const GAGU_USER_INFO_KEY = 'GAGU_USER_INFO_KEY'
 
@@ -28,12 +27,10 @@ export const UserInfoStore = {
 
   set(userInfo: IUserInfo) {
     localStorage.setItem(GAGU_USER_INFO_KEY, JSON.stringify(userInfo))
-    document.cookie = `${COOKIE_TOKEN_KEY}=${userInfo.token}`
   },
 
   remove() {
     localStorage.removeItem(GAGU_USER_INFO_KEY)
-    document.cookie = ''
   },
 }
 

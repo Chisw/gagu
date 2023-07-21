@@ -29,8 +29,7 @@ export const ENTRY_ICON_LIST = [
 export const PULSE_INTERVAL = 60 * 1000
 export const HEADERS_AUTH_KEY = 'Authorization'
 export const HEADERS_AUTH_PREFIX = 'Bearer '
-export const TOKEN_KEY = 'access_token'
-export const COOKIE_TOKEN_KEY = 'gagu_access_token'
+export const QUERY_TOKEN_KEY = 'access_token'
 
 export const GEN_THUMBNAIL_VIDEO_LIST = [
   'mp4',
