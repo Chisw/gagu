@@ -10,7 +10,7 @@ export class FsApi {
   }
 
   static queryEntryList = async (path: string, config?: AxiosRequestConfig) => {
-    const { data } = await service.get(`/api/fs/list?path=${path}`, config)
+    const { data } = await service.get(`/api/fs/list?path=${encodeURIComponent(path)}`, config)
     return data
   }
 
@@ -20,17 +20,17 @@ export class FsApi {
   }
 
   static queryDirectorySize = async (path: string, config?: AxiosRequestConfig) => {
-    const { data } = await service.get(`/api/fs/size?path=${path}`, config)
+    const { data } = await service.get(`/api/fs/size?path=${encodeURIComponent(path)}`, config)
     return data
   }
 
   static getTextContent = async (path: string, config?: AxiosRequestConfig) => {
-    const { data } = await service.get(`/api/fs/text?path=${path}`, config)
+    const { data } = await service.get(`/api/fs/text?path=${encodeURIComponent(path)}`, config)
     return data
   }
 
   static getExists = async (path: string, config?: AxiosRequestConfig) => {
-    const { data } = await service.get(`/api/fs/exists?path=${path}`, config)
+    const { data } = await service.get(`/api/fs/exists?path=${encodeURIComponent(path)}`, config)
     return data
   }
 
@@ -45,14 +45,14 @@ export class FsApi {
   }
 
   static deleteEntry = async (path: string, config?: AxiosRequestConfig) => {
-    const { data } = await service.delete(`/api/fs/delete?path=${path}`, config)
+    const { data } = await service.delete(`/api/fs/delete?path=${encodeURIComponent(path)}`, config)
     return data
   }
 
   static uploadFile = async (path: string, file: File, config?: AxiosRequestConfig) => {
     let formData = new FormData()
     formData.append('file', file)
-    const { data } = await service.post(`/api/fs/upload?path=${path}`, formData, { ...config, timeout: 0 })
+    const { data } = await service.post(`/api/fs/upload?path=${encodeURIComponent(path)}`, formData, { ...config, timeout: 0 })
     return data
   }
 
@@ -64,12 +64,12 @@ export class FsApi {
   }
 
   static getExif = async (path: string, config?: AxiosRequestConfig) => {
-    const { data } = await service.get(`/api/fs/exif?path=${path}`, config)
+    const { data } = await service.get(`/api/fs/exif?path=${encodeURIComponent(path)}`, config)
     return data
   }
 
   static queryAudioTags = async (path: string, config?: AxiosRequestConfig) => {
-    const { data } = await service.get(`/api/fs/audio-tags?path=${path}`, config)
+    const { data } = await service.get(`/api/fs/audio-tags?path=${encodeURIComponent(path)}`, config)
     return data
   }
 

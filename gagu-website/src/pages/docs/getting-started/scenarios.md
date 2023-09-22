@@ -25,10 +25,12 @@ Therefore, the usage of GAGU is mainly designed according to this pattern, GAGU 
 
 Similar applications are listed here, or there are more suitable ones for your reference:
 
-- chfs (CuteHttpFileServer) [http://iscute.cn/chfs](http://iscute.cn/chfs)
-- hfs (HTTP File Server) [https://github.com/rejetto/hfs](https://github.com/rejetto/hfs)
-- miniserve [https://github.com/svenstaro/miniserve](https://github.com/svenstaro/miniserve)
-- webd [https://webd.cf](https://webd.cf)
 - AirDroid [http://web.airdroid.com](http://web.airdroid.com)
+- chfs (CuteHttpFileServer) [http://iscute.cn/chfs](http://iscute.cn/chfs)
+- Dufs [https://github.com/sigoden/dufs](https://github.com/sigoden/dufs)
+- hfs (HTTP File Server) [https://github.com/rejetto/hfs](https://github.com/rejetto/hfs)
+- LocalSend [https://localsend.org](https://localsend.org)
+- miniserve [https://github.com/svenstaro/miniserve](https://github.com/svenstaro/miniserve)
 - Snapdrop [https://snapdrop.net](https://snapdrop.net)
+- webd [https://webd.cf](https://webd.cf)
 - Wechat File Helper [https://filehelper.weixin.qq.com](https://filehelper.weixin.qq.com)
