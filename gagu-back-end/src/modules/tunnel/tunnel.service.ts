@@ -51,6 +51,8 @@ export class TunnelService {
   }
 
   findUserTunnels(username: User.Username) {
-    return this.tunnelList.filter((t) => t.username === username)
+    return this.tunnelList.filter(
+      (t) => t.username === username && t.type === 'share',
+    )
   }
 }

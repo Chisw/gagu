@@ -65,6 +65,8 @@
   background-image: url("data: image/svg+xml, %3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' %3E%3Cpath fill='none' d='M0 0h24v24H0z' /%3E%3Cpath fill='%23d97706' d='M19 13H5v7h14v-7zm0-2a7 7 0 0 0-14 0h14zM6.382 3.968A8.962 8.962 0 0 1 12 2c2.125 0 4.078.736 5.618 1.968l1.453-1.453 1.414 1.414-1.453 1.453A8.962 8.962 0 0 1 21 11v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V11c0-2.125.736-4.078 1.968-5.618L3.515 3.93l1.414-1.414 1.453 1.453zM9 9a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm6 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z' /%3E%3C/svg%3E");
 }
 
+.gagu-entry-icon.--entry-folder[data-folder-name="app"]::before,
+.gagu-entry-icon.--entry-folder[data-folder-name="apps"]::before,
 .gagu-entry-icon.--entry-folder[data-folder-name="application"]::before,
 .gagu-entry-icon.--entry-folder[data-folder-name="applications"]::before {
   background-image: url("data: image/svg+xml, %3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' %3E%3Cpath fill='none' d='M0 0h24v24H0z' /%3E%3Cpath fill='%23d97706' d='M6.5 11.5a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9zm.5 10a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9zm10-10a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9zm0 10a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9zM6.5 9.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zm.5 10a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zm10-10a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zm0 10a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z' /%3E%3C/svg%3E");
@@ -114,6 +116,10 @@
   background-image: url("data: image/svg+xml, %3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' %3E%3Cpath fill='none' d='M0 0h24v24H0z' /%3E%3Cpath fill='%23d97706' d='M20 3v14a4 4 0 1 1-2-3.465V5H9v12a4 4 0 1 1-2-3.465V3h13zM5 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm11 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4z' /%3E%3C/svg%3E");
 }
 
+.gagu-entry-icon.--entry-folder[data-folder-name="img"]::before,
+.gagu-entry-icon.--entry-folder[data-folder-name="imgs"]::before,
+.gagu-entry-icon.--entry-folder[data-folder-name="image"]::before,
+.gagu-entry-icon.--entry-folder[data-folder-name="images"]::before,
 .gagu-entry-icon.--entry-folder[data-folder-name="picture"]::before,
 .gagu-entry-icon.--entry-folder[data-folder-name="pictures"]::before {
   background-image: url("data: image/svg+xml, %3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' %3E%3Cpath fill='none' d='M0 0h24v24H0z' /%3E%3Cpath fill='%23d97706' d='M4.828 21l-.02.02-.021-.02H2.992A.993.993 0 0 1 2 20.007V3.993A1 1 0 0 1 2.992 3h18.016c.548 0 .992.445.992.993v16.014a1 1 0 0 1-.992.993H4.828zM20 15V5H4v14L14 9l6 6zm0 2.828l-6-6L6.828 19H20v-1.172zM8 11a2 2 0 1 1 0-4 2 2 0 0 1 0 4z' /%3E%3C/svg%3E");

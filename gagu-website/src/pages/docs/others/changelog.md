@@ -19,6 +19,12 @@ Clear data directory means that all users, download tunnels and other data will 
 
 ## v0.0.*
 
+- v0.0.43 (2023-09-25)
+  - feat: delete-operation in PhotoViewer
+  - fix: file name special character recognition error
+  - fix: filter and display correct sharing records
+  - fix: optimize some styles and icons
+
 - v0.0.42 (2023-06-05)
   - feat: add basic drag and drop file transfer
   - feat: display MP3 thumbnail

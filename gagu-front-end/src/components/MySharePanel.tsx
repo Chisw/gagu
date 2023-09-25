@@ -61,7 +61,7 @@ export default function MySharePanel(props: MySharePanelProps) {
         )}
         closable={false}
         placement="left"
-        headerStyle={{ padding: '8px 12px', borderBottom: '1px solid #efefef' }}
+        headerStyle={{ padding: '8px 12px' }}
         bodyStyle={{ padding: 0 }}
         maskStyle={{ background: 'rgba(0, 0, 0, .2)' }}
         style={{ background: 'rgba(255, 255, 255, .6)', backdropFilter: 'blur(12px)' }}
@@ -70,7 +70,7 @@ export default function MySharePanel(props: MySharePanelProps) {
         onCancel={onClose}
       >
         <div className="relative w-full h-full overflow-y-auto">
-          <EmptyPanel show={!data?.tunnels.length} />
+          <EmptyPanel dark show={!data?.tunnels.length} />
 
           <div>
             {data?.tunnels.map((tunnel: ITunnel) => {
@@ -82,7 +82,7 @@ export default function MySharePanel(props: MySharePanelProps) {
                 >
                   <div>
                     <div className="font-bold">{downloadName}</div>
-                    <div className="mt-1 text-xs text-gray-400">
+                    <div className="mt-1 text-xs text-gray-600">
                       {getDateTime(createdAt)}
                       &emsp;
                       {leftTimes === undefined ? t`tip.noTimesLimit` : leftTimes}
