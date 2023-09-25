@@ -25,6 +25,7 @@ export default function ExplorePage() {
             isTopWindow={true}
             setWindowLoading={() => {}}
             setWindowTitle={() => {}}
+            closeWindow={() => {}}
             windowSize={{ width: 1080, height: 1920 }}
           />
         </div>

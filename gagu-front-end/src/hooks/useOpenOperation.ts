@@ -35,6 +35,7 @@ export function useOpenOperation(appId: string) {
 
   return {
     matchedEntryList,
+    setMatchedEntryList,
     activeIndex,
     activeEntry,
     activeEntryStreamUrl,

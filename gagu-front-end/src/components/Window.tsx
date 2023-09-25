@@ -175,10 +175,10 @@ export default function Window(props: WindowProps) {
               onDoubleClick={handleFullScreen}
             >
               <div
-                className="gagu-app-icon w-4 h-4 bg-center bg-no-repeat bg-contain"
+                className="gagu-app-icon flex-shrink-0 w-4 h-4 bg-center bg-no-repeat bg-contain"
                 data-app-id={appId}
               />
-              <span className="ml-2 text-xs">
+              <span className="ml-2 text-xs truncate">
                 {windowTitle || t(`app.${appId}`)}
               </span>
             </div>
@@ -236,6 +236,7 @@ export default function Window(props: WindowProps) {
               windowSize={windowSize}
               setWindowLoading={setWindowLoading}
               setWindowTitle={setWindowTitle}
+              closeWindow={handleClose}
             />
           </div>
         </div>

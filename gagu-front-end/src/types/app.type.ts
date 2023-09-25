@@ -5,6 +5,7 @@ export interface AppComponentProps {
   windowSize: { width: number, height: number }
   setWindowLoading: (loading: boolean) => void
   setWindowTitle: (title: string) => void
+  closeWindow: () => void
 }
 
 interface IAppComponent {

@@ -2,12 +2,14 @@ import { useMemo, useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { DownloadApi, FsApi, TunnelApi } from '../../api'
 import { SvgIcon } from '../../components/base'
-import { IconButton } from '../../components/base'
+import { Confirmor, IconButton } from '../../components/base'
 import { useRequest } from '../../hooks'
 import { TunnelType, IEntry } from '../../types'
-import { DOWNLOAD_PERIOD, getPaddedNo, getReadableSize, line } from '../../utils'
+import { DOWNLOAD_PERIOD, getEntryPath, getPaddedNo, getReadableSize, line } from '../../utils'
 import { getBaiduMapPinUrl } from '../../utils'
 import { useTranslation } from 'react-i18next'
+import { useRecoilState } from 'recoil'
+import { lastChangedPathState } from '../../states'
 
 interface ToolbarProps {
   imgEl: HTMLImageElement | null
@@ -16,9 +18,12 @@ interface ToolbarProps {
   matchedEntryList: IEntry[]
   isLight: boolean
   thumbnailListShow: boolean
+  setActiveIndex: (index: number) => void
+  setMatchedEntryList: (entryList: IEntry[]) => void
   setIsLight: (is: boolean) => void
   setThumbnailListShow: (is: boolean) => void
   handlePrevOrNext: (offset: number) => void
+  closeWindow: () => void
 }
 
 export default function Toolbar(props: ToolbarProps) {
@@ -30,15 +35,21 @@ export default function Toolbar(props: ToolbarProps) {
     matchedEntryList,
     isLight,
     thumbnailListShow,
+    setActiveIndex,
+    setMatchedEntryList,
     setIsLight,
     setThumbnailListShow,
     handlePrevOrNext,
+    closeWindow,
   } = props
 
   const { t } = useTranslation()
 
+  const [, setLastUploadedPath] = useRecoilState(lastChangedPathState)
+
   const { request: getExif, data: ExifData, setData } = useRequest(FsApi.getExif)
   const { request: createTunnel } = useRequest(TunnelApi.createTunnel)
+  const { request: deleteEntry } = useRequest(FsApi.deleteEntry)
 
   const [sizeInfo, setSizeInfo] = useState({ width: 0, height: 0 })
   const [mapPinUrl, setMapPinUrl] = useState('')
@@ -51,7 +62,6 @@ export default function Toolbar(props: ToolbarProps) {
       }
     }
   }, [imgEl, activeEntry])
-
 
   useEffect(() => {
     setMapPinUrl(getBaiduMapPinUrl(ExifData, activeEntry?.name))
@@ -113,7 +123,31 @@ export default function Toolbar(props: ToolbarProps) {
         icon: <SvgIcon.Delete size={14} />,
         title: t`action.delete`,
         disabled: !activeEntry,
-        onClick: () => { },
+        onClick: () => {
+          const { name } = activeEntry!
+          Confirmor({
+            type: 'delete',
+            content: t('tip.deleteItem', { name }),
+            t,
+            onConfirm: async (close) => {
+              const { success } = await deleteEntry(getEntryPath(activeEntry))
+              if (success) {
+                setLastUploadedPath({ path: activeEntry!.parentPath, timestamp: Date.now() })
+                const len = matchedEntryList.length
+                if (len === 1) {
+                  closeWindow()
+                } else {
+                  const newActiveIndex = activeIndex === matchedEntryList.length - 1
+                    ? activeIndex - 1
+                    : activeIndex
+                  setActiveIndex(newActiveIndex)
+                  setMatchedEntryList(matchedEntryList.filter(e => e.name !== name))
+                }
+                close()
+              }
+            },
+          })
+        },
       },
       {
         icon: <SvgIcon.ChevronRight size={14} />,
@@ -121,7 +155,7 @@ export default function Toolbar(props: ToolbarProps) {
         onClick: () => handlePrevOrNext(1),
       },
     ]
-  }, [thumbnailListShow, isLight, getExifData, activeEntry, matchedEntryList, setIsLight, setThumbnailListShow, handlePrevOrNext, createTunnel, t])
+  }, [t, matchedEntryList, activeEntry, getExifData, handlePrevOrNext, setThumbnailListShow, thumbnailListShow, setIsLight, isLight, createTunnel, deleteEntry, setLastUploadedPath, closeWindow, activeIndex, setActiveIndex, setMatchedEntryList])
 
   return (
     <>

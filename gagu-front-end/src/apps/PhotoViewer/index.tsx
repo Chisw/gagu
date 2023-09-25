@@ -18,6 +18,7 @@ export default function PhotoViewer(props: AppComponentProps) {
     windowSize: { width: windowWidth },
     setWindowTitle,
     setWindowLoading,
+    closeWindow,
   } = props
 
   const { t } = useTranslation()
@@ -27,6 +28,7 @@ export default function PhotoViewer(props: AppComponentProps) {
     activeIndex,
     activeEntry,
     activeEntryStreamUrl,
+    setMatchedEntryList,
     setActiveIndex,
   } = useOpenOperation(APP_ID_MAP.photoViewer)
 
@@ -111,13 +113,16 @@ export default function PhotoViewer(props: AppComponentProps) {
           <Toolbar
             imgEl={imgEl}
             activeIndex={activeIndex}
+            setActiveIndex={setActiveIndex}
             activeEntry={activeEntry}
             matchedEntryList={matchedEntryList}
+            setMatchedEntryList={setMatchedEntryList}
             isLight={isLight}
             thumbnailListShow={thumbnailListShow}
             setIsLight={setIsLight}
             setThumbnailListShow={setThumbnailListShow}
             handlePrevOrNext={handlePrevOrNext}
+            closeWindow={closeWindow}
           />
 
         </div>
