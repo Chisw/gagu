@@ -74,14 +74,14 @@ export class FsApi {
   }
 
   static getEntryStreamUrl = (entry: IEntry) => {
-    return `${BASE_URL}/api/fs/stream?path=${getEntryPath(entry)}&${QUERY_TOKEN_KEY}=${UserInfoStore.getToken()}`
+    return `${BASE_URL}/api/fs/stream?path=${encodeURIComponent(getEntryPath(entry))}&${QUERY_TOKEN_KEY}=${UserInfoStore.getToken()}`
   }
 
   static getThumbnailUrl = (entry: IEntry) => {
     if (entry.extension === 'svg') {
       return this.getEntryStreamUrl(entry)
     }
-    return `${BASE_URL}/api/fs/thumbnail?path=${getEntryPath(entry)}&${QUERY_TOKEN_KEY}=${UserInfoStore.getToken()}`
+    return `${BASE_URL}/api/fs/thumbnail?path=${encodeURIComponent(getEntryPath(entry))}&${QUERY_TOKEN_KEY}=${UserInfoStore.getToken()}`
   }
 
   static getAvatarStreamUrl = (username: string) => {
