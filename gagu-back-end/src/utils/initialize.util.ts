@@ -22,7 +22,7 @@ export const initialize = () => {
       nickname: 'Admin',
       username: 'gagu',
       password: md5('9293'),
-      disabled: false,
+      invalid: false,
       createdAt: Date.now(),
       expiredAt: undefined,
       permissions: [
@@ -31,7 +31,8 @@ export const initialize = () => {
         UserPermission.write,
         UserPermission.delete,
       ],
-      rootEntryPathList: [],
+      assignedPathList: [],
+      favoritePathList: [],
     }
     writeUsersData([administrator])
   }

@@ -6,9 +6,16 @@ import {
   Delete,
   Param,
   Patch,
+  Query,
 } from '@nestjs/common'
 import { UserService } from './user.service'
-import { User, IUserForm, UserPermission, UserAbilityType } from '../../types'
+import {
+  User,
+  IUserForm,
+  UserPermission,
+  UserValidityType,
+  IUser,
+} from '../../types'
 import {
   deleteEntry,
   GAGU_PATH,
@@ -19,18 +26,19 @@ import {
 import { FsService } from '../fs/fs.service'
 import { Permission } from '../../common/decorators/permission.decorator'
 import { AuthService } from '../auth/auth.service'
+import { UserGetter } from 'src/common/decorators/user.decorator'
 
 @Controller('user')
 export class UserController {
   constructor(
+    private readonly userService: UserService,
     private readonly authService: AuthService,
     private readonly fsService: FsService,
-    private readonly userService: UserService,
   ) {}
 
   @Get()
   @Permission(UserPermission.administer)
-  getData() {
+  query() {
     const userList = this.userService.findAll()
     const authRecordList = this.authService.findAll()
     const loggedInList = authRecordList
@@ -97,20 +105,82 @@ export class UserController {
     }
   }
 
-  @Post(':username/:ability')
+  @Patch(':username/validity/:validity')
   @Permission(UserPermission.administer)
-  enable(
+  updateValidity(
     @Param('username') username: User.Username,
-    @Param('ability') ability: UserAbilityType,
+    @Param('validity') validity: UserValidityType,
   ) {
-    const isEnable = ability === 'enable'
-    this.userService.updateAbility(username, isEnable)
-    if (!isEnable) {
+    const isValid = validity === 'valid'
+    this.userService.updateValidity(username, isValid)
+    if (!isValid) {
       this.authService.removeUser(username)
     }
     return {
       success: true,
       message: SERVER_MESSAGE_MAP.OK,
+    }
+  }
+
+  @Get(':username/favorite')
+  @Permission(UserPermission.read)
+  queryFavorite(
+    @Param('username') username: User.Username,
+    @UserGetter() user: IUser,
+  ) {
+    if (username !== user.username) {
+      return {
+        success: false,
+        message: SERVER_MESSAGE_MAP.ERROR_403,
+      }
+    }
+    const list = this.userService.queryFavorite(username)
+    return {
+      success: true,
+      message: SERVER_MESSAGE_MAP.OK,
+      list,
+    }
+  }
+
+  @Post(':username/favorite')
+  @Permission(UserPermission.read)
+  updateFavorite(
+    @Param('username') username: User.Username,
+    @Query('path') path: string,
+    @UserGetter() user: IUser,
+  ) {
+    if (username !== user.username) {
+      return {
+        success: false,
+        message: SERVER_MESSAGE_MAP.ERROR_403,
+      }
+    }
+    const list = this.userService.createFavorite(username, path)
+    return {
+      success: true,
+      message: SERVER_MESSAGE_MAP.OK,
+      list,
+    }
+  }
+
+  @Delete(':username/favorite')
+  @Permission(UserPermission.read)
+  removeFavorite(
+    @Param('username') username: User.Username,
+    @Query('path') path: string,
+    @UserGetter() user: IUser,
+  ) {
+    if (username !== user.username) {
+      return {
+        success: false,
+        message: SERVER_MESSAGE_MAP.ERROR_403,
+      }
+    }
+    const list = this.userService.removeFavorite(username, path)
+    return {
+      success: true,
+      message: SERVER_MESSAGE_MAP.OK,
+      list,
     }
   }
 }

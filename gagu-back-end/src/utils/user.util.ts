@@ -41,12 +41,13 @@ export const readAuthData = () => {
 }
 
 export const genUserInfo = (user: IUser, token: User.Token) => {
-  const { nickname, username, disabled, expiredAt, permissions } = user
+  const { nickname, username, invalid, expiredAt, permissions } = user
+
   const userInfo: IUserInfo = {
     token,
     nickname,
     username,
-    disabled,
+    invalid,
     expiredAt,
     permissions,
   }

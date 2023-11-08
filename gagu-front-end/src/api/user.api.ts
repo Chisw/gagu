@@ -1,9 +1,10 @@
-import { IUserForm, UserAbilityType } from '../types'
+import { IUserForm, UserValidityType } from '../types'
+import { UserInfoStore } from '../utils'
 import service from './service'
 
 export class UserApi {
 
-  static getUserData = async () => {
+  static queryUser = async () => {
     const { data } = await service.get('/api/user')
     return data
   }
@@ -23,8 +24,27 @@ export class UserApi {
     return data
   }
 
-  static updateUserAbility = async (username: string, ability: UserAbilityType) => {
-    const { data } = await service.post(`/api/user/${username}/${ability}`)
+  static updateUserValidity = async (username: string, validity: UserValidityType) => {
+    const { data } = await service.patch(`/api/user/${username}/validity/${validity}`)
+    return data
+  }
+
+  static queryUserFavorite = async () => {
+    const username = UserInfoStore.getUsername()
+    const { data } = await service.get(`/api/user/${username}/favorite`)
+    return data
+  }
+
+  static createUserFavorite = async (path: string) => {
+    const username = UserInfoStore.getUsername()
+    console.log(username, 'user')
+    const { data } = await service.post(`/api/user/${username}/favorite?path=${encodeURIComponent(path)}`)
+    return data
+  }
+
+  static removeUserFavorite = async (path: string) => {
+    const username = UserInfoStore.getUsername()
+    const { data } = await service.delete(`/api/user/${username}/favorite?path=${encodeURIComponent(path)}`)
     return data
   }
 }

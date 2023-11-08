@@ -7,6 +7,7 @@ import { FsApi } from '../../../api'
 interface IconProps {
   entry: IEntry
   isSmall?: boolean
+  isFavorite?: boolean
   isViewable?: boolean
   hideApp?: boolean
   thumbnailSupported?: boolean
@@ -16,6 +17,7 @@ export default function EntryIcon(props: IconProps) {
   const {
     entry,
     isSmall = false,
+    isFavorite = false,
     isViewable = false,
     hideApp = false,
     thumbnailSupported = false,
@@ -61,6 +63,7 @@ export default function EntryIcon(props: IconProps) {
         bg-no-repeat bg-contain bg-center
         ${isSmall ? 'w-6 h-6 --small-icon' : 'h-12'}
         ${isFolder ? '--entry-folder' : '--entry-file'}
+        ${isFavorite ? '--is-favorite' : ''}
         ${`--icon-${entryIconType || 'unknown'}`}
       `)}
     >

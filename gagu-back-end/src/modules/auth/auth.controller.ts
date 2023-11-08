@@ -28,11 +28,11 @@ export class AuthController {
   ) {
     const user = this.userService.findOne(username)
     if (user) {
-      const { disabled } = user
+      const { invalid } = user
       if (password === user.password) {
         const token = Buffer.from(genRandomCode()).toString('base64')
         this.authService.create(token, username)
-        if (disabled) {
+        if (invalid) {
           return {
             success: false,
             message: SERVER_MESSAGE_MAP.ERROR_USER_DISABLED,

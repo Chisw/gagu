@@ -228,6 +228,7 @@ export class FsService {
       deviceName: presetDeviceName || ServerOS.hostname,
       desktopEntryList: this.getEntryList(`${GAGU_PATH.ROOT}/desktop`),
       rootEntryList,
+      favoritePathList: [],
       thumbnailSupported,
     }
 

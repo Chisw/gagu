@@ -7,7 +7,7 @@ export declare namespace User {
   type Password = string
 }
 
-export type UserAbilityType = 'enable' | 'disable'
+export type UserValidityType = 'valid' | 'invalid'
 
 export enum UserPermission {
   administer = 'administer',
@@ -22,11 +22,12 @@ export interface IUser {
   nickname: User.Nickname
   username: User.Username
   password: User.Password
-  disabled: boolean
+  invalid: boolean
   createdAt: number
   expiredAt?: number
   permissions: UserPermissionType[]
-  rootEntryPathList: string[]
+  assignedPathList: string[]
+  favoritePathList: string[]
 }
 
 export interface IUserForm extends IUser {
@@ -40,21 +41,23 @@ export class UserForm implements IUserForm {
   username: User.Username = ''
   password: User.Password = ''
   password2: User.Password = ''
-  disabled = false
+  invalid = false
   createdAt = 0
   expiredAt?: number
   permissions: UserPermissionType[] = [UserPermission.read]
-  rootEntryPathList: string[] = []
+  assignedPathList: string[] = []
+  favoritePathList: string[] = []
 
   constructor(user?: IUser, avatarPath?: string) {
     if (user) {
       this.avatar = avatarPath || ''
       this.nickname = user.nickname
       this.username = user.username
-      this.disabled = user.disabled
+      this.invalid = user.invalid
       this.expiredAt = user.expiredAt
       this.permissions = user.permissions
-      this.rootEntryPathList = user.rootEntryPathList
+      this.assignedPathList = user.assignedPathList
+      this.favoritePathList = user.favoritePathList
     }
   }
 }
@@ -69,7 +72,7 @@ export interface IUserInfo {
   token: User.Token
   nickname: User.Nickname
   username: User.Username
-  disabled: boolean
+  invalid: boolean
   expiredAt?: number
   permissions: UserPermissionType[]
 }

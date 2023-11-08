@@ -31,18 +31,20 @@ export class UserService {
       password,
       expiredAt,
       permissions,
-      rootEntryPathList,
+      assignedPathList,
+      favoritePathList,
     } = userForm
 
     const user: IUser = {
       nickname,
       username,
       password,
-      disabled: false,
+      invalid: false,
       createdAt: Date.now(),
       expiredAt,
       permissions,
-      rootEntryPathList,
+      assignedPathList,
+      favoritePathList,
     }
 
     this.userList.push(user)
@@ -56,7 +58,8 @@ export class UserService {
       password,
       expiredAt,
       permissions,
-      rootEntryPathList,
+      assignedPathList,
+      favoritePathList,
     } = userForm
 
     const user = this.userList.find((u) => u.username === username)
@@ -65,7 +68,8 @@ export class UserService {
       user.nickname = nickname
       user.expiredAt = expiredAt
       user.permissions = permissions
-      user.rootEntryPathList = rootEntryPathList
+      user.assignedPathList = assignedPathList
+      user.favoritePathList = favoritePathList
       if (password) {
         user.password = password
       }
@@ -78,11 +82,42 @@ export class UserService {
     this.sync()
   }
 
-  updateAbility(username: User.Username, enable: boolean) {
+  updateValidity(username: User.Username, isValid: boolean) {
     const user = this.userList.find((user) => user.username === username)
     if (user) {
-      user.disabled = !enable
+      user.invalid = !isValid
+      this.sync()
     }
-    this.sync()
+  }
+
+  queryFavorite(username: User.Username) {
+    const user = this.userList.find((user) => user.username === username)
+    return user?.favoritePathList || []
+  }
+
+  createFavorite(username: User.Username, path: string) {
+    const user = this.userList.find((user) => user.username === username)
+    if (user) {
+      const list = Array.from(
+        new Set([...(user.favoritePathList || []), path]),
+      )
+      user.favoritePathList = list
+      this.sync()
+      return list
+    } else {
+      return []
+    }
+  }
+
+  removeFavorite(username: User.Username, path: string) {
+    const user = this.userList.find((user) => user.username === username)
+    if (user) {
+      const list = user.favoritePathList.filter((p) => p !== path)
+      user.favoritePathList = list
+      this.sync()
+      return list
+    } else {
+      return []
+    }
   }
 }

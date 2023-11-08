@@ -73,10 +73,10 @@ export default function UserFormModal(props: UserFormModalProps) {
       nickname,
       username,
       password,
-      disabled,
+      invalid,
       expiredAt,
       permissions,
-      rootEntryPathList,
+      assignedPathList,
     } = form
 
     const res = await (MODE.isCreate ? createUser : updateUser)({
@@ -85,11 +85,12 @@ export default function UserFormModal(props: UserFormModalProps) {
       username,
       password: password ? md5(password) : '',
       password2: '',
-      disabled,
+      invalid,
       createdAt: 0,
       expiredAt,
       permissions: permissions.sort(permissionSorter),
-      rootEntryPathList,
+      assignedPathList,
+      favoritePathList: [],
     })
 
     if (res.success) {
@@ -260,9 +261,9 @@ export default function UserFormModal(props: UserFormModalProps) {
             {/* <Form.TagInput
               label="根目录"
               placeholder="请选择根目录"
-              field="rootEntryPathList"
+              field="assignedPathList"
               className="w-full"
-              // onChange={value => setForm({ ...form, rootEntryPathList: value as string[] })}
+              // onChange={value => setForm({ ...form, assignedPathList: value as string[] })}
             /> */}
             <div className="pt-2 flex justify-end">
               <Button

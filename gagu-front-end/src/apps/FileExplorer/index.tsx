@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { useRequest, useDragSelect, useDragOperations, useHotKey } from '../../hooks'
-import { FsApi, DownloadApi, TunnelApi } from '../../api'
+import { FsApi, DownloadApi, TunnelApi, UserApi } from '../../api'
 import BottomBar from './BottomBar'
 import ToolBar, { IToolBarDisabledMap } from './ToolBar'
 import { NameFailType } from './EntryNode/EntryName'
@@ -21,6 +21,7 @@ import {
   getEntryPath,
   DOWNLOAD_PERIOD,
   GEN_THUMBNAIL_IMAGE_LIST,
+  path2RootEntry,
 } from '../../utils'
 import {
   contextMenuDataState,
@@ -46,6 +47,7 @@ import {
   TransferTaskType,
   TransferTaskStatus,
   TunnelType,
+  IRootInfo,
 } from '../../types'
 import ShareModal from '../../components/ShareModal'
 import { useTranslation } from 'react-i18next'
@@ -62,7 +64,7 @@ export default function FileExplorer(props: AppComponentProps) {
 
   const { t } = useTranslation()
 
-  const [rootInfo] = useRecoilState(rootInfoState)
+  const [rootInfo, setRootInfo] = useRecoilState(rootInfoState)
   // const [entryListMap, setEntryListMap] =  useRecoilState(entryListMapState)
   const [sizeMap, setSizeMap] = useRecoilState(sizeMapState)
   const [, setOpenOperation] = useRecoilState(openOperationState)
@@ -90,7 +92,7 @@ export default function FileExplorer(props: AppComponentProps) {
   const [shareModalVisible, setShareModalVisible] = useState(false)
   const [sharedEntryList, setSharedEntryList] = useState<IEntry[]>([])
 
-  const rectRef = useRef(null)
+  const lassoRef = useRef(null)
   const containerRef = useRef(null)       // containerInnerRef 的容器，y-scroll-auto
   const containerInnerRef = useRef(null)  // entryList 容器，最小高度与 containerRef 的一致，自动撑高
   const uploadInputRef = useRef(null)
@@ -98,12 +100,15 @@ export default function FileExplorer(props: AppComponentProps) {
   const { request: queryEntryList, loading: querying, data, setData } = useRequest(FsApi.queryEntryList)
   const { request: deleteEntry, loading: deleting } = useRequest(FsApi.deleteEntry)
   const { request: queryDirectorySize, loading: sizeQuerying } = useRequest(FsApi.queryDirectorySize)
+  const { request: createUserFavorite } = useRequest(UserApi.createUserFavorite)
+  const { request: removeUserFavorite } = useRequest(UserApi.removeUserFavorite)
   const { request: createTunnel } = useRequest(TunnelApi.createTunnel)
 
-  const { rootEntryList, rootEntryPathList } = useMemo(() => {
-    const { rootEntryList } = rootInfo
+  const { rootEntryList, rootEntryPathList, favoriteEntryList } = useMemo(() => {
+    const { rootEntryList, favoritePathList } = rootInfo
     const rootEntryPathList = rootEntryList.map(getEntryPath)
-    return { rootEntryList, rootEntryPathList }
+    const favoriteEntryList = favoritePathList?.map(path2RootEntry).filter(Boolean) || []
+    return { rootEntryList, rootEntryPathList, favoriteEntryList }
   }, [rootInfo])
 
   const isInRoot = useMemo(() => rootEntryPathList.includes(currentPath), [rootEntryPathList, currentPath])
@@ -293,6 +298,23 @@ export default function FileExplorer(props: AppComponentProps) {
     (uploadInputRef.current as any)?.click()
   }, [])
 
+  const handleFavorite = useCallback((entry: IEntry, isFavorite: boolean) => {
+    Confirmor({
+      type: 'favorite',
+      content: t(isFavorite ? 'tip.unfavoriteItem' : 'tip.favoriteItem', { name: entry.name }),
+      t,
+      onConfirm: async (close) => {
+        const path = getEntryPath(entry)
+        const fn = isFavorite ? removeUserFavorite : createUserFavorite
+        const { success, list } = await fn(path)
+        if (success) {
+          setRootInfo({ ...rootInfo, favoritePathList: list } as IRootInfo)
+        }
+        close()
+      },
+    })
+  }, [createUserFavorite, removeUserFavorite, t, rootInfo, setRootInfo])
+
   const handleDownloadClick = useCallback((contextEntryList?: IEntry[]) => {
     const entryList = contextEntryList || selectedEntryList
     const { message, downloadName } = getDownloadInfo(currentPath, entryList, t)
@@ -469,7 +491,7 @@ export default function FileExplorer(props: AppComponentProps) {
   }, [setSelectedEntryList, entryList])
 
   useDragSelect({
-    rectRef,
+    lassoRef,
     containerRef,
     containerInnerRef,
     onDragging: handleRectSelect,
@@ -576,6 +598,8 @@ export default function FileExplorer(props: AppComponentProps) {
       })
     }
 
+    const isFavorite = isSingleConfirmed && favoriteEntryList.some(o => isSameEntry(o, contextEntryList[0]))
+
     const menuItemList: IContextMenuItem[] = [
       {
         icon: <SvgIcon.FolderAdd />,
@@ -634,8 +658,14 @@ export default function FileExplorer(props: AppComponentProps) {
       {
         icon: <SvgIcon.FolderInfo />,
         name: t`action.folderSize`,
-        isShow: isOnDirectory,
+        isShow: isOnDirectory && isSingleConfirmed,
         onClick: () => updateDirectorySize(contextEntryList[0]),
+      },
+      {
+        icon: isFavorite ? <SvgIcon.StarSolid /> : <SvgIcon.Star />,
+        name: isFavorite ? t`action.unfavorite` : t`action.favorite`,
+        isShow: isOnDirectory && isSingleConfirmed,
+        onClick: () => handleFavorite(contextEntryList[0], isFavorite),
       },
       {
         icon: <SvgIcon.Upload />,
@@ -664,27 +694,14 @@ export default function FileExplorer(props: AppComponentProps) {
     ]
 
     setContextMenuData({ eventData, menuItemList })
-  }, [
-    entryList,
-    selectedEntryList,
-    updateDirectorySize,
-    setContextMenuData,
-    setOpenOperation,
-    handleRefresh,
-    handleRename,
-    handleUploadClick,
-    handleDownloadClick,
-    handleDeleteClick,
-    handleShareClick,
-    t,
-  ])
+  }, [selectedEntryList, favoriteEntryList, t, handleRefresh, handleUploadClick, setContextMenuData, entryList, setOpenOperation, handleRename, updateDirectorySize, handleFavorite, handleDownloadClick, handleShareClick, handleDeleteClick])
 
   return (
     <>
       <div className="absolute inset-0 flex">
         {/* side */}
         <Side
-          {...{ sideCollapse, currentPath, activeRootEntry, rootEntryList }}
+          {...{ sideCollapse, currentPath, rootEntryList, favoriteEntryList }}
           onRootEntryClick={handleRootEntryClick}
         />
         {/* main */}
@@ -725,7 +742,7 @@ export default function FileExplorer(props: AppComponentProps) {
             onMouseDownCapture={handleCancelSelect}
           >
             <div
-              ref={rectRef}
+              ref={lassoRef}
               className="hidden absolute z-10 border box-content border-gray-400 bg-black bg-opacity-10 pointer-events-none"
             />
 
@@ -763,11 +780,12 @@ export default function FileExplorer(props: AppComponentProps) {
               {/* entry list */}
               {entryList.map(entry => {
                 const isSelected = selectedEntryList.some(o => isSameEntry(o, entry))
+                const isFavorite = favoriteEntryList.some(o => isSameEntry(o, entry))
                 const thumbnailSupported = rootInfo.thumbnailSupported
                 return (
                   <EntryNode
                     key={encodeURIComponent(`${entry.name}-${entry.type}`)}
-                    {...{ entry, gridMode, renameMode, isSelected, thumbnailSupported, sizeMap, scrollHook }}
+                    {...{ entry, gridMode, renameMode, isSelected, isFavorite, thumbnailSupported, sizeMap, scrollHook }}
                     requestState={{ deleting, sizeQuerying }}
                     onClick={handleEntryClick}
                     onDoubleClick={handleEntryDoubleClick}

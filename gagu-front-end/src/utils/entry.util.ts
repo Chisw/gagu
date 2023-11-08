@@ -1,9 +1,9 @@
 import { FsApi } from '../api'
 import { CALLABLE_APP_LIST } from '../apps'
-import { EntryType, IEntry, INestedFile } from '../types'
+import { EntryType, IEntry, INestedFile, IRootEntry } from '../types'
 
 export const isSameEntry = (a: IEntry, b: IEntry) => {
-  return a.name === b.name && a.type === b.type
+  return a.name === b.name && a.parentPath === b.parentPath
 }
 
 export const openInIINA = (entry: IEntry) => {
@@ -99,6 +99,24 @@ export const getDataTransferNestedFileList = async (dataTransfer: DataTransfer) 
     }
   }))
   return nestedFileList
+}
+
+export const path2RootEntry = (path: string) => {
+  const names = path.split('/')
+  const lastName = names.pop()
+
+  const entry: IRootEntry = {
+    name: lastName!,
+    type: EntryType.directory,
+    hidden: false,
+    lastModified: 0,
+    parentPath: names.join('/'),
+    hasChildren: false,
+    extension: '_dir',
+    isDisk: false,
+  }
+
+  return entry
 }
 
 

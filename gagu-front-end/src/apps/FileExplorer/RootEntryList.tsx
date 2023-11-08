@@ -1,11 +1,9 @@
-import { Tooltip } from '@douyinfe/semi-ui'
 import { SvgIcon } from '../../components/base'
 import { IRootEntry } from '../../types'
 import { getReadableSize, getEntryPath, line } from '../../utils'
 
 interface RootEntryListProps {
   currentPath: string
-  activeRootEntry: IRootEntry | null
   rootEntryList: IRootEntry[]
   onRootEntryClick: (rootEntry: IRootEntry) => void
 }
@@ -14,7 +12,6 @@ export default function RootEntryList(props: RootEntryListProps) {
 
   const {
     currentPath,
-    activeRootEntry,
     rootEntryList,
     onRootEntryClick,
   } = props
@@ -25,35 +22,26 @@ export default function RootEntryList(props: RootEntryListProps) {
         {rootEntryList.map(rootEntry => {
           const { spaceFree, spaceTotal, name, isDisk } = rootEntry
           const rootEntryPath = getEntryPath(rootEntry)
-          const isActive = rootEntryPath === getEntryPath(activeRootEntry)
+          const isActive = rootEntryPath === currentPath
           const canRootEntryClick = currentPath !== rootEntryPath
           const spaceUsed = isDisk ? spaceTotal! - spaceFree! : 0
           return (
             <div
               key={rootEntryPath}
               className={line(`
-                p-2 text-sm cursor-pointer
+                px-3 py-2 text-sm cursor-pointer
                 ${isActive
                   ? 'bg-white text-black'
-                  : 'bg-w hite-400 text-gray-500 hover:text-black'
+                  : 'text-gray-700 hover:text-black'
                 }
               `)}
               onClick={() => canRootEntryClick && onRootEntryClick(rootEntry)}
             >
               <div className="flex justify-between items-center">
-                <Tooltip
-                  position="right"
-                  content={(
-                    <span className="text-xs font-din">
-                      {rootEntryPath}
-                    </span>
-                  )}
-                >
-                  <span className="flex items-center">
-                    {isDisk ? <SvgIcon.HardDrive /> : <SvgIcon.Folder />}
-                    <span className="ml-1 truncate flex-grow">{name}</span>
-                  </span>
-                </Tooltip>
+                <span className="flex items-center">
+                  {isDisk ? <SvgIcon.HardDrive /> : <SvgIcon.Folder />}
+                  <span className="ml-1 truncate flex-grow">{name}</span>
+                </span>
                 {isDisk && (
                   <div className="font-din scale-75 origin-right opacity-60">
                     {`${getReadableSize(spaceUsed!)} / ${getReadableSize(spaceTotal!)}`}

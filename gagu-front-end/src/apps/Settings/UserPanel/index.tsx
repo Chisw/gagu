@@ -21,7 +21,7 @@ export default function UserPanel(props: IPanelProps) {
   const [formMode, setFormMode] = useState<formModeType>('CLOSE')
   const [form, setForm] = useState<IUserForm>(new UserForm())
 
-  const { request: refresh, data, loading } = useRequest(UserApi.getUserData)
+  const { request: refresh, data, loading } = useRequest(UserApi.queryUser)
 
   useEffect(() => {
     refresh()

@@ -11,7 +11,7 @@ export const UserInfoStore = {
         token: storeUserInfo.token || '',
         nickname: storeUserInfo.nickname || 'NO_NICKNAME',
         username: storeUserInfo.username || 'UNKNOWN',
-        disabled: storeUserInfo.disabled || false,
+        invalid: storeUserInfo.invalid || false,
         expiredAt: storeUserInfo.expiredAt,
         permissions: storeUserInfo.permissions || [],
       }
@@ -23,6 +23,10 @@ export const UserInfoStore = {
 
   getToken() {
     return this.get()?.token || ''
+  },
+
+  getUsername() {
+    return this.get()?.username || ''
   },
 
   set(userInfo: IUserInfo) {

@@ -8,6 +8,7 @@ import { useEffect, useRef, useState } from 'react'
 interface EntryNodeProps {
   entry: IEntry
   isSelected?: boolean
+  isFavorite?: boolean
   gridMode: boolean
   creationMode?: boolean
   renameMode?: boolean
@@ -30,6 +31,7 @@ export default function EntryNode(props: EntryNodeProps) {
   const {
     entry,
     isSelected = false,
+    isFavorite = false,
     gridMode,
     creationMode = false,
     renameMode = false,
@@ -88,7 +90,7 @@ export default function EntryNode(props: EntryNodeProps) {
       onClick={e => onClick(e, entry)}
       onDoubleClick={() => onDoubleClick(entry)}
     >
-      <EntryIcon {...{ isSmall, isViewable, entry, hideApp, thumbnailSupported }} />
+      <EntryIcon {...{ isSmall, isFavorite, isViewable, entry, hideApp, thumbnailSupported }} />
 
       <EntryName
         inputMode={(renameMode && isSelected) || creationMode}

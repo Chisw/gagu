@@ -5,7 +5,7 @@ import { formModeType } from '.'
 import { FsApi, UserApi } from '../../../api'
 import { Confirmor, SvgIcon } from '../../../components/base'
 import { useRequest } from '../../../hooks'
-import { IUser, IUserForm, User, UserAbilityType, UserForm, UserPermission } from '../../../types'
+import { IUser, IUserForm, User, UserValidityType, UserForm, UserPermission } from '../../../types'
 import { getDateTime, getIsExpired } from '../../../utils'
 
 interface UserListProps {
@@ -28,18 +28,18 @@ export default function UserList(props: UserListProps) {
 
   const { t } = useTranslation()
 
-  const { request: updateUserAbility } = useRequest(UserApi.updateUserAbility)
+  const { request: updateUserValidity } = useRequest(UserApi.updateUserValidity)
   const { request: removeUser } = useRequest(UserApi.removeUser)
 
-  const handleUpdateAbility = useCallback(async (username: User.Username, ability: UserAbilityType) => {
-    const res = await updateUserAbility(username, ability)
+  const handleUpdateAbility = useCallback(async (username: User.Username, ability: UserValidityType) => {
+    const res = await updateUserValidity(username, ability)
     if (res.success) {
       refresh()
       toast.success(res.message)
     } else {
       toast.error(res.message)
     }
-  }, [updateUserAbility, refresh])
+  }, [updateUserValidity, refresh])
 
   const handleRemove = useCallback(async (username: string) => {
     const { success, message } = await removeUser(username)
@@ -67,14 +67,14 @@ export default function UserList(props: UserListProps) {
       {
         label: t`action.disable`,
         icon: <SvgIcon.Forbid className="text-yellow-500" />,
-        show: !isAdmin && !user.disabled,
-        onClick: () => handleUpdateAbility(user.username, 'disable'),
+        show: !isAdmin && !user.invalid,
+        onClick: () => handleUpdateAbility(user.username, 'invalid'),
       },
       {
         label: t`action.enable`,
         icon: <SvgIcon.CheckCircle className="text-green-500" />,
-        show: !isAdmin && user.disabled,
-        onClick: () => handleUpdateAbility(user.username, 'enable'),
+        show: !isAdmin && user.invalid,
+        onClick: () => handleUpdateAbility(user.username, 'valid'),
       },
       {
         label: t`action.delete`,
@@ -113,7 +113,7 @@ export default function UserList(props: UserListProps) {
     <>
       <div className="relative z-0 flex flex-wrap -mx-2">
         {userList.map((user) => {
-          const { nickname, username, expiredAt, createdAt, disabled, permissions } = user
+          const { nickname, username, expiredAt, createdAt, invalid, permissions } = user
           const isLoggedIn = loggedInList.includes(username)
           const showExpire = !!expiredAt
           const isExpired = getIsExpired(expiredAt)
@@ -133,7 +133,7 @@ export default function UserList(props: UserListProps) {
                     {t`tip.expired`}
                   </span>
                 )}
-                {disabled && (
+                {invalid && (
                   <span
                     className={`
                       inline-block px-2 py-0 rounded-full select-none

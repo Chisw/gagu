@@ -22,11 +22,19 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common'
-import { IEntry, SettingKey, User, UserPermission } from '../../types'
+import {
+  IEntry,
+  IRootInfo,
+  IUser,
+  SettingKey,
+  User,
+  UserPermission,
+} from '../../types'
 import { mkdirSync, renameSync } from 'fs'
 import { Permission } from '../../common/decorators/permission.decorator'
 import { Public } from 'src/common/decorators/public.decorator'
 import 'express-zip'
+import { UserGetter } from 'src/common/decorators/user.decorator'
 
 @Controller('fs')
 export class FsController {
@@ -37,12 +45,16 @@ export class FsController {
 
   @Get('root')
   @Permission(UserPermission.read)
-  getRoot() {
+  getRoot(@UserGetter() user: IUser) {
     const deviceName = this.settingService.findOne(SettingKey.deviceName)
+    const rootInfo: IRootInfo = {
+      ...this.fsService.getRootInfo(deviceName),
+      favoritePathList: user.favoritePathList,
+    }
     return {
       success: true,
       message: SERVER_MESSAGE_MAP.OK,
-      data: this.fsService.getRootInfo(deviceName),
+      data: rootInfo,
     }
   }
 
