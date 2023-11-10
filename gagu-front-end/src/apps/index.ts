@@ -37,8 +37,8 @@ export const APP_LIST: IApp[] = [
     id: APP_ID_MAP.textEditor,
     runningId: 0,
     AppComponent: TextEditor,
-    width: 960,
-    height: 720,
+    width: 1000,
+    height: 800,
     resizeRange: {
       minWidth: 240,
       minHeight: 100,

@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import ToolButton from '../../components/ToolButton'
-import { copy, ENTRY_ICON_LIST, getEntryPath } from '../../utils'
+import { copy, ENTRY_ICON_LIST, getEntryPath, line } from '../../utils'
 import { FsApi } from '../../api'
 import { APP_ID_MAP, APP_LIST } from '..'
 import { AppComponentProps } from '../../types'
@@ -10,10 +10,12 @@ import { useOpenOperation, useRequest } from '../../hooks'
 import { useRecoilState } from 'recoil'
 import { entrySelectorState } from '../../states'
 import { useTranslation } from 'react-i18next'
+import ReactMarkdown from 'react-markdown'
+import 'github-markdown-css/github-markdown-light.css'
 
 export default function TextEditor(props: AppComponentProps) {
 
-  const { setWindowTitle, setWindowLoading } = props
+  const { isTopWindow, setWindowTitle, setWindowLoading } = props
 
   const { t } = useTranslation()
 
@@ -25,16 +27,30 @@ export default function TextEditor(props: AppComponentProps) {
     // setActiveIndex,
   } = useOpenOperation(APP_ID_MAP.textEditor)
 
-
   const [, setEntrySelector] = useRecoilState(entrySelectorState)
 
   const [value, setValue] = useState('')
   const [monoMode, setMonoMode] = useState(false)
+  const [markdownView, setMarkdownView] = useState(false)
+  const [markdownFullView, setMarkdownFullView] = useState(false)
+  const [fontSize, setFontSize] = useState(14)
 
   const { request: getTextContent, loading: fetching, data: textContent, setData: setTextContent } = useRequest(FsApi.getTextContent)
   const { request: uploadFile, loading: saving } = useRequest(FsApi.uploadFile)
 
+  const isMarkdown = useMemo(() => activeEntry?.extension === 'md', [activeEntry])
+  const submitDisabled = useMemo(() => (value === textContent && !saving )|| !activeEntry, [activeEntry, saving, textContent, value])
+
   useEffect(() => setWindowLoading(fetching), [setWindowLoading, fetching])
+
+  useEffect(() => {
+    if (isMarkdown) {
+      setMarkdownView(true)
+    } else {
+      setMarkdownView(false)
+      setMarkdownFullView(false)
+    }
+  }, [isMarkdown])
 
   useEffect(() => {
     if (activeEntry) {
@@ -63,6 +79,20 @@ export default function TextEditor(props: AppComponentProps) {
     }
   }, [value, activeEntry, uploadFile, setTextContent])
 
+  const bindCtrlS = useCallback((e: any) => {
+    const currKey = e.keyCode || e.which || e.charCode
+    if (currKey === 83 && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault()
+      if (!isTopWindow || submitDisabled) return
+      handleSave()
+    }
+  }, [handleSave, submitDisabled, isTopWindow])
+
+  useEffect(() => {
+    window.addEventListener('keydown', bindCtrlS)
+    return () => window.removeEventListener('keydown', bindCtrlS)
+  }, [bindCtrlS])
+
   return (
     <>
       <div className="absolute inset-0 flex flex-col">
@@ -70,7 +100,7 @@ export default function TextEditor(props: AppComponentProps) {
           <ToolButton
             title={t`action.save`}
             icon={<SvgIcon.Save />}
-            disabled={(value === textContent && !saving )|| !activeEntry}
+            disabled={submitDisabled}
             loading={saving}
             onClick={handleSave}
           />
@@ -81,12 +111,6 @@ export default function TextEditor(props: AppComponentProps) {
             onClick={() => setValue(textContent)}
           />
           <ToolButton
-            title={t`action.codeView`}
-            icon={<SvgIcon.CodeSlash />}
-            disabled={!activeEntry}
-            onClick={() => setMonoMode(!monoMode)}
-          />
-          <ToolButton
             title={t`action.copy`}
             icon={<SvgIcon.Copy />}
             disabled={!activeEntry}
@@ -95,15 +119,81 @@ export default function TextEditor(props: AppComponentProps) {
               toast.success('OK')
             }}
           />
+          <ToolButton
+            title={t`action.fontSmall`}
+            icon={<SvgIcon.FontSmall />}
+            disabled={fontSize <= 12}
+            onClick={() => setFontSize(fontSize - 2)}
+          />
+          <ToolButton
+            title={t`action.fontLarge`}
+            icon={<SvgIcon.FontLarge />}
+            disabled={fontSize >= 32}
+            onClick={() => setFontSize(fontSize + 2)}
+          />
+          <div className="flex-grow" />
+          <ToolButton
+            title={t`action.codeView`}
+            icon={<SvgIcon.CodeView />}
+            disabled={!activeEntry}
+            active={monoMode}
+            onClick={() => setMonoMode(!monoMode)}
+          />
+          <ToolButton
+            title={t`action.markdownView`}
+            icon={<SvgIcon.Markdown />}
+            disabled={!isMarkdown}
+            active={markdownView}
+            onClick={() => setMarkdownView(!markdownView)}
+          />
+          <ToolButton
+            title={t`action.markdownFullView`}
+            icon={<SvgIcon.MarkdownSolid />}
+            disabled={!markdownView}
+            active={markdownFullView}
+            onClick={() => setMarkdownFullView(!markdownFullView)}
+          />
         </div>
-        <div className="flex-grow">
+        <div className="flex-grow relative">
           {activeEntry ? (
-            <code style={monoMode ? undefined : { fontFamily: 'unset' }}>
-              <textarea
-                className="p-2 w-full h-full outline-none resize-none bg-transparent text-xs"
-                value={value}
-                onChange={e => setValue(e.target.value)}
-              />
+            <code
+              className="absolute inset-0"
+              style={monoMode ? undefined : { fontFamily: 'unset' }}
+            >
+              <div className="flex h-full">
+                <textarea
+                  className={line(`
+                    p-2 h-full outline-none resize-none bg-transparent
+                    ${markdownView
+                      ? markdownFullView
+                        ? 'hidden'
+                        : 'w-1/2'
+                      : 'w-full'
+                    }
+                  `)}
+                  style={{ fontSize }}
+                  value={value}
+                  onChange={e => setValue(e.target.value)}
+                />
+                {(isMarkdown && markdownView) && (
+                  <div
+                    className={line(`
+                      markdown-body p-6 w-1/2 h-full bg-white overflow-y-auto
+                      ${markdownFullView ? 'w-full' : 'border-l w-1/2'}
+                    `)}
+                  >
+                    <ReactMarkdown
+                      skipHtml={false}
+                      children={value}
+                      components={{
+                        a(props) {
+                          return <a target="_blank" {...props}>{props.children}</a>
+                        }
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
             </code>
           ) : (
             <div

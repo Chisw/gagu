@@ -28,7 +28,6 @@ Many unrealized ideas will be recorded here, waiting for development.
 
 - Drag and drop to move files
 - Directory caching mechanism
-- User folder favorites
 - Sort by time, size
 - Tree structure display
 - Scan and connect multiple devices in LAN
@@ -43,7 +42,6 @@ Many unrealized ideas will be recorded here, waiting for development.
 
 ### Text Editor
 
-- Markdown real-time editing preview
 - Code highlighting
 - Generate pictures for sharing
 
@@ -54,13 +52,13 @@ Many unrealized ideas will be recorded here, waiting for development.
 
 ### Music Player
 
-- MP3 thumbnail
 - Playlist favorites
 
 ### Video Player
 
 - Playlist favorites
 - Play continuously
+- Generate content screenshots
 
 ### Settings
 

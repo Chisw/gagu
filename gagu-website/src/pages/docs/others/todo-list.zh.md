@@ -28,7 +28,6 @@ layout: ../../../layouts/DocLayout.astro
 
 - 拖拽移动文件
 - 目录缓存机制
-- 用户文件夹收藏
 - 按时间、大小排序
 - 树结构显示
 - 局域网内扫描、连接多个设备
@@ -43,7 +42,6 @@ layout: ../../../layouts/DocLayout.astro
 
 ### 文本编辑器
 
-- Markdown 实时编辑预览
 - 代码高亮
 - 生成分享图片
 
@@ -54,13 +52,13 @@ layout: ../../../layouts/DocLayout.astro
 
 ### 音乐播放器
 
-- MP3 缩略图
 - 播放列表
 
 ### 视频播放器
 
 - 侧边列表
 - 连续播放
+- 生成内容截图
 
 ### 设置
 

@@ -9,6 +9,7 @@ interface ToolButtonProps {
   onClick?: () => void
   disabled?: boolean
   loading?: boolean
+  active?: boolean
 }
 
 export default function ToolButton(props: ToolButtonProps) {
@@ -20,6 +21,7 @@ export default function ToolButton(props: ToolButtonProps) {
     onClick = () => { },
     disabled = false,
     loading = false,
+    active = false,
   } = props
 
   return (
@@ -33,6 +35,7 @@ export default function ToolButton(props: ToolButtonProps) {
           ? 'cursor-not-allowed text-gray-200'
           : 'cursor-pointer bg-white text-gray-500 hover:text-black hover:bg-gray-100 active:bg-gray-200'
         }
+        ${active ? 'outline-2 outline outline-gray-300 outline-offset-[-6px]' : ''}
         ${className}
       `)}
       onClick={() => !disabled && onClick()}

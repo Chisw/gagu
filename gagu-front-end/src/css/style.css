@@ -88,3 +88,11 @@ body {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+.markdown-body ol li {
+  list-style: decimal !important;
+}
+
+.markdown-body ul li {
+  list-style: disc !important;
+}

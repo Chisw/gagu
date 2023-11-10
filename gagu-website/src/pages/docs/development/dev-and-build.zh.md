@@ -88,6 +88,7 @@ $ yarn start
 [axios](https://npmjs.com/package/axios)&emsp;
 [chalk](https://npmjs.com/package/chalk)&emsp;
 [express-zip](https://npmjs.com/package/express-zip)&emsp;
+[github-markdown-css](https://npmjs.com/package/github-markdown-css)&emsp;
 [gm](https://npmjs.com/package/gm)&emsp;
 [jsmediatags](https://npmjs.com/package/jsmediatags)&emsp;
 [lodash](https://npmjs.com/package/lodash)&emsp;
@@ -99,6 +100,7 @@ $ yarn start
 [qrcode.react](https://npmjs.com/package/qrcode.react)&emsp;
 [react-hot-toast](https://npmjs.com/package/react-hot-toast)&emsp;
 [react-i18next](https://npmjs.com/package/react-i18next)&emsp;
+[react-markdown](https://npmjs.com/package/react-markdown)&emsp;
 [react-photo-view](https://npmjs.com/package/react-photo-view)&emsp;
 [react-rnd](https://npmjs.com/package/react-rnd)&emsp;
 [recoil](https://npmjs.com/package/recoil)&emsp;
