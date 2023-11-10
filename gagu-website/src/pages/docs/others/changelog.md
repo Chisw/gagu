@@ -19,6 +19,10 @@ Clear data directory means that all users, download tunnels and other data will 
 
 ## v0.0.*
 
+- v0.0.44 (2023-11-10)
+  - feat: user favorites
+  - feat: view Markdown in TextEditor
+
 - v0.0.43 (2023-09-25)
   - feat: delete-operation in PhotoViewer
   - fix: file name special character recognition error
