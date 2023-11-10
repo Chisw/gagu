@@ -358,18 +358,21 @@ export default function FileExplorer(props: AppComponentProps) {
       content: message,
       t,
       onConfirm: async (close) => {
-        const successList: boolean[] = []
         for (const entry of processList) {
           const { name } = entry
-          const { success } = await deleteEntry(getEntryPath(entry))
-          success && document.querySelector(`.gagu-entry-node[data-entry-name="${name}"]`)?.setAttribute('style', 'opacity:0;')
-          successList.push(success)
+          const path = getEntryPath(entry)
+          const { success } = await deleteEntry(path)
+          if (success) {
+            document.querySelector(`.gagu-entry-node[data-entry-name="${name}"]`)?.setAttribute('style', 'opacity:0;')
+            const { favoritePathList } = rootInfo
+            setRootInfo({ ...rootInfo, favoritePathList: favoritePathList.filter((p) => p !== path) } as IRootInfo)
+          }
         }
         handleRefresh()
         close()
       },
     })
-  }, [deleteEntry, selectedEntryList, handleRefresh, t])
+  }, [deleteEntry, selectedEntryList, handleRefresh, t, setRootInfo, rootInfo])
 
   useEffect(() => {
     if (lastUploadedPath.path === currentPath) {
@@ -703,6 +706,7 @@ export default function FileExplorer(props: AppComponentProps) {
         <Side
           {...{ sideCollapse, currentPath, rootEntryList, favoriteEntryList }}
           onRootEntryClick={handleRootEntryClick}
+          onFavoriteCancel={(entry) => handleFavorite(entry, true)}
         />
         {/* main */}
         <div className="relative flex-grow h-full bg-white flex flex-col">

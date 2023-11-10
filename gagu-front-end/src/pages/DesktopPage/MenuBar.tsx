@@ -83,11 +83,7 @@ export default function MenuBar() {
   }, [pulse, setUserInfo])
 
   useEffect(() => {
-    const tick = () => {
-      const now = DateTime.local()
-      const str = now.toFormat('HH:mm')
-      setTimerStr(str)
-    }
+    const tick = () => setTimerStr(DateTime.local().toFormat('HH:mm'))
     tick()
     const timer = setInterval(tick, 1000)
     return () => clearInterval(timer)

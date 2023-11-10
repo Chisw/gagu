@@ -1,11 +1,12 @@
-import { SvgIcon } from '../../components/base'
-import { IRootEntry } from '../../types'
+import { IconButton, SvgIcon } from '../../components/base'
+import { IEntry, IRootEntry } from '../../types'
 import { getReadableSize, getEntryPath, line } from '../../utils'
 
 interface RootEntryListProps {
   currentPath: string
   rootEntryList: IRootEntry[]
   onRootEntryClick: (rootEntry: IRootEntry) => void
+  onFavoriteCancel?: (rootEntry: IEntry) => void
 }
 
 export default function RootEntryList(props: RootEntryListProps) {
@@ -14,6 +15,7 @@ export default function RootEntryList(props: RootEntryListProps) {
     currentPath,
     rootEntryList,
     onRootEntryClick,
+    onFavoriteCancel,
   } = props
 
   return (
@@ -37,11 +39,21 @@ export default function RootEntryList(props: RootEntryListProps) {
               `)}
               onClick={() => canRootEntryClick && onRootEntryClick(rootEntry)}
             >
-              <div className="flex justify-between items-center">
-                <span className="flex items-center">
+              <div>
+                <div className="flex justify-between items-center">
                   {isDisk ? <SvgIcon.HardDrive /> : <SvgIcon.Folder />}
                   <span className="ml-1 truncate flex-grow">{name}</span>
-                </span>
+                  {onFavoriteCancel && (
+                    <div onClick={(e) => e.stopPropagation()}>
+                      <IconButton
+                        size="xs"
+                        className="hover:outline-2 hover:outline-dashed hover:outline-yellow-400"
+                        icon={<SvgIcon.StarSolid size={10} className="text-yellow-500" />}
+                        onClick={() => onFavoriteCancel(rootEntry)}
+                      />
+                    </div>
+                  )}
+                </div>
                 {isDisk && (
                   <div className="font-din scale-75 origin-right opacity-60">
                     {`${getReadableSize(spaceUsed!)} / ${getReadableSize(spaceTotal!)}`}

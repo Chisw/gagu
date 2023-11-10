@@ -98,9 +98,7 @@ export class UserService {
   createFavorite(username: User.Username, path: string) {
     const user = this.userList.find((user) => user.username === username)
     if (user) {
-      const list = Array.from(
-        new Set([...(user.favoritePathList || []), path]),
-      )
+      const list = Array.from(new Set([...(user.favoritePathList || []), path]))
       user.favoritePathList = list
       this.sync()
       return list
@@ -119,5 +117,12 @@ export class UserService {
     } else {
       return []
     }
+  }
+
+  removeAllUsersFavorite(path: string) {
+    this.userList.forEach((user) => {
+      user.favoritePathList = user.favoritePathList.filter((p) => p !== path)
+    })
+    this.sync()
   }
 }

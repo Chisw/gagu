@@ -35,11 +35,13 @@ import { Permission } from '../../common/decorators/permission.decorator'
 import { Public } from 'src/common/decorators/public.decorator'
 import 'express-zip'
 import { UserGetter } from 'src/common/decorators/user.decorator'
+import { UserService } from '../user/user.service'
 
 @Controller('fs')
 export class FsController {
   constructor(
     private readonly fsService: FsService,
+    private readonly userService: UserService,
     private readonly settingService: SettingService,
   ) {}
 
@@ -132,6 +134,7 @@ export class FsController {
   @Permission(UserPermission.delete)
   remove(@Query('path') path: string) {
     deleteEntry(path)
+    this.userService.removeAllUsersFavorite(path)
     return {
       success: true,
       message: SERVER_MESSAGE_MAP.OK,

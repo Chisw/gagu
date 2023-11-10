@@ -1,5 +1,5 @@
 import { line } from '../../utils'
-import { IRootEntry } from '../../types'
+import { IEntry, IRootEntry } from '../../types'
 import RootEntryList from './RootEntryList'
 
 interface SideProps {
@@ -8,6 +8,7 @@ interface SideProps {
   rootEntryList: IRootEntry[]
   favoriteEntryList: IRootEntry[]
   onRootEntryClick: (rootEntry: IRootEntry) => void
+  onFavoriteCancel: (rootEntry: IEntry) => void
 }
 
 export default function Side(props: SideProps) {
@@ -18,6 +19,7 @@ export default function Side(props: SideProps) {
     rootEntryList,
     favoriteEntryList,
     onRootEntryClick,
+    onFavoriteCancel,
   } = props
   
   return (
@@ -35,6 +37,7 @@ export default function Side(props: SideProps) {
         <RootEntryList
           {...{ currentPath, rootEntryList: favoriteEntryList }}
           onRootEntryClick={onRootEntryClick}
+          onFavoriteCancel={onFavoriteCancel}
         />
       </div>
     </div>
