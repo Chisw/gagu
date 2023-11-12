@@ -41,7 +41,9 @@ export default function RootEntryList(props: RootEntryListProps) {
             >
               <div>
                 <div className="flex justify-between items-center">
-                  {isDisk ? <SvgIcon.HardDrive /> : <SvgIcon.Folder />}
+                  <span className="flex-shrink-0">
+                    {isDisk ? <SvgIcon.HardDrive /> : <SvgIcon.Folder />}
+                  </span>
                   <span className="ml-1 truncate flex-grow">{name}</span>
                   {onFavoriteCancel && (
                     <div onClick={(e) => e.stopPropagation()}>
