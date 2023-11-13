@@ -11,4 +11,14 @@ export class SettingApi {
     const { data } = await service.put('/api/setting', settings)
     return data
   }
+
+  static getLatestVersion = async () => {
+    const { data } = await service.get('/api/setting/version')
+    return data
+  }
+
+  static updateVersion = async () => {
+    const { data } = await service.post('/api/setting/version', undefined, { timeout: 0 })
+    return data
+  } 
 }

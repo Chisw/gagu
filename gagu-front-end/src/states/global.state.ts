@@ -26,12 +26,14 @@ export const rootInfoState = atom<IRootInfo>({
       isWindows: false,
       isLinux: false,
       isAndroid: false,
+      supportThumbnail: false,
+      supportCompression: false,
+      supportCurl: false,
     },
     deviceName: '--',
     desktopEntryList: [],
     rootEntryList: [],
     favoritePathList: [],
-    thumbnailSupported: false,
   },
 })
 

@@ -3,8 +3,8 @@ import { Public } from '../../common/decorators/public.decorator'
 import { AuthService } from './auth.service'
 import { User, UserPermission } from '../../types'
 import {
-  genRandomCode,
-  genUserInfo,
+  generateRandomCode,
+  generateUserInfo,
   SERVER_MESSAGE_MAP,
   HEADERS_AUTH_KEY,
   getIsExpired,
@@ -30,7 +30,7 @@ export class AuthController {
     if (user) {
       const { invalid } = user
       if (password === user.password) {
-        const token = Buffer.from(genRandomCode()).toString('base64')
+        const token = Buffer.from(generateRandomCode()).toString('base64')
         this.authService.create(token, username)
         if (invalid) {
           return {
@@ -47,7 +47,7 @@ export class AuthController {
             return {
               success: true,
               message: SERVER_MESSAGE_MAP.OK,
-              userInfo: genUserInfo(user, token),
+              userInfo: generateUserInfo(user, token),
             }
           }
         }
@@ -76,7 +76,7 @@ export class AuthController {
         return {
           success: true,
           message: SERVER_MESSAGE_MAP.OK,
-          userInfo: genUserInfo(user, token),
+          userInfo: generateUserInfo(user, token),
         }
       } else {
         return {

@@ -300,7 +300,7 @@ export default function FileExplorer(props: AppComponentProps) {
 
   const handleFavorite = useCallback((entry: IEntry, isFavorite: boolean) => {
     Confirmor({
-      type: 'favorite',
+      type: isFavorite ? 'unfavorite' : 'favorite',
       content: t(isFavorite ? 'tip.unfavoriteItem' : 'tip.favoriteItem', { name: entry.name }),
       t,
       onConfirm: async (close) => {
@@ -665,7 +665,7 @@ export default function FileExplorer(props: AppComponentProps) {
         onClick: () => updateDirectorySize(contextEntryList[0]),
       },
       {
-        icon: isFavorite ? <SvgIcon.StarSolid /> : <SvgIcon.Star />,
+        icon: isFavorite ? <SvgIcon.Star /> : <SvgIcon.StarSolid />,
         name: isFavorite ? t`action.unfavorite` : t`action.favorite`,
         isShow: isOnDirectory && isSingleConfirmed,
         onClick: () => handleFavorite(contextEntryList[0], isFavorite),
@@ -785,11 +785,11 @@ export default function FileExplorer(props: AppComponentProps) {
               {entryList.map(entry => {
                 const isSelected = selectedEntryList.some(o => isSameEntry(o, entry))
                 const isFavorite = favoriteEntryList.some(o => isSameEntry(o, entry))
-                const thumbnailSupported = rootInfo.thumbnailSupported
+                const supportThumbnail = rootInfo.serverOS.supportThumbnail
                 return (
                   <EntryNode
                     key={encodeURIComponent(`${entry.name}-${entry.type}`)}
-                    {...{ entry, gridMode, renameMode, isSelected, isFavorite, thumbnailSupported, sizeMap, scrollHook }}
+                    {...{ entry, gridMode, renameMode, isSelected, isFavorite, supportThumbnail, sizeMap, scrollHook }}
                     requestState={{ deleting, sizeQuerying }}
                     onClick={handleEntryClick}
                     onDoubleClick={handleEntryDoubleClick}

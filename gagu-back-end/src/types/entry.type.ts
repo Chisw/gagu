@@ -35,5 +35,4 @@ export interface IRootInfo {
   desktopEntryList: IEntry[]
   rootEntryList: IRootEntry[]
   favoritePathList: string[]
-  thumbnailSupported: boolean
 }

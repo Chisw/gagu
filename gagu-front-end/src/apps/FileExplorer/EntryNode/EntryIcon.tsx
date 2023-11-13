@@ -10,7 +10,7 @@ interface IconProps {
   isFavorite?: boolean
   isViewable?: boolean
   hideApp?: boolean
-  thumbnailSupported?: boolean
+  supportThumbnail?: boolean
 }
 
 export default function EntryIcon(props: IconProps) {
@@ -20,7 +20,7 @@ export default function EntryIcon(props: IconProps) {
     isFavorite = false,
     isViewable = false,
     hideApp = false,
-    thumbnailSupported = false,
+    supportThumbnail = false,
   } = props
 
   const [thumbnailErr, setThumbnailErr] = useState(false)
@@ -42,8 +42,8 @@ export default function EntryIcon(props: IconProps) {
   }, [entry])
 
   const showThumbnail = useMemo(() => {
-    return thumbnailSupported && useThumbnail && isViewable && !thumbnailErr
-  }, [thumbnailSupported, useThumbnail, isViewable, thumbnailErr])
+    return supportThumbnail && useThumbnail && isViewable && !thumbnailErr
+  }, [supportThumbnail, useThumbnail, isViewable, thumbnailErr])
 
   const imageThumbnailClassName = useMemo(() => {
     return thumbnailType === 'image'

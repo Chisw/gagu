@@ -3,17 +3,20 @@ import { ReactNode } from 'react'
 import { SvgIcon } from './SvgIcon'
 
 interface ConfirmorProps {
-  type: 'download' | 'delete' | 'tip' | 'favorite'
+  type: 'download' | 'delete' | 'tip' | 'favorite' | 'unfavorite' | 'upgrade' | 'ok'
   content: ReactNode
   t: (key: string | TemplateStringsArray) => string
   onConfirm: (close: () => void) => void
 }
 
 const iconMap = {
-  download: <SvgIcon.Download size={36} />,
-  delete: <SvgIcon.Delete size={36} />,
-  tip: <SvgIcon.Warning size={36} />,
-  favorite: <SvgIcon.Star size={36} />,
+  download: <SvgIcon.Download size={36} className="text-blue-600" />,
+  delete: <SvgIcon.Delete size={36} className="text-red-600" />,
+  tip: <SvgIcon.Warning size={36} className="text-gray-400" />,
+  favorite: <SvgIcon.StarSolid size={36} className="text-yellow-500" />,
+  unfavorite: <SvgIcon.Star size={36} className="text-gray-400" />,
+  upgrade: <SvgIcon.Upgrade size={36} className="text-blue-600" />,
+  ok: <SvgIcon.CheckCircle size={36} className="text-green-600" />,
 }
 
 export function Confirmor(props: ConfirmorProps) {
@@ -62,5 +65,5 @@ export function Confirmor(props: ConfirmorProps) {
     ),
     cancelButtonProps: { theme: 'borderless' },
     okButtonProps: { theme: 'solid' },
-  });
+  })
 }

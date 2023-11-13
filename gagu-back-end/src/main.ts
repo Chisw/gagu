@@ -60,7 +60,7 @@ async function bootstrap() {
     process.exit(0)
   }
 
-  initialize()
+  await initialize()
 
   const settings = readSettingsData()
   const Host = argv.Host || undefined

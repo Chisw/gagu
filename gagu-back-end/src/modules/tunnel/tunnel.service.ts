@@ -1,7 +1,11 @@
 import { ITunnel, User } from '../../types'
 import { Injectable } from '@nestjs/common'
 import { TunnelForm } from '../../types'
-import { genRandomCode, readTunnelData, writeTunnelData } from '../../utils'
+import {
+  generateRandomCode,
+  readTunnelData,
+  writeTunnelData,
+} from '../../utils'
 
 @Injectable()
 export class TunnelService {
@@ -32,7 +36,7 @@ export class TunnelService {
     nickname: User.Nickname,
     tunnelForm: TunnelForm,
   ) {
-    const code = genRandomCode()
+    const code = generateRandomCode()
     const tunnel: ITunnel = {
       code,
       username,

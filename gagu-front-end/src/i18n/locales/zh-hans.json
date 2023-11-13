@@ -21,12 +21,16 @@
       "exifInfo": "Exif 信息",
       "favorite": "收藏",
       "folderSize": "文件夹大小",
+      "fontSizeIncrease": "增大字号",
+      "fontSizeReduce": "减小字号",
       "fullScreenEnter": "进入全屏",
       "fullScreenExit": "退出全屏",
       "gridView": "网格视图",
       "hideHiddenItems": "不显示隐藏项",
       "listView": "列表视图",
       "logout": "退出",
+      "markdownFullView": "Markdown 全预览",
+      "markdownView": "Markdown 预览",
       "maximize": "最大化",
       "minimize": "最小化",
       "more": "更多",
@@ -103,6 +107,7 @@
     "label": {
       "accesses": "入口目录",
       "avatar": "头像",
+      "currentVersion": "当前版本",
       "desktopWallpaper": "桌面壁纸",
       "deviceName": "设备名称",
       "downloadName": "保存名称",
@@ -151,6 +156,8 @@
     "tip": {
       "copied": "已复制：{{value}}",
       "createdAt": "{{time}} 创建",
+      "currentlyLatestVersion": "当前已是最新版本",
+      "currentlyNeedsUpdating": "GAGU 已于 {{date}} 发布了新版本 v{{version}}，确定要更新吗？",
       "deleteItem": "删除 {{name}} ？",
       "deleteItems": "删除 {{count}} 个项目？",
       "deleteUser": "删除用户？",
@@ -174,6 +181,8 @@
       "totalUsers": "共 {{count}} 位用户",
       "unfavoriteItem": "取消收藏 {{name}} ？",
       "unlimited": "无限制",
+      "upgraded": "升级完成，请重启服务",
+      "upgrading": "GAGU 正在升级，大约需要 1~2 分钟",
       "validUntil": "有效期至：{{time}}"
     },
     "title": {

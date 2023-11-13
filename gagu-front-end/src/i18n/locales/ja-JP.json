@@ -21,12 +21,16 @@
       "exifInfo": "Exif 情報",
       "favorite": "集める",
       "folderSize": "フォルダサイズ",
+      "fontSizeIncrease": "フォントサイズを大きくする",
+      "fontSizeReduce": "フォントサイズを小さくする",
       "fullScreenEnter": "フルスクリーンに入る",
       "fullScreenExit": "全画面表示を終了",
       "gridView": "グリッドビュー",
       "hideHiddenItems": "非表示のアイテムを非表示にする",
       "listView": "リストビュー",
       "logout": "終了する",
+      "markdownFullView": "Markdown 完全なプレビュー",
+      "markdownView": "Markdown プレビュー",
       "maximize": "最大化",
       "minimize": "最小化",
       "more": "もっと",
@@ -103,6 +107,7 @@
     "label": {
       "accesses": "エントリ ディレクトリ",
       "avatar": "アバター",
+      "currentVersion": "現行版",
       "desktopWallpaper": "デスクトップの壁紙",
       "deviceName": "装置名",
       "downloadName": "保存時の名前",
@@ -151,6 +156,8 @@
     "tip": {
       "copied": "コピーされました：{{value}}",
       "createdAt": "{{time}} 作成",
+      "currentlyLatestVersion": "現在の最新バージョン",
+      "currentlyNeedsUpdating": "GAGU は {{date}} に新しいバージョン v{{version}} をリリースしました。更新してもよろしいですか？",
       "deleteItem": "{{name}} を削除しますか",
       "deleteItems": "{{count}} 件のアイテムを削除",
       "deleteUser": "このユーザーを削除しますか?",
@@ -174,6 +181,8 @@
       "totalUsers": "合計 {{count}} ユーザー",
       "unfavoriteItem": "お気に入りをキャンセルする {{name}}",
       "unlimited": "無制限",
+      "upgraded": "アップグレードが完了しました，サービスを再起動してください",
+      "upgrading": "GAGU をアップグレード中です，1 ～ 2 分程度かかります",
       "validUntil": "{{time}} まで有効"
     },
     "title": {

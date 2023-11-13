@@ -7,11 +7,6 @@ const hostname = os.hostname()
 export const GAGU_VERSION = '0.0.44'
 export const IS_DEV = process.env.NODE_ENV === 'development'
 
-export const DEPENDENCIES_MAP: { [KEY: string]: boolean } = {
-  ffmpeg: true,
-  gm: true,
-}
-
 export const HOST = (() => {
   const iFaces = os.networkInterfaces()
   const ipList: string[] = []
@@ -22,7 +17,7 @@ export const HOST = (() => {
       }
     })
   }
-  ipList.sort((ip1) => (ip1.indexOf('192') >= 0 ? -1 : 1))
+  ipList.sort((ip) => (ip.indexOf('192') >= 0 ? -1 : 1))
   return ipList[0] || '127.0.0.1'
 })()
 
@@ -35,6 +30,9 @@ export const ServerOS: IServerOS = {
   isWindows: platform === 'win32',
   isLinux: platform === 'linux',
   isAndroid: platform === 'android',
+  supportCompression: false,
+  supportCurl: false,
+  supportThumbnail: false,
 }
 
 export const PATH_MAP: { [PLATFORM: string]: string } = {

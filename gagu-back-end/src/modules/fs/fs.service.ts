@@ -26,7 +26,6 @@ import {
   dataURLtoBuffer,
   getEntryPath,
   FORBIDDEN_ENTRY_NAME_LIST,
-  DEPENDENCIES_MAP,
   GEN_THUMBNAIL_AUDIO_LIST,
 } from '../../utils'
 import * as nodeDiskInfo from 'node-disk-info'
@@ -220,8 +219,6 @@ export class FsService {
       )
     }
 
-    const thumbnailSupported = DEPENDENCIES_MAP.ffmpeg && DEPENDENCIES_MAP.gm
-
     const rootInfo: IRootInfo = {
       version: GAGU_VERSION,
       serverOS: ServerOS,
@@ -229,7 +226,6 @@ export class FsService {
       desktopEntryList: this.getEntryList(`${GAGU_PATH.ROOT}/desktop`),
       rootEntryList,
       favoritePathList: [],
-      thumbnailSupported,
     }
 
     return rootInfo

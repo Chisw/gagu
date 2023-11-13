@@ -13,7 +13,7 @@ interface EntryNodeProps {
   creationMode?: boolean
   renameMode?: boolean
   hideApp?: boolean
-  thumbnailSupported?: boolean
+  supportThumbnail?: boolean
   creationType?: NameCreationType
   sizeMap?: { [KEY: string]: number }
   scrollHook?: { top: number, height: number }
@@ -36,7 +36,7 @@ export default function EntryNode(props: EntryNodeProps) {
     creationMode = false,
     renameMode = false,
     hideApp = false,
-    thumbnailSupported = false,
+    supportThumbnail = false,
     creationType,
     sizeMap = {},
     scrollHook,
@@ -90,7 +90,7 @@ export default function EntryNode(props: EntryNodeProps) {
       onClick={e => onClick(e, entry)}
       onDoubleClick={() => onDoubleClick(entry)}
     >
-      <EntryIcon {...{ isSmall, isFavorite, isViewable, entry, hideApp, thumbnailSupported }} />
+      <EntryIcon {...{ isSmall, isFavorite, isViewable, entry, hideApp, supportThumbnail }} />
 
       <EntryName
         inputMode={(renameMode && isSelected) || creationMode}

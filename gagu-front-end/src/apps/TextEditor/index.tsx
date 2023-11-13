@@ -120,13 +120,13 @@ export default function TextEditor(props: AppComponentProps) {
             }}
           />
           <ToolButton
-            title={t`action.fontSmall`}
+            title={t`action.fontSizeReduce`}
             icon={<SvgIcon.FontSmall />}
             disabled={fontSize <= 12}
             onClick={() => setFontSize(fontSize - 2)}
           />
           <ToolButton
-            title={t`action.fontLarge`}
+            title={t`action.fontSizeIncrease`}
             icon={<SvgIcon.FontLarge />}
             disabled={fontSize >= 32}
             onClick={() => setFontSize(fontSize + 2)}

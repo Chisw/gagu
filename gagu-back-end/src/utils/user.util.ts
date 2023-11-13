@@ -40,7 +40,7 @@ export const readAuthData = () => {
   return authRecordList
 }
 
-export const genUserInfo = (user: IUser, token: User.Token) => {
+export const generateUserInfo = (user: IUser, token: User.Token) => {
   const { nickname, username, invalid, expiredAt, permissions } = user
 
   const userInfo: IUserInfo = {

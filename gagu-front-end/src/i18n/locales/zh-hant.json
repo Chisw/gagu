@@ -22,12 +22,16 @@
       "favorite": "收藏",
       "filter": "篩選",
       "folderSize": "文件夾大小",
+      "fontSizeIncrease": "增大字號",
+      "fontSizeReduce": "減小字號",
       "fullScreenEnter": "進入全屏",
       "fullScreenExit": "退出全屏",
       "gridView": "網格視圖",
       "hideHiddenItems": "不顯示隱藏項",
       "listView": "列表視圖",
       "logout": "退出",
+      "markdownFullView": "Markdown 全預覽",
+      "markdownView": "Markdown 預覽",
       "maximize": "最大化",
       "minimize": "最小化",
       "more": "更多",
@@ -103,6 +107,7 @@
     "label": {
       "accesses": "入口目錄",
       "avatar": "頭像",
+      "currentVersion": "當前版本",
       "desktopWallpaper": "桌面壁紙",
       "deviceName": "設備名稱",
       "downloadName": "保存名稱",
@@ -151,6 +156,8 @@
     "tip": {
       "copied": "已複製：{{value}}",
       "createdAt": "{{time}} 創建",
+      "currentlyLatestVersion": "當前已是最新版本",
+      "currentlyNeedsUpdating": "GAGU 已於 {{date}} 發佈了新版本 v{{version}}，確定要更新嗎？",
       "deleteItem": "刪除 {{name}} ？",
       "deleteItems": "刪除 {{count}} 個項目？",
       "deleteUser": "刪除用戶？",
@@ -174,6 +181,8 @@
       "totalUsers": "共 {{count}} 位用戶",
       "unfavoriteItem": "取消收藏 {{name}} ？",
       "unlimited": "無限制",
+      "upgraded": "升級完成，請重啟服務",
+      "upgrading": "GAGU 正在升級，大約需要 1~2 分鐘",
       "validUntil": "有效期至：{{time}}"
     },
     "title": {

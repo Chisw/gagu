@@ -21,6 +21,8 @@
       "exifInfo": "Exif info",
       "favorite": "Favorite",
       "filter": "Filter",
+      "fontSizeIncrease": "Increase font size",
+      "fontSizeReduce": "Reduce font size",
       "folderSize": "Folder size",
       "fullScreenEnter": "Enter full screen",
       "fullScreenExit": "Exit full screen",
@@ -28,6 +30,8 @@
       "hideHiddenItems": "Hide hidden items",
       "listView": "List view",
       "logout": "Logout",
+      "markdownFullView": "Markdown full view",
+      "markdownView": "Markdown view",
       "maximize": "Maximize",
       "minimize": "Minimize",
       "more": "More",
@@ -103,6 +107,7 @@
     "label": {
       "accesses": "Accesses",
       "avatar": "Avatar",
+      "currentVersion": "Current version",
       "desktopWallpaper": "Desktop wallpaper",
       "deviceName": "Device name",
       "downloadName": "Download name",
@@ -151,6 +156,8 @@
     "tip": {
       "copied": "Copied: {{value}}",
       "createdAt": "Created at {{time}}",
+      "currentlyLatestVersion": "Currently the latest version",
+      "currentlyNeedsUpdating": "GAGU has released a new version v{{version}} on {{date}}. Are you sure you want to update?",
       "deleteItem": "Delete {{name}} ?",
       "deleteItems": "Delete {{count}} items ?",
       "deleteUser": "Delete this user?",
@@ -174,6 +181,8 @@
       "totalUsers": "{{count}} user(s) in total",
       "unfavoriteItem": "Unfavorite {{name}} ?",
       "unlimited": "Unlimited",
+      "upgraded": "Upgrade completed, please restart the service",
+      "upgrading": "GAGU is upgrading, it will take about 1~2 minutes",
       "validUntil": "Valid until: {{time}}"
     },
     "title": {

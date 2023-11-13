@@ -13,4 +13,7 @@ export interface IServerOS {
   isWindows: boolean
   isLinux: boolean
   isAndroid: boolean
+  supportThumbnail: boolean
+  supportCompression: boolean
+  supportCurl: boolean
 }

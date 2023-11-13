@@ -58,6 +58,6 @@ export class AuthService {
 
   removeAll() {
     this.authRecordList = []
-    this.sync
+    this.sync()
   }
 }

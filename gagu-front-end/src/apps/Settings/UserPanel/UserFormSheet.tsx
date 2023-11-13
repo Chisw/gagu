@@ -108,7 +108,7 @@ export default function UserFormModal(props: UserFormModalProps) {
       <SideSheet
         width="100%"
         height="100%"
-        placement="top"
+        placement="right"
         maskClosable={false}
         title={MODE.isCreate
           ? t`title.settings_users_newUser`

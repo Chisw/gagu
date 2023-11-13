@@ -1,5 +1,5 @@
 import { IUser, UserPermission } from '../types'
-import { DEPENDENCIES_MAP, GAGU_PATH, ServerOS } from './constant.util'
+import { GAGU_PATH, ServerOS } from './constant.util'
 import { writeAuthData, writeUsersData } from './user.util'
 import { completeNestedPath, getExists } from './fs.util'
 import { writeTunnelData } from './tunnel.util'
@@ -7,7 +7,7 @@ import { writeSettingsData } from './setting.util'
 import * as md5 from 'md5'
 import { exec } from 'child_process'
 
-export const initialize = () => {
+export const initialize = async () => {
   completeNestedPath(`${GAGU_PATH.ROOT}/data/_`)
   completeNestedPath(`${GAGU_PATH.ROOT}/desktop/_`)
   completeNestedPath(`${GAGU_PATH.ROOT}/log/_`)
@@ -49,13 +49,28 @@ export const initialize = () => {
     writeSettingsData({})
   }
 
+  const libMap: { [LIB_KEY: string]: boolean } = {
+    ffmpeg: false,
+    gm: false,
+    zip: false,
+    unzip: false,
+    curl: false,
+  }
+
   const cmd = ServerOS.isWindows ? 'where' : 'type'
 
-  Object.keys(DEPENDENCIES_MAP).forEach((key) => {
-    exec(`${cmd} ${key}`, (err, out) => {
-      if (out && out.includes('not found')) {
-        DEPENDENCIES_MAP[key] = false
-      }
-    })
-  })
+  await Promise.all(
+    Object.keys(libMap).map((libKey) => {
+      return new Promise((resolve) => {
+        exec(`${cmd} ${libKey}`, (err, out) => {
+          libMap[libKey] = !(out && out.includes('not found'))
+          resolve(true)
+        })
+      })
+    }),
+  )
+
+  ServerOS.supportThumbnail = libMap.ffmpeg && libMap.gm
+  ServerOS.supportCompression = libMap.zip && libMap.unzip
+  ServerOS.supportCurl = libMap.curl
 }

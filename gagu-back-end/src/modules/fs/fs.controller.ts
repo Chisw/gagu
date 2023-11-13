@@ -3,7 +3,7 @@ import { Response } from 'express'
 import { FileInterceptor } from '@nestjs/platform-express'
 import {
   deleteEntry,
-  DEPENDENCIES_MAP,
+  ServerOS,
   getExists,
   SERVER_MESSAGE_MAP,
 } from '../../utils'
@@ -145,7 +145,7 @@ export class FsController {
   @Permission(UserPermission.read)
   @Header('Content-Type', 'image/jpg')
   async readThumbnail(@Query('path') path: string, @Res() response: Response) {
-    if (DEPENDENCIES_MAP.ffmpeg && DEPENDENCIES_MAP.gm) {
+    if (ServerOS.supportThumbnail) {
       try {
         const filePath = await this.fsService.getThumbnailPath(path)
         response.sendFile(filePath)
@@ -153,7 +153,7 @@ export class FsController {
         response.end(`ERROR: ${err}`)
       }
     } else {
-      response.end('FFMPEG and GM are required.')
+      response.end('ERROR: FFMPEG and GM are required.')
     }
   }
 
