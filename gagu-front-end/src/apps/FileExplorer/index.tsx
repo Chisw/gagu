@@ -303,14 +303,14 @@ export default function FileExplorer(props: AppComponentProps) {
     (uploadInputRef.current as any)?.click()
   }, [])
 
-  const handleFavorite = useCallback((entry: IEntry, isFavorite: boolean) => {
+  const handleFavorite = useCallback((entry: IEntry, isFavorited: boolean) => {
     Confirmor({
       t,
-      type: isFavorite ? 'unfavorite' : 'favorite',
-      content: t(isFavorite ? 'tip.unfavoriteItem' : 'tip.favoriteItem', { name: entry.name }),
+      type: isFavorited ? 'unfavorite' : 'favorite',
+      content: t(isFavorited ? 'tip.unfavoriteItem' : 'tip.favoriteItem', { name: entry.name }),
       onConfirm: async (close) => {
         const path = getEntryPath(entry)
-        const fn = isFavorite ? removeUserFavorite : createUserFavorite
+        const fn = isFavorited ? removeUserFavorite : createUserFavorite
         const { success, list } = await fn(path)
         if (success) {
           setRootInfo({ ...rootInfo, favoritePathList: list } as IRootInfo)
@@ -573,44 +573,46 @@ export default function FileExplorer(props: AppComponentProps) {
     let isOnImage = false
     let contextEntryList: IEntry[] = [...selectedEntryList]
 
-    const unconfirmedLen = contextEntryList.length
+    const unconfirmedCount = contextEntryList.length
     const { target, clientX, clientY } = event
-    const targetEntry = target.closest('.gagu-entry-node')
     const eventData = { target, clientX, clientY }
+    const targetEntryEl = target.closest('.gagu-entry-node')
 
-    if (targetEntry) {
+    if (targetEntryEl) {
       isOnBlank = false
 
-      const entryName = targetEntry.getAttribute('data-entry-name')
-      const isDirectory = targetEntry.getAttribute('data-entry-type') === EntryType.directory
-      const entry = entryList.find(o => o.name === entryName)
+      const targetEntryName = targetEntryEl.getAttribute('data-entry-name')
+      const isDirectory = targetEntryEl.getAttribute('data-entry-type') === EntryType.directory
+      const foundEntry = entryList.find(o => o.name === targetEntryName)
 
-      if (isDirectory) isOnDirectory = true
-      if (GEN_THUMBNAIL_IMAGE_LIST.includes(targetEntry.getAttribute('data-extension'))) {
+      if (isDirectory) {
+        isOnDirectory = true
+      }
+
+      if (GEN_THUMBNAIL_IMAGE_LIST.includes(targetEntryEl.getAttribute('data-entry-extension'))) {
         isOnImage = true
       }
-      if (unconfirmedLen <= 1 && entry) {
-        contextEntryList = [entry]
+
+      if (unconfirmedCount <= 1 && foundEntry) {
+        contextEntryList = [foundEntry]
         setSelectedEntryList(contextEntryList)
       }
     } else {
+      contextEntryList = []
       setSelectedEntryList([])
     }
 
-    const confirmedLen = contextEntryList.length
-    const isSingleConfirmed = confirmedLen === 1
+    const confirmedCount = contextEntryList.length
+    const isSingle = confirmedCount === 1
+    const isFavorited = isSingle && favoriteEntryList.some(entry => isSameEntry(entry, contextEntryList[0]))
 
     const handleOpenEntry = (app: IApp) => {
-      // const matchedEntryList = contextEntryList.filter(en => app.matchList?.includes(en.extension))
-      // const activeEntryIndex = matchedEntryList.findIndex(en => en.name === name)
       setOpenOperation({
         app,
         matchedEntryList: contextEntryList,
         activeEntryIndex: 0,
       })
     }
-
-    const isFavorite = isSingleConfirmed && favoriteEntryList.some(o => isSameEntry(o, contextEntryList[0]))
 
     const menuItemList: IContextMenuItem[] = [
       {
@@ -634,13 +636,13 @@ export default function FileExplorer(props: AppComponentProps) {
       {
         icon: <SvgIcon.Rename />,
         name: t`action.rename`,
-        isShow: isSingleConfirmed,
+        isShow: isSingle,
         onClick: () => setTimeout(handleRename, 0),
       },
       {
         icon: <SvgIcon.Apps />,
         name: t`action.openWith`,
-        isShow: !isOnDirectory && isSingleConfirmed,
+        isShow: !isOnDirectory && isSingle,
         onClick: () => { },
         children: CALLABLE_APP_LIST.map(app => ({
           icon: <div className="gagu-app-icon w-4 h-4" data-app-id={app.id} />,
@@ -655,7 +657,7 @@ export default function FileExplorer(props: AppComponentProps) {
       {
         icon: <SvgIcon.Settings />,
         name: t`action.setAs`,
-        isShow: isOnImage && isSingleConfirmed,
+        isShow: isOnImage && isSingle,
         onClick: () => {},
         children: [
           { name: 'bg-desktop', title: 'Desktop Wallpaper' },
@@ -663,6 +665,7 @@ export default function FileExplorer(props: AppComponentProps) {
           { name: 'favicon', title: 'Favicon' },
         ].map(o => ({
           icon: <div className="w-4 h-4">⏳</div>,
+          // TODO: i18n
           name: t(`${o.title}`),
           onClick: () => toast.error('⏳'),
         }))
@@ -670,14 +673,14 @@ export default function FileExplorer(props: AppComponentProps) {
       {
         icon: <SvgIcon.FolderInfo />,
         name: t`action.folderSize`,
-        isShow: isOnDirectory && isSingleConfirmed,
+        isShow: isOnDirectory && isSingle,
         onClick: () => updateDirectorySize(contextEntryList[0]),
       },
       {
-        icon: isFavorite ? <SvgIcon.Star /> : <SvgIcon.StarSolid />,
-        name: isFavorite ? t`action.unfavorite` : t`action.favorite`,
-        isShow: isOnDirectory && isSingleConfirmed,
-        onClick: () => handleFavorite(contextEntryList[0], isFavorite),
+        icon: isFavorited ? <SvgIcon.Star /> : <SvgIcon.StarSolid />,
+        name: isFavorited ? t`action.unfavorite` : t`action.favorite`,
+        isShow: isOnDirectory && isSingle,
+        onClick: () => handleFavorite(contextEntryList[0], isFavorited),
       },
       {
         icon: <SvgIcon.Upload />,
@@ -793,12 +796,12 @@ export default function FileExplorer(props: AppComponentProps) {
               {/* entry list */}
               {entryList.map(entry => {
                 const isSelected = selectedEntryList.some(o => isSameEntry(o, entry))
-                const isFavorite = favoriteEntryList.some(o => isSameEntry(o, entry))
+                const isFavorited = favoriteEntryList.some(o => isSameEntry(o, entry))
                 const supportThumbnail = rootInfo.serverOS.supportThumbnail
                 return (
                   <EntryNode
                     key={encodeURIComponent(`${entry.name}-${entry.type}`)}
-                    {...{ entry, gridMode, renameMode, isSelected, isFavorite, supportThumbnail, entryPathMap, scrollHook }}
+                    {...{ entry, gridMode, renameMode, isSelected, isFavorited, supportThumbnail, entryPathMap, scrollHook }}
                     requestState={{ deleting, sizeQuerying }}
                     onClick={handleEntryClick}
                     onDoubleClick={handleEntryDoubleClick}

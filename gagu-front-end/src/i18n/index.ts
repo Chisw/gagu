@@ -4,8 +4,7 @@ import zh_hans from './locales/zh-hans.json'
 import zh_hant from './locales/zh-hant.json'
 import en_US from './locales/en-US.json'
 import ja_JP from './locales/ja-JP.json'
-
-const I18N_LANGUAGE_KEY = 'GAGU_I18N_LANGUAGE'
+import { GAGU_I18N_LANGUAGE_KEY } from '../utils'
 
 const languageList = [
   { key: 'zh-HS', name: '简体中文', resource: zh_hans },
@@ -28,7 +27,7 @@ const navLanguage = (function() {
   return lang
 }());
 
-const storedLanguage = localStorage.getItem(I18N_LANGUAGE_KEY)
+const storedLanguage = localStorage.getItem(GAGU_I18N_LANGUAGE_KEY)
 
 const matchedStoredLanguage =
   storedLanguage && languageList.map(lang => lang.key).includes(storedLanguage) ? storedLanguage : ''
@@ -47,7 +46,7 @@ i18n
   })
 
 const setLanguage = (language: string) => {
-  localStorage.setItem(I18N_LANGUAGE_KEY, language)
+  localStorage.setItem(GAGU_I18N_LANGUAGE_KEY, language)
   i18n.changeLanguage(language)
 }
 

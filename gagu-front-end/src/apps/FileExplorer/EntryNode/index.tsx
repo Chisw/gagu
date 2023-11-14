@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from 'react'
 interface EntryNodeProps {
   entry: IEntry
   isSelected?: boolean
-  isFavorite?: boolean
+  isFavorited?: boolean
   gridMode: boolean
   creationMode?: boolean
   renameMode?: boolean
@@ -31,7 +31,7 @@ export default function EntryNode(props: EntryNodeProps) {
   const {
     entry,
     isSelected = false,
-    isFavorite = false,
+    isFavorited = false,
     gridMode,
     creationMode = false,
     renameMode = false,
@@ -74,7 +74,7 @@ export default function EntryNode(props: EntryNodeProps) {
       ref={nodeRef}
       data-entry-name={name}
       data-entry-type={type}
-      data-extension={extension}
+      data-entry-extension={extension}
       data-selected={isSelected}
       className={line(`
         gagu-entry-node
@@ -90,7 +90,7 @@ export default function EntryNode(props: EntryNodeProps) {
       onClick={e => onClick(e, entry)}
       onDoubleClick={() => onDoubleClick(entry)}
     >
-      <EntryIcon {...{ isSmall, isFavorite, isViewable, entry, hideApp, supportThumbnail }} />
+      <EntryIcon {...{ isSmall, isFavorited, isViewable, entry, hideApp, supportThumbnail }} />
 
       <EntryName
         inputMode={(renameMode && isSelected) || creationMode}

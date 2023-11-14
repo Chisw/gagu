@@ -1,6 +1,5 @@
 import { IUserInfo, UserPermission, UserPermissionType } from '../types'
-
-export const GAGU_USER_INFO_KEY = 'GAGU_USER_INFO_KEY'
+import { GAGU_USER_INFO_KEY } from './constant.util'
 
 export const UserInfoStore = {
   get() {
