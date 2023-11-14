@@ -143,7 +143,7 @@ export default function TransferPanel() {
         closable={false}
         headerStyle={{ padding: '8px 12px' }}
         bodyStyle={{ padding: 0 }}
-        maskStyle={{ background: 'rgba(0, 0, 0, .2)' }}
+        maskStyle={{ background: 'rgba(0, 0, 0, .1)' }}
         style={{ background: 'rgba(255, 255, 255, .6)', backdropFilter: 'blur(12px)' }}
         width={400}
         visible={visible}

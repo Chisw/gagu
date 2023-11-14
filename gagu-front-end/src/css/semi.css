@@ -7,7 +7,7 @@
 }
 
 .gagu-confirmor .semi-modal-mask {
-  @apply bg-black bg-opacity-30 !important;
+  @apply bg-black bg-opacity-10 !important;
 }
 
 .semi-form-field-extra {

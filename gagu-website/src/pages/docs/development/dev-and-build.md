@@ -57,11 +57,10 @@ $ yarn start
 
 ## Build NPM package
 
-1. Update following version tags:
+1. Update following version info:
 
-- `GAGU_VERSION` in `gagu/gagu-back-end/src/utils/constant.util.ts`
 - `version field` in `gagu/package.json`
-- `version tag` in `gagu/README.md`
+- `GAGU_VERSION` in `gagu/gagu-back-end/src/utils/constant.util.ts`
 - `version field` in `gagu/gagu-website/.env`
 
 2. Sync dependencies in `gagu/gagu-back-end/package.json` to `gagu/package.json`

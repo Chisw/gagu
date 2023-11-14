@@ -59,9 +59,8 @@ $ yarn start
 
 1. 更新以下版本信息：
 
-- `GAGU_VERSION` 位于 `gagu/gagu-back-end/src/utils/constant.util.ts`
 - `version field` 位于 `gagu/package.json`
-- `version tag` 位于 `gagu/README.md`
+- `GAGU_VERSION` 位于 `gagu/gagu-back-end/src/utils/constant.util.ts`
 - `version field` 位于 `gagu/gagu-website/.env`
 
 2. 同步 `gagu/gagu-back-end/package.json` 中的依赖项到 `gagu/package.json` 中

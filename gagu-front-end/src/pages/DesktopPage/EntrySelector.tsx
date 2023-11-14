@@ -64,9 +64,9 @@ export default function EntrySelector() {
   const handleLoadData = useCallback(async (node?: { key: string }) => {
     const { key } = node || {}
     if (!key) return
-    const res = await queryEntryList(key)
-    if (res.success) {
-      const list = updateTreeData(treeData, key, entryToTree(res.entryList.sort(entrySorter), hiddenShow))
+    const { success, data } = await queryEntryList(key)
+    if (success) {
+      const list = updateTreeData(treeData, key, entryToTree(data.sort(entrySorter), hiddenShow))
       setTreeData(list)
     }
   }, [treeData, queryEntryList, hiddenShow])
@@ -87,7 +87,7 @@ export default function EntrySelector() {
     <>
       <Modal
         centered
-        title={t`action.choose`}
+        title={t`hint.choose`}
         closable={false}
         width={500}
         visible={entrySelector.show}

@@ -8,7 +8,7 @@
 <p>Manage files on your different devices in the browser</p>
 <p>Works on Windows, macOS, Linux and Android/Termux</p>
 <p>Inspired by <a href="https://play.google.com/store/apps/details?id=com.lonelycatgames.Xplore" target="_blank">Android/X-plore</a> and <a href="https://www.npmjs.com/package/anywhere" target="_blank">NPM/anywhere</a></p>
-<img src="https://img.shields.io/badge/NPM-0.0.44-orange">
+<img src="https://img.shields.io/npm/v/gagu">
 <img src="https://img.shields.io/badge/Package Size-644KB-success">
 <img src="https://img.shields.io/badge/License-MIT-blue">
 <img src="https://api.netlify.com/api/v1/badges/43a65c74-6640-4341-a3fd-b0bc8f52e670/deploy-status">
@@ -65,11 +65,10 @@ $ yarn start
 
 ## 🔨 Build NPM package
 
-1. Update following version tags:
+1. Update following version info:
 
-- `GAGU_VERSION` in `gagu/gagu-back-end/src/utils/constant.util.ts`
 - `version field` in `gagu/package.json`
-- `version tag` in `gagu/README.md`
+- `GAGU_VERSION` in `gagu/gagu-back-end/src/utils/constant.util.ts`
 - `version field` in `gagu/gagu-website/.env`
 
 2. Sync dependencies in `gagu/gagu-back-end/package.json` to `gagu/package.json`.
