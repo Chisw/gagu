@@ -31,9 +31,9 @@ export default function MySharePanel(props: MySharePanelProps) {
 
   const handleDeleteClick = useCallback((code: string) => {
     Confirmor({
+      t,
       type: 'delete',
       content: t`tip.sureToDelete`,
-      t,
       onConfirm: async close => {
         const { success } = await deleteTunnel(code)
         if (success) {

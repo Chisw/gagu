@@ -48,9 +48,9 @@ export default function AdvancedSettings() {
       : t('tip.currentlyNeedsUpdating', { date, version })
 
     Confirmor({
+      t,
       type: isNewest ? 'tip' : 'upgrade',
       content,
-      t,
       onConfirm: async (close) => {
         close()
 
@@ -80,9 +80,9 @@ export default function AdvancedSettings() {
           confirm.destroy()
           
           Confirmor({
+            t,
             type: 'ok',
             content: t`tip.upgraded`,
-            t,
             onConfirm(close) {
               close()
             },

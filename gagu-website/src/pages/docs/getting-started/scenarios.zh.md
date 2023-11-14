@@ -28,6 +28,8 @@ layout: ../../../layouts/DocLayout.astro
 
 - AirDroid [http://web.airdroid.com](http://web.airdroid.com)
 - chfs (CuteHttpFileServer) [http://iscute.cn/chfs](http://iscute.cn/chfs)
+- croc [https://github.com/schollz/croc](https://github.com/schollz/croc)
+- daedalOS [https://github.com/DustinBrett/daedalOS](https://github.com/DustinBrett/daedalOS)
 - Dufs [https://github.com/sigoden/dufs](https://github.com/sigoden/dufs)
 - hfs (HTTP File Server) [https://github.com/rejetto/hfs](https://github.com/rejetto/hfs)
 - LocalSend [https://localsend.org](https://localsend.org)

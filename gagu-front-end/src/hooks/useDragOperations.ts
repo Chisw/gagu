@@ -39,9 +39,9 @@ export function useDragOperations(props: useDragOperationsProps) {
 
   const handleMoveTransfer = useCallback(async (transferEntryList: IEntry[], targetDirectory: IEntry) => {
     Confirmor({
+      t,
       type: 'tip',
       content: `${transferEntryList.map(({ name }) => name).join(', ')} -> ${targetDirectory.name}`,
-      t,
       onConfirm: async (close) => {
         for (const transferEntry of transferEntryList) {
           const oldPath = getEntryPath(transferEntry)

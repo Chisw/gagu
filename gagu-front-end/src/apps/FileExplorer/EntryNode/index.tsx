@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { IEntry } from '../../../types'
+import { IEntry, IEntryPathMap } from '../../../types'
 import { getEntryPath, getReadableSize, line } from '../../../utils'
 import EntryIcon from './EntryIcon'
 import EntryName, { NameCreationType, NameFailType } from './EntryName'
@@ -15,7 +15,7 @@ interface EntryNodeProps {
   hideApp?: boolean
   supportThumbnail?: boolean
   creationType?: NameCreationType
-  sizeMap?: { [KEY: string]: number }
+  entryPathMap?: IEntryPathMap
   scrollHook?: { top: number, height: number }
   requestState?: {
     sizeQuerying: boolean
@@ -38,7 +38,7 @@ export default function EntryNode(props: EntryNodeProps) {
     hideApp = false,
     supportThumbnail = false,
     creationType,
-    sizeMap = {},
+    entryPathMap = {},
     scrollHook,
     requestState,
     onClick = () => {},
@@ -50,7 +50,7 @@ export default function EntryNode(props: EntryNodeProps) {
   const { name, type, parentPath, extension, hidden, size, lastModified } = entry
   const isSmall = !gridMode
   const path = getEntryPath(entry)
-  const bytes = size === undefined ? sizeMap[path] : size
+  const bytes = size === undefined ? entryPathMap[path]?.size : size
   const sizeLabel = bytes === undefined ? '--' : getReadableSize(bytes)
   const dateLabel = lastModified ? DateTime.fromMillis(lastModified).toFormat('yyyy-MM-dd HH:mm') : ''
 

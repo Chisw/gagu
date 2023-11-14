@@ -27,11 +27,10 @@ import {
   contextMenuDataState,
   openOperationState,
   rootInfoState,
-  sizeMapState,
   transferTaskListState,
   transferSignalState,
   lastChangedPathState,
-  // entryListMapState,
+  entryPathMapState,
 } from '../../states'
 import {
   AppComponentProps,
@@ -65,8 +64,7 @@ export default function FileExplorer(props: AppComponentProps) {
   const { t } = useTranslation()
 
   const [rootInfo, setRootInfo] = useRecoilState(rootInfoState)
-  // const [entryListMap, setEntryListMap] =  useRecoilState(entryListMapState)
-  const [sizeMap, setSizeMap] = useRecoilState(sizeMapState)
+  const [entryPathMap, setEntryPathMap] = useRecoilState(entryPathMapState)
   const [, setOpenOperation] = useRecoilState(openOperationState)
   const [, setContextMenuData] = useRecoilState(contextMenuDataState)
   const [transferTaskList, setTransferTaskList] = useRecoilState(transferTaskListState)
@@ -97,7 +95,7 @@ export default function FileExplorer(props: AppComponentProps) {
   const containerInnerRef = useRef(null)  // entryList 容器，最小高度与 containerRef 的一致，自动撑高
   const uploadInputRef = useRef(null)
 
-  const { request: queryEntryList, loading: querying, data, setData } = useRequest(FsApi.queryEntryList)
+  const { request: queryEntryList, loading: querying, setData } = useRequest(FsApi.queryEntryList)
   const { request: deleteEntry, loading: deleting } = useRequest(FsApi.deleteEntry)
   const { request: queryDirectorySize, loading: sizeQuerying } = useRequest(FsApi.queryDirectorySize)
   const { request: createUserFavorite } = useRequest(UserApi.createUserFavorite)
@@ -136,8 +134,8 @@ export default function FileExplorer(props: AppComponentProps) {
   }, [])
 
   const { entryList, isEntryListEmpty, folderCount, fileCount } = useMemo(() => {
-    const list = get(data, 'data') || []
-    const allEntryList: IEntry[] = list.sort(entrySorter)
+    const list = (get(entryPathMap, `${currentPath}.list`) || []) as IEntry[]
+    const allEntryList = [...list].sort(entrySorter)
     const ft = filterText.toLowerCase()
     const methodName = ft.startsWith('*') ? 'endsWith' : (ft.endsWith('*') ? 'startsWith' : 'includes')
     const entryList = allEntryList
@@ -155,7 +153,7 @@ export default function FileExplorer(props: AppComponentProps) {
     const isEntryListEmpty = entryListCount === 0
 
     return { entryList, entryListCount, isEntryListEmpty, folderCount, fileCount }
-  }, [data, filterText, hiddenShow])
+  }, [currentPath, entryPathMap, filterText, hiddenShow])
 
   const disabledMap: IToolBarDisabledMap = useMemo(() => {
     const { position, list } = visitHistory
@@ -180,12 +178,19 @@ export default function FileExplorer(props: AppComponentProps) {
 
   const handleQueryEntryList = useCallback(async (path: string, keepData?: boolean) => {
     if (!path) return
-    !keepData && setData(null)
+    if (!keepData) {
+      setData(null)
+    }
     const controller = new AbortController()
     const config = { signal: controller.signal }
     setAbortController(controller)
-    await queryEntryList(path, config)
-  }, [setData, queryEntryList])
+    const { success, data } = await queryEntryList(path, config)
+    if (success) {
+      const map = {...(entryPathMap[path] || {})}
+      map.list = data
+      setEntryPathMap({ ...entryPathMap, [path]: map })
+    }
+  }, [queryEntryList, setData, entryPathMap, setEntryPathMap])
 
   const updateHistory = useCallback((direction: 'forward' | 'backward', path?: string) => {
     const map = { forward: 1, backward: -1 }
@@ -300,9 +305,9 @@ export default function FileExplorer(props: AppComponentProps) {
 
   const handleFavorite = useCallback((entry: IEntry, isFavorite: boolean) => {
     Confirmor({
+      t,
       type: isFavorite ? 'unfavorite' : 'favorite',
       content: t(isFavorite ? 'tip.unfavoriteItem' : 'tip.favoriteItem', { name: entry.name }),
-      t,
       onConfirm: async (close) => {
         const path = getEntryPath(entry)
         const fn = isFavorite ? removeUserFavorite : createUserFavorite
@@ -319,9 +324,9 @@ export default function FileExplorer(props: AppComponentProps) {
     const entryList = contextEntryList || selectedEntryList
     const { message, downloadName } = getDownloadInfo(currentPath, entryList, t)
     Confirmor({
+      t,
       type: 'download',
       content: message,
-      t,
       onConfirm: async (close) => {
         const res = await createTunnel({
           type: TunnelType.download,
@@ -354,9 +359,9 @@ export default function FileExplorer(props: AppComponentProps) {
       : t('tip.deleteItems', { count })
 
     Confirmor({
+      t,
       type: 'delete',
       content: message,
-      t,
       onConfirm: async (close) => {
         for (const entry of processList) {
           const { name } = entry
@@ -419,8 +424,12 @@ export default function FileExplorer(props: AppComponentProps) {
   const updateDirectorySize = useCallback(async (entry: IEntry) => {
     const path = getEntryPath(entry)
     const { success, data } = await queryDirectorySize(path)
-    success && setSizeMap({ ...sizeMap, [path]: data })
-  }, [queryDirectorySize, sizeMap, setSizeMap])
+    if (success) {
+      const map = {...(entryPathMap[path] || {})}
+      map.size = data
+      setEntryPathMap({ ...entryPathMap, [path]: map })
+    }
+  }, [queryDirectorySize, entryPathMap, setEntryPathMap])
 
   const handleEntryClick = useCallback((e: any, entry: IEntry) => {
     if (newDirMode || newTxtMode || renameMode) return
@@ -646,7 +655,7 @@ export default function FileExplorer(props: AppComponentProps) {
       {
         icon: <SvgIcon.Settings />,
         name: t`action.setAs`,
-        isShow: isOnImage,
+        isShow: isOnImage && isSingleConfirmed,
         onClick: () => {},
         children: [
           { name: 'bg-desktop', title: 'Desktop Wallpaper' },
@@ -789,7 +798,7 @@ export default function FileExplorer(props: AppComponentProps) {
                 return (
                   <EntryNode
                     key={encodeURIComponent(`${entry.name}-${entry.type}`)}
-                    {...{ entry, gridMode, renameMode, isSelected, isFavorite, supportThumbnail, sizeMap, scrollHook }}
+                    {...{ entry, gridMode, renameMode, isSelected, isFavorite, supportThumbnail, entryPathMap, scrollHook }}
                     requestState={{ deleting, sizeQuerying }}
                     onClick={handleEntryClick}
                     onDoubleClick={handleEntryDoubleClick}

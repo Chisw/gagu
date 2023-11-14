@@ -3,9 +3,9 @@ import { ReactNode } from 'react'
 import { SvgIcon } from './SvgIcon'
 
 interface ConfirmorProps {
+  t: (key: string | TemplateStringsArray) => string
   type: 'download' | 'delete' | 'tip' | 'favorite' | 'unfavorite' | 'upgrade' | 'ok'
   content: ReactNode
-  t: (key: string | TemplateStringsArray) => string
   onConfirm: (close: () => void) => void
 }
 
@@ -22,9 +22,9 @@ const iconMap = {
 export function Confirmor(props: ConfirmorProps) {
 
   const {
+    t,
     type,
     content,
-    t,
     onConfirm,
   } = props
 

@@ -171,7 +171,10 @@ export default function Window(props: WindowProps) {
           >
             {windowLoading && (<div className="absolute z-0 right-0 bottom-0 left-0 h-[2px] bg-loading" />)}
             <div
-              className="gagu-drag-handler flex items-center flex-grow px-2 h-full truncate"
+              className={line(`
+                flex items-center flex-grow px-2 h-full truncate
+                ${isFullScreen ? '' : 'gagu-drag-handler'}
+              `)}
               onDoubleClick={handleFullScreen}
             >
               <div

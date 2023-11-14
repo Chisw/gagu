@@ -1,15 +1,5 @@
 import { atom } from 'recoil'
-import { EntryType, IApp, IEntry } from '../types'
-
-export const entryListMapState = atom<{ [KEY: string]: IEntry[] }>({
-  key: 'entryListMapState',
-  default: {},
-})
-
-export const sizeMapState = atom<{ [KEY: string]: number }>({
-  key: 'sizeMapState',
-  default: {},
-})
+import { EntryType, IApp, IEntryPathMap } from '../types'
 
 export const entrySelectorState = atom<{
   show: boolean
@@ -21,4 +11,9 @@ export const entrySelectorState = atom<{
   default: {
     show: false,
   },
+})
+
+export const entryPathMapState = atom<IEntryPathMap>({
+  key: 'entryPathMapState',
+  default: {},
 })

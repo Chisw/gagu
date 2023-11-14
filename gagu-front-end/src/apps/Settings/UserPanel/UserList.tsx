@@ -82,6 +82,7 @@ export default function UserList(props: UserListProps) {
         show: true,
         onClick: () => {
           Confirmor({
+            t,
             type: 'delete',
             content: (
               <div>
@@ -89,7 +90,6 @@ export default function UserList(props: UserListProps) {
                 <p>{user.nickname} @{user.username}</p>
               </div>
             ),
-            t,
             onConfirm: async close => {
               const isCurrentAdmin = user.permissions.includes(UserPermission.administer)
               const isOnlyOneAdmin = userList.filter(u => u.permissions.includes(UserPermission.administer)).length === 1
