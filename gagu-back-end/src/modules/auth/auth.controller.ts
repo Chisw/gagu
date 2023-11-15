@@ -105,7 +105,7 @@ export class AuthController {
   @Post('shutdown')
   @Permission(UserPermission.administer)
   shutdown() {
-    this.authService.removeAll()
+    // this.authService.removeAll()
     return process.exit(0)
   }
 }

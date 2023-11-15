@@ -13,15 +13,6 @@ export const openInIINA = (entry: IEntry) => {
   a.click()
 }
 
-export const entrySorter = (a: IEntry, b: IEntry) => {
-  const map = { directory: 1, file: 2 }
-  const aVal = map[a.type]
-  const bVal = map[b.type]
-  const typeDirection = aVal - bVal
-  if (typeDirection !== 0) return typeDirection
-  return a.name.toLowerCase().localeCompare(b.name.toLowerCase())
-}
-
 export const getMatchedApp = (entry: IEntry) => {
   const { extension } = entry
   if (!extension) return

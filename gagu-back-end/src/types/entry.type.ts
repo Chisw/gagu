@@ -36,10 +36,3 @@ export interface IRootInfo {
   rootEntryList: IRootEntry[]
   favoritePathList: string[]
 }
-
-export interface IEntryPathMap {
-  [ENTRY_PATH: string]: {
-    size?: number
-    list?: IEntry[]
-  }
-}

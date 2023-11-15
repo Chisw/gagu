@@ -9,7 +9,6 @@ Many unrealized ideas will be recorded here, waiting for development.
 
 ## System
 
-- Get version updates
 - Multi-window automatic arrangement
 - Window layout assignment
 - favicon shows file transfer percentage
@@ -27,8 +26,6 @@ Many unrealized ideas will be recorded here, waiting for development.
 ### File Explorer
 
 - Drag and drop to move files
-- Directory caching mechanism
-- Sort by time, size
 - Tree structure display
 - Scan and connect multiple devices in LAN
 - Drag tray (file clipboard)
@@ -71,7 +68,7 @@ Many unrealized ideas will be recorded here, waiting for development.
    - Clear thumbnail data
 
 - User Management
-   -  Import and Export
+   - Import and Export
 
 - Log Management
 

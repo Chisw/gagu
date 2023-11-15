@@ -7,7 +7,7 @@ import { SvgIcon } from '../../components/base'
 import { useRequest } from '../../hooks'
 import { entrySelectorState, openOperationState, rootInfoState } from '../../states'
 import { EntryType, IEntry, IRootEntry } from '../../types'
-import { entrySorter, getEntryPath } from '../../utils'
+import { getEntryPath, sortMethodMap } from '../../utils'
 import { useTranslation } from 'react-i18next'
 
 const entryToTree = (entryList: IRootEntry[], hiddenShow: boolean) => {
@@ -66,7 +66,7 @@ export default function EntrySelector() {
     if (!key) return
     const { success, data } = await queryEntryList(key)
     if (success) {
-      const list = updateTreeData(treeData, key, entryToTree(data.sort(entrySorter), hiddenShow))
+      const list = updateTreeData(treeData, key, entryToTree(data.sort(sortMethodMap.default), hiddenShow))
       setTreeData(list)
     }
   }, [treeData, queryEntryList, hiddenShow])

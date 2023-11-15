@@ -6,7 +6,7 @@ import BottomBar from './BottomBar'
 import ToolBar, { IToolBarDisabledMap } from './ToolBar'
 import { NameFailType } from './EntryNode/EntryName'
 import Side from './Side'
-import { get, pick, throttle } from 'lodash-es'
+import { pick, throttle } from 'lodash-es'
 import { Confirmor, EmptyPanel, SvgIcon } from '../../components/base'
 import { CALLABLE_APP_LIST } from '..'
 import toast from 'react-hot-toast'
@@ -14,7 +14,6 @@ import {
   getDownloadInfo,
   getIsContained,
   isSameEntry,
-  entrySorter,
   line,
   getMatchedApp,
   openInIINA,
@@ -22,6 +21,7 @@ import {
   DOWNLOAD_PERIOD,
   GEN_THUMBNAIL_IMAGE_LIST,
   path2RootEntry,
+  sortMethodMap,
 } from '../../utils'
 import {
   contextMenuDataState,
@@ -47,6 +47,8 @@ import {
   TransferTaskStatus,
   TunnelType,
   IRootInfo,
+  Sort,
+  SortType,
 } from '../../types'
 import ShareModal from '../../components/ShareModal'
 import { useTranslation } from 'react-i18next'
@@ -75,7 +77,6 @@ export default function FileExplorer(props: AppComponentProps) {
   const [currentPath, setCurrentPath] = useState('')
   const [lastVisitedPath, setLastVisitedPath] = useState('')
   const [activeRootEntry, setActiveRootEntry] = useState<IRootEntry | null>(null)
-  const [gridMode, setGridMode] = useState(true)
   const [visitHistory, setVisitHistory] = useState<IVisitHistory>({ position: -1, list: [] })
   const [selectedEntryList, setSelectedEntryList] = useState<IEntry[]>([])
   const [newDirMode, setNewDirMode] = useState(false)
@@ -133,9 +134,14 @@ export default function FileExplorer(props: AppComponentProps) {
     return () => container.removeEventListener('scroll', throttleListener)
   }, [])
 
-  const { entryList, isEntryListEmpty, folderCount, fileCount } = useMemo(() => {
-    const list = (get(entryPathMap, `${currentPath}.list`) || []) as IEntry[]
-    const allEntryList = [...list].sort(entrySorter)
+  const { entryList, isEntryListEmpty, folderCount, fileCount, gridMode, sortType } = useMemo(() => {
+    const {
+      list = [],
+      gridMode = true,
+      sortType = Sort.default,
+    } = entryPathMap[currentPath] || {}
+
+    const allEntryList = [...list].sort(sortMethodMap[sortType])
     const ft = filterText.toLowerCase()
     const methodName = ft.startsWith('*') ? 'endsWith' : (ft.endsWith('*') ? 'startsWith' : 'includes')
     const entryList = allEntryList
@@ -152,12 +158,12 @@ export default function FileExplorer(props: AppComponentProps) {
     const entryListCount = entryList.length
     const isEntryListEmpty = entryListCount === 0
 
-    return { entryList, entryListCount, isEntryListEmpty, folderCount, fileCount }
+    return { entryList, entryListCount, isEntryListEmpty, folderCount, fileCount, gridMode, sortType }
   }, [currentPath, entryPathMap, filterText, hiddenShow])
 
-  const disabledMap: IToolBarDisabledMap = useMemo(() => {
+  const disabledMap = useMemo(() => {
     const { position, list } = visitHistory
-    return {
+    const disabledMap: IToolBarDisabledMap = {
       navBack: position <= 0,
       navForward: list.length === position + 1,
       refresh: querying || !currentPath,
@@ -167,13 +173,10 @@ export default function FileExplorer(props: AppComponentProps) {
       rename: selectedEntryList.length !== 1,
       upload: false,
       download: isEntryListEmpty,
-      store: false,
       delete: !selectedEntryList.length,
-      filter: false,
       selectAll: isEntryListEmpty,
-      showHidden: false,
-      gridMode: false,
     }
+    return disabledMap
   }, [visitHistory, querying, currentPath, isInRoot, newDirMode, newTxtMode, selectedEntryList, isEntryListEmpty])
 
   const handleQueryEntryList = useCallback(async (path: string, keepData?: boolean) => {
@@ -186,9 +189,11 @@ export default function FileExplorer(props: AppComponentProps) {
     setAbortController(controller)
     const { success, data } = await queryEntryList(path, config)
     if (success) {
-      const map = {...(entryPathMap[path] || {})}
-      map.list = data
-      setEntryPathMap({ ...entryPathMap, [path]: map })
+      const res = {
+        ...(entryPathMap[path] || {}),
+        list: data,
+      }
+      setEntryPathMap({ ...entryPathMap, [path]: res })
     }
   }, [queryEntryList, setData, entryPathMap, setEntryPathMap])
 
@@ -328,17 +333,17 @@ export default function FileExplorer(props: AppComponentProps) {
       type: 'download',
       content: message,
       onConfirm: async (close) => {
-        const res = await createTunnel({
+        const { success, message, code } = await createTunnel({
           type: TunnelType.download,
           entryList,
           downloadName,
           leftTimes: 1,
           expiredAt: Date.now() + DOWNLOAD_PERIOD,
         })
-        if (res && res.success && res.code) {
-          DownloadApi.download(res.code)
+        if (success && code) {
+          DownloadApi.download(code)
         } else {
-          res && toast.error(res.message)
+          toast.error(message)
         }
         close()
       },
@@ -425,9 +430,11 @@ export default function FileExplorer(props: AppComponentProps) {
     const path = getEntryPath(entry)
     const { success, data } = await queryDirectorySize(path)
     if (success) {
-      const map = {...(entryPathMap[path] || {})}
-      map.size = data
-      setEntryPathMap({ ...entryPathMap, [path]: map })
+      const res = {
+        ...(entryPathMap[path] || {}),
+        size: data,
+      }
+      setEntryPathMap({ ...entryPathMap, [path]: res })
     }
   }, [queryDirectorySize, entryPathMap, setEntryPathMap])
 
@@ -540,6 +547,22 @@ export default function FileExplorer(props: AppComponentProps) {
     },
   })
 
+  const handleGridModeChange = useCallback((mode: boolean) => {
+    const res = {
+      ...(entryPathMap[currentPath] || {}),
+      gridMode: mode,
+    }
+    setEntryPathMap({ ...entryPathMap, [currentPath]: res })
+  }, [currentPath, entryPathMap, setEntryPathMap])
+
+  const handleSortChange = useCallback((sortType: SortType) => {
+    const res = {
+      ...(entryPathMap[currentPath] || {}),
+      sortType: sortType,
+    }
+    setEntryPathMap({ ...entryPathMap, [currentPath]: res })
+  }, [currentPath, entryPathMap, setEntryPathMap])
+
   useHotKey({
     type: 'keyup',
     bindCondition: isTopWindow && !newDirMode && !newTxtMode && !renameMode && !filterMode,
@@ -549,13 +572,12 @@ export default function FileExplorer(props: AppComponentProps) {
       'Shift+A': disabledMap.selectAll ? null : () => handleSelectAll(true),
       'Shift+D': disabledMap.download ? null : handleDownloadClick,
       'Shift+E': disabledMap.rename ? null : handleRename,
-      'Shift+F': disabledMap.filter ? null : () => setFilterMode(true),
-      'Shift+G': disabledMap.showHidden ? null : () => setGridMode(true),
-      'Shift+H': disabledMap.showHidden ? null : () => setHiddenShow(!hiddenShow),
-      'Shift+L': disabledMap.showHidden ? null : () => setGridMode(false),
+      'Shift+F': () => setFilterMode(true),
+      'Shift+G': () => handleGridModeChange(true),
+      'Shift+H': () => setHiddenShow(!hiddenShow),
+      'Shift+L': () => handleGridModeChange(false),
       'Shift+N': disabledMap.newDir ? null : () => handleCreate('dir'),
       'Shift+R': disabledMap.refresh ? null : handleRefresh,
-      'Shift+S': disabledMap.store ? null : null,
       'Shift+T': disabledMap.newTxt ? null : () => handleCreate('txt'),
       'Shift+U': disabledMap.upload ? null : handleUploadClick,
       'Shift+ArrowUp': disabledMap.backToParentDirectory ? null : handleBackToParentDirectory,
@@ -723,8 +745,10 @@ export default function FileExplorer(props: AppComponentProps) {
         {/* main */}
         <div className="relative flex-grow h-full bg-white flex flex-col">
           <ToolBar
-            {...{ windowWidth, disabledMap, gridMode, filterMode, filterText, hiddenShow }}
-            {...{ setGridMode, setFilterMode, setFilterText, setHiddenShow }}
+            {...{ windowWidth, disabledMap, gridMode, filterMode, filterText, hiddenShow, sortType }}
+            {...{ setFilterMode, setFilterText, setHiddenShow }}
+            onGridModeChange={handleGridModeChange}
+            onSortTypeChange={handleSortChange}
             onNavBack={handleNavBack}
             onNavForward={handleNavForward}
             onRefresh={handleRefresh}

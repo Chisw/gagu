@@ -80,7 +80,7 @@ export default function EntryNode(props: EntryNodeProps) {
         gagu-entry-node
         relative overflow-hidden group
         ${hidden ? 'opacity-50' : ''}
-        ${gridMode ? 'm-1 px-1 py-2 w-28 rounded-sm' : 'px-3 py-[6px] w-full flex items-center'}
+        ${gridMode ? 'm-1 px-1 py-2 w-28 rounded-sm' : 'px-3 py-[3px] w-full flex items-center'}
         ${isSelected && !gridMode ? 'bg-blue-600' : ''}
         ${isSelected && gridMode ? 'bg-gray-100' : ''}
         ${isSelected && requestState?.deleting ? 'bg-loading' : ''}

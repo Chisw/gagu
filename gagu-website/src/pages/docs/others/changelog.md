@@ -19,6 +19,14 @@ Clear data directory means that all users, download tunnels and other data will 
 
 ## v0.0.*
 
+- v0.0.45 (2023-11-15)
+  - feat: Settings/Advanced/Check for updates
+  - feat: Front-end entries caching to improve access speed
+  - feat: File sorting
+  - feat: Before closing the window, remember the display method and sorting method of each directory
+  - fix: Failed to open file within media app
+  - fix: File manager right-click menu is messed up
+
 - v0.0.44 (2023-11-10)
   - feat: user favorites
   - feat: view Markdown in TextEditor

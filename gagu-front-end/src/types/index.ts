@@ -1,3 +1,5 @@
+import { IEntry, SortType } from './entry.type'
+
 export * from './common.type'
 export * from './app.type'
 export * from './entry.type'
@@ -51,4 +53,15 @@ export interface IContextMenuState {
   }
   menuItemList: IContextMenuItem[]
   isDock?: boolean
+}
+
+export interface IEntryPathMapRes {
+  size?: number
+  list?: IEntry[]
+  gridMode?: boolean
+  sortType?: SortType
+}
+
+export interface IEntryPathMap {
+  [ENTRY_PATH: string]: IEntryPathMapRes | undefined
 }

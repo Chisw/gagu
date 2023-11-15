@@ -37,9 +37,16 @@ export interface IRootInfo {
   favoritePathList: string[]
 }
 
-export interface IEntryPathMap {
-  [ENTRY_PATH: string]: {
-    size?: number
-    list?: IEntry[]
-  }
+export enum Sort {
+  default = 'default',
+  extension = 'extension',
+  extensionDesc = 'extensionDesc',
+  name = 'name',
+  nameDesc = 'nameDesc',
+  lastModified = 'lastModified',
+  lastModifiedDesc = 'lastModifiedDesc',
+  size = 'size',
+  sizeDesc = 'sizeDesc',
 }
+
+export type SortType = keyof typeof Sort

@@ -1,6 +1,9 @@
 import { useTranslation } from 'react-i18next'
 import ToolButton from '../../components/ToolButton'
 import { SvgIcon } from '../../components/base'
+import { Dropdown } from '@douyinfe/semi-ui'
+import { useCallback, useMemo, useState } from 'react'
+import { Sort, SortType } from '../../types'
 
 export interface IToolBarDisabledMap {
   navBack: boolean
@@ -12,12 +15,8 @@ export interface IToolBarDisabledMap {
   rename: boolean
   upload: boolean
   download: boolean
-  store: boolean
   delete: boolean
-  filter: boolean
   selectAll: boolean
-  showHidden: boolean
-  gridMode: boolean
 }
 
 interface ToolBarProps {
@@ -27,10 +26,12 @@ interface ToolBarProps {
   filterMode: boolean
   filterText: string
   hiddenShow: boolean
-  setGridMode: (mode: boolean) => void
+  sortType: SortType
   setFilterMode: (open: boolean) => void
   setFilterText: (text: string) => void
   setHiddenShow: (show: boolean) => void
+  onGridModeChange: (mode: boolean) => void
+  onSortTypeChange: (sortType: SortType) => void
   onNavBack: () => void
   onNavForward: () => void
   onRefresh: () => void
@@ -56,10 +57,12 @@ export default function ToolBar(props: ToolBarProps) {
     filterMode,
     filterText,
     hiddenShow,
-    setGridMode,
+    sortType,
     setFilterMode,
     setFilterText,
     setHiddenShow,
+    onGridModeChange,
+    onSortTypeChange,
     onNavBack,
     onNavForward,
     onRefresh,
@@ -74,10 +77,26 @@ export default function ToolBar(props: ToolBarProps) {
     onSelectAll,
   } = props
 
-  const cancel = () => {
+  const [sortVisible, setSortVisible] = useState(false)
+
+  const sortList = useMemo(() => {
+    return [
+      Sort.default,
+      Sort.name,
+      Sort.nameDesc,
+      Sort.size,
+      Sort.sizeDesc,
+      Sort.extension,
+      Sort.extensionDesc,
+      Sort.lastModified,
+      Sort.lastModifiedDesc,
+    ]
+  }, [])
+
+  const cancel = useCallback(() => {
     setFilterMode(false)
     setFilterText('')
-  }
+  }, [setFilterMode, setFilterText])
 
   return (
     <>
@@ -145,6 +164,12 @@ export default function ToolBar(props: ToolBarProps) {
               onClick={onDownload}
             />
             <ToolButton
+              title={`${t`action.selectAll`} [Shift + A]`}
+              icon={<SvgIcon.Check />}
+              disabled={disabledMap.selectAll}
+              onClick={onSelectAll}
+            />
+            <ToolButton
               title={`${t`action.rename`} [Shift + e]`}
               className="hidden md:flex"
               icon={<SvgIcon.Rename />}
@@ -185,18 +210,11 @@ export default function ToolBar(props: ToolBarProps) {
             <ToolButton
               title={`${t`action.filter`} [Shift + F]`}
               icon={<SvgIcon.Filter />}
-              disabled={disabledMap.filter}
               onClick={() => setFilterMode(true)}
             />
           )}
         </div>
 
-        <ToolButton
-          title={`${t`action.selectAll`} [Shift + A]`}
-          icon={<SvgIcon.Check />}
-          disabled={disabledMap.selectAll}
-          onClick={onSelectAll}
-        />
         <ToolButton
           title={`${hiddenShow ? t`action.hideHiddenItems` : t`action.showHiddenItems`} [Shift + H]`}
           icon={hiddenShow ? <SvgIcon.EyeOff /> : <SvgIcon.Eye />}
@@ -205,8 +223,50 @@ export default function ToolBar(props: ToolBarProps) {
         <ToolButton
           title={gridMode ? `${t`action.listView`} [Shift + L]` : `${t`action.gridView`} [Shift + G]`}
           icon={gridMode ? <SvgIcon.ViewList /> : <SvgIcon.ViewGrid />}
-          onClick={() => setGridMode(!gridMode)}
-        /> 
+          onClick={() => onGridModeChange(!gridMode)}
+        />
+        <ToolButton
+          // TODO
+          title={t`action.sort`}
+          icon={<SvgIcon.Sort />}
+          active={sortVisible || sortType !== Sort.default}
+          onClick={() => setSortVisible(!sortVisible)}
+        />
+        <Dropdown
+          position="bottomRight"
+          spacing={0}
+          visible={sortVisible}
+          onVisibleChange={setSortVisible}
+          onClickOutSide={() => setSortVisible(false)}
+          render={(
+            <Dropdown.Menu className="w-48">
+              {sortList.map(type => {
+                const isActive = type === sortType
+                const isDesc = type.endsWith('Desc')
+                return (
+                  <Dropdown.Item
+                    key={type}
+                    className={`flex items-center ${isActive ? 'text-blue-600' : ''}`}
+                    onClick={() => onSortTypeChange(type)}
+                  >
+                    <span className="flex-shrink-0 inline-block w-6">
+                      {isActive ? <SvgIcon.Check /> : undefined}
+                    </span>
+                    <span className="flex-grow">{t(`action.sort-${type}`)}</span>
+                    {type !== Sort.default && (
+                      <span className="flex-shrink-0 inline-block">
+                        {isDesc ? <SvgIcon.ArrowDown size={12} /> : <SvgIcon.ArrowUp size={12} />}
+                      </span>
+                    )}
+                  </Dropdown.Item>
+                )
+              })}
+
+            </Dropdown.Menu>
+          )}
+        >
+          <div className="h-full"></div>
+        </Dropdown>
       </div>
     </>
   )
