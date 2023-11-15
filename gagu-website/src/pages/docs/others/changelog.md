@@ -19,6 +19,9 @@ Clear data directory means that all users, download tunnels and other data will 
 
 ## v0.0.*
 
+- v0.0.46 (2023-11-15)
+  - hotfix: Loop request after file upload
+
 - v0.0.45 (2023-11-15)
   - feat: Settings/Advanced/Check for updates
   - feat: Front-end entries caching to improve access speed

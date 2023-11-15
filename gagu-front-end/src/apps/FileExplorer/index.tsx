@@ -71,7 +71,7 @@ export default function FileExplorer(props: AppComponentProps) {
   const [, setContextMenuData] = useRecoilState(contextMenuDataState)
   const [transferTaskList, setTransferTaskList] = useRecoilState(transferTaskListState)
   const [transferSignal, setTransferSignal] = useRecoilState(transferSignalState)
-  const [lastUploadedPath] = useRecoilState(lastChangedPathState)
+  const [lastChangedPath, setLastChangedPath] = useRecoilState(lastChangedPathState)
 
   const [sideCollapse, setSideCollapse] = useState(false)
   const [currentPath, setCurrentPath] = useState('')
@@ -385,10 +385,11 @@ export default function FileExplorer(props: AppComponentProps) {
   }, [deleteEntry, selectedEntryList, handleRefresh, t, setRootInfo, rootInfo])
 
   useEffect(() => {
-    if (lastUploadedPath.path === currentPath) {
+    if (lastChangedPath.path === currentPath) {
       handleRefresh()
+      setLastChangedPath({ path: '', timestamp: 0 })
     }
-  }, [lastUploadedPath, currentPath, handleRefresh])
+  }, [lastChangedPath, currentPath, handleRefresh, setLastChangedPath])
 
   useEffect(() => {
     if (!currentPath && rootEntryList.length) {
