@@ -4,18 +4,20 @@ import ContextMenu from './DesktopPage/ContextMenu'
 import MenuBar from './DesktopPage/MenuBar'
 import { activePageState } from '../states'
 import { useEffect } from 'react'
+import { Page } from '../types'
 
 export default function ExplorePage() {
 
   const [, setActivePage] = useRecoilState(activePageState)
 
   useEffect(() => {
-    setTimeout(() => setActivePage('explore'))
+    setTimeout(() => setActivePage(Page.explore))
   }, [setActivePage])
 
   return (
     <>
       <div
+        data-customized-scrollbar
         className="fixed z-0 inset-0 bg-gray-200"
         onContextMenuCapture={e => e.preventDefault()}
       >

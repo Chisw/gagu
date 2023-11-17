@@ -2,23 +2,23 @@ body {
   font-family: PingFang, Arial, Helvetica, sans-serif;
 }
 
-::-webkit-scrollbar,
-::-webkit-scrollbar-button,
-::-webkit-scrollbar-track-piece,
-::-webkit-scrollbar-corner,
-::-webkit-resizer {
+[data-customized-scrollbar] ::-webkit-scrollbar,
+[data-customized-scrollbar] ::-webkit-scrollbar-button,
+[data-customized-scrollbar] ::-webkit-scrollbar-track-piece,
+[data-customized-scrollbar] ::-webkit-scrollbar-corner,
+[data-customized-scrollbar] ::-webkit-resizer {
   background: none;
 }
 
-::-webkit-scrollbar {
+[data-customized-scrollbar] ::-webkit-scrollbar {
   width: 10px;
 }
 
-::-webkit-scrollbar-track {
+[data-customized-scrollbar] ::-webkit-scrollbar-track {
   background-color: rgba(0, 0, 0, .1);
 }
 
-::-webkit-scrollbar-thumb {
+[data-customized-scrollbar] ::-webkit-scrollbar-thumb {
   background-color: rgba(0, 0, 0, .3);
 }
 

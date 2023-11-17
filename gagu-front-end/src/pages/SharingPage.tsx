@@ -13,6 +13,7 @@ import { useRequest } from '../hooks'
 import { getDateTime, line, SERVER_MESSAGE_MAP } from '../utils'
 import { useRecoilState } from 'recoil'
 import { activePageState } from '../states'
+import { Page } from '../types'
 
 export default function SharePage() {
 
@@ -25,7 +26,7 @@ export default function SharePage() {
   const [activePage, setActivePage] = useRecoilState(activePageState)
 
   useEffect(() => {
-    setTimeout(() => setActivePage('sharing'))
+    setTimeout(() => setActivePage(Page.sharing))
   }, [setActivePage])
 
   const { request: getTunnel, loading, data } = useRequest(TunnelApi.getTunnel)

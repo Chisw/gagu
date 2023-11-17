@@ -13,11 +13,12 @@ import QrCode from 'qrcode.react'
 import TransferPanel from './TransferPanel'
 import MySharePanel from '../../components/MySharePanel'
 import { useTranslation } from 'react-i18next'
+import { Page } from '../../types'
 
 const modeList = [
-  { key: 'desktop', icon: <SvgIcon.Desktop /> },
-  { key: 'explore', icon: <SvgIcon.Layout /> },
-  { key: 'touch', icon: <SvgIcon.Phone /> },
+  { key: Page.desktop, icon: <SvgIcon.Desktop /> },
+  { key: Page.explore, icon: <SvgIcon.Layout /> },
+  { key: Page.touch, icon: <SvgIcon.Phone /> },
 ]
 
 export default function MenuBar() {
@@ -44,11 +45,11 @@ export default function MenuBar() {
 
   const activeMode = useMemo(() => {
     if (pathname.startsWith('/explore')) {
-      return 'explore'
+      return Page.explore
     } else if (pathname.startsWith('/touch')) {
-      return 'touch'
+      return Page.touch
     } else {
-      return 'desktop'
+      return Page.desktop
     }
   }, [pathname])
 
@@ -113,7 +114,7 @@ export default function MenuBar() {
     setUserPopoverShow(false)
     await logout()
     UserInfoStore.remove()
-    setActivePage('PENDING')
+    setActivePage(Page.PENDING)
     setTimeout(() => {
       navigate('/login')
     }, 500)
@@ -130,7 +131,7 @@ export default function MenuBar() {
            bg-white bg-opacity-50 shadow-sm
           backdrop-filter backdrop-blur
           transition-all duration-500 ease-out
-          ${['desktop', 'explore'].includes(activePage) ? 'translate-y-0' : '-translate-y-20'}
+          ${[Page.desktop, Page.explore, Page.touch].includes(activePage) ? 'translate-y-0' : '-translate-y-20'}
         `)}
       >
         <div className="w-1/3 h-full flex items-center text-xs">
@@ -214,7 +215,7 @@ export default function MenuBar() {
                           key={key}
                           icon={icon}
                           onClick={() => {
-                            setActivePage('PENDING')
+                            setActivePage(Page.PENDING)
                             navigate(`/${key}`)
                           }}
                         >
@@ -330,7 +331,7 @@ export default function MenuBar() {
             </div>
           </Dropdown>
         </div>
-        <div className="w-1/3 flex-shrink-0 text-center text-xs leading-none font-din">
+        <div className="w-1/3 flex-shrink-0 text-center text-xs leading-none font-din select-none">
           {timeStr}
         </div>
         <div className="w-1/3 h-full flex justify-end">

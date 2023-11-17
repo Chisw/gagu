@@ -5,7 +5,7 @@ import {
   IOpenOperation,
   IContextMenuState,
   IUserInfo,
-  PageType,
+  Page,
 } from '../types'
 
 export const userInfoState = atom<IUserInfo | null>({
@@ -37,9 +37,9 @@ export const rootInfoState = atom<IRootInfo>({
   },
 })
 
-export const activePageState = atom<PageType>({
+export const activePageState = atom<Page>({
   key: 'activePageState',
-  default: 'PENDING'
+  default: Page.PENDING
 })
 
 export const topWindowIndexState = atom<number>({

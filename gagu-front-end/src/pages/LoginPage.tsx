@@ -11,6 +11,7 @@ import { useRecoilState } from 'recoil'
 import { activePageState, userInfoState } from '../states'
 import { useTranslation } from 'react-i18next'
 import PublicFooter from '../components/PublicFooter'
+import { Page } from '../types'
 
 export default function LoginPage() {
 
@@ -23,7 +24,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
 
   useEffect(() => {
-    setTimeout(() => setActivePage('login'))
+    setTimeout(() => setActivePage(Page.login))
   }, [setActivePage])
 
   useEffect(() => {
@@ -45,7 +46,7 @@ export default function LoginPage() {
     if (success) {
       setUserInfo(userInfo)
       UserInfoStore.set(userInfo)
-      setActivePage('PENDING')
+      setActivePage(Page.PENDING)
       setTimeout(() => navigate('/'), 500)
     } else {
       toast.error(t(`server.${message}`))

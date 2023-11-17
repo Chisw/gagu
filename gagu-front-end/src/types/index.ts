@@ -8,7 +8,16 @@ export * from './user.type'
 export * from './tunnel.type'
 export * from './setting.type'
 
-export type PageType = 'PENDING' | 'login' | 'desktop' | 'explore' | 'touch' | 'sharing'
+export enum Page {
+  PENDING = 'PENDING',
+  login = 'login',
+  desktop = 'desktop',
+  explore = 'explore',
+  touch = 'touch',
+  sharing = 'sharing',
+}
+
+export type PageType = keyof typeof Page
 export type PublicImageName = 'bg-desktop' | 'bg-sharing' | 'favicon'
 export type ThumbnailType = 'video' | 'audio' | 'image'
 

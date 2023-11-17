@@ -9,6 +9,7 @@ import { useEffect } from 'react'
 import { useRecoilState } from 'recoil'
 import { activePageState } from '../../states'
 import { line } from '../../utils'
+import { Page } from '../../types'
 
 // fixed z-0 DesktopPage
 // -               EntrySelector
@@ -23,11 +24,12 @@ export default function DesktopPage() {
   const [activePage, setActivePage] = useRecoilState(activePageState)
 
   useEffect(() => {
-    setTimeout(() => setActivePage('desktop'))
+    setTimeout(() => setActivePage(Page.desktop))
   }, [setActivePage])
 
   return (
     <div
+      data-customized-scrollbar
       className="gagu-desktop-page fixed z-0 inset-0 overflow-hidden bg-gradient-to-b from-black to-slate-600"
       onContextMenuCapture={e => e.preventDefault()}
     >

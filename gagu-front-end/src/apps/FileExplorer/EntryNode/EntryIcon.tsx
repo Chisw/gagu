@@ -9,7 +9,7 @@ interface IconProps {
   isSmall?: boolean
   isFavorited?: boolean
   isViewable?: boolean
-  hideApp?: boolean
+  hideAppIcon?: boolean
   supportThumbnail?: boolean
 }
 
@@ -19,7 +19,7 @@ export default function EntryIcon(props: IconProps) {
     isSmall = false,
     isFavorited = false,
     isViewable = false,
-    hideApp = false,
+    hideAppIcon = false,
     supportThumbnail = false,
   } = props
 
@@ -61,13 +61,13 @@ export default function EntryIcon(props: IconProps) {
         relative mx-auto max-w-[4rem] pointer-events-none
         flex justify-center items-center flex-shrink-0
         bg-no-repeat bg-contain bg-center
-        ${isSmall ? 'w-6 h-6 --small-icon' : 'h-12'}
+        ${isSmall ? 'w-6 h-6 --small-icon' : 'w-14 h-12'}
         ${isFolder ? '--entry-folder' : '--entry-file'}
         ${isFavorited ? '--is-favorited' : ''}
         ${`--icon-${entryIconType || 'unknown'}`}
       `)}
     >
-      {(!hideApp && callableAppId) && (
+      {(!hideAppIcon && callableAppId) && (
         <div
           data-app-id={callableAppId}
           className={line(`

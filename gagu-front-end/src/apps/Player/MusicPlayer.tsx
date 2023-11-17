@@ -125,7 +125,7 @@ export default function MusicPlayer(props: AppComponentProps) {
   }, [audioEl, playMode, handlePrevOrNext])
 
   const { title, artist, album, base64 } = useMemo(() => {
-    const { title, artist, album, base64 } = data || {
+    const { title, artist, album, base64 } = data?.data || {
       title: activeEntry?.name || t`text.noTitle`,
       artist: t`text.unknownArtist`,
       album: t`text.unknownAlbum`,

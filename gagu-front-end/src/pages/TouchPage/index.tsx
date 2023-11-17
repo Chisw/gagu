@@ -4,6 +4,7 @@ import { SvgIcon } from '../../components/base'
 import { useRecoilState } from 'recoil'
 import { activePageState } from '../../states'
 import { useEffect } from 'react'
+import { Page } from '../../types'
 
 export default function TouchPage() {
   const navigate = useNavigate()
@@ -11,7 +12,7 @@ export default function TouchPage() {
   const [, setActivePage] = useRecoilState(activePageState)
 
   useEffect(() => {
-    setTimeout(() => setActivePage('touch'))
+    setTimeout(() => setActivePage(Page.touch))
   }, [setActivePage])
 
   return (

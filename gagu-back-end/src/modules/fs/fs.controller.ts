@@ -215,7 +215,11 @@ export class FsController {
   async getAudioTags(@Query('path') path: string) {
     try {
       const data = await this.fsService.getAudioTags(path)
-      return data
+      return {
+        success: true,
+        message: SERVER_MESSAGE_MAP.OK,
+        data,
+      }
     } catch (err) {
       return {
         success: false,

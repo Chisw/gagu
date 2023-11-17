@@ -50,7 +50,7 @@ export default function EntryListPanel(props: EntryListPanelProps) {
             {(allMode ? flattenList : entryList).map((entry: IEntry) => (
               <EntryNode
                 key={entry.parentPath + entry.name}
-                hideApp
+                hideAppIcon
                 gridMode
                 entry={entry}
               />
