@@ -106,8 +106,12 @@ export class FsController {
   @Get('text')
   @Permission(UserPermission.read)
   readTextContent(@Query('path') path: string) {
-    const textContent = this.fsService.getTextContent(path)
-    return textContent
+    const data = this.fsService.getTextContent(path)
+    return {
+      success: true,
+      message: SERVER_MESSAGE_MAP.OK,
+      data,
+    }
   }
 
   @Put('rename')
@@ -199,7 +203,6 @@ export class FsController {
       const data = await this.fsService.getExif(path)
       return data
     } catch (err) {
-      console.log('ERR: EXIF')
       return {
         success: false,
         message: SERVER_MESSAGE_MAP.ERROR_EXIF,
@@ -233,8 +236,26 @@ export class FsController {
   uploadFile(
     @Query('path') path: string,
     @UploadedFile() file: Express.Multer.File,
+    @UserGetter() user: IUser,
   ) {
-    return this.fsService.uploadFile(path, file.buffer)
+    if (getExists(path) && !user.permissions.includes(UserPermission.delete)) {
+      return {
+        success: false,
+        message: SERVER_MESSAGE_MAP.ERROR_403,
+      }
+    }
+    try {
+      this.fsService.uploadFile(path, file.buffer)
+      return {
+        success: true,
+        message: SERVER_MESSAGE_MAP.OK,
+      }
+    } catch (err) {
+      return {
+        success: false,
+        message: err.toString(),
+      }
+    }
   }
 
   @Post('upload/image/:name')
@@ -244,6 +265,17 @@ export class FsController {
     @Param('name') name: string,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    return this.fsService.uploadImage(name, file.buffer)
+    try {
+      this.fsService.uploadImage(name, file.buffer)
+      return {
+        success: true,
+        message: SERVER_MESSAGE_MAP.OK,
+      }
+    } catch (err) {
+      return {
+        success: false,
+        message: err.toString(),
+      }
+    }
   }
 }

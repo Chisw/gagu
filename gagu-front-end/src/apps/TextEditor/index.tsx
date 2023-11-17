@@ -35,7 +35,7 @@ export default function TextEditor(props: AppComponentProps) {
   const [markdownFullView, setMarkdownFullView] = useState(false)
   const [fontSize, setFontSize] = useState(14)
 
-  const { request: getTextContent, loading: fetching, data: textContent, setData: setTextContent } = useRequest(FsApi.getTextContent)
+  const { request: getTextContent, loading: fetching, data: { data: textContent }, setData: setTextContent } = useRequest(FsApi.getTextContent, { data: '' })
   const { request: uploadFile, loading: saving } = useRequest(FsApi.uploadFile)
 
   const isMarkdown = useMemo(() => activeEntry?.extension === 'md', [activeEntry])

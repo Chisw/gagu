@@ -37,7 +37,6 @@ export class UserApi {
 
   static createUserFavorite = async (path: string) => {
     const username = UserInfoStore.getUsername()
-    console.log(username, 'user')
     const { data } = await service.post(`/api/user/${username}/favorite?path=${encodeURIComponent(path)}`)
     return data
   }

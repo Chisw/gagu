@@ -20,27 +20,36 @@ service.interceptors.request.use(config => {
   return config
 })
 
-service.interceptors.response.use(response => response, (error: any) => {
-  const { message, response } = error
-  if (message === ERROR_TIMEOUT) {
-    toast.error(message)
-  }
+service.interceptors.response.use(
+  (response: any) => {
+    const { success, message } = response?.data || {}
+    if (!success) {
+      toast.error(t(`server.${message}`))
+    }
+    return response
+  },
+  (error: any) => {
+    const { message, response } = error
+    if (message === ERROR_TIMEOUT) {
+      toast.error(message)
+    }
 
-  if (!response && message !== 'canceled') {
-    toast.error(t`server.ERROR_NO_RESPONSE`)
-    return
-  }
+    if (!response && message !== 'canceled') {
+      toast.error(t`server.ERROR_NO_RESPONSE`)
+      return
+    }
 
-  const { status } = response
+    const { status } = response
 
-  if (status === 401) {
-    UserInfoStore.remove()
-    window.location.href = '/login'
-  } else if (status === 403) {
-    toast.error(t`server.ERROR_403`)
-  } else if (status >= 500) {
-    toast.error(`ERROR_${status}: ${message}`)
+    if (status === 401) {
+      UserInfoStore.remove()
+      window.location.href = '/login'
+    } else if (status === 403) {
+      toast.error(t`server.ERROR_403`)
+    } else if (status >= 500) {
+      toast.error(`ERROR_${status}: ${message}`)
+    }
   }
-})
+)
 
 export default service

@@ -85,6 +85,7 @@ export default function AdvancedSettings() {
             content: t`tip.upgraded`,
             onConfirm(close) {
               close()
+              window.close()
             },
           })
         }  

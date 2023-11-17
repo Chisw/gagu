@@ -83,7 +83,6 @@ export class FsService {
           }
           return entry
         } catch (err) {
-          console.log('ERR:', 'getEntryList', err)
           return null
         }
       })
@@ -250,32 +249,12 @@ export class FsService {
   }
 
   uploadFile(path: string, buffer: Buffer) {
-    try {
-      completeNestedPath(path)
-      writeFileSync(path, buffer)
-      return {
-        success: true,
-      }
-    } catch (err) {
-      return {
-        success: false,
-        message: err.toString(),
-      }
-    }
+    completeNestedPath(path)
+    writeFileSync(path, buffer)
   }
 
   uploadImage(name: string, buffer: Buffer) {
-    try {
-      writeFileSync(`${GAGU_PATH.PUBLIC_IMAGE}/${name}`, buffer)
-      return {
-        success: true,
-      }
-    } catch (err) {
-      return {
-        success: false,
-        message: err.toString(),
-      }
-    }
+    writeFileSync(`${GAGU_PATH.PUBLIC_IMAGE}/${name}`, buffer)
   }
 
   uploadAvatar(username: User.Username, avatar: string) {
@@ -384,7 +363,6 @@ export class FsService {
           .noProfile()
           .write(thumbnailFilePath, (err) => {
             if (err) {
-              console.log(err)
               reject(err)
             } else {
               resolve(thumbnailFilePath)

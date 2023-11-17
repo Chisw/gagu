@@ -72,7 +72,6 @@ export interface IUserInfo {
   token: User.Token
   nickname: User.Nickname
   username: User.Username
-  invalid: boolean
   expiredAt?: number
   permissions: UserPermissionType[]
 }
