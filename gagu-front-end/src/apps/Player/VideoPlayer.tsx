@@ -131,7 +131,7 @@ export default function VideoPlayer(props: AppComponentProps) {
             opacity-0 group-hover:opacity-100
             transition-opacity duration-300
             flex justify-between items-center
-            backdrop-filter backdrop-blur bg-black bg-opacity-50
+            backdrop-blur bg-black bg-opacity-50
             text-xs text-white
           `)}
         >

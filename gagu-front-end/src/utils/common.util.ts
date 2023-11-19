@@ -193,6 +193,10 @@ export const setSelection = (input: HTMLInputElement, start: number, end: number
   }
 }
 
+export const vibrate = (p?: VibratePattern) => {
+  window.navigator.vibrate(p || 1)
+}
+
 // Sync following code to BE & FE
 export const getIsExpired = (expiredAt?: number) => {
   return expiredAt && expiredAt < Date.now()

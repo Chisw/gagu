@@ -88,9 +88,8 @@ export default function Dock() {
           absolute z-20 left-1/2 bottom-0 mb-2 px-1 h-12
           flex items-center
           border border-gray-500 border-opacity-20
-          bg-clip-padding bg-white bg-opacity-40
+          bg-clip-padding bg-white bg-opacity-40 backdrop-blur
           rounded-xl
-          backdrop-filter backdrop-blur
           transition-all duration-500 ease-out
           -translate-x-1/2
           ${activePage === 'desktop' ? 'translate-y-0' : 'translate-y-20'}

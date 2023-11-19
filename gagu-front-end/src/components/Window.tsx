@@ -153,7 +153,7 @@ export default function Window(props: WindowProps) {
         <div
           className={line(`
             gagu-move-to-front-trigger
-            absolute inset-0 bg-white bg-opacity-80 backdrop-filter backdrop-blur-sm overflow-hidden
+            absolute inset-0 bg-white bg-opacity-80 backdrop-blur-sm overflow-hidden
             transition-box-shadow duration-200 flex flex-col
             ${isFullScreen ? '' : 'rounded-lg border border-gray-500 border-opacity-30 bg-clip-padding'}
             ${isTopWindow ? 'shadow-xl' : 'shadow'}

@@ -128,8 +128,7 @@ export default function MenuBar() {
           absolute z-20 top-0 right-0 left-0
           px-1 h-6
           flex justify-between items-center
-           bg-white bg-opacity-50 shadow-sm
-          backdrop-filter backdrop-blur
+           bg-white bg-opacity-50 shadow-sm backdrop-blur
           transition-all duration-500 ease-out
           ${[Page.desktop, Page.explore, Page.touch].includes(activePage) ? 'translate-y-0' : '-translate-y-20'}
         `)}
@@ -245,7 +244,7 @@ export default function MenuBar() {
             )}
           >
             <div
-              className="px-2 h-full flex items-center cursor-pointer hover:bg-white hover:bg-opacity-30 active:bg-black active:bg-opacity-10"
+              className="px-2 h-full flex items-center cursor-pointer hover:bg-white hover:bg-opacity-30 active:bg-black active:bg-opacity-10 select-none"
               onClick={() => setSystemPopoverShow(true)}
             >
               <SvgIcon.G size={12} />
@@ -314,7 +313,7 @@ export default function MenuBar() {
             )}
           >
             <div
-              className="px-2 h-full flex items-center cursor-pointer hover:bg-white hover:bg-opacity-30 active:bg-black active:bg-opacity-10"
+              className="px-2 h-full flex items-center cursor-pointer hover:bg-white hover:bg-opacity-30 active:bg-black active:bg-opacity-10 select-none"
               onClick={() => setUserPopoverShow(true)}
             >
               {userInfo ? (

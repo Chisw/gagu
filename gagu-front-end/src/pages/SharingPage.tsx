@@ -194,7 +194,7 @@ export default function SharePage() {
                 </div>
               </div>
               {isShowInput ? (
-                <div className="my-6 px-8 py-16 border backdrop-filter backdrop-blur">
+                <div className="my-6 px-8 py-16 border backdrop-blur">
                   <p className="text-sm text-gray-500 text-center">{t`tip.sharingWithPassword`}</p>
                   <div className="mt-4 flex justify-center">
                     <Input

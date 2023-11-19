@@ -85,7 +85,7 @@ export default function TransferPanel() {
       <div
         className={`
           relative px-2 h-full
-          text-xs
+          text-xs select-none
           transition-width duration-200
           flex items-center cursor-pointer hover:bg-white hover:bg-opacity-30 active:bg-black active:bg-opacity-10
           ${uploading ? 'min-w-32 bg-white bg-opacity-40' : ''}
@@ -144,7 +144,7 @@ export default function TransferPanel() {
         headerStyle={{ padding: '8px 12px' }}
         bodyStyle={{ padding: 0 }}
         maskStyle={{ background: 'rgba(0, 0, 0, .1)' }}
-        style={{ background: 'rgba(255, 255, 255, .6)', backdropFilter: 'blur(12px)' }}
+        style={{ background: 'rgba(255, 255, 255, .6)', backdropFilter: 'blur(12px)', maxWidth: '90vw' }}
         width={400}
         visible={visible}
         onCancel={() => setVisible(false)}

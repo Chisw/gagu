@@ -11,6 +11,7 @@ interface IconProps {
   isViewable?: boolean
   hideAppIcon?: boolean
   supportThumbnail?: boolean
+  touchMode?: boolean
 }
 
 export default function EntryIcon(props: IconProps) {
@@ -21,6 +22,7 @@ export default function EntryIcon(props: IconProps) {
     isViewable = false,
     hideAppIcon = false,
     supportThumbnail = false,
+    touchMode = false,
   } = props
 
   const [thumbnailErr, setThumbnailErr] = useState(false)
@@ -58,7 +60,7 @@ export default function EntryIcon(props: IconProps) {
       data-show-thumbnail={String(showThumbnail)}
       className={line(`
         gagu-entry-icon
-        relative mx-auto max-w-[4rem] pointer-events-none
+        relative mx-auto pointer-events-none
         flex justify-center items-center flex-shrink-0
         bg-no-repeat bg-contain bg-center
         ${isSmall ? 'w-6 h-6 --small-icon' : 'w-14 h-12'}
@@ -72,8 +74,8 @@ export default function EntryIcon(props: IconProps) {
           data-app-id={callableAppId}
           className={line(`
             gagu-app-icon absolute z-0 right-0 bottom-0 left-1/2 rounded-sm shadow-sm
-            opacity-0 group-hover:opacity-100
             transition-opacity duration-200
+            ${touchMode ? '' : 'opacity-0 group-hover:opacity-100'}
             ${isSmall ? 'ml-[4px] w-[8px] h-[8px]' : 'ml-4 w-[12px] h-[12px]'}
           `)}
         />

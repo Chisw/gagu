@@ -67,53 +67,73 @@ export default function EntryNode(props: EntryNodeProps) {
       className={line(`
         gagu-entry-node
         relative overflow-hidden
-        px-1 py-2
-        active:scale-90 transition-transform duration-200
+        transition-transform duration-200
         ${hidden ? 'opacity-50' : ''}
-        ${gridMode ? ' w-1/4' : 'w-full flex items-center'}
         ${isSelected && requestState?.deleting ? 'bg-loading' : ''}
+        ${gridMode
+          ? 'py-2 w-1/4 md:w-[12.5%] lg:w-1/12 active:scale-90'
+          : 'px-2 py-3 w-full flex justify-start items-center active:scale-95'
+        }
       `)}
       onClick={e => onClick(e, entry)}
     >
-      <EntryIcon {...{ isSmall: false, isFavorited, isViewable, entry, hideAppIcon, supportThumbnail }} />
-
-      <div
-        className={line(`
-          text-xs
-          ${gridMode ? 'text-center' : ''}
-        `)}
-      >
-        {entry.name}
-      </div>
-
-      <div
-        className={line(`
-          text-xs whitespace-nowrap font-din
-          ${gridMode ? 'hidden' : ''}
-          ${isSelected && !gridMode ? 'text-white' : 'text-gray-400'}
-        `)}
-      >
-        {dateLabel}
-      </div>
-      <div
-        className={line(`
-          text-xs whitespace-nowrap font-din min-w-16
-          ${isSelected && !gridMode ? 'text-white' : 'text-gray-400'}
-          ${gridMode ? 'w-full text-center' : 'pl-2 w-24 text-right'}
-          ${(isSelected && requestState?.sizeQuerying) ? 'bg-loading' : ''}
-        `)}
-      >
-        {sizeLabel}
-      </div>
+      {gridMode ? (
+        <>
+          <EntryIcon
+            touchMode
+            {...{ isSmall: false, isFavorited, isViewable, entry, hideAppIcon, supportThumbnail }}
+          />
+          <div className="text-center text-xs">
+            {entry.name}
+          </div>
+          <div
+            className={line(`
+              w-full min-w-16
+              text-center text-xs whitespace-nowrap font-din text-gray-400
+              ${(isSelected && requestState?.sizeQuerying) ? 'bg-loading' : ''}
+            `)}
+          >
+            {sizeLabel}
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="w-14">
+            <EntryIcon
+              touchMode
+              {...{ isSmall: false, isFavorited, isViewable, entry, hideAppIcon, supportThumbnail }}
+            />
+          </div>
+          <div className="pl-2">
+            <div className="text-sm">
+              {entry.name}
+            </div>
+            <div>
+              <div
+                className={line(`
+                  w-full min-w-16
+                  text-xs whitespace-nowrap font-din text-gray-400
+                  ${(isSelected && requestState?.sizeQuerying) ? 'bg-loading' : ''}
+                `)}
+              >
+                {dateLabel} &nbsp;|&nbsp; {sizeLabel}
+              </div>
+            </div>
+          </div>
+        </>
+      )}
 
       {isSelectionMode && (
         <div
           className={line(`
-            absolute top-1/2 left-1/2
-            w-4 h-4 rounded-full text-white
+            absolute z-10 
+            rounded-full text-white
             flex justify-center items-center
-            ${gridMode ? 'translate-x-1/2 -translate-y-1/2' : ''}
             ${isSelected ? 'bg-blue-500' : 'bg-black bg-opacity-20 border border-gray-200'}
+            ${gridMode
+                ? 'top-0 left-1/2 w-4 h-4 translate-x-4 translate-y-2'
+                : 'right-0 w-5 h-5 -translate-x-4 top-1/2 -translate-y-1/2'
+            }
           `)}
         >
           <SvgIcon.Check className={isSelected ? '' : 'hidden'} size={14} />

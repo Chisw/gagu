@@ -1,11 +1,11 @@
 import { Confirmor, EmptyPanel, SvgIcon } from '../../components/base'
 import { useRecoilState } from 'recoil'
-import { activePageState, entryPathMapState, openOperationState, rootInfoState } from '../../states'
+import { activePageState, entryPathMapState, openOperationState, rootInfoState, transferSignalState, transferTaskListState } from '../../states'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import MenuBar from '../DesktopPage/MenuBar'
-import { EntryType, IApp, IContextMenuItem, IContextMenuState, IEntry, IRootEntry, IRootInfo, IVisitHistory, Page, Sort, SortType, TunnelType } from '../../types'
+import { EntryType, IApp, IContextMenuItem, IContextMenuState, IEntry, INestedFile, IRootEntry, IRootInfo, IUploadTransferTask, IVisitHistory, Page, Sort, SortType, TransferTaskStatus, TransferTaskType, TunnelType } from '../../types'
 import { useTranslation } from 'react-i18next'
-import { DOWNLOAD_PERIOD, GEN_THUMBNAIL_IMAGE_LIST, getDownloadInfo, getEntryPath, getMatchedApp, isSameEntry, line, path2RootEntry, sortMethodMap } from '../../utils'
+import { DOWNLOAD_PERIOD, getDownloadInfo, getEntryPath, getMatchedApp, isSameEntry, line, path2RootEntry, sortMethodMap, vibrate } from '../../utils'
 import EntryNode from './EntryNode'
 import { useRequest } from '../../hooks'
 import { DownloadApi, FsApi, TunnelApi, UserApi } from '../../api'
@@ -15,6 +15,8 @@ import { CALLABLE_APP_LIST } from '../../apps'
 import toast from 'react-hot-toast'
 import ShareModal from '../../components/ShareModal'
 import { throttle } from 'lodash-es'
+import ToolButton from '../../components/ToolButton'
+import RootEntryList from '../../apps/FileExplorer/RootEntryList'
 
 export default function TouchPage() {
 
@@ -24,6 +26,8 @@ export default function TouchPage() {
   const [rootInfo, setRootInfo] = useRecoilState(rootInfoState)
   const [entryPathMap, setEntryPathMap] = useRecoilState(entryPathMapState)
   const [, setOpenOperation] = useRecoilState(openOperationState)
+  const [transferTaskList, setTransferTaskList] = useRecoilState(transferTaskListState)
+  const [transferSignal, setTransferSignal] = useRecoilState(transferSignalState)
 
   const [currentPath, setCurrentPath] = useState('')
   const [filterText, setFilterText] = useState('')
@@ -39,6 +43,8 @@ export default function TouchPage() {
   const [shareModalVisible, setShareModalVisible] = useState(false)
   const [contextMenuData, setContextMenuData] = useState<IContextMenuState | null>(null)
   const [isSelectionMode, setIsSelectionMode] = useState(false)
+  const [bottomMenuExpanded, setBottomMenuExpanded] = useState(false)
+  const [sideShow, setSideShow] = useState(false)
 
   const { request: queryEntryList, loading: querying, setData } = useRequest(FsApi.queryEntryList)
   const { request: queryDirectorySize, loading: sizeQuerying } = useRequest(FsApi.queryDirectorySize)
@@ -48,6 +54,7 @@ export default function TouchPage() {
   const { request: deleteEntry, loading: deleting } = useRequest(FsApi.deleteEntry)
 
   const containerRef = useRef(null)
+  const uploadInputRef = useRef(null)
 
   useEffect(() => {
     setSelectedEntryList([])
@@ -165,6 +172,8 @@ export default function TouchPage() {
   }, [abortController, currentPath, handleQueryEntryList, rootEntryList, updateHistory])
 
   const handleRootEntryClick = useCallback((rootEntry: IRootEntry) => {
+    vibrate()
+    setSideShow(false)
     const path = getEntryPath(rootEntry)
     handlePathChange({ path, direction: 'forward', pushPath: true, updateActiveRootEntry: true })
   }, [handlePathChange])
@@ -184,8 +193,59 @@ export default function TouchPage() {
     handlePathChange({ path, direction: 'forward', pushPath: true })
   }, [handlePathChange])
 
+  const addUploadTransferTask = useCallback((nestedFileList: INestedFile[], targetDir?: string) => {
+    if (!nestedFileList.length) {
+      toast.error(t`tip.noUploadableFilesDetected`)
+      return
+    }
+    const newTaskList: IUploadTransferTask[] = nestedFileList.map(nestedFile => {
+      const { name, fullPath } = nestedFile
+      const file = nestedFile as File
+      const id = `${Date.now()}-${Math.random().toString(36).slice(-8)}`
+      const newPath = `${currentPath}${targetDir ? `/${targetDir}` : ''}${fullPath || `/${name}`}`
+      return {
+        id,
+        type: TransferTaskType.upload,
+        status: TransferTaskStatus.waiting,
+        file,
+        newPath,
+      }
+    })
+    setTransferTaskList([...transferTaskList, ...newTaskList])
+    setTransferSignal(transferSignal + 1)
+  }, [currentPath, transferTaskList, setTransferTaskList, transferSignal, setTransferSignal, t])
+
+  const handleUploadClick = useCallback(() => {
+    (uploadInputRef.current as any)?.click()
+  }, [])
+
+  const handleDownloadClick = useCallback((contextEntryList?: IEntry[]) => {
+    const entryList = contextEntryList || selectedEntryList
+    const { message, downloadName } = getDownloadInfo(currentPath, entryList, t)
+    Confirmor({
+      t,
+      type: 'download',
+      content: message,
+      onConfirm: async (close) => {
+        const { success, message, code } = await createTunnel({
+          type: TunnelType.download,
+          entryList,
+          downloadName,
+          leftTimes: 1,
+          expiredAt: Date.now() + DOWNLOAD_PERIOD,
+        })
+        if (success && code) {
+          DownloadApi.download(code)
+        } else {
+          toast.error(message)
+        }
+        close()
+      },
+    })
+  }, [currentPath, selectedEntryList, createTunnel, t])
+
   const handleEntryClick = useCallback((entry: IEntry) => {
-    // window.navigator.vibrate(200)
+    vibrate()
 
     if (isSelectionMode) {
       let list = [...selectedEntryList]
@@ -212,10 +272,10 @@ export default function TouchPage() {
         //   activeEntryIndex,
         // })
       } else {
-        // handleDownloadClick()
+        handleDownloadClick()
       }
     }
-  }, [handleDirOpen, isSelectionMode, selectedEntryList])
+  }, [handleDirOpen, isSelectionMode, selectedEntryList, handleDownloadClick])
 
   const handleGoFullPath = useCallback((path: string) => {
     handlePathChange({ path, direction: 'forward', pushPath: true })
@@ -309,31 +369,6 @@ export default function TouchPage() {
     })
   }, [createUserFavorite, removeUserFavorite, t, rootInfo, setRootInfo])
 
-  const handleDownloadClick = useCallback((contextEntryList?: IEntry[]) => {
-    const entryList = contextEntryList || selectedEntryList
-    const { message, downloadName } = getDownloadInfo(currentPath, entryList, t)
-    Confirmor({
-      t,
-      type: 'download',
-      content: message,
-      onConfirm: async (close) => {
-        const { success, message, code } = await createTunnel({
-          type: TunnelType.download,
-          entryList,
-          downloadName,
-          leftTimes: 1,
-          expiredAt: Date.now() + DOWNLOAD_PERIOD,
-        })
-        if (success && code) {
-          DownloadApi.download(code)
-        } else {
-          toast.error(message)
-        }
-        close()
-      },
-    })
-  }, [currentPath, selectedEntryList, createTunnel, t])
-
   const handleShareClick = useCallback((entryList: IEntry[]) => {
     setSharedEntryList(entryList)
     setShareModalVisible(true)
@@ -368,14 +403,49 @@ export default function TouchPage() {
     })
   }, [deleteEntry, selectedEntryList, handleRefresh, t, setRootInfo, rootInfo])
 
+  const bottomMenuList = useMemo(() => {
+    const bottomMenuList: IContextMenuItem[] = [
+      {
+        icon: <SvgIcon.SideBar />,
+        name: t`action.location`,
+        onClick: () => setSideShow(true),
+      },
+      {
+        icon: <SvgIcon.FolderAdd />,
+        name: t`action.newFolder`,
+        onClick: () => {},
+      },
+      {
+        icon: <SvgIcon.FileAdd />,
+        name: t`action.newTextFile`,
+        onClick: () => {},
+      },
+      {
+        icon: <SvgIcon.Upload />,
+        name: t`action.upload`,
+        onClick: handleUploadClick,
+      },
+      {
+        icon: <SvgIcon.CloseCircle />,
+        name: t`action.cancel`,
+        onClick: () => {
+          setBottomMenuExpanded(false)
+        },
+      },
+    ]
+    return bottomMenuList
+  }, [handleUploadClick, t])
+
   const handleContextMenu = useCallback((event: any) => {
       event.preventDefault()
+      
+      if (sideShow) return
 
       setIsSelectionMode(true)
 
       let isOnBlank = true
       let isOnDirectory = false
-      let isOnImage = false
+      // let isOnImage = false
       let contextEntryList: IEntry[] = [...selectedEntryList]
 
       const unconfirmedCount = contextEntryList.length
@@ -394,9 +464,9 @@ export default function TouchPage() {
           isOnDirectory = true
         }
 
-        if (GEN_THUMBNAIL_IMAGE_LIST.includes(targetEntryEl.getAttribute('data-entry-extension'))) {
-          isOnImage = true
-        }
+        // if (GEN_THUMBNAIL_IMAGE_LIST.includes(targetEntryEl.getAttribute('data-entry-extension'))) {
+        //   isOnImage = true
+        // }
 
         if (unconfirmedCount <= 1 && foundEntry) {
           contextEntryList = [foundEntry]
@@ -421,24 +491,6 @@ export default function TouchPage() {
 
       const menuItemList: IContextMenuItem[] = [
         {
-          icon: <SvgIcon.FolderAdd />,
-          name: t`action.newFolder`,
-          isShow: isOnBlank,
-          onClick: () => {},
-        },
-        {
-          icon: <SvgIcon.FileAdd />,
-          name: t`action.newTextFile`,
-          isShow: isOnBlank,
-          onClick: () => {},
-        },
-        {
-          icon: <SvgIcon.Refresh />,
-          name: t`action.refresh`,
-          isShow: isOnBlank,
-          onClick: handleRefresh,
-        },
-        {
           icon: <SvgIcon.Rename />,
           name: t`action.rename`,
           isShow: isSingle,
@@ -456,22 +508,6 @@ export default function TouchPage() {
           })),
         },
         {
-          icon: <SvgIcon.Settings />,
-          name: t`action.setAs`,
-          isShow: isOnImage && isSingle,
-          onClick: () => {},
-          children: [
-            { name: 'bg-desktop', title: 'Desktop Wallpaper' },
-            { name: 'bg-sharing', title: 'Sharing Wallpaper' },
-            { name: 'favicon', title: 'Favicon' },
-          ].map(o => ({
-            icon: <div className="w-4 h-4">⏳</div>,
-            // TODO: i18n
-            name: t(`${o.title}`),
-            onClick: () => toast.error('⏳'),
-          }))
-        },
-        {
           icon: <SvgIcon.FolderInfo />,
           name: t`action.folderSize`,
           isShow: isOnDirectory && isSingle,
@@ -483,12 +519,7 @@ export default function TouchPage() {
           isShow: isOnDirectory && isSingle,
           onClick: () => handleFavorite(contextEntryList[0], isFavorited),
         },
-        {
-          icon: <SvgIcon.Upload />,
-          name: t`action.upload`,
-          isShow: isOnBlank,
-          onClick: () => {},
-        },
+
         {
           icon: <SvgIcon.Download />,
           name: t`action.download`,
@@ -520,7 +551,7 @@ export default function TouchPage() {
       ]
 
       setContextMenuData({ eventData, menuItemList })
-    }, [selectedEntryList, favoriteEntryList, t, handleRefresh, entryList, setOpenOperation, updateDirectorySize, handleFavorite, handleDownloadClick, handleShareClick, handleDeleteClick])
+    }, [selectedEntryList, favoriteEntryList, t, entryList, setOpenOperation, updateDirectorySize, handleFavorite, handleDownloadClick, handleShareClick, handleDeleteClick, sideShow])
 
 
   return (
@@ -532,14 +563,50 @@ export default function TouchPage() {
       >
         <MenuBar />
         <div
+          className={line(`
+            absolute z-0 top-6 bottom-0 left-0 pb-12 w-56 bg-gray-100 overflow-x-hidden overflow-y-auto border-r
+            duration-transform duration-500 ease-in-out
+            ${sideShow ? 'translate-x-0' : '-translate-x-56'}
+          `)}
+        >
+          <RootEntryList
+            {...{ currentPath, rootEntryList }}
+            onRootEntryClick={handleRootEntryClick}
+          />
+          <RootEntryList
+            {...{ currentPath, rootEntryList: favoriteEntryList }}
+            onRootEntryClick={handleRootEntryClick}
+            onFavoriteCancel={(entry) => handleFavorite(entry, true)}
+          />
+          <div
+            className="absolute right-0 bottom-0 left-0 px-4 h-12 flex items-center"
+            onClick={() => {
+              vibrate()
+              setSideShow(false)
+            }}
+          >
+            <SvgIcon.ArrowLeft />  
+          </div>
+        </div>
+        <div
           ref={containerRef}
           className={`
-            absolute inset-0 top-6 overflow-y-auto
-            transition-all duration-1000
+            absolute z-10 inset-0 top-6 bg-white transition-all duration-500
             ${activePage === Page.touch ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[10%]'}
+            ${sideShow ? 'ease-in-out translate-x-56 opacity-20 overflow-y-hidden' : 'overflow-y-auto'}
           `}
+          onContextMenu={handleContextMenu}
         >
-          <div className="sticky z-10 top-0 bg-white select-none">
+          {sideShow && (
+            <div
+              className="absolute inset-0 z-50"
+              onClick={() => {
+                vibrate()
+                setSideShow(false)
+              }}
+            />
+          )}
+          <div className="sticky z-20 top-0 bg-white select-none">
             <ToolBar
               {...{ windowWidth: 360, disabledMap, gridMode, filterMode, filterText, hiddenShow, sortType }}
               {...{ setFilterMode, setFilterText, setHiddenShow }}
@@ -567,7 +634,6 @@ export default function TouchPage() {
           </div>
           <div
             className="flex flex-wrap px-1 py-2 pb-36 select-none"
-            onContextMenu={handleContextMenu}
           >
             {entryList.map(entry => {
               const isSelected = selectedEntryList.some(o => isSameEntry(o, entry))
@@ -598,6 +664,14 @@ export default function TouchPage() {
         </div>
       </div>
 
+      <input
+        multiple
+        ref={uploadInputRef}
+        type="file"
+        className="hidden"
+        onChange={(e: any) => addUploadTransferTask([...e.target.files])}
+      />
+
       <ShareModal
         visible={shareModalVisible}
         entryList={sharedEntryList}
@@ -618,20 +692,99 @@ export default function TouchPage() {
           <div
             key={name}
             className={line(`
-              w-1/5 h-12 rounded-md
+              w-1/4 h-12 rounded-md
               transition-all duration-100
               active:scale-90 active:bg-gray-100
               ${isShow ? '' : 'hidden'}
             `)}
             onClick={() => {
-              setContextMenuData(null)
+              vibrate()
               onClick()
+              setContextMenuData(null)
             }}
           >
             <div className="mt-1 flex justify-center">{icon}</div>
             <div className="mt-1 text-xs text-center">{name}</div>
           </div>
         ))}
+      </div>
+
+      <div
+        className={line(`
+          fixed z-20 
+          border shadow-lg bg-white overflow-hidden
+          transition-all duration-200 select-none
+          origin-bottom-right
+          ${(contextMenuData || sideShow) ? 'hidden' : ''}
+          ${bottomMenuExpanded
+            ? 'right-[10px] bottom-[10px] w-44 h-64 rounded-xl'
+            : 'right-[1rem] bottom-[1rem] w-12 h-12 rounded-3xl'
+          }
+        `)}
+      >
+        {bottomMenuExpanded ? (
+          <div className="py-1 w-44">
+            <div className="flex justify-around items-center h-8">
+              <ToolButton
+                title={`${t`action.backward`} [Shift + ←]`}
+                icon={<SvgIcon.ArrowLeft />}
+                disabled={disabledMap.navBack}
+                onClick={handleNavBack}
+              />
+              <ToolButton
+                title={`${t`action.forward`} [Shift + →]`}
+                icon={<SvgIcon.ArrowRight />}
+                disabled={disabledMap.navForward}
+                onClick={handleNavForward}
+              />
+              {disabledMap.refresh ? (
+                <ToolButton
+                  title={t`action.cancel`}
+                  icon={<SvgIcon.Close />}
+                  onClick={() => abortController?.abort()}
+                />
+              ) : (
+                <ToolButton
+                  title={`${t`action.refresh`} [Shift + R]`}
+                  icon={<SvgIcon.Refresh />}
+                  onClick={handleRefresh}
+                />
+              )}
+              <ToolButton
+                title={`${t`action.backToParentDirectory`} [Shift + ↑]`}
+                icon={<SvgIcon.ArrowUp />}
+                disabled={disabledMap.backToParentDirectory}
+                onClick={handleBackToParentDirectory}
+              />
+            </div>
+            <div className="mt-2">
+              {bottomMenuList.map(({ icon, name, onClick }, index) => (
+                <div
+                  key={index}
+                  className="flex items-center px-3 py-2 transition-all duration-200 active:scale-95 active:bg-gray-100 rounded-lg"
+                  onClick={() => {
+                    vibrate()
+                    onClick()
+                    setBottomMenuExpanded(false)
+                  }}
+                >
+                  <div className="mr-2">{icon}</div>
+                  <div className="text-base">{name}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div
+            className="w-full h-full flex justify-center items-center text-gray-800"
+            onClick={() => {
+              vibrate()
+              setBottomMenuExpanded(true)
+            }}
+          >
+            <SvgIcon.G />
+          </div>
+        )}
       </div>
     </>
   )
