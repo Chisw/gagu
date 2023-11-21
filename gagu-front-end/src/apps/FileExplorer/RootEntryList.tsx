@@ -41,10 +41,20 @@ export default function RootEntryList(props: RootEntryListProps) {
             >
               <div>
                 <div className="flex justify-between items-center">
-                  <span className="flex-shrink-0">
+                  <div className="flex-shrink-0">
                     {isDisk ? <SvgIcon.HardDrive /> : <SvgIcon.Folder />}
-                  </span>
-                  <span className="ml-1 truncate flex-grow">{name}</span>
+                  </div>
+                  <div
+                    className="ml-1 truncate flex-grow"
+                    title={name}
+                  >
+                    {name}
+                  </div>
+                  {isDisk && (
+                    <div className="flex-shrink-0 font-din scale-75 origin-right opacity-60">
+                      {`${getReadableSize(spaceUsed!)} / ${getReadableSize(spaceTotal!)}`}
+                    </div>
+                  )}
                   {onFavoriteCancel && (
                     <div onClick={(e) => e.stopPropagation()}>
                       <IconButton
@@ -56,11 +66,6 @@ export default function RootEntryList(props: RootEntryListProps) {
                     </div>
                   )}
                 </div>
-                {isDisk && (
-                  <div className="font-din scale-75 origin-right opacity-60">
-                    {`${getReadableSize(spaceUsed!)} / ${getReadableSize(spaceTotal!)}`}
-                  </div>
-                )}
               </div>
               {isDisk && (
                 <div className="mt-[2px] text-xs relative z-0 h-1 font-din bg-gray-100 rounded-sm overflow-hidden">
