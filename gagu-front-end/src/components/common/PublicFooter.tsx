@@ -1,10 +1,10 @@
 import { Popover } from '@douyinfe/semi-ui'
 import { useTranslation } from 'react-i18next'
-import { languageList, setLanguage } from '../i18n'
-import { line } from '../utils'
-import { SvgIcon } from './base'
+import { languageList, setLanguage } from '../../i18n'
+import { line } from '../../utils'
+import { SvgIcon } from '.'
 
-export default function PublicFooter() {
+export function PublicFooter() {
   const { i18n: { language } } = useTranslation()
 
   return (

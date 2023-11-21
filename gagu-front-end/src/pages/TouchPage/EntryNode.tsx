@@ -3,7 +3,7 @@ import { IEntry, IEntryPathMap } from '../../types'
 import { getEntryPath, getReadableSize, line } from '../../utils'
 import EntryIcon from '../../apps/FileExplorer/EntryNode/EntryIcon'
 import { useEffect, useRef, useState } from 'react'
-import { SvgIcon } from '../../components/base'
+import { SvgIcon } from '../../components/common'
 
 interface EntryNodeProps {
   entry: IEntry

@@ -1,10 +1,10 @@
-import { IApp } from '../types'
+import { IApp } from '../../types'
 import { Rnd } from 'react-rnd'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRecoilState } from 'recoil'
-import { runningAppListState, topWindowIndexState } from '../states'
-import { line } from '../utils'
-import { SvgIcon } from './base'
+import { runningAppListState, topWindowIndexState } from '../../states'
+import { line } from '../../utils'
+import { SvgIcon } from '../../components/common'
 import { useTranslation } from 'react-i18next'
 
 const SAME_CLASS_NAME = `w-8 h-8 flex justify-center items-center cursor-pointer transition-all duration-200`

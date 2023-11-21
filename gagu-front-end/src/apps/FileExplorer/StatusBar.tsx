@@ -1,11 +1,11 @@
 import { useMemo } from 'react'
 import toast from 'react-hot-toast'
-import { SvgIcon } from '../../components/base'
+import { SvgIcon } from '../../components/common'
 import { copy, getEntryPath } from '../../utils'
 import { IEntry, IRootEntry } from '../../types'
 import { useTranslation } from 'react-i18next'
 
-interface BottomBarProps {
+interface StatusBarProps {
   loading: boolean
   folderCount: number
   fileCount: number
@@ -16,7 +16,7 @@ interface BottomBarProps {
   onRootEntryClick: (rootEntry: IRootEntry) => void
 }
 
-export default function BottomBar(props: BottomBarProps) {
+export default function StatusBar(props: StatusBarProps) {
 
   const {
     loading,

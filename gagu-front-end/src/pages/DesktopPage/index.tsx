@@ -1,9 +1,9 @@
-import ContextMenu from './ContextMenu'
+import ContextMenu from '../../components/ContextMenu'
 import WindowContainer from './WindowContainer'
 import Desktop from './Desktop'
 import Dock from './Dock'
-import MenuBar from './MenuBar'
-import EntrySelector from './EntrySelector'
+import MenuBar from '../../components/MenuBar'
+import EntrySelector from '../../components/EntrySelector'
 import { FsApi } from '../../api'
 import { useEffect } from 'react'
 import { useRecoilState } from 'recoil'
@@ -14,7 +14,7 @@ import { Page } from '../../types'
 // fixed z-0 DesktopPage
 // -               EntrySelector
 // - absolute z-30 ContextMenu
-// - absolute z-20 MenuBar & /TransferAssistant
+// - absolute z-20 MenuBar & /TransferPannel
 // - absolute z-20 Dock
 // - absolute z-10 WindowContainer
 // - absolute z-0  Desktop

@@ -1,6 +1,6 @@
 import { runningAppListState } from '../../states'
 import { useRecoilState } from 'recoil'
-import Window from '../../components/Window'
+import Window from './Window'
 
 export default function WindowContainer() {
 

@@ -6,7 +6,7 @@ import { lastChangedPathState } from '../states'
 import { useRequest } from './useRequest'
 import { FsApi } from '../api'
 import { useTranslation } from 'react-i18next'
-import { Confirmor } from '../components/base'
+import { Confirmor } from '../components/common'
 
 interface useDragOperationsProps {
   containerInnerRef: any

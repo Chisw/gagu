@@ -1,21 +1,21 @@
 import { Dropdown, Modal, Tooltip } from '@douyinfe/semi-ui'
 import { DateTime } from 'luxon'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import toast from 'react-hot-toast'
-import { useNavigate, useLocation } from 'react-router-dom'
-import { useRecoilState } from 'recoil'
-import { AuthApi, FsApi } from '../../api'
-import { SvgIcon } from '../../components/base'
-import { useRequest } from '../../hooks'
-import { activePageState, rootInfoState, userInfoState } from '../../states'
-import { DOCUMENT_TITLE, line, PULSE_INTERVAL, UserInfoStore } from '../../utils'
+import { useNavigate } from 'react-router-dom'
+import { AuthApi, FsApi } from '../api'
+import { SvgIcon } from './common'
+import { useRequest } from '../hooks'
+import { DOCUMENT_TITLE, line, PULSE_INTERVAL, UserInfoStore } from '../utils'
 import QrCode from 'qrcode.react'
 import TransferPanel from './TransferPanel'
-import MySharePanel from '../../components/MySharePanel'
+import MySharingPanel from './MySharingPanel'
 import { useTranslation } from 'react-i18next'
-import { Page } from '../../types'
+import { Page } from '../types'
+import { useRecoilState } from 'recoil'
+import { activePageState, rootInfoState, userInfoState } from '../states'
+import toast from 'react-hot-toast'
 
-const modeList = [
+const pageList = [
   { key: Page.desktop, icon: <SvgIcon.Desktop /> },
   { key: Page.explore, icon: <SvgIcon.Layout /> },
   { key: Page.touch, icon: <SvgIcon.Phone /> },
@@ -25,39 +25,22 @@ export default function MenuBar() {
 
   const navigate = useNavigate()
   const { t } = useTranslation()
-  const { pathname } = useLocation()
 
-  const [timeStr, setTimerStr] = useState('--:--')
+  const [activePage, setActivePage] = useRecoilState(activePageState)
+  const [rootInfo, setRootInfo] = useRecoilState(rootInfoState)
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState)
+
+  const [clockTime, setClockTime] = useState('--:--')
   const [systemPopoverShow, setSystemPopoverShow] = useState(false)
   const [userPopoverShow, setUserPopoverShow] = useState(false)
   const [isFullScreen, setIsFullScreen] = useState(false)
   const [passwordModalShow, setPasswordModalShow] = useState(false)
-  const [shareVisible, setShareVisible] = useState(false)
-
-  const [userInfo, setUserInfo] = useRecoilState(userInfoState)
-  const [rootInfo, setRootInfo] = useRecoilState(rootInfoState)
-  const [activePage, setActivePage] = useRecoilState(activePageState)
+  const [sharingPanelShow, setSharingPanelShow] = useState(false)
 
   const { request: pulse } = useRequest(AuthApi.pulse)
   const { request: logout } = useRequest(AuthApi.logout)
   const { request: queryRootInfo, loading } = useRequest(FsApi.queryRootInfo)
   const { request: shutdown } = useRequest(AuthApi.shutdown)
-
-  const activeMode = useMemo(() => {
-    if (pathname.startsWith('/explore')) {
-      return Page.explore
-    } else if (pathname.startsWith('/touch')) {
-      return Page.touch
-    } else {
-      return Page.desktop
-    }
-  }, [pathname])
-
-  useEffect(() => {
-    if (systemPopoverShow) {
-      setIsFullScreen(document.fullscreen)
-    }
-  }, [systemPopoverShow])
 
   useEffect(() => {
     if (!userInfo) {
@@ -72,19 +55,29 @@ export default function MenuBar() {
 
   useEffect(() => {
     const timer = setInterval(async () => {
-      const res = await pulse()
-      if (res.success) {
-        setUserInfo(res.userInfo)
-        UserInfoStore.set(res.userInfo)
+      const { success, message, userInfo } = await pulse()
+      if (success) {
+        setUserInfo(userInfo)
+        UserInfoStore.set(userInfo)
       } else {
-        toast.error(res.message)
+        toast.error(message)
       }
     }, PULSE_INTERVAL)
     return () => clearInterval(timer)
   }, [pulse, setUserInfo])
 
   useEffect(() => {
-    const tick = () => setTimerStr(DateTime.local().toFormat('HH:mm'))
+    document.title = `${rootInfo ? `${rootInfo.deviceName} - ` : ''}${DOCUMENT_TITLE}`
+  }, [rootInfo])
+
+  useEffect(() => {
+    if (systemPopoverShow) {
+      setIsFullScreen(document.fullscreen)
+    }
+  }, [systemPopoverShow])
+
+  useEffect(() => {
+    const tick = () => setClockTime(DateTime.local().toFormat('HH:mm'))
     tick()
     const timer = setInterval(tick, 1000)
     return () => clearInterval(timer)
@@ -101,10 +94,6 @@ export default function MenuBar() {
     handleQueryRootInfo()
   }, [handleQueryRootInfo])
 
-  useEffect(() => {
-    document.title = `${rootInfo ? `${rootInfo.deviceName} - ` : ''}${DOCUMENT_TITLE}`
-  }, [rootInfo])
-
   const localAddress = useMemo(() => {
     const { protocol, port } = window.location
     return `${protocol}//${rootInfo.serverOS.host}:${port}/touch`
@@ -115,9 +104,7 @@ export default function MenuBar() {
     await logout()
     UserInfoStore.remove()
     setActivePage(Page.PENDING)
-    setTimeout(() => {
-      navigate('/login')
-    }, 500)
+    setTimeout(() => navigate('/login'), 500)
   }, [logout, navigate, setActivePage])
 
   return (
@@ -209,7 +196,7 @@ export default function MenuBar() {
                   position="rightTop"
                   render={(
                     <Dropdown.Menu className="w-48">
-                      {modeList.filter(m => m.key !== activeMode).map(({ key, icon }) => (
+                      {pageList.filter(m => m.key !== activePage).map(({ key, icon }) => (
                         <Dropdown.Item
                           key={key}
                           icon={icon}
@@ -249,6 +236,7 @@ export default function MenuBar() {
             >
               <SvgIcon.G size={12} />
               <span className="hidden md:inline ml-2 text-gray-700 font-din">
+                {/* TODO: i18n */}
                 {loading ? 'Loading..' : `${rootInfo.deviceName}`}
               </span>
             </div>
@@ -289,7 +277,7 @@ export default function MenuBar() {
                   icon={<SvgIcon.Share />}
                   onClick={() => {
                     setUserPopoverShow(false)
-                    setShareVisible(true)
+                    setSharingPanelShow(true)
                   }}
                 >
                   {t`action.mySharing`}
@@ -331,7 +319,7 @@ export default function MenuBar() {
           </Dropdown>
         </div>
         <div className="w-1/3 flex-shrink-0 text-center text-xs leading-none font-din select-none">
-          {timeStr}
+          {clockTime}
         </div>
         <div className="w-1/3 h-full flex justify-end">
           <TransferPanel />
@@ -346,7 +334,10 @@ export default function MenuBar() {
         
       </Modal>
 
-      <MySharePanel visible={shareVisible} onClose={() => setShareVisible(false)} />
+      <MySharingPanel
+        visible={sharingPanelShow}
+        onClose={() => setSharingPanelShow(false)}
+      />
     </>
   )
 }

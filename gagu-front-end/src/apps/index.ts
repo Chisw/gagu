@@ -5,8 +5,8 @@ import PhotoViewer from './PhotoViewer'
 import MusicPlayer from './Player/MusicPlayer'
 import VideoPlayer from './Player/VideoPlayer'
 import Settings from './Settings'
-import BaiduMap from './BaiduMap'
-import PQINA from './PQINA'
+import BaiduMap from './web/BaiduMap'
+import PQINA from './web/PQINA'
 
 export const APP_ID_MAP = {
   fileExplorer: 'file-explorer',

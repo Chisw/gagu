@@ -1,15 +1,14 @@
 import { useTranslation } from 'react-i18next'
-import ToolButton from '../../components/ToolButton'
-import { SvgIcon } from '../../components/base'
+import { SvgIcon, ToolButton } from '../../components/common'
 import { Dropdown } from '@douyinfe/semi-ui'
 import { useCallback, useMemo, useState } from 'react'
 import { Sort, SortType } from '../../types'
 
-export interface IToolBarDisabledMap {
+export interface IControlBarDisabledMap {
   navBack: boolean
   navForward: boolean
   refresh: boolean
-  backToParentDirectory: boolean
+  navToParent: boolean
   newDir: boolean
   newTxt: boolean
   rename: boolean
@@ -19,9 +18,9 @@ export interface IToolBarDisabledMap {
   selectAll: boolean
 }
 
-interface ToolBarProps {
+interface ControlBarProps {
   windowWidth: number
-  disabledMap: IToolBarDisabledMap
+  disabledMap: IControlBarDisabledMap
   gridMode: boolean
   filterMode: boolean
   filterText: string
@@ -34,9 +33,9 @@ interface ToolBarProps {
   onSortTypeChange: (sortType: SortType) => void
   onNavBack: () => void
   onNavForward: () => void
-  onRefresh: () => void
-  onAbort: () => void
-  onBackToTop: () => void
+  onNavRefresh: () => void
+  onNavAbort: () => void
+  onNavToParent: () => void
   onNewDir: () => void
   onNewTxt: () => void
   onUpload: () => void
@@ -46,7 +45,7 @@ interface ToolBarProps {
   onSelectAll: () => void
 }
 
-export default function ToolBar(props: ToolBarProps) {
+export default function ControlBar(props: ControlBarProps) {
 
   const { t } = useTranslation()
 
@@ -65,9 +64,9 @@ export default function ToolBar(props: ToolBarProps) {
     onSortTypeChange,
     onNavBack,
     onNavForward,
-    onRefresh,
-    onAbort,
-    onBackToTop,
+    onNavRefresh,
+    onNavAbort,
+    onNavToParent,
     onNewDir,
     onNewTxt,
     onUpload,
@@ -117,20 +116,20 @@ export default function ToolBar(props: ToolBarProps) {
           <ToolButton
             title={t`action.cancel`}
             icon={<SvgIcon.Close />}
-            onClick={onAbort}
+            onClick={onNavAbort}
           />
         ) : (
           <ToolButton
             title={`${t`action.refresh`} [Shift + R]`}
             icon={<SvgIcon.Refresh />}
-            onClick={onRefresh}
+            onClick={onNavRefresh}
           />
         )}
         <ToolButton
-          title={`${t`action.backToParentDirectory`} [Shift + ↑]`}
+          title={`${t`action.navToParent`} [Shift + ↑]`}
           icon={<SvgIcon.ArrowUp />}
-          disabled={disabledMap.backToParentDirectory}
-          onClick={onBackToTop}
+          disabled={disabledMap.navToParent}
+          onClick={onNavToParent}
         />
 
         <div className="hidden md:block mx-2 h-3 border-l" />

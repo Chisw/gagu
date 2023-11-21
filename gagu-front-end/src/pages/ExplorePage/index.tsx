@@ -1,11 +1,12 @@
 import { useRecoilState } from 'recoil'
-import FileExplorer from '../apps/FileExplorer'
-import ContextMenu from './DesktopPage/ContextMenu'
-import MenuBar from './DesktopPage/MenuBar'
-import { activePageState } from '../states'
+import FileExplorer from '../../apps/FileExplorer'
+import { activePageState } from '../../states'
 import { useEffect } from 'react'
-import { Page } from '../types'
-import { line } from '../utils'
+import { Page } from '../../types'
+import { line } from '../../utils'
+import EntrySelector from '../../components/EntrySelector'
+import ContextMenu from '../../components/ContextMenu'
+import MenuBar from '../../components/MenuBar'
 
 export default function ExplorePage() {
 
@@ -22,6 +23,8 @@ export default function ExplorePage() {
         className="fixed z-0 inset-0 bg-gray-200 overflow-hidden"
         onContextMenuCapture={e => e.preventDefault()}
       >
+        <EntrySelector />
+        <ContextMenu />
         <MenuBar />
         <div
           className={line(`
@@ -31,14 +34,13 @@ export default function ExplorePage() {
           `)}
         >
           <FileExplorer
-            isTopWindow={true}
+            isTopWindow
             setWindowLoading={() => {}}
             setWindowTitle={() => {}}
             closeWindow={() => {}}
             windowSize={{ width: 1080, height: 1920 }}
           />
         </div>
-        <ContextMenu />
       </div>
     </>
   )

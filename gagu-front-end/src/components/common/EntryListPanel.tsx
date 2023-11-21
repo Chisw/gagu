@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react'
-import { IEntry } from '../types'
-import { getReadableSize } from '../utils'
+import { IEntry } from '../../types'
+import { getReadableSize } from '../../utils'
 import { useTranslation } from 'react-i18next'
-import EntryNode from '../apps/FileExplorer/EntryNode'
+import EntryNode from '../../apps/FileExplorer/EntryNode'
 
 interface EntryListPanelProps {
   downloadName: string
@@ -10,7 +10,7 @@ interface EntryListPanelProps {
   flattenList: IEntry[]
 }
 
-export default function EntryListPanel(props: EntryListPanelProps) {
+export function EntryListPanel(props: EntryListPanelProps) {
 
   const {
     downloadName,

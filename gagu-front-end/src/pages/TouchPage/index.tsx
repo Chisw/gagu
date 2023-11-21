@@ -1,22 +1,23 @@
-import { Confirmor, EmptyPanel, SvgIcon } from '../../components/base'
+import { Confirmor, EmptyPanel } from '../../components/common'
 import { useRecoilState } from 'recoil'
-import { activePageState, entryPathMapState, openOperationState, rootInfoState, transferSignalState, transferTaskListState } from '../../states'
+import { activePageState, entryPathMapState, rootInfoState, transferSignalState, transferTaskListState } from '../../states'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import MenuBar from '../DesktopPage/MenuBar'
-import { EntryType, IApp, IContextMenuItem, IContextMenuState, IEntry, INestedFile, IRootEntry, IRootInfo, IUploadTransferTask, IVisitHistory, Page, Sort, SortType, TransferTaskStatus, TransferTaskType, TunnelType } from '../../types'
+import EntrySelector from '../../components/EntrySelector'
+import MenuBar from '../../components/MenuBar'
+import { IEntry, INestedFile, IRootEntry, IRootInfo, IUploadTransferTask, IVisitHistory, Page, Sort, SortType, TransferTaskStatus, TransferTaskType, TunnelType } from '../../types'
 import { useTranslation } from 'react-i18next'
-import { DOWNLOAD_PERIOD, getDownloadInfo, getEntryPath, getMatchedApp, isSameEntry, line, path2RootEntry, sortMethodMap, vibrate } from '../../utils'
+import { DOWNLOAD_PERIOD, getDownloadInfo, getEntryPath, getMatchedApp, isSameEntry, path2RootEntry, sortMethodMap, vibrate } from '../../utils'
 import EntryNode from './EntryNode'
 import { useRequest } from '../../hooks'
 import { DownloadApi, FsApi, TunnelApi, UserApi } from '../../api'
-import BottomBar from '../../apps/FileExplorer/BottomBar'
-import ToolBar, { IToolBarDisabledMap } from '../../apps/FileExplorer/ToolBar'
-import { CALLABLE_APP_LIST } from '../../apps'
+import StatusBar from '../../apps/FileExplorer/StatusBar'
+import ControlBar, { IControlBarDisabledMap } from '../../apps/FileExplorer/ControlBar'
 import toast from 'react-hot-toast'
-import ShareModal from '../../components/ShareModal'
+import SharingModal from '../../components/SharingModal'
 import { throttle } from 'lodash-es'
-import ToolButton from '../../components/ToolButton'
-import RootEntryList from '../../apps/FileExplorer/RootEntryList'
+import SelectionMenu from './SelectionMenu'
+import FixedMenu from './FixedMenu'
+import Side from './Side'
 
 export default function TouchPage() {
 
@@ -25,7 +26,7 @@ export default function TouchPage() {
   const [activePage, setActivePage] = useRecoilState(activePageState)
   const [rootInfo, setRootInfo] = useRecoilState(rootInfoState)
   const [entryPathMap, setEntryPathMap] = useRecoilState(entryPathMapState)
-  const [, setOpenOperation] = useRecoilState(openOperationState)
+  // const [, setOpenOperation] = useRecoilState(openOperationState)
   const [transferTaskList, setTransferTaskList] = useRecoilState(transferTaskListState)
   const [transferSignal, setTransferSignal] = useRecoilState(transferSignalState)
 
@@ -40,10 +41,8 @@ export default function TouchPage() {
   const [activeRootEntry, setActiveRootEntry] = useState<IRootEntry | null>(null)
   const [visitHistory, setVisitHistory] = useState<IVisitHistory>({ position: -1, list: [] })
   const [sharedEntryList, setSharedEntryList] = useState<IEntry[]>([])
-  const [shareModalVisible, setShareModalVisible] = useState(false)
-  const [contextMenuData, setContextMenuData] = useState<IContextMenuState | null>(null)
+  const [SharingModalShow, setSharingModalShow] = useState(false)
   const [isSelectionMode, setIsSelectionMode] = useState(false)
-  const [bottomMenuExpanded, setBottomMenuExpanded] = useState(false)
   const [sideShow, setSideShow] = useState(false)
 
   const { request: queryEntryList, loading: querying, setData } = useRequest(FsApi.queryEntryList)
@@ -60,7 +59,6 @@ export default function TouchPage() {
     setSelectedEntryList([])
     setFilterMode(false)
     setFilterText('')
-    setContextMenuData(null)
     setIsSelectionMode(false)
   }, [currentPath])
 
@@ -272,7 +270,7 @@ export default function TouchPage() {
         //   activeEntryIndex,
         // })
       } else {
-        handleDownloadClick()
+        handleDownloadClick([entry])
       }
     }
   }, [handleDirOpen, isSelectionMode, selectedEntryList, handleDownloadClick])
@@ -298,7 +296,7 @@ export default function TouchPage() {
     await handleQueryEntryList(currentPath, true)
   }, [handleQueryEntryList, currentPath])
   
-  const handleBackToParentDirectory = useCallback(() => {
+  const handleNavToParent = useCallback(() => {
     const list = currentPath.split('/')
     list.pop()
     const path = list.join('/')
@@ -333,14 +331,13 @@ export default function TouchPage() {
     }
   }, [queryDirectorySize, entryPathMap, setEntryPathMap])
 
-
   const disabledMap = useMemo(() => {
     const { position, list } = visitHistory
-    const disabledMap: IToolBarDisabledMap = {
+    const disabledMap: IControlBarDisabledMap = {
       navBack: position <= 0,
       navForward: list.length === position + 1,
       refresh: querying || !currentPath,
-      backToParentDirectory: !currentPath || isInRoot,
+      navToParent: !currentPath || isInRoot,
       newDir: false,
       newTxt: false,
       rename: selectedEntryList.length !== 1,
@@ -371,7 +368,7 @@ export default function TouchPage() {
 
   const handleShareClick = useCallback((entryList: IEntry[]) => {
     setSharedEntryList(entryList)
-    setShareModalVisible(true)
+    setSharingModalShow(true)
   }, [])
 
   const handleDeleteClick = useCallback(async (contextEntryList?: IEntry[]) => {
@@ -403,191 +400,46 @@ export default function TouchPage() {
     })
   }, [deleteEntry, selectedEntryList, handleRefresh, t, setRootInfo, rootInfo])
 
-  const bottomMenuList = useMemo(() => {
-    const bottomMenuList: IContextMenuItem[] = [
-      {
-        icon: <SvgIcon.SideBar />,
-        name: t`action.location`,
-        onClick: () => setSideShow(true),
-      },
-      {
-        icon: <SvgIcon.FolderAdd />,
-        name: t`action.newFolder`,
-        onClick: () => {},
-      },
-      {
-        icon: <SvgIcon.FileAdd />,
-        name: t`action.newTextFile`,
-        onClick: () => {},
-      },
-      {
-        icon: <SvgIcon.Upload />,
-        name: t`action.upload`,
-        onClick: handleUploadClick,
-      },
-      {
-        icon: <SvgIcon.CloseCircle />,
-        name: t`action.cancel`,
-        onClick: () => {
-          setBottomMenuExpanded(false)
-        },
-      },
-    ]
-    return bottomMenuList
-  }, [handleUploadClick, t])
-
   const handleContextMenu = useCallback((event: any) => {
-      event.preventDefault()
-      
       if (sideShow) return
 
-      setIsSelectionMode(true)
-
-      let isOnBlank = true
-      let isOnDirectory = false
-      // let isOnImage = false
-      let contextEntryList: IEntry[] = [...selectedEntryList]
-
-      const unconfirmedCount = contextEntryList.length
-      const { target, clientX, clientY } = event
-      const eventData = { target, clientX, clientY }
+      const { target } = event
+      const selectedCount = selectedEntryList.length
       const targetEntryEl = target.closest('.gagu-entry-node')
 
       if (targetEntryEl) {
-        isOnBlank = false
-
         const targetEntryName = targetEntryEl.getAttribute('data-entry-name')
-        const isDirectory = targetEntryEl.getAttribute('data-entry-type') === EntryType.directory
         const foundEntry = entryList.find(o => o.name === targetEntryName)
 
-        if (isDirectory) {
-          isOnDirectory = true
-        }
-
-        // if (GEN_THUMBNAIL_IMAGE_LIST.includes(targetEntryEl.getAttribute('data-entry-extension'))) {
-        //   isOnImage = true
-        // }
-
-        if (unconfirmedCount <= 1 && foundEntry) {
-          contextEntryList = [foundEntry]
-          setSelectedEntryList(contextEntryList)
+        if (selectedCount <= 1 && foundEntry) {
+          setSelectedEntryList([foundEntry])
         }
       } else {
-        contextEntryList = []
         setSelectedEntryList([])
       }
 
-      const confirmedCount = contextEntryList.length
-      const isSingle = confirmedCount === 1
-      const isFavorited = isSingle && favoriteEntryList.some(entry => isSameEntry(entry, contextEntryList[0]))
+      setIsSelectionMode(true)
 
-      const handleOpenEntry = (app: IApp) => {
-        setOpenOperation({
-          app,
-          matchedEntryList: contextEntryList,
-          activeEntryIndex: 0,
-        })
-      }
-
-      const menuItemList: IContextMenuItem[] = [
-        {
-          icon: <SvgIcon.Rename />,
-          name: t`action.rename`,
-          isShow: isSingle,
-          onClick: () => {},
-        },
-        {
-          icon: <SvgIcon.Apps />,
-          name: t`action.openWith`,
-          isShow: !isOnDirectory && isSingle,
-          onClick: () => { },
-          children: CALLABLE_APP_LIST.map(app => ({
-            icon: <div className="gagu-app-icon w-4 h-4" data-app-id={app.id} />,
-            name: t(`app.${app.id}`),
-            onClick: () => handleOpenEntry(app),
-          })),
-        },
-        {
-          icon: <SvgIcon.FolderInfo />,
-          name: t`action.folderSize`,
-          isShow: isOnDirectory && isSingle,
-          onClick: () => updateDirectorySize(contextEntryList[0]),
-        },
-        {
-          icon: isFavorited ? <SvgIcon.Star /> : <SvgIcon.StarSolid />,
-          name: isFavorited ? t`action.unfavorite` : t`action.favorite`,
-          isShow: isOnDirectory && isSingle,
-          onClick: () => handleFavorite(contextEntryList[0], isFavorited),
-        },
-
-        {
-          icon: <SvgIcon.Download />,
-          name: t`action.download`,
-          isShow: true,
-          onClick: () => handleDownloadClick(contextEntryList),
-        },
-        {
-          icon: <SvgIcon.Share />,
-          name: t`action.newSharing`,
-          isShow: !isOnBlank,
-          onClick: () => handleShareClick(contextEntryList),
-        },
-        {
-          icon: <SvgIcon.Delete />,
-          name: t`action.delete`,
-          isShow: !isOnBlank,
-          onClick: () => handleDeleteClick(contextEntryList),
-        },
-        {
-          icon: <SvgIcon.CloseCircle />,
-          name: t`action.cancel`,
-          isShow: true,
-          onClick: () => {
-            setContextMenuData(null)
-            setIsSelectionMode(false)
-            setSelectedEntryList([])
-          },
-        },
-      ]
-
-      setContextMenuData({ eventData, menuItemList })
-    }, [selectedEntryList, favoriteEntryList, t, entryList, setOpenOperation, updateDirectorySize, handleFavorite, handleDownloadClick, handleShareClick, handleDeleteClick, sideShow])
-
+    }, [selectedEntryList, entryList, sideShow])
 
   return (
     <>
       <div
         className="fixed z-0 inset-0 overflow-hidden"
         data-touch-mode="true"
-        // onContextMenu={e => e.preventDefault()}
+        onContextMenuCapture={e => e.preventDefault()}
       >
+        <EntrySelector />
         <MenuBar />
-        <div
-          className={line(`
-            absolute z-0 top-6 bottom-0 left-0 pb-12 w-56 bg-gray-100 overflow-x-hidden overflow-y-auto border-r
-            duration-transform duration-500 ease-in-out
-            ${sideShow ? 'translate-x-0' : '-translate-x-56'}
-          `)}
-        >
-          <RootEntryList
-            {...{ currentPath, rootEntryList }}
-            onRootEntryClick={handleRootEntryClick}
-          />
-          <RootEntryList
-            {...{ currentPath, rootEntryList: favoriteEntryList }}
-            onRootEntryClick={handleRootEntryClick}
-            onFavoriteCancel={(entry) => handleFavorite(entry, true)}
-          />
-          <div
-            className="absolute right-0 bottom-0 left-0 px-4 h-12 flex items-center"
-            onClick={() => {
-              vibrate()
-              setSideShow(false)
-            }}
-          >
-            <SvgIcon.ArrowLeft />  
-          </div>
-        </div>
+        <Side
+          sideShow={sideShow}
+          setSideShow={setSideShow}
+          currentPath={currentPath}
+          rootEntryList={rootEntryList}
+          favoriteEntryList={favoriteEntryList}
+          handleRootEntryClick={handleRootEntryClick}
+          handleFavorite={handleFavorite}
+        />
         <div
           ref={containerRef}
           className={`
@@ -607,16 +459,16 @@ export default function TouchPage() {
             />
           )}
           <div className="sticky z-20 top-0 bg-white select-none">
-            <ToolBar
+            <ControlBar
               {...{ windowWidth: 360, disabledMap, gridMode, filterMode, filterText, hiddenShow, sortType }}
               {...{ setFilterMode, setFilterText, setHiddenShow }}
               onGridModeChange={handleGridModeChange}
               onSortTypeChange={handleSortChange}
               onNavBack={handleNavBack}
               onNavForward={handleNavForward}
-              onRefresh={handleRefresh}
-              onAbort={() => abortController?.abort()}
-              onBackToTop={handleBackToParentDirectory}
+              onNavRefresh={handleRefresh}
+              onNavAbort={() => abortController?.abort()}
+              onNavToParent={handleNavToParent}
               onNewDir={() => {}}
               onNewTxt={() => {}}
               onRename={() => {}}
@@ -625,7 +477,7 @@ export default function TouchPage() {
               onDelete={() => {}}
               onSelectAll={() => {}}
             />
-            <BottomBar
+            <StatusBar
               {...{ folderCount, fileCount, currentPath, rootEntry: activeRootEntry, selectedEntryList }}
               loading={querying}
               onDirClick={handleGoFullPath}
@@ -672,120 +524,34 @@ export default function TouchPage() {
         onChange={(e: any) => addUploadTransferTask([...e.target.files])}
       />
 
-      <ShareModal
-        visible={shareModalVisible}
+      <SharingModal
+        visible={SharingModalShow}
         entryList={sharedEntryList}
-        onClose={() => setShareModalVisible(false)}
+        onClose={() => setSharingModalShow(false)}
       />
 
-      <div
-        className={line(`
-          fixed z-10 right-[10px] bottom-[10px] left-[10px]
-          p-2 border rounded-xl shadow-lg
-          flex flex-wrap
-          bg-white bg-opacity-80 backdrop-blur select-none
-          transition-all duration-300
-          ${contextMenuData ? 'scale-100' : 'scale-0'}
-        `)}
-      >
-        {contextMenuData && contextMenuData.menuItemList.map(({ icon, name, onClick, isShow }) => (
-          <div
-            key={name}
-            className={line(`
-              w-1/4 h-12 rounded-md
-              transition-all duration-100
-              active:scale-90 active:bg-gray-100
-              ${isShow ? '' : 'hidden'}
-            `)}
-            onClick={() => {
-              vibrate()
-              onClick()
-              setContextMenuData(null)
-            }}
-          >
-            <div className="mt-1 flex justify-center">{icon}</div>
-            <div className="mt-1 text-xs text-center">{name}</div>
-          </div>
-        ))}
-      </div>
+      <SelectionMenu
+        show={isSelectionMode}
+        favoriteEntryList={favoriteEntryList}
+        selectedEntryList={selectedEntryList}
+        updateDirectorySize={updateDirectorySize}
+        handleFavorite={handleFavorite}
+        handleDownloadClick={handleDownloadClick}
+        handleShareClick={handleShareClick}
+        handleDeleteClick={handleDeleteClick}
+        onCancel={() => {
+          setIsSelectionMode(false)
+          setSelectedEntryList([])
+        }}
+      />
 
-      <div
-        className={line(`
-          fixed z-20 
-          border shadow-lg bg-white overflow-hidden
-          transition-all duration-200 select-none
-          origin-bottom-right
-          ${(contextMenuData || sideShow) ? 'hidden' : ''}
-          ${bottomMenuExpanded
-            ? 'right-[10px] bottom-[10px] w-44 h-64 rounded-xl'
-            : 'right-[1rem] bottom-[1rem] w-12 h-12 rounded-3xl'
-          }
-        `)}
-      >
-        {bottomMenuExpanded ? (
-          <div className="py-1 w-44">
-            <div className="flex justify-around items-center h-8">
-              <ToolButton
-                title={`${t`action.backward`} [Shift + ←]`}
-                icon={<SvgIcon.ArrowLeft />}
-                disabled={disabledMap.navBack}
-                onClick={handleNavBack}
-              />
-              <ToolButton
-                title={`${t`action.forward`} [Shift + →]`}
-                icon={<SvgIcon.ArrowRight />}
-                disabled={disabledMap.navForward}
-                onClick={handleNavForward}
-              />
-              {disabledMap.refresh ? (
-                <ToolButton
-                  title={t`action.cancel`}
-                  icon={<SvgIcon.Close />}
-                  onClick={() => abortController?.abort()}
-                />
-              ) : (
-                <ToolButton
-                  title={`${t`action.refresh`} [Shift + R]`}
-                  icon={<SvgIcon.Refresh />}
-                  onClick={handleRefresh}
-                />
-              )}
-              <ToolButton
-                title={`${t`action.backToParentDirectory`} [Shift + ↑]`}
-                icon={<SvgIcon.ArrowUp />}
-                disabled={disabledMap.backToParentDirectory}
-                onClick={handleBackToParentDirectory}
-              />
-            </div>
-            <div className="mt-2">
-              {bottomMenuList.map(({ icon, name, onClick }, index) => (
-                <div
-                  key={index}
-                  className="flex items-center px-3 py-2 transition-all duration-200 active:scale-95 active:bg-gray-100 rounded-lg"
-                  onClick={() => {
-                    vibrate()
-                    onClick()
-                    setBottomMenuExpanded(false)
-                  }}
-                >
-                  <div className="mr-2">{icon}</div>
-                  <div className="text-base">{name}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        ) : (
-          <div
-            className="w-full h-full flex justify-center items-center text-gray-800"
-            onClick={() => {
-              vibrate()
-              setBottomMenuExpanded(true)
-            }}
-          >
-            <SvgIcon.G />
-          </div>
-        )}
-      </div>
+      <FixedMenu
+        sideShow={sideShow}
+        setSideShow={setSideShow}
+        isSelectionMode={isSelectionMode}
+        disabledMap={disabledMap}
+        handleUploadClick={handleUploadClick}
+      />
     </>
   )
 }

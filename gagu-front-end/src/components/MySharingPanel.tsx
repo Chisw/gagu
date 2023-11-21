@@ -6,8 +6,7 @@ import { TunnelApi } from '../api'
 import { useRequest } from '../hooks'
 import { ITunnel } from '../types'
 import { getDateTime } from '../utils'
-import { EmptyPanel, SvgIcon } from './base'
-import { Confirmor } from './base'
+import { Confirmor, EmptyPanel, SvgIcon } from './common'
 
 interface MySharePanelProps {
   visible: boolean

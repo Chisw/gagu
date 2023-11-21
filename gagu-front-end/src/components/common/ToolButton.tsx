@@ -1,6 +1,6 @@
-import { Spinner } from '../components/base'
+import { Spinner } from '.'
 import { ReactNode } from 'react'
-import { line } from '../utils'
+import { line, vibrate } from '../../utils'
 
 interface ToolButtonProps {
   title: string
@@ -12,7 +12,7 @@ interface ToolButtonProps {
   active?: boolean
 }
 
-export default function ToolButton(props: ToolButtonProps) {
+export function ToolButton(props: ToolButtonProps) {
 
   const {
     title,
@@ -38,7 +38,12 @@ export default function ToolButton(props: ToolButtonProps) {
         ${active ? 'outline-2 outline outline-gray-300 outline-offset-[-6px]' : ''}
         ${className}
       `)}
-      onClick={() => !disabled && onClick()}
+      onClick={() => {
+        if (!disabled) {
+          vibrate()
+          onClick()
+        }
+      }}
     >
       {loading ? <Spinner size={16} /> : icon}
     </div>

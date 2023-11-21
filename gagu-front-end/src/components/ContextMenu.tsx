@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
-import { SvgIcon } from '../../components/base'
-import { contextMenuDataState } from '../../states'
+import { SvgIcon } from './common'
+import { contextMenuDataState } from '../states'
 import { Dropdown } from '@douyinfe/semi-ui'
 
 export default function ContextMenu() {

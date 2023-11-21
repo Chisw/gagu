@@ -4,7 +4,7 @@ import { openOperationState, runningAppListState, topWindowIndexState, contextMe
 import { APP_LIST, APP_ID_MAP } from '../../apps'
 import { IApp, IContextMenuItem } from '../../types'
 import { line } from '../../utils'
-import { SvgIcon } from '../../components/base'
+import { SvgIcon } from '../../components/common'
 import toast from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
 

@@ -2,7 +2,7 @@
   "translation": {
     "action": {
       "backward": "あとずさりする",
-      "backToParentDirectory": "親ディレクトリに戻る",
+      "navToParent": "親ディレクトリに戻る",
       "cancel": "キャンセル",
       "changePassword": "パスワードを変更する",
       "clear": "空",

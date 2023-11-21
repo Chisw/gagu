@@ -1,4 +1,4 @@
-import { Spinner } from '../../components/base'
+import { Spinner } from '../../components/common'
 import { useEffect, useMemo, useRef, useState, useCallback } from 'react'
 import { APP_ID_MAP, APP_LIST } from '..'
 import { AppComponentProps } from '../../types'

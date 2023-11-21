@@ -2,7 +2,7 @@
   "translation": {
     "action": {
       "backward": "Backward",
-      "backToParentDirectory": "Back to parent directory",
+      "navToParent": "Back to parent directory",
       "cancel": "Cancel",
       "changePassword": "Change password",
       "clear": "Clear",

@@ -2,7 +2,7 @@
   "translation": {
     "action": {
       "backward": "後退",
-      "backToParentDirectory": "返回上級",
+      "navToParent": "返回上級",
       "cancel": "取消",
       "changePassword": "修改密碼",
       "clear": "清空",

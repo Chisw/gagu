@@ -4,9 +4,8 @@ import { FsApi, TunnelApi } from '../api'
 import { useRequest } from '../hooks'
 import { IEntry, TunnelType } from '../types'
 import { copy, getDownloadInfo } from '../utils'
-import EntryListPanel from './EntryListPanel'
+import { EntryListPanel, SvgIcon } from './common'
 import QrCode from 'qrcode.react'
-import { SvgIcon } from './base'
 import toast from 'react-hot-toast'
 import md5 from 'md5'
 import { useTranslation } from 'react-i18next'
@@ -18,13 +17,13 @@ const newForm = () => ({
   leftTimes: undefined,
 })
 
-interface ShareModalProps {
+interface SharingModalProps {
   visible: boolean
   entryList: IEntry[]
   onClose: () => void
 }
 
-export default function ShareModal(props: ShareModalProps) {
+export default function SharingModal(props: SharingModalProps) {
 
   const {
     visible,

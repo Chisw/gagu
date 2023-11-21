@@ -1,4 +1,4 @@
-import { IconButton, SvgIcon } from '../../components/base'
+import { IconButton, SvgIcon } from '../../components/common'
 import { IEntry, IRootEntry } from '../../types'
 import { getReadableSize, getEntryPath, line } from '../../utils'
 

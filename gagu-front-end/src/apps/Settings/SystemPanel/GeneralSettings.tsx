@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { languageList, setLanguage } from '../../../i18n'
 import { Form } from '@douyinfe/semi-ui'
-import { SvgIcon } from '../../../components/base'
+import { SvgIcon } from '../../../components/common'
 import { line, refreshImage, setFavicon } from '../../../utils'
 import { useCallback, useRef } from 'react'
 import { useRequest } from '../../../hooks'

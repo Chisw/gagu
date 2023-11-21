@@ -2,12 +2,12 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { useRequest, useDragSelect, useDragOperations, useHotKey } from '../../hooks'
 import { FsApi, DownloadApi, TunnelApi, UserApi } from '../../api'
-import BottomBar from './BottomBar'
-import ToolBar, { IToolBarDisabledMap } from './ToolBar'
+import StatusBar from './StatusBar'
+import ControlBar, { IControlBarDisabledMap } from './ControlBar'
 import { NameFailType } from './EntryNode/EntryName'
 import Side from './Side'
 import { pick, throttle } from 'lodash-es'
-import { Confirmor, EmptyPanel, SvgIcon } from '../../components/base'
+import { Confirmor, EmptyPanel, SvgIcon } from '../../components/common'
 import { CALLABLE_APP_LIST } from '..'
 import toast from 'react-hot-toast'
 import {
@@ -50,7 +50,7 @@ import {
   Sort,
   SortType,
 } from '../../types'
-import ShareModal from '../../components/ShareModal'
+import SharingModal from '../../components/SharingModal'
 import { useTranslation } from 'react-i18next'
 import EntryNode from './EntryNode'
 
@@ -88,7 +88,7 @@ export default function FileExplorer(props: AppComponentProps) {
   const [scrollHook, setScrollHook] = useState({ top: 0, height: 0 })
   const [hiddenShow, setHiddenShow] = useState(false)
   const [abortController, setAbortController] = useState<AbortController | null>(null)
-  const [shareModalVisible, setShareModalVisible] = useState(false)
+  const [SharingModalShow, setSharingModalShow] = useState(false)
   const [sharedEntryList, setSharedEntryList] = useState<IEntry[]>([])
 
   const lassoRef = useRef(null)
@@ -163,11 +163,11 @@ export default function FileExplorer(props: AppComponentProps) {
 
   const disabledMap = useMemo(() => {
     const { position, list } = visitHistory
-    const disabledMap: IToolBarDisabledMap = {
+    const disabledMap: IControlBarDisabledMap = {
       navBack: position <= 0,
       navForward: list.length === position + 1,
       refresh: querying || !currentPath,
-      backToParentDirectory: !currentPath || isInRoot,
+      navToParent: !currentPath || isInRoot,
       newDir: newDirMode || newTxtMode,
       newTxt: newDirMode || newTxtMode,
       rename: selectedEntryList.length !== 1,
@@ -261,7 +261,7 @@ export default function FileExplorer(props: AppComponentProps) {
     await handleQueryEntryList(currentPath, true)
   }, [handleQueryEntryList, currentPath])
 
-  const handleBackToParentDirectory = useCallback(() => {
+  const handleNavToParent = useCallback(() => {
     const list = currentPath.split('/')
     list.pop()
     const path = list.join('/')
@@ -352,7 +352,7 @@ export default function FileExplorer(props: AppComponentProps) {
 
   const handleShareClick = useCallback((entryList: IEntry[]) => {
     setSharedEntryList(entryList)
-    setShareModalVisible(true)
+    setSharingModalShow(true)
   }, [])
 
   const handleDeleteClick = useCallback(async (contextEntryList?: IEntry[]) => {
@@ -581,7 +581,7 @@ export default function FileExplorer(props: AppComponentProps) {
       'Shift+R': disabledMap.refresh ? null : handleRefresh,
       'Shift+T': disabledMap.newTxt ? null : () => handleCreate('txt'),
       'Shift+U': disabledMap.upload ? null : handleUploadClick,
-      'Shift+ArrowUp': disabledMap.backToParentDirectory ? null : handleBackToParentDirectory,
+      'Shift+ArrowUp': disabledMap.navToParent ? null : handleNavToParent,
       'Shift+ArrowRight': disabledMap.navForward ? null : handleNavForward,
       'Shift+ArrowLeft': disabledMap.navBack ? null : handleNavBack,
       'Shift+ArrowDown': (selectedEntryList.length === 1 && selectedEntryList[0].type === 'directory')
@@ -745,16 +745,16 @@ export default function FileExplorer(props: AppComponentProps) {
         />
         {/* main */}
         <div className="relative flex-grow h-full bg-white flex flex-col">
-          <ToolBar
+          <ControlBar
             {...{ windowWidth, disabledMap, gridMode, filterMode, filterText, hiddenShow, sortType }}
             {...{ setFilterMode, setFilterText, setHiddenShow }}
             onGridModeChange={handleGridModeChange}
             onSortTypeChange={handleSortChange}
             onNavBack={handleNavBack}
             onNavForward={handleNavForward}
-            onRefresh={handleRefresh}
-            onAbort={() => abortController?.abort()}
-            onBackToTop={handleBackToParentDirectory}
+            onNavRefresh={handleRefresh}
+            onNavAbort={() => abortController?.abort()}
+            onNavToParent={handleNavToParent}
             onNewDir={() => handleCreate('dir')}
             onNewTxt={() => handleCreate('txt')}
             onRename={handleRename}
@@ -837,7 +837,7 @@ export default function FileExplorer(props: AppComponentProps) {
               })}
             </div>
           </div>
-          <BottomBar
+          <StatusBar
             {...{ folderCount, fileCount, currentPath, rootEntry: activeRootEntry, selectedEntryList }}
             loading={querying}
             onDirClick={handleGoFullPath}
@@ -854,10 +854,10 @@ export default function FileExplorer(props: AppComponentProps) {
         onChange={(e: any) => addUploadTransferTask([...e.target.files])}
       />
 
-      <ShareModal
-        visible={shareModalVisible}
+      <SharingModal
+        visible={SharingModalShow}
         entryList={sharedEntryList}
-        onClose={() => setShareModalVisible(false)}
+        onClose={() => setSharingModalShow(false)}
       />
       
     </>

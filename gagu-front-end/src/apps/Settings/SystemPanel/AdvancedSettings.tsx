@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { SettingApi } from '../../../api'
 import { useRequest } from '../../../hooks'
 import { SettingForm } from '../../../types'
-import { Confirmor, Spinner, SvgIcon } from '../../../components/base'
+import { Confirmor, Spinner, SvgIcon } from '../../../components/common'
 import { useRecoilState } from 'recoil'
 import { rootInfoState } from '../../../states'
 

@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { SvgIcon } from '../../components/base'
+import { SvgIcon } from '../../components/common'
 import { AppComponentProps } from '../../types'
 import { line } from '../../utils'
 import SystemPanel from './SystemPanel'
