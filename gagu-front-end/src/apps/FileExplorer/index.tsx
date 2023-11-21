@@ -1,58 +1,36 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useRecoilState } from 'recoil'
-import { useRequest, useDragSelect, useDragOperations, useHotKey } from '../../hooks'
-import { FsApi, DownloadApi, TunnelApi, UserApi } from '../../api'
+import { useDragSelect, useDragOperations, useHotKey } from '../../hooks'
 import StatusBar from './StatusBar'
 import ControlBar, { IControlBarDisabledMap } from './ControlBar'
 import { NameFailType } from './EntryNode/EntryName'
 import Side from './Side'
-import { pick, throttle } from 'lodash-es'
-import { Confirmor, EmptyPanel, SvgIcon } from '../../components/common'
+import { pick } from 'lodash-es'
+import { EmptyPanel, SvgIcon } from '../../components/common'
 import { CALLABLE_APP_LIST } from '..'
 import toast from 'react-hot-toast'
 import {
-  getDownloadInfo,
   getIsContained,
   isSameEntry,
   line,
   getMatchedApp,
   openInIINA,
   getEntryPath,
-  DOWNLOAD_PERIOD,
   GEN_THUMBNAIL_IMAGE_LIST,
-  path2RootEntry,
-  sortMethodMap,
 } from '../../utils'
-import {
-  contextMenuDataState,
-  openOperationState,
-  rootInfoState,
-  transferTaskListState,
-  transferSignalState,
-  lastChangedPathState,
-  entryPathMapState,
-} from '../../states'
+import { contextMenuDataState, openOperationState } from '../../states'
 import {
   AppComponentProps,
   EntryType,
   IEntry,
-  IRootEntry,
-  IVisitHistory,
   IRectInfo,
-  INestedFile,
   IContextMenuItem,
   IApp,
-  IUploadTransferTask,
-  TransferTaskType,
-  TransferTaskStatus,
-  TunnelType,
-  IRootInfo,
-  Sort,
-  SortType,
 } from '../../types'
 import SharingModal from '../../components/SharingModal'
 import { useTranslation } from 'react-i18next'
 import EntryNode from './EntryNode'
+import useFileExplorer from '../../hooks/useFileExplorer'
 
 export default function FileExplorer(props: AppComponentProps) {
 
@@ -65,52 +43,41 @@ export default function FileExplorer(props: AppComponentProps) {
 
   const { t } = useTranslation()
 
-  const [rootInfo, setRootInfo] = useRecoilState(rootInfoState)
-  const [entryPathMap, setEntryPathMap] = useRecoilState(entryPathMapState)
   const [, setOpenOperation] = useRecoilState(openOperationState)
   const [, setContextMenuData] = useRecoilState(contextMenuDataState)
-  const [transferTaskList, setTransferTaskList] = useRecoilState(transferTaskListState)
-  const [transferSignal, setTransferSignal] = useRecoilState(transferSignalState)
-  const [lastChangedPath, setLastChangedPath] = useRecoilState(lastChangedPathState)
 
   const [sideCollapse, setSideCollapse] = useState(false)
-  const [currentPath, setCurrentPath] = useState('')
-  const [lastVisitedPath, setLastVisitedPath] = useState('')
-  const [activeRootEntry, setActiveRootEntry] = useState<IRootEntry | null>(null)
-  const [visitHistory, setVisitHistory] = useState<IVisitHistory>({ position: -1, list: [] })
-  const [selectedEntryList, setSelectedEntryList] = useState<IEntry[]>([])
   const [newDirMode, setNewDirMode] = useState(false)
   const [newTxtMode, setNewTxtMode] = useState(false)
   const [renameMode, setRenameMode] = useState(false)
   const [filterMode, setFilterMode] = useState(false)
   const [filterText, setFilterText] = useState('')
-  const [scrollWaiter, setScrollWaiter] = useState<{ wait: boolean, smooth?: boolean }>({ wait: false })
-  const [scrollHook, setScrollHook] = useState({ top: 0, height: 0 })
   const [hiddenShow, setHiddenShow] = useState(false)
-  const [abortController, setAbortController] = useState<AbortController | null>(null)
-  const [SharingModalShow, setSharingModalShow] = useState(false)
-  const [sharedEntryList, setSharedEntryList] = useState<IEntry[]>([])
+  const [scrollWaiter, setScrollWaiter] = useState<{ wait: boolean, smooth?: boolean }>({ wait: false })
 
   const lassoRef = useRef(null)
   const containerRef = useRef(null)       // containerInnerRef 的容器，y-scroll-auto
   const containerInnerRef = useRef(null)  // entryList 容器，最小高度与 containerRef 的一致，自动撑高
   const uploadInputRef = useRef(null)
 
-  const { request: queryEntryList, loading: querying, setData } = useRequest(FsApi.queryEntryList)
-  const { request: deleteEntry, loading: deleting } = useRequest(FsApi.deleteEntry)
-  const { request: queryDirectorySize, loading: sizeQuerying } = useRequest(FsApi.queryDirectorySize)
-  const { request: createUserFavorite } = useRequest(UserApi.createUserFavorite)
-  const { request: removeUserFavorite } = useRequest(UserApi.removeUserFavorite)
-  const { request: createTunnel } = useRequest(TunnelApi.createTunnel)
-
-  const { rootEntryList, rootEntryPathList, favoriteEntryList } = useMemo(() => {
-    const { rootEntryList, favoritePathList } = rootInfo
-    const rootEntryPathList = rootEntryList.map(getEntryPath)
-    const favoriteEntryList = favoritePathList?.map(path2RootEntry).filter(Boolean) || []
-    return { rootEntryList, rootEntryPathList, favoriteEntryList }
-  }, [rootInfo])
-
-  const isInRoot = useMemo(() => rootEntryPathList.includes(currentPath), [rootEntryPathList, currentPath])
+  const {
+    rootInfo, entryPathMap, currentPath, activeRootEntry, lastVisitedPath, setLastVisitedPath,
+    querying, sizeQuerying, deleting,
+    rootEntryList, favoriteEntryList, isInRoot,
+    entryList, selectedEntryList, isEntryListEmpty, folderCount, fileCount, gridMode, sortType,
+    visitHistory, setSelectedEntryList,
+    handleRootEntryClick, handleDirectoryOpen, handleGoFullPath,
+    handleNavBack, handleNavForward, handleNavRefresh, handleNavAbort, handleNavToParent,
+    sharingModalShow, setSharingModalShow, sharedEntryList,
+    handleSelectAll, handleDownloadClick, handleShareClick, handleDirectorySizeUpdate, handleFavorite, handleDeleteClick,
+    scrollHook,
+    handleGridModeChange, handleSortChange,
+    addUploadTransferTask,
+  } = useFileExplorer({
+    filterText,
+    hiddenShow,
+    containerRef,
+  })
 
   useEffect(() => setWindowLoading(querying), [setWindowLoading, querying])
 
@@ -120,46 +87,6 @@ export default function FileExplorer(props: AppComponentProps) {
       : currentPath.split('/').pop() as string
     setWindowTitle(title)
   }, [currentPath, setWindowTitle, isInRoot, activeRootEntry])
-
-  useEffect(() => {
-    const container: any = containerRef.current
-    if (!container) return
-    const listener = () => {
-      const { top, height } = container.getBoundingClientRect()
-      setScrollHook({ top, height })
-    }
-    listener()
-    const throttleListener = throttle(listener, 500)
-    container.addEventListener('scroll', throttleListener)
-    return () => container.removeEventListener('scroll', throttleListener)
-  }, [])
-
-  const { entryList, isEntryListEmpty, folderCount, fileCount, gridMode, sortType } = useMemo(() => {
-    const {
-      list = [],
-      gridMode = true,
-      sortType = Sort.default,
-    } = entryPathMap[currentPath] || {}
-
-    const allEntryList = [...list].sort(sortMethodMap[sortType])
-    const ft = filterText.toLowerCase()
-    const methodName = ft.startsWith('*') ? 'endsWith' : (ft.endsWith('*') ? 'startsWith' : 'includes')
-    const entryList = allEntryList
-      .filter(entry => hiddenShow ? true : !entry.hidden)
-      .filter(entry => ft
-        ? entry.name.toLowerCase()[methodName](ft.replaceAll('*', ''))
-        : true
-      )
-    let folderCount = 0
-    let fileCount = 0
-
-    entryList.forEach(({ type }) => type === 'directory' ? folderCount++ : fileCount++)
-
-    const entryListCount = entryList.length
-    const isEntryListEmpty = entryListCount === 0
-
-    return { entryList, entryListCount, isEntryListEmpty, folderCount, fileCount, gridMode, sortType }
-  }, [currentPath, entryPathMap, filterText, hiddenShow])
 
   const disabledMap = useMemo(() => {
     const { position, list } = visitHistory
@@ -179,103 +106,14 @@ export default function FileExplorer(props: AppComponentProps) {
     return disabledMap
   }, [visitHistory, querying, currentPath, isInRoot, newDirMode, newTxtMode, selectedEntryList, isEntryListEmpty])
 
-  const handleQueryEntryList = useCallback(async (path: string, keepData?: boolean) => {
-    if (!path) return
-    if (!keepData) {
-      setData(null)
-    }
-    const controller = new AbortController()
-    const config = { signal: controller.signal }
-    setAbortController(controller)
-    const { success, data } = await queryEntryList(path, config)
-    if (success) {
-      const res = {
-        ...(entryPathMap[path] || {}),
-        list: data,
-      }
-      setEntryPathMap({ ...entryPathMap, [path]: res })
-    }
-  }, [queryEntryList, setData, entryPathMap, setEntryPathMap])
-
-  const updateHistory = useCallback((direction: 'forward' | 'backward', path?: string) => {
-    const map = { forward: 1, backward: -1 }
-    const { position: pos, list: li } = visitHistory
-    const position: number = pos + map[direction]
-    let list = [...li]
-    if (direction === 'forward' && path) {
-      list = list.filter((i, index) => index < position)
-      list.push(path)
-    }
-    setVisitHistory({ position, list })
-  }, [visitHistory])
-
-  const handlePathChange = useCallback((props: {
-    path: string
-    direction: 'forward' | 'backward'
-    pushPath?: boolean
-    updateActiveRootEntry?: boolean
-  }) => {
-    const { path, direction, pushPath, updateActiveRootEntry } = props
-    setLastVisitedPath(currentPath)
-    setCurrentPath(path)
-    abortController?.abort()
-    handleQueryEntryList(path)
-    updateHistory(direction, pushPath ? path : undefined)
-    if (updateActiveRootEntry) {
-      const activeEntry = rootEntryList
-        .map(entry => ({ path: getEntryPath(entry), entry }))
-        .filter(o => path.startsWith(o.path))
-        .sort((a, b) => a.path.length > b.path.length ? -1 : 1)[0].entry
-      setActiveRootEntry(activeEntry)
-    }
-  }, [abortController, currentPath, handleQueryEntryList, rootEntryList, updateHistory])
-
-  const handleRootEntryClick = useCallback((rootEntry: IRootEntry) => {
-    const path = getEntryPath(rootEntry)
-    handlePathChange({ path, direction: 'forward', pushPath: true, updateActiveRootEntry: true })
-  }, [handlePathChange])
-
-  const handleDirOpen = useCallback((entry: IEntry) => {
-    const path = getEntryPath(entry)
-    handlePathChange({ path, direction: 'forward', pushPath: true })
-  }, [handlePathChange])
-
-  const handleGoFullPath = useCallback((path: string) => {
-    handlePathChange({ path, direction: 'forward', pushPath: true })
-  }, [handlePathChange])
-
-  const handleNavBack = useCallback(() => {
-    const { position, list } = visitHistory
-    const path = list[position - 1]
-    handlePathChange({ path, direction: 'backward', updateActiveRootEntry: true })
-  }, [visitHistory, handlePathChange])
-
-  const handleNavForward = useCallback(() => {
-    const { position, list } = visitHistory
-    const path = list[position + 1]
-    handlePathChange({ path, direction: 'forward', updateActiveRootEntry: true })
-  }, [visitHistory, handlePathChange])
-
-  const handleRefresh = useCallback(async () => {
-    setSelectedEntryList([])
-    await handleQueryEntryList(currentPath, true)
-  }, [handleQueryEntryList, currentPath])
-
-  const handleNavToParent = useCallback(() => {
-    const list = currentPath.split('/')
-    list.pop()
-    const path = list.join('/')
-    handlePathChange({ path, direction: 'forward', pushPath: true })
-  }, [currentPath, handlePathChange])
-
   const handleCreate = useCallback((create: 'dir' | 'txt') => {
     setSelectedEntryList([])
     create === 'dir' ? setNewDirMode(true) : setNewTxtMode(true)
-  }, [])
+  }, [setSelectedEntryList])
 
   const handleRename = useCallback(() => setRenameMode(true), [])
 
-  const handleCancelSelect = useCallback((e: any) => {
+  const handleSelectCancel = useCallback((e: any) => {
     // oncontextmenu or same one entry
     if (e.button === 2 || e.target.closest('.gagu-entry-node')) return
 
@@ -285,16 +123,16 @@ export default function FileExplorer(props: AppComponentProps) {
       document.getElementById('file-explorer-name-input')
     ) return
     setSelectedEntryList([])
-  }, [])
+  }, [setSelectedEntryList])
 
   const handleNameSuccess = useCallback(async (entry: IEntry) => {
     setNewDirMode(false)
     setNewTxtMode(false)
     setRenameMode(false)
-    await handleRefresh()
+    await handleNavRefresh()
     setSelectedEntryList([entry])
     setScrollWaiter({ wait: true, smooth: true })
-  }, [handleRefresh])
+  }, [handleNavRefresh, setSelectedEntryList])
 
   const handleNameFail = useCallback((failType: NameFailType) => {
     if (['cancel', 'empty'].includes(failType)) {
@@ -308,95 +146,6 @@ export default function FileExplorer(props: AppComponentProps) {
     (uploadInputRef.current as any)?.click()
   }, [])
 
-  const handleFavorite = useCallback((entry: IEntry, isFavorited: boolean) => {
-    Confirmor({
-      t,
-      type: isFavorited ? 'unfavorite' : 'favorite',
-      content: t(isFavorited ? 'tip.unfavoriteItem' : 'tip.favoriteItem', { name: entry.name }),
-      onConfirm: async (close) => {
-        const path = getEntryPath(entry)
-        const fn = isFavorited ? removeUserFavorite : createUserFavorite
-        const { success, list } = await fn(path)
-        if (success) {
-          setRootInfo({ ...rootInfo, favoritePathList: list } as IRootInfo)
-        }
-        close()
-      },
-    })
-  }, [createUserFavorite, removeUserFavorite, t, rootInfo, setRootInfo])
-
-  const handleDownloadClick = useCallback((contextEntryList?: IEntry[]) => {
-    const entryList = contextEntryList || selectedEntryList
-    const { message, downloadName } = getDownloadInfo(currentPath, entryList, t)
-    Confirmor({
-      t,
-      type: 'download',
-      content: message,
-      onConfirm: async (close) => {
-        const { success, message, code } = await createTunnel({
-          type: TunnelType.download,
-          entryList,
-          downloadName,
-          leftTimes: 1,
-          expiredAt: Date.now() + DOWNLOAD_PERIOD,
-        })
-        if (success && code) {
-          DownloadApi.download(code)
-        } else {
-          toast.error(message)
-        }
-        close()
-      },
-    })
-  }, [currentPath, selectedEntryList, createTunnel, t])
-
-  const handleShareClick = useCallback((entryList: IEntry[]) => {
-    setSharedEntryList(entryList)
-    setSharingModalShow(true)
-  }, [])
-
-  const handleDeleteClick = useCallback(async (contextEntryList?: IEntry[]) => {
-    const processList = contextEntryList || selectedEntryList
-    const count = processList.length
-    if (!count) return
-    const message = count === 1
-      ? t('tip.deleteItem', { name: processList[0].name })
-      : t('tip.deleteItems', { count })
-
-    Confirmor({
-      t,
-      type: 'delete',
-      content: message,
-      onConfirm: async (close) => {
-        for (const entry of processList) {
-          const { name } = entry
-          const path = getEntryPath(entry)
-          const { success } = await deleteEntry(path)
-          if (success) {
-            document.querySelector(`.gagu-entry-node[data-entry-name="${name}"]`)?.setAttribute('style', 'opacity:0;')
-            const { favoritePathList } = rootInfo
-            setRootInfo({ ...rootInfo, favoritePathList: favoritePathList.filter((p) => p !== path) } as IRootInfo)
-          }
-        }
-        handleRefresh()
-        close()
-      },
-    })
-  }, [deleteEntry, selectedEntryList, handleRefresh, t, setRootInfo, rootInfo])
-
-  useEffect(() => {
-    if (lastChangedPath.path === currentPath) {
-      handleRefresh()
-      setLastChangedPath({ path: '', timestamp: 0 })
-    }
-  }, [lastChangedPath, currentPath, handleRefresh, setLastChangedPath])
-
-  useEffect(() => {
-    if (!currentPath && rootEntryList.length) {
-      handleRootEntryClick(rootEntryList[0])
-    }
-  }, [currentPath, rootEntryList, handleRootEntryClick])
-
   useEffect(() => {
     const container: any = containerRef.current
     if (container && scrollWaiter.wait && !querying) {
@@ -406,14 +155,14 @@ export default function FileExplorer(props: AppComponentProps) {
       setScrollWaiter({ wait: false })
       setLastVisitedPath('')
     }
-  }, [scrollWaiter, querying])
+  }, [scrollWaiter, querying, setLastVisitedPath])
 
   useEffect(() => {
     setRenameMode(false)
     setSelectedEntryList([])
     setFilterMode(false)
     setFilterText('')
-  }, [currentPath])
+  }, [currentPath, setSelectedEntryList])
 
   useEffect(() => {
     const prevEntry = entryList.find((entry) => getEntryPath(entry) === lastVisitedPath)
@@ -421,23 +170,7 @@ export default function FileExplorer(props: AppComponentProps) {
       setSelectedEntryList([prevEntry])
       setScrollWaiter({ wait: true })
     }
-  }, [entryList, lastVisitedPath])
-
-  useEffect(() => {
-    setSelectedEntryList([])
-  }, [filterText])
-
-  const updateDirectorySize = useCallback(async (entry: IEntry) => {
-    const path = getEntryPath(entry)
-    const { success, data } = await queryDirectorySize(path)
-    if (success) {
-      const res = {
-        ...(entryPathMap[path] || {}),
-        size: data,
-      }
-      setEntryPathMap({ ...entryPathMap, [path]: res })
-    }
-  }, [queryDirectorySize, entryPathMap, setEntryPathMap])
+  }, [entryList, lastVisitedPath, setSelectedEntryList])
 
   const handleEntryClick = useCallback((e: any, entry: IEntry) => {
     if (newDirMode || newTxtMode || renameMode) return
@@ -467,13 +200,13 @@ export default function FileExplorer(props: AppComponentProps) {
       list = [entry]
     }
     setSelectedEntryList(list)
-  }, [newDirMode, newTxtMode, renameMode, selectedEntryList, entryList])
+  }, [newDirMode, newTxtMode, renameMode, selectedEntryList, entryList, setSelectedEntryList])
 
   const handleEntryDoubleClick = useCallback((entry: IEntry) => {
     if (renameMode) return
     const { type, name } = entry
     if (type === 'directory') {
-      handleDirOpen(entry)
+      handleDirectoryOpen(entry)
     } else {
       const app = getMatchedApp(entry)
       if (app) {
@@ -488,14 +221,9 @@ export default function FileExplorer(props: AppComponentProps) {
         handleDownloadClick()
       }
     }
-  }, [renameMode, entryList, handleDirOpen, handleDownloadClick, setOpenOperation])
+  }, [renameMode, entryList, handleDirectoryOpen, handleDownloadClick, setOpenOperation])
 
-  const handleSelectAll = useCallback((force?: boolean) => {
-    const isSelectAll = force || !selectedEntryList.length
-    setSelectedEntryList(isSelectAll ? entryList : [])
-  }, [setSelectedEntryList, entryList, selectedEntryList])
-
-  const handleRectSelect = useCallback((info: IRectInfo) => {
+  const handleLassoSelect = useCallback((info: IRectInfo) => {
     const entryElements = document.querySelectorAll('.gagu-entry-node')
     if (!entryElements.length) return
     const indexList: number[] = []
@@ -514,30 +242,8 @@ export default function FileExplorer(props: AppComponentProps) {
     lassoRef,
     containerRef,
     containerInnerRef,
-    onDragging: handleRectSelect,
+    onDragging: handleLassoSelect,
   })
-
-  const addUploadTransferTask = useCallback((nestedFileList: INestedFile[], targetDir?: string) => {
-    if (!nestedFileList.length) {
-      toast.error(t`tip.noUploadableFilesDetected`)
-      return
-    }
-    const newTaskList: IUploadTransferTask[] = nestedFileList.map(nestedFile => {
-      const { name, fullPath } = nestedFile
-      const file = nestedFile as File
-      const id = `${Date.now()}-${Math.random().toString(36).slice(-8)}`
-      const newPath = `${currentPath}${targetDir ? `/${targetDir}` : ''}${fullPath || `/${name}`}`
-      return {
-        id,
-        type: TransferTaskType.upload,
-        status: TransferTaskStatus.waiting,
-        file,
-        newPath,
-      }
-    })
-    setTransferTaskList([...transferTaskList, ...newTaskList])
-    setTransferSignal(transferSignal + 1)
-  }, [currentPath, transferTaskList, setTransferTaskList, transferSignal, setTransferSignal, t])
 
   useDragOperations({
     containerInnerRef,
@@ -547,22 +253,6 @@ export default function FileExplorer(props: AppComponentProps) {
       addUploadTransferTask(nestedFileList, targetDir)
     },
   })
-
-  const handleGridModeChange = useCallback((mode: boolean) => {
-    const res = {
-      ...(entryPathMap[currentPath] || {}),
-      gridMode: mode,
-    }
-    setEntryPathMap({ ...entryPathMap, [currentPath]: res })
-  }, [currentPath, entryPathMap, setEntryPathMap])
-
-  const handleSortChange = useCallback((sortType: SortType) => {
-    const res = {
-      ...(entryPathMap[currentPath] || {}),
-      sortType: sortType,
-    }
-    setEntryPathMap({ ...entryPathMap, [currentPath]: res })
-  }, [currentPath, entryPathMap, setEntryPathMap])
 
   useHotKey({
     type: 'keyup',
@@ -578,14 +268,14 @@ export default function FileExplorer(props: AppComponentProps) {
       'Shift+H': () => setHiddenShow(!hiddenShow),
       'Shift+L': () => handleGridModeChange(false),
       'Shift+N': disabledMap.newDir ? null : () => handleCreate('dir'),
-      'Shift+R': disabledMap.refresh ? null : handleRefresh,
+      'Shift+R': disabledMap.refresh ? null : handleNavRefresh,
       'Shift+T': disabledMap.newTxt ? null : () => handleCreate('txt'),
       'Shift+U': disabledMap.upload ? null : handleUploadClick,
       'Shift+ArrowUp': disabledMap.navToParent ? null : handleNavToParent,
       'Shift+ArrowRight': disabledMap.navForward ? null : handleNavForward,
       'Shift+ArrowLeft': disabledMap.navBack ? null : handleNavBack,
       'Shift+ArrowDown': (selectedEntryList.length === 1 && selectedEntryList[0].type === 'directory')
-        ? () => handleDirOpen(selectedEntryList[0])
+        ? () => handleDirectoryOpen(selectedEntryList[0])
         : null,
     },
   })
@@ -654,7 +344,7 @@ export default function FileExplorer(props: AppComponentProps) {
         icon: <SvgIcon.Refresh />,
         name: t`action.refresh`,
         isShow: isOnBlank,
-        onClick: handleRefresh,
+        onClick: handleNavRefresh,
       },
       {
         icon: <SvgIcon.Rename />,
@@ -697,7 +387,7 @@ export default function FileExplorer(props: AppComponentProps) {
         icon: <SvgIcon.FolderInfo />,
         name: t`action.folderSize`,
         isShow: isOnDirectory && isSingle,
-        onClick: () => updateDirectorySize(contextEntryList[0]),
+        onClick: () => handleDirectorySizeUpdate(contextEntryList[0]),
       },
       {
         icon: isFavorited ? <SvgIcon.Star /> : <SvgIcon.StarSolid />,
@@ -732,7 +422,7 @@ export default function FileExplorer(props: AppComponentProps) {
     ]
 
     setContextMenuData({ eventData, menuItemList })
-  }, [selectedEntryList, favoriteEntryList, t, handleRefresh, handleUploadClick, setContextMenuData, entryList, setOpenOperation, handleRename, updateDirectorySize, handleFavorite, handleDownloadClick, handleShareClick, handleDeleteClick])
+  }, [selectedEntryList, favoriteEntryList, t, handleNavRefresh, handleUploadClick, setContextMenuData, entryList, setOpenOperation, handleRename, handleDirectorySizeUpdate, handleFavorite, handleDownloadClick, handleShareClick, handleDeleteClick, setSelectedEntryList])
 
   return (
     <>
@@ -752,8 +442,8 @@ export default function FileExplorer(props: AppComponentProps) {
             onSortTypeChange={handleSortChange}
             onNavBack={handleNavBack}
             onNavForward={handleNavForward}
-            onNavRefresh={handleRefresh}
-            onNavAbort={() => abortController?.abort()}
+            onNavRefresh={handleNavRefresh}
+            onNavAbort={handleNavAbort}
             onNavToParent={handleNavToParent}
             onNewDir={() => handleCreate('dir')}
             onNewTxt={() => handleCreate('txt')}
@@ -780,7 +470,7 @@ export default function FileExplorer(props: AppComponentProps) {
           <div
             ref={containerRef}
             className="relative flex-grow overflow-x-hidden overflow-y-auto select-none"
-            onMouseDownCapture={handleCancelSelect}
+            onMouseDownCapture={handleSelectCancel}
           >
             <div
               ref={lassoRef}
@@ -855,7 +545,7 @@ export default function FileExplorer(props: AppComponentProps) {
       />
 
       <SharingModal
-        visible={SharingModalShow}
+        visible={sharingModalShow}
         entryList={sharedEntryList}
         onClose={() => setSharingModalShow(false)}
       />

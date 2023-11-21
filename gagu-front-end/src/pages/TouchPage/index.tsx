@@ -1,88 +1,59 @@
-import { Confirmor, EmptyPanel } from '../../components/common'
+import { EmptyPanel } from '../../components/common'
 import { useRecoilState } from 'recoil'
-import { activePageState, entryPathMapState, rootInfoState, transferSignalState, transferTaskListState } from '../../states'
+import { activePageState } from '../../states'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import EntrySelector from '../../components/EntrySelector'
 import MenuBar from '../../components/MenuBar'
-import { IEntry, INestedFile, IRootEntry, IRootInfo, IUploadTransferTask, IVisitHistory, Page, Sort, SortType, TransferTaskStatus, TransferTaskType, TunnelType } from '../../types'
-import { useTranslation } from 'react-i18next'
-import { DOWNLOAD_PERIOD, getDownloadInfo, getEntryPath, getMatchedApp, isSameEntry, path2RootEntry, sortMethodMap, vibrate } from '../../utils'
+import { IEntry, Page } from '../../types'
+import { getMatchedApp, isSameEntry, vibrate } from '../../utils'
 import EntryNode from './EntryNode'
-import { useRequest } from '../../hooks'
-import { DownloadApi, FsApi, TunnelApi, UserApi } from '../../api'
 import StatusBar from '../../apps/FileExplorer/StatusBar'
 import ControlBar, { IControlBarDisabledMap } from '../../apps/FileExplorer/ControlBar'
-import toast from 'react-hot-toast'
 import SharingModal from '../../components/SharingModal'
-import { throttle } from 'lodash-es'
 import SelectionMenu from './SelectionMenu'
 import FixedMenu from './FixedMenu'
 import Side from './Side'
+import useFileExplorer from '../../hooks/useFileExplorer'
 
 export default function TouchPage() {
 
-  const { t } = useTranslation()
-
   const [activePage, setActivePage] = useRecoilState(activePageState)
-  const [rootInfo, setRootInfo] = useRecoilState(rootInfoState)
-  const [entryPathMap, setEntryPathMap] = useRecoilState(entryPathMapState)
   // const [, setOpenOperation] = useRecoilState(openOperationState)
-  const [transferTaskList, setTransferTaskList] = useRecoilState(transferTaskListState)
-  const [transferSignal, setTransferSignal] = useRecoilState(transferSignalState)
 
-  const [currentPath, setCurrentPath] = useState('')
   const [filterText, setFilterText] = useState('')
-  const [, setLastVisitedPath] = useState('')
   const [hiddenShow, setHiddenShow] = useState(false)
-  const [selectedEntryList, setSelectedEntryList] = useState<IEntry[]>([])
   const [filterMode, setFilterMode] = useState(false)
-  const [scrollHook, setScrollHook] = useState({ top: 0, height: 0 })
-  const [abortController, setAbortController] = useState<AbortController | null>(null)
-  const [activeRootEntry, setActiveRootEntry] = useState<IRootEntry | null>(null)
-  const [visitHistory, setVisitHistory] = useState<IVisitHistory>({ position: -1, list: [] })
-  const [sharedEntryList, setSharedEntryList] = useState<IEntry[]>([])
-  const [SharingModalShow, setSharingModalShow] = useState(false)
   const [isSelectionMode, setIsSelectionMode] = useState(false)
   const [sideShow, setSideShow] = useState(false)
 
-  const { request: queryEntryList, loading: querying, setData } = useRequest(FsApi.queryEntryList)
-  const { request: queryDirectorySize, loading: sizeQuerying } = useRequest(FsApi.queryDirectorySize)
-  const { request: createUserFavorite } = useRequest(UserApi.createUserFavorite)
-  const { request: removeUserFavorite } = useRequest(UserApi.removeUserFavorite)
-  const { request: createTunnel } = useRequest(TunnelApi.createTunnel)
-  const { request: deleteEntry, loading: deleting } = useRequest(FsApi.deleteEntry)
-
   const containerRef = useRef(null)
   const uploadInputRef = useRef(null)
+
+  const {
+    rootInfo, entryPathMap, currentPath, activeRootEntry,
+    querying, sizeQuerying, deleting,
+    rootEntryList, favoriteEntryList, isInRoot,
+    entryList, selectedEntryList, isEntryListEmpty, folderCount, fileCount, gridMode, sortType,
+    visitHistory, setSelectedEntryList,
+    handleRootEntryClick, handleDirectoryOpen, handleGoFullPath,
+    handleNavBack, handleNavForward, handleNavRefresh, handleNavAbort, handleNavToParent,
+    sharingModalShow, setSharingModalShow, sharedEntryList,
+    handleSelectAll, handleDownloadClick, handleShareClick, handleDirectorySizeUpdate, handleFavorite, handleDeleteClick,
+    scrollHook,
+    handleGridModeChange, handleSortChange,
+    addUploadTransferTask,
+  } = useFileExplorer({
+    filterText,
+    hiddenShow,
+    containerRef,
+  })
 
   useEffect(() => {
     setSelectedEntryList([])
     setFilterMode(false)
     setFilterText('')
     setIsSelectionMode(false)
-  }, [currentPath])
-
-  useEffect(() => {
-    const container: any = containerRef.current
-    if (!container) return
-    const listener = () => {
-      const { top, height } = container.getBoundingClientRect()
-      setScrollHook({ top, height })
-    }
-    listener()
-    const throttleListener = throttle(listener, 500)
-    container.addEventListener('scroll', throttleListener)
-    return () => container.removeEventListener('scroll', throttleListener)
-  }, [])
-
-  const { rootEntryList, rootEntryPathList, favoriteEntryList } = useMemo(() => {
-    const { rootEntryList, favoritePathList } = rootInfo
-    const rootEntryPathList = rootEntryList.map(getEntryPath)
-    const favoriteEntryList = favoritePathList?.map(path2RootEntry).filter(Boolean) || []
-    return { rootEntryList, rootEntryPathList, favoriteEntryList }
-  }, [rootInfo])
-
-  const isInRoot = useMemo(() => rootEntryPathList.includes(currentPath), [rootEntryPathList, currentPath])
+  }, [currentPath, setSelectedEntryList])
 
   useEffect(() => {
     const title = isInRoot
@@ -91,156 +62,13 @@ export default function TouchPage() {
     document.title = title
   }, [currentPath, isInRoot, activeRootEntry])
 
-  const { entryList, isEntryListEmpty, folderCount, fileCount, gridMode, sortType } = useMemo(() => {
-    const {
-      list = [],
-      gridMode = true,
-      sortType = Sort.default,
-    } = entryPathMap[currentPath] || {}
-
-    const allEntryList = [...list].sort(sortMethodMap[sortType])
-    const ft = filterText.toLowerCase()
-    const methodName = ft.startsWith('*') ? 'endsWith' : (ft.endsWith('*') ? 'startsWith' : 'includes')
-    const entryList = allEntryList
-      .filter(entry => hiddenShow ? true : !entry.hidden)
-      .filter(entry => ft
-        ? entry.name.toLowerCase()[methodName](ft.replaceAll('*', ''))
-        : true
-      )
-    let folderCount = 0
-    let fileCount = 0
-
-    entryList.forEach(({ type }) => type === 'directory' ? folderCount++ : fileCount++)
-
-    const entryListCount = entryList.length
-    const isEntryListEmpty = entryListCount === 0
-
-    return { entryList, entryListCount, isEntryListEmpty, folderCount, fileCount, gridMode, sortType }
-  }, [currentPath, entryPathMap, filterText, hiddenShow])
-
-  const handleQueryEntryList = useCallback(async (path: string, keepData?: boolean) => {
-    if (!path) return
-    if (!keepData) {
-      setData(null)
-    }
-    const controller = new AbortController()
-    const config = { signal: controller.signal }
-    setAbortController(controller)
-    const { success, data } = await queryEntryList(path, config)
-    if (success) {
-      const res = {
-        ...(entryPathMap[path] || {}),
-        list: data,
-      }
-      setEntryPathMap({ ...entryPathMap, [path]: res })
-    }
-  }, [queryEntryList, setData, entryPathMap, setEntryPathMap])
-
-  const updateHistory = useCallback((direction: 'forward' | 'backward', path?: string) => {
-    const map = { forward: 1, backward: -1 }
-    const { position: pos, list: li } = visitHistory
-    const position: number = pos + map[direction]
-    let list = [...li]
-    if (direction === 'forward' && path) {
-      list = list.filter((i, index) => index < position)
-      list.push(path)
-    }
-    setVisitHistory({ position, list })
-  }, [visitHistory])
-
-  const handlePathChange = useCallback((props: {
-    path: string
-    direction: 'forward' | 'backward'
-    pushPath?: boolean
-    updateActiveRootEntry?: boolean
-  }) => {
-    const { path, direction, pushPath, updateActiveRootEntry } = props
-    setLastVisitedPath(currentPath)
-    setCurrentPath(path)
-    abortController?.abort()
-    handleQueryEntryList(path)
-    updateHistory(direction, pushPath ? path : undefined)
-    if (updateActiveRootEntry) {
-      const activeEntry = rootEntryList
-        .map(entry => ({ path: getEntryPath(entry), entry }))
-        .filter(o => path.startsWith(o.path))
-        .sort((a, b) => a.path.length > b.path.length ? -1 : 1)[0].entry
-      setActiveRootEntry(activeEntry)
-    }
-  }, [abortController, currentPath, handleQueryEntryList, rootEntryList, updateHistory])
-
-  const handleRootEntryClick = useCallback((rootEntry: IRootEntry) => {
-    vibrate()
-    setSideShow(false)
-    const path = getEntryPath(rootEntry)
-    handlePathChange({ path, direction: 'forward', pushPath: true, updateActiveRootEntry: true })
-  }, [handlePathChange])
-
   useEffect(() => {
     setTimeout(() => setActivePage(Page.touch))
   }, [setActivePage])
 
-  useEffect(() => {
-    if (!currentPath && rootEntryList.length) {
-      handleRootEntryClick(rootEntryList[0])
-    }
-  }, [currentPath, rootEntryList, handleRootEntryClick])
-
-  const handleDirOpen = useCallback((entry: IEntry) => {
-    const path = getEntryPath(entry)
-    handlePathChange({ path, direction: 'forward', pushPath: true })
-  }, [handlePathChange])
-
-  const addUploadTransferTask = useCallback((nestedFileList: INestedFile[], targetDir?: string) => {
-    if (!nestedFileList.length) {
-      toast.error(t`tip.noUploadableFilesDetected`)
-      return
-    }
-    const newTaskList: IUploadTransferTask[] = nestedFileList.map(nestedFile => {
-      const { name, fullPath } = nestedFile
-      const file = nestedFile as File
-      const id = `${Date.now()}-${Math.random().toString(36).slice(-8)}`
-      const newPath = `${currentPath}${targetDir ? `/${targetDir}` : ''}${fullPath || `/${name}`}`
-      return {
-        id,
-        type: TransferTaskType.upload,
-        status: TransferTaskStatus.waiting,
-        file,
-        newPath,
-      }
-    })
-    setTransferTaskList([...transferTaskList, ...newTaskList])
-    setTransferSignal(transferSignal + 1)
-  }, [currentPath, transferTaskList, setTransferTaskList, transferSignal, setTransferSignal, t])
-
   const handleUploadClick = useCallback(() => {
     (uploadInputRef.current as any)?.click()
   }, [])
-
-  const handleDownloadClick = useCallback((contextEntryList?: IEntry[]) => {
-    const entryList = contextEntryList || selectedEntryList
-    const { message, downloadName } = getDownloadInfo(currentPath, entryList, t)
-    Confirmor({
-      t,
-      type: 'download',
-      content: message,
-      onConfirm: async (close) => {
-        const { success, message, code } = await createTunnel({
-          type: TunnelType.download,
-          entryList,
-          downloadName,
-          leftTimes: 1,
-          expiredAt: Date.now() + DOWNLOAD_PERIOD,
-        })
-        if (success && code) {
-          DownloadApi.download(code)
-        } else {
-          toast.error(message)
-        }
-        close()
-      },
-    })
-  }, [currentPath, selectedEntryList, createTunnel, t])
 
   const handleEntryClick = useCallback((entry: IEntry) => {
     vibrate()
@@ -258,7 +86,7 @@ export default function TouchPage() {
 
     const { type } = entry
     if (type === 'directory') {
-      handleDirOpen(entry)
+      handleDirectoryOpen(entry)
     } else {
       const app = getMatchedApp(entry)
       if (app) {
@@ -273,63 +101,7 @@ export default function TouchPage() {
         handleDownloadClick([entry])
       }
     }
-  }, [handleDirOpen, isSelectionMode, selectedEntryList, handleDownloadClick])
-
-  const handleGoFullPath = useCallback((path: string) => {
-    handlePathChange({ path, direction: 'forward', pushPath: true })
-  }, [handlePathChange])
-
-  const handleNavBack = useCallback(() => {
-    const { position, list } = visitHistory
-    const path = list[position - 1]
-    handlePathChange({ path, direction: 'backward', updateActiveRootEntry: true })
-  }, [visitHistory, handlePathChange])
-
-  const handleNavForward = useCallback(() => {
-    const { position, list } = visitHistory
-    const path = list[position + 1]
-    handlePathChange({ path, direction: 'forward', updateActiveRootEntry: true })
-  }, [visitHistory, handlePathChange])
-
-  const handleRefresh = useCallback(async () => {
-    setSelectedEntryList([])
-    await handleQueryEntryList(currentPath, true)
-  }, [handleQueryEntryList, currentPath])
-  
-  const handleNavToParent = useCallback(() => {
-    const list = currentPath.split('/')
-    list.pop()
-    const path = list.join('/')
-    handlePathChange({ path, direction: 'forward', pushPath: true })
-  }, [currentPath, handlePathChange])
-  
-  const handleGridModeChange = useCallback((mode: boolean) => {
-    const res = {
-      ...(entryPathMap[currentPath] || {}),
-      gridMode: mode,
-    }
-    setEntryPathMap({ ...entryPathMap, [currentPath]: res })
-  }, [currentPath, entryPathMap, setEntryPathMap])
-
-  const handleSortChange = useCallback((sortType: SortType) => {
-    const res = {
-      ...(entryPathMap[currentPath] || {}),
-      sortType: sortType,
-    }
-    setEntryPathMap({ ...entryPathMap, [currentPath]: res })
-  }, [currentPath, entryPathMap, setEntryPathMap])
-
-  const updateDirectorySize = useCallback(async (entry: IEntry) => {
-    const path = getEntryPath(entry)
-    const { success, data } = await queryDirectorySize(path)
-    if (success) {
-      const res = {
-        ...(entryPathMap[path] || {}),
-        size: data,
-      }
-      setEntryPathMap({ ...entryPathMap, [path]: res })
-    }
-  }, [queryDirectorySize, entryPathMap, setEntryPathMap])
+  }, [isSelectionMode, selectedEntryList, setSelectedEntryList, handleDirectoryOpen, handleDownloadClick])
 
   const disabledMap = useMemo(() => {
     const { position, list } = visitHistory
@@ -348,57 +120,6 @@ export default function TouchPage() {
     }
     return disabledMap
   }, [visitHistory, querying, currentPath, isInRoot, selectedEntryList, isEntryListEmpty])
-
-  const handleFavorite = useCallback((entry: IEntry, isFavorited: boolean) => {
-    Confirmor({
-      t,
-      type: isFavorited ? 'unfavorite' : 'favorite',
-      content: t(isFavorited ? 'tip.unfavoriteItem' : 'tip.favoriteItem', { name: entry.name }),
-      onConfirm: async (close) => {
-        const path = getEntryPath(entry)
-        const fn = isFavorited ? removeUserFavorite : createUserFavorite
-        const { success, list } = await fn(path)
-        if (success) {
-          setRootInfo({ ...rootInfo, favoritePathList: list } as IRootInfo)
-        }
-        close()
-      },
-    })
-  }, [createUserFavorite, removeUserFavorite, t, rootInfo, setRootInfo])
-
-  const handleShareClick = useCallback((entryList: IEntry[]) => {
-    setSharedEntryList(entryList)
-    setSharingModalShow(true)
-  }, [])
-
-  const handleDeleteClick = useCallback(async (contextEntryList?: IEntry[]) => {
-    const processList = contextEntryList || selectedEntryList
-    const count = processList.length
-    if (!count) return
-    const message = count === 1
-      ? t('tip.deleteItem', { name: processList[0].name })
-      : t('tip.deleteItems', { count })
-
-    Confirmor({
-      t,
-      type: 'delete',
-      content: message,
-      onConfirm: async (close) => {
-        for (const entry of processList) {
-          const { name } = entry
-          const path = getEntryPath(entry)
-          const { success } = await deleteEntry(path)
-          if (success) {
-            document.querySelector(`.gagu-entry-node[data-entry-name="${name}"]`)?.setAttribute('style', 'opacity:0;')
-            const { favoritePathList } = rootInfo
-            setRootInfo({ ...rootInfo, favoritePathList: favoritePathList.filter((p) => p !== path) } as IRootInfo)
-          }
-        }
-        handleRefresh()
-        close()
-      },
-    })
-  }, [deleteEntry, selectedEntryList, handleRefresh, t, setRootInfo, rootInfo])
 
   const handleContextMenu = useCallback((event: any) => {
       if (sideShow) return
@@ -420,7 +141,7 @@ export default function TouchPage() {
 
       setIsSelectionMode(true)
 
-    }, [selectedEntryList, entryList, sideShow])
+    }, [sideShow, selectedEntryList.length, entryList, setSelectedEntryList])
 
   return (
     <>
@@ -437,7 +158,11 @@ export default function TouchPage() {
           currentPath={currentPath}
           rootEntryList={rootEntryList}
           favoriteEntryList={favoriteEntryList}
-          handleRootEntryClick={handleRootEntryClick}
+          handleRootEntryClick={(rootEntry) => {
+            vibrate()
+            setSideShow(false)
+            handleRootEntryClick(rootEntry)
+          }}
           handleFavorite={handleFavorite}
         />
         <div
@@ -466,8 +191,8 @@ export default function TouchPage() {
               onSortTypeChange={handleSortChange}
               onNavBack={handleNavBack}
               onNavForward={handleNavForward}
-              onNavRefresh={handleRefresh}
-              onNavAbort={() => abortController?.abort()}
+              onNavRefresh={handleNavRefresh}
+              onNavAbort={handleNavAbort}
               onNavToParent={handleNavToParent}
               onNewDir={() => {}}
               onNewTxt={() => {}}
@@ -525,7 +250,7 @@ export default function TouchPage() {
       />
 
       <SharingModal
-        visible={SharingModalShow}
+        visible={sharingModalShow}
         entryList={sharedEntryList}
         onClose={() => setSharingModalShow(false)}
       />
@@ -534,11 +259,12 @@ export default function TouchPage() {
         show={isSelectionMode}
         favoriteEntryList={favoriteEntryList}
         selectedEntryList={selectedEntryList}
-        updateDirectorySize={updateDirectorySize}
+        handleDirectorySizeUpdate={handleDirectorySizeUpdate}
         handleFavorite={handleFavorite}
         handleDownloadClick={handleDownloadClick}
         handleShareClick={handleShareClick}
         handleDeleteClick={handleDeleteClick}
+        handleSelectAll={handleSelectAll}
         onCancel={() => {
           setIsSelectionMode(false)
           setSelectedEntryList([])

@@ -9,11 +9,12 @@ interface SelectionMenuProps {
   show: boolean
   favoriteEntryList: IEntry[]
   selectedEntryList: IEntry[]
-  updateDirectorySize: (entry: IEntry) => void
+  handleDirectorySizeUpdate: (entry: IEntry) => void
   handleFavorite: (entry: IEntry, isFavorited: boolean) => void
   handleDownloadClick: (entryList: IEntry[]) => void
   handleShareClick: (entryList: IEntry[]) => void
   handleDeleteClick: (entryList: IEntry[]) => void
+  handleSelectAll: () => void
   onCancel: () => void
 }
 
@@ -22,11 +23,12 @@ export default function SelectionMenu(props: SelectionMenuProps) {
     show,
     favoriteEntryList,
     selectedEntryList,
-    updateDirectorySize,
+    handleDirectorySizeUpdate,
     handleFavorite,
     handleDownloadClick,
     handleShareClick,
     handleDeleteClick,
+    handleSelectAll,
     onCancel,
   } = props
 
@@ -56,6 +58,12 @@ export default function SelectionMenu(props: SelectionMenuProps) {
 
     return [
       {
+        icon: <SvgIcon.Check />,
+        name: t`action.selectAll`,
+        isShow: true,
+        onClick: handleSelectAll,
+      },
+      {
         icon: <SvgIcon.Rename />,
         name: t`action.rename`,
         isShow: isSingle,
@@ -76,7 +84,7 @@ export default function SelectionMenu(props: SelectionMenuProps) {
         icon: <SvgIcon.FolderInfo />,
         name: t`action.folderSize`,
         isShow: isOnDirectory && isSingle,
-        onClick: () => updateDirectorySize(selectedEntryList[0]),
+        onClick: () => handleDirectorySizeUpdate(selectedEntryList[0]),
       },
       {
         icon: isFavorited ? <SvgIcon.Star /> : <SvgIcon.StarSolid />,
@@ -110,8 +118,7 @@ export default function SelectionMenu(props: SelectionMenuProps) {
         onClick: onCancel,
       },
     ].filter(item => item.isShow)
-  }, [favoriteEntryList, handleDeleteClick, handleDownloadClick, handleFavorite, handleShareClick, onCancel, selectedEntryList, t, updateDirectorySize])
-
+  }, [selectedEntryList, t, handleSelectAll, onCancel, favoriteEntryList, handleDirectorySizeUpdate, handleFavorite, handleDownloadClick, handleShareClick, handleDeleteClick])
 
   return (
     <>

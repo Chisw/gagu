@@ -97,7 +97,7 @@ export default function FixedMenu(props: FixedMenuProps) {
                 <ToolButton
                   title={`${t`action.refresh`} [Shift + R]`}
                   icon={<SvgIcon.Refresh />}
-                  onClick={handleRefresh}
+                  onClick={handleNavRefresh}
                 />
               )}
               <ToolButton

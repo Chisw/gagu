@@ -32,7 +32,7 @@ export function useDragOperations(props: useDragOperationsProps) {
   } = props
 
   const { t } = useTranslation()
-  const [, setLastUploadedPath] = useRecoilState(lastChangedPathState)
+  const [, setLastChangedPath] = useRecoilState(lastChangedPathState)
   const [isInnerDrag, setIsInnerDrag] = useState(false)
 
   const { request: renameEntry } = useRequest(FsApi.renameEntry)
@@ -52,13 +52,13 @@ export function useDragOperations(props: useDragOperationsProps) {
 
           const { success } = await renameEntry(oldPath, newPath)
           if (success) {
-            setLastUploadedPath({ path: transferEntry.parentPath, timestamp: Date.now() })
+            setLastChangedPath({ path: transferEntry.parentPath, timestamp: Date.now() })
           }
         }
         close()
       },
     })
-  }, [t, renameEntry, setLastUploadedPath])
+  }, [t, renameEntry, setLastChangedPath])
 
   useEffect(() => {
     const containerInner: any = containerInnerRef.current

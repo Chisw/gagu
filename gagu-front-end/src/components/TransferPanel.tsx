@@ -25,7 +25,7 @@ export default function TransferPanel() {
 
   const [transferTaskList, setTransferTaskList] = useRecoilState(transferTaskListState)
   const [transferSignal] = useRecoilState(transferSignalState)
-  const [, setLastUploadedPath] = useRecoilState(lastChangedPathState)
+  const [, setLastChangedPath] = useRecoilState(lastChangedPathState)
 
   const [visible, setVisible] = useState(false)
   const [uploadInfo, setUploadInfo] = useState({ ratio: 0, speed: '' })
@@ -62,7 +62,7 @@ export default function TransferPanel() {
       if (success) {
         setUploadInfo({ ratio: 0, speed: '' })
         const match = file.fullPath || `/${file.name}`
-        setLastUploadedPath({ path: newPath.replace(match, ''), timestamp: Date.now() })
+        setLastChangedPath({ path: newPath.replace(match, ''), timestamp: Date.now() })
       }
     }
 
@@ -70,7 +70,7 @@ export default function TransferPanel() {
     list.forEach(t => t.status = 'success')
     setTransferTaskList(list)
     setActiveId('')
-  }, [uploadFile, setLastUploadedPath, transferTaskList, setTransferTaskList])
+  }, [uploadFile, setLastChangedPath, transferTaskList, setTransferTaskList])
 
   useEffect(() => {
     if (transferSignal !== transferSignalCache) {

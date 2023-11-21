@@ -44,7 +44,7 @@ export default function Toolbar(props: ToolbarProps) {
 
   const { t } = useTranslation()
 
-  const [, setLastUploadedPath] = useRecoilState(lastChangedPathState)
+  const [, setLastChangedPath] = useRecoilState(lastChangedPathState)
 
   const { request: getExif, data: ExifData, setData } = useRequest(FsApi.getExif)
   const { request: createTunnel } = useRequest(TunnelApi.createTunnel)
@@ -131,7 +131,7 @@ export default function Toolbar(props: ToolbarProps) {
             onConfirm: async (close) => {
               const { success } = await deleteEntry(getEntryPath(activeEntry))
               if (success) {
-                setLastUploadedPath({ path: activeEntry!.parentPath, timestamp: Date.now() })
+                setLastChangedPath({ path: activeEntry!.parentPath, timestamp: Date.now() })
                 const len = matchedEntryList.length
                 if (len === 1) {
                   closeWindow()
@@ -154,7 +154,7 @@ export default function Toolbar(props: ToolbarProps) {
         onClick: () => handlePrevOrNext(1),
       },
     ]
-  }, [t, matchedEntryList, activeEntry, getExifData, handlePrevOrNext, setThumbnailListShow, thumbnailListShow, setIsLight, isLight, createTunnel, deleteEntry, setLastUploadedPath, closeWindow, activeIndex, setActiveIndex, setMatchedEntryList])
+  }, [t, matchedEntryList, activeEntry, getExifData, handlePrevOrNext, setThumbnailListShow, thumbnailListShow, setIsLight, isLight, createTunnel, deleteEntry, setLastChangedPath, closeWindow, activeIndex, setActiveIndex, setMatchedEntryList])
 
   return (
     <>
