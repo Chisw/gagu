@@ -10,7 +10,7 @@ interface SelectionMenuProps {
   favoriteEntryList: IEntry[]
   selectedEntryList: IEntry[]
   handleDirectorySizeUpdate: (entry: IEntry) => void
-  handleFavorite: (entry: IEntry, isFavorited: boolean) => void
+  handleFavoriteClick: (entry: IEntry, isFavorited: boolean) => void
   handleDownloadClick: (entryList: IEntry[]) => void
   handleShareClick: (entryList: IEntry[]) => void
   handleDeleteClick: (entryList: IEntry[]) => void
@@ -24,7 +24,7 @@ export default function SelectionMenu(props: SelectionMenuProps) {
     favoriteEntryList,
     selectedEntryList,
     handleDirectorySizeUpdate,
-    handleFavorite,
+    handleFavoriteClick,
     handleDownloadClick,
     handleShareClick,
     handleDeleteClick,
@@ -90,7 +90,7 @@ export default function SelectionMenu(props: SelectionMenuProps) {
         icon: isFavorited ? <SvgIcon.Star /> : <SvgIcon.StarSolid />,
         name: isFavorited ? t`action.unfavorite` : t`action.favorite`,
         isShow: isOnDirectory && isSingle,
-        onClick: () => handleFavorite(selectedEntryList[0], isFavorited),
+        onClick: () => handleFavoriteClick(selectedEntryList[0], isFavorited),
       },
 
       {
@@ -118,7 +118,7 @@ export default function SelectionMenu(props: SelectionMenuProps) {
         onClick: onCancel,
       },
     ].filter(item => item.isShow)
-  }, [selectedEntryList, t, handleSelectAll, onCancel, favoriteEntryList, handleDirectorySizeUpdate, handleFavorite, handleDownloadClick, handleShareClick, handleDeleteClick])
+  }, [selectedEntryList, t, handleSelectAll, onCancel, favoriteEntryList, handleDirectorySizeUpdate, handleFavoriteClick, handleDownloadClick, handleShareClick, handleDeleteClick])
 
   return (
     <>

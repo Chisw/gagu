@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useRecoilState } from 'recoil'
-import { useDragSelect, useDragOperations, useHotKey } from '../../hooks'
+import { useDragSelect, useDragOperations, useHotKey, useFileExplorer } from '../../hooks'
 import StatusBar from './StatusBar'
-import ControlBar, { IControlBarDisabledMap } from './ControlBar'
+import ControlBar from './ControlBar'
 import { NameFailType } from './EntryNode/EntryName'
 import Side from './Side'
 import { pick } from 'lodash-es'
@@ -30,7 +30,6 @@ import {
 import SharingModal from '../../components/SharingModal'
 import { useTranslation } from 'react-i18next'
 import EntryNode from './EntryNode'
-import useFileExplorer from '../../hooks/useFileExplorer'
 
 export default function FileExplorer(props: AppComponentProps) {
 
@@ -47,35 +46,37 @@ export default function FileExplorer(props: AppComponentProps) {
   const [, setContextMenuData] = useRecoilState(contextMenuDataState)
 
   const [sideCollapse, setSideCollapse] = useState(false)
-  const [newDirMode, setNewDirMode] = useState(false)
-  const [newTxtMode, setNewTxtMode] = useState(false)
   const [renameMode, setRenameMode] = useState(false)
-  const [filterMode, setFilterMode] = useState(false)
-  const [filterText, setFilterText] = useState('')
-  const [hiddenShow, setHiddenShow] = useState(false)
   const [scrollWaiter, setScrollWaiter] = useState<{ wait: boolean, smooth?: boolean }>({ wait: false })
 
   const lassoRef = useRef(null)
-  const containerRef = useRef(null)       // containerInnerRef 的容器，y-scroll-auto
-  const containerInnerRef = useRef(null)  // entryList 容器，最小高度与 containerRef 的一致，自动撑高
-  const uploadInputRef = useRef(null)
+  const containerRef = useRef(null)      // container of containerInner, overflow-y-auto
+  const containerInnerRef = useRef(null) // container of entryList, its min-height is consistent with its container
 
   const {
-    rootInfo, entryPathMap, currentPath, activeRootEntry, lastVisitedPath, setLastVisitedPath,
+    rootInfo, entryPathMap, disabledMap, scrollHook,
+    currentPath, activeRootEntry,
     querying, sizeQuerying, deleting,
-    rootEntryList, favoriteEntryList, isInRoot,
-    entryList, selectedEntryList, isEntryListEmpty, folderCount, fileCount, gridMode, sortType,
-    visitHistory, setSelectedEntryList,
+    entryList, rootEntryList, favoriteEntryList, sharedEntryList,
+    isInRoot, isEntryListEmpty,
+    folderCount, fileCount,
+    newDirMode, setNewDirMode,
+    newTxtMode, setNewTxtMode,
+    filterMode, setFilterMode,
+    filterText, setFilterText,
+    hiddenShow, handleHiddenShowChange,
+    gridMode, handleGridModeChange,
+    sortType, handleSortChange,
+    lastVisitedPath, setLastVisitedPath,
+    selectedEntryList, setSelectedEntryList,
+    sharingModalShow, setSharingModalShow,
+    handleSelectAll, handleDirectorySizeUpdate, handleUploadTaskAdd, 
     handleRootEntryClick, handleDirectoryOpen, handleGoFullPath,
     handleNavBack, handleNavForward, handleNavRefresh, handleNavAbort, handleNavToParent,
-    sharingModalShow, setSharingModalShow, sharedEntryList,
-    handleSelectAll, handleDownloadClick, handleShareClick, handleDirectorySizeUpdate, handleFavorite, handleDeleteClick,
-    scrollHook,
-    handleGridModeChange, handleSortChange,
-    addUploadTransferTask,
+    handleUploadClick, handleDownloadClick,
+    handleShareClick, handleFavoriteClick, handleDeleteClick,
   } = useFileExplorer({
-    filterText,
-    hiddenShow,
+    touchMode: false,
     containerRef,
   })
 
@@ -88,40 +89,21 @@ export default function FileExplorer(props: AppComponentProps) {
     setWindowTitle(title)
   }, [currentPath, setWindowTitle, isInRoot, activeRootEntry])
 
-  const disabledMap = useMemo(() => {
-    const { position, list } = visitHistory
-    const disabledMap: IControlBarDisabledMap = {
-      navBack: position <= 0,
-      navForward: list.length === position + 1,
-      refresh: querying || !currentPath,
-      navToParent: !currentPath || isInRoot,
-      newDir: newDirMode || newTxtMode,
-      newTxt: newDirMode || newTxtMode,
-      rename: selectedEntryList.length !== 1,
-      upload: false,
-      download: isEntryListEmpty,
-      delete: !selectedEntryList.length,
-      selectAll: isEntryListEmpty,
-    }
-    return disabledMap
-  }, [visitHistory, querying, currentPath, isInRoot, newDirMode, newTxtMode, selectedEntryList, isEntryListEmpty])
-
   const handleCreate = useCallback((create: 'dir' | 'txt') => {
     setSelectedEntryList([])
     create === 'dir' ? setNewDirMode(true) : setNewTxtMode(true)
-  }, [setSelectedEntryList])
+  }, [setSelectedEntryList, setNewDirMode, setNewTxtMode])
 
   const handleRename = useCallback(() => setRenameMode(true), [])
 
   const handleSelectCancel = useCallback((e: any) => {
-    // oncontextmenu or same one entry
-    if (e.button === 2 || e.target.closest('.gagu-entry-node')) return
+    const isOnContextMenu = e.button === 2
+    const isSameEntry = e.target.closest('.gagu-entry-node')
+    const isMultipleSelect = e.metaKey || e.ctrlKey || e.shiftKey
+    const isRename = document.getElementById('file-explorer-name-input')
 
-    // avoid multiple select and rename
-    if (
-      e.metaKey || e.ctrlKey || e.shiftKey ||
-      document.getElementById('file-explorer-name-input')
-    ) return
+    if (isOnContextMenu || isSameEntry || isMultipleSelect || isRename) return
+
     setSelectedEntryList([])
   }, [setSelectedEntryList])
 
@@ -132,7 +114,7 @@ export default function FileExplorer(props: AppComponentProps) {
     await handleNavRefresh()
     setSelectedEntryList([entry])
     setScrollWaiter({ wait: true, smooth: true })
-  }, [handleNavRefresh, setSelectedEntryList])
+  }, [handleNavRefresh, setSelectedEntryList, setNewDirMode, setNewTxtMode])
 
   const handleNameFail = useCallback((failType: NameFailType) => {
     if (['cancel', 'empty'].includes(failType)) {
@@ -140,11 +122,7 @@ export default function FileExplorer(props: AppComponentProps) {
       setNewTxtMode(false)
       setRenameMode(false)
     }
-  }, [])
-
-  const handleUploadClick = useCallback(() => {
-    (uploadInputRef.current as any)?.click()
-  }, [])
+  }, [setNewDirMode, setNewTxtMode])
 
   useEffect(() => {
     const container: any = containerRef.current
@@ -162,7 +140,7 @@ export default function FileExplorer(props: AppComponentProps) {
     setSelectedEntryList([])
     setFilterMode(false)
     setFilterText('')
-  }, [currentPath, setSelectedEntryList])
+  }, [currentPath, setSelectedEntryList, setFilterMode, setFilterText])
 
   useEffect(() => {
     const prevEntry = entryList.find((entry) => getEntryPath(entry) === lastVisitedPath)
@@ -250,7 +228,7 @@ export default function FileExplorer(props: AppComponentProps) {
     entryList,
     selectedEntryList,
     onDrop: (nestedFileList, targetDir) => {
-      addUploadTransferTask(nestedFileList, targetDir)
+      handleUploadTaskAdd(nestedFileList, targetDir)
     },
   })
 
@@ -265,7 +243,7 @@ export default function FileExplorer(props: AppComponentProps) {
       'Shift+E': disabledMap.rename ? null : handleRename,
       'Shift+F': () => setFilterMode(true),
       'Shift+G': () => handleGridModeChange(true),
-      'Shift+H': () => setHiddenShow(!hiddenShow),
+      'Shift+H': () => handleHiddenShowChange(!hiddenShow),
       'Shift+L': () => handleGridModeChange(false),
       'Shift+N': disabledMap.newDir ? null : () => handleCreate('dir'),
       'Shift+R': disabledMap.refresh ? null : handleNavRefresh,
@@ -393,7 +371,7 @@ export default function FileExplorer(props: AppComponentProps) {
         icon: isFavorited ? <SvgIcon.Star /> : <SvgIcon.StarSolid />,
         name: isFavorited ? t`action.unfavorite` : t`action.favorite`,
         isShow: isOnDirectory && isSingle,
-        onClick: () => handleFavorite(contextEntryList[0], isFavorited),
+        onClick: () => handleFavoriteClick(contextEntryList[0], isFavorited),
       },
       {
         icon: <SvgIcon.Upload />,
@@ -422,7 +400,7 @@ export default function FileExplorer(props: AppComponentProps) {
     ]
 
     setContextMenuData({ eventData, menuItemList })
-  }, [selectedEntryList, favoriteEntryList, t, handleNavRefresh, handleUploadClick, setContextMenuData, entryList, setOpenOperation, handleRename, handleDirectorySizeUpdate, handleFavorite, handleDownloadClick, handleShareClick, handleDeleteClick, setSelectedEntryList])
+  }, [selectedEntryList, favoriteEntryList, t, handleNavRefresh, handleUploadClick, setContextMenuData, entryList, setOpenOperation, handleRename, handleDirectorySizeUpdate, handleFavoriteClick, handleDownloadClick, handleShareClick, handleDeleteClick, setSelectedEntryList, setNewDirMode, setNewTxtMode])
 
   return (
     <>
@@ -431,13 +409,13 @@ export default function FileExplorer(props: AppComponentProps) {
         <Side
           {...{ sideCollapse, currentPath, rootEntryList, favoriteEntryList }}
           onRootEntryClick={handleRootEntryClick}
-          onFavoriteCancel={(entry) => handleFavorite(entry, true)}
+          onFavoriteCancel={(entry) => handleFavoriteClick(entry, true)}
         />
         {/* main */}
         <div className="relative flex-grow h-full bg-white flex flex-col">
           <ControlBar
             {...{ windowWidth, disabledMap, gridMode, filterMode, filterText, hiddenShow, sortType }}
-            {...{ setFilterMode, setFilterText, setHiddenShow }}
+            {...{ setFilterMode, setFilterText, setHiddenShow: handleHiddenShowChange }}
             onGridModeChange={handleGridModeChange}
             onSortTypeChange={handleSortChange}
             onNavBack={handleNavBack}
@@ -535,14 +513,6 @@ export default function FileExplorer(props: AppComponentProps) {
           />
         </div>
       </div>
-
-      <input
-        multiple
-        ref={uploadInputRef}
-        type="file"
-        className="hidden"
-        onChange={(e: any) => addUploadTransferTask([...e.target.files])}
-      />
 
       <SharingModal
         visible={sharingModalShow}

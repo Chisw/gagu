@@ -1,59 +1,66 @@
 import { EmptyPanel } from '../../components/common'
 import { useRecoilState } from 'recoil'
+import { useFileExplorer } from '../../hooks'
 import { activePageState } from '../../states'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import EntrySelector from '../../components/EntrySelector'
 import MenuBar from '../../components/MenuBar'
 import { IEntry, Page } from '../../types'
 import { getMatchedApp, isSameEntry, vibrate } from '../../utils'
 import EntryNode from './EntryNode'
 import StatusBar from '../../apps/FileExplorer/StatusBar'
-import ControlBar, { IControlBarDisabledMap } from '../../apps/FileExplorer/ControlBar'
+import ControlBar from '../../apps/FileExplorer/ControlBar'
 import SharingModal from '../../components/SharingModal'
 import SelectionMenu from './SelectionMenu'
 import FixedMenu from './FixedMenu'
 import Side from './Side'
-import useFileExplorer from '../../hooks/useFileExplorer'
 
 export default function TouchPage() {
 
   const [activePage, setActivePage] = useRecoilState(activePageState)
   // const [, setOpenOperation] = useRecoilState(openOperationState)
 
-  const [filterText, setFilterText] = useState('')
-  const [hiddenShow, setHiddenShow] = useState(false)
-  const [filterMode, setFilterMode] = useState(false)
-  const [isSelectionMode, setIsSelectionMode] = useState(false)
   const [sideShow, setSideShow] = useState(false)
+  const [isSelectionMode, setIsSelectionMode] = useState(false)
 
   const containerRef = useRef(null)
-  const uploadInputRef = useRef(null)
 
   const {
-    rootInfo, entryPathMap, currentPath, activeRootEntry,
+    rootInfo, entryPathMap, disabledMap, scrollHook,
+    currentPath, activeRootEntry,
     querying, sizeQuerying, deleting,
-    rootEntryList, favoriteEntryList, isInRoot,
-    entryList, selectedEntryList, isEntryListEmpty, folderCount, fileCount, gridMode, sortType,
-    visitHistory, setSelectedEntryList,
+    entryList, rootEntryList, favoriteEntryList, sharedEntryList,
+    isInRoot, isEntryListEmpty,
+    folderCount, fileCount,
+    // newDirMode, setNewDirMode,
+    // newTxtMode, setNewTxtMode,
+    filterMode, setFilterMode,
+    filterText, setFilterText,
+    hiddenShow, handleHiddenShowChange,
+    gridMode, handleGridModeChange,
+    sortType, handleSortChange,
+    selectedEntryList, setSelectedEntryList,
+    sharingModalShow, setSharingModalShow,
+    handleSelectAll, handleDirectorySizeUpdate,
     handleRootEntryClick, handleDirectoryOpen, handleGoFullPath,
     handleNavBack, handleNavForward, handleNavRefresh, handleNavAbort, handleNavToParent,
-    sharingModalShow, setSharingModalShow, sharedEntryList,
-    handleSelectAll, handleDownloadClick, handleShareClick, handleDirectorySizeUpdate, handleFavorite, handleDeleteClick,
-    scrollHook,
-    handleGridModeChange, handleSortChange,
-    addUploadTransferTask,
+    handleUploadClick, handleDownloadClick,
+    handleShareClick, handleFavoriteClick, handleDeleteClick,
   } = useFileExplorer({
-    filterText,
-    hiddenShow,
+    touchMode: true,
     containerRef,
   })
+
+  useEffect(() => {
+    setTimeout(() => setActivePage(Page.touch))
+  }, [setActivePage])
 
   useEffect(() => {
     setSelectedEntryList([])
     setFilterMode(false)
     setFilterText('')
     setIsSelectionMode(false)
-  }, [currentPath, setSelectedEntryList])
+  }, [currentPath, setSelectedEntryList, setFilterMode, setFilterText])
 
   useEffect(() => {
     const title = isInRoot
@@ -61,14 +68,6 @@ export default function TouchPage() {
       : currentPath.split('/').pop() as string
     document.title = title
   }, [currentPath, isInRoot, activeRootEntry])
-
-  useEffect(() => {
-    setTimeout(() => setActivePage(Page.touch))
-  }, [setActivePage])
-
-  const handleUploadClick = useCallback(() => {
-    (uploadInputRef.current as any)?.click()
-  }, [])
 
   const handleEntryClick = useCallback((entry: IEntry) => {
     vibrate()
@@ -102,24 +101,6 @@ export default function TouchPage() {
       }
     }
   }, [isSelectionMode, selectedEntryList, setSelectedEntryList, handleDirectoryOpen, handleDownloadClick])
-
-  const disabledMap = useMemo(() => {
-    const { position, list } = visitHistory
-    const disabledMap: IControlBarDisabledMap = {
-      navBack: position <= 0,
-      navForward: list.length === position + 1,
-      refresh: querying || !currentPath,
-      navToParent: !currentPath || isInRoot,
-      newDir: false,
-      newTxt: false,
-      rename: selectedEntryList.length !== 1,
-      upload: false,
-      download: isEntryListEmpty,
-      delete: !selectedEntryList.length,
-      selectAll: isEntryListEmpty,
-    }
-    return disabledMap
-  }, [visitHistory, querying, currentPath, isInRoot, selectedEntryList, isEntryListEmpty])
 
   const handleContextMenu = useCallback((event: any) => {
       if (sideShow) return
@@ -163,7 +144,7 @@ export default function TouchPage() {
             setSideShow(false)
             handleRootEntryClick(rootEntry)
           }}
-          handleFavorite={handleFavorite}
+          handleFavoriteClick={handleFavoriteClick}
         />
         <div
           ref={containerRef}
@@ -186,7 +167,7 @@ export default function TouchPage() {
           <div className="sticky z-20 top-0 bg-white select-none">
             <ControlBar
               {...{ windowWidth: 360, disabledMap, gridMode, filterMode, filterText, hiddenShow, sortType }}
-              {...{ setFilterMode, setFilterText, setHiddenShow }}
+              {...{ setFilterMode, setFilterText, setHiddenShow: handleHiddenShowChange }}
               onGridModeChange={handleGridModeChange}
               onSortTypeChange={handleSortChange}
               onNavBack={handleNavBack}
@@ -209,9 +190,7 @@ export default function TouchPage() {
               onRootEntryClick={handleRootEntryClick}
             />
           </div>
-          <div
-            className="flex flex-wrap px-1 py-2 pb-36 select-none"
-          >
+          <div className="flex flex-wrap px-1 py-2 pb-36 select-none">
             {entryList.map(entry => {
               const isSelected = selectedEntryList.some(o => isSameEntry(o, entry))
               const isFavorited = favoriteEntryList.some(o => isSameEntry(o, entry))
@@ -230,7 +209,7 @@ export default function TouchPage() {
                     scrollHook,
                   }}
                   requestState={{ deleting, sizeQuerying }}
-                  onClick={(e, entry) => handleEntryClick(entry)}
+                  onClick={handleEntryClick}
                 />
               )
             })}
@@ -240,14 +219,6 @@ export default function TouchPage() {
 
         </div>
       </div>
-
-      <input
-        multiple
-        ref={uploadInputRef}
-        type="file"
-        className="hidden"
-        onChange={(e: any) => addUploadTransferTask([...e.target.files])}
-      />
 
       <SharingModal
         visible={sharingModalShow}
@@ -260,7 +231,7 @@ export default function TouchPage() {
         favoriteEntryList={favoriteEntryList}
         selectedEntryList={selectedEntryList}
         handleDirectorySizeUpdate={handleDirectorySizeUpdate}
-        handleFavorite={handleFavorite}
+        handleFavoriteClick={handleFavoriteClick}
         handleDownloadClick={handleDownloadClick}
         handleShareClick={handleShareClick}
         handleDeleteClick={handleDeleteClick}

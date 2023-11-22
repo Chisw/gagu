@@ -19,7 +19,7 @@ interface EntryNodeProps {
     sizeQuerying: boolean
     deleting: boolean
   }
-  onClick?: (e: any, entry: IEntry) => void
+  onClick?: (entry: IEntry) => void
 }
 
 export default function EntryNode(props: EntryNodeProps) {
@@ -75,7 +75,7 @@ export default function EntryNode(props: EntryNodeProps) {
           : 'px-2 py-3 w-full flex justify-start items-center active:scale-95'
         }
       `)}
-      onClick={e => onClick(e, entry)}
+      onClick={() => onClick(entry)}
     >
       {gridMode ? (
         <>

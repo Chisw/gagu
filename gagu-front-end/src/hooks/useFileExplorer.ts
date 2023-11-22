@@ -9,17 +9,16 @@ import { useTranslation } from 'react-i18next'
 import { Confirmor } from '../components/common'
 import toast from 'react-hot-toast'
 import { throttle } from 'lodash-es'
+import { IControlBarDisabledMap } from '../apps/FileExplorer/ControlBar'
 
 interface Props {
-  filterText: string
-  hiddenShow: boolean
+  touchMode: boolean
   containerRef: any
 }
 
-export default function useFileExplorer(props: Props) {
+export function useFileExplorer(props: Props) {
   const {
-    filterText,
-    hiddenShow,
+    touchMode,
     containerRef,
   } = props
 
@@ -38,6 +37,10 @@ export default function useFileExplorer(props: Props) {
   const [abortController, setAbortController] = useState<AbortController | null>(null)
   const [selectedEntryList, setSelectedEntryList] = useState<IEntry[]>([])
   const [sharingModalShow, setSharingModalShow] = useState(false)
+  const [newDirMode, setNewDirMode] = useState(false)
+  const [newTxtMode, setNewTxtMode] = useState(false)
+  const [filterMode, setFilterMode] = useState(false)
+  const [filterText, setFilterText] = useState('')
   const [sharedEntryList, setSharedEntryList] = useState<IEntry[]>([])
   const [scrollHook, setScrollHook] = useState({ top: 0, height: 0 })
 
@@ -57,22 +60,44 @@ export default function useFileExplorer(props: Props) {
 
   const isInRoot = useMemo(() => rootEntryPathList.includes(currentPath), [rootEntryPathList, currentPath])
 
-  const { entryList, isEntryListEmpty, folderCount, fileCount, gridMode, sortType } = useMemo(() => {
+  const { entryList, isEntryListEmpty, folderCount, fileCount, hiddenShow, gridMode, sortType } = useMemo(() => {
     const {
       list = [],
+      hiddenShow = false,
       gridMode = true,
       sortType = Sort.default,
     } = entryPathMap[currentPath] || {}
 
     const allEntryList = [...list].sort(sortMethodMap[sortType])
-    const ft = filterText.toLowerCase()
-    const methodName = ft.startsWith('*') ? 'endsWith' : (ft.endsWith('*') ? 'startsWith' : 'includes')
+    const text = filterText.toLowerCase()
+    const asteriskExist = text.includes('*')
+    const asteriskStart = text.startsWith('*')
+    const asteriskEnd = text.endsWith('*')
+
     const entryList = allEntryList
       .filter(entry => hiddenShow ? true : !entry.hidden)
-      .filter(entry => ft
-        ? entry.name.toLowerCase()[methodName](ft.replaceAll('*', ''))
-        : true
-      )
+      .filter((entry: IEntry) => {
+        if (!text) return true
+        const name = entry.name.toLowerCase()
+        const key = text.replaceAll('*', '')
+        if (asteriskExist) {
+          if (asteriskStart) {
+            if (asteriskEnd) {
+              return name.includes(key) && !name.startsWith(key) && !name.endsWith(key)
+            } else {
+              return name.endsWith(key)
+            }
+          } else if (asteriskEnd) {
+            return name.startsWith(key)
+          } else {
+            const [start, end] = text.split('*')
+            return name.startsWith(start) && name.endsWith(end)
+          }
+        } else {
+          return name.startsWith(key)
+        }
+      })
+
     let folderCount = 0
     let fileCount = 0
 
@@ -81,8 +106,26 @@ export default function useFileExplorer(props: Props) {
     const entryListCount = entryList.length
     const isEntryListEmpty = entryListCount === 0
 
-    return { entryList, entryListCount, isEntryListEmpty, folderCount, fileCount, gridMode, sortType }
-  }, [currentPath, entryPathMap, filterText, hiddenShow])
+    return { entryList, entryListCount, isEntryListEmpty, folderCount, fileCount, hiddenShow, gridMode, sortType }
+  }, [currentPath, entryPathMap, filterText])
+
+  const disabledMap = useMemo(() => {
+    const { position, list } = visitHistory
+    const disabledMap: IControlBarDisabledMap = {
+      navBack: position <= 0,
+      navForward: list.length === position + 1,
+      refresh: querying || !currentPath,
+      navToParent: !currentPath || isInRoot,
+      newDir: touchMode ? false : (newDirMode || newTxtMode),
+      newTxt: touchMode ? false : (newDirMode || newTxtMode),
+      rename: selectedEntryList.length !== 1,
+      upload: false,
+      download: isEntryListEmpty,
+      delete: !selectedEntryList.length,
+      selectAll: isEntryListEmpty,
+    }
+    return disabledMap
+  }, [touchMode, visitHistory, querying, currentPath, isInRoot, newDirMode, newTxtMode, selectedEntryList, isEntryListEmpty])
 
   const updateHistory = useCallback((direction: 'forward' | 'backward', path?: string) => {
     const map = { forward: 1, backward: -1 }
@@ -180,10 +223,41 @@ export default function useFileExplorer(props: Props) {
   }, [currentPath, handlePathChange])
 
   // entry callback
+  const handleUploadTaskAdd = useCallback((nestedFileList: INestedFile[], targetDir?: string) => {
+    if (!nestedFileList.length) {
+      toast.error(t`tip.noUploadableFilesDetected`)
+      return
+    }
+    const newTaskList: IUploadTransferTask[] = nestedFileList.map(nestedFile => {
+      const { name, fullPath } = nestedFile
+      const file = nestedFile as File
+      const id = `${Date.now()}-${Math.random().toString(36).slice(-8)}`
+      const newPath = `${currentPath}${targetDir ? `/${targetDir}` : ''}${fullPath || `/${name}`}`
+      return {
+        id,
+        type: TransferTaskType.upload,
+        status: TransferTaskStatus.waiting,
+        file,
+        newPath,
+      }
+    })
+    setTransferTaskList([...transferTaskList, ...newTaskList])
+    setTransferSignal(transferSignal + 1)
+  }, [currentPath, transferTaskList, setTransferTaskList, transferSignal, setTransferSignal, t])
+
   const handleSelectAll = useCallback((force?: boolean) => {
     const isSelectAll = force || !selectedEntryList.length
     setSelectedEntryList(isSelectAll ? entryList : [])
   }, [setSelectedEntryList, entryList, selectedEntryList])
+
+  const handleUploadClick = useCallback(() => {
+    const input = document.createElement('input')
+    input.multiple = true
+    input.type = 'file'
+    input.className = 'hidden'
+    input.onchange = (e: any) => handleUploadTaskAdd([...e.target.files])
+    input.click()
+  }, [handleUploadTaskAdd])
 
   const handleDownloadClick = useCallback((contextEntryList?: IEntry[]) => {
     const entryList = contextEntryList || selectedEntryList
@@ -227,7 +301,7 @@ export default function useFileExplorer(props: Props) {
     }
   }, [queryDirectorySize, entryPathMap, setEntryPathMap])
 
-  const handleFavorite = useCallback((entry: IEntry, isFavorited: boolean) => {
+  const handleFavoriteClick = useCallback((entry: IEntry, isFavorited: boolean) => {
     Confirmor({
       t,
       type: isFavorited ? 'unfavorite' : 'favorite',
@@ -273,6 +347,14 @@ export default function useFileExplorer(props: Props) {
     })
   }, [deleteEntry, selectedEntryList, handleNavRefresh, t, setRootInfo, rootInfo])
 
+  const handleHiddenShowChange = useCallback((show: boolean) => {
+    const res = {
+      ...(entryPathMap[currentPath] || {}),
+      hiddenShow: show,
+    }
+    setEntryPathMap({ ...entryPathMap, [currentPath]: res })
+  }, [currentPath, entryPathMap, setEntryPathMap])
+
   const handleGridModeChange = useCallback((mode: boolean) => {
     const res = {
       ...(entryPathMap[currentPath] || {}),
@@ -288,28 +370,6 @@ export default function useFileExplorer(props: Props) {
     }
     setEntryPathMap({ ...entryPathMap, [currentPath]: res })
   }, [currentPath, entryPathMap, setEntryPathMap])
-
-  const addUploadTransferTask = useCallback((nestedFileList: INestedFile[], targetDir?: string) => {
-    if (!nestedFileList.length) {
-      toast.error(t`tip.noUploadableFilesDetected`)
-      return
-    }
-    const newTaskList: IUploadTransferTask[] = nestedFileList.map(nestedFile => {
-      const { name, fullPath } = nestedFile
-      const file = nestedFile as File
-      const id = `${Date.now()}-${Math.random().toString(36).slice(-8)}`
-      const newPath = `${currentPath}${targetDir ? `/${targetDir}` : ''}${fullPath || `/${name}`}`
-      return {
-        id,
-        type: TransferTaskType.upload,
-        status: TransferTaskStatus.waiting,
-        file,
-        newPath,
-      }
-    })
-    setTransferTaskList([...transferTaskList, ...newTaskList])
-    setTransferSignal(transferSignal + 1)
-  }, [currentPath, transferTaskList, setTransferTaskList, transferSignal, setTransferSignal, t])
 
   useEffect(() => {
     const container: any = containerRef.current
@@ -342,17 +402,26 @@ export default function useFileExplorer(props: Props) {
   }, [currentPath, rootEntryList, handleRootEntryClick])
 
   return {
-    rootInfo, entryPathMap, currentPath, activeRootEntry, lastVisitedPath, setLastVisitedPath,
+    rootInfo, entryPathMap, disabledMap, scrollHook,
+    currentPath, activeRootEntry,
     querying, sizeQuerying, deleting,
-    rootEntryList, rootEntryPathList, favoriteEntryList, isInRoot,
-    entryList, selectedEntryList, isEntryListEmpty, folderCount, fileCount, gridMode, sortType,
-    visitHistory, setSelectedEntryList,
+    entryList, rootEntryList, favoriteEntryList, sharedEntryList,
+    isInRoot, isEntryListEmpty,
+    folderCount, fileCount,
+    newDirMode, setNewDirMode,
+    newTxtMode, setNewTxtMode,
+    filterMode, setFilterMode,
+    filterText, setFilterText,
+    hiddenShow, handleHiddenShowChange,
+    gridMode, handleGridModeChange,
+    sortType, handleSortChange,
+    lastVisitedPath, setLastVisitedPath,
+    selectedEntryList, setSelectedEntryList,
+    sharingModalShow, setSharingModalShow,
+    handleSelectAll, handleDirectorySizeUpdate, handleUploadTaskAdd, 
     handleRootEntryClick, handleDirectoryOpen, handleGoFullPath,
     handleNavBack, handleNavForward, handleNavRefresh, handleNavAbort, handleNavToParent,
-    sharingModalShow, setSharingModalShow, sharedEntryList, 
-    handleSelectAll, handleDownloadClick, handleShareClick, handleDirectorySizeUpdate, handleFavorite, handleDeleteClick,
-    scrollHook,
-    handleGridModeChange, handleSortChange,
-    addUploadTransferTask,
+    handleUploadClick, handleDownloadClick,
+    handleShareClick, handleFavoriteClick, handleDeleteClick,
   }
 }

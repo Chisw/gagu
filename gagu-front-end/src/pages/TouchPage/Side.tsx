@@ -10,7 +10,7 @@ interface SideProps {
   rootEntryList: IRootEntry[]
   favoriteEntryList: IRootEntry[]
   handleRootEntryClick: (rootEntry: IRootEntry) => void
-  handleFavorite: (entry: IEntry, isFavorited: boolean) => void
+  handleFavoriteClick: (entry: IEntry, isFavorited: boolean) => void
 }
 
 export default function Side(props: SideProps) {
@@ -22,7 +22,7 @@ export default function Side(props: SideProps) {
     rootEntryList,
     favoriteEntryList,
     handleRootEntryClick,
-    handleFavorite,
+    handleFavoriteClick,
   } = props
 
   return (
@@ -41,7 +41,7 @@ export default function Side(props: SideProps) {
         <RootEntryList
           {...{ currentPath, rootEntryList: favoriteEntryList }}
           onRootEntryClick={handleRootEntryClick}
-          onFavoriteCancel={(entry) => handleFavorite(entry, true)}
+          onFavoriteCancel={(entry) => handleFavoriteClick(entry, true)}
         />
         <div
           className="absolute right-0 bottom-0 left-0 px-4 h-12 flex items-center"

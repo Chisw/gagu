@@ -67,6 +67,7 @@ export interface IContextMenuState {
 export interface IEntryPathMapRes {
   size?: number
   list?: IEntry[]
+  hiddenShow?: boolean
   gridMode?: boolean
   sortType?: SortType
 }
