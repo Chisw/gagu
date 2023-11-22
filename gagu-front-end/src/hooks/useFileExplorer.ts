@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { IEntry, INestedFile, IRootEntry, IRootInfo, IUploadTransferTask, IVisitHistory, Sort, SortType, TransferTaskStatus, TransferTaskType, TunnelType } from '../types'
+import { EditModeType, IEntry, INestedFile, IRootEntry, IRootInfo, IScrollerWatcher, IUploadTransferTask, IVisitHistory, Sort, SortType, TransferTaskStatus, TransferTaskType, TunnelType } from '../types'
 import { DOWNLOAD_PERIOD, getDownloadInfo, getEntryPath, path2RootEntry, sortMethodMap } from '../utils'
 import { useRecoilState } from 'recoil'
 import { entryPathMapState, lastChangedPathState, rootInfoState, transferSignalState, transferTaskListState } from '../states'
@@ -37,12 +37,11 @@ export function useFileExplorer(props: Props) {
   const [abortController, setAbortController] = useState<AbortController | null>(null)
   const [selectedEntryList, setSelectedEntryList] = useState<IEntry[]>([])
   const [sharingModalShow, setSharingModalShow] = useState(false)
-  const [newDirMode, setNewDirMode] = useState(false)
-  const [newTxtMode, setNewTxtMode] = useState(false)
+  const [editMode, setEditMode] = useState<EditModeType | null>(null)
   const [filterMode, setFilterMode] = useState(false)
   const [filterText, setFilterText] = useState('')
   const [sharedEntryList, setSharedEntryList] = useState<IEntry[]>([])
-  const [scrollHook, setScrollHook] = useState({ top: 0, height: 0 })
+  const [thumbScrollWatcher, setThumbScrollWatcher] = useState<IScrollerWatcher>({ top: 0, height: 0 })
 
   const { request: queryEntryList, loading: querying, setData } = useRequest(FsApi.queryEntryList)
   const { request: queryDirectorySize, loading: sizeQuerying } = useRequest(FsApi.queryDirectorySize)
@@ -116,8 +115,8 @@ export function useFileExplorer(props: Props) {
       navForward: list.length === position + 1,
       refresh: querying || !currentPath,
       navToParent: !currentPath || isInRoot,
-      newDir: touchMode ? false : (newDirMode || newTxtMode),
-      newTxt: touchMode ? false : (newDirMode || newTxtMode),
+      createFolder: touchMode ? false : !!editMode,
+      createText: touchMode ? false : !!editMode,
       rename: selectedEntryList.length !== 1,
       upload: false,
       download: isEntryListEmpty,
@@ -125,7 +124,7 @@ export function useFileExplorer(props: Props) {
       selectAll: isEntryListEmpty,
     }
     return disabledMap
-  }, [touchMode, visitHistory, querying, currentPath, isInRoot, newDirMode, newTxtMode, selectedEntryList, isEntryListEmpty])
+  }, [touchMode, visitHistory, querying, currentPath, isInRoot, editMode, selectedEntryList, isEntryListEmpty])
 
   const updateHistory = useCallback((direction: 'forward' | 'backward', path?: string) => {
     const map = { forward: 1, backward: -1 }
@@ -246,7 +245,7 @@ export function useFileExplorer(props: Props) {
   }, [currentPath, transferTaskList, setTransferTaskList, transferSignal, setTransferSignal, t])
 
   const handleSelectAll = useCallback((force?: boolean) => {
-    const isSelectAll = force || !selectedEntryList.length
+    const isSelectAll = force || (selectedEntryList.length < entryList.length)
     setSelectedEntryList(isSelectAll ? entryList : [])
   }, [setSelectedEntryList, entryList, selectedEntryList])
 
@@ -376,7 +375,7 @@ export function useFileExplorer(props: Props) {
     if (!container) return
     const listener = () => {
       const { top, height } = container.getBoundingClientRect()
-      setScrollHook({ top, height })
+      setThumbScrollWatcher({ top, height })
     }
     listener()
     const throttleListener = throttle(listener, 500)
@@ -402,14 +401,13 @@ export function useFileExplorer(props: Props) {
   }, [currentPath, rootEntryList, handleRootEntryClick])
 
   return {
-    rootInfo, entryPathMap, disabledMap, scrollHook,
+    rootInfo, entryPathMap, disabledMap, thumbScrollWatcher,
     currentPath, activeRootEntry,
     querying, sizeQuerying, deleting,
     entryList, rootEntryList, favoriteEntryList, sharedEntryList,
     isInRoot, isEntryListEmpty,
     folderCount, fileCount,
-    newDirMode, setNewDirMode,
-    newTxtMode, setNewTxtMode,
+    editMode, setEditMode,
     filterMode, setFilterMode,
     filterText, setFilterText,
     hiddenShow, handleHiddenShowChange,

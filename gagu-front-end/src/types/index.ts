@@ -18,8 +18,35 @@ export enum Page {
 }
 
 export type PageType = keyof typeof Page
+
+export enum EditMode {
+  createFolder = 'createFolder',
+  createText = 'createText',
+  rename = 'rename',
+}
+
+export type EditModeType = keyof typeof EditMode
+
+export type CreationType = EditMode.createFolder | EditMode.createText
+
+export enum NameFail {
+  cancel = 'cancel',
+  empty = 'empty',
+  existed = 'existed',
+  net_error = 'net_error',
+  invalid = 'invalid',
+}
+
+export type NameFailType = keyof typeof NameFail
+
 export type PublicImageName = 'bg-desktop' | 'bg-sharing' | 'favicon'
+
 export type ThumbnailType = 'video' | 'audio' | 'image'
+
+export interface IScrollerWatcher {
+  top: number
+  height: number
+}
 
 export interface IResponse<T> {
   success: boolean

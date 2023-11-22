@@ -3,7 +3,6 @@ import { useRecoilState } from 'recoil'
 import { useDragSelect, useDragOperations, useHotKey, useFileExplorer } from '../../hooks'
 import StatusBar from './StatusBar'
 import ControlBar from './ControlBar'
-import { NameFailType } from './EntryNode/EntryName'
 import Side from './Side'
 import { pick } from 'lodash-es'
 import { EmptyPanel, SvgIcon } from '../../components/common'
@@ -26,6 +25,9 @@ import {
   IRectInfo,
   IContextMenuItem,
   IApp,
+  NameFailType,
+  EditModeType,
+  EditMode,
 } from '../../types'
 import SharingModal from '../../components/SharingModal'
 import { useTranslation } from 'react-i18next'
@@ -46,22 +48,20 @@ export default function FileExplorer(props: AppComponentProps) {
   const [, setContextMenuData] = useRecoilState(contextMenuDataState)
 
   const [sideCollapse, setSideCollapse] = useState(false)
-  const [renameMode, setRenameMode] = useState(false)
-  const [scrollWaiter, setScrollWaiter] = useState<{ wait: boolean, smooth?: boolean }>({ wait: false })
+  const [locationScrollWatcher, setLocationScrollWatcher] = useState<{ wait: boolean, smooth?: boolean }>({ wait: false })
 
   const lassoRef = useRef(null)
   const containerRef = useRef(null)      // container of containerInner, overflow-y-auto
   const containerInnerRef = useRef(null) // container of entryList, its min-height is consistent with its container
 
   const {
-    rootInfo, entryPathMap, disabledMap, scrollHook,
+    rootInfo, entryPathMap, disabledMap, thumbScrollWatcher,
     currentPath, activeRootEntry,
     querying, sizeQuerying, deleting,
     entryList, rootEntryList, favoriteEntryList, sharedEntryList,
     isInRoot, isEntryListEmpty,
     folderCount, fileCount,
-    newDirMode, setNewDirMode,
-    newTxtMode, setNewTxtMode,
+    editMode, setEditMode,
     filterMode, setFilterMode,
     filterText, setFilterText,
     hiddenShow, handleHiddenShowChange,
@@ -89,12 +89,12 @@ export default function FileExplorer(props: AppComponentProps) {
     setWindowTitle(title)
   }, [currentPath, setWindowTitle, isInRoot, activeRootEntry])
 
-  const handleCreate = useCallback((create: 'dir' | 'txt') => {
-    setSelectedEntryList([])
-    create === 'dir' ? setNewDirMode(true) : setNewTxtMode(true)
-  }, [setSelectedEntryList, setNewDirMode, setNewTxtMode])
-
-  const handleRename = useCallback(() => setRenameMode(true), [])
+  const handleEdit = useCallback((editModeType: EditModeType) => {
+    if (editModeType !== EditMode.rename) {
+      setSelectedEntryList([])
+    }
+    setEditMode(editModeType)
+  }, [setSelectedEntryList, setEditMode])
 
   const handleSelectCancel = useCallback((e: any) => {
     const isOnContextMenu = e.button === 2
@@ -108,53 +108,51 @@ export default function FileExplorer(props: AppComponentProps) {
   }, [setSelectedEntryList])
 
   const handleNameSuccess = useCallback(async (entry: IEntry) => {
-    setNewDirMode(false)
-    setNewTxtMode(false)
-    setRenameMode(false)
+    setEditMode(null)
     await handleNavRefresh()
     setSelectedEntryList([entry])
-    setScrollWaiter({ wait: true, smooth: true })
-  }, [handleNavRefresh, setSelectedEntryList, setNewDirMode, setNewTxtMode])
+    setLocationScrollWatcher({ wait: true, smooth: true })
+  }, [handleNavRefresh, setSelectedEntryList, setEditMode])
 
   const handleNameFail = useCallback((failType: NameFailType) => {
     if (['cancel', 'empty'].includes(failType)) {
-      setNewDirMode(false)
-      setNewTxtMode(false)
-      setRenameMode(false)
+      setEditMode(null)
     }
-  }, [setNewDirMode, setNewTxtMode])
+  }, [setEditMode])
 
   useEffect(() => {
     const container: any = containerRef.current
-    if (container && scrollWaiter.wait && !querying) {
+    if (container && locationScrollWatcher.wait && !querying) {
       const target: any = document.querySelector('.gagu-entry-node[data-selected="true"]')
       const top = target ? target.offsetTop - 10 : 0
-      container!.scrollTo({ top, behavior: scrollWaiter.smooth ? 'smooth' : undefined })
-      setScrollWaiter({ wait: false })
+      container!.scrollTo({ top, behavior: locationScrollWatcher.smooth ? 'smooth' : undefined })
+      setLocationScrollWatcher({ wait: false })
       setLastVisitedPath('')
     }
-  }, [scrollWaiter, querying, setLastVisitedPath])
+  }, [locationScrollWatcher, querying, setLastVisitedPath])
 
   useEffect(() => {
-    setRenameMode(false)
+    setEditMode(null)
     setSelectedEntryList([])
     setFilterMode(false)
     setFilterText('')
-  }, [currentPath, setSelectedEntryList, setFilterMode, setFilterText])
+  }, [currentPath, setSelectedEntryList, setFilterMode, setFilterText, setEditMode])
 
   useEffect(() => {
     const prevEntry = entryList.find((entry) => getEntryPath(entry) === lastVisitedPath)
     if (prevEntry) {
       setSelectedEntryList([prevEntry])
-      setScrollWaiter({ wait: true })
+      setLocationScrollWatcher({ wait: true })
     }
   }, [entryList, lastVisitedPath, setSelectedEntryList])
 
   const handleEntryClick = useCallback((e: any, entry: IEntry) => {
-    if (newDirMode || newTxtMode || renameMode) return
+    if (editMode) return
+
     let list = [...selectedEntryList]
     const { metaKey, ctrlKey, shiftKey } = e
     const selectedLen = selectedEntryList.length
+
     if (metaKey || ctrlKey) {
       list = list.find(o => isSameEntry(o, entry))
         ? list.filter(o => !isSameEntry(o, entry))
@@ -178,10 +176,10 @@ export default function FileExplorer(props: AppComponentProps) {
       list = [entry]
     }
     setSelectedEntryList(list)
-  }, [newDirMode, newTxtMode, renameMode, selectedEntryList, entryList, setSelectedEntryList])
+  }, [editMode, selectedEntryList, entryList, setSelectedEntryList])
 
   const handleEntryDoubleClick = useCallback((entry: IEntry) => {
-    if (renameMode) return
+    if (editMode) return
     const { type, name } = entry
     if (type === 'directory') {
       handleDirectoryOpen(entry)
@@ -199,7 +197,7 @@ export default function FileExplorer(props: AppComponentProps) {
         handleDownloadClick()
       }
     }
-  }, [renameMode, entryList, handleDirectoryOpen, handleDownloadClick, setOpenOperation])
+  }, [editMode, entryList, handleDirectoryOpen, handleDownloadClick, setOpenOperation])
 
   const handleLassoSelect = useCallback((info: IRectInfo) => {
     const entryElements = document.querySelectorAll('.gagu-entry-node')
@@ -234,20 +232,20 @@ export default function FileExplorer(props: AppComponentProps) {
 
   useHotKey({
     type: 'keyup',
-    bindCondition: isTopWindow && !newDirMode && !newTxtMode && !renameMode && !filterMode,
+    bindCondition: isTopWindow && !editMode && !filterMode,
     hotKeyMap: {
       'Delete': disabledMap.delete ? null : handleDeleteClick,
       'Escape': () => setSelectedEntryList([]),
       'Shift+A': disabledMap.selectAll ? null : () => handleSelectAll(true),
       'Shift+D': disabledMap.download ? null : handleDownloadClick,
-      'Shift+E': disabledMap.rename ? null : handleRename,
+      'Shift+E': disabledMap.rename ? null : () => handleEdit(EditMode.rename),
       'Shift+F': () => setFilterMode(true),
       'Shift+G': () => handleGridModeChange(true),
       'Shift+H': () => handleHiddenShowChange(!hiddenShow),
       'Shift+L': () => handleGridModeChange(false),
-      'Shift+N': disabledMap.newDir ? null : () => handleCreate('dir'),
+      'Shift+N': disabledMap.createFolder ? null : () => handleEdit(EditMode.createFolder),
       'Shift+R': disabledMap.refresh ? null : handleNavRefresh,
-      'Shift+T': disabledMap.newTxt ? null : () => handleCreate('txt'),
+      'Shift+T': disabledMap.createText ? null : () => handleEdit(EditMode.createText),
       'Shift+U': disabledMap.upload ? null : handleUploadClick,
       'Shift+ArrowUp': disabledMap.navToParent ? null : handleNavToParent,
       'Shift+ArrowRight': disabledMap.navForward ? null : handleNavForward,
@@ -310,13 +308,13 @@ export default function FileExplorer(props: AppComponentProps) {
         icon: <SvgIcon.FolderAdd />,
         name: t`action.newFolder`,
         isShow: isOnBlank,
-        onClick: () => setNewDirMode(true),
+        onClick: () => handleEdit(EditMode.createFolder),
       },
       {
         icon: <SvgIcon.FileAdd />,
         name: t`action.newTextFile`,
         isShow: isOnBlank,
-        onClick: () => setNewTxtMode(true),
+        onClick: () => handleEdit(EditMode.createText),
       },
       {
         icon: <SvgIcon.Refresh />,
@@ -328,7 +326,7 @@ export default function FileExplorer(props: AppComponentProps) {
         icon: <SvgIcon.Rename />,
         name: t`action.rename`,
         isShow: isSingle,
-        onClick: () => setTimeout(handleRename, 0),
+        onClick: () => setTimeout(() => handleEdit(EditMode.rename), 0),
       },
       {
         icon: <SvgIcon.Apps />,
@@ -400,7 +398,23 @@ export default function FileExplorer(props: AppComponentProps) {
     ]
 
     setContextMenuData({ eventData, menuItemList })
-  }, [selectedEntryList, favoriteEntryList, t, handleNavRefresh, handleUploadClick, setContextMenuData, entryList, setOpenOperation, handleRename, handleDirectorySizeUpdate, handleFavoriteClick, handleDownloadClick, handleShareClick, handleDeleteClick, setSelectedEntryList, setNewDirMode, setNewTxtMode])
+  }, [
+    t,
+    entryList,
+    selectedEntryList,
+    favoriteEntryList,
+    handleEdit,
+    setContextMenuData,
+    setSelectedEntryList,
+    setOpenOperation,
+    handleNavRefresh,
+    handleUploadClick,
+    handleDirectorySizeUpdate,
+    handleFavoriteClick,
+    handleDownloadClick,
+    handleShareClick,
+    handleDeleteClick,
+  ])
 
   return (
     <>
@@ -414,8 +428,18 @@ export default function FileExplorer(props: AppComponentProps) {
         {/* main */}
         <div className="relative flex-grow h-full bg-white flex flex-col">
           <ControlBar
-            {...{ windowWidth, disabledMap, gridMode, filterMode, filterText, hiddenShow, sortType }}
-            {...{ setFilterMode, setFilterText, setHiddenShow: handleHiddenShowChange }}
+            {...{
+              windowWidth,
+              disabledMap,
+              gridMode,
+              filterMode,
+              filterText,
+              hiddenShow,
+              sortType,
+              setFilterMode,
+              setFilterText,
+            }}
+            onHiddenShowChange={handleHiddenShowChange}
             onGridModeChange={handleGridModeChange}
             onSortTypeChange={handleSortChange}
             onNavBack={handleNavBack}
@@ -423,9 +447,7 @@ export default function FileExplorer(props: AppComponentProps) {
             onNavRefresh={handleNavRefresh}
             onNavAbort={handleNavAbort}
             onNavToParent={handleNavToParent}
-            onNewDir={() => handleCreate('dir')}
-            onNewTxt={() => handleCreate('txt')}
-            onRename={handleRename}
+            onEdit={handleEdit}
             onUpload={handleUploadClick}
             onDownload={handleDownloadClick}
             onDelete={handleDeleteClick}
@@ -467,20 +489,20 @@ export default function FileExplorer(props: AppComponentProps) {
               onContextMenu={handleContextMenu}
             >
               {/* create */}
-              {(newDirMode || newTxtMode) && (
+              {(editMode === EditMode.createFolder || editMode === EditMode.createText) && (
                 <EntryNode
                   creationMode
                   gridMode={gridMode}
                   entry={{
                     name: '',
-                    type: newDirMode ? 'directory' : 'file',
+                    type: editMode === EditMode.createFolder ? 'directory' : 'file',
                     lastModified: 0,
                     hidden: false,
                     hasChildren: false,
                     parentPath: currentPath,
-                    extension: newDirMode ? '_dir_new' : '_txt_new',
+                    extension: editMode === EditMode.createFolder ? '_dir_new' : '_txt_new',
                   }}
-                  creationType={newDirMode ? 'dir' : 'txt'}
+                  creationType={editMode === EditMode.createFolder ? EditMode.createFolder : EditMode.createText}
                   onNameSuccess={handleNameSuccess}
                   onNameFail={handleNameFail}
                 />
@@ -494,7 +516,16 @@ export default function FileExplorer(props: AppComponentProps) {
                 return (
                   <EntryNode
                     key={encodeURIComponent(`${entry.name}-${entry.type}`)}
-                    {...{ entry, gridMode, renameMode, isSelected, isFavorited, supportThumbnail, entryPathMap, scrollHook }}
+                    {...{
+                      entry,
+                      gridMode,
+                      renameMode: editMode === EditMode.rename,
+                      isSelected,
+                      isFavorited,
+                      supportThumbnail,
+                      entryPathMap,
+                      thumbScrollWatcher,
+                    }}
                     requestState={{ deleting, sizeQuerying }}
                     onClick={handleEntryClick}
                     onDoubleClick={handleEntryDoubleClick}
@@ -506,7 +537,14 @@ export default function FileExplorer(props: AppComponentProps) {
             </div>
           </div>
           <StatusBar
-            {...{ folderCount, fileCount, currentPath, rootEntry: activeRootEntry, selectedEntryList }}
+            {...{
+              folderCount,
+              fileCount,
+              currentPath,
+              rootEntry:
+              activeRootEntry,
+              selectedEntryList,
+            }}
             loading={querying}
             onDirClick={handleGoFullPath}
             onRootEntryClick={handleRootEntryClick}

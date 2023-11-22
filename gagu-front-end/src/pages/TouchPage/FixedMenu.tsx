@@ -9,7 +9,7 @@ interface FixedMenuProps {
   setSideShow: (show: boolean) => void
   isSelectionMode: boolean
   disabledMap: IControlBarDisabledMap
-  handleUploadClick: () => void
+  onUploadClick: () => void
 }
 
 export default function FixedMenu(props: FixedMenuProps) {
@@ -18,7 +18,7 @@ export default function FixedMenu(props: FixedMenuProps) {
     setSideShow,
     isSelectionMode,
     // disabledMap,
-    handleUploadClick,
+    onUploadClick,
   } = props
 
   const { t } = useTranslation()
@@ -45,7 +45,7 @@ export default function FixedMenu(props: FixedMenuProps) {
       {
         icon: <SvgIcon.Upload />,
         name: t`action.upload`,
-        onClick: handleUploadClick,
+        onClick: onUploadClick,
       },
       {
         icon: <SvgIcon.CloseCircle />,
@@ -56,7 +56,7 @@ export default function FixedMenu(props: FixedMenuProps) {
       },
     ]
     return bottomMenuList
-  }, [handleUploadClick, t, setSideShow])
+  }, [onUploadClick, t, setSideShow])
 
   return (
     <>
@@ -79,13 +79,13 @@ export default function FixedMenu(props: FixedMenuProps) {
                 title={`${t`action.backward`} [Shift + ←]`}
                 icon={<SvgIcon.ArrowLeft />}
                 disabled={disabledMap.navBack}
-                onClick={handleNavBack}
+                onClick={onNavBack}
               />
               <ToolButton
                 title={`${t`action.forward`} [Shift + →]`}
                 icon={<SvgIcon.ArrowRight />}
                 disabled={disabledMap.navForward}
-                onClick={handleNavForward}
+                onClick={onNavForward}
               />
               {disabledMap.refresh ? (
                 <ToolButton
@@ -97,14 +97,14 @@ export default function FixedMenu(props: FixedMenuProps) {
                 <ToolButton
                   title={`${t`action.refresh`} [Shift + R]`}
                   icon={<SvgIcon.Refresh />}
-                  onClick={handleNavRefresh}
+                  onClick={onNavRefresh}
                 />
               )}
               <ToolButton
                 title={`${t`action.navToParent`} [Shift + ↑]`}
                 icon={<SvgIcon.ArrowUp />}
                 disabled={disabledMap.navToParent}
-                onClick={handleNavToParent}
+                onClick={onNavToParent}
               /> */}
             </div>
             <div className="mt-2 break-keep">

@@ -2,15 +2,15 @@ import { useTranslation } from 'react-i18next'
 import { SvgIcon, ToolButton } from '../../components/common'
 import { Dropdown } from '@douyinfe/semi-ui'
 import { useCallback, useMemo, useState } from 'react'
-import { Sort, SortType } from '../../types'
+import { EditMode, Sort, SortType } from '../../types'
 
 export interface IControlBarDisabledMap {
   navBack: boolean
   navForward: boolean
   refresh: boolean
   navToParent: boolean
-  newDir: boolean
-  newTxt: boolean
+  createFolder: boolean
+  createText: boolean
   rename: boolean
   upload: boolean
   download: boolean
@@ -28,7 +28,7 @@ interface ControlBarProps {
   sortType: SortType
   setFilterMode: (open: boolean) => void
   setFilterText: (text: string) => void
-  setHiddenShow: (show: boolean) => void
+  onHiddenShowChange: (show: boolean) => void
   onGridModeChange: (mode: boolean) => void
   onSortTypeChange: (sortType: SortType) => void
   onNavBack: () => void
@@ -36,11 +36,9 @@ interface ControlBarProps {
   onNavRefresh: () => void
   onNavAbort: () => void
   onNavToParent: () => void
-  onNewDir: () => void
-  onNewTxt: () => void
+  onEdit: (editMode: EditMode) => void
   onUpload: () => void
   onDownload: () => void
-  onRename: () => void
   onDelete: () => void
   onSelectAll: () => void
 }
@@ -59,7 +57,7 @@ export default function ControlBar(props: ControlBarProps) {
     sortType,
     setFilterMode,
     setFilterText,
-    setHiddenShow,
+    onHiddenShowChange,
     onGridModeChange,
     onSortTypeChange,
     onNavBack,
@@ -67,11 +65,9 @@ export default function ControlBar(props: ControlBarProps) {
     onNavRefresh,
     onNavAbort,
     onNavToParent,
-    onNewDir,
-    onNewTxt,
+    onEdit,
     onUpload,
     onDownload,
-    onRename,
     onDelete,
     onSelectAll,
   } = props
@@ -139,15 +135,15 @@ export default function ControlBar(props: ControlBarProps) {
               title={`${t`action.newFolder`} [Shift + N]`}
               className="hidden md:flex"
               icon={<SvgIcon.FolderAdd />}
-              disabled={disabledMap.newDir}
-              onClick={onNewDir}
+              disabled={disabledMap.createFolder}
+              onClick={() => onEdit(EditMode.createFolder)}
             />
             <ToolButton
               title={`${t`action.newTextFile`} [Shift + T]`}
               className="hidden md:flex"
               icon={<SvgIcon.FileAdd />}
-              disabled={disabledMap.newTxt}
-              onClick={onNewTxt}
+              disabled={disabledMap.createText}
+              onClick={() => onEdit(EditMode.createText)}
             />
             <ToolButton
               title={`${t`action.upload`} [Shift + U]`}
@@ -173,7 +169,7 @@ export default function ControlBar(props: ControlBarProps) {
               className="hidden md:flex"
               icon={<SvgIcon.Rename />}
               disabled={disabledMap.rename}
-              onClick={onRename}
+              onClick={() => onEdit(EditMode.rename)}
             />
             <ToolButton
               title={`${t`action.delete`} [Del]`}
@@ -217,7 +213,7 @@ export default function ControlBar(props: ControlBarProps) {
         <ToolButton
           title={`${hiddenShow ? t`action.hideHiddenItems` : t`action.showHiddenItems`} [Shift + H]`}
           icon={hiddenShow ? <SvgIcon.EyeOff /> : <SvgIcon.Eye />}
-          onClick={() => setHiddenShow(!hiddenShow)}
+          onClick={() => onHiddenShowChange(!hiddenShow)}
         />
         <ToolButton
           title={gridMode ? `${t`action.listView`} [Shift + L]` : `${t`action.gridView`} [Shift + G]`}

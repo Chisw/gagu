@@ -4,14 +4,11 @@ import { useRequest } from '../../../hooks'
 import { line, setSelection } from '../../../utils'
 import { FsApi } from '../../../api'
 import { INVALID_NAME_CHAR_LIST } from '../../../utils'
-import { EntryType, IEntry } from '../../../types'
+import { EditMode, CreationType, EntryType, IEntry, NameFailType } from '../../../types'
 import { useTranslation } from 'react-i18next'
 
-export type NameFailType = 'cancel' | 'empty' | 'existed' | 'net_error' | 'invalid'
-export type NameCreationType = 'dir' | 'txt' 
-
 interface EntryNameProps {
-  creationType?: NameCreationType
+  creationType?: CreationType
   inputMode?: boolean
   entry?: IEntry,
   isSelected?: boolean
@@ -23,7 +20,7 @@ interface EntryNameProps {
 
 export default function EntryName(props: EntryNameProps) {
   const {
-    creationType = 'dir',
+    creationType = EditMode.createFolder,
     inputMode = false,
     entry = undefined,
     isSelected = false,
@@ -67,7 +64,7 @@ export default function EntryName(props: EntryNameProps) {
       return
     }
 
-    const finalName = creationType === 'dir' || newName.includes('.')
+    const finalName = creationType === EditMode.createFolder || newName.includes('.')
       ? newName
       : `${newName}.txt`
 
@@ -86,8 +83,8 @@ export default function EntryName(props: EntryNameProps) {
         } else {
           onFail('net_error')
         }
-      } else {  // new dir
-        if (creationType === 'dir') {
+      } else {
+        if (creationType === EditMode.createFolder) {
           const { success } = await addDirectory(newPath)
           if (success) {
             onSuccess({
@@ -102,7 +99,7 @@ export default function EntryName(props: EntryNameProps) {
           } else {
             onFail('net_error')
           }
-        } else if (creationType === 'txt') {
+        } else if (creationType === EditMode.createText) {
           const blob = new Blob([''], { type: 'text/plain;charset=utf-8' })
           const file = new File([blob], finalName)
           const fullPath = `${parentPath}/${finalName}`
@@ -200,7 +197,6 @@ export function NameLabel(props: NameLabelProps) {
         ${isSelected ? 'bg-blue-600 text-white' : 'text-gray-700'}
         ${gridMode ? 'max-w-full line-clamp-2' : 'w-full truncate'}
       `)}
-      // style={{ textShadow: '0 1px #fff, 1px 0 #fff, -1px 0 #fff, 0 -1px #fff' }}
     >
       {entryName}
     </span>

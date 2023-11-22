@@ -26,14 +26,13 @@ export default function TouchPage() {
   const containerRef = useRef(null)
 
   const {
-    rootInfo, entryPathMap, disabledMap, scrollHook,
+    rootInfo, entryPathMap, disabledMap, thumbScrollWatcher,
     currentPath, activeRootEntry,
     querying, sizeQuerying, deleting,
     entryList, rootEntryList, favoriteEntryList, sharedEntryList,
     isInRoot, isEntryListEmpty,
     folderCount, fileCount,
-    // newDirMode, setNewDirMode,
-    // newTxtMode, setNewTxtMode,
+    // editMode, setEditMode,
     filterMode, setFilterMode,
     filterText, setFilterText,
     hiddenShow, handleHiddenShowChange,
@@ -134,17 +133,22 @@ export default function TouchPage() {
         <EntrySelector />
         <MenuBar />
         <Side
-          sideShow={sideShow}
-          setSideShow={setSideShow}
-          currentPath={currentPath}
-          rootEntryList={rootEntryList}
-          favoriteEntryList={favoriteEntryList}
-          handleRootEntryClick={(rootEntry) => {
+          {...{
+            sideShow,
+            setSideShow,
+            currentPath,
+            rootEntryList,
+            favoriteEntryList,
+          }}
+          onRootEntryClick={(rootEntry) => {
             vibrate()
             setSideShow(false)
             handleRootEntryClick(rootEntry)
           }}
-          handleFavoriteClick={handleFavoriteClick}
+          onFavoriteClick={(rootEntry, isFavorited) => {
+            vibrate()
+            handleFavoriteClick(rootEntry, isFavorited)
+          }}
         />
         <div
           ref={containerRef}
@@ -166,8 +170,18 @@ export default function TouchPage() {
           )}
           <div className="sticky z-20 top-0 bg-white select-none">
             <ControlBar
-              {...{ windowWidth: 360, disabledMap, gridMode, filterMode, filterText, hiddenShow, sortType }}
-              {...{ setFilterMode, setFilterText, setHiddenShow: handleHiddenShowChange }}
+              {...{
+                windowWidth: 360,
+                disabledMap,
+                gridMode,
+                filterMode,
+                filterText,
+                hiddenShow,
+                sortType,
+                setFilterMode,
+                setFilterText,
+              }}
+              onHiddenShowChange={handleHiddenShowChange}
               onGridModeChange={handleGridModeChange}
               onSortTypeChange={handleSortChange}
               onNavBack={handleNavBack}
@@ -175,16 +189,21 @@ export default function TouchPage() {
               onNavRefresh={handleNavRefresh}
               onNavAbort={handleNavAbort}
               onNavToParent={handleNavToParent}
-              onNewDir={() => {}}
-              onNewTxt={() => {}}
-              onRename={() => {}}
+              onEdit={() => {}}
               onUpload={() => {}}
               onDownload={() => {}}
               onDelete={() => {}}
               onSelectAll={() => {}}
             />
             <StatusBar
-              {...{ folderCount, fileCount, currentPath, rootEntry: activeRootEntry, selectedEntryList }}
+              {...{
+                folderCount,
+                fileCount,
+                currentPath,
+                rootEntry:
+                activeRootEntry,
+                selectedEntryList,
+              }}
               loading={querying}
               onDirClick={handleGoFullPath}
               onRootEntryClick={handleRootEntryClick}
@@ -206,7 +225,7 @@ export default function TouchPage() {
                     isFavorited,
                     supportThumbnail,
                     entryPathMap,
-                    scrollHook,
+                    thumbScrollWatcher,
                   }}
                   requestState={{ deleting, sizeQuerying }}
                   onClick={handleEntryClick}
@@ -228,14 +247,16 @@ export default function TouchPage() {
 
       <SelectionMenu
         show={isSelectionMode}
-        favoriteEntryList={favoriteEntryList}
-        selectedEntryList={selectedEntryList}
-        handleDirectorySizeUpdate={handleDirectorySizeUpdate}
-        handleFavoriteClick={handleFavoriteClick}
-        handleDownloadClick={handleDownloadClick}
-        handleShareClick={handleShareClick}
-        handleDeleteClick={handleDeleteClick}
-        handleSelectAll={handleSelectAll}
+        {...{
+          favoriteEntryList,
+          selectedEntryList,
+        }}
+        onDirectorySizeUpdate={handleDirectorySizeUpdate}
+        onFavoriteClick={handleFavoriteClick}
+        onDownloadClick={handleDownloadClick}
+        onShareClick={handleShareClick}
+        onDeleteClick={handleDeleteClick}
+        onSelectAll={handleSelectAll}
         onCancel={() => {
           setIsSelectionMode(false)
           setSelectedEntryList([])
@@ -243,11 +264,13 @@ export default function TouchPage() {
       />
 
       <FixedMenu
-        sideShow={sideShow}
-        setSideShow={setSideShow}
-        isSelectionMode={isSelectionMode}
-        disabledMap={disabledMap}
-        handleUploadClick={handleUploadClick}
+        {...{
+          sideShow,
+          setSideShow,
+          isSelectionMode,
+          disabledMap,
+        }}
+        onUploadClick={handleUploadClick}
       />
     </>
   )

@@ -14,7 +14,7 @@ interface EntryNodeProps {
   hideAppIcon?: boolean
   supportThumbnail?: boolean
   entryPathMap?: IEntryPathMap
-  scrollHook?: { top: number, height: number }
+  thumbScrollWatcher?: { top: number, height: number }
   requestState?: {
     sizeQuerying: boolean
     deleting: boolean
@@ -32,7 +32,7 @@ export default function EntryNode(props: EntryNodeProps) {
     hideAppIcon = false,
     supportThumbnail = false,
     entryPathMap = {},
-    scrollHook,
+    thumbScrollWatcher,
     requestState,
     onClick = () => {},
   } = props
@@ -49,13 +49,13 @@ export default function EntryNode(props: EntryNodeProps) {
 
   useEffect(() => {
     const icon: any = nodeRef.current
-    if (!icon || !scrollHook) return
-    const { top, height } = scrollHook
+    if (!icon || !thumbScrollWatcher) return
+    const { top, height } = thumbScrollWatcher
     const { top: iconTop } = icon.getBoundingClientRect()
     if ((top - 20) <= iconTop && iconTop <= (top + height)) {
       setIsViewable(true)
     }
-  }, [scrollHook])
+  }, [thumbScrollWatcher])
 
   return (
     <div
@@ -80,8 +80,15 @@ export default function EntryNode(props: EntryNodeProps) {
       {gridMode ? (
         <>
           <EntryIcon
-            touchMode
-            {...{ isSmall: false, isFavorited, isViewable, entry, hideAppIcon, supportThumbnail }}
+            {...{
+              touchMode: true,
+              isSmall: false,
+              isFavorited,
+              isViewable,
+              entry,
+              hideAppIcon,
+              supportThumbnail
+            }}
           />
           <div className="text-center text-xs">
             {entry.name}
@@ -100,8 +107,15 @@ export default function EntryNode(props: EntryNodeProps) {
         <>
           <div className="w-14">
             <EntryIcon
-              touchMode
-              {...{ isSmall: false, isFavorited, isViewable, entry, hideAppIcon, supportThumbnail }}
+              {...{
+                touchMode: true,
+                isSmall: false,
+                isFavorited,
+                isViewable,
+                entry,
+                hideAppIcon,
+                supportThumbnail,
+              }}
             />
           </div>
           <div className="pl-2">
@@ -126,7 +140,7 @@ export default function EntryNode(props: EntryNodeProps) {
       {isSelectionMode && (
         <div
           className={line(`
-            absolute z-10 
+            absolute z-10 pointer-events-none
             rounded-full text-white
             flex justify-center items-center
             ${isSelected ? 'bg-blue-500' : 'bg-black bg-opacity-20 border border-gray-200'}

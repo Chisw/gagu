@@ -9,12 +9,12 @@ interface SelectionMenuProps {
   show: boolean
   favoriteEntryList: IEntry[]
   selectedEntryList: IEntry[]
-  handleDirectorySizeUpdate: (entry: IEntry) => void
-  handleFavoriteClick: (entry: IEntry, isFavorited: boolean) => void
-  handleDownloadClick: (entryList: IEntry[]) => void
-  handleShareClick: (entryList: IEntry[]) => void
-  handleDeleteClick: (entryList: IEntry[]) => void
-  handleSelectAll: () => void
+  onDirectorySizeUpdate: (entry: IEntry) => void
+  onFavoriteClick: (entry: IEntry, isFavorited: boolean) => void
+  onDownloadClick: (entryList: IEntry[]) => void
+  onShareClick: (entryList: IEntry[]) => void
+  onDeleteClick: (entryList: IEntry[]) => void
+  onSelectAll: () => void
   onCancel: () => void
 }
 
@@ -23,12 +23,12 @@ export default function SelectionMenu(props: SelectionMenuProps) {
     show,
     favoriteEntryList,
     selectedEntryList,
-    handleDirectorySizeUpdate,
-    handleFavoriteClick,
-    handleDownloadClick,
-    handleShareClick,
-    handleDeleteClick,
-    handleSelectAll,
+    onDirectorySizeUpdate,
+    onFavoriteClick,
+    onDownloadClick,
+    onShareClick,
+    onDeleteClick,
+    onSelectAll,
     onCancel,
   } = props
 
@@ -48,7 +48,7 @@ export default function SelectionMenu(props: SelectionMenuProps) {
       isOnDirectory = activeEntry.type === 'directory'
     }
 
-    const handleOpenEntry = (app: IApp) => {
+    const onOpenEntry = (app: IApp) => {
       // setOpenOperation({
       //   app,
       //   matchedEntryList: contextEntryList,
@@ -61,7 +61,7 @@ export default function SelectionMenu(props: SelectionMenuProps) {
         icon: <SvgIcon.Check />,
         name: t`action.selectAll`,
         isShow: true,
-        onClick: handleSelectAll,
+        onClick: onSelectAll,
       },
       {
         icon: <SvgIcon.Rename />,
@@ -77,39 +77,39 @@ export default function SelectionMenu(props: SelectionMenuProps) {
         children: CALLABLE_APP_LIST.map(app => ({
           icon: <div className="gagu-app-icon w-4 h-4" data-app-id={app.id} />,
           name: t(`app.${app.id}`),
-          onClick: () => handleOpenEntry(app),
+          onClick: () => onOpenEntry(app),
         })),
       },
       {
         icon: <SvgIcon.FolderInfo />,
         name: t`action.folderSize`,
         isShow: isOnDirectory && isSingle,
-        onClick: () => handleDirectorySizeUpdate(selectedEntryList[0]),
+        onClick: () => onDirectorySizeUpdate(selectedEntryList[0]),
       },
       {
         icon: isFavorited ? <SvgIcon.Star /> : <SvgIcon.StarSolid />,
         name: isFavorited ? t`action.unfavorite` : t`action.favorite`,
         isShow: isOnDirectory && isSingle,
-        onClick: () => handleFavoriteClick(selectedEntryList[0], isFavorited),
+        onClick: () => onFavoriteClick(selectedEntryList[0], isFavorited),
       },
 
       {
         icon: <SvgIcon.Download />,
         name: t`action.download`,
         isShow: true,
-        onClick: () => handleDownloadClick(selectedEntryList),
+        onClick: () => onDownloadClick(selectedEntryList),
       },
       {
         icon: <SvgIcon.Share />,
         name: t`action.newSharing`,
         isShow: !isOnBlank,
-        onClick: () => handleShareClick(selectedEntryList),
+        onClick: () => onShareClick(selectedEntryList),
       },
       {
         icon: <SvgIcon.Delete />,
         name: t`action.delete`,
         isShow: !isOnBlank,
-        onClick: () => handleDeleteClick(selectedEntryList),
+        onClick: () => onDeleteClick(selectedEntryList),
       },
       {
         icon: <SvgIcon.CloseCircle />,
@@ -118,7 +118,7 @@ export default function SelectionMenu(props: SelectionMenuProps) {
         onClick: onCancel,
       },
     ].filter(item => item.isShow)
-  }, [selectedEntryList, t, handleSelectAll, onCancel, favoriteEntryList, handleDirectorySizeUpdate, handleFavoriteClick, handleDownloadClick, handleShareClick, handleDeleteClick])
+  }, [selectedEntryList, t, onSelectAll, onCancel, favoriteEntryList, onDirectorySizeUpdate, onFavoriteClick, onDownloadClick, onShareClick, onDeleteClick])
 
   return (
     <>

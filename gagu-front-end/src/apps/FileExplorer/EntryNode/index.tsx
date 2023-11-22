@@ -1,8 +1,8 @@
 import { DateTime } from 'luxon'
-import { IEntry, IEntryPathMap } from '../../../types'
+import { CreationType, IEntry, IEntryPathMap, IScrollerWatcher, NameFailType } from '../../../types'
 import { getEntryPath, getReadableSize, line } from '../../../utils'
 import EntryIcon from './EntryIcon'
-import EntryName, { NameCreationType, NameFailType } from './EntryName'
+import EntryName from './EntryName'
 import { useEffect, useRef, useState } from 'react'
 
 interface EntryNodeProps {
@@ -14,9 +14,9 @@ interface EntryNodeProps {
   renameMode?: boolean
   hideAppIcon?: boolean
   supportThumbnail?: boolean
-  creationType?: NameCreationType
+  creationType?: CreationType
   entryPathMap?: IEntryPathMap
-  scrollHook?: { top: number, height: number }
+  thumbScrollWatcher?: IScrollerWatcher
   requestState?: {
     sizeQuerying: boolean
     deleting: boolean
@@ -39,7 +39,7 @@ export default function EntryNode(props: EntryNodeProps) {
     supportThumbnail = false,
     creationType,
     entryPathMap = {},
-    scrollHook,
+    thumbScrollWatcher,
     requestState,
     onClick = () => {},
     onDoubleClick = () => {},
@@ -60,13 +60,13 @@ export default function EntryNode(props: EntryNodeProps) {
 
   useEffect(() => {
     const icon: any = nodeRef.current
-    if (!icon || !scrollHook) return
-    const { top, height } = scrollHook
+    if (!icon || !thumbScrollWatcher) return
+    const { top, height } = thumbScrollWatcher
     const { top: iconTop } = icon.getBoundingClientRect()
     if ((top - 20) <= iconTop && iconTop <= (top + height)) {
       setIsViewable(true)
     }
-  }, [scrollHook])
+  }, [thumbScrollWatcher])
 
   return (
     <div
@@ -90,15 +90,26 @@ export default function EntryNode(props: EntryNodeProps) {
       onClick={e => onClick(e, entry)}
       onDoubleClick={() => onDoubleClick(entry)}
     >
-      <EntryIcon {...{ isSmall, isFavorited, isViewable, entry, hideAppIcon, supportThumbnail }} />
+      <EntryIcon
+        {...{
+          isSmall,
+          isFavorited,
+          isViewable,
+          entry,
+          hideAppIcon,
+          supportThumbnail,
+        }}
+      />
 
       <EntryName
         inputMode={(renameMode && isSelected) || creationMode}
-        entry={entry}
-        creationType={creationType}
-        isSelected={isSelected}
-        gridMode={gridMode}
-        parentPath={parentPath}
+        {...{
+          entry,
+          creationType,
+          isSelected,
+          gridMode,
+          parentPath, 
+        }}
         onSuccess={onNameSuccess}
         onFail={onNameFail}
       />
@@ -109,7 +120,6 @@ export default function EntryNode(props: EntryNodeProps) {
           ${gridMode ? 'w-full text-center' : 'pl-2 w-24 text-right'}
           ${(isSelected && requestState?.sizeQuerying) ? 'bg-loading' : ''}
         `)}
-        // style={{ textShadow: '0 1px #fff, 1px 0 #fff, -1px 0 #fff, 0 -1px #fff' }}
       >
         {sizeLabel}
       </div>
