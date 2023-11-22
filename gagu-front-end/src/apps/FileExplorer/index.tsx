@@ -442,6 +442,7 @@ export default function FileExplorer(props: AppComponentProps) {
             onHiddenShowChange={handleHiddenShowChange}
             onGridModeChange={handleGridModeChange}
             onSortTypeChange={handleSortChange}
+            onSideBarClick={() => setSideCollapse(!sideCollapse)}
             onNavBack={handleNavBack}
             onNavForward={handleNavForward}
             onNavRefresh={handleNavRefresh}
@@ -453,20 +454,6 @@ export default function FileExplorer(props: AppComponentProps) {
             onDelete={handleDeleteClick}
             onSelectAll={handleSelectAll}
           />
-          <div
-            title={sideCollapse ? t`action.unfold` : t`action.fold`}
-            className={line(`
-              absolute z-10 top-1/2 left-0 w-2 h-12 bg-gray-200 rounded-r-sm
-              opacity-40 hover:bg-gray-300
-              transition-all duration-200 -translate-y-1/2 cursor-pointer
-              flex justify-center items-center
-            `)}
-            onClick={() => setSideCollapse(!sideCollapse)}
-          >
-            <span className={sideCollapse ? '' : '-rotate-180'}>
-              <SvgIcon.ChevronRight />
-            </span>
-          </div>
           <div
             ref={containerRef}
             className="relative flex-grow overflow-x-hidden overflow-y-auto select-none"

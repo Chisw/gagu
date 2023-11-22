@@ -27,6 +27,7 @@ export interface IApp {
   matchList?: string[]
   headerClassName?: string
   multiple?: boolean
+  touchModeShow?: boolean
 }
 
 export interface IOpenOperation {

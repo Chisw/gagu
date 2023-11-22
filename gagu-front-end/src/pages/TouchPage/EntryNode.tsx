@@ -72,7 +72,7 @@ export default function EntryNode(props: EntryNodeProps) {
         ${isSelected && requestState?.deleting ? 'bg-loading' : ''}
         ${gridMode
           ? 'py-2 w-1/4 md:w-[12.5%] lg:w-1/12 active:scale-90'
-          : 'px-2 py-3 w-full flex justify-start items-center active:scale-95'
+          : 'px-2 py-2 w-full flex justify-start items-center active:scale-95'
         }
       `)}
       onClick={() => onClick(entry)}

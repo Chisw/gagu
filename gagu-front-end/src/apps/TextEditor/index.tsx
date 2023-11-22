@@ -95,7 +95,7 @@ export default function TextEditor(props: AppComponentProps) {
   return (
     <>
       <div className="absolute inset-0 flex flex-col">
-        <div className="h-8 flex-shrink-0 flex items-center border-b bg-white">
+        <div className="h-10 md:h-8 flex-shrink-0 flex items-center border-b bg-white">
           <ToolButton
             title={t`action.save`}
             icon={<SvgIcon.Save />}

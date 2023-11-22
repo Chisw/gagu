@@ -1,28 +1,32 @@
 import { EmptyPanel } from '../../components/common'
 import { useRecoilState } from 'recoil'
 import { useFileExplorer } from '../../hooks'
-import { activePageState } from '../../states'
+import { activePageState, openOperationState, runningAppListState } from '../../states'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import EntrySelector from '../../components/EntrySelector'
 import MenuBar from '../../components/MenuBar'
 import { IEntry, Page } from '../../types'
-import { getMatchedApp, isSameEntry, vibrate } from '../../utils'
+import { getMatchedApp, isSameEntry, line, vibrate } from '../../utils'
 import EntryNode from './EntryNode'
 import StatusBar from '../../apps/FileExplorer/StatusBar'
 import ControlBar from '../../apps/FileExplorer/ControlBar'
 import SharingModal from '../../components/SharingModal'
 import SelectionMenu from './SelectionMenu'
-import FixedMenu from './FixedMenu'
+import Dock from './Dock'
 import Side from './Side'
+import { APP_ID_MAP } from '../../apps'
+import Window from './Window'
 
 export default function TouchPage() {
 
   const [activePage, setActivePage] = useRecoilState(activePageState)
-  // const [, setOpenOperation] = useRecoilState(openOperationState)
+  const [runningAppList] = useRecoilState(runningAppListState)
+  const [, setOpenOperation] = useRecoilState(openOperationState)
 
   const [show, setShow] = useState(false)
   const [sideShow, setSideShow] = useState(false)
   const [isSelectionMode, setIsSelectionMode] = useState(false)
+  const [activeAppId, setActiveAppId] = useState(APP_ID_MAP.fileExplorer)
 
   const containerRef = useRef(null)
 
@@ -91,24 +95,24 @@ export default function TouchPage() {
       return
     }
 
-    const { type } = entry
+    const { name, type } = entry
     if (type === 'directory') {
       handleDirectoryOpen(entry)
     } else {
       const app = getMatchedApp(entry)
       if (app) {
-        // const matchedEntryList = entryList.filter(en => app.matchList?.includes(en.extension))
-        // const activeEntryIndex = matchedEntryList.findIndex(en => en.name === name)
-        // setOpenOperation({
-        //   app,
-        //   matchedEntryList,
-        //   activeEntryIndex,
-        // })
+        const matchedEntryList = entryList.filter(entry => app.matchList?.includes(entry.extension))
+        const activeEntryIndex = matchedEntryList.findIndex(entry => entry.name === name)
+        setOpenOperation({
+          app,
+          matchedEntryList,
+          activeEntryIndex,
+        })
       } else {
         handleDownloadClick([entry])
       }
     }
-  }, [isSelectionMode, selectedEntryList, setSelectedEntryList, handleDirectoryOpen, handleDownloadClick])
+  }, [isSelectionMode, selectedEntryList, setSelectedEntryList, handleDirectoryOpen, entryList, setOpenOperation, handleDownloadClick])
 
   const handleContextMenu = useCallback((event: any) => {
       if (sideShow) return
@@ -140,7 +144,21 @@ export default function TouchPage() {
         onContextMenuCapture={e => e.preventDefault()}
       >
         <EntrySelector />
+
+        {/* z-30 */}
+        {runningAppList.map(app => (
+          <Window
+            key={app.runningId}
+            app={app}
+            isTopWindow={app.id === activeAppId}
+            onClose={() => setActiveAppId(APP_ID_MAP.fileExplorer)}
+          />
+        ))}
+
+        {/* z-20 */}
         <MenuBar />
+
+        {/* z-0 */}
         <Side
           {...{
             sideShow,
@@ -159,24 +177,17 @@ export default function TouchPage() {
             handleFavoriteClick(rootEntry, isFavorited)
           }}
         />
+
+        {/* z-0 */}
         <div
           ref={containerRef}
-          className={`
-            absolute z-10 inset-0 top-6 bg-white transition-all duration-500
+          className={line(`
+            absolute z-0 inset-0 top-6 bg-white transition-all duration-500
             ${show ? 'opacity-100' : 'opacity-0'}
-            ${sideShow ? 'ease-in-out translate-x-56 opacity-20 overflow-y-hidden' : 'overflow-y-auto'}
-          `}
+            ${sideShow ? 'ease-in-out translate-x-56 opacity-20 overflow-y-hidden pointer-events-none' : 'overflow-y-auto'}
+          `)}
           onContextMenu={handleContextMenu}
         >
-          {sideShow && (
-            <div
-              className="absolute inset-0 z-50"
-              onClick={() => {
-                vibrate()
-                setSideShow(false)
-              }}
-            />
-          )}
           <div className="sticky z-20 top-0 bg-white select-none">
             <ControlBar
               {...{
@@ -193,6 +204,7 @@ export default function TouchPage() {
               onHiddenShowChange={handleHiddenShowChange}
               onGridModeChange={handleGridModeChange}
               onSortTypeChange={handleSortChange}
+              onSideBarClick={() => setSideShow(!sideShow)}
               onNavBack={handleNavBack}
               onNavForward={handleNavForward}
               onNavRefresh={handleNavRefresh}
@@ -246,7 +258,15 @@ export default function TouchPage() {
           <EmptyPanel show={!querying && isEntryListEmpty} />
 
         </div>
+
       </div>
+
+      <Dock
+        show={!(sideShow || isSelectionMode || activeAppId !== APP_ID_MAP.fileExplorer)}
+        activeAppId={activeAppId}
+        setActiveAppId={setActiveAppId}
+        onUploadClick={handleUploadClick}
+      />
 
       <SharingModal
         visible={sharingModalShow}
@@ -272,15 +292,6 @@ export default function TouchPage() {
         }}
       />
 
-      <FixedMenu
-        {...{
-          sideShow,
-          setSideShow,
-          isSelectionMode,
-          disabledMap,
-        }}
-        onUploadClick={handleUploadClick}
-      />
     </>
   )
 }

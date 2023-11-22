@@ -37,7 +37,7 @@ export default function Window(props: WindowProps) {
   const [hidden, setHidden] = useState(false)
   const [isFullScreen, setIsFullScreen] = useState(false)
   const [rndInstance, setRndInstance] = useState<any>(null)
-  const [windowStatus, setWindowStatus] = useState<WindowStatus>('closed')
+  const [windowStatus, setWindowStatus] = useState<WindowStatus>('opening')
   const [isDraggingOrResizing, setIsDraggingOrResizing] = useState(false)
 
   const isTopWindow = useMemo(() => currentIndex === topWindowIndex, [currentIndex, topWindowIndex])
@@ -53,7 +53,6 @@ export default function Window(props: WindowProps) {
   const [memoInfo, setMemoInfo] = useState(defaultInfo)
 
   useEffect(() => {
-    setWindowStatus('opening')
     setTimeout(() => {
       setWindowStatus('opened')
     }, WINDOW_DURATION)

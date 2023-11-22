@@ -44,8 +44,9 @@ export const APP_LIST: IApp[] = [
       minHeight: 100,
     },
     matchList: ['txt', 'md', 'html', 'xml', 'css', 'js', 'json', 'php', 'java', 'sh', 'log', 'md', 'ts', 'tsx'],
-    headerClassName: 'bg-yellow-600 text-yellow-100 border-yellow-900 border-opacity-10',
+    headerClassName: 'bg-yellow-500 text-yellow-100 border-yellow-900 border-opacity-10',
     multiple: true,
+    touchModeShow: true,
   },
   {
     id: APP_ID_MAP.photoViewer,
@@ -60,6 +61,7 @@ export const APP_LIST: IApp[] = [
     matchList: ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'ico'],
     headerClassName: 'bg-gray-800 text-gray-100 border-black border-opacity-10',
     multiple: true,
+    touchModeShow: true,
   },
   {
     id: APP_ID_MAP.musicPlayer,
@@ -73,6 +75,7 @@ export const APP_LIST: IApp[] = [
     },
     matchList: ['mp3', 'flac', 'wav', 'aac', 'ogg'],
     headerClassName: 'bg-pink-900 text-pink-100 border-black border-opacity-10',
+    touchModeShow: true,
   },
   {
     id: APP_ID_MAP.videoPlayer,
@@ -87,6 +90,7 @@ export const APP_LIST: IApp[] = [
     matchList: ['mp4', 'mkv', 'webm'],
     headerClassName: 'bg-gray-800 text-gray-100 border-black border-opacity-10',
     multiple: true,
+    touchModeShow: true,
   },
   {
     id: APP_ID_MAP.settings,
@@ -99,6 +103,7 @@ export const APP_LIST: IApp[] = [
       minHeight: 300,
     },
     headerClassName: 'bg-gray-700 text-gray-100 border-gray-900 border-opacity-10',
+    touchModeShow: true,
   },
   {
     id: APP_ID_MAP.baiduMap,

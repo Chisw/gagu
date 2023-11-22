@@ -31,6 +31,7 @@ interface ControlBarProps {
   onHiddenShowChange: (show: boolean) => void
   onGridModeChange: (mode: boolean) => void
   onSortTypeChange: (sortType: SortType) => void
+  onSideBarClick: () => void
   onNavBack: () => void
   onNavForward: () => void
   onNavRefresh: () => void
@@ -60,6 +61,7 @@ export default function ControlBar(props: ControlBarProps) {
     onHiddenShowChange,
     onGridModeChange,
     onSortTypeChange,
+    onSideBarClick,
     onNavBack,
     onNavForward,
     onNavRefresh,
@@ -95,7 +97,13 @@ export default function ControlBar(props: ControlBarProps) {
 
   return (
     <>
-      <div className="h-8 flex-shrink-0 flex items-center border-b border-gray-100">
+      <div className="h-10 md:h-8 flex-shrink-0 flex items-center border-b border-gray-100">
+        <ToolButton
+          title={t`action.location`}
+          icon={<SvgIcon.SideBar />}
+          onClick={onSideBarClick}
+        />
+        <div className="mx-1 h-3 border-l" />
         <ToolButton
           title={`${t`action.backward`} [Shift + ←]`}
           icon={<SvgIcon.ArrowLeft />}
@@ -128,7 +136,8 @@ export default function ControlBar(props: ControlBarProps) {
           onClick={onNavToParent}
         />
 
-        <div className="hidden md:block mx-2 h-3 border-l" />
+        <div className="hidden md:block mx-1 h-3 border-l" />
+
         {windowWidth > 720 && (
           <>
             <ToolButton
@@ -160,6 +169,7 @@ export default function ControlBar(props: ControlBarProps) {
             />
             <ToolButton
               title={`${t`action.selectAll`} [Shift + A]`}
+              className="hidden md:flex"
               icon={<SvgIcon.Check />}
               disabled={disabledMap.selectAll}
               onClick={onSelectAll}
@@ -181,7 +191,7 @@ export default function ControlBar(props: ControlBarProps) {
           </>
         )}
 
-        <div className="flex-grow mx-2 h-3 border-r" />
+        <div className="flex-grow mx-1 h-3 border-r" />
 
         <div className={`${filterMode ? 'w-40' : 'w-8'} h-full transition-all duration-200`}>
           {filterMode ? (
@@ -210,58 +220,59 @@ export default function ControlBar(props: ControlBarProps) {
           )}
         </div>
 
-        <ToolButton
-          title={`${hiddenShow ? t`action.hideHiddenItems` : t`action.showHiddenItems`} [Shift + H]`}
-          icon={hiddenShow ? <SvgIcon.EyeOff /> : <SvgIcon.Eye />}
-          onClick={() => onHiddenShowChange(!hiddenShow)}
-        />
-        <ToolButton
-          title={gridMode ? `${t`action.listView`} [Shift + L]` : `${t`action.gridView`} [Shift + G]`}
-          icon={gridMode ? <SvgIcon.ViewList /> : <SvgIcon.ViewGrid />}
-          onClick={() => onGridModeChange(!gridMode)}
-        />
-        <ToolButton
-          // TODO
-          title={t`action.sort`}
-          icon={<SvgIcon.Sort />}
-          active={sortVisible || sortType !== Sort.default}
-          onClick={() => setSortVisible(!sortVisible)}
-        />
-        <Dropdown
-          position="bottomRight"
-          spacing={0}
-          visible={sortVisible}
-          onVisibleChange={setSortVisible}
-          onClickOutSide={() => setSortVisible(false)}
-          render={(
-            <Dropdown.Menu className="w-48">
-              {sortList.map(type => {
-                const isActive = type === sortType
-                const isDesc = type.endsWith('Desc')
-                return (
-                  <Dropdown.Item
-                    key={type}
-                    className={`flex items-center ${isActive ? 'text-blue-600' : ''}`}
-                    onClick={() => onSortTypeChange(type)}
-                  >
-                    <span className="flex-shrink-0 inline-block w-6">
-                      {isActive ? <SvgIcon.Check /> : undefined}
-                    </span>
-                    <span className="flex-grow">{t(`action.sort-${type}`)}</span>
-                    {type !== Sort.default && (
-                      <span className="flex-shrink-0 inline-block">
-                        {isDesc ? <SvgIcon.ArrowDown size={12} /> : <SvgIcon.ArrowUp size={12} />}
+        <div className={`h-full flex items-center ${(windowWidth < 720 && filterMode) ? 'hidden' : ''}`}>
+          <ToolButton
+            title={`${hiddenShow ? t`action.hideHiddenItems` : t`action.showHiddenItems`} [Shift + H]`}
+            icon={hiddenShow ? <SvgIcon.EyeOff /> : <SvgIcon.Eye />}
+            onClick={() => onHiddenShowChange(!hiddenShow)}
+          />
+          <ToolButton
+            title={gridMode ? `${t`action.listView`} [Shift + L]` : `${t`action.gridView`} [Shift + G]`}
+            icon={gridMode ? <SvgIcon.ViewList /> : <SvgIcon.ViewGrid />}
+            onClick={() => onGridModeChange(!gridMode)}
+          />
+          <ToolButton
+            title={t`action.sort`}
+            icon={<SvgIcon.Sort />}
+            active={sortVisible || sortType !== Sort.default}
+            onClick={() => setSortVisible(!sortVisible)}
+          />
+          <Dropdown
+            position="bottomRight"
+            spacing={0}
+            visible={sortVisible}
+            onVisibleChange={setSortVisible}
+            onClickOutSide={() => setSortVisible(false)}
+            render={(
+              <Dropdown.Menu className="w-48">
+                {sortList.map(type => {
+                  const isActive = type === sortType
+                  const isDesc = type.endsWith('Desc')
+                  return (
+                    <Dropdown.Item
+                      key={type}
+                      className={`flex items-center ${isActive ? 'text-blue-600' : ''}`}
+                      onClick={() => onSortTypeChange(type)}
+                    >
+                      <span className="flex-shrink-0 inline-block w-6">
+                        {isActive ? <SvgIcon.Check /> : undefined}
                       </span>
-                    )}
-                  </Dropdown.Item>
-                )
-              })}
+                      <span className="flex-grow">{t(`action.sort-${type}`)}</span>
+                      {type !== Sort.default && (
+                        <span className="flex-shrink-0 inline-block">
+                          {isDesc ? <SvgIcon.ArrowDown size={12} /> : <SvgIcon.ArrowUp size={12} />}
+                        </span>
+                      )}
+                    </Dropdown.Item>
+                  )
+                })}
 
-            </Dropdown.Menu>
-          )}
-        >
-          <div className="h-full"></div>
-        </Dropdown>
+              </Dropdown.Menu>
+            )}
+          >
+            <div className="h-full"></div>
+          </Dropdown>
+        </div>
       </div>
     </>
   )

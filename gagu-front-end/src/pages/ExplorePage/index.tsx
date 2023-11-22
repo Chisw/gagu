@@ -25,7 +25,7 @@ export default function ExplorePage() {
 
   useEffect(() => {
     if (activePage === Page.explore) {
-      setTimeout(() => setShow(true), 400)
+      setTimeout(() => setShow(true), 300)
     } else {
       setShow(false)
     }
@@ -39,8 +39,8 @@ export default function ExplorePage() {
         onContextMenuCapture={e => e.preventDefault()}
       >
         <EntrySelector />
-        <ContextMenu />     {/* z-30 */}
-        <MenuBar />         {/* z-20 */}
+        <ContextMenu /> {/* z-30 */}
+        <MenuBar />     {/* z-20 */}
 
         {/* z-10 */}
         {runningAppList.map(app => (
@@ -69,7 +69,8 @@ export default function ExplorePage() {
           />
         </div>
 
-        <Dock {...{ activeAppId, setActiveAppId }} /> {/* z-0 */}
+        {/* z-0 */}
+        <Dock {...{ activeAppId, setActiveAppId }} />
       </div>
     </>
   )

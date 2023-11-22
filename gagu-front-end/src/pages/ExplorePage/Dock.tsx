@@ -41,7 +41,7 @@ export default function Dock(props: DockProps) {
       <div
         className={line(`
           gagu-dock
-          absolute z-0 bottom-0 px-1 w-full h-10 bg-gray-300
+          absolute z-0 bottom-0 px-1 w-full h-10 border-t border-gray-300 bg-gray-300
           flex justify-center items-center
           transition-all duration-500 ease-out
           ${activePage === Page.explore ? 'translate-y-0' : 'translate-y-20'}
