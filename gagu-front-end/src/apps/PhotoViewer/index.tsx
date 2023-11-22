@@ -18,7 +18,7 @@ export default function PhotoViewer(props: AppComponentProps) {
     windowSize: { width: windowWidth },
     setWindowTitle,
     setWindowLoading,
-    closeWindow,
+    onClose,
   } = props
 
   const { t } = useTranslation()
@@ -122,7 +122,7 @@ export default function PhotoViewer(props: AppComponentProps) {
             setIsLight={setIsLight}
             setThumbnailListShow={setThumbnailListShow}
             handlePrevOrNext={handlePrevOrNext}
-            closeWindow={closeWindow}
+            onClose={onClose}
           />
 
         </div>

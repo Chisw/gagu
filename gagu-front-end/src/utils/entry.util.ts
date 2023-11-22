@@ -110,7 +110,6 @@ export const path2RootEntry = (path: string) => {
   return entry
 }
 
-
 // Sync following code to BE & FE
 export const getEntryPath = (entry: IEntry | null | undefined) => {
   if (!entry) return ''

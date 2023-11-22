@@ -27,6 +27,19 @@ export const ENTRY_ICON_LIST = [
   { type: 'book', matchList: ['mobi', 'epub'] },
 ]
 
+export const WINDOW_DURATION = 200
+
+export const WINDOW_STATUS_MAP = {
+  opening: { transition: 'none', transitionDuration: '0', transform: 'perspective(1000px) rotateX(-50deg) scale(.5)', opacity: 0 },
+  opened: { transition: 'all', transitionDuration: `${WINDOW_DURATION}ms`, transform: '', opacity: 1 },
+  hiding: { transition: 'all', transitionDuration: `${WINDOW_DURATION}ms`, transform: 'perspective(1000px) rotateX(0) scale(1) translateY(20vh)', opacity: 0 },
+  hidden: { transition: 'all', transitionDuration: `${WINDOW_DURATION}ms`, transform: 'perspective(1000px) rotateX(0) scale(1) translateY(20vh)', opacity: 0 },
+  showing: { transition: 'all', transitionDuration: '0', transform: 'perspective(1000px) rotateX(0) scale(1) translateY(20vh)', opacity: 0 },
+  shown: { transition: 'all', transitionDuration: `${WINDOW_DURATION}ms`, transform: 'perspective(1000px) rotateX(0) scale(1) translateY(0)', opacity: 1 },
+  closing: { transition: 'all', transitionDuration: `${WINDOW_DURATION}ms`, transform: 'perspective(1000px) rotateX(-50deg) scale(.5)', opacity: 0 },
+  closed: undefined,
+}
+
 // Sync following code to BE & FE
 export const PULSE_INTERVAL = 60 * 1000
 export const HEADERS_AUTH_KEY = 'Authorization'

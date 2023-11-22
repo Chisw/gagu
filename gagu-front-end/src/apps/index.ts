@@ -44,6 +44,7 @@ export const APP_LIST: IApp[] = [
       minHeight: 100,
     },
     matchList: ['txt', 'md', 'html', 'xml', 'css', 'js', 'json', 'php', 'java', 'sh', 'log', 'md', 'ts', 'tsx'],
+    headerClassName: 'bg-yellow-600 text-yellow-100 border-yellow-900 border-opacity-10',
     multiple: true,
   },
   {
@@ -97,6 +98,7 @@ export const APP_LIST: IApp[] = [
       minWidth: 600,
       minHeight: 300,
     },
+    headerClassName: 'bg-gray-700 text-gray-100 border-gray-900 border-opacity-10',
   },
   {
     id: APP_ID_MAP.baiduMap,

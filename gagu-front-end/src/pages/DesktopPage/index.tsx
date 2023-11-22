@@ -11,14 +11,6 @@ import { activePageState } from '../../states'
 import { line } from '../../utils'
 import { Page } from '../../types'
 
-// fixed z-0 DesktopPage
-// -               EntrySelector
-// - absolute z-30 ContextMenu
-// - absolute z-20 MenuBar & /TransferPannel
-// - absolute z-20 Dock
-// - absolute z-10 WindowContainer
-// - absolute z-0  Desktop
-
 export default function DesktopPage() {
 
   const [activePage, setActivePage] = useRecoilState(activePageState)
@@ -37,16 +29,16 @@ export default function DesktopPage() {
         className={line(`
           gagu-public-image-bg-desktop absolute z-0 inset-0 bg-cover bg-center
           transition-all duration-1000 ease-out
-          ${activePage === 'desktop' ? 'scale-100 opacity-100' : 'scale-110 opacity-50'}
+          ${activePage === Page.desktop ? 'scale-100 opacity-100' : 'scale-110 opacity-50'}
         `)}
         style={{ backgroundImage: `url("${FsApi.getImageStreamUrl('bg-desktop')}")` }}
       />
       <EntrySelector />
-      <ContextMenu />
-      <MenuBar />
-      <Dock />
-      <WindowContainer />
-      <Desktop />
+      <ContextMenu />     {/* z-30 */}
+      <MenuBar />         {/* z-20 */}
+      <Dock />            {/* z-20 */}
+      <WindowContainer /> {/* z-10 */}
+      <Desktop />         {/* z-0 */}
     </div>
   )
 }

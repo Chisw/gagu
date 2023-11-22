@@ -20,6 +20,7 @@ export default function TouchPage() {
   const [activePage, setActivePage] = useRecoilState(activePageState)
   // const [, setOpenOperation] = useRecoilState(openOperationState)
 
+  const [show, setShow] = useState(false)
   const [sideShow, setSideShow] = useState(false)
   const [isSelectionMode, setIsSelectionMode] = useState(false)
 
@@ -53,6 +54,14 @@ export default function TouchPage() {
   useEffect(() => {
     setTimeout(() => setActivePage(Page.touch))
   }, [setActivePage])
+
+  useEffect(() => {
+    if (activePage === Page.touch) {
+      setTimeout(() => setShow(true), 400)
+    } else {
+      setShow(false)
+    }
+  }, [activePage])
 
   useEffect(() => {
     setSelectedEntryList([])
@@ -154,7 +163,7 @@ export default function TouchPage() {
           ref={containerRef}
           className={`
             absolute z-10 inset-0 top-6 bg-white transition-all duration-500
-            ${activePage === Page.touch ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[10%]'}
+            ${show ? 'opacity-100' : 'opacity-0'}
             ${sideShow ? 'ease-in-out translate-x-56 opacity-20 overflow-y-hidden' : 'overflow-y-auto'}
           `}
           onContextMenu={handleContextMenu}

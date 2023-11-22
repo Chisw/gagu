@@ -40,8 +40,8 @@ export enum NameFail {
 export type NameFailType = keyof typeof NameFail
 
 export type PublicImageName = 'bg-desktop' | 'bg-sharing' | 'favicon'
-
 export type ThumbnailType = 'video' | 'audio' | 'image'
+export type WindowStatus = 'opening' | 'opened' | 'hiding' | 'hidden' | 'showing' | 'shown' | 'closing' | 'closed'
 
 export interface IScrollerWatcher {
   top: number

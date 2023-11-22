@@ -1,14 +1,11 @@
-import { IApp } from '../../types'
+import { IApp, WindowStatus } from '../../types'
 import { Rnd } from 'react-rnd'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { runningAppListState, topWindowIndexState } from '../../states'
-import { line } from '../../utils'
+import { WINDOW_DURATION, WINDOW_STATUS_MAP, line } from '../../utils'
 import { SvgIcon } from '../../components/common'
 import { useTranslation } from 'react-i18next'
-
-const SAME_CLASS_NAME = `w-8 h-8 flex justify-center items-center cursor-pointer transition-all duration-200`
-const DURATION = 200
 
 interface WindowProps {
   app: IApp
@@ -40,7 +37,7 @@ export default function Window(props: WindowProps) {
   const [hidden, setHidden] = useState(false)
   const [isFullScreen, setIsFullScreen] = useState(false)
   const [rndInstance, setRndInstance] = useState<any>(null)
-  const [windowStatus, setWindowStatus] = useState<'opening' | 'opened' | 'hiding' | 'hidden' | 'showing' | 'shown' | 'closing' | 'closed'>('closed')
+  const [windowStatus, setWindowStatus] = useState<WindowStatus>('closed')
   const [isDraggingOrResizing, setIsDraggingOrResizing] = useState(false)
 
   const isTopWindow = useMemo(() => currentIndex === topWindowIndex, [currentIndex, topWindowIndex])
@@ -59,21 +56,8 @@ export default function Window(props: WindowProps) {
     setWindowStatus('opening')
     setTimeout(() => {
       setWindowStatus('opened')
-    }, DURATION)
+    }, WINDOW_DURATION)
   }, [])
-
-  const transformStyle = useMemo(() => {
-    return {
-      opening: { transition: 'none', transitionDuration: '0', transform: 'perspective(1000px) rotateX(-50deg) scale(.5)', opacity: 0 },
-      opened: { transition: 'all', transitionDuration: `${DURATION}ms`, transform: '', opacity: 1 },
-      hiding: { transition: 'all', transitionDuration: `${DURATION}ms`, transform: 'perspective(1000px) rotateX(0) scale(1) translateY(20vh)', opacity: 0 },
-      hidden: { transition: 'all', transitionDuration: `${DURATION}ms`, transform: 'perspective(1000px) rotateX(0) scale(1) translateY(20vh)', opacity: 0 },
-      showing: { transition: 'all', transitionDuration: '0', transform: 'perspective(1000px) rotateX(0) scale(1) translateY(20vh)', opacity: 0 },
-      shown: { transition: 'all', transitionDuration: `${DURATION}ms`, transform: 'perspective(1000px) rotateX(0) scale(1) translateY(0)', opacity: 1 },
-      closing: { transition: 'all', transitionDuration: `${DURATION}ms`, transform: 'perspective(1000px) rotateX(-50deg) scale(.5)', opacity: 0 },
-      closed: undefined,
-    }[windowStatus]
-  }, [windowStatus])
 
   const handleMoveToFront = useCallback((e: any) => {
     if (isTopWindow || e.target.closest('[prevent-move-to-front]')) return
@@ -89,7 +73,7 @@ export default function Window(props: WindowProps) {
     setTimeout(() => {
       !hidden && setHidden(!hidden)
       setWindowStatus(hidden ? 'shown' : 'hidden')
-    }, DURATION)
+    }, WINDOW_DURATION)
   }, [hidden])
 
   const handleFullScreen = useCallback(() => {
@@ -118,7 +102,7 @@ export default function Window(props: WindowProps) {
       setRunningAppList(list)
       setTopWindowIndex(currentIndex - 1)
       setWindowStatus('closed')
-    }, DURATION)
+    }, WINDOW_DURATION)
   }, [runningAppList, setRunningAppList, runningId, currentIndex, setTopWindowIndex])
 
   return (
@@ -158,7 +142,7 @@ export default function Window(props: WindowProps) {
             ${isFullScreen ? '' : 'rounded-lg border border-gray-500 border-opacity-30 bg-clip-padding'}
             ${isTopWindow ? 'shadow-xl' : 'shadow'}
           `)}
-          style={transformStyle}
+          style={WINDOW_STATUS_MAP[windowStatus]}
           onMouseDownCapture={handleMoveToFront}  // click is too late
           onDragEnterCapture={handleMoveToFront}
         >
@@ -199,9 +183,9 @@ export default function Window(props: WindowProps) {
                 prevent-move-to-front="true"
                 className={line(`
                   gagu-hidden-switch-trigger
+                  w-8 h-8 flex justify-center items-center cursor-pointer transition-all duration-200
                 hover:bg-gray-200 hover:text-black active:bg-gray-400
                   ${headerClassName ? 'text-gray-200' : 'text-gray-400'}
-                  ${SAME_CLASS_NAME}
                 `)}
                 onClick={handleHide}
               >
@@ -211,8 +195,8 @@ export default function Window(props: WindowProps) {
                 title={isFullScreen ? t`action.fullScreenExit` : t`action.fullScreenEnter`}
                 className={line(`
                 hover:bg-gray-200 hover:text-black active:bg-gray-400
+                  w-8 h-8 flex justify-center items-center cursor-pointer transition-all duration-200
                   ${headerClassName ? 'text-gray-200' : 'text-gray-400'}
-                  ${SAME_CLASS_NAME}
                 `)}
                 onClick={handleFullScreen}
               >
@@ -223,8 +207,8 @@ export default function Window(props: WindowProps) {
                 prevent-move-to-front="true"
                 className={line(`
                   gagu-app-close-trigger
+                  w-8 h-8 flex justify-center items-center cursor-pointer transition-all duration-200
                   text-red-500 hover:bg-red-500 hover:text-white active:bg-red-700
-                  ${SAME_CLASS_NAME}
                 `)}
                 onClick={handleClose}
               >
@@ -239,7 +223,7 @@ export default function Window(props: WindowProps) {
               windowSize={windowSize}
               setWindowLoading={setWindowLoading}
               setWindowTitle={setWindowTitle}
-              closeWindow={handleClose}
+              onClose={handleClose}
             />
           </div>
         </div>

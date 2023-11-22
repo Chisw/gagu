@@ -22,7 +22,7 @@ interface ToolbarProps {
   setIsLight: (is: boolean) => void
   setThumbnailListShow: (is: boolean) => void
   handlePrevOrNext: (offset: number) => void
-  closeWindow: () => void
+  onClose: () => void
 }
 
 export default function Toolbar(props: ToolbarProps) {
@@ -39,7 +39,7 @@ export default function Toolbar(props: ToolbarProps) {
     setIsLight,
     setThumbnailListShow,
     handlePrevOrNext,
-    closeWindow,
+    onClose,
   } = props
 
   const { t } = useTranslation()
@@ -134,7 +134,7 @@ export default function Toolbar(props: ToolbarProps) {
                 setLastChangedPath({ path: activeEntry!.parentPath, timestamp: Date.now() })
                 const len = matchedEntryList.length
                 if (len === 1) {
-                  closeWindow()
+                  onClose()
                 } else {
                   const newActiveIndex = activeIndex === matchedEntryList.length - 1
                     ? activeIndex - 1
@@ -154,7 +154,7 @@ export default function Toolbar(props: ToolbarProps) {
         onClick: () => handlePrevOrNext(1),
       },
     ]
-  }, [t, matchedEntryList, activeEntry, getExifData, handlePrevOrNext, setThumbnailListShow, thumbnailListShow, setIsLight, isLight, createTunnel, deleteEntry, setLastChangedPath, closeWindow, activeIndex, setActiveIndex, setMatchedEntryList])
+  }, [t, matchedEntryList, activeEntry, getExifData, handlePrevOrNext, setThumbnailListShow, thumbnailListShow, setIsLight, isLight, createTunnel, deleteEntry, setLastChangedPath, onClose, activeIndex, setActiveIndex, setMatchedEntryList])
 
   return (
     <>

@@ -3,6 +3,7 @@ import { useRecoilState } from 'recoil'
 import { line } from '../../utils'
 import { activePageState, rootInfoState } from '../../states'
 import EntryNode from '../../apps/FileExplorer/EntryNode'
+import { Page } from '../../types'
 
 export default function Desktop() {
 
@@ -11,9 +12,8 @@ export default function Desktop() {
 
   const [show, setShow] = useState(false)
 
-  // Show MenuBar & Dock and then show Desktop
   useEffect(() => {
-    if (activePage === 'desktop') {
+    if (activePage === Page.desktop) {
       setTimeout(() => setShow(true), 800)
     } else {
       setShow(false)

@@ -2,7 +2,7 @@ import { useCallback, useEffect } from 'react'
 import { useRecoilState } from 'recoil'
 import { openOperationState, runningAppListState, topWindowIndexState, contextMenuDataState, activePageState } from '../../states'
 import { APP_LIST, APP_ID_MAP } from '../../apps'
-import { IApp, IContextMenuItem } from '../../types'
+import { IApp, IContextMenuItem, Page } from '../../types'
 import { line } from '../../utils'
 import { SvgIcon } from '../../components/common'
 import toast from 'react-hot-toast'
@@ -92,36 +92,34 @@ export default function Dock() {
           rounded-xl
           transition-all duration-500 ease-out
           -translate-x-1/2
-          ${activePage === 'desktop' ? 'translate-y-0' : 'translate-y-20'}
+          ${activePage === Page.desktop ? 'translate-y-0' : 'translate-y-20'}
         `)}
       >
-        <div className="flex items-center">
-          {APP_LIST.map(app => {
-            const isRunning = !!runningAppList.find(a => a.id === app.id)
-            return (
+        {APP_LIST.map(app => {
+          const isRunning = !!runningAppList.find(a => a.id === app.id)
+          return (
+            <div
+              key={app.id}
+              className="relative mx-1 w-8 h-8"
+            >
               <div
-                key={app.id}
-                className="relative mx-1 w-8 h-8"
-              >
-                <div
-                  className="gagu-app-icon filter hover:brightness-110 active:brightness-75 transition-all duration-50 w-full h-full cursor-pointer shadow rounded-lg"
-                  data-app-id={app.id}
-                  title={t(`app.${app.id}`)}
-                  onClick={() => handleOpenApp(app)}
-                  onContextMenu={event => handleContextMenu(event, app)}
-                />
-                <span
-                  className={line(`
-                    absolute left-1/2 bottom-0 w-1 h-1 rounded-full bg-black
-                    -translate-x-1/2 translate-y-[6px]
-                    transition-all duration-300
-                    ${isRunning ? 'opacity-100' : 'opacity-0'}
-                  `)}
-                />
-              </div>
-            )
-          })}
-        </div>
+                className="gagu-app-icon filter hover:brightness-110 active:brightness-75 transition-all duration-50 w-full h-full cursor-pointer shadow rounded-lg"
+                data-app-id={app.id}
+                title={t(`app.${app.id}`)}
+                onClick={() => handleOpenApp(app)}
+                onContextMenu={event => handleContextMenu(event, app)}
+              />
+              <span
+                className={line(`
+                  absolute left-1/2 bottom-0 w-1 h-1 rounded-full bg-black
+                  -translate-x-1/2 translate-y-[6px]
+                  transition-all duration-300
+                  ${isRunning ? 'opacity-100' : 'opacity-0'}
+                `)}
+              />
+            </div>
+          )
+        })}
       </div>
     </>
   )
