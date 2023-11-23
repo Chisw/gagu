@@ -50,11 +50,12 @@ export function useFileExplorer(props: Props) {
   const { request: createUserFavorite } = useRequest(UserApi.createUserFavorite)
   const { request: removeUserFavorite } = useRequest(UserApi.removeUserFavorite)
 
-  const { rootEntryList, rootEntryPathList, favoriteEntryList } = useMemo(() => {
-    const { rootEntryList, favoritePathList } = rootInfo
+  const { rootEntryList, rootEntryPathList, favoriteEntryList, supportThumbnail } = useMemo(() => {
+    const { rootEntryList, favoritePathList, serverOS } = rootInfo
+    const { supportThumbnail } = serverOS
     const rootEntryPathList = rootEntryList.map(getEntryPath)
     const favoriteEntryList = favoritePathList?.map(path2RootEntry).filter(Boolean) || []
-    return { rootEntryList, rootEntryPathList, favoriteEntryList }
+    return { rootEntryList, rootEntryPathList, favoriteEntryList, supportThumbnail }
   }, [rootInfo])
 
   const isInRoot = useMemo(() => rootEntryPathList.includes(currentPath), [rootEntryPathList, currentPath])
@@ -146,11 +147,11 @@ export function useFileExplorer(props: Props) {
     const controller = new AbortController()
     const config = { signal: controller.signal }
     setAbortController(controller)
-    const { success, data } = await queryEntryList(path, config)
+    const { success, data: list } = await queryEntryList(path, config)
     if (success) {
       const res = {
         ...(entryPathMap[path] || {}),
-        list: data,
+        list,
       }
       setEntryPathMap({ ...entryPathMap, [path]: res })
     }
@@ -290,11 +291,11 @@ export function useFileExplorer(props: Props) {
 
   const handleDirectorySizeUpdate = useCallback(async (entry: IEntry) => {
     const path = getEntryPath(entry)
-    const { success, data } = await queryDirectorySize(path)
+    const { success, data: size } = await queryDirectorySize(path)
     if (success) {
       const res = {
         ...(entryPathMap[path] || {}),
-        size: data,
+        size,
       }
       setEntryPathMap({ ...entryPathMap, [path]: res })
     }
@@ -401,7 +402,7 @@ export function useFileExplorer(props: Props) {
   }, [currentPath, rootEntryList, handleRootEntryClick])
 
   return {
-    rootInfo, entryPathMap, disabledMap, thumbScrollWatcher,
+    entryPathMap, disabledMap, supportThumbnail, thumbScrollWatcher,
     currentPath, activeRootEntry,
     querying, sizeQuerying, deleting,
     entryList, rootEntryList, favoriteEntryList, sharedEntryList,

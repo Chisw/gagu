@@ -28,6 +28,7 @@ import {
   NameFailType,
   EditModeType,
   EditMode,
+  CreationType,
 } from '../../types'
 import SharingModal from '../../components/SharingModal'
 import { useTranslation } from 'react-i18next'
@@ -55,7 +56,7 @@ export default function FileExplorer(props: AppComponentProps) {
   const containerInnerRef = useRef(null) // container of entryList, its min-height is consistent with its container
 
   const {
-    rootInfo, entryPathMap, disabledMap, thumbScrollWatcher,
+    entryPathMap, disabledMap, supportThumbnail, thumbScrollWatcher,
     currentPath, activeRootEntry,
     querying, sizeQuerying, deleting,
     entryList, rootEntryList, favoriteEntryList, sharedEntryList,
@@ -476,9 +477,9 @@ export default function FileExplorer(props: AppComponentProps) {
               onContextMenu={handleContextMenu}
             >
               {/* create */}
-              {(editMode === EditMode.createFolder || editMode === EditMode.createText) && (
+              {[EditMode.createFolder, EditMode.createText].includes(editMode as CreationType) && (
                 <EntryNode
-                  creationMode
+                  inputMode
                   gridMode={gridMode}
                   entry={{
                     name: '',
@@ -489,7 +490,7 @@ export default function FileExplorer(props: AppComponentProps) {
                     parentPath: currentPath,
                     extension: editMode === EditMode.createFolder ? '_dir_new' : '_txt_new',
                   }}
-                  creationType={editMode === EditMode.createFolder ? EditMode.createFolder : EditMode.createText}
+                  creationType={editMode as CreationType}
                   onNameSuccess={handleNameSuccess}
                   onNameFail={handleNameFail}
                 />
@@ -499,14 +500,14 @@ export default function FileExplorer(props: AppComponentProps) {
               {entryList.map(entry => {
                 const isSelected = selectedEntryList.some(o => isSameEntry(o, entry))
                 const isFavorited = favoriteEntryList.some(o => isSameEntry(o, entry))
-                const supportThumbnail = rootInfo.serverOS.supportThumbnail
+                const inputMode = editMode === EditMode.rename && isSelected
                 return (
                   <EntryNode
                     key={encodeURIComponent(`${entry.name}-${entry.type}`)}
                     {...{
                       entry,
                       gridMode,
-                      renameMode: editMode === EditMode.rename,
+                      inputMode,
                       isSelected,
                       isFavorited,
                       supportThumbnail,

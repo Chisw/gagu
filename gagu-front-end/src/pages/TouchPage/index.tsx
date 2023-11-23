@@ -31,7 +31,7 @@ export default function TouchPage() {
   const containerRef = useRef(null)
 
   const {
-    rootInfo, entryPathMap, disabledMap, thumbScrollWatcher,
+    entryPathMap, disabledMap, supportThumbnail, thumbScrollWatcher,
     currentPath, activeRootEntry,
     querying, sizeQuerying, deleting,
     entryList, rootEntryList, favoriteEntryList, sharedEntryList,
@@ -234,7 +234,6 @@ export default function TouchPage() {
             {entryList.map(entry => {
               const isSelected = selectedEntryList.some(o => isSameEntry(o, entry))
               const isFavorited = favoriteEntryList.some(o => isSameEntry(o, entry))
-              const supportThumbnail = rootInfo.serverOS.supportThumbnail
               return (
                 <EntryNode
                   key={encodeURIComponent(`${entry.name}-${entry.type}`)}

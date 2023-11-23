@@ -7,11 +7,10 @@ import { useEffect, useRef, useState } from 'react'
 
 interface EntryNodeProps {
   entry: IEntry
+  gridMode: boolean
   isSelected?: boolean
   isFavorited?: boolean
-  gridMode: boolean
-  creationMode?: boolean
-  renameMode?: boolean
+  inputMode?: boolean
   hideAppIcon?: boolean
   supportThumbnail?: boolean
   creationType?: CreationType
@@ -30,11 +29,10 @@ interface EntryNodeProps {
 export default function EntryNode(props: EntryNodeProps) {
   const {
     entry,
+    gridMode,
     isSelected = false,
     isFavorited = false,
-    gridMode,
-    creationMode = false,
-    renameMode = false,
+    inputMode = false,
     hideAppIcon = false,
     supportThumbnail = false,
     creationType,
@@ -70,7 +68,7 @@ export default function EntryNode(props: EntryNodeProps) {
 
   return (
     <div
-      draggable
+      draggable={!inputMode}
       ref={nodeRef}
       data-entry-name={name}
       data-entry-type={type}
@@ -102,7 +100,7 @@ export default function EntryNode(props: EntryNodeProps) {
       />
 
       <EntryName
-        inputMode={(renameMode && isSelected) || creationMode}
+        inputMode={inputMode}
         {...{
           entry,
           creationType,
