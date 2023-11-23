@@ -28,7 +28,7 @@ export interface IDisk extends IRootEntry {
   spaceTotal: number
 }
 
-export interface IRootInfo {
+export interface IBaseData {
   version: string
   serverOS: IServerOS
   deviceName: string

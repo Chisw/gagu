@@ -211,8 +211,8 @@ export default function FileExplorer(props: AppComponentProps) {
       })
       isContained && indexList.push(elIndex)
     })
-    const names = entryList.filter((n, nIndex) => indexList.includes(nIndex))
-    setSelectedEntryList(names)
+    const entries = entryList.filter((entry, entryIndex) => indexList.includes(entryIndex))
+    setSelectedEntryList(entries)
   }, [setSelectedEntryList, entryList])
 
   useDragSelect({
@@ -226,9 +226,7 @@ export default function FileExplorer(props: AppComponentProps) {
     containerInnerRef,
     entryList,
     selectedEntryList,
-    onDrop: (nestedFileList, targetDir) => {
-      handleUploadTaskAdd(nestedFileList, targetDir)
-    },
+    onDrop: handleUploadTaskAdd,
   })
 
   useHotKey({
@@ -245,7 +243,7 @@ export default function FileExplorer(props: AppComponentProps) {
       'Shift+H': () => handleHiddenShowChange(!hiddenShow),
       'Shift+L': () => handleGridModeChange(false),
       'Shift+N': disabledMap.createFolder ? null : () => handleEdit(EditMode.createFolder),
-      'Shift+R': disabledMap.refresh ? null : handleNavRefresh,
+      'Shift+R': disabledMap.navRefresh ? null : handleNavRefresh,
       'Shift+T': disabledMap.createText ? null : () => handleEdit(EditMode.createText),
       'Shift+U': disabledMap.upload ? null : handleUploadClick,
       'Shift+ArrowUp': disabledMap.navToParent ? null : handleNavToParent,
@@ -293,8 +291,9 @@ export default function FileExplorer(props: AppComponentProps) {
     }
 
     const confirmedCount = contextEntryList.length
+    const activeEntry = contextEntryList[0]
     const isSingle = confirmedCount === 1
-    const isFavorited = isSingle && favoriteEntryList.some(entry => isSameEntry(entry, contextEntryList[0]))
+    const isFavorited = isSingle && favoriteEntryList.some(entry => isSameEntry(entry, activeEntry))
 
     const handleOpenEntry = (app: IApp) => {
       setOpenOperation({
@@ -341,7 +340,7 @@ export default function FileExplorer(props: AppComponentProps) {
         })).concat({
           icon: <div className="gagu-app-icon w-4 h-4" data-app-id="iina" />,
           name: 'IINA',
-          onClick: () => openInIINA(contextEntryList[0]),
+          onClick: () => openInIINA(activeEntry),
         }),
       },
       {
@@ -364,13 +363,13 @@ export default function FileExplorer(props: AppComponentProps) {
         icon: <SvgIcon.FolderInfo />,
         name: t`action.folderSize`,
         isShow: isOnDirectory && isSingle,
-        onClick: () => handleDirectorySizeUpdate(contextEntryList[0]),
+        onClick: () => handleDirectorySizeUpdate(activeEntry),
       },
       {
         icon: isFavorited ? <SvgIcon.Star /> : <SvgIcon.StarSolid />,
         name: isFavorited ? t`action.unfavorite` : t`action.favorite`,
         isShow: isOnDirectory && isSingle,
-        onClick: () => handleFavoriteClick(contextEntryList[0], isFavorited),
+        onClick: () => handleFavoriteClick(activeEntry, isFavorited),
       },
       {
         icon: <SvgIcon.Upload />,

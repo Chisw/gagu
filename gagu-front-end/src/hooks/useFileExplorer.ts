@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { EditModeType, IEntry, INestedFile, IRootEntry, IRootInfo, IScrollerWatcher, IUploadTransferTask, IVisitHistory, Sort, SortType, TransferTaskStatus, TransferTaskType, TunnelType } from '../types'
+import { EditModeType, IEntry, INestedFile, IRootEntry, IBaseData, IScrollerWatcher, IUploadTransferTask, IVisitHistory, Sort, SortType, TransferTaskStatus, TransferTaskType, TunnelType } from '../types'
 import { DOWNLOAD_PERIOD, getDownloadInfo, getEntryPath, path2RootEntry, sortMethodMap } from '../utils'
 import { useRecoilState } from 'recoil'
-import { entryPathMapState, lastChangedPathState, rootInfoState, transferSignalState, transferTaskListState } from '../states'
+import { entryPathMapState, lastChangedPathState, baseDataState, transferSignalState, transferTaskListState } from '../states'
 import { useRequest } from './useRequest'
-import { DownloadApi, FsApi, TunnelApi, UserApi } from '../api'
+import { DownloadApi, FsApi, TunnelApi } from '../api'
 import { useTranslation } from 'react-i18next'
 import { Confirmor } from '../components/common'
 import toast from 'react-hot-toast'
@@ -24,7 +24,7 @@ export function useFileExplorer(props: Props) {
 
   const { t } = useTranslation()
 
-  const [rootInfo, setRootInfo] = useRecoilState(rootInfoState)
+  const [baseData, setBaseData] = useRecoilState(baseDataState)
   const [entryPathMap, setEntryPathMap] = useRecoilState(entryPathMapState)
   const [transferTaskList, setTransferTaskList] = useRecoilState(transferTaskListState)
   const [transferSignal, setTransferSignal] = useRecoilState(transferSignalState)
@@ -47,16 +47,16 @@ export function useFileExplorer(props: Props) {
   const { request: queryDirectorySize, loading: sizeQuerying } = useRequest(FsApi.queryDirectorySize)
   const { request: deleteEntry, loading: deleting } = useRequest(FsApi.deleteEntry)
   const { request: createTunnel } = useRequest(TunnelApi.createTunnel)
-  const { request: createUserFavorite } = useRequest(UserApi.createUserFavorite)
-  const { request: removeUserFavorite } = useRequest(UserApi.removeUserFavorite)
+  const { request: createFavorite } = useRequest(FsApi.createFavorite)
+  const { request: removeFavorite } = useRequest(FsApi.removeFavorite)
 
   const { rootEntryList, rootEntryPathList, favoriteEntryList, supportThumbnail } = useMemo(() => {
-    const { rootEntryList, favoritePathList, serverOS } = rootInfo
+    const { rootEntryList, favoritePathList, serverOS } = baseData
     const { supportThumbnail } = serverOS
     const rootEntryPathList = rootEntryList.map(getEntryPath)
     const favoriteEntryList = favoritePathList?.map(path2RootEntry).filter(Boolean) || []
     return { rootEntryList, rootEntryPathList, favoriteEntryList, supportThumbnail }
-  }, [rootInfo])
+  }, [baseData])
 
   const isInRoot = useMemo(() => rootEntryPathList.includes(currentPath), [rootEntryPathList, currentPath])
 
@@ -114,7 +114,7 @@ export function useFileExplorer(props: Props) {
     const disabledMap: IControlBarDisabledMap = {
       navBack: position <= 0,
       navForward: list.length === position + 1,
-      refresh: querying || !currentPath,
+      navRefresh: querying || !currentPath,
       navToParent: !currentPath || isInRoot,
       createFolder: touchMode ? false : !!editMode,
       createText: touchMode ? false : !!editMode,
@@ -308,15 +308,15 @@ export function useFileExplorer(props: Props) {
       content: t(isFavorited ? 'tip.unfavoriteItem' : 'tip.favoriteItem', { name: entry.name }),
       onConfirm: async (close) => {
         const path = getEntryPath(entry)
-        const fn = isFavorited ? removeUserFavorite : createUserFavorite
+        const fn = isFavorited ? removeFavorite : createFavorite
         const { success, list } = await fn(path)
         if (success) {
-          setRootInfo({ ...rootInfo, favoritePathList: list } as IRootInfo)
+          setBaseData({ ...baseData, favoritePathList: list } as IBaseData)
         }
         close()
       },
     })
-  }, [createUserFavorite, removeUserFavorite, t, rootInfo, setRootInfo])
+  }, [createFavorite, removeFavorite, t, baseData, setBaseData])
 
   const handleDeleteClick = useCallback(async (contextEntryList?: IEntry[]) => {
     const processList = contextEntryList || selectedEntryList
@@ -337,15 +337,15 @@ export function useFileExplorer(props: Props) {
           const { success } = await deleteEntry(path)
           if (success) {
             document.querySelector(`.gagu-entry-node[data-entry-name="${name}"]`)?.setAttribute('style', 'opacity:0;')
-            const { favoritePathList } = rootInfo
-            setRootInfo({ ...rootInfo, favoritePathList: favoritePathList.filter((p) => p !== path) } as IRootInfo)
+            const { favoritePathList } = baseData
+            setBaseData({ ...baseData, favoritePathList: favoritePathList.filter((p) => p !== path) } as IBaseData)
           }
         }
         handleNavRefresh()
         close()
       },
     })
-  }, [deleteEntry, selectedEntryList, handleNavRefresh, t, setRootInfo, rootInfo])
+  }, [deleteEntry, selectedEntryList, handleNavRefresh, t, setBaseData, baseData])
 
   const handleHiddenShowChange = useCallback((show: boolean) => {
     const res = {

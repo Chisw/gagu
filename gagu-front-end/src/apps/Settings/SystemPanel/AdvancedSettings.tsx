@@ -7,13 +7,13 @@ import { useRequest } from '../../../hooks'
 import { SettingForm } from '../../../types'
 import { Confirmor, Spinner, SvgIcon } from '../../../components/common'
 import { useRecoilState } from 'recoil'
-import { rootInfoState } from '../../../states'
+import { baseDataState } from '../../../states'
 
 export default function AdvancedSettings() {
 
   const { t } = useTranslation()
 
-  const [rootInfo] = useRecoilState(rootInfoState)
+  const [baseData] = useRecoilState(baseDataState)
 
   const [form, setForm] = useState<SettingForm | null>(null)
   const [formCache, setFormCache] = useState<SettingForm | null>(null)
@@ -42,7 +42,7 @@ export default function AdvancedSettings() {
 
   const handleVersionCheck = useCallback(async () => {
     const { data: { date, version } } = await queryLatestVersion()
-    const isNewest = rootInfo.version === version
+    const isNewest = baseData.version === version
     const content = isNewest
       ? t`tip.currentlyLatestVersion`
       : t('tip.currentlyNeedsUpdating', { date, version })
@@ -91,7 +91,7 @@ export default function AdvancedSettings() {
         }  
       },
     })
-  }, [queryLatestVersion, rootInfo.version, t, updateVersion])
+  }, [queryLatestVersion, baseData.version, t, updateVersion])
 
   const handleSubmit = useCallback(async () => {
     if (!form) return
@@ -115,7 +115,7 @@ export default function AdvancedSettings() {
           >
             <Form.Slot label={t`label.currentVersion`}>
               <div className="flex justify-between items-center">
-                <span>v{ rootInfo.version }</span>
+                <span>v{ baseData.version }</span>
                 <Button
                   loading={getting}
                   onClick={handleVersionCheck}

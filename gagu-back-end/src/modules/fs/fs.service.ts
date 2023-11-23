@@ -4,7 +4,7 @@ import {
   IDisk,
   IEntry,
   IRootEntry,
-  IRootInfo,
+  IBaseData,
   User,
 } from '../../types'
 import {
@@ -104,7 +104,7 @@ export class FsService {
     return list
   }
 
-  getRootInfo(presetDeviceName?: string) {
+  getBaseData(presetDeviceName?: string) {
     const rootEntryList: IRootEntry[] = []
     if (ServerOS.isMacOS) {
       const driveList = nodeDiskInfo
@@ -218,7 +218,7 @@ export class FsService {
       )
     }
 
-    const rootInfo: IRootInfo = {
+    const baseData: IBaseData = {
       version: GAGU_VERSION,
       serverOS: ServerOS,
       deviceName: presetDeviceName || ServerOS.hostname,
@@ -227,7 +227,7 @@ export class FsService {
       favoritePathList: [],
     }
 
-    return rootInfo
+    return baseData
   }
 
   getDirectorySize(path: string) {

@@ -7,7 +7,7 @@ import { EditMode, Sort, SortType } from '../../types'
 export interface IControlBarDisabledMap {
   navBack: boolean
   navForward: boolean
-  refresh: boolean
+  navRefresh: boolean
   navToParent: boolean
   createFolder: boolean
   createText: boolean
@@ -116,7 +116,7 @@ export default function ControlBar(props: ControlBarProps) {
           disabled={disabledMap.navForward}
           onClick={onNavForward}
         />
-        {disabledMap.refresh ? (
+        {disabledMap.navRefresh ? (
           <ToolButton
             title={t`action.cancel`}
             icon={<SvgIcon.Close />}

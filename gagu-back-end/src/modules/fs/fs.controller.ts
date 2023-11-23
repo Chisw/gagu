@@ -24,7 +24,7 @@ import {
 } from '@nestjs/common'
 import {
   IEntry,
-  IRootInfo,
+  IBaseData,
   IUser,
   SettingKey,
   User,
@@ -45,18 +45,18 @@ export class FsController {
     private readonly settingService: SettingService,
   ) {}
 
-  @Get('root')
+  @Get('base-data')
   @Permission(UserPermission.read)
   getRoot(@UserGetter() user: IUser) {
     const deviceName = this.settingService.findOne(SettingKey.deviceName)
-    const rootInfo: IRootInfo = {
-      ...this.fsService.getRootInfo(deviceName),
+    const baseData: IBaseData = {
+      ...this.fsService.getBaseData(deviceName),
       favoritePathList: user.favoritePathList,
     }
     return {
       success: true,
       message: SERVER_MESSAGE_MAP.OK,
-      data: rootInfo,
+      data: baseData,
     }
   }
 
@@ -284,6 +284,34 @@ export class FsController {
         success: false,
         message: err.toString(),
       }
+    }
+  }
+
+  @Post('favorite')
+  @Permission(UserPermission.read)
+  updateFavorite(
+    @Query('path') path: string,
+    @UserGetter() user: IUser,
+  ) {
+    const list = this.userService.createFavorite(user.username, path)
+    return {
+      success: true,
+      message: SERVER_MESSAGE_MAP.OK,
+      list,
+    }
+  }
+
+  @Delete('favorite')
+  @Permission(UserPermission.read)
+  removeFavorite(
+    @Query('path') path: string,
+    @UserGetter() user: IUser,
+  ) {
+    const list = this.userService.removeFavorite(user.username, path)
+    return {
+      success: true,
+      message: SERVER_MESSAGE_MAP.OK,
+      list,
     }
   }
 }

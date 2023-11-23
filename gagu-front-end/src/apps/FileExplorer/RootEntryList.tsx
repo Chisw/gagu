@@ -31,7 +31,7 @@ export default function RootEntryList(props: RootEntryListProps) {
             <div
               key={rootEntryPath}
               className={line(`
-                px-3 py-2 text-sm cursor-pointer
+                px-3 py-3 md:py-2 text-sm cursor-pointer
                 ${isActive
                   ? 'bg-white text-black'
                   : 'text-gray-700 hover:text-black'

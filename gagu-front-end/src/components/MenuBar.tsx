@@ -12,7 +12,7 @@ import MySharingPanel from './MySharingPanel'
 import { useTranslation } from 'react-i18next'
 import { Page } from '../types'
 import { useRecoilState } from 'recoil'
-import { activePageState, rootInfoState, userInfoState } from '../states'
+import { activePageState, baseDataState, userInfoState } from '../states'
 import toast from 'react-hot-toast'
 
 const pageList = [
@@ -27,7 +27,7 @@ export default function MenuBar() {
   const { t } = useTranslation()
 
   const [activePage, setActivePage] = useRecoilState(activePageState)
-  const [rootInfo, setRootInfo] = useRecoilState(rootInfoState)
+  const [baseData, setBaseData] = useRecoilState(baseDataState)
   const [userInfo, setUserInfo] = useRecoilState(userInfoState)
 
   const [clockTime, setClockTime] = useState('--:--')
@@ -39,7 +39,7 @@ export default function MenuBar() {
 
   const { request: pulse } = useRequest(AuthApi.pulse)
   const { request: logout } = useRequest(AuthApi.logout)
-  const { request: queryRootInfo, loading } = useRequest(FsApi.queryRootInfo)
+  const { request: queryBaseData, loading } = useRequest(FsApi.queryBaseData)
   const { request: shutdown } = useRequest(AuthApi.shutdown)
 
   useEffect(() => {
@@ -67,8 +67,8 @@ export default function MenuBar() {
   }, [pulse, setUserInfo])
 
   useEffect(() => {
-    document.title = `${rootInfo ? `${rootInfo.deviceName} - ` : ''}${DOCUMENT_TITLE}`
-  }, [rootInfo])
+    document.title = `${baseData ? `${baseData.deviceName} - ` : ''}${DOCUMENT_TITLE}`
+  }, [baseData])
 
   useEffect(() => {
     if (systemPopoverShow) {
@@ -83,21 +83,21 @@ export default function MenuBar() {
     return () => clearInterval(timer)
   }, [])
 
-  const handleQueryRootInfo = useCallback(async () => {
-    const { success, data } = await queryRootInfo()
+  const handleQueryBaseData = useCallback(async () => {
+    const { success, data } = await queryBaseData()
     if (success) {
-      setRootInfo(data)
+      setBaseData(data)
     }
-  }, [queryRootInfo, setRootInfo])
+  }, [queryBaseData, setBaseData])
 
   useEffect(() => {
-    handleQueryRootInfo()
-  }, [handleQueryRootInfo])
+    handleQueryBaseData()
+  }, [handleQueryBaseData])
 
   const localAddress = useMemo(() => {
     const { protocol, port } = window.location
-    return `${protocol}//${rootInfo.serverOS.host}:${port}/touch`
-  }, [rootInfo])
+    return `${protocol}//${baseData.serverOS.host}:${port}/touch`
+  }, [baseData])
 
   const handleLogout = useCallback(async () => {
     setUserPopoverShow(false)
@@ -129,7 +129,7 @@ export default function MenuBar() {
               <Dropdown.Menu className="w-48">
                 <div className="mb-[2px] px-2 pb-1 border-b text-xs font-din flex justify-between">
                   <div>
-                    GAGU v{rootInfo.version}
+                    GAGU v{baseData.version}
                   </div>
                   <div className="flex">
                     <a
@@ -169,7 +169,7 @@ export default function MenuBar() {
                   icon={<SvgIcon.Refresh />}
                   onClick={() => {
                     setSystemPopoverShow(false)
-                    handleQueryRootInfo()
+                    handleQueryBaseData()
                   }}
                 >
                   {t`action.refresh`}
@@ -237,7 +237,7 @@ export default function MenuBar() {
               <SvgIcon.G size={12} />
               <span className="hidden md:inline ml-2 text-gray-700 font-din">
                 {/* TODO: i18n */}
-                {loading ? 'Loading..' : `${rootInfo.deviceName}`}
+                {loading ? 'Loading..' : `${baseData.deviceName}`}
               </span>
             </div>
           </Dropdown>

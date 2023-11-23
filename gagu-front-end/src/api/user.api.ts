@@ -28,22 +28,4 @@ export class UserApi {
     const { data } = await service.patch(`/api/user/${username}/validity/${validity}`)
     return data
   }
-
-  static queryUserFavorite = async () => {
-    const username = UserInfoStore.getUsername()
-    const { data } = await service.get(`/api/user/${username}/favorite`)
-    return data
-  }
-
-  static createUserFavorite = async (path: string) => {
-    const username = UserInfoStore.getUsername()
-    const { data } = await service.post(`/api/user/${username}/favorite?path=${encodeURIComponent(path)}`)
-    return data
-  }
-
-  static removeUserFavorite = async (path: string) => {
-    const username = UserInfoStore.getUsername()
-    const { data } = await service.delete(`/api/user/${username}/favorite?path=${encodeURIComponent(path)}`)
-    return data
-  }
 }

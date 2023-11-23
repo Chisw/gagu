@@ -5,7 +5,7 @@ import { useRecoilState } from 'recoil'
 import { FsApi } from '../api'
 import { SvgIcon } from './common'
 import { useRequest } from '../hooks'
-import { entrySelectorState, openOperationState, rootInfoState } from '../states'
+import { entrySelectorState, openOperationState, baseDataState } from '../states'
 import { EntryType, IEntry, IRootEntry } from '../types'
 import { getEntryPath, sortMethodMap } from '../utils'
 import { useTranslation } from 'react-i18next'
@@ -48,7 +48,7 @@ export default function EntrySelector() {
   const { t } = useTranslation()
 
   const [entrySelector, setEntrySelector] = useRecoilState(entrySelectorState)
-  const [rootInfo] = useRecoilState(rootInfoState)
+  const [baseData] = useRecoilState(baseDataState)
   const [, setOpenOperation] = useRecoilState(openOperationState)
 
   const [treeData, setTreeData] = useState<TreeNodeData[]>([])
@@ -58,8 +58,8 @@ export default function EntrySelector() {
   const { request: queryEntryList } = useRequest(FsApi.queryEntryList)
 
   useEffect(() => {
-    setTreeData(entryToTree(rootInfo.rootEntryList, hiddenShow))
-  }, [rootInfo, hiddenShow])
+    setTreeData(entryToTree(baseData.rootEntryList, hiddenShow))
+  }, [baseData, hiddenShow])
 
   const handleLoadData = useCallback(async (node?: { key: string }) => {
     const { key } = node || {}

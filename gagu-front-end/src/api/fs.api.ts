@@ -1,11 +1,11 @@
 import { AxiosRequestConfig } from 'axios'
 import { BASE_URL, QUERY_TOKEN_KEY, UserInfoStore, getEntryPath } from '../utils'
-import { IEntry, IResponse, IRootInfo } from '../types'
+import { IEntry, IResponse, IBaseData } from '../types'
 import service from './service'
 
 export class FsApi {
-  static queryRootInfo = async (config?: AxiosRequestConfig) => {
-    const { data } = await service.get<IResponse<IRootInfo>>(`/api/fs/root`, config)
+  static queryBaseData = async (config?: AxiosRequestConfig) => {
+    const { data } = await service.get<IResponse<IBaseData>>(`/api/fs/base-data`, config)
     return data
   }
 
@@ -77,6 +77,16 @@ export class FsApi {
 
   static queryAudioTags = async (path: string, config?: AxiosRequestConfig) => {
     const { data } = await service.get(`/api/fs/audio-tags?path=${encodeURIComponent(path)}`, config)
+    return data
+  }
+
+  static createFavorite = async (path: string) => {
+    const { data } = await service.post(`/api/fs/favorite?path=${encodeURIComponent(path)}`)
+    return data
+  }
+
+  static removeFavorite = async (path: string) => {
+    const { data } = await service.delete(`/api/fs/favorite?path=${encodeURIComponent(path)}`)
     return data
   }
 

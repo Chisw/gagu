@@ -1,7 +1,7 @@
 import { atom } from 'recoil'
 import {
   IApp,
-  IRootInfo,
+  IBaseData,
   IOpenOperation,
   IContextMenuState,
   IUserInfo,
@@ -13,8 +13,8 @@ export const userInfoState = atom<IUserInfo | null>({
   default: null,
 })
 
-export const rootInfoState = atom<IRootInfo>({
-  key: 'rootInfoState',
+export const baseDataState = atom<IBaseData>({
+  key: 'baseDataState',
   default: {
     version: 'v-.-.-',
     serverOS: {
