@@ -35,7 +35,7 @@ export function useDragOperations(props: useDragOperationsProps) {
   const [, setLastChangedPath] = useRecoilState(lastChangedPathState)
   const [isInnerDrag, setIsInnerDrag] = useState(false)
 
-  const { request: renameEntry } = useRequest(FsApi.renameEntry)
+  const { request: updatePath } = useRequest(FsApi.updatePath)
 
   const handleMoveTransfer = useCallback(async (transferEntryList: IEntry[], targetDirectory: IEntry) => {
     Confirmor({
@@ -50,7 +50,7 @@ export function useDragOperations(props: useDragOperationsProps) {
 
           if (oldPath === newPathParentPath) return
 
-          const { success } = await renameEntry(oldPath, newPath)
+          const { success } = await updatePath(oldPath, newPath)
           if (success) {
             setLastChangedPath({ path: transferEntry.parentPath, timestamp: Date.now() })
           }
@@ -58,7 +58,7 @@ export function useDragOperations(props: useDragOperationsProps) {
         close()
       },
     })
-  }, [t, renameEntry, setLastChangedPath])
+  }, [t, updatePath, setLastChangedPath])
 
   useEffect(() => {
     const containerInner: any = containerInnerRef.current

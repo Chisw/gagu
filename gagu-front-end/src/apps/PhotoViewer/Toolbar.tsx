@@ -46,7 +46,7 @@ export default function Toolbar(props: ToolbarProps) {
 
   const [, setLastChangedPath] = useRecoilState(lastChangedPathState)
 
-  const { request: getExif, data: ExifData, setData } = useRequest(FsApi.getExif)
+  const { request: queryExif, data: exifData, setData, loading: querying } = useRequest(FsApi.queryExif)
   const { request: createTunnel } = useRequest(TunnelApi.createTunnel)
   const { request: deleteEntry } = useRequest(FsApi.deleteEntry)
 
@@ -63,14 +63,16 @@ export default function Toolbar(props: ToolbarProps) {
   }, [imgEl, activeEntry])
 
   useEffect(() => {
-    setMapPinUrl(getBaiduMapPinUrl(ExifData, activeEntry?.name))
-  }, [ExifData, activeEntry])
+    setData(null)
+  }, [activeIndex, setData])
 
-  const getExifData = useCallback(() => {
+  const getExifData = useCallback(async () => {
     if (activeEntry && ['jpg', 'jpeg'].includes(activeEntry.extension)) {
-      getExif(`${activeEntry.parentPath}/${activeEntry.name}`)
+      const { data } = await queryExif(`${activeEntry.parentPath}/${activeEntry.name}`)
+      const url = getBaiduMapPinUrl(data, activeEntry?.name)
+      setMapPinUrl(url)
     }
-  }, [activeEntry, getExif])
+  }, [activeEntry, queryExif])
 
   const buttonList = useMemo(() => {
     return [
@@ -115,7 +117,7 @@ export default function Toolbar(props: ToolbarProps) {
       {
         icon: <SvgIcon.Info size={14} />,
         title: t`action.exifInfo`,
-        disabled: !activeEntry || !['jpg', 'jpeg'].includes(activeEntry.extension),
+        disabled: !activeEntry || !['jpg', 'jpeg'].includes(activeEntry.extension) || querying,
         onClick: getExifData,
       },
       {
@@ -154,7 +156,25 @@ export default function Toolbar(props: ToolbarProps) {
         onClick: () => handlePrevOrNext(1),
       },
     ]
-  }, [t, matchedEntryList, activeEntry, getExifData, handlePrevOrNext, setThumbnailListShow, thumbnailListShow, setIsLight, isLight, createTunnel, deleteEntry, setLastChangedPath, onClose, activeIndex, setActiveIndex, setMatchedEntryList])
+  }, [
+    t,
+    matchedEntryList,
+    activeEntry,
+    getExifData,
+    handlePrevOrNext,
+    setThumbnailListShow,
+    thumbnailListShow,
+    setIsLight,
+    isLight,
+    createTunnel,
+    deleteEntry,
+    setLastChangedPath,
+    onClose,
+    activeIndex,
+    setActiveIndex,
+    setMatchedEntryList,
+    querying,
+  ])
 
   return (
     <>
@@ -196,35 +216,53 @@ export default function Toolbar(props: ToolbarProps) {
 
       <div
         className={line(`
-          absolute z-20 top-0 left-0
-          p-2 w-full max-h-[33.33%]
-          overflow-y-auto
-          text-xs text-white break-words
-          bg-black bg-opacity-30 backdrop-blur
-          cursor-default
-          ${ExifData ? 'block' : 'hidden'}
+          absolute z-20 inset-0
+          text-xs text-white break-words cursor-default
+          bg-gray-700 bg-opacity-70 backdrop-blur
+          transition-transform duration-200
+          ${exifData ? 'scale-100' : 'scale-0'}
         `)}
         onClick={e => e.stopPropagation()}
       >
         {mapPinUrl && (
-          <a
-            target="_blank"
-            rel="noreferrer"
-            className="inline-block m-2 p-1 rounded-full bg-gray-100 hover:bg-white"
-            href={mapPinUrl}
-          >
-            <SvgIcon.Pin className="text-red-500" />
-          </a>
+          <IconButton
+            icon={<SvgIcon.Pin size={12} />}
+            size="sm"
+            onClick={() => window.open(mapPinUrl)}
+            className="absolute z-10 top-1 right-8"
+          />
         )}
-        <code>
-          {JSON.stringify(ExifData)}
-        </code>
-        <IconButton
-          icon={<SvgIcon.Close size={12} />}
-          onClick={() => setData(null)}
-          size="xs"
-          className="absolute top-0 right-0 m-1"
-        />
+        {exifData && (
+          <IconButton
+            icon={<SvgIcon.Close size={12} />}
+            size="sm"
+            onClick={() => setData(null)}
+            className="absolute z-10 top-1 right-1"
+          />
+        )}
+        <div className="absolute z-0 inset-0 pb-4 overflow-y-auto text-xs select-text">
+          {Object.entries(exifData?.data || {}).map(([key, value]) => (
+            <div
+              key={key}
+              className="mb-3"
+            >
+              <div className="py-2 text-center text-base font-bold">-- {key} --</div>
+              <div className="ml-2 flex-grow flex flex-wrap">
+                {Object.entries(value || {}).map(([_key, _value]) => (
+                  <div
+                    key={_key}
+                    className="mt-2 w-full flex"
+                  >
+                    <div className="flex-shrink-0 w-1/2 text-right">{_key}:</div>
+                    <div className="ml-2 flex-grow flex break-all max-h-10 overflow-y-auto">
+                      {_value}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </>
   )

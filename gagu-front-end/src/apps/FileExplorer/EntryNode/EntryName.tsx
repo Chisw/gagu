@@ -39,9 +39,9 @@ export default function EntryName(props: EntryNameProps) {
     setInputValue(e.target.value)
   }, [])
 
-  const { request: getExists, loading: loadingExist } = useRequest(FsApi.getExists)
-  const { request: addDirectory, loading: loadingNewDir } = useRequest(FsApi.addDirectory)
-  const { request: renameEntry, loading: loadingRename } = useRequest(FsApi.renameEntry)
+  const { request: queryExists, loading: loadingExist } = useRequest(FsApi.queryExists)
+  const { request: createDirectory, loading: loadingNewDir } = useRequest(FsApi.createDirectory)
+  const { request: updateName, loading: loadingRename } = useRequest(FsApi.updateName)
   const { request: uploadFile } = useRequest(FsApi.uploadFile)
 
   const handleName = useCallback(async (e: any) => {
@@ -69,7 +69,7 @@ export default function EntryName(props: EntryNameProps) {
       : `${newName}.txt`
 
     const newPath = `${parentPath}/${finalName}`
-    const { exists } = await getExists(newPath)
+    const { exists } = await queryExists(newPath)
 
     if (exists) {
       onFail('existed')
@@ -77,7 +77,7 @@ export default function EntryName(props: EntryNameProps) {
     } else {
       if (oldName) {  // rename
         const oldPath = `${parentPath}/${oldName}`
-        const { success } = await renameEntry(oldPath, newPath)
+        const { success } = await updateName(oldPath, newPath)
         if (success) {
           onSuccess({ ...entry!, name: finalName })
         } else {
@@ -85,7 +85,7 @@ export default function EntryName(props: EntryNameProps) {
         }
       } else {
         if (creationType === EditMode.createFolder) {
-          const { success } = await addDirectory(newPath)
+          const { success } = await createDirectory(newPath)
           if (success) {
             onSuccess({
               name: finalName,
@@ -120,7 +120,7 @@ export default function EntryName(props: EntryNameProps) {
         }
       }
     }
-  }, [entry, parentPath, creationType, getExists, addDirectory, renameEntry, uploadFile, onSuccess, onFail, t])
+  }, [entry, parentPath, creationType, queryExists, createDirectory, updateName, uploadFile, onSuccess, onFail, t])
 
   return (
     <div

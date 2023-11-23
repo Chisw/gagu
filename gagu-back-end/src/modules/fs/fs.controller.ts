@@ -33,9 +33,9 @@ import {
 import { mkdirSync, renameSync } from 'fs'
 import { Permission } from '../../common/decorators/permission.decorator'
 import { Public } from 'src/common/decorators/public.decorator'
-import 'express-zip'
 import { UserGetter } from 'src/common/decorators/user.decorator'
 import { UserService } from '../user/user.service'
+import 'express-zip'
 
 @Controller('fs')
 export class FsController {
@@ -201,7 +201,11 @@ export class FsController {
   async getExif(@Query('path') path: string) {
     try {
       const data = await this.fsService.getExif(path)
-      return data
+      return {
+        success: true,
+        message: SERVER_MESSAGE_MAP.OK,
+        data,
+      }
     } catch (err) {
       return {
         success: false,

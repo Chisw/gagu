@@ -12,7 +12,7 @@ export class SettingApi {
     return data
   }
 
-  static getLatestVersion = async () => {
+  static queryLatestVersion = async () => {
     const { data } = await service.get('/api/setting/version')
     return data
   }

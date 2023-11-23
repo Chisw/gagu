@@ -65,7 +65,7 @@ export default function ThumbnailList(props: ThumbnailListProps) {
   return (
     <div
       className={line(`
-        relative bg-gray-900 flex-shrink-0
+        relative z-0 bg-gray-900 flex-shrink-0
         transition-height duration-200 overflow-hidden
         ${show ? 'h-12' : 'h-0'}
       `)}

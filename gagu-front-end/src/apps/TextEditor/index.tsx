@@ -34,7 +34,7 @@ export default function TextEditor(props: AppComponentProps) {
   const [markdownFullView, setMarkdownFullView] = useState(false)
   const [fontSize, setFontSize] = useState(14)
 
-  const { request: getTextContent, loading: fetching, data: { data: textContent }, setData: setTextContent } = useRequest(FsApi.getTextContent, { data: '' })
+  const { request: queryTextContent, loading: fetching, data: { data: textContent }, setData: setTextContent } = useRequest(FsApi.queryTextContent, { data: '' })
   const { request: uploadFile, loading: saving } = useRequest(FsApi.uploadFile)
 
   const isMarkdown = useMemo(() => activeEntry?.extension === 'md', [activeEntry])
@@ -54,13 +54,13 @@ export default function TextEditor(props: AppComponentProps) {
   useEffect(() => {
     if (activeEntry) {
       const { name, extension } = activeEntry
-      getTextContent(getEntryPath(activeEntry))
+      queryTextContent(getEntryPath(activeEntry))
       setWindowTitle(name)
       if (ENTRY_ICON_LIST.find(l => l.type === 'code')?.matchList.includes(extension)) {
         setMonoMode(true)
       }
     }
-  }, [activeEntry, getTextContent, setWindowTitle])
+  }, [activeEntry, queryTextContent, setWindowTitle])
 
   useEffect(() => {
     setValue(typeof textContent === 'object' ? JSON.stringify(textContent) : textContent)

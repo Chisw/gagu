@@ -19,14 +19,14 @@ export default function MySharePanel(props: MySharePanelProps) {
 
   const { t } = useTranslation()
 
-  const { request: getTunnels, data } = useRequest(TunnelApi.getTunnels)
+  const { request: queryTunnels, data } = useRequest(TunnelApi.queryTunnels)
   const { request: deleteTunnel } = useRequest(TunnelApi.deleteTunnel)
 
   useEffect(() => {
     if (visible) {
-      getTunnels()
+      queryTunnels()
     }
-  }, [visible, getTunnels])
+  }, [visible, queryTunnels])
 
   const handleDeleteClick = useCallback((code: string) => {
     Confirmor({
@@ -37,12 +37,12 @@ export default function MySharePanel(props: MySharePanelProps) {
         const { success } = await deleteTunnel(code)
         if (success) {
           toast.success('OK')
-          getTunnels()
+          queryTunnels()
         }
         close()
       },
     })
-  }, [deleteTunnel, getTunnels, t])
+  }, [deleteTunnel, queryTunnels, t])
 
   return (
     <>

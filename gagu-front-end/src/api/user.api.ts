@@ -19,7 +19,7 @@ export class UserApi {
     return data
   }
 
-  static removeUser = async (username: string) => {
+  static deleteUser = async (username: string) => {
     const { data } = await service.delete(`/api/user/${username}`)
     return data
   }

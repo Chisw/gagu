@@ -12,7 +12,7 @@ interface TunnelResponse extends ResponseBase {
 }
 
 export class TunnelApi {
-  static getTunnels = async () => {
+  static queryTunnels = async () => {
     const { data } = await service.get(`/api/tunnel`)
     return data
   }
@@ -22,7 +22,7 @@ export class TunnelApi {
     return data
   }
 
-  static getTunnel = async (code: string, password?: string) => {
+  static queryTunnel = async (code: string, password?: string) => {
     const { data } = await service.get<TunnelResponse>(`/api/tunnel/${code}${getPasswordParam(password)}`)
     return data
   }
@@ -32,7 +32,7 @@ export class TunnelApi {
     return data
   }
 
-  static checkTunnel = async (code: string, password?: string) => {
+  static queryTunnelCheck = async (code: string, password?: string) => {
     const { data } = await service.get<ResponseBase>(`/api/tunnel/${code}/check${getPasswordParam(password)}`)
     return data
   }

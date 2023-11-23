@@ -14,7 +14,7 @@ export class FsApi {
     return data
   }
 
-  static getFlattenEntryList = async (entryList: IEntry[], config?: AxiosRequestConfig) => {
+  static queryFlattenEntryList = async (entryList: IEntry[], config?: AxiosRequestConfig) => {
     const { data } = await service.post(`/api/fs/list/flatten`, { entryList }, config)
     return data
   }
@@ -24,22 +24,29 @@ export class FsApi {
     return data
   }
 
-  static getTextContent = async (path: string, config?: AxiosRequestConfig) => {
+  static queryTextContent = async (path: string, config?: AxiosRequestConfig) => {
     const { data } = await service.get(`/api/fs/text?path=${encodeURIComponent(path)}`, config)
     return data
   }
 
-  static getExists = async (path: string, config?: AxiosRequestConfig) => {
+  static queryExists = async (path: string, config?: AxiosRequestConfig) => {
     const { data } = await service.get(`/api/fs/exists?path=${encodeURIComponent(path)}`, config)
     return data
   }
 
-  static renameEntry = async (oldPath: string, newPath: string, config?: AxiosRequestConfig) => {
+  // TODO: name limit
+  static updateName = async (oldPath: string, newPath: string, config?: AxiosRequestConfig) => {
     const { data } = await service.put(`/api/fs/rename`, { oldPath, newPath }, config)
     return data
   }
 
-  static addDirectory = async (path: string, config?: AxiosRequestConfig) => {
+  // TODO: add api
+  static updatePath = async (oldPath: string, newPath: string, config?: AxiosRequestConfig) => {
+    const { data } = await service.put(`/api/fs/rename`, { oldPath, newPath }, config)
+    return data
+  }
+
+  static createDirectory = async (path: string, config?: AxiosRequestConfig) => {
     const { data } = await service.post(`/api/fs/mkdir`, { path }, config)
     return data
   }
@@ -63,7 +70,7 @@ export class FsApi {
     return data
   }
 
-  static getExif = async (path: string, config?: AxiosRequestConfig) => {
+  static queryExif = async (path: string, config?: AxiosRequestConfig) => {
     const { data } = await service.get(`/api/fs/exif?path=${encodeURIComponent(path)}`, config)
     return data
   }

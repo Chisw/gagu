@@ -129,8 +129,8 @@ export const getPasswordParam = (password?: string) => {
   return password ? `?password=${md5(password)}` : ''
 }
 
-export const getBaiduMapPinUrl = (ExifData: any, content?: string) => {
-  const { GPS } = ExifData || {}
+export const getBaiduMapPinUrl = (exifData: any, content?: string) => {
+  const { GPS } = exifData || {}
   const { GPSLatitude, GPSLongitude } = GPS || {}
   if (GPSLatitude && GPSLongitude) {
     const [[a, b], [c, d], [e, f]] = GPSLatitude as any
@@ -147,6 +147,7 @@ export const getBaiduMapPinUrl = (ExifData: any, content?: string) => {
     } as any)
 
     return `https://api.map.baidu.com/marker?${query.toString()}`
+    // return `https://www.google.com/maps/search/?api=1&query=${lat},${lon}`
   } else {
     return ''
   }

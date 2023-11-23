@@ -20,7 +20,7 @@ export default function AdvancedSettings() {
 
   const { request: querySettingAll, loading } = useRequest(SettingApi.querySettingAll)
   const { request: updateSetting, loading: updating } = useRequest(SettingApi.updateSetting)
-  const { request: getLatestVersion, loading: getting } = useRequest(SettingApi.getLatestVersion)
+  const { request: queryLatestVersion, loading: getting } = useRequest(SettingApi.queryLatestVersion)
   const { request: updateVersion } = useRequest(SettingApi.updateVersion)
 
   const handleQuerySettingAll = useCallback(async () => {
@@ -41,7 +41,7 @@ export default function AdvancedSettings() {
   }, [form, formCache])
 
   const handleVersionCheck = useCallback(async () => {
-    const { data: { date, version } } = await getLatestVersion()
+    const { data: { date, version } } = await queryLatestVersion()
     const isNewest = rootInfo.version === version
     const content = isNewest
       ? t`tip.currentlyLatestVersion`
@@ -91,7 +91,7 @@ export default function AdvancedSettings() {
         }  
       },
     })
-  }, [getLatestVersion, rootInfo.version, t, updateVersion])
+  }, [queryLatestVersion, rootInfo.version, t, updateVersion])
 
   const handleSubmit = useCallback(async () => {
     if (!form) return

@@ -27,14 +27,14 @@ export default function SharePage() {
     setTimeout(() => setActivePage(Page.sharing))
   }, [setActivePage])
 
-  const { request: getTunnel, loading, data } = useRequest(TunnelApi.getTunnel)
-  const { request: checkTunnel, loading: calling } = useRequest(TunnelApi.checkTunnel)
+  const { request: queryTunnel, loading, data } = useRequest(TunnelApi.queryTunnel)
+  const { request: queryTunnelCheck, loading: calling } = useRequest(TunnelApi.queryTunnelCheck)
 
   const updateTunnelData = useCallback(() => {
     if (code) {
-      getTunnel(code, passwordVal)
+      queryTunnel(code, passwordVal)
     }
-  }, [code, getTunnel, passwordVal])
+  }, [code, queryTunnel, passwordVal])
 
   useEffect(() => {
     updateTunnelData()
@@ -131,17 +131,17 @@ export default function SharePage() {
 
   const handleDownloadClick = useCallback(async () => {
     if (code) {
-      const { success, message } = await checkTunnel(code, passwordVal)
+      const { success, message } = await queryTunnelCheck(code, passwordVal)
       if (success) {
         DownloadApi.download(code, passwordVal)
         setTimeout(() => {
-          getTunnel(code, passwordVal)
+          queryTunnel(code, passwordVal)
         }, 50)
       } else {
         toast.error(message || 'ERROR')
       }
     }
-  }, [code, passwordVal, checkTunnel, getTunnel])
+  }, [code, passwordVal, queryTunnelCheck, queryTunnel])
 
   return (
     <>

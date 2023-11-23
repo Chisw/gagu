@@ -42,7 +42,7 @@ export default function SharingModal(props: SharingModalProps) {
 
   const [tunnelLink, setTunnelLink] = useState('')
 
-  const { request: getFlattenEntryList, loading, data } = useRequest(FsApi.getFlattenEntryList)
+  const { request: queryFlattenEntryList, loading, data } = useRequest(FsApi.queryFlattenEntryList)
   const { request: createTunnel, loading: creating } = useRequest(TunnelApi.createTunnel)
 
   useEffect(() => {
@@ -54,9 +54,9 @@ export default function SharingModal(props: SharingModalProps) {
 
   useEffect(() => {
     if (entryList.length) {
-      getFlattenEntryList(entryList)
+      queryFlattenEntryList(entryList)
     }
-  }, [entryList, getFlattenEntryList])
+  }, [entryList, queryFlattenEntryList])
 
   useEffect(() => {
     if (entryList.length) {

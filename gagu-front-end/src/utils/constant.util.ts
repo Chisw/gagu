@@ -25,6 +25,7 @@ export const ENTRY_ICON_LIST = [
   { type: 'excel', matchList: ['xls', 'xlt', 'xlsx'] },
   { type: 'ppt', matchList: ['ppt', 'pps', 'pptx'] },
   { type: 'book', matchList: ['mobi', 'epub'] },
+  { type: 'font', matchList: ['ttf', 'otf', 'woff', 'woff2'] },
 ]
 
 export const WINDOW_DURATION = 200

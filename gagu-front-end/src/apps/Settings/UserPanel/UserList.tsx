@@ -29,7 +29,7 @@ export default function UserList(props: UserListProps) {
   const { t } = useTranslation()
 
   const { request: updateUserValidity } = useRequest(UserApi.updateUserValidity)
-  const { request: removeUser } = useRequest(UserApi.removeUser)
+  const { request: deleteUser } = useRequest(UserApi.deleteUser)
 
   const handleUpdateAbility = useCallback(async (username: User.Username, ability: UserValidityType) => {
     const res = await updateUserValidity(username, ability)
@@ -42,14 +42,14 @@ export default function UserList(props: UserListProps) {
   }, [updateUserValidity, refresh])
 
   const handleRemove = useCallback(async (username: string) => {
-    const { success, message } = await removeUser(username)
+    const { success, message } = await deleteUser(username)
     if (success) {
       refresh()
       toast.success('OK')
     } else {
       toast.error(message)
     }
-  }, [refresh, removeUser])
+  }, [refresh, deleteUser])
 
   const getButtonList = useCallback((user: IUser) => {
     const isAdmin = user.permissions.includes(UserPermission.administer)
