@@ -1,16 +1,14 @@
+import { EntrySelector, MenuBar, SharingModal } from '../../components'
 import { EmptyPanel } from '../../components/common'
 import { useRecoilState } from 'recoil'
 import { useFileExplorer } from '../../hooks'
 import { activePageState, openOperationState, runningAppListState } from '../../states'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import EntrySelector from '../../components/EntrySelector'
-import MenuBar from '../../components/MenuBar'
 import { IEntry, Page } from '../../types'
 import { getMatchedApp, isSameEntry, line, vibrate } from '../../utils'
 import EntryNode from './EntryNode'
 import StatusBar from '../../apps/FileExplorer/StatusBar'
 import ControlBar from '../../apps/FileExplorer/ControlBar'
-import SharingModal from '../../components/SharingModal'
 import SelectionMenu from './SelectionMenu'
 import Dock from './Dock'
 import Side from './Side'
@@ -61,11 +59,23 @@ export default function TouchPage() {
 
   useEffect(() => {
     if (activePage === Page.touch) {
-      setTimeout(() => setShow(true), 400)
+      setTimeout(() => setShow(true), 300)
     } else {
       setShow(false)
     }
   }, [activePage])
+
+  useEffect(() => {
+    const listener = (e: any) => {
+      const { target } = e
+      const isDisabled = target.getAttribute('data-disabled') === 'true'
+      const isVibrateDisabled = target.getAttribute('data-vibrate-disabled') === 'true'
+      if (isDisabled || isVibrateDisabled) return
+      vibrate()
+    }
+    document.addEventListener('click', listener)
+    return () => document.removeEventListener('click', listener)
+  }, [])
 
   useEffect(() => {
     setSelectedEntryList([])
@@ -82,8 +92,6 @@ export default function TouchPage() {
   }, [currentPath, isInRoot, activeRootEntry])
 
   const handleEntryClick = useCallback((entry: IEntry) => {
-    vibrate()
-
     if (isSelectionMode) {
       let list = [...selectedEntryList]
       if (list.find(e => isSameEntry(e, entry))) {
@@ -151,6 +159,7 @@ export default function TouchPage() {
             key={app.runningId}
             app={app}
             isTopWindow={app.id === activeAppId}
+            onHide={() => setActiveAppId(APP_ID_MAP.fileExplorer)}
             onClose={() => setActiveAppId(APP_ID_MAP.fileExplorer)}
           />
         ))}
@@ -168,23 +177,20 @@ export default function TouchPage() {
             favoriteEntryList,
           }}
           onRootEntryClick={(rootEntry) => {
-            vibrate()
             setSideShow(false)
             handleRootEntryClick(rootEntry)
           }}
-          onFavoriteClick={(rootEntry, isFavorited) => {
-            vibrate()
-            handleFavoriteClick(rootEntry, isFavorited)
-          }}
+          onFavoriteClick={handleFavoriteClick}
         />
 
         {/* z-0 */}
         <div
           ref={containerRef}
+          data-vibrate-disabled="true"
           className={line(`
             absolute z-0 inset-0 top-6 bg-white transition-all duration-500
             ${show ? 'opacity-100' : 'opacity-0'}
-            ${sideShow ? 'ease-in-out translate-x-56 opacity-20 overflow-y-hidden pointer-events-none' : 'overflow-y-auto'}
+            ${sideShow ? 'ease-in-out translate-x-64 opacity-20 overflow-y-hidden pointer-events-none' : 'overflow-y-auto'}
           `)}
           onContextMenu={handleContextMenu}
         >
@@ -230,7 +236,10 @@ export default function TouchPage() {
               onRootEntryClick={handleRootEntryClick}
             />
           </div>
-          <div className="flex flex-wrap px-1 py-2 pb-36 select-none">
+          <div
+            data-vibrate-disabled="true"
+            className="flex flex-wrap px-1 py-2 pb-36 select-none"
+          >
             {entryList.map(entry => {
               const isSelected = selectedEntryList.some(o => isSameEntry(o, entry))
               const isFavorited = favoriteEntryList.some(o => isSameEntry(o, entry))
@@ -261,7 +270,7 @@ export default function TouchPage() {
       </div>
 
       <Dock
-        show={!(sideShow || isSelectionMode || activeAppId !== APP_ID_MAP.fileExplorer)}
+        show={!sideShow && !isSelectionMode && activeAppId === APP_ID_MAP.fileExplorer}
         activeAppId={activeAppId}
         setActiveAppId={setActiveAppId}
         onUploadClick={handleUploadClick}

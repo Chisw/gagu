@@ -184,7 +184,7 @@ export default function Toolbar(props: ToolbarProps) {
           flex items-center
           text-xs px-2 py-1 bg-black bg-opacity-50 text-white
           transition-opacity duration-200
-          opacity-0 group-hover:opacity-100
+          md:opacity-0 group-hover:opacity-100
           cursor-default
           ${thumbnailListShow ? 'opacity-100' : ''}
         `)}

@@ -68,7 +68,7 @@ export default function RootEntryList(props: RootEntryListProps) {
                 </div>
               </div>
               {isDisk && (
-                <div className="mt-[2px] text-xs relative z-0 h-1 font-din bg-gray-100 rounded-sm overflow-hidden">
+                <div className="mt-[2px] text-xs relative z-0 h-1 font-din bg-blue-100 rounded-sm overflow-hidden">
                   <div
                     className="h-full bg-blue-500"
                     style={{ width: `${spaceUsed / spaceTotal! * 100}%` }}

@@ -119,6 +119,7 @@ export default function ControlBar(props: ControlBarProps) {
         {disabledMap.navRefresh ? (
           <ToolButton
             title={t`action.cancel`}
+            className="bg-loading"
             icon={<SvgIcon.Close />}
             onClick={onNavAbort}
           />

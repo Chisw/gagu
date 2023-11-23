@@ -1,11 +1,12 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { line, vibrate } from '../../utils'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { line } from '../../utils'
 import { SvgIcon } from '../../components/common'
 import { useTranslation } from 'react-i18next'
 import { useRecoilState } from 'recoil'
 import { openOperationState, runningAppListState } from '../../states'
 import { APP_ID_MAP, APP_LIST } from '../../apps'
 import { IApp } from '../../types'
+import { useClickAway } from '../../hooks'
 
 interface DockProps {
   show: boolean
@@ -17,7 +18,7 @@ interface DockProps {
 export default function Dock(props: DockProps) {
   const {
     show,
-    // activeAppId,
+    activeAppId,
     setActiveAppId,
     onUploadClick,
   } = props
@@ -29,12 +30,29 @@ export default function Dock(props: DockProps) {
 
   const [expanded, setExpanded] = useState(false)
 
+  const dockRef = useRef(null)
+  
+  useClickAway(dockRef, () => setExpanded(false))
+
   const handleOpenApp = useCallback((app: IApp) => {
-    const isRunning = !!runningAppList.find(a => a.id === app.id)
-    if (isRunning) return
-    const list = [...runningAppList, { ...app, runningId: Date.now() }]
-    setRunningAppList(list)
-  }, [runningAppList, setRunningAppList])
+    const appId = app.id
+    const isActive = appId === activeAppId
+    const isRunning = !!runningAppList.find(a => a.id === appId)
+    const sameRunningAppList = runningAppList.filter(a => a.id === appId)
+    if (isRunning) {
+      if (isActive) return
+      sameRunningAppList.forEach(app => {
+        const windowId = `gagu-app-window-${app.runningId}`
+        if (document.getElementById(windowId)!.getAttribute('data-hidden') === 'true') {
+          const hiddenSwitchTrigger = document.querySelector(`#${windowId} .gagu-hidden-switch-trigger`) as any
+          hiddenSwitchTrigger.click()
+        }
+      })
+    } else {
+      const list = [...runningAppList, { ...app, runningId: Date.now() }]
+      setRunningAppList(list)
+    }
+  }, [runningAppList, setRunningAppList, activeAppId])
 
   useEffect(() => {
     if (openOperation) {
@@ -47,98 +65,93 @@ export default function Dock(props: DockProps) {
   const bottomMenuList = useMemo(() => {
     const bottomMenuList = [
       {
-        icon: <SvgIcon.FolderAdd />,
-        name: t`action.newFolder`,
+        icon: <SvgIcon.FolderAdd size={18} />,
         onClick: () => {},
       },
       {
-        icon: <SvgIcon.FileAdd />,
-        name: t`action.newTextFile`,
+        icon: <SvgIcon.FileAdd size={18} />,
         onClick: () => {},
       },
       {
-        icon: <SvgIcon.Upload />,
-        name: t`action.upload`,
+        icon: <SvgIcon.Upload size={18} />,
         onClick: onUploadClick,
-      },
-      {
-        icon: <SvgIcon.CloseCircle />,
-        name: t`action.cancel`,
-        onClick: () => {
-          setExpanded(false)
-        },
       },
     ]
     return bottomMenuList
-  }, [onUploadClick, t])
+  }, [onUploadClick])
 
   return (
     <>
       <div
+        ref={dockRef}
         className={line(`
           fixed z-20 
-          border shadow-lg bg-white overflow-hidden
+          border shadow-lg overflow-hidden
           transition-all duration-200 select-none
-          ${show ? 'sclae-100 origin-bottom-right' : 'scale-0 origin-center'}
+          ${show ? 'scale-100 origin-bottom-right' : 'scale-0 origin-center'}
           ${expanded
-            ? 'right-[10px] bottom-[10px] w-44 h-64 rounded-xl'
-            : 'right-[1rem] bottom-[1rem] w-12 h-12 rounded-3xl'
+            ? 'right-[10px] bottom-[10px] w-44 h-44 rounded-xl bg-gradient-to-b from-gray-200 via-gray-100 to-gray-100'
+            : 'right-[1rem] bottom-[1rem] w-12 h-12 rounded-3xl bg-white'
           }
         `)}
       >
         {expanded ? (
-          <div className="p-1 w-44 break-keep">
-            <div className="gagu-dock flex flex-wrap justify-start">
-              {APP_LIST.filter(app => app.touchModeShow).map(app => {
-                const appId = app.id
-                const isFileExplorer = appId === APP_ID_MAP.fileExplorer
-                return (
-                  <div
-                    key={appId}
-                    className={line(`
-                      relative w-10 h-10 flex justify-center items-center
-                      transition-all duration-50
-                      active:bg-gray-200
-                    `)}
-                    title={t(`app.${appId}`)}
-                    onClick={() => {
-                      setActiveAppId(appId)
-                      if (isFileExplorer) return
-                      handleOpenApp(app)
-                    }}
-                  >
-                    <div
-                      className="gagu-app-icon w-8 h-8 rounded-md shadow"
-                      data-app-id={app.id}
-                    />
-                  </div>
-                )
-              })}
-            </div>
-            <div className="mt-2 break-keep">
-              {bottomMenuList.map(({ icon, name, onClick }, index) => (
+          <div className="gagu-dock p-3 grid grid-cols-3 gap-2">
+            {bottomMenuList.map(({ icon, onClick }, index) => (
+              <div
+                key={index}
+                className={line(`
+                  aspect-square border rounded-lg
+                  flex justify-center items-center
+                  transition-all duration-200 active:scale-90
+                  bg-gradient-to-b from-white via-white to-gray-100
+                `)}
+                onClick={() => {
+                  onClick()
+                  setExpanded(false)
+                }}
+              >
+                {icon}
+              </div>
+            ))}
+            {APP_LIST.filter(app => app.touchModeShow).map(app => {
+              const appId = app.id
+              const isFileExplorer = appId === APP_ID_MAP.fileExplorer
+              const isRunning = !!runningAppList.find(a => a.id === app.id)
+              return (
                 <div
-                  key={index}
-                  className="flex items-center px-3 py-2 transition-all duration-200 active:scale-95 active:bg-gray-100 rounded-lg break-keep"
+                  key={appId}
+                  className="relative aspect-square transition-all duration-50 active:scale-90"
+                  title={t(`app.${appId}`)}
                   onClick={() => {
-                    vibrate()
-                    onClick()
-                    setExpanded(false)
+                    setActiveAppId(appId)
+                    if (isFileExplorer) return
+                    handleOpenApp(app)
                   }}
                 >
-                  <div className="mr-2">{icon}</div>
-                  <div className="text-base">{name}</div>
+                  <div
+                    className="gagu-app-icon w-full h-full"
+                    data-app-id={app.id}
+                  />
+                  {isRunning && <div className="absolute bottom-1 right-1 w-1 h-1 rounded-full bg-green-400 shadow shadow-green-500 border border-green-700" />}
                 </div>
-              ))}
+              )
+            })}
+            <div
+              className={line(`
+                aspect-square border rounded-lg
+                flex justify-center items-center
+                transition-all duration-200 active:scale-90
+              `)}
+              onClick={() => setExpanded(false)}
+            >
+              <SvgIcon.Close size={18} />
             </div>
           </div>
         ) : (
           <div
             className="w-full h-full flex justify-center items-center text-gray-800"
-            onClick={() => {
-              vibrate()
-              setExpanded(true)
-            }}
+            onClick={() => setExpanded(true)}
           >
             <SvgIcon.G />
           </div>

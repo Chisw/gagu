@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useRecoilState } from 'recoil'
+import { SharingModal } from '../../components'
 import { useDragSelect, useDragOperations, useHotKey, useFileExplorer } from '../../hooks'
 import StatusBar from './StatusBar'
 import ControlBar from './ControlBar'
@@ -30,7 +31,6 @@ import {
   EditMode,
   CreationType,
 } from '../../types'
-import SharingModal from '../../components/SharingModal'
 import { useTranslation } from 'react-i18next'
 import EntryNode from './EntryNode'
 

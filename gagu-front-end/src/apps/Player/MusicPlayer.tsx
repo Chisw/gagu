@@ -263,8 +263,6 @@ export default function MusicPlayer(props: AppComponentProps) {
                 <p className="truncate" title={`${title} - ${artist}`}>{title} - {artist}</p>
                 <p className="opacity-50">{album}</p>
                 <p className="opacity-50 font-din">
-                  {getPaddedNo(activeIndex, matchedEntryList.length, { minWidth: 2 })}
-                  &nbsp;-&nbsp;
                   {playInfo.currentTimeLabel} / {playInfo.durationLabel}
                 </p>
               </div>

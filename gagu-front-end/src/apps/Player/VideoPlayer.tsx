@@ -128,7 +128,7 @@ export default function VideoPlayer(props: AppComponentProps) {
           className={line(`
             absolute z-10 right-0 bottom-0 left-0
             p-2 h-12
-            opacity-0 group-hover:opacity-100
+            md:opacity-0 group-hover:opacity-100
             transition-opacity duration-300
             flex justify-between items-center
             backdrop-blur bg-black bg-opacity-50

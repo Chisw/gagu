@@ -1,7 +1,7 @@
 import RootEntryList from '../../apps/FileExplorer/RootEntryList'
 import { SvgIcon } from '../../components/common'
 import { IEntry, IRootEntry } from '../../types'
-import { line, vibrate } from '../../utils'
+import { line } from '../../utils'
 
 interface SideProps {
   sideShow: boolean
@@ -28,10 +28,11 @@ export default function Side(props: SideProps) {
   return (
     <>
       <div
+        data-vibrate-disabled="true"
         className={line(`
-          absolute z-0 top-6 bottom-0 left-0 pb-12 w-56 bg-gray-100 overflow-x-hidden overflow-y-auto border-r
+          absolute z-0 top-6 bottom-0 left-0 pb-12 w-64 bg-gray-100 overflow-x-hidden overflow-y-auto border-r
           duration-transform duration-500 ease-in-out
-          ${sideShow ? 'translate-x-0' : '-translate-x-56'}
+          ${sideShow ? 'translate-x-0' : '-translate-x-64'}
         `)}
       >
         <RootEntryList
@@ -45,10 +46,7 @@ export default function Side(props: SideProps) {
         />
         <div
           className="absolute right-0 bottom-0 left-0 px-4 h-12 flex items-center"
-          onClick={() => {
-            vibrate()
-            setSideShow(false)
-          }}
+          onClick={() => setSideShow(false)}
         >
           <SvgIcon.ArrowLeft />  
         </div>

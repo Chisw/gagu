@@ -19,7 +19,7 @@ const statusIconMap = {
   cancel: { icon: <SvgIcon.Warning />, bg: 'bg-pink-500' },
 }
 
-export default function TransferPanel() {
+export function TransferPanel() {
 
   const { t } = useTranslation()
 

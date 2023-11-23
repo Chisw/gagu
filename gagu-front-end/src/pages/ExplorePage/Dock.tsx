@@ -49,7 +49,7 @@ export default function Dock(props: DockProps) {
       >
         {APP_LIST.map(app => {
           const appId = app.id
-          const isAcive = appId === activeAppId
+          const isActive = appId === activeAppId
           const isFileExplorer = appId === APP_ID_MAP.fileExplorer
           const isRunning = isFileExplorer || !!runningAppList.find(a => a.id === appId)
           return (
@@ -58,7 +58,7 @@ export default function Dock(props: DockProps) {
               className={line(`
                 relative w-10 h-10 flex justify-center items-center
                 transition-all duration-50
-                ${isAcive ? 'bg-gray-100' : 'hover:bg-gray-200 active:bg-gray-400 cursor-pointer'}
+                ${isActive ? 'bg-gray-100' : 'hover:bg-gray-200 active:bg-gray-400 cursor-pointer'}
               `)}
               title={t(`app.${appId}`)}
               onClick={() => {

@@ -1,18 +1,17 @@
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { TransferPanel, MySharingPanel } from '.'
 import { Dropdown, Modal, Tooltip } from '@douyinfe/semi-ui'
 import { DateTime } from 'luxon'
-import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AuthApi, FsApi } from '../api'
 import { SvgIcon } from './common'
 import { useRequest } from '../hooks'
 import { DOCUMENT_TITLE, line, PULSE_INTERVAL, UserInfoStore } from '../utils'
 import QrCode from 'qrcode.react'
-import TransferPanel from './TransferPanel'
-import MySharingPanel from './MySharingPanel'
 import { useTranslation } from 'react-i18next'
 import { Page } from '../types'
 import { useRecoilState } from 'recoil'
-import { activePageState, baseDataState, userInfoState } from '../states'
+import { activePageState, baseDataState, runningAppListState, userInfoState } from '../states'
 import toast from 'react-hot-toast'
 
 const pageList = [
@@ -21,7 +20,7 @@ const pageList = [
   { key: Page.touch, icon: <SvgIcon.Phone /> },
 ]
 
-export default function MenuBar() {
+export function MenuBar() {
 
   const navigate = useNavigate()
   const { t } = useTranslation()
@@ -29,6 +28,7 @@ export default function MenuBar() {
   const [activePage, setActivePage] = useRecoilState(activePageState)
   const [baseData, setBaseData] = useRecoilState(baseDataState)
   const [userInfo, setUserInfo] = useRecoilState(userInfoState)
+  const [, setRunningAppList] = useRecoilState(runningAppListState)
 
   const [clockTime, setClockTime] = useState('--:--')
   const [systemPopoverShow, setSystemPopoverShow] = useState(false)
@@ -202,7 +202,8 @@ export default function MenuBar() {
                           icon={icon}
                           onClick={() => {
                             setActivePage(Page.PENDING)
-                            navigate(`/${key}`)
+                            setRunningAppList([])
+                            setTimeout(() => navigate(`/${key}`), 500)
                           }}
                         >
                           <span className="capitalize">{key}</span>&nbsp;{t`label.mode`}

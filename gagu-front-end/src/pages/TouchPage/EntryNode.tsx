@@ -137,6 +137,19 @@ export default function EntryNode(props: EntryNodeProps) {
         </>
       )}
 
+      {type === 'directory' && !isSelectionMode && !gridMode && (
+        <div
+          className={line(`
+            absolute z-10 pointer-events-none
+            rounded-full text-gray-300
+            flex justify-center items-center
+            right-0 w-5 h-5 -translate-x-4 top-1/2 -translate-y-1/2
+          `)}
+        >
+          <SvgIcon.ChevronRight size={20} />
+        </div>
+      )}
+
       {isSelectionMode && (
         <div
           className={line(`

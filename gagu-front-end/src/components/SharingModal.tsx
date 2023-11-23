@@ -23,7 +23,7 @@ interface SharingModalProps {
   onClose: () => void
 }
 
-export default function SharingModal(props: SharingModalProps) {
+export function SharingModal(props: SharingModalProps) {
 
   const {
     visible,

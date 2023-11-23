@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { isSameEntry, line, vibrate } from '../../utils'
+import { isSameEntry, line } from '../../utils'
 import { IApp, IEntry } from '../../types'
 import { useTranslation } from 'react-i18next'
 import { SvgIcon } from '../../components/common'
@@ -140,11 +140,7 @@ export default function SelectionMenu(props: SelectionMenuProps) {
               transition-all duration-100
               active:scale-90 active:bg-gray-100
             `)}
-            onClick={() => {
-              vibrate()
-              onClick()
-              // setContextMenuData(null)
-            }}
+            onClick={onClick}
           >
             <div className="mt-1 flex justify-center">{icon}</div>
             <div className="mt-1 text-xs text-center">{name}</div>

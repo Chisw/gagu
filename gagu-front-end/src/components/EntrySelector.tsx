@@ -43,7 +43,7 @@ const updateTreeData = (list: TreeNodeData[], key: string, children: TreeNodeDat
   })
 }
 
-export default function EntrySelector() {
+export function EntrySelector() {
 
   const { t } = useTranslation()
 

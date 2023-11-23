@@ -8,12 +8,12 @@ import { ITunnel } from '../types'
 import { getDateTime } from '../utils'
 import { Confirmor, EmptyPanel, SvgIcon } from './common'
 
-interface MySharePanelProps {
+interface MySharingPanelProps {
   visible: boolean
   onClose: () => void
 }
 
-export default function MySharePanel(props: MySharePanelProps) {
+export function MySharingPanel(props: MySharingPanelProps) {
 
   const { visible, onClose } = props
 

@@ -1,5 +1,4 @@
 import { IUserForm, UserValidityType } from '../types'
-import { UserInfoStore } from '../utils'
 import service from './service'
 
 export class UserApi {

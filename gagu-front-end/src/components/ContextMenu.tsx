@@ -5,7 +5,7 @@ import { SvgIcon } from './common'
 import { contextMenuDataState } from '../states'
 import { Dropdown } from '@douyinfe/semi-ui'
 
-export default function ContextMenu() {
+export function ContextMenu() {
 
   const { pathname } = useLocation()
 
