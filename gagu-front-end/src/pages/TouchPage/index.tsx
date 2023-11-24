@@ -194,7 +194,7 @@ export default function TouchPage() {
           `)}
           onContextMenu={handleContextMenu}
         >
-          <div className="sticky z-20 top-0 bg-white select-none">
+          <div className="sticky z-20 top-0 bg-white select-none overflow-hidden">
             <ControlBar
               {...{
                 windowWidth: 360,

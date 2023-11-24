@@ -90,13 +90,13 @@ export default function Dock(props: DockProps) {
           transition-all duration-200 select-none
           ${show ? 'scale-100 origin-bottom-right' : 'scale-0 origin-center'}
           ${expanded
-            ? 'right-[10px] bottom-[10px] w-44 h-44 rounded-xl bg-gradient-to-b from-gray-200 via-gray-100 to-gray-100'
+            ? 'right-[10px] bottom-[10px] w-48 h-64 rounded-xl bg-gradient-to-b from-gray-200 via-gray-100 to-gray-100'
             : 'right-[1rem] bottom-[1rem] w-12 h-12 rounded-3xl bg-white'
           }
         `)}
       >
         {expanded ? (
-          <div className="gagu-dock p-3 grid grid-cols-3 gap-2">
+          <div className="gagu-dock p-3 grid grid-cols-3 gap-3">
             {bottomMenuList.map(({ icon, onClick }, index) => (
               <div
                 key={index}
@@ -154,6 +154,7 @@ export default function Dock(props: DockProps) {
             onClick={() => setExpanded(true)}
           >
             <SvgIcon.G />
+            {(runningAppList.length > 0) && <div className="absolute bottom-2 right-2 w-1 h-1 rounded-full bg-green-400 shadow shadow-green-500 border border-green-700" />}
           </div>
         )}
       </div>

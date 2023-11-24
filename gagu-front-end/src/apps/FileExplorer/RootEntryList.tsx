@@ -32,8 +32,9 @@ export default function RootEntryList(props: RootEntryListProps) {
               key={rootEntryPath}
               className={line(`
                 px-3 py-3 md:py-2 text-sm cursor-pointer border-l-4
+                transition-all duration-200
                 ${isActive
-                  ? 'border-blue-400 bg-white text-black'
+                  ? 'border-blue-500 bg-white text-black'
                   : 'border-transparent text-gray-700 hover:text-black'
                 }
               `)}

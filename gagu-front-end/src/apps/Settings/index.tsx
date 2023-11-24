@@ -41,8 +41,9 @@ export default function Settings (props: AppComponentProps) {
                 px-3 py-2 w-full border-l-4
                 text-sm text-gray-700 hover:text-gray-900
                 flex items-center
+                transition-all duration-200
                 ${key === activeTagKey
-                  ? 'border-blue-400 bg-white cursor-default'
+                  ? 'border-blue-500 bg-white cursor-default'
                   : 'border-transparent cursor-pointer'
                 }
               `)}

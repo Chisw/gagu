@@ -126,6 +126,7 @@ export const APP_LIST: IApp[] = [
       minWidth: 800,
       minHeight: 600,
     },
+    touchModeShow: true,
   },
 ]
 

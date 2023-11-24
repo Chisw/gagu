@@ -78,15 +78,11 @@ export default function ControlBar(props: ControlBarProps) {
 
   const sortList = useMemo(() => {
     return [
-      Sort.default,
-      Sort.name,
-      Sort.nameDesc,
-      Sort.size,
-      Sort.sizeDesc,
-      Sort.extension,
-      Sort.extensionDesc,
-      Sort.lastModified,
-      Sort.lastModifiedDesc,
+      [Sort.default],
+      [Sort.name, Sort.nameDesc],
+      [Sort.size, Sort.sizeDesc],
+      [Sort.extension, Sort.extensionDesc],
+      [Sort.lastModified, Sort.lastModifiedDesc],
     ]
   }, [])
 
@@ -244,24 +240,35 @@ export default function ControlBar(props: ControlBarProps) {
             visible={sortVisible}
             onVisibleChange={setSortVisible}
             onClickOutSide={() => setSortVisible(false)}
+            showTick
             render={(
-              <Dropdown.Menu className="w-48">
-                {sortList.map(type => {
-                  const isActive = type === sortType
-                  const isDesc = type.endsWith('Desc')
+              <Dropdown.Menu className="w-48 select-none">
+                {sortList.map(group => {
+                  const isDefault = group.length === 1
+                  const isActive = group.includes(sortType as Sort)
+                  const isAsc = isActive && !sortType.endsWith('Desc')
+                  const targetType = isDefault
+                    ? group[0]
+                    : group[isAsc ? 1 : 0]
+
+                  const currentType = isDefault
+                    ? group[0]
+                    : group[isAsc ? 1 : 0]
+
+                  const isCurrentDesc = currentType.endsWith('Desc')
+
                   return (
                     <Dropdown.Item
-                      key={type}
-                      className={`flex items-center ${isActive ? 'text-blue-600' : ''}`}
-                      onClick={() => onSortTypeChange(type)}
+                      key={group[0]}
+                      active={isActive}
+                      className={`flex items-center cursor-pointer ${isActive ? 'text-blue-600' : ''}`}
+                      onClick={() => onSortTypeChange(targetType)}
                     >
-                      <span className="flex-shrink-0 inline-block w-6">
-                        {isActive ? <SvgIcon.Check /> : undefined}
-                      </span>
-                      <span className="flex-grow">{t(`action.sort-${type}`)}</span>
-                      {type !== Sort.default && (
-                        <span className="flex-shrink-0 inline-block">
-                          {isDesc ? <SvgIcon.ArrowDown size={12} /> : <SvgIcon.ArrowUp size={12} />}
+                      <span className="flex-grow">{t(`action.sort-${targetType}`)}</span>
+                      {targetType !== Sort.default && (
+                        <span className="flex-shrink-0 flex">
+                          <SvgIcon.ArrowDown size={12} className={(!isCurrentDesc || !isActive) ? 'text-gray-300' : ''} />
+                          <SvgIcon.ArrowUp size={12} className={(isCurrentDesc || !isActive) ? 'text-gray-300' : ''} />
                         </span>
                       )}
                     </Dropdown.Item>
