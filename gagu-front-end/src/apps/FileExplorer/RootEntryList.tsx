@@ -31,10 +31,10 @@ export default function RootEntryList(props: RootEntryListProps) {
             <div
               key={rootEntryPath}
               className={line(`
-                px-3 py-3 md:py-2 text-sm cursor-pointer
+                px-3 py-3 md:py-2 text-sm cursor-pointer border-l-4
                 ${isActive
-                  ? 'bg-white text-black'
-                  : 'text-gray-700 hover:text-black'
+                  ? 'border-blue-400 bg-white text-black'
+                  : 'border-transparent text-gray-700 hover:text-black'
                 }
               `)}
               onClick={() => canRootEntryClick && onRootEntryClick(rootEntry)}

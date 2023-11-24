@@ -3,16 +3,23 @@ import { languageList, setLanguage } from '../../../i18n'
 import { Form } from '@douyinfe/semi-ui'
 import { SvgIcon } from '../../../components/common'
 import { line, refreshImage, setFavicon } from '../../../utils'
-import { useCallback, useRef } from 'react'
+import { useCallback, useMemo, useRef } from 'react'
 import { useRequest } from '../../../hooks'
 import { FsApi } from '../../../api'
+import { useRecoilState } from 'recoil'
+import { activePageState } from '../../../states'
+import { Page } from '../../../types'
 
 export default function GeneralSettings() {
   const { t, i18n: { language } } = useTranslation()
 
+  const [activePage] = useRecoilState(activePageState)
+
   const faviconFileInputRef = useRef<any>(null)
   const desktopWallpaperFileInputRef = useRef<any>(null)
   const sharingWallpaperFileInputRef = useRef<any>(null)
+
+  const touchMode = useMemo(() => activePage === Page.touch, [activePage])
 
   const { request: uploadImage } = useRequest(FsApi.uploadImage)
 
@@ -37,11 +44,11 @@ export default function GeneralSettings() {
 
   return (
     <>
-      <div className="mx-auto max-w-lg">
+      <div className="max-w-lg">
         <Form
-          labelPosition="left"
+          labelPosition={touchMode ? 'top' : 'left'}
+          labelAlign={touchMode ? 'left': 'right'}
           labelWidth={200}
-          labelAlign="right"
         >
           <Form.Select
             field="language"

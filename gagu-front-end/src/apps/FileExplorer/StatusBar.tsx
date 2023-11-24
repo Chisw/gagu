@@ -92,7 +92,7 @@ export default function StatusBar(props: StatusBarProps) {
         })}
         <span
           title={t`action.copy`}
-          className="invisible ml-1 cursor-pointer group-hover:visible text-xs hover:text-gray-500 active:opacity-70"
+          className="md:invisible ml-1 cursor-pointer group-hover:visible text-xs hover:text-gray-500 active:opacity-70"
           onClick={() => {
             const value = `${rootEntryPath}/${centerPathList.join('/')}`
             copy(value)

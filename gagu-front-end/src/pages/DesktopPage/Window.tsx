@@ -216,7 +216,7 @@ export default function Window(props: WindowProps) {
             </div>
           </div>
           {/* main */}
-          <div className="relative flex-grow overflow-hidden bg-black bg-opacity-5">
+          <div className="relative flex-grow overflow-hidden bg-white bg-opacity-30">
             <AppComponent
               isTopWindow={isTopWindow}
               windowSize={windowSize}

@@ -33,6 +33,7 @@ Similar applications are listed here, or there are more suitable ones for your r
 - hfs (HTTP File Server) [https://github.com/rejetto/hfs](https://github.com/rejetto/hfs)
 - LocalSend [https://localsend.org](https://localsend.org)
 - miniserve [https://github.com/svenstaro/miniserve](https://github.com/svenstaro/miniserve)
+- os.js [https://www.os-js.org](https://www.os-js.org)
 - Snapdrop [https://snapdrop.net](https://snapdrop.net)
 - webd [https://webd.cf](https://webd.cf)
 - Wechat File Helper [https://filehelper.weixin.qq.com](https://filehelper.weixin.qq.com)

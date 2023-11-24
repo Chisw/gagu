@@ -11,7 +11,7 @@ import QrCode from 'qrcode.react'
 import { useTranslation } from 'react-i18next'
 import { Page } from '../types'
 import { useRecoilState } from 'recoil'
-import { activePageState, baseDataState, runningAppListState, userInfoState } from '../states'
+import { activePageState, baseDataState, contextMenuDataState, runningAppListState, userInfoState } from '../states'
 import toast from 'react-hot-toast'
 
 const pageList = [
@@ -29,6 +29,7 @@ export function MenuBar() {
   const [baseData, setBaseData] = useRecoilState(baseDataState)
   const [userInfo, setUserInfo] = useRecoilState(userInfoState)
   const [, setRunningAppList] = useRecoilState(runningAppListState)
+  const [, setContextMenuData] = useRecoilState(contextMenuDataState)
 
   const [clockTime, setClockTime] = useState('--:--')
   const [systemPopoverShow, setSystemPopoverShow] = useState(false)
@@ -193,22 +194,29 @@ export function MenuBar() {
                   </Dropdown.Item>
                 </Dropdown>
                 <Dropdown
+                  showTick
                   position="rightTop"
                   render={(
                     <Dropdown.Menu className="w-48">
-                      {pageList.filter(m => m.key !== activePage).map(({ key, icon }) => (
-                        <Dropdown.Item
-                          key={key}
-                          icon={icon}
-                          onClick={() => {
-                            setActivePage(Page.PENDING)
-                            setRunningAppList([])
-                            setTimeout(() => navigate(`/${key}`), 500)
-                          }}
-                        >
-                          <span className="capitalize">{key}</span>&nbsp;{t`label.mode`}
-                        </Dropdown.Item>
-                      ))}
+                      {pageList.map(({ key, icon }) => {
+                        const isActive = key === activePage
+                        return (
+                          <Dropdown.Item
+                            key={key}
+                            icon={icon}
+                            active={isActive}
+                            disabled={isActive}
+                            onClick={() => {
+                              setActivePage(Page.PENDING)
+                              setRunningAppList([])
+                              setContextMenuData(null)
+                              setTimeout(() => navigate(`/${key}`), 500)
+                            }}
+                          >
+                            <span className="capitalize">{key}</span>&nbsp;{t`label.mode`}
+                          </Dropdown.Item>
+                        )
+                      })}
                     </Dropdown.Menu>
                   )}
                 >

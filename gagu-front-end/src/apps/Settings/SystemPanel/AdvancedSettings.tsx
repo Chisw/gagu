@@ -4,16 +4,17 @@ import toast from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
 import { SettingApi } from '../../../api'
 import { useRequest } from '../../../hooks'
-import { SettingForm } from '../../../types'
+import { Page, SettingForm } from '../../../types'
 import { Confirmor, Spinner, SvgIcon } from '../../../components/common'
 import { useRecoilState } from 'recoil'
-import { baseDataState } from '../../../states'
+import { activePageState, baseDataState } from '../../../states'
 
 export default function AdvancedSettings() {
 
   const { t } = useTranslation()
 
   const [baseData] = useRecoilState(baseDataState)
+  const [activePage] = useRecoilState(activePageState)
 
   const [form, setForm] = useState<SettingForm | null>(null)
   const [formCache, setFormCache] = useState<SettingForm | null>(null)
@@ -22,6 +23,8 @@ export default function AdvancedSettings() {
   const { request: updateSetting, loading: updating } = useRequest(SettingApi.updateSetting)
   const { request: queryLatestVersion, loading: getting } = useRequest(SettingApi.queryLatestVersion)
   const { request: updateVersion } = useRequest(SettingApi.updateVersion)
+
+  const touchMode = useMemo(() => activePage === Page.touch, [activePage])
 
   const handleQuerySettingAll = useCallback(async () => {
     const { success, data } = await querySettingAll()
@@ -104,11 +107,11 @@ export default function AdvancedSettings() {
 
   return (
     <>
-      <div className="mx-auto max-w-lg">
+      <div className="max-w-lg">
         {(!loading && form) && (
           <Form
-            labelPosition="left"
-            labelAlign="right"
+            labelPosition={touchMode ? 'top' : 'left'}
+            labelAlign={touchMode ? 'left': 'right'}
             labelWidth={200}
             initValues={form}
             onSubmit={() => handleSubmit()}

@@ -5,10 +5,12 @@ import { formModeType } from '.'
 import { UserApi } from '../../../api'
 import { SvgIcon } from '../../../components/common'
 import { useRequest } from '../../../hooks'
-import { IUserForm, UserPermission } from '../../../types'
+import { IUserForm, Page, UserPermission } from '../../../types'
 import { getImageTypeBase64ByURL, line, permissionSorter } from '../../../utils'
 import { Button, Form, SideSheet } from '@douyinfe/semi-ui'
 import { useTranslation } from 'react-i18next'
+import { useRecoilState } from 'recoil'
+import { activePageState } from '../../../states'
 
 const handleScrollToError = () => {
   const top = document.querySelector('.gagu-app-settings-user-form .semi-form-field-error-message')?.closest('.semi-form-field')?.getBoundingClientRect()?.top
@@ -36,6 +38,10 @@ export default function UserFormModal(props: UserFormModalProps) {
   } = props
 
   const { t } = useTranslation()
+
+  const [activePage] = useRecoilState(activePageState)
+
+  const touchMode = useMemo(() => activePage === Page.touch, [activePage])
 
   const MODE = useMemo(() => {
     return {
@@ -119,10 +125,10 @@ export default function UserFormModal(props: UserFormModalProps) {
         onCancel={() => setFormMode('CLOSE')}
         getPopupContainer={() => document.querySelector('.gagu-app-settings-user-form')!}
       >
-        <div className="gagu-app-settings-user-form-container py-4 mx-auto max-w-lg overflow-y-auto">
+        <div className="gagu-app-settings-user-form-container py-4 max-w-lg overflow-y-auto">
           <Form
-            labelPosition="left"
-            labelAlign="right"
+            labelPosition={touchMode ? 'top' : 'left'}
+            labelAlign={touchMode ? 'left': 'right'}
             labelWidth={200}
             initValues={form}
             onSubmit={() => handleSubmit()}

@@ -111,7 +111,8 @@ export default function MusicPlayer(props: AppComponentProps) {
   const handleProgressClick = useCallback((ratio: number) => {
     if (!audioEl) return
     audioEl.currentTime = audioEl.duration * ratio
-  }, [audioEl])
+    if (!isPlaying) handlePlayOrPause()
+  }, [audioEl, isPlaying, handlePlayOrPause])
 
   const handleEnded = useCallback(() => {
     if (!audioEl) return

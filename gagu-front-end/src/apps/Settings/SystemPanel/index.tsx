@@ -11,7 +11,11 @@ export default function SystemPanel(props: IPanelProps) {
   return (
     <>
       <div className="absolute inset-0 px-4">
-        <Tabs lazyRender type="line">
+        <Tabs
+          lazyRender
+          type="line"
+          size="small"
+        >
           <TabPane tab={t`title.settings_system_general`} itemKey="general">
             <GeneralSettings />
           </TabPane>

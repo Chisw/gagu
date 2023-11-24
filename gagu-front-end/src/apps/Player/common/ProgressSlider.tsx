@@ -55,6 +55,7 @@ export default function ProgressSlider(props: ProgressSliderProps) {
         <div
           className={line(`
             hover-show-child
+            opacity-0 md:opacity-100
             absolute top-0 -mt-5 px-1 h-4 bg-black
             text-white font-din text-xs text-center rounded-sm
             scale-90 -translate-x-1/2
