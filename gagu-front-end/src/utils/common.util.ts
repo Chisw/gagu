@@ -113,7 +113,7 @@ export const getImageTypeBase64ByURL = async (url: string, options?: { width?: n
   })
 }
 
-export const getPaddedNo = (currentIndex: number, total: number, options?: { minWidth?: number, hideTotal?: boolean }) => {
+export const getIndexLabel = (currentIndex: number, total: number, options?: { minWidth?: number, hideTotal?: boolean }) => {
   const {
     minWidth = 2,
     hideTotal = false,

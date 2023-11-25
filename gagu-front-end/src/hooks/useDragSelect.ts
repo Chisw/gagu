@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { IRectInfo } from '../types'
 
 interface useDragSelectProps {
+  binding: boolean
   lassoRef: any
   containerRef: any
   containerInnerRef: any
@@ -11,6 +12,7 @@ interface useDragSelectProps {
 export function useDragSelect(props: useDragSelectProps) {
 
   const {
+    binding,
     lassoRef,
     containerRef,
     containerInnerRef,
@@ -104,14 +106,19 @@ export function useDragSelect(props: useDragSelectProps) {
       }, 300)
     }
 
-    container.addEventListener('mousedown', mousedownListener)
-    document.addEventListener('mousemove', mousemoveListener)
-    document.addEventListener('mouseup', mouseupListener)
+    const bind = () => {
+      container.addEventListener('mousedown', mousedownListener)
+      document.addEventListener('mousemove', mousemoveListener)
+      document.addEventListener('mouseup', mouseupListener)
+    }
 
-    return () => {
+    const unbind = () => {
       container.removeEventListener('mousedown', mousedownListener)
       document.removeEventListener('mousemove', mousemoveListener)
       document.removeEventListener('mouseup', mouseupListener)
     }
-  }, [lassoRef, containerRef, containerInnerRef, onDragging])
+
+    binding ? bind() : unbind()
+    return unbind
+  }, [binding, lassoRef, containerRef, containerInnerRef, onDragging])
 }

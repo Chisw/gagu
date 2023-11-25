@@ -180,7 +180,7 @@
 }
 
 .gagu-entry-icon.--entry-file::after {
-  @apply absolute z-0 top-1/2 left-1/2 block w-1/2 text-center text-xs text-white uppercase rounded-sm transform scale-75 -translate-x-1/2 translate-y-[2px];
+  @apply absolute z-0 top-1/2 left-1/2 block w-2/3 text-center text-xs text-white uppercase rounded-sm transform scale-75 -translate-x-1/2 translate-y-[2px] break-keep;
   content: attr(data-extension-label);
   font-family: din;
 }

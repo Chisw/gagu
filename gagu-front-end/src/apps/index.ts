@@ -1,4 +1,4 @@
-import { IApp } from '../types'
+import { AppId, IApp } from '../types'
 import FileExplorer from './FileExplorer'
 import TextEditor from './TextEditor'
 import PhotoViewer from './PhotoViewer'
@@ -8,21 +8,9 @@ import Settings from './Settings'
 import BaiduMap from './web/BaiduMap'
 import PQINA from './web/PQINA'
 
-export const APP_ID_MAP = {
-  fileExplorer: 'file-explorer',
-  transfer: 'transfer',
-  textEditor: 'text-editor',
-  photoViewer: 'photo-viewer',
-  musicPlayer: 'music-player',
-  videoPlayer: 'video-player',
-  settings: 'settings',
-  baiduMap: 'baidu-map',
-  pqina: 'pqina',
-}
-
 export const APP_LIST: IApp[] = [
   {
-    id: APP_ID_MAP.fileExplorer,
+    id: AppId.fileExplorer,
     runningId: 0,
     AppComponent: FileExplorer,
     width: 1240,
@@ -34,7 +22,7 @@ export const APP_LIST: IApp[] = [
     multiple: true,
   },
   {
-    id: APP_ID_MAP.textEditor,
+    id: AppId.textEditor,
     runningId: 0,
     AppComponent: TextEditor,
     width: 1000,
@@ -43,13 +31,13 @@ export const APP_LIST: IApp[] = [
       minWidth: 240,
       minHeight: 100,
     },
-    matchList: ['txt', 'md', 'html', 'xml', 'css', 'js', 'json', 'php', 'java', 'sh', 'log', 'md', 'ts', 'tsx'],
+    matchList: ['txt', 'md', 'html', 'xml', 'css', 'js', 'json', 'php', 'java', 'sh', 'log', 'ts', 'tsx'],
     headerClassName: 'bg-yellow-500 text-yellow-100 border-yellow-900 border-opacity-10',
     multiple: true,
     touchModeShow: true,
   },
   {
-    id: APP_ID_MAP.photoViewer,
+    id: AppId.photoViewer,
     runningId: 0,
     AppComponent: PhotoViewer,
     width: 960,
@@ -64,7 +52,7 @@ export const APP_LIST: IApp[] = [
     touchModeShow: true,
   },
   {
-    id: APP_ID_MAP.musicPlayer,
+    id: AppId.musicPlayer,
     runningId: 0,
     AppComponent: MusicPlayer,
     width: 480,
@@ -78,7 +66,7 @@ export const APP_LIST: IApp[] = [
     touchModeShow: true,
   },
   {
-    id: APP_ID_MAP.videoPlayer,
+    id: AppId.videoPlayer,
     runningId: 0,
     AppComponent: VideoPlayer,
     width: 1280,
@@ -93,7 +81,7 @@ export const APP_LIST: IApp[] = [
     touchModeShow: true,
   },
   {
-    id: APP_ID_MAP.settings,
+    id: AppId.settings,
     runningId: 0,
     AppComponent: Settings,
     width: 800,
@@ -106,7 +94,7 @@ export const APP_LIST: IApp[] = [
     touchModeShow: true,
   },
   {
-    id: APP_ID_MAP.baiduMap,
+    id: AppId.baiduMap,
     runningId: 0,
     AppComponent: BaiduMap,
     width: 800,
@@ -117,7 +105,7 @@ export const APP_LIST: IApp[] = [
     },
   },
   {
-    id: APP_ID_MAP.pqina,
+    id: AppId.pqina,
     runningId: 0,
     AppComponent: PQINA,
     width: 800,

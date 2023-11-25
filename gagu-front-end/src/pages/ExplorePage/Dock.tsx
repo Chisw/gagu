@@ -1,8 +1,8 @@
 import { useCallback, useEffect } from 'react'
 import { useRecoilState } from 'recoil'
 import { openOperationState, runningAppListState, activePageState } from '../../states'
-import { APP_ID_MAP, APP_LIST } from '../../apps'
-import { IApp, Page } from '../../types'
+import { APP_LIST } from '../../apps'
+import { AppId, IApp, Page } from '../../types'
 import { line } from '../../utils'
 import { useTranslation } from 'react-i18next'
 
@@ -30,7 +30,7 @@ export default function Dock(props: DockProps) {
 
   useEffect(() => {
     if (openOperation) {
-      const app = APP_LIST.find(a => a.id === openOperation.app.id)!
+      const app = APP_LIST.find(a => a.id === openOperation.appId)!
       setActiveAppId(app.id)
       handleOpenApp(app)
     }
@@ -51,7 +51,7 @@ export default function Dock(props: DockProps) {
         {APP_LIST.map(app => {
           const appId = app.id
           const isActive = appId === activeAppId
-          const isFileExplorer = appId === APP_ID_MAP.fileExplorer
+          const isFileExplorer = appId === AppId.fileExplorer
           const isRunning = isFileExplorer || !!runningAppList.find(a => a.id === appId)
           return (
             <div

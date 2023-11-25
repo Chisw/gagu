@@ -4,8 +4,8 @@ import { SvgIcon } from '../../components/common'
 import { useTranslation } from 'react-i18next'
 import { useRecoilState } from 'recoil'
 import { openOperationState, runningAppListState } from '../../states'
-import { APP_ID_MAP, APP_LIST } from '../../apps'
-import { IApp } from '../../types'
+import { APP_LIST } from '../../apps'
+import { AppId, IApp } from '../../types'
 import { useClickAway } from '../../hooks'
 
 interface DockProps {
@@ -56,7 +56,7 @@ export default function Dock(props: DockProps) {
 
   useEffect(() => {
     if (openOperation) {
-      const app = APP_LIST.find(a => a.id === openOperation.app.id)!
+      const app = APP_LIST.find(a => a.id === openOperation.appId)!
       setActiveAppId(app.id)
       handleOpenApp(app)
     }
@@ -116,7 +116,7 @@ export default function Dock(props: DockProps) {
             ))}
             {APP_LIST.filter(app => app.touchModeShow).map(app => {
               const appId = app.id
-              const isFileExplorer = appId === APP_ID_MAP.fileExplorer
+              const isFileExplorer = appId === AppId.fileExplorer
               const isRunning = !!runningAppList.find(a => a.id === app.id)
               return (
                 <div

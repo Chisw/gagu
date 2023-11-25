@@ -1,4 +1,4 @@
-import { IEntry } from './entry.type'
+import { EntryType, IEntry } from './entry.type'
 
 export interface AppComponentProps {
   isTopWindow: boolean
@@ -8,8 +8,26 @@ export interface AppComponentProps {
   onClose: () => void
 }
 
-interface IAppComponent {
-  (props: AppComponentProps): JSX.Element
+export interface FileExplorerProps extends AppComponentProps {
+  asSelector?: boolean
+  onSelect?: (entryList: IEntry[]) => void
+  onSelectConfirm?: () => void
+}
+
+export interface IAppComponent {
+  (props: AppComponentProps | FileExplorerProps): JSX.Element
+}
+
+export enum AppId {
+  fileExplorer = 'file-explorer',
+  transfer = 'transfer',
+  textEditor = 'text-editor',
+  photoViewer = 'photo-viewer',
+  musicPlayer = 'music-player',
+  videoPlayer = 'video-player',
+  settings = 'settings',
+  baiduMap = 'baidu-map',
+  pqina = 'pqina',
 }
 
 export interface IApp {
@@ -31,7 +49,14 @@ export interface IApp {
 }
 
 export interface IOpenOperation {
-  app: IApp
-  matchedEntryList: IEntry[]
-  activeEntryIndex: number
+  appId: string
+  entryList: IEntry[]
+  force?: boolean
+}
+
+export interface IEntrySelectorOperation {
+  appId: string
+  multiple?: boolean
+  type?: EntryType.directory | EntryType.file
+  saveMode?: boolean
 }

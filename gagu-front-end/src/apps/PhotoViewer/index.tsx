@@ -1,15 +1,16 @@
 import { Spinner } from '../../components/common'
 import { useEffect, useMemo, useRef, useState, useCallback } from 'react'
-import { APP_ID_MAP, APP_LIST } from '..'
-import { AppComponentProps } from '../../types'
+import { AppComponentProps, AppId, EntryType } from '../../types'
 import { useOpenOperation, useHotKey } from '../../hooks'
 import ThumbnailList from './ThumbnailList'
 import Toolbar from './Toolbar'
 import Viewer from './Viewer'
 import { line } from '../../utils'
 import { useRecoilState } from 'recoil'
-import { entrySelectorState } from '../../states'
+import { entrySelectorOperationState } from '../../states'
 import { useTranslation } from 'react-i18next'
+
+const appId = AppId.photoViewer
 
 export default function PhotoViewer(props: AppComponentProps) {
 
@@ -24,15 +25,16 @@ export default function PhotoViewer(props: AppComponentProps) {
   const { t } = useTranslation()
 
   const {
+    indexLabel,
     matchedEntryList,
     activeIndex,
     activeEntry,
     activeEntryStreamUrl,
     setMatchedEntryList,
     setActiveIndex,
-  } = useOpenOperation(APP_ID_MAP.photoViewer)
+  } = useOpenOperation(appId)
 
-  const [, setEntrySelector] = useRecoilState(entrySelectorState)
+  const [, setEntrySelectorOperation] = useRecoilState(entrySelectorOperationState)
 
   const [loading, setLoading] = useState(false)
   const [isLight, setIsLight] = useState(false)
@@ -64,7 +66,7 @@ export default function PhotoViewer(props: AppComponentProps) {
 
   useHotKey({
     type: 'keyup',
-    bindCondition: isTopWindow && !viewerShow,
+    binding: isTopWindow && !viewerShow,
     hotKeyMap: {
       'ArrowRight': () => handlePrevOrNext(1),
       'ArrowLeft': () => handlePrevOrNext(-1),
@@ -93,7 +95,7 @@ export default function PhotoViewer(props: AppComponentProps) {
             {!activeEntry && (
               <div
                 className="m-2 p-2 border border-gray-500 cursor-pointer text-xs text-white rounded-sm text-center hover:border-gray-300"
-                onClick={() => setEntrySelector({ show: true, app: APP_LIST.find(a => a.id === APP_ID_MAP.photoViewer) })}
+                onClick={() => setEntrySelectorOperation({ appId, type: EntryType.file })}
               >
                 {t`action.openFile`}
               </div>
@@ -111,17 +113,20 @@ export default function PhotoViewer(props: AppComponentProps) {
           </div>
 
           <Toolbar
-            imgEl={imgEl}
-            activeIndex={activeIndex}
-            setActiveIndex={setActiveIndex}
-            activeEntry={activeEntry}
-            matchedEntryList={matchedEntryList}
-            setMatchedEntryList={setMatchedEntryList}
-            isLight={isLight}
-            thumbnailListShow={thumbnailListShow}
-            setIsLight={setIsLight}
-            setThumbnailListShow={setThumbnailListShow}
-            handlePrevOrNext={handlePrevOrNext}
+            {...{
+              imgEl,
+              indexLabel,
+              activeIndex,
+              setActiveIndex,
+              activeEntry,
+              matchedEntryList,
+              setMatchedEntryList,
+              isLight,
+              thumbnailListShow,
+              setIsLight,
+              setThumbnailListShow,
+            }}
+            onPrevOrNext={handlePrevOrNext}
             onClose={onClose}
           />
 
@@ -129,20 +134,25 @@ export default function PhotoViewer(props: AppComponentProps) {
 
         <ThumbnailList
           show={thumbnailListShow}
-          activeIndex={activeIndex}
-          matchedEntryList={matchedEntryList}
-          windowWidth={windowWidth}
+          {...{
+            activeIndex,
+            matchedEntryList,
+            windowWidth,
+          }}
           onClick={setActiveIndex}
         />
 
       </div>
 
       <Viewer
-        activeIndex={activeIndex}
-        setActiveIndex={setActiveIndex}
-        matchedEntryList={matchedEntryList}
-        viewerShow={viewerShow}
-        setViewerShow={setViewerShow}
+        {...{
+          indexLabel,
+          activeIndex,
+          setActiveIndex,
+          matchedEntryList,
+          viewerShow,
+          setViewerShow,
+        }}
       />
 
     </>

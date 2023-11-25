@@ -2,14 +2,14 @@ import { useEffect } from 'react'
 
 interface useHotKeyProps {
   type: 'keydown' | 'keyup'
-  bindCondition: boolean
+  binding: boolean
   hotKeyMap: {[KEY: string]: any}  // null | () => void
 }
 
 export function useHotKey(props: useHotKeyProps) {
   const {
     type,
-    bindCondition,
+    binding,
     hotKeyMap,
   } = props
 
@@ -27,7 +27,7 @@ export function useHotKey(props: useHotKeyProps) {
     }
     const bind = () => document.addEventListener(type, listener)
     const unbind = () => document.removeEventListener(type, listener)
-    bindCondition ? bind() : unbind()
+    binding ? bind() : unbind()
     return unbind
-  }, [type, bindCondition, hotKeyMap])
+  }, [type, binding, hotKeyMap])
 }

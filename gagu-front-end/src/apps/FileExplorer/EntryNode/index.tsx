@@ -11,6 +11,7 @@ interface EntryNodeProps {
   isSelected?: boolean
   isFavorited?: boolean
   inputMode?: boolean
+  draggable?: boolean
   hideAppIcon?: boolean
   supportThumbnail?: boolean
   creationType?: CreationType
@@ -33,6 +34,7 @@ export default function EntryNode(props: EntryNodeProps) {
     isSelected = false,
     isFavorited = false,
     inputMode = false,
+    draggable = false,
     hideAppIcon = false,
     supportThumbnail = false,
     creationType,
@@ -68,7 +70,7 @@ export default function EntryNode(props: EntryNodeProps) {
 
   return (
     <div
-      draggable={!inputMode}
+      draggable={draggable}
       ref={nodeRef}
       data-entry-name={name}
       data-entry-type={type}

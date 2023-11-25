@@ -6,6 +6,8 @@ import {
   IContextMenuState,
   IUserInfo,
   Page,
+  IEntryPathMap,
+  IEntrySelectorOperation,
 } from '../types'
 
 export const userInfoState = atom<IUserInfo | null>({
@@ -60,4 +62,14 @@ export const openOperationState = atom<IOpenOperation | null>({
 export const contextMenuDataState = atom<IContextMenuState | null>({
   key: 'contextMenuDataState',
   default: null,
+})
+
+export const entrySelectorOperationState = atom<IEntrySelectorOperation | null>({
+  key: 'entrySelectorOperationState',
+  default: null,
+})
+
+export const entryPathMapState = atom<IEntryPathMap>({
+  key: 'entryPathMapState',
+  default: {},
 })

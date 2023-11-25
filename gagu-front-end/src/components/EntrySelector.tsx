@@ -1,130 +1,143 @@
-import { Button, Modal, Tree } from '@douyinfe/semi-ui'
-import { TreeNodeData } from '@douyinfe/semi-ui/lib/es/tree'
-import { useCallback, useEffect, useState } from 'react'
+import { Button, Modal } from '@douyinfe/semi-ui'
+import { useCallback, useMemo, useState } from 'react'
 import { useRecoilState } from 'recoil'
-import { FsApi } from '../api'
-import { SvgIcon } from './common'
-import { useRequest } from '../hooks'
-import { entrySelectorState, openOperationState, baseDataState } from '../states'
-import { EntryType, IEntry, IRootEntry } from '../types'
-import { getEntryPath, sortMethodMap } from '../utils'
+import { entrySelectorOperationState, openOperationState } from '../states'
+import { IEntry } from '../types'
 import { useTranslation } from 'react-i18next'
+import FileExplorer from '../apps/FileExplorer'
+import { APP_LIST } from '../apps'
+import { SvgIcon } from './common'
 
-const entryToTree = (entryList: IRootEntry[], hiddenShow: boolean) => {
-  const treeList: TreeNodeData[] = entryList.map(entry => {
-    const { name, type, hidden } = entry
-    const isFile = type === EntryType.file
-    const path = getEntryPath(entry)
-    return {
-      key: path,
-      label: name,
-      value: path,
-      icon: isFile
-        ? <SvgIcon.File className="mr-1" />
-        : <SvgIcon.Folder className="mr-1" />,
-      isLeaf: isFile,
-      hidden,
-      entry,
-    }
-  }).filter(node => hiddenShow ? true : !node.hidden)
-  return treeList
-}
+// const entryToTree = (entryList: IRootEntry[], hiddenShow: boolean) => {
+//   const treeList: TreeNodeData[] = entryList.map(entry => {
+//     const { name, type, hidden } = entry
+//     const isFile = type === EntryType.file
+//     const path = getEntryPath(entry)
+//     return {
+//       key: path,
+//       label: name,
+//       value: path,
+//       icon: isFile
+//         ? <SvgIcon.File className="mr-1" />
+//         : <SvgIcon.Folder className="mr-1" />,
+//       isLeaf: isFile,
+//       hidden,
+//       entry,
+//     }
+//   }).filter(node => hiddenShow ? true : !node.hidden)
+//   return treeList
+// }
 
-const updateTreeData = (list: TreeNodeData[], key: string, children: TreeNodeData[]) => {
-  return list.map((node: TreeNodeData) => {
-    let newNode: TreeNodeData = node
-    if (node.key === key) {
-      newNode = { ...node, children }
-    }
-    if (node.children) {
-      newNode = { ...node, children: updateTreeData(node.children, key, children) }
-    }
-    return newNode
-  })
-}
+// const updateTreeData = (list: TreeNodeData[], key: string, children: TreeNodeData[]) => {
+//   return list.map((node: TreeNodeData) => {
+//     let newNode: TreeNodeData = node
+//     if (node.key === key) {
+//       newNode = { ...node, children }
+//     }
+//     if (node.children) {
+//       newNode = { ...node, children: updateTreeData(node.children, key, children) }
+//     }
+//     return newNode
+//   })
+// }
 
 export function EntrySelector() {
 
   const { t } = useTranslation()
 
-  const [entrySelector, setEntrySelector] = useRecoilState(entrySelectorState)
-  const [baseData] = useRecoilState(baseDataState)
+  const [entrySelectorOperation, setEntrySelectorOperation] = useRecoilState(entrySelectorOperationState)
   const [, setOpenOperation] = useRecoilState(openOperationState)
 
-  const [treeData, setTreeData] = useState<TreeNodeData[]>([])
-  const [hiddenShow] = useState(false)
-  const [activeEntry, setActiveEntry] = useState<IEntry | null>(null)
+  const [selectedEntryList, setSelectedEntryList] = useState<IEntry[]>([])
 
-  const { request: queryEntryList } = useRequest(FsApi.queryEntryList)
+  const { appId, multiple, type, matchList } = useMemo(() => {
+    const { appId, multiple = false, type = '' } = entrySelectorOperation || {}
+    const matchList = APP_LIST.find(app => app.id === appId)?.matchList || []
+    return { appId, multiple, type, matchList }
+  }, [entrySelectorOperation])
 
-  useEffect(() => {
-    setTreeData(entryToTree(baseData.rootEntryList, hiddenShow))
-  }, [baseData, hiddenShow])
-
-  const handleLoadData = useCallback(async (node?: { key: string }) => {
-    const { key } = node || {}
-    if (!key) return
-    const { success, data } = await queryEntryList(key)
-    if (success) {
-      const list = updateTreeData(treeData, key, entryToTree(data.sort(sortMethodMap.default), hiddenShow))
-      setTreeData(list)
-    }
-  }, [treeData, queryEntryList, hiddenShow])
+  const { disabled, isExtensionMatched } = useMemo(() => {
+    const selectedCount = selectedEntryList.length
+    const isEnough = multiple ? selectedCount > 0 : selectedCount === 1
+    const isTypeMatched = type ? selectedEntryList.every((entry) => entry.type === type) : true
+    const disabled = !isEnough || !isTypeMatched
+    const isExtensionMatched = selectedEntryList.every(({ extension }) => matchList.includes(extension))
+    return { disabled, isExtensionMatched }
+  }, [multiple, type, selectedEntryList, matchList])
 
   const handleConfirm = useCallback(() => {
-    const { app } = entrySelector
-    if (app && activeEntry) {
-      setOpenOperation({
-        app,
-        matchedEntryList: [activeEntry],
-        activeEntryIndex: 0,
-      })
-      setEntrySelector({ show: false })
+    if (!disabled && appId && selectedEntryList) {
+      setOpenOperation({ appId, entryList: selectedEntryList })
+      setEntrySelectorOperation(null)
     }
-  }, [activeEntry, entrySelector, setOpenOperation, setEntrySelector])
+  }, [disabled, appId, selectedEntryList, setOpenOperation, setEntrySelectorOperation])
 
   return (
     <>
       <Modal
         centered
-        title={t`hint.choose`}
         closable={false}
-        width={500}
-        visible={entrySelector.show}
+        width={1020}
+        visible={!!entrySelectorOperation}
+        className="gagu-entry-selector"
         footer={(
-          <div className="flex">
-            <Button
-              className="w-full"
-              style={{ margin: 0 }}
-              onClick={() => setEntrySelector({ show: false })}
-            >
-              {t`action.cancel`}
-            </Button>
-            <Button
-              theme="solid"
-              className="w-full"
-              disabled={!activeEntry}
-              onClick={handleConfirm}
-            >
-              {t`action.confirm`}
-            </Button>
+          <div className="flex justify-between items-center">
+            <div>
+
+            </div>
+            <div>
+              <Button
+                style={{ margin: 0 }}
+                onClick={() => setEntrySelectorOperation(null)}
+              >
+                {t`action.cancel`}
+              </Button>
+              <Button
+                theme="solid"
+                className="w-32"
+                disabled={disabled}
+                onClick={handleConfirm}
+              >
+                <div className="flex items-center">
+                  <div className={`transition-all duration-200 overflow-hidden ${!disabled && !isExtensionMatched ? 'w-5' : 'w-0'}`}>
+                    <SvgIcon.Warning />
+                  </div>
+                  <span>{t`action.open`}</span>
+                </div>
+              </Button>
+            </div>
           </div>
         )}
       >
-        <div className="max-h-[60vh] min-h-[30vh] overflow-y-auto">
-          <Tree
-            labelEllipsis
-            // filterTreeNode
-            // showFilteredOnly
-            onChangeWithObject
-            multiple={entrySelector.multiple}
-            treeData={treeData}
-            loadData={handleLoadData}
-            onChange={(value) => {
-              const entry = (value as any as { entry: IEntry }).entry
-              setActiveEntry(entry)
-            }}
-          />
+        <div data-customized-scrollbar>
+          <div className="flex items-center justify-between select-none">
+            <div className="flex items-center">
+              <div className="gagu-app-icon w-4 h-4" data-app-id={appId} />
+              <span className="ml-1">{t(`app.${appId}`)}</span>
+            </div>
+            <div className="ml-3 flex">
+              {matchList.map((extension) => (
+                <div
+                  key={extension}
+                  className="ml-1 px-1 text-xs text-gray-400 font-din bg-gray-100 rounded uppercase"
+                >
+                  {extension}
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="mt-3 relative h-[540px] overflow-y-auto border bg-gray-100 bg-opacity-50">
+            <FileExplorer
+              asSelector
+              isTopWindow={!!entrySelectorOperation}
+              windowSize={{ width: 1020, height: 540 }}
+              setWindowLoading={() => {}}
+              setWindowTitle={() => {}}
+              onClose={() => {}}
+              onSelect={setSelectedEntryList}
+              onSelectConfirm={handleConfirm}
+            />
+          </div>
         </div>
       </Modal>
     </>

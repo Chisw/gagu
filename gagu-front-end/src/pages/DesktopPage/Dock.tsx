@@ -1,8 +1,8 @@
 import { useCallback, useEffect } from 'react'
 import { useRecoilState } from 'recoil'
 import { openOperationState, runningAppListState, topWindowIndexState, contextMenuDataState, activePageState } from '../../states'
-import { APP_LIST, APP_ID_MAP } from '../../apps'
-import { IApp, IContextMenuItem, Page } from '../../types'
+import { APP_LIST } from '../../apps'
+import { AppId, IApp, IContextMenuItem, Page } from '../../types'
 import { line } from '../../utils'
 import { SvgIcon } from '../../components/common'
 import toast from 'react-hot-toast'
@@ -42,7 +42,7 @@ export default function Dock() {
   useEffect(() => {
     // console.log('openOperation', openOperation)
     if (openOperation) {
-      const app = APP_LIST.find(a => a.id === openOperation.app.id)!
+      const app = APP_LIST.find(a => a.id === openOperation.appId)!
       handleOpenApp(app)
     }
   }, [openOperation, handleOpenApp])
@@ -63,7 +63,7 @@ export default function Dock() {
       {
         icon: <SvgIcon.Links />,
         name: t`action.newConnection` + ' ⏳',
-        isShow: app.id === APP_ID_MAP.fileExplorer,
+        isShow: app.id === AppId.fileExplorer,
         onClick: () => toast('⏳'),
       },
       {

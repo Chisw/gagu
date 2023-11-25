@@ -3,14 +3,15 @@ import toast from 'react-hot-toast'
 import { SvgIcon, ToolButton } from '../../components/common'
 import { copy, ENTRY_ICON_LIST, getEntryPath, line } from '../../utils'
 import { FsApi } from '../../api'
-import { APP_ID_MAP, APP_LIST } from '..'
-import { AppComponentProps } from '../../types'
+import { AppComponentProps, AppId, EntryType } from '../../types'
 import { useOpenOperation, useRequest } from '../../hooks'
 import { useRecoilState } from 'recoil'
-import { entrySelectorState } from '../../states'
+import { entrySelectorOperationState } from '../../states'
 import { useTranslation } from 'react-i18next'
 import ReactMarkdown from 'react-markdown'
 import 'github-markdown-css/github-markdown-light.css'
+
+const appId = AppId.textEditor
 
 export default function TextEditor(props: AppComponentProps) {
 
@@ -24,9 +25,9 @@ export default function TextEditor(props: AppComponentProps) {
     activeEntry,
     // activeEntryStreamUrl,
     // setActiveIndex,
-  } = useOpenOperation(APP_ID_MAP.textEditor)
+  } = useOpenOperation(appId)
 
-  const [, setEntrySelector] = useRecoilState(entrySelectorState)
+  const [, setEntrySelectorOperation] = useRecoilState(entrySelectorOperationState)
 
   const [value, setValue] = useState('')
   const [monoMode, setMonoMode] = useState(false)
@@ -197,7 +198,7 @@ export default function TextEditor(props: AppComponentProps) {
           ) : (
             <div
               className="m-2 p-2 border border-gray-400 cursor-pointer text-xs rounded-sm text-center hover:border-gray-600"
-              onClick={() => setEntrySelector({ show: true, app: APP_LIST.find(a => a.id === APP_ID_MAP.textEditor) })}
+              onClick={() => setEntrySelectorOperation({ appId, type: EntryType.file })}
             >
               {t`action.openFile`}
             </div>

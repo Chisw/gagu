@@ -98,12 +98,32 @@ body {
   background-color: var(--semi-color-fill-0);
 }
 
+.semi-form-field-extra {
+  @apply text-xs !important;
+}
+
+.semi-button {
+  @apply transition-all duration-200;
+}
+
+.semi-button.semi-button-disabled {
+  @apply bg-gray-100 cursor-not-allowed;
+}
+
 .gagu-confirmor .semi-modal-mask {
   @apply bg-black bg-opacity-10 !important;
 }
 
-.semi-form-field-extra {
-  @apply text-xs !important;
+.gagu-entry-selector .semi-modal-content {
+  padding: 0 16px;
+}
+
+.gagu-entry-selector .semi-modal-body-wrapper {
+  margin: 16px 0 0 0;
+}
+
+.gagu-entry-selector .semi-modal-footer {
+  margin: 16px 0 20px 0;
 }
 
 /* markdown */

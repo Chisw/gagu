@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { EditModeType, IEntry, INestedFile, IRootEntry, IBaseData, IScrollerWatcher, IUploadTransferTask, IVisitHistory, Sort, SortType, TransferTaskStatus, TransferTaskType, TunnelType } from '../types'
+import { EditModeType, IEntry, INestedFile, IRootEntry, IBaseData, IScrollerWatcher, IUploadTransferTask, IVisitHistory, Sort, SortType, TransferTaskStatus, TransferTaskType, TunnelType, Page } from '../types'
 import { DOWNLOAD_PERIOD, getDownloadInfo, getEntryPath, path2RootEntry, sortMethodMap } from '../utils'
 import { useRecoilState } from 'recoil'
-import { entryPathMapState, lastChangedPathState, baseDataState, transferSignalState, transferTaskListState } from '../states'
+import { entryPathMapState, lastChangedPathState, baseDataState, transferSignalState, transferTaskListState, activePageState } from '../states'
 import { useRequest } from './useRequest'
 import { DownloadApi, FsApi, TunnelApi } from '../api'
 import { useTranslation } from 'react-i18next'
@@ -12,15 +12,11 @@ import { throttle } from 'lodash-es'
 import { IControlBarDisabledMap } from '../apps/FileExplorer/ControlBar'
 
 interface Props {
-  touchMode: boolean
   containerRef: any
 }
 
 export function useFileExplorer(props: Props) {
-  const {
-    touchMode,
-    containerRef,
-  } = props
+  const { containerRef } = props
 
   const { t } = useTranslation()
 
@@ -29,6 +25,7 @@ export function useFileExplorer(props: Props) {
   const [transferTaskList, setTransferTaskList] = useRecoilState(transferTaskListState)
   const [transferSignal, setTransferSignal] = useRecoilState(transferSignalState)
   const [lastChangedPath, setLastChangedPath] = useRecoilState(lastChangedPathState)
+  const [activePage] = useRecoilState(activePageState)
 
   const [currentPath, setCurrentPath] = useState('')
   const [lastVisitedPath, setLastVisitedPath] = useState('')
@@ -49,6 +46,8 @@ export function useFileExplorer(props: Props) {
   const { request: createTunnel } = useRequest(TunnelApi.createTunnel)
   const { request: createFavorite } = useRequest(FsApi.createFavorite)
   const { request: removeFavorite } = useRequest(FsApi.removeFavorite)
+
+  const touchMode = useMemo(() => activePage === Page.touch, [activePage])
 
   const { rootEntryList, rootEntryPathList, favoriteEntryList, supportThumbnail } = useMemo(() => {
     const { rootEntryList, favoritePathList, serverOS } = baseData

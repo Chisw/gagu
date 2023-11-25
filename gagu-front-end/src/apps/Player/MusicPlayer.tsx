@@ -1,15 +1,14 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { APP_ID_MAP, APP_LIST } from '..'
-import { AppComponentProps } from '../../types'
+import { AppComponentProps, AppId, EntryType } from '../../types'
 import { useRequest, useOpenOperation, usePlayInfo } from '../../hooks'
 import { FsApi } from '../../api'
-import { getEntryPath, getPaddedNo, getReadableSize, line } from '../../utils'
+import { getEntryPath, getIndexLabel, getReadableSize, line } from '../../utils'
 import SpectrumCanvas from './common/SpectrumCanvas'
 import VolumeSlider from './common/VolumeSlider'
 import ProgressSlider from './common/ProgressSlider'
 import { IconButton, SvgIcon } from '../../components/common'
 import { useRecoilState } from 'recoil'
-import { entrySelectorState } from '../../states'
+import { entrySelectorOperationState } from '../../states'
 import { useTranslation } from 'react-i18next'
 
 const nextPlayMode: any = {
@@ -24,6 +23,8 @@ const playModeIcon: any = {
   random: <SvgIcon.PlayRandom size={14} />,
 }
 
+const appId = AppId.musicPlayer
+
 export default function MusicPlayer(props: AppComponentProps) {
 
   const { setWindowTitle, setWindowLoading } = props
@@ -36,9 +37,9 @@ export default function MusicPlayer(props: AppComponentProps) {
     activeEntry,
     activeEntryStreamUrl,
     setActiveIndex,
-  } = useOpenOperation(APP_ID_MAP.musicPlayer)
+  } = useOpenOperation(appId)
 
-  const [, setEntrySelector] = useRecoilState(entrySelectorState)
+  const [, setEntrySelectorOperation] = useRecoilState(entrySelectorOperationState)
 
   const [isPlaying, setIsPlaying] = useState(false)
   const [playMode, setPlayMode] = useState('order')
@@ -176,7 +177,7 @@ export default function MusicPlayer(props: AppComponentProps) {
         {!activeEntry && (
           <div
             className="m-2 p-2 border border-pink-500 cursor-pointer text-xs text-white rounded-sm text-center hover:border-pink-300"
-            onClick={() => setEntrySelector({ show: true, app: APP_LIST.find(a => a.id === APP_ID_MAP.musicPlayer) })}
+            onClick={() => setEntrySelectorOperation({ appId, type: EntryType.file })}
           >
             {t`action.openFile`}
           </div>
@@ -186,7 +187,7 @@ export default function MusicPlayer(props: AppComponentProps) {
           {matchedEntryList.map((entry, entryIndex) => {
             const { name, size } = entry
             const isActive = entryIndex === activeIndex
-            const indexNo = getPaddedNo(entryIndex, matchedEntryList.length, { minWidth: 2, hideTotal: true })
+            const indexNo = getIndexLabel(entryIndex, matchedEntryList.length, { minWidth: 2, hideTotal: true })
             const onClick = isActive ? handlePlayOrPause : () => setActiveIndex(entryIndex)
             return (
               <div

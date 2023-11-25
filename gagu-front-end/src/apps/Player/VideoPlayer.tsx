@@ -1,14 +1,15 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { APP_ID_MAP, APP_LIST } from '..'
-import { AppComponentProps } from '../../types'
+import { AppComponentProps, AppId, EntryType } from '../../types'
 import { useOpenOperation, usePlayInfo } from '../../hooks'
 import ProgressSlider from './common/ProgressSlider'
 import { line } from '../../utils'
 import { SvgIcon } from '../../components/common'
 import VolumeSlider from './common/VolumeSlider'
 import { useRecoilState } from 'recoil'
-import { entrySelectorState } from '../../states'
+import { entrySelectorOperationState } from '../../states'
 import { useTranslation } from 'react-i18next'
+
+const appId = AppId.videoPlayer
 
 export default function VideoPlayer(props: AppComponentProps) {
 
@@ -22,9 +23,9 @@ export default function VideoPlayer(props: AppComponentProps) {
     activeEntry,
     activeEntryStreamUrl,
     // setActiveIndex,
-  } = useOpenOperation(APP_ID_MAP.videoPlayer)
+  } = useOpenOperation(appId)
 
-  const [, setEntrySelector] = useRecoilState(entrySelectorState)
+  const [, setEntrySelectorOperation] = useRecoilState(entrySelectorOperationState)
 
   const [loading, setLoading] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
@@ -112,7 +113,7 @@ export default function VideoPlayer(props: AppComponentProps) {
           {!activeEntry && (
             <div
               className="m-2 p-2 border border-gray-500 cursor-pointer text-xs text-white rounded-sm text-center hover:border-gray-300"
-              onClick={() => setEntrySelector({ show: true, app: APP_LIST.find(a => a.id === APP_ID_MAP.videoPlayer) })}
+              onClick={() => setEntrySelectorOperation({ appId, type: EntryType.file })}
             >
               {t`action.openFile`}
             </div>

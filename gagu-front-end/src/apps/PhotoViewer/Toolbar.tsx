@@ -4,7 +4,7 @@ import { DownloadApi, FsApi, TunnelApi } from '../../api'
 import { Confirmor, IconButton, SvgIcon } from '../../components/common'
 import { useRequest } from '../../hooks'
 import { TunnelType, IEntry } from '../../types'
-import { DOWNLOAD_PERIOD, getEntryPath, getPaddedNo, getReadableSize, line } from '../../utils'
+import { DOWNLOAD_PERIOD, getEntryPath, getReadableSize, line } from '../../utils'
 import { getBaiduMapPinUrl } from '../../utils'
 import { useTranslation } from 'react-i18next'
 import { useRecoilState } from 'recoil'
@@ -12,6 +12,7 @@ import { lastChangedPathState } from '../../states'
 
 interface ToolbarProps {
   imgEl: HTMLImageElement | null
+  indexLabel: string
   activeIndex: number
   activeEntry?: IEntry
   matchedEntryList: IEntry[]
@@ -21,7 +22,7 @@ interface ToolbarProps {
   setMatchedEntryList: (entryList: IEntry[]) => void
   setIsLight: (is: boolean) => void
   setThumbnailListShow: (is: boolean) => void
-  handlePrevOrNext: (offset: number) => void
+  onPrevOrNext: (offset: number) => void
   onClose: () => void
 }
 
@@ -29,6 +30,7 @@ export default function Toolbar(props: ToolbarProps) {
 
   const {
     imgEl,
+    indexLabel,
     activeIndex,
     activeEntry,
     matchedEntryList,
@@ -38,7 +40,7 @@ export default function Toolbar(props: ToolbarProps) {
     setMatchedEntryList,
     setIsLight,
     setThumbnailListShow,
-    handlePrevOrNext,
+    onPrevOrNext,
     onClose,
   } = props
 
@@ -79,7 +81,7 @@ export default function Toolbar(props: ToolbarProps) {
       {
         icon: <SvgIcon.ChevronLeft size={14} />,
         title: t`action.previousPicture`,
-        onClick: () => handlePrevOrNext(-1),
+        onClick: () => onPrevOrNext(-1),
       },
       {
         icon: <SvgIcon.LayoutBottom size={14} />,
@@ -153,7 +155,7 @@ export default function Toolbar(props: ToolbarProps) {
       {
         icon: <SvgIcon.ChevronRight size={14} />,
         title: t`action.nextPicture`,
-        onClick: () => handlePrevOrNext(1),
+        onClick: () => onPrevOrNext(1),
       },
     ]
   }, [
@@ -161,7 +163,7 @@ export default function Toolbar(props: ToolbarProps) {
     matchedEntryList,
     activeEntry,
     getExifData,
-    handlePrevOrNext,
+    onPrevOrNext,
     setThumbnailListShow,
     thumbnailListShow,
     setIsLight,
@@ -191,7 +193,7 @@ export default function Toolbar(props: ToolbarProps) {
         onClick={e => e.stopPropagation()}
       >
         <div className="w-28 font-din">
-          {getPaddedNo(activeIndex, matchedEntryList.length)}
+          {indexLabel}
         </div>
 
         <div className="flex-grow flex justify-center">

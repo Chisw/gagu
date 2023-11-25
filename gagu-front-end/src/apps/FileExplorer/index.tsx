@@ -20,12 +20,11 @@ import {
 } from '../../utils'
 import { contextMenuDataState, openOperationState } from '../../states'
 import {
-  AppComponentProps,
+  FileExplorerProps,
   EntryType,
   IEntry,
   IRectInfo,
   IContextMenuItem,
-  IApp,
   NameFailType,
   EditModeType,
   EditMode,
@@ -34,13 +33,16 @@ import {
 import { useTranslation } from 'react-i18next'
 import EntryNode from './EntryNode'
 
-export default function FileExplorer(props: AppComponentProps) {
+export default function FileExplorer(props: FileExplorerProps) {
 
   const {
     isTopWindow,
     windowSize: { width: windowWidth },
     setWindowTitle,
     setWindowLoading,
+    asSelector = false,
+    onSelect = () => {},
+    onSelectConfirm = () => {},
   } = props
 
   const { t } = useTranslation()
@@ -76,10 +78,7 @@ export default function FileExplorer(props: AppComponentProps) {
     handleNavBack, handleNavForward, handleNavRefresh, handleNavAbort, handleNavToParent,
     handleUploadClick, handleDownloadClick,
     handleShareClick, handleFavoriteClick, handleDeleteClick,
-  } = useFileExplorer({
-    touchMode: false,
-    containerRef,
-  })
+  } = useFileExplorer({ containerRef })
 
   useEffect(() => setWindowLoading(querying), [setWindowLoading, querying])
 
@@ -147,6 +146,10 @@ export default function FileExplorer(props: AppComponentProps) {
     }
   }, [entryList, lastVisitedPath, setSelectedEntryList])
 
+  useEffect(() => {
+    onSelect(selectedEntryList)
+  }, [onSelect, selectedEntryList])
+
   const handleEntryClick = useCallback((e: any, entry: IEntry) => {
     if (editMode) return
 
@@ -181,24 +184,22 @@ export default function FileExplorer(props: AppComponentProps) {
 
   const handleEntryDoubleClick = useCallback((entry: IEntry) => {
     if (editMode) return
-    const { type, name } = entry
+    const { type } = entry
     if (type === 'directory') {
       handleDirectoryOpen(entry)
     } else {
+      if (asSelector) {
+        onSelectConfirm()
+        return
+      }
       const app = getMatchedApp(entry)
       if (app) {
-        const matchedEntryList = entryList.filter(en => app.matchList?.includes(en.extension))
-        const activeEntryIndex = matchedEntryList.findIndex(en => en.name === name)
-        setOpenOperation({
-          app,
-          matchedEntryList,
-          activeEntryIndex,
-        })
+        setOpenOperation({ appId: app.id, entryList: [entry] })
       } else {
         handleDownloadClick()
       }
     }
-  }, [editMode, entryList, handleDirectoryOpen, handleDownloadClick, setOpenOperation])
+  }, [editMode, asSelector, onSelectConfirm, handleDirectoryOpen, handleDownloadClick, setOpenOperation])
 
   const handleLassoSelect = useCallback((info: IRectInfo) => {
     const entryElements = document.querySelectorAll('.gagu-entry-node')
@@ -216,6 +217,7 @@ export default function FileExplorer(props: AppComponentProps) {
   }, [setSelectedEntryList, entryList])
 
   useDragSelect({
+    binding: !asSelector,
     lassoRef,
     containerRef,
     containerInnerRef,
@@ -231,7 +233,7 @@ export default function FileExplorer(props: AppComponentProps) {
 
   useHotKey({
     type: 'keyup',
-    bindCondition: isTopWindow && !editMode && !filterMode,
+    binding: isTopWindow && !editMode && !filterMode,
     hotKeyMap: {
       'Delete': disabledMap.delete ? null : handleDeleteClick,
       'Escape': () => setSelectedEntryList([]),
@@ -256,6 +258,8 @@ export default function FileExplorer(props: AppComponentProps) {
   })
 
   const handleContextMenu = useCallback((event: any) => {
+    if (asSelector) return
+
     let isOnBlank = true
     let isOnDirectory = false
     let isOnImage = false
@@ -295,14 +299,6 @@ export default function FileExplorer(props: AppComponentProps) {
     const isSingle = confirmedCount === 1
     const isFavorited = isSingle && favoriteEntryList.some(entry => isSameEntry(entry, activeEntry))
 
-    const handleOpenEntry = (app: IApp) => {
-      setOpenOperation({
-        app,
-        matchedEntryList: contextEntryList,
-        activeEntryIndex: 0,
-      })
-    }
-
     const menuItemList: IContextMenuItem[] = [
       {
         icon: <SvgIcon.FolderAdd />,
@@ -336,7 +332,7 @@ export default function FileExplorer(props: AppComponentProps) {
         children: CALLABLE_APP_LIST.map(app => ({
           icon: <div className="gagu-app-icon w-4 h-4" data-app-id={app.id} />,
           name: t(`app.${app.id}`),
-          onClick: () => handleOpenEntry(app),
+          onClick: () => setOpenOperation({ appId: app.id, entryList: [activeEntry], force: true }),
         })).concat({
           icon: <div className="gagu-app-icon w-4 h-4" data-app-id="iina" />,
           name: 'IINA',
@@ -400,6 +396,7 @@ export default function FileExplorer(props: AppComponentProps) {
     setContextMenuData({ eventData, menuItemList })
   }, [
     t,
+    asSelector,
     entryList,
     selectedEntryList,
     favoriteEntryList,
@@ -513,6 +510,7 @@ export default function FileExplorer(props: AppComponentProps) {
                       entryPathMap,
                       thumbScrollWatcher,
                     }}
+                    draggable={!inputMode && !asSelector}
                     requestState={{ deleting, sizeQuerying }}
                     onClick={handleEntryClick}
                     onDoubleClick={handleEntryDoubleClick}

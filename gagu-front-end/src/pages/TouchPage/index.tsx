@@ -4,7 +4,7 @@ import { useRecoilState } from 'recoil'
 import { useFileExplorer } from '../../hooks'
 import { activePageState, openOperationState, runningAppListState } from '../../states'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { IEntry, Page } from '../../types'
+import { AppId, IEntry, Page } from '../../types'
 import { getMatchedApp, isSameEntry, line, vibrate } from '../../utils'
 import EntryNode from './EntryNode'
 import StatusBar from '../../apps/FileExplorer/StatusBar'
@@ -12,7 +12,6 @@ import ControlBar from '../../apps/FileExplorer/ControlBar'
 import SelectionMenu from './SelectionMenu'
 import Dock from './Dock'
 import Side from './Side'
-import { APP_ID_MAP } from '../../apps'
 import Window from './Window'
 
 export default function TouchPage() {
@@ -24,7 +23,7 @@ export default function TouchPage() {
   const [show, setShow] = useState(false)
   const [sideShow, setSideShow] = useState(false)
   const [isSelectionMode, setIsSelectionMode] = useState(false)
-  const [activeAppId, setActiveAppId] = useState(APP_ID_MAP.fileExplorer)
+  const [activeAppId, setActiveAppId] = useState<string>(AppId.fileExplorer)
 
   const containerRef = useRef(null)
 
@@ -48,10 +47,7 @@ export default function TouchPage() {
     handleNavBack, handleNavForward, handleNavRefresh, handleNavAbort, handleNavToParent,
     handleUploadClick, handleDownloadClick,
     handleShareClick, handleFavoriteClick, handleDeleteClick,
-  } = useFileExplorer({
-    touchMode: true,
-    containerRef,
-  })
+  } = useFileExplorer({ containerRef })
 
   useEffect(() => {
     setTimeout(() => setActivePage(Page.touch))
@@ -103,24 +99,18 @@ export default function TouchPage() {
       return
     }
 
-    const { name, type } = entry
+    const { type } = entry
     if (type === 'directory') {
       handleDirectoryOpen(entry)
     } else {
       const app = getMatchedApp(entry)
       if (app) {
-        const matchedEntryList = entryList.filter(entry => app.matchList?.includes(entry.extension))
-        const activeEntryIndex = matchedEntryList.findIndex(entry => entry.name === name)
-        setOpenOperation({
-          app,
-          matchedEntryList,
-          activeEntryIndex,
-        })
+        setOpenOperation({ appId: app.id, entryList: [entry] })
       } else {
         handleDownloadClick([entry])
       }
     }
-  }, [isSelectionMode, selectedEntryList, setSelectedEntryList, handleDirectoryOpen, entryList, setOpenOperation, handleDownloadClick])
+  }, [isSelectionMode, selectedEntryList, setSelectedEntryList, handleDirectoryOpen, setOpenOperation, handleDownloadClick])
 
   const handleContextMenu = useCallback((event: any) => {
       if (sideShow) return
@@ -159,8 +149,8 @@ export default function TouchPage() {
             key={app.runningId}
             app={app}
             isTopWindow={app.id === activeAppId}
-            onHide={() => setActiveAppId(APP_ID_MAP.fileExplorer)}
-            onClose={() => setActiveAppId(APP_ID_MAP.fileExplorer)}
+            onHide={() => setActiveAppId(AppId.fileExplorer)}
+            onClose={() => setActiveAppId(AppId.fileExplorer)}
           />
         ))}
 
@@ -270,7 +260,7 @@ export default function TouchPage() {
       </div>
 
       <Dock
-        show={!sideShow && !isSelectionMode && activeAppId === APP_ID_MAP.fileExplorer}
+        show={!sideShow && !isSelectionMode && activeAppId === AppId.fileExplorer}
         activeAppId={activeAppId}
         setActiveAppId={setActiveAppId}
         onUploadClick={handleUploadClick}

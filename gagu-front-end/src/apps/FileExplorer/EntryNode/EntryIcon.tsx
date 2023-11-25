@@ -32,7 +32,14 @@ export default function EntryIcon(props: IconProps) {
     const { extension, type } = entry
     const useThumbnail = GEN_THUMBNAIL_LIST.includes(extension)
     const isFolder = type === EntryType.directory
-    const extensionLabel = isFolder ? '' : (extension.replace('_txt_new', 'txt').substring(0, 4) || 'N/A')
+    const extensionLabel = isFolder
+      ? ''
+      : (extension.replace('_txt_new', 'txt')
+        .substring(0, 5)
+        .split('')
+        .filter(s => s.match(/[A-Za-z0-9]/))
+        .join('') || 'N/A'
+      )
     const entryIconType = ENTRY_ICON_LIST.find(o => o.matchList.includes(extension))?.type
     const callableAppId = CALLABLE_APP_LIST.find(({ matchList }) => matchList!.includes(extension))?.id
     const thumbnailType: ThumbnailType = GEN_THUMBNAIL_VIDEO_LIST.includes(extension)

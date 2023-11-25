@@ -2,11 +2,11 @@ import { PhotoSlider } from 'react-photo-view'
 import { FsApi } from '../../api'
 import { IconButton, SvgIcon } from '../../components/common'
 import { IEntry } from '../../types'
-import { getPaddedNo } from '../../utils'
 
 interface ViewerProps {
   activeIndex: number
   setActiveIndex: (index: number) => void
+  indexLabel: string
   matchedEntryList: IEntry[]
   viewerShow: boolean
   setViewerShow: (is: boolean) => void
@@ -17,6 +17,7 @@ export default function Viewer(props: ViewerProps) {
   const {
     activeIndex,
     setActiveIndex,
+    indexLabel,
     matchedEntryList,
     viewerShow,
     setViewerShow,
@@ -35,7 +36,7 @@ export default function Viewer(props: ViewerProps) {
           return (
             <div className="absolute z-10 top-0 right-0 left-0 pl-2 pr-1 h-10 flex justify-between items-center bg-black bg-opacity-50">
               <span className="text-white font-din text-sm">
-                {getPaddedNo(activeIndex, matchedEntryList.length)}
+                {indexLabel}
                 &emsp;
                 {matchedEntryList[activeIndex].name}
               </span>

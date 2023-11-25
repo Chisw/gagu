@@ -3,9 +3,8 @@ import { useRecoilState } from 'recoil'
 import FileExplorer from '../../apps/FileExplorer'
 import { activePageState, runningAppListState } from '../../states'
 import { useEffect, useState } from 'react'
-import { Page } from '../../types'
+import { AppId, Page } from '../../types'
 import { line } from '../../utils'
-import { APP_ID_MAP } from '../../apps'
 import Dock from './Dock'
 import Window from './Window'
 
@@ -15,7 +14,7 @@ export default function ExplorePage() {
   const [runningAppList] = useRecoilState(runningAppListState)
 
   const [show, setShow] = useState(false)
-  const [activeAppId, setActiveAppId] = useState(APP_ID_MAP.fileExplorer)
+  const [activeAppId, setActiveAppId] = useState<string>(AppId.fileExplorer)
   
   useEffect(() => {
     setTimeout(() => setActivePage(Page.explore))
@@ -46,7 +45,7 @@ export default function ExplorePage() {
             key={app.runningId}
             app={app}
             isTopWindow={app.id === activeAppId}
-            onClose={() => setActiveAppId(APP_ID_MAP.fileExplorer)}
+            onClose={() => setActiveAppId(AppId.fileExplorer)}
           />
         ))}
 
@@ -59,7 +58,7 @@ export default function ExplorePage() {
           `)}
         >
           <FileExplorer
-            isTopWindow={APP_ID_MAP.fileExplorer === activeAppId}
+            isTopWindow={AppId.fileExplorer === activeAppId}
             windowSize={{ width: 1080, height: 1920 }}
             setWindowLoading={() => {}}
             setWindowTitle={() => {}}
