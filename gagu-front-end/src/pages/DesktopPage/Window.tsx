@@ -83,7 +83,7 @@ export default function Window(props: WindowProps) {
       setIsFullScreen(false)
       setWindowSize({ width, height })
     } else {
-      const menuBarHeight = 24
+      const menuBarHeight = document.querySelector('.gagu-menu-bar')?.scrollHeight || 24
       const dockOffsetAndHeight =  8 + 48
       rndInstance.updatePosition({ x: 0, y: menuBarHeight })
       const width = window.innerWidth

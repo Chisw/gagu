@@ -119,6 +119,7 @@ export default function EntryNode(props: EntryNodeProps) {
           ${isSelected && !gridMode ? 'text-white' : 'text-gray-400'}
           ${gridMode ? 'w-full text-center' : 'pl-2 w-24 text-right'}
           ${(isSelected && requestState?.sizeQuerying) ? 'bg-loading' : ''}
+          ${inputMode ? 'hidden' : ''}
         `)}
       >
         {sizeLabel}

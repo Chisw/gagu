@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { line } from '../../utils'
 import { SvgIcon } from '../../components/common'
 import { useTranslation } from 'react-i18next'
@@ -12,7 +12,6 @@ interface DockProps {
   show: boolean
   activeAppId: string
   setActiveAppId: (id: string) => void
-  onUploadClick: () => void
 }
 
 export default function Dock(props: DockProps) {
@@ -20,7 +19,6 @@ export default function Dock(props: DockProps) {
     show,
     activeAppId,
     setActiveAppId,
-    onUploadClick,
   } = props
 
   const { t } = useTranslation()
@@ -62,24 +60,6 @@ export default function Dock(props: DockProps) {
     }
   }, [openOperation, setActiveAppId, handleOpenApp])
 
-  const bottomMenuList = useMemo(() => {
-    const bottomMenuList = [
-      {
-        icon: <SvgIcon.FolderAdd size={18} />,
-        onClick: () => {},
-      },
-      {
-        icon: <SvgIcon.FileAdd size={18} />,
-        onClick: () => {},
-      },
-      {
-        icon: <SvgIcon.Upload size={18} />,
-        onClick: onUploadClick,
-      },
-    ]
-    return bottomMenuList
-  }, [onUploadClick])
-
   return (
     <>
       <div
@@ -90,30 +70,13 @@ export default function Dock(props: DockProps) {
           transition-all duration-200 select-none
           ${show ? 'scale-100 origin-bottom-right' : 'scale-0 origin-center'}
           ${expanded
-            ? 'right-[10px] bottom-[10px] w-48 h-64 rounded-xl bg-gradient-to-b from-gray-200 via-gray-100 to-gray-100'
+            ? 'right-[10px] bottom-[10px] w-48 h-48 rounded-xl bg-gradient-to-b from-gray-200 via-gray-100 to-gray-100'
             : 'right-[1rem] bottom-[1rem] w-12 h-12 rounded-3xl bg-white'
           }
         `)}
       >
         {expanded ? (
           <div className="gagu-dock p-3 grid grid-cols-3 gap-3">
-            {bottomMenuList.map(({ icon, onClick }, index) => (
-              <div
-                key={index}
-                className={line(`
-                  aspect-square border rounded-lg
-                  flex justify-center items-center
-                  transition-all duration-200 active:scale-90
-                  bg-gradient-to-b from-white via-white to-gray-100
-                `)}
-                onClick={() => {
-                  onClick()
-                  setExpanded(false)
-                }}
-              >
-                {icon}
-              </div>
-            ))}
             {APP_LIST.filter(app => app.touchModeShow).map(app => {
               const appId = app.id
               const isFileExplorer = appId === AppId.fileExplorer

@@ -99,7 +99,7 @@ export default function ControlBar(props: ControlBarProps) {
           icon={<SvgIcon.SideBar />}
           onClick={onSideBarClick}
         />
-        <div className="mx-1 h-3 border-l" />
+        <div className="md:mx-1 h-3 border-l" />
         <ToolButton
           title={`${t`action.backward`} [Shift + ←]`}
           icon={<SvgIcon.ArrowLeft />}
@@ -133,7 +133,7 @@ export default function ControlBar(props: ControlBarProps) {
           onClick={onNavToParent}
         />
 
-        <div className="hidden md:block mx-1 h-3 border-l" />
+        <div className="hidden md:block md:mx-1 h-3 border-l" />
 
         {windowWidth > 720 && (
           <>
@@ -188,7 +188,7 @@ export default function ControlBar(props: ControlBarProps) {
           </>
         )}
 
-        <div className="flex-grow mx-1 h-3 border-r" />
+        <div className="flex-grow md:mx-1 h-3 border-r" />
 
         <div className={`${filterMode ? 'w-40' : 'w-8'} h-full transition-all duration-200`}>
           {filterMode ? (

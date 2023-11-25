@@ -178,7 +178,7 @@ export default function TouchPage() {
           ref={containerRef}
           data-vibrate-disabled="true"
           className={line(`
-            absolute z-0 inset-0 top-6 bg-white transition-all duration-500
+            absolute z-0 inset-0 top-8 md:top-6 bg-white transition-all duration-500
             ${show ? 'opacity-100' : 'opacity-0'}
             ${sideShow ? 'ease-in-out translate-x-64 opacity-20 overflow-y-hidden pointer-events-none' : 'overflow-y-auto'}
           `)}
@@ -263,7 +263,6 @@ export default function TouchPage() {
         show={!sideShow && !isSelectionMode && activeAppId === AppId.fileExplorer}
         activeAppId={activeAppId}
         setActiveAppId={setActiveAppId}
-        onUploadClick={handleUploadClick}
       />
 
       <SharingModal
@@ -280,6 +279,7 @@ export default function TouchPage() {
         }}
         onDirectorySizeUpdate={handleDirectorySizeUpdate}
         onFavoriteClick={handleFavoriteClick}
+        onUploadClick={handleUploadClick}
         onDownloadClick={handleDownloadClick}
         onShareClick={handleShareClick}
         onDeleteClick={handleDeleteClick}

@@ -111,7 +111,7 @@ export function EntrySelector() {
       >
         <div data-customized-scrollbar>
           <div className="flex items-center justify-between select-none">
-            <div className="flex items-center">
+            <div className="flex items-center flex-shrink-0">
               <div className="gagu-app-icon w-4 h-4" data-app-id={appId} />
               <span className="ml-1">{t(`app.${appId}`)}</span>
             </div>

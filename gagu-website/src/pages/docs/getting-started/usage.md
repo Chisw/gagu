@@ -69,8 +69,8 @@ $ gagu --Host 0.0.0.0
 Start with a customized port:
 
 ```sh
-$ gagu -p 8888
-$ gagu --port 8888
+$ gagu -p 80
+$ gagu --port 80
 ```
 
 Show version:
@@ -190,7 +190,7 @@ The default port number of the GAGU service is `9293`. After the service is star
 There are two ways to modify the port number:
 
 - Modify through "Settings / Advanced / Service Port"
-- Modify by starting the command parameter `gagu -p 8888` (desktop version does not support)
+- Modify by starting the command parameter `gagu -p 80` (desktop version does not support)
 
 The modification of command parameters has the highest priority, followed by the modification in the settings, and the last is the default port number.
 

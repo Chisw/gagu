@@ -11,6 +11,7 @@ interface SelectionMenuProps {
   selectedEntryList: IEntry[]
   onDirectorySizeUpdate: (entry: IEntry) => void
   onFavoriteClick: (entry: IEntry, isFavorited: boolean) => void
+  onUploadClick: () => void
   onDownloadClick: (entryList: IEntry[]) => void
   onShareClick: (entryList: IEntry[]) => void
   onDeleteClick: (entryList: IEntry[]) => void
@@ -25,6 +26,7 @@ export default function SelectionMenu(props: SelectionMenuProps) {
     selectedEntryList,
     onDirectorySizeUpdate,
     onFavoriteClick,
+    onUploadClick,
     onDownloadClick,
     onShareClick,
     onDeleteClick,
@@ -58,10 +60,35 @@ export default function SelectionMenu(props: SelectionMenuProps) {
 
     return [
       {
+        icon: <SvgIcon.FolderAdd />,
+        name: t`action.newFolder`,
+        isShow: true,
+        onClick: () => {},
+      },
+      {
+        icon: <SvgIcon.FileAdd />,
+        name: t`action.newTextFile`,
+        isShow: true,
+        onClick: () => {},
+      },
+      {
+        icon: <SvgIcon.Upload />,
+        name: t`action.upload`,
+        isShow: true,
+        onClick: onUploadClick,
+      },
+      {
+        icon: <SvgIcon.Download />,
+        name: t`action.download`,
+        isShow: true,
+        onClick: () => onDownloadClick(selectedEntryList),
+      },
+      {
         icon: <SvgIcon.Check />,
         name: t`action.selectAll`,
         isShow: true,
-        onClick: onSelectAll,
+        noCancel: true,
+        onClick: () => onSelectAll(),
       },
       {
         icon: <SvgIcon.Rename />,
@@ -92,13 +119,6 @@ export default function SelectionMenu(props: SelectionMenuProps) {
         isShow: isOnDirectory && isSingle,
         onClick: () => onFavoriteClick(selectedEntryList[0], isFavorited),
       },
-
-      {
-        icon: <SvgIcon.Download />,
-        name: t`action.download`,
-        isShow: true,
-        onClick: () => onDownloadClick(selectedEntryList),
-      },
       {
         icon: <SvgIcon.Share />,
         name: t`action.newSharing`,
@@ -115,35 +135,49 @@ export default function SelectionMenu(props: SelectionMenuProps) {
         icon: <SvgIcon.CloseCircle />,
         name: t`action.cancel`,
         isShow: true,
-        onClick: onCancel,
+        onClick: () => {},
       },
     ].filter(item => item.isShow)
-  }, [selectedEntryList, t, onSelectAll, onCancel, favoriteEntryList, onDirectorySizeUpdate, onFavoriteClick, onDownloadClick, onShareClick, onDeleteClick])
+  }, [
+    t,
+    selectedEntryList,
+    onSelectAll,
+    favoriteEntryList,
+    onDirectorySizeUpdate,
+    onFavoriteClick,
+    onUploadClick,
+    onDownloadClick,
+    onShareClick,
+    onDeleteClick,
+  ])
 
   return (
     <>
       <div
         className={line(`
-          fixed z-10 right-[10px] bottom-[10px] left-[10px]
+          fixed z-10 right-[8px] bottom-[8px] left-[8px]
           p-2 border rounded-xl shadow-lg
           flex flex-wrap
-          bg-white bg-opacity-80 backdrop-blur select-none
+          bg-white bg-opacity-80 backdrop-blur select-none overflow-y-auto
           transition-all duration-300
-          ${show ? 'scale-100' : 'scale-0'}
+          ${show ? 'h-28 scale-100' : 'h-0 scale-0'}
         `)}
       >
-        {menuItemList.map(({ icon, name, onClick }) => (
+        {menuItemList.map(({ icon, name, noCancel, onClick }) => (
           <div
             key={name}
             className={line(`
-              w-1/4 h-12 rounded-md
+              mb-1 w-1/5 h-10 rounded-md
               transition-all duration-100
               active:scale-90 active:bg-gray-100
             `)}
-            onClick={onClick}
+            onClick={() => {
+              onClick()
+              !noCancel && onCancel()
+            }}
           >
             <div className="mt-1 flex justify-center">{icon}</div>
-            <div className="mt-1 text-xs text-center">{name}</div>
+            <div className="mt-1 -mx-1 text-xs text-center truncate scale-90">{name}</div>
           </div>
         ))}
       </div>

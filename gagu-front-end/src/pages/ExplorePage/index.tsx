@@ -52,7 +52,7 @@ export default function ExplorePage() {
         {/* z-0 */}
         <div
           className={line(`
-            absolute z-0 inset-0 top-6 bottom-10
+            absolute z-0 inset-0 top-8 md:top-6 bottom-10
             transition-all duration-500 bg-gray-200
             ${show ? 'opacity-100' : 'opacity-0'}
           `)}

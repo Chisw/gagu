@@ -114,7 +114,7 @@ export function MenuBar() {
         className={line(`
           gagu-menu-bar
           absolute z-20 top-0 right-0 left-0
-          px-1 h-6
+          px-1 h-8 md:h-6
           flex justify-between items-center
            bg-white bg-opacity-50 shadow-sm backdrop-blur
           transition-all duration-500 ease-out
