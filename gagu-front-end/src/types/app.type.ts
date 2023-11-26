@@ -3,7 +3,6 @@ import { EntryType, IEntry } from './entry.type'
 export interface AppComponentProps {
   isTopWindow: boolean
   windowSize: { width: number, height: number }
-  setWindowLoading: (loading: boolean) => void
   setWindowTitle: (title: string) => void
   onClose: () => void
 }

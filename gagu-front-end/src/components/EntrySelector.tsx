@@ -177,7 +177,6 @@ export function EntrySelector() {
               asSelector
               isTopWindow={selectorShow}
               windowSize={{ width: 1020, height: 540 }}
-              setWindowLoading={() => {}}
               setWindowTitle={() => {}}
               onClose={() => {}}
               onSelect={setSelectedEntryList}

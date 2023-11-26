@@ -19,16 +19,33 @@ Clear data directory means that all users, download tunnels and other data will 
 
 ## v0.0.*
 
+- v0.0.47 (2023-11-26)
+  - feat: finish Explorer mode
+  - feat: touch mode preview
+  - feat: adaptive Touch mode for all apps
+  - feat: file filtering wildcard support a* / a*c / *bc / \*b\*
+  - feat: exif formatted information panel in PhotoViewer
+  - feat: new fully functional file picker
+  - feat: limit reminder when the file upload exceeds 2GB. Slice upload will be implemented in the future
+  - fix: users without deletion permission cannot upload files with the same name for overwriting
+  - fix: disable drag and drop when renaming files
+  - fix: merge similar sort items
+  - fix: the limit for clearing the number of times entered when creating a new share is still limited to 0 times
+  - fix: resize the browser to synchronize the window size after applying full screen in Desktop mode
+  - fix: file manager multi-select logic with Shift key pressed
+  - fix: after modifying the user's avatar, the list page is not updated simultaneously
+  - fix: code optimization
+
 - v0.0.46 (2023-11-15)
   - hotfix: Loop request after file upload
 
 - v0.0.45 (2023-11-15)
   - feat: Settings/Advanced/Check for updates
-  - feat: Front-end entries caching to improve access speed
-  - feat: File sorting
-  - feat: Before closing the window, remember the display method and sorting method of each directory
-  - fix: Failed to open file within media app
-  - fix: File manager right-click menu is messed up
+  - feat: front-end entries caching to improve access speed
+  - feat: file sorting
+  - feat: before closing the window, remember the display method and sorting method of each directory
+  - fix: failed to open file within media app
+  - fix: FileExplorer right-click menu is messed up
 
 - v0.0.44 (2023-11-10)
   - feat: user favorites

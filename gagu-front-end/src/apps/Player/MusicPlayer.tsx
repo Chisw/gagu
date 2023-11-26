@@ -27,7 +27,7 @@ const appId = AppId.musicPlayer
 
 export default function MusicPlayer(props: AppComponentProps) {
 
-  const { setWindowTitle, setWindowLoading } = props
+  const { setWindowTitle } = props
 
   const { t } = useTranslation()
 
@@ -46,7 +46,7 @@ export default function MusicPlayer(props: AppComponentProps) {
   const [volume, setVolume] = useState(1)
   const [volumeSliderShow, setVolumeSliderShow] = useState(false)
 
-  const { request: queryAudioTags, data, loading } = useRequest(FsApi.queryAudioTags)
+  const { request: queryAudioTags, data } = useRequest(FsApi.queryAudioTags)
 
   const audioRef = useRef<HTMLAudioElement>(null)
   const audioEl = useMemo(() => {
@@ -55,10 +55,6 @@ export default function MusicPlayer(props: AppComponentProps) {
   }, [audioRef.current])
 
   const playInfo = usePlayInfo({ el: audioEl, isPlaying })
-
-  useEffect(() => {
-    setWindowLoading(loading)
-  }, [loading, setWindowLoading])
 
   useEffect(() => {
     if (activeEntry) {

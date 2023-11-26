@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { TransferPanel, MySharingPanel } from '.'
-import { Dropdown, Modal, Tooltip } from '@douyinfe/semi-ui'
+import { Dropdown, Modal } from '@douyinfe/semi-ui'
 import { DateTime } from 'luxon'
 import { useNavigate } from 'react-router-dom'
 import { AuthApi, FsApi } from '../api'
@@ -253,30 +253,26 @@ export function MenuBar() {
             visible={userPopoverShow}
             render={(
               <Dropdown.Menu className="w-48">
-                <div className="mb-[2px] px-2 pt-1 pb-2 border-b group">
+                <div className="mb-[2px] px-2 pt-1 pb-2 border-b">
                   <div className="flex items-center">
                     <div
                       className="w-10 h-10 rounded-full border-2 border-white shadow bg-center bg-cover"
                       style={{ backgroundImage: `url("${FsApi.getAvatarStreamUrl(userInfo?.username || '')}")` }}
                     />
                     <div className="ml-2 text-sm leading-none flex-grow">
-                      <p>{userInfo?.nickname}</p>
+                      <p className="font-bold">{userInfo?.nickname}</p>
                       <p className="text-xs text-gray-500">@{userInfo?.username}</p>
                     </div>
-                    <div className="hidden group-hover:block">
-                      <Tooltip
-                        position="right"
-                        content={(
-                          <div className="font-din capitalize text-white font-din">
-                            Permissions: {userInfo?.permissions.join(' ')}
-                          </div>
-                        )}
+                  </div>
+                  <div className="mt-1 font-din">
+                    {userInfo?.permissions.map(p => (
+                      <span
+                        key={p}
+                        className="inline-block mr-[2px] mb-[2px] px-1 py-0 text-xs text-blue-600 bg-blue-100 rounded select-none capitalize"
                       >
-                        <span>
-                          <SvgIcon.Info className="text-gray-400" />
-                        </span>
-                      </Tooltip>
-                    </div>
+                        {p}
+                      </span>
+                    ))}
                   </div>
                 </div>
                 <Dropdown.Item

@@ -8,6 +8,8 @@ import { useRequest } from '../../../hooks'
 import { IUser, IUserForm, User, UserValidityType, UserForm, UserPermission } from '../../../types'
 import { getDateTime, getIsExpired } from '../../../utils'
 
+const getTimestampSuffix = () => `?timestamp=${Date.now()}`
+
 interface UserListProps {
   list: IUser[]
   loggedInList: string[]
@@ -59,7 +61,7 @@ export default function UserList(props: UserListProps) {
         icon: <SvgIcon.Edit className="text-gray-500" />,
         show: true,
         onClick: () => {
-          const avatarPath = FsApi.getAvatarStreamUrl(user.username)
+          const avatarPath = FsApi.getAvatarStreamUrl(user.username) + getTimestampSuffix()
           setForm(new UserForm(user, avatarPath))
           setFormMode('EDIT')
         },
@@ -120,7 +122,7 @@ export default function UserList(props: UserListProps) {
           return (
             <div
               key={username}
-              className="relative m-2 w-48 transition-shadow duration-200 hover:shadow-lg group rounded-lg border overflow-hidden"
+              className="relative mr-2 w-44 transition-shadow duration-200 md:hover:shadow-lg group rounded-lg border overflow-hidden select-none"
             >
               <div className="absolute z-10 top-0 right-0 m-1 scale-90 origin-top-right text-xs font-din">
                 {isExpired && (
@@ -147,13 +149,13 @@ export default function UserList(props: UserListProps) {
               </div>
               <div
                 className="w-full h-16 bg-center bg-cover filter blur-sm bg-gray-200 opacity-20"
-                style={{ backgroundImage: `url("${FsApi.getAvatarStreamUrl(username)}")` }}
+                style={{ backgroundImage: `url("${FsApi.getAvatarStreamUrl(username)}${getTimestampSuffix()}")` }}
               />
               <div className="relative z-10 -mt-8 p-2">
                 <div className="flex items-center">
                   <div
                     className="relative w-12 h-12 flex-shrink-0 rounded-full bg-cover bg-center bg-no-repeat bg-gray-300 border-2 border-white"
-                    style={{ backgroundImage: `url("${FsApi.getAvatarStreamUrl(username)}")` }}
+                    style={{ backgroundImage: `url("${FsApi.getAvatarStreamUrl(username)}${getTimestampSuffix()}")` }}
                   >
                     {isLoggedIn && (
                       <div className="absolute top-0 right-0 w-2 h-2 rounded bg-green-400 border border-white" />
@@ -164,7 +166,7 @@ export default function UserList(props: UserListProps) {
                     <div className="text-xs text-gray-400">@{username}</div>
                   </div>
                 </div>
-                <div className="mt-2 min-h-[1.5rem] scale-90 origin-top-left font-din leading-none">
+                <div className="mt-2 pb-4 min-h-[1.5rem] scale-90 origin-top-left font-din leading-none">
                   {permissions.map(p => (
                     <span
                       key={p}
@@ -173,8 +175,6 @@ export default function UserList(props: UserListProps) {
                       {p}
                     </span>
                   ))}
-                </div>
-                <div className="mt-2 min-h-[1.5rem] scale-90 origin-top-left leading-none">
                 </div>
                 <div className="flex-shrink-0 text-xs leading-none font-din text-gray-400 text-center group-hover:opacity-0">
                   <p>{t('tip.createdAt', { time: getDateTime(createdAt) })}</p>
@@ -188,7 +188,7 @@ export default function UserList(props: UserListProps) {
                   <div
                     key={label}
                     title={label}
-                    className="w-6 h-6 cursor-pointer hover:opacity-70 flex justify-center items-center rounded"
+                    className="mx-1 w-6 h-6 cursor-pointer hover:opacity-70 flex justify-center items-center rounded"
                     onClick={onClick}
                   >
                     {icon}

@@ -8,10 +8,6 @@ import LogPanel from './LogPanel'
 import { useTranslation } from 'react-i18next'
 import { TabPane, Tabs } from '@douyinfe/semi-ui'
 
-export interface IPanelProps {
-  setWindowLoading: (loading: boolean) => void
-}
-
 const tabList = [
   { key: 'system', icon: <SvgIcon.Settings size={14} />, Panel: SystemPanel },
   { key: 'users', icon: <SvgIcon.User size={14} />, Panel: UserPanel},
@@ -19,8 +15,6 @@ const tabList = [
 ]
 
 export default function Settings (props: AppComponentProps) {
-
-  const { setWindowLoading } = props
 
   const { t } = useTranslation()
 
@@ -75,7 +69,7 @@ export default function Settings (props: AppComponentProps) {
           </Tabs>
         </div>
         <div className="relative w-full h-full bg-white">
-          <Panel setWindowLoading={setWindowLoading} />
+          <Panel />
         </div>
       </div>
     </>

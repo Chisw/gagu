@@ -28,7 +28,6 @@ export default function Window(props: WindowProps) {
   const { t } = useTranslation()
 
   const [runningAppList, setRunningAppList] = useRecoilState(runningAppListState)
-  const [windowLoading, setWindowLoading] = useState(false)
   const [windowTitle, setWindowTitle] = useState('')
   const [windowStatus, setWindowStatus] = useState<WindowStatus>('opening')
 
@@ -65,7 +64,6 @@ export default function Window(props: WindowProps) {
             ${headerClassName ? headerClassName : 'border-gray-100 bg-white text-gray-500'}
           `)}
         >
-          {windowLoading && (<div className="absolute z-0 right-0 bottom-0 left-0 h-[2px] bg-loading" />)}
           <div className="flex items-center flex-grow px-2 h-full truncate">
             <div
               className="gagu-app-icon flex-shrink-0 w-4 h-4 bg-center bg-no-repeat bg-contain"
@@ -95,7 +93,6 @@ export default function Window(props: WindowProps) {
           <AppComponent
             isTopWindow={isTopWindow}
             windowSize={{ width: 1920, height: 1080 }}
-            setWindowLoading={setWindowLoading}
             setWindowTitle={setWindowTitle}
             onClose={handleClose}
           />

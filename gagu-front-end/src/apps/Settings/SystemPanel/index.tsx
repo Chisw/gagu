@@ -1,10 +1,9 @@
 import { TabPane, Tabs } from '@douyinfe/semi-ui'
 import { useTranslation } from 'react-i18next'
-import { IPanelProps } from '..'
 import GeneralSettings from './GeneralSettings'
 import AdvancedSettings from './AdvancedSettings'
 
-export default function SystemPanel(props: IPanelProps) {
+export default function SystemPanel() {
 
   const { t } = useTranslation()
 

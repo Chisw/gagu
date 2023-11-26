@@ -1,6 +1,4 @@
-import { IPanelProps } from '.'
-
-export default function LogPanel(props: IPanelProps) {
+export default function LogPanel() {
 
   return (
     <>

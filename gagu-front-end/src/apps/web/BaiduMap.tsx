@@ -1,22 +1,18 @@
-import { useEffect } from 'react'
-import { AppComponentProps } from '../../types'
+import { useState } from 'react'
 
-export default function BaiduMap(props: AppComponentProps) {
+export default function BaiduMap() {
 
-  const { setWindowLoading } = props
-
-  useEffect(() => {
-    setWindowLoading(true)
-  }, [setWindowLoading])
+  const [loading, setLoading] = useState(true)
 
   return (
     <>
       <div className="absolute inset-0">
+        {loading && (<div className="absolute z-10 right-0 top-0 left-0 h-1 bg-loading" />)}
         <iframe
           title="app"
           className="w-full h-full"
           src="https://map.baidu.com"
-          onLoad={() => setWindowLoading(false)}
+          onLoad={() => setLoading(false)}
         />
       </div>
     </>

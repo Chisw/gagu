@@ -39,7 +39,6 @@ export default function FileExplorer(props: FileExplorerProps) {
     isTopWindow,
     windowSize: { width: windowWidth },
     setWindowTitle,
-    setWindowLoading,
     asSelector = false,
     onSelect = () => {},
     onSelectConfirm = () => {},
@@ -52,6 +51,7 @@ export default function FileExplorer(props: FileExplorerProps) {
 
   const [sideCollapse, setSideCollapse] = useState(false)
   const [locationScrollWatcher, setLocationScrollWatcher] = useState<{ wait: boolean, smooth?: boolean }>({ wait: false })
+  const [shiftFromIndex, setShiftFromIndex] = useState<number>(0)
 
   const lassoRef = useRef(null)
   const containerRef = useRef(null)      // container of containerInner, overflow-y-auto
@@ -79,8 +79,6 @@ export default function FileExplorer(props: FileExplorerProps) {
     handleUploadClick, handleDownloadClick,
     handleShareClick, handleFavoriteClick, handleDeleteClick,
   } = useFileExplorer({ containerRef })
-
-  useEffect(() => setWindowLoading(querying), [setWindowLoading, querying])
 
   useEffect(() => {
     const title = isInRoot
@@ -148,6 +146,9 @@ export default function FileExplorer(props: FileExplorerProps) {
 
   useEffect(() => {
     onSelect(selectedEntryList)
+    if (selectedEntryList.length === 0) {
+      setShiftFromIndex(0)
+    }
   }, [onSelect, selectedEntryList])
 
   const handleEntryClick = useCallback((e: any, entry: IEntry) => {
@@ -155,32 +156,24 @@ export default function FileExplorer(props: FileExplorerProps) {
 
     let list = [...selectedEntryList]
     const { metaKey, ctrlKey, shiftKey } = e
-    const selectedLen = selectedEntryList.length
+    const currentIndex = entryList.findIndex((e) => isSameEntry(e, entry))
+
+    if (!shiftKey) {
+      setShiftFromIndex(currentIndex)
+    }
 
     if (metaKey || ctrlKey) {
       list = list.find(o => isSameEntry(o, entry))
         ? list.filter(o => !isSameEntry(o, entry))
         : list.concat(entry)
     } else if (shiftKey) {
-      if (selectedLen) {
-        const lastSelectedEntry = selectedEntryList[selectedLen - 1]
-        const range: number[] = []
-        entryList.forEach((_entry, _entryIndex) => {
-          if ([entry, lastSelectedEntry].find(o => isSameEntry(o, _entry))) {
-            range.push(_entryIndex)
-          }
-        })
-        range.sort((a, b) => a > b ? 1 : -1)
-        const [start, end] = range
-        list = entryList.slice(start, end + 1)
-      } else {
-        list = [entry]
-      }
+      const [start, end] = [shiftFromIndex, currentIndex].sort((a, b) => a > b ? 1 : -1)
+      list = entryList.slice(start, end + 1)
     } else {
       list = [entry]
     }
     setSelectedEntryList(list)
-  }, [editMode, selectedEntryList, entryList, setSelectedEntryList])
+  }, [editMode, selectedEntryList, setSelectedEntryList, shiftFromIndex, entryList])
 
   const handleEntryDoubleClick = useCallback((entry: IEntry) => {
     if (editMode) return

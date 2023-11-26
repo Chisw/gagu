@@ -22,15 +22,24 @@ export default function LoginPage() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
+  const handleNavigate = useCallback(() => {
+    const { innerWidth } = window
+    if (innerWidth > 1200) {
+      navigate('/')
+    } else {
+      navigate(`/${Page.touch}`)
+    }
+  }, [navigate])
+
   useEffect(() => {
     setTimeout(() => setActivePage(Page.login))
   }, [setActivePage])
 
   useEffect(() => {
     if (UserInfoStore.get()) {
-      navigate('/')
+      handleNavigate()
     }
-  }, [navigate])
+  }, [handleNavigate])
 
   const [, setUserInfo] = useRecoilState(userInfoState)
 
@@ -46,11 +55,11 @@ export default function LoginPage() {
       setUserInfo(userInfo)
       UserInfoStore.set(userInfo)
       setActivePage(Page.PENDING)
-      setTimeout(() => navigate('/'), 500)
+      setTimeout(handleNavigate, 500)
     } else {
       toast.error(t(`server.${message}`))
     }
-  }, [username, password, login, setUserInfo, navigate, t, setActivePage])
+  }, [username, password, login, setUserInfo, handleNavigate, t, setActivePage])
   
   return (
     <>

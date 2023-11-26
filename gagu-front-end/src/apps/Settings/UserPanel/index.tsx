@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { IPanelProps } from '..'
 import { UserApi } from '../../../api'
 import { SvgIcon } from '../../../components/common'
 import { useRequest } from '../../../hooks'
@@ -10,26 +9,18 @@ import UserList from './UserList'
 
 export type formModeType = 'CLOSE' | 'CREATE' | 'EDIT'
 
-export default function UserPanel(props: IPanelProps) {
-
-  const {
-    setWindowLoading,
-  } = props
+export default function UserPanel() {
 
   const { t } = useTranslation()
 
   const [formMode, setFormMode] = useState<formModeType>('CLOSE')
   const [form, setForm] = useState<IUserForm>(new UserForm())
 
-  const { request: refresh, data, loading } = useRequest(UserApi.queryUser)
+  const { request: refresh, data } = useRequest(UserApi.queryUser)
 
   useEffect(() => {
     refresh()
   }, [refresh])
-
-  useEffect(() => {
-    setWindowLoading(loading)
-  }, [setWindowLoading, loading])
 
   const { userList, loggedInList } = useMemo(() => {
     const userList: IUser[] = data?.userList || []

@@ -32,7 +32,6 @@ export default function Window(props: WindowProps) {
   const [runningAppList, setRunningAppList] = useRecoilState(runningAppListState)
   const [initIndex] = useState(topWindowIndex)
   const [currentIndex, setCurrentIndex] = useState(initIndex)
-  const [windowLoading, setWindowLoading] = useState(false)
   const [windowTitle, setWindowTitle] = useState('')
   const [windowSize, setWindowSize] = useState({ width, height })
   const [hidden, setHidden] = useState(false)
@@ -170,7 +169,6 @@ export default function Window(props: WindowProps) {
               ${headerClassName ? headerClassName : 'border-gray-100 bg-white text-gray-500'}
             `)}
           >
-            {windowLoading && (<div className="absolute z-0 right-0 bottom-0 left-0 h-[2px] bg-loading" />)}
             <div
               className={line(`
                 flex items-center flex-grow px-2 h-full truncate
@@ -238,7 +236,6 @@ export default function Window(props: WindowProps) {
             <AppComponent
               isTopWindow={isTopWindow}
               windowSize={windowSize}
-              setWindowLoading={setWindowLoading}
               setWindowTitle={setWindowTitle}
               onClose={handleClose}
             />

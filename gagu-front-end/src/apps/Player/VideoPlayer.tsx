@@ -13,7 +13,7 @@ const appId = AppId.videoPlayer
 
 export default function VideoPlayer(props: AppComponentProps) {
 
-  const { setWindowTitle, setWindowLoading } = props
+  const { setWindowTitle } = props
 
   const { t } = useTranslation()
 
@@ -27,7 +27,7 @@ export default function VideoPlayer(props: AppComponentProps) {
 
   const [, setEntrySelectorOperation] = useRecoilState(entrySelectorOperationState)
 
-  const [loading, setLoading] = useState(false)
+  const [, setLoading] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
   const [volume, setVolume] = useState(1)
   const [volumeSliderShow, setVolumeSliderShow] = useState(false)
@@ -39,10 +39,6 @@ export default function VideoPlayer(props: AppComponentProps) {
   }, [videoRef.current])
 
   const playInfo = usePlayInfo({ el: videoEl, isPlaying, maxUnit: 'H' })
-
-  useEffect(() => {
-    setWindowLoading(loading)
-  }, [setWindowLoading, loading])
 
   useEffect(() => {
     if (activeEntry) {

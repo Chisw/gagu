@@ -63,7 +63,11 @@ export const initialize = async () => {
     Object.keys(libMap).map((libKey) => {
       return new Promise((resolve) => {
         exec(`${cmd} ${libKey}`, (err, out) => {
-          libMap[libKey] = !(out && out.includes('not found'))
+          if (out) {
+            libMap[libKey] = !out.includes('not found')
+          } else {
+            libMap[libKey] = out === ''
+          }
           resolve(true)
         })
       })

@@ -60,7 +60,6 @@ export default function ExplorePage() {
           <FileExplorer
             isTopWindow={AppId.fileExplorer === activeAppId}
             windowSize={{ width: 1080, height: 1920 }}
-            setWindowLoading={() => {}}
             setWindowTitle={() => {}}
             onClose={() => {}}
           />

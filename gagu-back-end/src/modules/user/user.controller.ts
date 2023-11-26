@@ -6,16 +6,9 @@ import {
   Delete,
   Param,
   Patch,
-  Query,
 } from '@nestjs/common'
 import { UserService } from './user.service'
-import {
-  User,
-  IUserForm,
-  UserPermission,
-  UserValidityType,
-  IUser,
-} from '../../types'
+import { User, IUserForm, UserPermission, UserValidityType } from '../../types'
 import {
   deleteEntry,
   GAGU_PATH,
@@ -26,7 +19,6 @@ import {
 import { FsService } from '../fs/fs.service'
 import { Permission } from '../../common/decorators/permission.decorator'
 import { AuthService } from '../auth/auth.service'
-import { UserGetter } from 'src/common/decorators/user.decorator'
 
 @Controller('user')
 export class UserController {

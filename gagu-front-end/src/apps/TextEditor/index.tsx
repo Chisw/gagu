@@ -15,7 +15,7 @@ const appId = AppId.textEditor
 
 export default function TextEditor(props: AppComponentProps) {
 
-  const { isTopWindow, setWindowTitle, setWindowLoading } = props
+  const { isTopWindow, setWindowTitle } = props
 
   const { t } = useTranslation()
 
@@ -35,13 +35,11 @@ export default function TextEditor(props: AppComponentProps) {
   const [markdownFullView, setMarkdownFullView] = useState(false)
   const [fontSize, setFontSize] = useState(14)
 
-  const { request: queryTextContent, loading: fetching, data: { data: textContent }, setData: setTextContent } = useRequest(FsApi.queryTextContent, { data: '' })
+  const { request: queryTextContent, data: { data: textContent }, setData: setTextContent } = useRequest(FsApi.queryTextContent, { data: '' })
   const { request: uploadFile, loading: saving } = useRequest(FsApi.uploadFile)
 
   const isMarkdown = useMemo(() => activeEntry?.extension === 'md', [activeEntry])
   const submitDisabled = useMemo(() => (value === textContent && !saving )|| !activeEntry, [activeEntry, saving, textContent, value])
-
-  useEffect(() => setWindowLoading(fetching), [setWindowLoading, fetching])
 
   useEffect(() => {
     if (isMarkdown) {
@@ -57,7 +55,9 @@ export default function TextEditor(props: AppComponentProps) {
       const { name, extension } = activeEntry
       queryTextContent(getEntryPath(activeEntry))
       setWindowTitle(name)
-      if (ENTRY_ICON_LIST.find(l => l.type === 'code')?.matchList.includes(extension)) {
+      const isMono = ENTRY_ICON_LIST.filter(icon => ['code', 'data'].includes(icon.type))
+        .some(icon => icon.matchList.includes(extension))
+      if (isMono) {
         setMonoMode(true)
       }
     }

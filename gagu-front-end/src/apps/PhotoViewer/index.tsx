@@ -18,7 +18,6 @@ export default function PhotoViewer(props: AppComponentProps) {
     isTopWindow,
     windowSize: { width: windowWidth },
     setWindowTitle,
-    setWindowLoading,
     onClose,
   } = props
 
@@ -46,8 +45,6 @@ export default function PhotoViewer(props: AppComponentProps) {
     return imgRef.current || null as HTMLImageElement | null
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imgRef.current])
-
-  useEffect(() => setWindowLoading(loading), [setWindowLoading, loading])
 
   useEffect(() => {
     if (activeEntry) {
