@@ -9,6 +9,7 @@ layout: ../../../layouts/DocLayout.astro
 
 ## 系统
 
+- 深色模式
 - 多窗口自动排列
 - 窗口布局分配
 - favicon 显示文件传输百分比
@@ -25,6 +26,8 @@ layout: ../../../layouts/DocLayout.astro
 
 ### 文件管理器
 
+- 复制、剪切、移动
+- 切片上传
 - 拖拽移动文件
 - 树结构显示
 - 局域网内扫描、连接多个设备

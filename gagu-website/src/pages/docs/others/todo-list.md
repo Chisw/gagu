@@ -9,6 +9,7 @@ Many unrealized ideas will be recorded here, waiting for development.
 
 ## System
 
+- Dark mode
 - Multi-window automatic arrangement
 - Window layout assignment
 - favicon shows file transfer percentage
@@ -25,6 +26,8 @@ Many unrealized ideas will be recorded here, waiting for development.
 
 ### File Explorer
 
+- Copy, Cut, Move
+- Slice upload
 - Drag and drop to move files
 - Tree structure display
 - Scan and connect multiple devices in LAN

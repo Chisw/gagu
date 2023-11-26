@@ -6,6 +6,7 @@ import { runningAppListState, topWindowIndexState } from '../../states'
 import { WINDOW_DURATION, WINDOW_STATUS_MAP, line } from '../../utils'
 import { SvgIcon } from '../../components/common'
 import { useTranslation } from 'react-i18next'
+import { throttle } from 'lodash-es'
 
 interface WindowProps {
   app: IApp
@@ -75,14 +76,8 @@ export default function Window(props: WindowProps) {
     }, WINDOW_DURATION)
   }, [hidden])
 
-  const handleFullScreen = useCallback(() => {
-    if (isFullScreen) {
-      const { x, y, width, height } = memoInfo
-      rndInstance.updatePosition({ x, y })
-      rndInstance.updateSize({ width, height })
-      setIsFullScreen(false)
-      setWindowSize({ width, height })
-    } else {
+  const handleFullScreen = useCallback((force?: boolean) => {
+    const fill = () => {
       const menuBarHeight = document.querySelector('.gagu-menu-bar')?.scrollHeight || 24
       const dockOffsetAndHeight =  8 + 48
       rndInstance.updatePosition({ x: 0, y: menuBarHeight })
@@ -91,6 +86,20 @@ export default function Window(props: WindowProps) {
       rndInstance.updateSize({ width, height })  
       setIsFullScreen(true)
       setWindowSize({ width, height })
+    }
+
+    const restore = () => {
+      const { x, y, width, height } = memoInfo
+      rndInstance.updatePosition({ x, y })
+      rndInstance.updateSize({ width, height })
+      setIsFullScreen(false)
+      setWindowSize({ width, height })
+    }
+
+    if (force) {
+      fill()
+    } else {
+      isFullScreen ? restore() : fill()
     }
   }, [memoInfo, isFullScreen, rndInstance])
 
@@ -103,6 +112,15 @@ export default function Window(props: WindowProps) {
       setWindowStatus('closed')
     }, WINDOW_DURATION)
   }, [runningAppList, setRunningAppList, runningId, currentIndex, setTopWindowIndex])
+
+  useEffect(() => {
+    const listener = throttle(() => {
+      if (!isFullScreen) return
+      handleFullScreen(true)
+    }, 500)
+    window.addEventListener('resize', listener)
+    return () => window.removeEventListener('resize', listener)
+  }, [handleFullScreen, isFullScreen])
 
   return (
     <>
@@ -158,7 +176,7 @@ export default function Window(props: WindowProps) {
                 flex items-center flex-grow px-2 h-full truncate
                 ${isFullScreen ? '' : 'gagu-drag-handler'}
               `)}
-              onDoubleClick={handleFullScreen}
+              onDoubleClick={() => handleFullScreen()}
             >
               <div
                 className="gagu-app-icon flex-shrink-0 w-4 h-4 bg-center bg-no-repeat bg-contain"
@@ -197,7 +215,7 @@ export default function Window(props: WindowProps) {
                   w-8 h-8 flex justify-center items-center cursor-pointer transition-all duration-200
                   ${headerClassName ? 'text-gray-200' : 'text-gray-400'}
                 `)}
-                onClick={handleFullScreen}
+                onClick={() => handleFullScreen()}
               >
                 {isFullScreen ? <SvgIcon.FullscreenExit size={12} /> : <SvgIcon.Fullscreen size={12} />}
               </span>

@@ -5,6 +5,7 @@ export enum TransferTaskStatus {
   success = 'success',
   fail = 'fail',
   cancel = 'cancel',
+  exceed = 'exceed',
 }
 
 export type TransferTaskStatusType = keyof typeof TransferTaskStatus
