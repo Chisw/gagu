@@ -1,7 +1,7 @@
 import { Button, Form, Modal } from '@douyinfe/semi-ui'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { FsApi, TunnelApi } from '../api'
-import { useRequest } from '../hooks'
+import { useRequest, useTouchMode } from '../hooks'
 import { IEntry, TunnelType } from '../types'
 import { copy, getDownloadInfo } from '../utils'
 import { EntryListPanel, SvgIcon } from './common'
@@ -32,6 +32,8 @@ export function SharingModal(props: SharingModalProps) {
   } = props
 
   const { t } = useTranslation()
+
+  const touchMode = useTouchMode()
 
   const [form, setForm] = useState<{
     downloadName: string
@@ -97,10 +99,12 @@ export function SharingModal(props: SharingModalProps) {
             {isCreating ? t`title.createSharingLink` : t`title.createdSuccessfully`}
           </span>
         )}
+        fullScreen={touchMode}
+        bodyStyle={{ maxHeight: '80%', overflowY: 'auto' }}
         width={isCreating ? 640 : 480}
         visible={visible}
         footer={isCreating ? (
-          <div className="flex justify-end">
+          <div className="relative z-10 flex justify-end">
             <Button
               onClick={onClose}
             >
@@ -126,7 +130,7 @@ export function SharingModal(props: SharingModalProps) {
             <div className="mb-4">
               <Form initValues={form}>
                 <div className="flex flex-wrap">
-                  <div className="w-1/2">
+                  <div className="w-full md:w-1/2">
                     <Form.Input
                       showClear
                       autoComplete="off"
@@ -139,7 +143,7 @@ export function SharingModal(props: SharingModalProps) {
                       ]}
                     />
                   </div>
-                  <div className="pl-4 w-1/2">
+                  <div className="w-full md:pl-4 md:w-1/2">
                     <Form.Input
                       showClear
                       field="password"
@@ -149,7 +153,7 @@ export function SharingModal(props: SharingModalProps) {
                       onChange={password => setForm({ ...form, password })}
                     />
                   </div>
-                  <div className="w-1/2">
+                  <div className="w-full md:w-1/2">
                     <Form.InputNumber
                       showClear
                       autoComplete="off"
@@ -158,10 +162,10 @@ export function SharingModal(props: SharingModalProps) {
                       placeholder={t`hint.noLimitLeaveBlank`}
                       className="w-full"
                       min={1}
-                      onChange={val => setForm({ ...form, leftTimes: Number(val) })}
+                      onChange={val => setForm({ ...form, leftTimes: val === '' ? undefined : Number(val) })}
                     />
                   </div>
-                  <div className="pl-4 w-1/2">
+                  <div className="w-full md:pl-4 md:w-1/2">
                     <Form.DatePicker
                       showClear
                       type="dateTime"
@@ -185,11 +189,11 @@ export function SharingModal(props: SharingModalProps) {
             />
           </>
         ) : (
-          <div className="relative z-10 pt-2 pb-8 flex justify-between">
+          <div className={`relative z-10 pt-2 pb-8 flex ${touchMode ? 'flex-wrap justify-center' : 'justify-between'}`}>
             <QrCode value={tunnelLink} className="ring-8 ring-white" />
-            <div className="pl-8 flex flex-col justify-between">
+            <div className={`flex flex-col justify-between ${touchMode ? 'mt-4' : 'pl-8'}`}>
               <div className="font-din text-base text-gray-500 break-all">{tunnelLink}</div>
-              <div className="flex justify-end">
+              <div className={`flex justify-end ${touchMode ? 'mt-8' : ''}`}>
                 <Button
                   className="mr-2"
                   icon={<SvgIcon.ExternalLink />}

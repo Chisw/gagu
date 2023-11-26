@@ -8,10 +8,12 @@ import { useParams } from 'react-router-dom'
 import { DownloadApi, FsApi, TunnelApi } from '../api'
 import { EntryListPanel, PublicFooter, Spinner, SvgIcon } from '../components/common'
 import { useRequest } from '../hooks'
-import { getDateTime, line, SERVER_MESSAGE_MAP } from '../utils'
+import { copy, getDateTime, line, SERVER_MESSAGE_MAP } from '../utils'
 import { useRecoilState } from 'recoil'
 import { activePageState } from '../states'
 import { Page } from '../types'
+
+const sharingUrl = window.location.href
 
 export default function SharePage() {
 
@@ -154,7 +156,7 @@ export default function SharePage() {
           `)}
           style={{ backgroundImage: `url("${FsApi.getImageStreamUrl('bg-sharing')}")` }}
         />
-        <div className="relative m-4 md:m-0 px-4 md:px-10 py-8 w-full md:w-[40rem] bg-white rounded-2xl shadow-2xl overflow-hidden">
+        <div className="relative m-4 md:m-0 px-4 md:px-10 py-6 md:py-8 w-full md:w-[40rem] bg-white rounded-2xl shadow-2xl overflow-hidden">
           <div className="absolute z-0 top-0 right-0 -mt-16 -mr-16">
             <SvgIcon.Share className="text-gray-100" size={320} />
           </div>
@@ -171,24 +173,35 @@ export default function SharePage() {
                     {createdAt && getDateTime(createdAt).slice(0, -3)}
                   </p>
                 </div>
-                <div>
+                <div className="flex">
                   <Popover
                     showArrow
                     trigger="hover"
-                    position="leftTop"
+                    position="bottomRight"
                     content={(
-                      <div className="">
-                        <QRCodeCanvas value={window.location.href} />
-                        <p className="mt-2 w-32 break-all text-xs text-gray-400">
-                          {window.location.href}
+                      <div className="p-4">
+                        <div className="w-56 h-40 flex justify-center items-center">
+                          <QRCodeCanvas value={sharingUrl} />
+                        </div>
+                        <p className="mt-2 w-56 break-all text-xs text-gray-400">
+                          {sharingUrl}
                         </p>
                       </div>
                     )}
                   >
-                    <span>
+                    <span className="cursor-pointer">
                       <SvgIcon.QrCode className="text-gray-400" />
                     </span>
                   </Popover>
+                  <span
+                    className="ml-3 md:ml-2 cursor-pointer"
+                    onClick={() => {
+                      copy(sharingUrl)
+                      toast.success(t('copied', { value: sharingUrl }))
+                    }}
+                  >
+                    <SvgIcon.Copy className="text-gray-400" />
+                  </span>
                 </div>
               </div>
               {isShowInput ? (
