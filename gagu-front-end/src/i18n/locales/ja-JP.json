@@ -20,6 +20,7 @@
       "enable": "有効",
       "exifInfo": "Exif 情報",
       "favorite": "集める",
+      "feedback": "フィードバック",
       "folderSize": "フォルダサイズ",
       "fontSizeIncrease": "フォントサイズを大きくする",
       "fontSizeReduce": "フォントサイズを小さくする",
@@ -165,6 +166,7 @@
       "unknownArtist": "無名の画家"
     },
     "tip": {
+      "2GBLimited": "2GB 以上のファイルのアップロードは現在サポートされていません",
       "copied": "コピーされました：{{value}}",
       "createdAt": "{{time}} 作成",
       "currentlyLatestVersion": "現在の最新バージョン",

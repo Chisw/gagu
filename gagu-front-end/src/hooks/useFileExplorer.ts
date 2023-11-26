@@ -252,6 +252,9 @@ export function useFileExplorer(props: Props) {
       const file = nestedFile as File
       const id = `${Date.now()}-${Math.random().toString(36).slice(-8)}`
       const newPath = `${currentPath}${targetDir ? `/${targetDir}` : ''}${fullPath || `/${name}`}`
+      if (file.size > 2147483647) {
+        toast.error(t`tip.2GBLimited`)
+      }
       return {
         id,
         type: TransferTaskType.upload,

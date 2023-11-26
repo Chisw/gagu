@@ -20,6 +20,7 @@
       "enable": "启用",
       "exifInfo": "Exif 信息",
       "favorite": "收藏",
+      "feedback": "问题反馈",
       "folderSize": "文件夹大小",
       "fontSizeIncrease": "增大字号",
       "fontSizeReduce": "减小字号",
@@ -165,6 +166,7 @@
       "unknownArtist": "未知艺术家"
     },
     "tip": {
+      "2GBLimited": "暂不支持上传 >= 2GB 的文件",
       "copied": "已复制：{{value}}",
       "createdAt": "{{time}} 创建",
       "currentlyLatestVersion": "当前已是最新版本",

@@ -1,3 +1,4 @@
+import * as chalk from 'chalk'
 import * as os from 'os'
 import { IServerOS } from 'src/types'
 
@@ -61,14 +62,14 @@ export const GAGU_PATH = {
 export const HELP_INFO = `
   Usage:
 
-  gagu              Start service
-  gagu -o           Start and open in browser, --open
-  gagu -H 0.0.0.0   Start with a customized host, --Host
-  gagu -p 80        Start with a customized port, --port
-  gagu -h           Show help info, --help
-  gagu -v           Show version, --version
-  gagu --reset      Remove GAGU data directory
-  gagu --reset-all  Remove GAGU root directory
+    gagu              ${chalk.gray('# Start service')}
+    gagu -o           ${chalk.gray('# Start and open in browser, or --open')}
+    gagu -H 0.0.0.0   ${chalk.gray('# Start with a customized host, or --Host')}
+    gagu -p 80        ${chalk.gray('# Start with a customized port, or --port')}
+    gagu -h           ${chalk.gray('# Show help info, or --help')}
+    gagu -v           ${chalk.gray('# Show version, or --version')}
+    gagu --reset      ${chalk.gray('# Remove GAGU data directory')}
+    gagu --reset-all  ${chalk.gray('# Remove GAGU root directory')}
 `
 
 export const LOGO_TEXT = `

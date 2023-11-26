@@ -117,7 +117,18 @@ export default function AdvancedSettings() {
           >
             <Form.Slot label={t`label.currentVersion`}>
               <div className="flex justify-between items-center">
-                <span>v{ baseData.version }</span>
+                <div className="flex items-center">
+                  <span>v{ baseData.version }</span>
+                  <a
+                    href="https://github.com/Chisw/gagu/issues"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="ml-2 flex items-center text-sm text-blue-500 hover:text-blue-600"
+                  >
+                    <span>{t`action.feedback`}</span>
+                    <SvgIcon.Feedback size={12} className="-translate-y-1" />
+                  </a>
+                </div>
                 <Button
                   loading={getting}
                   onClick={handleVersionCheck}

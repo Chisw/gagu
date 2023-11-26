@@ -289,10 +289,7 @@ export class FsController {
 
   @Post('favorite')
   @Permission(UserPermission.read)
-  updateFavorite(
-    @Query('path') path: string,
-    @UserGetter() user: IUser,
-  ) {
+  updateFavorite(@Query('path') path: string, @UserGetter() user: IUser) {
     const list = this.userService.createFavorite(user.username, path)
     return {
       success: true,
@@ -303,10 +300,7 @@ export class FsController {
 
   @Delete('favorite')
   @Permission(UserPermission.read)
-  removeFavorite(
-    @Query('path') path: string,
-    @UserGetter() user: IUser,
-  ) {
+  removeFavorite(@Query('path') path: string, @UserGetter() user: IUser) {
     const list = this.userService.removeFavorite(user.username, path)
     return {
       success: true,

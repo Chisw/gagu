@@ -91,7 +91,6 @@ export default function VideoPlayer(props: AppComponentProps) {
     ]
   }, [isPlaying, handlePlayOrPause, t])
 
-
   const volumeIcon = useMemo(() => {
     let volumeIcon = <SvgIcon.VolumeDown size={14} />
     if (volume > .5) {
@@ -101,7 +100,6 @@ export default function VideoPlayer(props: AppComponentProps) {
     }
     return volumeIcon
   }, [volume])
-
 
   return (
     <>
@@ -175,6 +173,12 @@ export default function VideoPlayer(props: AppComponentProps) {
               onClick={() => setVolumeSliderShow(true)}
             >
               {volumeIcon}
+            </div>
+            <div
+              className="ml-1 w-8 h-8 text-white cursor-pointer hover:bg-white hover:bg-opacity-20 active:bg-opacity-10 flex justify-center items-center rounded"
+              onClick={() => videoEl?.requestFullscreen()}
+            >
+              <SvgIcon.Fullscreen />
             </div>
           </div>
         </div>

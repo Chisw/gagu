@@ -17,6 +17,7 @@ const statusIconMap = {
   success: { icon: <SvgIcon.Check />, bg: 'bg-green-500' },
   fail: { icon: <SvgIcon.Close />, bg: 'bg-red-500' },
   cancel: { icon: <SvgIcon.Warning />, bg: 'bg-pink-500' },
+  exceed: { icon: <SvgIcon.Warning />, bg: 'bg-red-500' },
 }
 
 export function TransferPanel() {
@@ -58,6 +59,10 @@ export function TransferPanel() {
         lastUpload = { time: now, size: loaded }
       }
 
+      if (file.size > 2147483647) {
+        continue
+      }
+
       const { success } = await uploadFile(newPath, file, { onUploadProgress })
       if (success) {
         setUploadInfo({ ratio: 0, speed: '' })
@@ -67,7 +72,9 @@ export function TransferPanel() {
     }
 
     const list = cloneDeep(transferTaskList)
-    list.forEach(t => t.status = 'success')
+    list.forEach(t => {
+      t.status = (t.file?.size || 0) > 2147483647 ? 'exceed' : 'success'
+    })
     setTransferTaskList(list)
     setActiveId('')
   }, [uploadFile, setLastChangedPath, transferTaskList, setTransferTaskList])
@@ -88,7 +95,7 @@ export function TransferPanel() {
           text-xs select-none
           transition-width duration-200
           flex items-center cursor-pointer hover:bg-white hover:bg-opacity-30 active:bg-black active:bg-opacity-10
-          ${uploading ? 'min-w-32 bg-white bg-opacity-40' : ''}
+          ${uploading ? 'w-28 bg-white bg-opacity-40' : ''}
         `}
         onClick={() => setVisible(true)}
       >
