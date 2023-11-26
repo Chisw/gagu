@@ -11,6 +11,7 @@ interface SideProps {
   favoriteEntryList: IRootEntry[]
   onRootEntryClick: (rootEntry: IRootEntry) => void
   onFavoriteClick: (entry: IEntry, isFavorited: boolean) => void
+  asSelector?: boolean
 }
 
 export default function Side(props: SideProps) {
@@ -23,6 +24,7 @@ export default function Side(props: SideProps) {
     favoriteEntryList,
     onRootEntryClick,
     onFavoriteClick,
+    asSelector = false,
   } = props
 
   return (
@@ -30,9 +32,10 @@ export default function Side(props: SideProps) {
       <div
         data-vibrate-disabled="true"
         className={line(`
-          absolute z-0 top-8 md:top-6 bottom-0 left-0 pb-12 w-64 bg-gray-100 overflow-x-hidden overflow-y-auto border-r
+          absolute z-0 bottom-0 left-0 pb-12 w-64 bg-gray-100 overflow-x-hidden overflow-y-auto border-r
           duration-transform duration-500 ease-in-out
           ${sideShow ? 'translate-x-0' : '-translate-x-64'}
+          ${asSelector ? 'top-0' : 'top-8 md:top-6'}
         `)}
       >
         <RootEntryList
@@ -48,9 +51,13 @@ export default function Side(props: SideProps) {
           className="absolute right-0 bottom-0 left-0 px-4 h-12 flex items-center"
           onClick={() => setSideShow(false)}
         >
-          <SvgIcon.ArrowLeft />  
+          <SvgIcon.ArrowLeft />
         </div>
       </div>
+      <div
+        className={`absolute z-10 top-8 md:top-6 right-0 bottom-0 left-64 ${sideShow ? '' : 'hidden'}`}
+        onClick={() => setSideShow(false)}
+      />
     </>
   )
 }

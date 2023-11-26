@@ -3,18 +3,19 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
 import { SettingApi } from '../../../api'
-import { useRequest } from '../../../hooks'
-import { Page, SettingForm } from '../../../types'
+import { useRequest, useTouchMode } from '../../../hooks'
+import { SettingForm } from '../../../types'
 import { Confirmor, Spinner, SvgIcon } from '../../../components/common'
 import { useRecoilState } from 'recoil'
-import { activePageState, baseDataState } from '../../../states'
+import { baseDataState } from '../../../states'
 
 export default function AdvancedSettings() {
 
   const { t } = useTranslation()
 
   const [baseData] = useRecoilState(baseDataState)
-  const [activePage] = useRecoilState(activePageState)
+
+  const touchMode = useTouchMode()
 
   const [form, setForm] = useState<SettingForm | null>(null)
   const [formCache, setFormCache] = useState<SettingForm | null>(null)
@@ -23,8 +24,6 @@ export default function AdvancedSettings() {
   const { request: updateSetting, loading: updating } = useRequest(SettingApi.updateSetting)
   const { request: queryLatestVersion, loading: getting } = useRequest(SettingApi.queryLatestVersion)
   const { request: updateVersion } = useRequest(SettingApi.updateVersion)
-
-  const touchMode = useMemo(() => activePage === Page.touch, [activePage])
 
   const handleQuerySettingAll = useCallback(async () => {
     const { success, data } = await querySettingAll()

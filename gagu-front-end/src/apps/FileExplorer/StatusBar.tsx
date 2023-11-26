@@ -2,10 +2,9 @@ import { useMemo } from 'react'
 import toast from 'react-hot-toast'
 import { SvgIcon } from '../../components/common'
 import { copy, getEntryPath, line } from '../../utils'
-import { IEntry, IRootEntry, Page } from '../../types'
+import { IEntry, IRootEntry } from '../../types'
 import { useTranslation } from 'react-i18next'
-import { activePageState } from '../../states'
-import { useRecoilState } from 'recoil'
+import { useTouchMode } from '../../hooks'
 
 interface StatusBarProps {
   loading: boolean
@@ -33,9 +32,7 @@ export default function StatusBar(props: StatusBarProps) {
 
   const { t } = useTranslation()
 
-  const [activePage] = useRecoilState(activePageState)
-
-  const touchMode = useMemo(() => activePage === Page.touch, [activePage])
+  const touchMode = useTouchMode()
 
   const {
     selectedLen,

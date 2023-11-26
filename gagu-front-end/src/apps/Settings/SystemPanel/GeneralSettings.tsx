@@ -3,23 +3,18 @@ import { languageList, setLanguage } from '../../../i18n'
 import { Form } from '@douyinfe/semi-ui'
 import { SvgIcon } from '../../../components/common'
 import { line, refreshImage, setFavicon } from '../../../utils'
-import { useCallback, useMemo, useRef } from 'react'
-import { useRequest } from '../../../hooks'
+import { useCallback, useRef } from 'react'
+import { useRequest, useTouchMode } from '../../../hooks'
 import { FsApi } from '../../../api'
-import { useRecoilState } from 'recoil'
-import { activePageState } from '../../../states'
-import { Page } from '../../../types'
 
 export default function GeneralSettings() {
   const { t, i18n: { language } } = useTranslation()
 
-  const [activePage] = useRecoilState(activePageState)
+  const touchMode = useTouchMode()
 
   const faviconFileInputRef = useRef<any>(null)
   const desktopWallpaperFileInputRef = useRef<any>(null)
   const sharingWallpaperFileInputRef = useRef<any>(null)
-
-  const touchMode = useMemo(() => activePage === Page.touch, [activePage])
 
   const { request: uploadImage } = useRequest(FsApi.uploadImage)
 

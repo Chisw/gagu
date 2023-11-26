@@ -7,6 +7,7 @@ import { CALLABLE_APP_LIST } from '../../apps'
 
 interface SelectionMenuProps {
   show: boolean
+  asSelector?: boolean
   favoriteEntryList: IEntry[]
   selectedEntryList: IEntry[]
   onDirectorySizeUpdate: (entry: IEntry) => void
@@ -22,6 +23,7 @@ interface SelectionMenuProps {
 export default function SelectionMenu(props: SelectionMenuProps) {
   const {
     show,
+    asSelector = false,
     favoriteEntryList,
     selectedEntryList,
     onDirectorySizeUpdate,
@@ -99,7 +101,7 @@ export default function SelectionMenu(props: SelectionMenuProps) {
       {
         icon: <SvgIcon.Apps />,
         name: t`action.openWith`,
-        isShow: !isOnDirectory && isSingle,
+        isShow: !isOnDirectory && isSingle && !asSelector,
         onClick: () => { },
         children: CALLABLE_APP_LIST.map(app => ({
           icon: <div className="gagu-app-icon w-4 h-4" data-app-id={app.id} />,
@@ -122,7 +124,7 @@ export default function SelectionMenu(props: SelectionMenuProps) {
       {
         icon: <SvgIcon.Share />,
         name: t`action.newSharing`,
-        isShow: !isOnBlank,
+        isShow: !isOnBlank && !asSelector,
         onClick: () => onShareClick(selectedEntryList),
       },
       {
@@ -140,6 +142,7 @@ export default function SelectionMenu(props: SelectionMenuProps) {
     ].filter(item => item.isShow)
   }, [
     t,
+    asSelector,
     selectedEntryList,
     onSelectAll,
     favoriteEntryList,

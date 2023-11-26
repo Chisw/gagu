@@ -116,7 +116,7 @@ export default function Dock(props: DockProps) {
             className="w-full h-full flex justify-center items-center text-gray-800"
             onClick={() => setExpanded(true)}
           >
-            <SvgIcon.G />
+            <SvgIcon.Apps />
             {(runningAppList.length > 0) && <div className="absolute bottom-2 right-2 w-1 h-1 rounded-full bg-green-400 shadow shadow-green-500 border border-green-700" />}
           </div>
         )}

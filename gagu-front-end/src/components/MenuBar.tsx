@@ -12,7 +12,6 @@ import { useTranslation } from 'react-i18next'
 import { Page } from '../types'
 import { useRecoilState } from 'recoil'
 import { activePageState, baseDataState, contextMenuDataState, runningAppListState, userInfoState } from '../states'
-import toast from 'react-hot-toast'
 
 const pageList = [
   { key: Page.desktop, icon: <SvgIcon.Desktop /> },
@@ -56,12 +55,10 @@ export function MenuBar() {
 
   useEffect(() => {
     const timer = setInterval(async () => {
-      const { success, message, userInfo } = await pulse()
+      const { success, userInfo } = await pulse()
       if (success) {
         setUserInfo(userInfo)
         UserInfoStore.set(userInfo)
-      } else {
-        toast.error(message)
       }
     }, PULSE_INTERVAL)
     return () => clearInterval(timer)

@@ -4,13 +4,11 @@ import toast from 'react-hot-toast'
 import { formModeType } from '.'
 import { UserApi } from '../../../api'
 import { SvgIcon } from '../../../components/common'
-import { useRequest } from '../../../hooks'
-import { IUserForm, Page, UserPermission } from '../../../types'
+import { useRequest, useTouchMode } from '../../../hooks'
+import { IUserForm, UserPermission } from '../../../types'
 import { getImageTypeBase64ByURL, line, permissionSorter } from '../../../utils'
 import { Button, Form, SideSheet } from '@douyinfe/semi-ui'
 import { useTranslation } from 'react-i18next'
-import { useRecoilState } from 'recoil'
-import { activePageState } from '../../../states'
 
 const handleScrollToError = () => {
   const top = document.querySelector('.gagu-app-settings-user-form .semi-form-field-error-message')?.closest('.semi-form-field')?.getBoundingClientRect()?.top
@@ -39,9 +37,7 @@ export default function UserFormModal(props: UserFormModalProps) {
 
   const { t } = useTranslation()
 
-  const [activePage] = useRecoilState(activePageState)
-
-  const touchMode = useMemo(() => activePage === Page.touch, [activePage])
+  const touchMode = useTouchMode()
 
   const MODE = useMemo(() => {
     return {
