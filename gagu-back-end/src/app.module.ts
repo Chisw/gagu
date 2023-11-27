@@ -20,9 +20,10 @@ const rootPath = IS_DEV ? devRootPath : prodRootPath
 @Module({
   imports: [
     ServeStaticModule.forRoot(
+      // sync to routers
       { rootPath, serveRoot: '/' },
-      { rootPath, serveRoot: '/desktop' },
       { rootPath, serveRoot: '/login' },
+      { rootPath, serveRoot: '/desktop' },
       { rootPath, serveRoot: '/explore' },
       { rootPath, serveRoot: '/touch' },
       { rootPath, serveRoot: '/sharing' },

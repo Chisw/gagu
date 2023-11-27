@@ -4,7 +4,7 @@ import { useRequest } from '../hooks'
 import { AuthApi, FsApi } from '../api'
 import md5 from 'md5'
 import { PublicFooter, SvgIcon } from '../components/common'
-import { UserInfoStore, line } from '../utils'
+import { SERVER_MESSAGE_MAP, UserInfoStore, line } from '../utils'
 import { Input } from '@douyinfe/semi-ui'
 import { useRecoilState } from 'recoil'
 import { activePageState, userInfoState } from '../states'
@@ -20,6 +20,7 @@ export default function LoginPage() {
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [classNames, setClassNames] = useState<string[]>([])
 
   const handleNavigate = useCallback(() => {
     const { innerWidth } = window
@@ -49,12 +50,20 @@ export default function LoginPage() {
       username,
       password: md5(password),
     }
-    const { success, userInfo } = await login(formData)
+    const { success, message, userInfo } = await login(formData)
     if (success) {
       setUserInfo(userInfo)
       UserInfoStore.set(userInfo)
       setActivePage(Page.PENDING)
       setTimeout(handleNavigate, 500)
+    } else {
+      if (message === SERVER_MESSAGE_MAP.ERROR_USER_NOT_EXISTED) {
+        setClassNames(['animate-shake-x', ''])
+      } else if (message === SERVER_MESSAGE_MAP.ERROR_PASSWORD_WRONG) {
+        setClassNames(['', 'animate-shake-x'])
+        setPassword('')
+      }
+      setTimeout(() => setClassNames([]), 500)
     }
   }, [username, password, login, setUserInfo, handleNavigate, setActivePage])
   
@@ -95,7 +104,7 @@ export default function LoginPage() {
               showClear
               size="large"
               placeholder={t`label.username`}
-              className="hover:border-white focus-within:border-white"
+              className={`hover:border-white focus-within:border-white ${classNames[0] || ''}`}
               maxLength={16}
               value={username}
               onChange={(value) => setUsername(value.trim())}
@@ -105,7 +114,7 @@ export default function LoginPage() {
               size="large"
               type="password"
               placeholder={t`label.password`}
-              className="mt-4 hover:border-white focus-within:border-white"
+              className={`mt-4 hover:border-white focus-within:border-white ${classNames[1] || ''}`}
               maxLength={16}
               value={password}
               onChange={setPassword}
@@ -113,7 +122,7 @@ export default function LoginPage() {
               suffix={(
                 <button
                   disabled={!username || !password}
-                  className="mr-[2px] w-8 h-8 rounded hover:bg-black bg-opacity-20 text-white flex justify-center items-center"
+                  className="mr-[2px] w-8 h-8 rounded hover:bg-black hover:bg-opacity-20 active:bg-opacity-30 text-white flex justify-center items-center"
                   onClick={handleLogin}
                 >
                   {loading

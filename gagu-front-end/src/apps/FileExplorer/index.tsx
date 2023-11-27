@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { SharingModal } from '../../components'
-import { useDragSelect, useDragOperations, useHotKey, useFileExplorer } from '../../hooks'
+import { useLassoSelect, useDragOperations, useHotKey, useFileExplorer } from '../../hooks'
 import StatusBar from './StatusBar'
 import ControlBar from './ControlBar'
 import Side from './Side'
@@ -23,7 +23,7 @@ import {
   FileExplorerProps,
   EntryType,
   IEntry,
-  IRectInfo,
+  ILassoInfo,
   IContextMenuItem,
   NameFailType,
   EditModeType,
@@ -194,7 +194,7 @@ export default function FileExplorer(props: FileExplorerProps) {
     }
   }, [editMode, asSelector, onSelectConfirm, handleDirectoryOpen, handleDownloadClick, setOpenOperation])
 
-  const handleLassoSelect = useCallback((info: IRectInfo) => {
+  const handleLassoSelect = useCallback((info: ILassoInfo) => {
     const entryElements = document.querySelectorAll('.gagu-entry-node')
     if (!entryElements.length) return
     const indexList: number[] = []
@@ -209,7 +209,7 @@ export default function FileExplorer(props: FileExplorerProps) {
     setSelectedEntryList(entries)
   }, [setSelectedEntryList, entryList])
 
-  useDragSelect({
+  useLassoSelect({
     binding: !asSelector,
     lassoRef,
     containerRef,

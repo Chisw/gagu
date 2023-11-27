@@ -1,7 +1,7 @@
 
 import { useCallback, useEffect, useRef } from 'react'
 import { EmptyPanel } from '../../components/common'
-import { getMatchedApp, isSameEntry, line } from '../../utils'
+import { DOCUMENT_TITLE, getMatchedApp, isSameEntry, line } from '../../utils'
 import ControlBar from '../FileExplorer/ControlBar'
 import StatusBar from '../FileExplorer/StatusBar'
 import EntryNode from './EntryNode'
@@ -12,6 +12,7 @@ import { SharingModal } from '../../components'
 import { openOperationState } from '../../states'
 import { useRecoilState } from 'recoil'
 import { IEntry } from '../../types'
+// import { useNavigate } from 'react-router'
 
 interface FileExplorerTouchProps {
   show: boolean
@@ -34,6 +35,8 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
     asSelector = false,
     onSelect = () => {},
   } = props
+
+  // const navigate = useNavigate()
 
   const [, setOpenOperation] = useRecoilState(openOperationState)
 
@@ -76,6 +79,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
     const { type } = entry
     if (type === 'directory') {
       handleDirectoryOpen(entry)
+      // navigate(`/touch?path=${getEntryPath(entry)}`)
     } else {
       if (asSelector) {
         setIsSelectionMode(true)
@@ -89,7 +93,17 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
         handleDownloadClick([entry])
       }
     }
-  }, [isSelectionMode, selectedEntryList, setSelectedEntryList, handleDirectoryOpen, asSelector, setIsSelectionMode, setOpenOperation, handleDownloadClick])
+  }, [
+    isSelectionMode,
+    selectedEntryList,
+    setSelectedEntryList,
+    handleDirectoryOpen,
+    // navigate,
+    asSelector,
+    setIsSelectionMode,
+    setOpenOperation,
+    handleDownloadClick,
+  ])
 
   const handleContextMenu = useCallback((event: any) => {
     if (sideShow) return
@@ -118,7 +132,15 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
       ? (activeRootEntry?.name || currentPath)
       : currentPath.split('/').pop() as string
     document.title = title
+    return () => {
+      document.title = DOCUMENT_TITLE
+    }
   }, [currentPath, isInRoot, activeRootEntry])
+
+  // useEffect(() => {
+  //   window.addEventListener('popstate', handleNavBack)
+  //   return () => window.removeEventListener('popstate', handleNavBack)
+  // }, [handleNavBack])
 
   useEffect(() => {
     setSelectedEntryList([])
@@ -148,6 +170,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
         }}
         onRootEntryClick={(rootEntry) => {
           setSideShow(false)
+          // navigate(`/touch?path=${getEntryPath(rootEntry)}`)
           handleRootEntryClick(rootEntry)
         }}
         onFavoriteClick={handleFavoriteClick}

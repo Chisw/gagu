@@ -1,15 +1,15 @@
 import { useEffect } from 'react'
-import { IRectInfo } from '../types'
+import { ILassoInfo } from '../types'
 
 interface useDragSelectProps {
   binding: boolean
   lassoRef: any
   containerRef: any
   containerInnerRef: any
-  onDragging: (info: IRectInfo) => void
+  onDragging: (info: ILassoInfo) => void
 }
 
-export function useDragSelect(props: useDragSelectProps) {
+export function useLassoSelect(props: useDragSelectProps) {
 
   const {
     binding,
@@ -21,20 +21,20 @@ export function useDragSelect(props: useDragSelectProps) {
 
   useEffect(() => {
 
-    const rect: any = lassoRef.current
+    const lasso: any = lassoRef.current
     const container: any = containerRef.current
     const containerInner: any = containerInnerRef.current
-    if (!rect || !container || !containerInner) return
+    if (!lasso || !container || !containerInner) return
 
     let isMouseDown = false
     let startX = 0
     let startY = 0
     let endX = 0
     let endY = 0
-    let rectTop = 0
-    let rectLeft = 0
-    let rectWidth = 0
-    let rectHeight = 0
+    let lassoTop = 0
+    let lassoLeft = 0
+    let lassoWidth = 0
+    let lassoHeight = 0
     let containerTop = 0
     let containerLeft = 0
     let containerInnerWidth = 0
@@ -58,8 +58,8 @@ export function useDragSelect(props: useDragSelectProps) {
 
       startX = (event.x || event.clientX) - containerLeft
       startY = (event.y || event.clientY) - containerTop + container.scrollTop
-      rect.style.left = `${startX}px`
-      rect.style.top = `${startY}px`
+      lasso.style.left = `${startX}px`
+      lasso.style.top = `${startY}px`
     }
 
     const mousemoveListener = (event: any) => {
@@ -75,23 +75,23 @@ export function useDragSelect(props: useDragSelectProps) {
           ? containerInnerHeight - startY + borderOffset
           : startY
 
-        rectTop = Math.max(Math.min(endY, startY), 0)
-        rectLeft = Math.max(Math.min(endX, startX), 0)
-        rectWidth = Math.min(Math.abs(endX - startX), maxWidth)
-        rectHeight = Math.min(Math.abs(endY - startY), maxHeight)
+        lassoTop = Math.max(Math.min(endY, startY), 0)
+        lassoLeft = Math.max(Math.min(endX, startX), 0)
+        lassoWidth = Math.min(Math.abs(endX - startX), maxWidth)
+        lassoHeight = Math.min(Math.abs(endY - startY), maxHeight)
 
-        rect.style.top = `${rectTop}px`
-        rect.style.left = `${rectLeft}px`
-        rect.style.width = `${rectWidth}px`
-        rect.style.height = `${rectHeight}px`
-        rect.style.display = 'block'
-        rect.style.opacity = 1
+        lasso.style.top = `${lassoTop}px`
+        lasso.style.left = `${lassoLeft}px`
+        lasso.style.width = `${lassoWidth}px`
+        lasso.style.height = `${lassoHeight}px`
+        lasso.style.display = 'block'
+        lasso.style.opacity = 1
 
         onDragging({
-          startX: rectLeft,
-          startY: rectTop,
-          endX: rectLeft + rectWidth,
-          endY: rectTop + rectHeight,
+          startX: lassoLeft,
+          startY: lassoTop,
+          endX: lassoLeft + lassoWidth,
+          endY: lassoTop + lassoHeight,
         })
       }
     }
@@ -99,10 +99,10 @@ export function useDragSelect(props: useDragSelectProps) {
     const mouseupListener = (e: any) => {
       if (!isMouseDown) return
       isMouseDown = false
-      rect.style.transition = 'opacity 300ms'
-      rect.style.opacity = 0
+      lasso.style.transition = 'opacity 300ms'
+      lasso.style.opacity = 0
       setTimeout(() => {
-        rect.style.display = 'none'
+        lasso.style.display = 'none'
       }, 300)
     }
 

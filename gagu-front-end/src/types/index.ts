@@ -59,7 +59,7 @@ export interface IVisitHistory {
   list: string[]
 }
 
-export interface IRectInfo {
+export interface ILassoInfo {
   startX: number
   startY: number
   endX: number

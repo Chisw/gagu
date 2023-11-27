@@ -20,6 +20,7 @@ export default function App() {
     <BrowserRouter>
       <Toaster containerClassName="break-all" />
       <Routes>
+        {/* sync to roots */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/" element={<DesktopPage />} />
         <Route path="/desktop" element={<DesktopPage />} />

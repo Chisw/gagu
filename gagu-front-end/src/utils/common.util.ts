@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { IOffsetInfo, IRectInfo, PublicImageName } from '../types'
+import { IOffsetInfo, ILassoInfo, PublicImageName } from '../types'
 import md5 from 'md5'
 import { FsApi } from '../api'
 import default_favicon from '../img/favicon.png'
@@ -59,7 +59,7 @@ export const getReadableSize = (size: number, options?: getReadableSizeOption) =
   return `${readableSize}${separator}${unit}`
 }
 
-export const getIsContained = (props: IRectInfo & IOffsetInfo) => {
+export const getIsContained = (props: ILassoInfo & IOffsetInfo) => {
   const {
     startX,
     startY,

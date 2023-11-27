@@ -19,6 +19,10 @@ Clear data directory means that all users, download tunnels and other data will 
 
 ## v0.0.*
 
+- v0.0.48 (2023-11-27)
+  - feat: Settings/Advanced/Service host name
+  - fix: Sharing page missing
+
 - v0.0.47 (2023-11-26)
   - feat: finish Explorer mode
   - feat: touch mode preview
