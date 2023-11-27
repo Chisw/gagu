@@ -137,6 +137,7 @@
       "permission_delete": "Delete",
       "remainingSaves": "Remaining Saves: ",
       "remainingValidityPeriod": "Remaining validity period: ",
+      "serviceHost": "Service host name",
       "servicePort": "Service port",
       "sharingPageWallpaper": "Sharing page wallpaper",
       "username": "Username",

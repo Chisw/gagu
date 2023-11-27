@@ -137,6 +137,7 @@
       "permission_delete": "删除",
       "remainingSaves": "剩余保存次数：",
       "remainingValidityPeriod": "剩余有效期：",
+      "serviceHost": "服务主机名",
       "servicePort": "服务端口号",
       "sharingPageWallpaper": "分享页壁纸",
       "username": "用户名",

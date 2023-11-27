@@ -3,7 +3,6 @@ import { useCallback, useEffect, useState } from 'react'
 import { useRequest } from '../hooks'
 import { AuthApi, FsApi } from '../api'
 import md5 from 'md5'
-import toast from 'react-hot-toast'
 import { PublicFooter, SvgIcon } from '../components/common'
 import { UserInfoStore, line } from '../utils'
 import { Input } from '@douyinfe/semi-ui'
@@ -50,16 +49,14 @@ export default function LoginPage() {
       username,
       password: md5(password),
     }
-    const { success, message, userInfo } = await login(formData)
+    const { success, userInfo } = await login(formData)
     if (success) {
       setUserInfo(userInfo)
       UserInfoStore.set(userInfo)
       setActivePage(Page.PENDING)
       setTimeout(handleNavigate, 500)
-    } else {
-      toast.error(t(`server.${message}`))
     }
-  }, [username, password, login, setUserInfo, handleNavigate, t, setActivePage])
+  }, [username, password, login, setUserInfo, handleNavigate, setActivePage])
   
   return (
     <>

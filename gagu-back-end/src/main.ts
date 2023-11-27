@@ -63,7 +63,7 @@ async function bootstrap() {
   await initialize()
 
   const settings = readSettingsData()
-  const Host = argv.Host || undefined
+  const Host = argv.Host || settings.host || undefined
   const port = argv.port || settings.port || 9293
   const url = `http://${Host || HOST}:${port}`
 

@@ -139,9 +139,31 @@ export default function AdvancedSettings() {
             </Form.Slot>
             <Form.Input
               showClear
+              field="host"
+              label={t`label.serviceHost`}
+              placeholder="127.0.0.1"
+              autoComplete="off"
+              maxLength={15}
+              suffix={<span className="pr-1 text-xs font-din text-gray-500">{form.host.length}/15</span>}
+              onChange={value => setForm({ ...form, host: value.trim() })}
+              rules={[
+                {
+                  validator(rule, value, callback, source, options) {
+                    if (value) {
+                      return /((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})(\.((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})){3}/.test(value)
+                    } else {
+                      return true
+                    }
+                  },
+                  message: t`hint.invalid`,
+                },
+              ]}
+            />
+            <Form.Input
+              showClear
               field="port"
               label={t`label.servicePort`}
-              placeholder="9293 (default)"
+              placeholder="9293"
               autoComplete="off"
               maxLength={5}
               suffix={<span className="pr-1 text-xs font-din text-gray-500">{form.port.length}/5</span>}
