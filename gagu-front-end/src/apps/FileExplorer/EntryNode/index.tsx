@@ -1,6 +1,5 @@
-import { DateTime } from 'luxon'
 import { CreationType, IEntry, IEntryPathMap, IScrollerWatcher, NameFailType } from '../../../types'
-import { getEntryPath, getReadableSize, line } from '../../../utils'
+import { getEntryLabels, line } from '../../../utils'
 import EntryIcon from './EntryIcon'
 import EntryName from './EntryName'
 import { useEffect, useRef, useState } from 'react'
@@ -47,12 +46,8 @@ export default function EntryNode(props: EntryNodeProps) {
     onNameFail = () => {},
   } = props
 
-  const { name, type, parentPath, extension, hidden, size, lastModified } = entry
-  const isSmall = !gridMode
-  const path = getEntryPath(entry)
-  const bytes = size === undefined ? entryPathMap[path]?.size : size
-  const sizeLabel = bytes === undefined ? '--' : getReadableSize(bytes)
-  const dateLabel = lastModified ? DateTime.fromMillis(lastModified).toFormat('yyyy-MM-dd HH:mm') : ''
+  const { name, type, parentPath, extension, hidden } = entry
+  const { sizeLabel, dateLabel } = getEntryLabels(entry, entryPathMap)
 
   const [isViewable, setIsViewable] = useState(false)
 
@@ -92,7 +87,7 @@ export default function EntryNode(props: EntryNodeProps) {
     >
       <EntryIcon
         {...{
-          isSmall,
+          isSmall: !gridMode,
           isFavorited,
           isViewable,
           entry,

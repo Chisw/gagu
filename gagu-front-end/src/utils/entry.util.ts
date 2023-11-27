@@ -1,6 +1,8 @@
+import { DateTime } from 'luxon'
 import { FsApi } from '../api'
 import { CALLABLE_APP_LIST } from '../apps'
-import { EntryType, IEntry, INestedFile, IRootEntry } from '../types'
+import { EntryType, IEntry, IEntryPathMap, INestedFile, IRootEntry } from '../types'
+import { getReadableSize } from './common.util'
 
 export const isSameEntry = (a: IEntry, b: IEntry) => {
   return a.name === b.name && a.parentPath === b.parentPath
@@ -108,6 +110,15 @@ export const path2RootEntry = (path: string) => {
   }
 
   return entry
+}
+
+export const getEntryLabels = (entry: IEntry, entryPathMap: IEntryPathMap) => {
+  const { size, lastModified } = entry
+  const path = getEntryPath(entry)
+  const bytes = size === undefined ? entryPathMap[path]?.size : size
+  const sizeLabel = bytes === undefined ? '--' : getReadableSize(bytes)
+  const dateLabel = lastModified ? DateTime.fromMillis(lastModified).toFormat('yyyy-MM-dd HH:mm') : ''
+  return { sizeLabel, dateLabel }
 }
 
 // Sync following code to BE & FE

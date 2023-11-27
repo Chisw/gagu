@@ -63,9 +63,9 @@ async function bootstrap() {
   await initialize()
 
   const settings = readSettingsData()
-  const Host = argv.Host || settings.host || undefined
+  const host = argv.Host || settings.host || undefined
   const port = argv.port || settings.port || 9293
-  const url = `http://${Host || HOST}:${port}`
+  const url = `http://${host || HOST}:${port}`
 
   const app = await NestFactory.create(AppModule, {
     logger: IS_DEV
@@ -77,7 +77,7 @@ async function bootstrap() {
   app.use(json({ limit: '5mb' }))
   app.setGlobalPrefix('api')
 
-  await app.listen(port, Host)
+  await app.listen(port, host)
 
   console.log(chalk.green.bold(LOGO_TEXT))
   console.log(`    GAGU v${GAGU_VERSION} service successfully started.\n`)

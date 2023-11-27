@@ -1,6 +1,5 @@
-import { DateTime } from 'luxon'
 import { IEntry, IEntryPathMap } from '../../types'
-import { getEntryPath, getReadableSize, line } from '../../utils'
+import { getEntryLabels, line } from '../../utils'
 import EntryIcon from '../../apps/FileExplorer/EntryNode/EntryIcon'
 import { useEffect, useRef, useState } from 'react'
 import { SvgIcon } from '../../components/common'
@@ -37,11 +36,8 @@ export default function EntryNode(props: EntryNodeProps) {
     onClick = () => {},
   } = props
 
-  const { name, type, extension, hidden, size, lastModified } = entry
-  const path = getEntryPath(entry)
-  const bytes = size === undefined ? entryPathMap[path]?.size : size
-  const sizeLabel = bytes === undefined ? '--' : getReadableSize(bytes)
-  const dateLabel = lastModified ? DateTime.fromMillis(lastModified).toFormat('yyyy-MM-dd HH:mm') : ''
+  const { name, type, extension, hidden } = entry
+  const { sizeLabel, dateLabel } = getEntryLabels(entry, entryPathMap)
 
   const [isViewable, setIsViewable] = useState(false)
 
@@ -90,7 +86,7 @@ export default function EntryNode(props: EntryNodeProps) {
               supportThumbnail
             }}
           />
-          <div className="text-center text-xs">
+          <div className="text-center text-xs max-w-full line-clamp-2">
             {entry.name}
           </div>
           <div
@@ -119,7 +115,7 @@ export default function EntryNode(props: EntryNodeProps) {
             />
           </div>
           <div className="pl-2">
-            <div className="text-sm">
+            <div className="text-sm max-w-full line-clamp-2">
               {entry.name}
             </div>
             <div>

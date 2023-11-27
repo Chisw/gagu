@@ -21,10 +21,11 @@ const rootPath = IS_DEV ? devRootPath : prodRootPath
   imports: [
     ServeStaticModule.forRoot(
       { rootPath, serveRoot: '/' },
+      { rootPath, serveRoot: '/desktop' },
       { rootPath, serveRoot: '/login' },
       { rootPath, serveRoot: '/explore' },
       { rootPath, serveRoot: '/touch' },
-      { rootPath, serveRoot: '/share' },
+      { rootPath, serveRoot: '/sharing' },
     ),
     AuthModule,
     UserModule,
