@@ -14,7 +14,7 @@ import {
   TransferTaskType,
   TunnelType,
 } from '../types'
-import { DOWNLOAD_PERIOD, getDownloadInfo, getEntryPath, path2RootEntry, sortMethodMap } from '../utils'
+import { DOWNLOAD_PERIOD, getDownloadInfo, getEntryPath, isSameEntry, path2SideEntry, sortMethodMap } from '../utils'
 import { useRecoilState } from 'recoil'
 import {
   entryPathMapState,
@@ -59,7 +59,7 @@ export function useFileExplorer(props: Props) {
   const [editMode, setEditMode] = useState<EditModeType | null>(null)
   const [filterMode, setFilterMode] = useState(false)
   const [filterText, setFilterText] = useState('')
-  const [sharedEntryList, setSharedEntryList] = useState<IEntry[]>([])
+  const [sharingEntryList, setSharingEntryList] = useState<IEntry[]>([])
   const [thumbScrollWatcher, setThumbScrollWatcher] = useState<IScrollerWatcher>({ top: 0, height: 0 })
 
   const { request: queryEntryList, loading: querying, setData } = useRequest(FsApi.queryEntryList)
@@ -73,7 +73,7 @@ export function useFileExplorer(props: Props) {
     const { rootEntryList, favoritePathList, serverOS } = baseData
     const { supportThumbnail } = serverOS
     const rootEntryPathList = rootEntryList.map(getEntryPath)
-    const favoriteEntryList = favoritePathList?.map(path2RootEntry).filter(Boolean) || []
+    const favoriteEntryList = favoritePathList?.map(path2SideEntry).filter(Boolean) || []
     return { rootEntryList, rootEntryPathList, favoriteEntryList, supportThumbnail }
   }, [baseData])
 
@@ -83,7 +83,7 @@ export function useFileExplorer(props: Props) {
     const {
       list = [],
       hiddenShow = false,
-      gridMode = true,
+      gridMode = !touchMode,
       sortType = Sort.default,
     } = entryPathMap[currentPath] || {}
 
@@ -122,11 +122,10 @@ export function useFileExplorer(props: Props) {
 
     entryList.forEach(({ type }) => type === 'directory' ? folderCount++ : fileCount++)
 
-    const entryListCount = entryList.length
-    const isEntryListEmpty = entryListCount === 0
+    const isEntryListEmpty = entryList.length === 0
 
-    return { entryList, entryListCount, isEntryListEmpty, folderCount, fileCount, hiddenShow, gridMode, sortType }
-  }, [currentPath, entryPathMap, filterText])
+    return { entryList, isEntryListEmpty, folderCount, fileCount, hiddenShow, gridMode, sortType }
+  }, [currentPath, entryPathMap, filterText, touchMode])
 
   const disabledMap = useMemo(() => {
     const { position, list } = visitHistory
@@ -190,22 +189,17 @@ export function useFileExplorer(props: Props) {
     handleQueryEntryList(path)
     updateHistory(direction, pushPath ? path : undefined)
     if (updateActiveRootEntry) {
-      const activeEntry = rootEntryList
+      const activeRootEntry = rootEntryList
         .map(entry => ({ path: getEntryPath(entry), entry }))
         .filter(o => path.startsWith(o.path))
         .sort((a, b) => a.path.length > b.path.length ? -1 : 1)[0].entry
-      setActiveRootEntry(activeEntry)
+      setActiveRootEntry(activeRootEntry)
     }
   }, [abortController, currentPath, handleQueryEntryList, rootEntryList, updateHistory])
 
-  const handleRootEntryClick = useCallback((rootEntry: IRootEntry) => {
-    const path = getEntryPath(rootEntry)
-    handlePathChange({ path, direction: 'forward', pushPath: true, updateActiveRootEntry: true })
-  }, [handlePathChange])
-
-  const handleDirectoryOpen = useCallback((entry: IEntry) => {
+  const handleDirectoryOpen = useCallback((entry: IEntry, updateActiveRootEntry?: boolean) => {
     const path = getEntryPath(entry)
-    handlePathChange({ path, direction: 'forward', pushPath: true })
+    handlePathChange({ path, direction: 'forward', pushPath: true, updateActiveRootEntry })
   }, [handlePathChange])
 
   const handleGoFullPath = useCallback((path: string) => {
@@ -307,7 +301,7 @@ export function useFileExplorer(props: Props) {
   }, [currentPath, selectedEntryList, createTunnel, t])
 
   const handleShareClick = useCallback((entryList: IEntry[]) => {
-    setSharedEntryList(entryList)
+    setSharingEntryList(entryList)
     setSharingModalShow(true)
   }, [])
 
@@ -315,11 +309,17 @@ export function useFileExplorer(props: Props) {
     const path = getEntryPath(entry)
     const { success, data: size } = await queryDirectorySize(path)
     if (success) {
-      const res = {
-        ...(entryPathMap[path] || {}),
-        size,
-      }
-      setEntryPathMap({ ...entryPathMap, [path]: res })
+      const { parentPath } = entry
+      const currentList = [...entryPathMap[parentPath]?.list || []]
+      const index = currentList.findIndex((e) => isSameEntry(e, entry))!
+      currentList.splice(index, 1, { ...entry, size })
+      setEntryPathMap({
+        ...entryPathMap,
+        [parentPath]: {
+          ...(entryPathMap[parentPath] || {}),
+          list: currentList,
+        }
+      })
     }
   }, [queryDirectorySize, entryPathMap, setEntryPathMap])
 
@@ -419,16 +419,16 @@ export function useFileExplorer(props: Props) {
 
   useEffect(() => {
     if (!currentPath && rootEntryList.length) {
-      handleRootEntryClick(rootEntryList[0])
+      handleDirectoryOpen(rootEntryList[0], true)
     }
-  }, [currentPath, rootEntryList, handleRootEntryClick])
+  }, [currentPath, rootEntryList, handleDirectoryOpen])
 
   return {
-    entryPathMap, disabledMap, supportThumbnail, thumbScrollWatcher,
+    disabledMap, supportThumbnail, thumbScrollWatcher,
     currentPath, activeRootEntry,
     querying, sizeQuerying, deleting,
-    entryList, rootEntryList, favoriteEntryList, sharedEntryList,
-    isInRoot, isEntryListEmpty,
+    entryList, rootEntryList, favoriteEntryList, sharingEntryList,
+    isEntryListEmpty,
     folderCount, fileCount,
     editMode, setEditMode,
     filterMode, setFilterMode,
@@ -440,7 +440,7 @@ export function useFileExplorer(props: Props) {
     selectedEntryList, setSelectedEntryList,
     sharingModalShow, setSharingModalShow,
     handleSelectAll, handleDirectorySizeUpdate, handleUploadTaskAdd, 
-    handleRootEntryClick, handleDirectoryOpen, handleGoFullPath,
+    handleDirectoryOpen, handleGoFullPath,
     handleNavBack, handleNavForward, handleNavRefresh, handleNavAbort, handleNavToParent,
     handleUploadClick, handleDownloadClick,
     handleShareClick, handleFavoriteClick, handleDeleteClick,

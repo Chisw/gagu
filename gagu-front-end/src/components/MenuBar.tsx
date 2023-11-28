@@ -228,7 +228,7 @@ export function MenuBar() {
                   icon={<SvgIcon.ShutDown className="text-red-500" />}
                   onClick={() => {
                     shutdown()
-                    window.close()
+                    window.open('', '_self')?.close()
                   }}
                 >
                   {t`action.shutdown`}

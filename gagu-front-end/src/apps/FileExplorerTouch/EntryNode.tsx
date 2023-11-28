@@ -1,4 +1,4 @@
-import { IEntry, IEntryPathMap } from '../../types'
+import { IEntry } from '../../types'
 import { getEntryLabels, line } from '../../utils'
 import EntryIcon from '../../apps/FileExplorer/EntryNode/EntryIcon'
 import { useEffect, useRef, useState } from 'react'
@@ -12,7 +12,6 @@ interface EntryNodeProps {
   isSelectionMode: boolean
   hideAppIcon?: boolean
   supportThumbnail?: boolean
-  entryPathMap?: IEntryPathMap
   thumbScrollWatcher?: { top: number, height: number }
   requestState?: {
     sizeQuerying: boolean
@@ -30,14 +29,13 @@ export default function EntryNode(props: EntryNodeProps) {
     isSelectionMode,
     hideAppIcon = false,
     supportThumbnail = false,
-    entryPathMap = {},
     thumbScrollWatcher,
     requestState,
     onClick = () => {},
   } = props
 
   const { name, type, extension, hidden } = entry
-  const { sizeLabel, dateLabel } = getEntryLabels(entry, entryPathMap)
+  const { sizeLabel, dateLabel } = getEntryLabels(entry)
 
   const [isViewable, setIsViewable] = useState(false)
 

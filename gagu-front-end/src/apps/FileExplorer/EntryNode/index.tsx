@@ -1,4 +1,4 @@
-import { CreationType, IEntry, IEntryPathMap, IScrollerWatcher, NameFailType } from '../../../types'
+import { CreationType, IEntry, IScrollerWatcher, NameFailType } from '../../../types'
 import { getEntryLabels, line } from '../../../utils'
 import EntryIcon from './EntryIcon'
 import EntryName from './EntryName'
@@ -14,7 +14,6 @@ interface EntryNodeProps {
   hideAppIcon?: boolean
   supportThumbnail?: boolean
   creationType?: CreationType
-  entryPathMap?: IEntryPathMap
   thumbScrollWatcher?: IScrollerWatcher
   requestState?: {
     sizeQuerying: boolean
@@ -37,7 +36,6 @@ export default function EntryNode(props: EntryNodeProps) {
     hideAppIcon = false,
     supportThumbnail = false,
     creationType,
-    entryPathMap = {},
     thumbScrollWatcher,
     requestState,
     onClick = () => {},
@@ -47,7 +45,7 @@ export default function EntryNode(props: EntryNodeProps) {
   } = props
 
   const { name, type, parentPath, extension, hidden } = entry
-  const { sizeLabel, dateLabel } = getEntryLabels(entry, entryPathMap)
+  const { sizeLabel, dateLabel } = getEntryLabels(entry)
 
   const [isViewable, setIsViewable] = useState(false)
 

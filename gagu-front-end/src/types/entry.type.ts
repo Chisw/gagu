@@ -18,9 +18,14 @@ export interface IEntry {
 }
 
 export interface IRootEntry extends IEntry {
+  type: EntryType.directory
   isDisk: boolean
   spaceFree?: number
   spaceTotal?: number
+}
+
+export interface ISideEntry extends IRootEntry {
+  isFavorited?: boolean
 }
 
 export interface IDisk extends IRootEntry {

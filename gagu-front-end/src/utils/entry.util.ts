@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 import { FsApi } from '../api'
 import { CALLABLE_APP_LIST } from '../apps'
-import { EntryType, IEntry, IEntryPathMap, INestedFile, IRootEntry } from '../types'
+import { EntryType, IEntry, INestedFile, ISideEntry } from '../types'
 import { getReadableSize } from './common.util'
 
 export const isSameEntry = (a: IEntry, b: IEntry) => {
@@ -55,6 +55,7 @@ export const getEntryNestedFileList = async (entry: FileSystemEntry) => {
     await new Promise((resolve, reject) => {
       (entry as FileSystemFileEntry).file((file: File) => {
         const fileName = file.name
+        // TODO:
         if (fileName !== '.DS_Store' && !fileName.startsWith('._')) {
           nestedFileList.push(Object.assign(file, { fullPath: entry.fullPath }))
         }
@@ -94,11 +95,11 @@ export const getDataTransferNestedFileList = async (dataTransfer: DataTransfer) 
   return nestedFileList
 }
 
-export const path2RootEntry = (path: string) => {
+export const path2SideEntry = (path: string) => {
   const names = path.split('/')
   const lastName = names.pop()
 
-  const entry: IRootEntry = {
+  const entry: ISideEntry = {
     name: lastName!,
     type: EntryType.directory,
     hidden: false,
@@ -107,16 +108,14 @@ export const path2RootEntry = (path: string) => {
     hasChildren: false,
     extension: '_dir',
     isDisk: false,
+    isFavorited: true,
   }
-
   return entry
 }
 
-export const getEntryLabels = (entry: IEntry, entryPathMap: IEntryPathMap) => {
+export const getEntryLabels = (entry: IEntry) => {
   const { size, lastModified } = entry
-  const path = getEntryPath(entry)
-  const bytes = size === undefined ? entryPathMap[path]?.size : size
-  const sizeLabel = bytes === undefined ? '--' : getReadableSize(bytes)
+  const sizeLabel = size === undefined ? '--' : getReadableSize(size)
   const dateLabel = lastModified ? DateTime.fromMillis(lastModified).toFormat('yyyy-MM-dd HH:mm') : ''
   return { sizeLabel, dateLabel }
 }

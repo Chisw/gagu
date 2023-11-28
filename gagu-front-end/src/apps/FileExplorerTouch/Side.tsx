@@ -1,16 +1,15 @@
-import RootEntryList from '../../apps/FileExplorer/RootEntryList'
+import SideEntryList from '../FileExplorer/SideEntryList'
 import { SvgIcon } from '../../components/common'
-import { IEntry, IRootEntry } from '../../types'
+import { ISideEntry } from '../../types'
 import { line } from '../../utils'
 
 interface SideProps {
   sideShow: boolean
   setSideShow: (show: boolean) => void
   currentPath: string
-  rootEntryList: IRootEntry[]
-  favoriteEntryList: IRootEntry[]
-  onRootEntryClick: (rootEntry: IRootEntry) => void
-  onFavoriteClick: (entry: IEntry, isFavorited: boolean) => void
+  sideEntryList: ISideEntry[]
+  onSideEntryClick: (sideEntry: ISideEntry) => void
+  onFavoriteCancel: (sideEntry: ISideEntry) => void
   asSelector?: boolean
 }
 
@@ -20,10 +19,9 @@ export default function Side(props: SideProps) {
     sideShow,
     setSideShow,
     currentPath,
-    rootEntryList,
-    favoriteEntryList,
-    onRootEntryClick,
-    onFavoriteClick,
+    sideEntryList,
+    onSideEntryClick,
+    onFavoriteCancel,
     asSelector = false,
   } = props
 
@@ -38,14 +36,10 @@ export default function Side(props: SideProps) {
           ${asSelector ? 'top-0' : 'top-8 md:top-6'}
         `)}
       >
-        <RootEntryList
-          {...{ currentPath, rootEntryList }}
-          onRootEntryClick={onRootEntryClick}
-        />
-        <RootEntryList
-          {...{ currentPath, rootEntryList: favoriteEntryList }}
-          onRootEntryClick={onRootEntryClick}
-          onFavoriteCancel={(entry) => onFavoriteClick(entry, true)}
+        <SideEntryList
+          {...{ currentPath, sideEntryList }}
+          onSideEntryClick={onSideEntryClick}
+          onFavoriteCancel={onFavoriteCancel}
         />
         <div
           className="absolute right-0 bottom-0 left-0 px-4 h-12 flex items-center"

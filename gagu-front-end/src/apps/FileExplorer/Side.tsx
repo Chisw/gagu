@@ -1,14 +1,13 @@
 import { line } from '../../utils'
-import { IEntry, IRootEntry } from '../../types'
-import RootEntryList from './RootEntryList'
+import { ISideEntry } from '../../types'
+import SideEntryList from './SideEntryList'
 
 interface SideProps {
   sideCollapse: boolean
   currentPath: string
-  rootEntryList: IRootEntry[]
-  favoriteEntryList: IRootEntry[]
-  onRootEntryClick: (rootEntry: IRootEntry) => void
-  onFavoriteCancel: (rootEntry: IEntry) => void
+  sideEntryList: ISideEntry[]
+  onSideEntryClick: (sideEntry: ISideEntry) => void
+  onFavoriteCancel: (sideEntry: ISideEntry) => void
 }
 
 export default function Side(props: SideProps) {
@@ -16,9 +15,8 @@ export default function Side(props: SideProps) {
   const {
     sideCollapse,
     currentPath,
-    rootEntryList,
-    favoriteEntryList,
-    onRootEntryClick,
+    sideEntryList,
+    onSideEntryClick,
     onFavoriteCancel,
   } = props
   
@@ -30,13 +28,9 @@ export default function Side(props: SideProps) {
       `)}
     >
       <div className="w-56 h-full border-r border-gray-100 overflow-x-hidden overflow-y-auto">
-        <RootEntryList
-          {...{ currentPath, rootEntryList }}
-          onRootEntryClick={onRootEntryClick}
-        />
-        <RootEntryList
-          {...{ currentPath, rootEntryList: favoriteEntryList }}
-          onRootEntryClick={onRootEntryClick}
+        <SideEntryList
+          {...{ currentPath, sideEntryList }}
+          onSideEntryClick={onSideEntryClick}
           onFavoriteCancel={onFavoriteCancel}
         />
       </div>

@@ -1,7 +1,7 @@
 
 import { useCallback, useEffect, useRef } from 'react'
 import { EmptyPanel } from '../../components/common'
-import { DOCUMENT_TITLE, getMatchedApp, isSameEntry, line } from '../../utils'
+import { getMatchedApp, isSameEntry, line } from '../../utils'
 import ControlBar from '../FileExplorer/ControlBar'
 import StatusBar from '../FileExplorer/StatusBar'
 import EntryNode from './EntryNode'
@@ -43,11 +43,11 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
   const containerRef = useRef(null)
 
   const {
-    entryPathMap, disabledMap, supportThumbnail, thumbScrollWatcher,
+    disabledMap, supportThumbnail, thumbScrollWatcher,
     currentPath, activeRootEntry,
     querying, sizeQuerying, deleting,
-    entryList, rootEntryList, favoriteEntryList, sharedEntryList,
-    isInRoot, isEntryListEmpty,
+    entryList, rootEntryList, favoriteEntryList, sharingEntryList,
+    isEntryListEmpty,
     folderCount, fileCount,
     // editMode, setEditMode,
     filterMode, setFilterMode,
@@ -58,7 +58,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
     selectedEntryList, setSelectedEntryList,
     sharingModalShow, setSharingModalShow,
     handleSelectAll, handleDirectorySizeUpdate,
-    handleRootEntryClick, handleDirectoryOpen, handleGoFullPath,
+    handleDirectoryOpen, handleGoFullPath,
     handleNavBack, handleNavForward, handleNavRefresh, handleNavAbort, handleNavToParent,
     handleUploadClick, handleDownloadClick,
     handleShareClick, handleFavoriteClick, handleDeleteClick,
@@ -127,16 +127,6 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
 
   }, [sideShow, selectedEntryList, entryList, setSelectedEntryList, setIsSelectionMode])
 
-  useEffect(() => {
-    const title = isInRoot
-      ? (activeRootEntry?.name || currentPath)
-      : currentPath.split('/').pop() as string
-    document.title = title
-    return () => {
-      document.title = DOCUMENT_TITLE
-    }
-  }, [currentPath, isInRoot, activeRootEntry])
-
   // useEffect(() => {
   //   window.addEventListener('popstate', handleNavBack)
   //   return () => window.removeEventListener('popstate', handleNavBack)
@@ -164,16 +154,15 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
           sideShow,
           setSideShow,
           currentPath,
-          rootEntryList,
-          favoriteEntryList,
           asSelector,
         }}
-        onRootEntryClick={(rootEntry) => {
+        sideEntryList={[...rootEntryList, ...favoriteEntryList]}
+        onSideEntryClick={(sideEntry) => {
           setSideShow(false)
-          // navigate(`/touch?path=${getEntryPath(rootEntry)}`)
-          handleRootEntryClick(rootEntry)
+          // navigate(`/touch?path=${getEntryPath(sideEntry)}`)
+          handleDirectoryOpen(sideEntry, true)
         }}
-        onFavoriteClick={handleFavoriteClick}
+        onFavoriteCancel={(entry) => handleFavoriteClick(entry, true)}
       />
     
       <div
@@ -220,13 +209,12 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
               folderCount,
               fileCount,
               currentPath,
-              rootEntry:
-              activeRootEntry,
               selectedEntryList,
             }}
             loading={querying}
+            rootEntry={activeRootEntry}
             onDirClick={handleGoFullPath}
-            onRootEntryClick={handleRootEntryClick}
+            onRootEntryClick={(entry) => handleDirectoryOpen(entry, true)}
           />
         </div>
         <div
@@ -246,7 +234,6 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
                   isSelected,
                   isFavorited,
                   supportThumbnail,
-                  entryPathMap,
                   thumbScrollWatcher,
                 }}
                 requestState={{ deleting, sizeQuerying }}
@@ -282,7 +269,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
 
       <SharingModal
         visible={sharingModalShow}
-        entryList={sharedEntryList}
+        entryList={sharingEntryList}
         onClose={() => setSharingModalShow(false)}
       />
     </>

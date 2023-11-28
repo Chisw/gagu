@@ -18,9 +18,14 @@ export interface IEntry {
 }
 
 export interface IRootEntry extends IEntry {
+  type: EntryType.directory
   isDisk: boolean
   spaceFree?: number
   spaceTotal?: number
+}
+
+export interface ISideEntry extends IRootEntry {
+  isFavorited?: boolean
 }
 
 export interface IDisk extends IRootEntry {
@@ -36,3 +41,17 @@ export interface IBaseData {
   rootEntryList: IRootEntry[]
   favoritePathList: string[]
 }
+
+export enum Sort {
+  default = 'default',
+  extension = 'extension',
+  extensionDesc = 'extensionDesc',
+  name = 'name',
+  nameDesc = 'nameDesc',
+  lastModified = 'lastModified',
+  lastModifiedDesc = 'lastModifiedDesc',
+  size = 'size',
+  sizeDesc = 'sizeDesc',
+}
+
+export type SortType = keyof typeof Sort

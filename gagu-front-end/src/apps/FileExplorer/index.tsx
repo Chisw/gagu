@@ -58,11 +58,11 @@ export default function FileExplorer(props: FileExplorerProps) {
   const containerInnerRef = useRef(null) // container of entryList, its min-height is consistent with its container
 
   const {
-    entryPathMap, disabledMap, supportThumbnail, thumbScrollWatcher,
+    disabledMap, supportThumbnail, thumbScrollWatcher,
     currentPath, activeRootEntry,
     querying, sizeQuerying, deleting,
-    entryList, rootEntryList, favoriteEntryList, sharedEntryList,
-    isInRoot, isEntryListEmpty,
+    entryList, rootEntryList, favoriteEntryList, sharingEntryList,
+    isEntryListEmpty,
     folderCount, fileCount,
     editMode, setEditMode,
     filterMode, setFilterMode,
@@ -74,18 +74,15 @@ export default function FileExplorer(props: FileExplorerProps) {
     selectedEntryList, setSelectedEntryList,
     sharingModalShow, setSharingModalShow,
     handleSelectAll, handleDirectorySizeUpdate, handleUploadTaskAdd, 
-    handleRootEntryClick, handleDirectoryOpen, handleGoFullPath,
+    handleDirectoryOpen, handleGoFullPath,
     handleNavBack, handleNavForward, handleNavRefresh, handleNavAbort, handleNavToParent,
     handleUploadClick, handleDownloadClick,
     handleShareClick, handleFavoriteClick, handleDeleteClick,
   } = useFileExplorer({ containerRef })
 
   useEffect(() => {
-    const title = isInRoot
-      ? (activeRootEntry?.name || currentPath)
-      : currentPath.split('/').pop() as string
-    setWindowTitle(title)
-  }, [currentPath, setWindowTitle, isInRoot, activeRootEntry])
+    setWindowTitle(currentPath.split('/').pop() as string)
+  }, [currentPath, setWindowTitle])
 
   const handleEdit = useCallback((editModeType: EditModeType) => {
     if (editModeType !== EditMode.rename) {
@@ -408,11 +405,12 @@ export default function FileExplorer(props: FileExplorerProps) {
 
   return (
     <>
-      <div className="absolute inset-0 flex">
+      <div className={`absolute inset-0 flex ${asSelector ? '' : 'border-t border-gray-100'}`}>
         {/* side */}
         <Side
-          {...{ sideCollapse, currentPath, rootEntryList, favoriteEntryList }}
-          onRootEntryClick={handleRootEntryClick}
+          {...{ sideCollapse, currentPath }}
+          sideEntryList={[...rootEntryList, ...favoriteEntryList]}
+          onSideEntryClick={(entry) => handleDirectoryOpen(entry, true)}
           onFavoriteCancel={(entry) => handleFavoriteClick(entry, true)}
         />
         {/* main */}
@@ -500,7 +498,6 @@ export default function FileExplorer(props: FileExplorerProps) {
                       isSelected,
                       isFavorited,
                       supportThumbnail,
-                      entryPathMap,
                       thumbScrollWatcher,
                     }}
                     draggable={!inputMode && !asSelector}
@@ -519,20 +516,19 @@ export default function FileExplorer(props: FileExplorerProps) {
               folderCount,
               fileCount,
               currentPath,
-              rootEntry:
-              activeRootEntry,
               selectedEntryList,
             }}
             loading={querying}
+            rootEntry={activeRootEntry}
             onDirClick={handleGoFullPath}
-            onRootEntryClick={handleRootEntryClick}
+            onRootEntryClick={(entry) => handleDirectoryOpen(entry, true)}
           />
         </div>
       </div>
 
       <SharingModal
         visible={sharingModalShow}
-        entryList={sharedEntryList}
+        entryList={sharingEntryList}
         onClose={() => setSharingModalShow(false)}
       />
       

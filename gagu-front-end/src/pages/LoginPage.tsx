@@ -69,7 +69,7 @@ export default function LoginPage() {
   
   return (
     <>
-      <div className="fixed z-0 inset-0 overflow-hidden bg-gradient-to-b from-black to-slate-600 flex justify-center items-center">
+      <div className="fixed z-0 inset-0 py-20 overflow-hidden bg-gradient-to-b from-black to-slate-600 flex justify-center md:items-center">
         <div
           className={line(`
             absolute z-0 inset-0 bg-cover bg-center
