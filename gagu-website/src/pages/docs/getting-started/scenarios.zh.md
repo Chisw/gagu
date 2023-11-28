@@ -31,6 +31,7 @@ layout: ../../../layouts/DocLayout.astro
 - croc [https://github.com/schollz/croc](https://github.com/schollz/croc)
 - daedalOS [https://github.com/DustinBrett/daedalOS](https://github.com/DustinBrett/daedalOS)
 - Dufs [https://github.com/sigoden/dufs](https://github.com/sigoden/dufs)
+- filebrowser [https://github.com/filebrowser/filebrowser](https://github.com/filebrowser/filebrowser)
 - hfs (HTTP File Server) [https://github.com/rejetto/hfs](https://github.com/rejetto/hfs)
 - LocalSend [https://localsend.org](https://localsend.org)
 - miniserve [https://github.com/svenstaro/miniserve](https://github.com/svenstaro/miniserve)

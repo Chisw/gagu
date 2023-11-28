@@ -45,6 +45,7 @@ export const PATH_MAP: { [PLATFORM: string]: string } = {
 export const ROOT_PATH =
   (PATH_MAP[ServerOS.platform] || '') + (IS_DEV ? '.dev' : '')
 
+// TODO: use path check
 export const FORBIDDEN_ENTRY_NAME_LIST = ['.io.gagu', '.io.gagu.dev']
 
 export const GAGU_PATH = {
