@@ -6,6 +6,9 @@ import {
   ServerOS,
   getExists,
   SERVER_MESSAGE_MAP,
+  GAGU_VERSION,
+  GAGU_PATH,
+  favoritePath2SideEntry,
 } from '../../utils'
 import { FsService } from './fs.service'
 import {
@@ -49,14 +52,24 @@ export class FsController {
   @Permission(UserPermission.read)
   getRoot(@UserGetter() user: IUser) {
     const deviceName = this.settingService.findOne(SettingKey.deviceName)
-    const baseData: IBaseData = {
-      ...this.fsService.getBaseData(deviceName),
-      favoritePathList: user.favoritePathList,
+    const { username, favoritePathList = [], assignedRootPathList = [] } = user
+    const desktopPath = `${GAGU_PATH.ROOT}/desktop/${username}`
+    const favoriteEntryList = favoritePathList.map(favoritePath2SideEntry)
+    const hasAssigned = assignedRootPathList.length > 0
+
+    const data: IBaseData = {
+      version: GAGU_VERSION,
+      serverOS: ServerOS,
+      deviceName: deviceName || ServerOS.hostname,
+      desktopEntryList: this.fsService.getEntryList(desktopPath),
+      rootEntryList: hasAssigned ? [] : this.fsService.getRootEntryList(),
+      favoriteEntryList,
     }
+
     return {
       success: true,
       message: SERVER_MESSAGE_MAP.OK,
-      data: baseData,
+      data,
     }
   }
 
@@ -290,22 +303,22 @@ export class FsController {
   @Post('favorite')
   @Permission(UserPermission.read)
   updateFavorite(@Query('path') path: string, @UserGetter() user: IUser) {
-    const list = this.userService.createFavorite(user.username, path)
+    const pathList = this.userService.createFavorite(user.username, path)
     return {
       success: true,
       message: SERVER_MESSAGE_MAP.OK,
-      list,
+      data: pathList.map(favoritePath2SideEntry),
     }
   }
 
   @Delete('favorite')
   @Permission(UserPermission.read)
   removeFavorite(@Query('path') path: string, @UserGetter() user: IUser) {
-    const list = this.userService.removeFavorite(user.username, path)
+    const pathList = this.userService.removeFavorite(user.username, path)
     return {
       success: true,
       message: SERVER_MESSAGE_MAP.OK,
-      list,
+      data: pathList.map(favoritePath2SideEntry),
     }
   }
 }

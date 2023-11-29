@@ -26,7 +26,7 @@ export interface IUser {
   createdAt: number
   expiredAt?: number
   permissions: UserPermissionType[]
-  assignedPathList: string[]
+  assignedRootPathList: string[]
   favoritePathList: string[]
 }
 
@@ -45,7 +45,7 @@ export class UserForm implements IUserForm {
   createdAt = 0
   expiredAt?: number
   permissions: UserPermissionType[] = [UserPermission.read]
-  assignedPathList: string[] = []
+  assignedRootPathList: string[] = []
   favoritePathList: string[] = []
 
   constructor(user?: IUser, avatarPath?: string) {
@@ -56,7 +56,7 @@ export class UserForm implements IUserForm {
       this.invalid = user.invalid
       this.expiredAt = user.expiredAt
       this.permissions = user.permissions
-      this.assignedPathList = user.assignedPathList
+      this.assignedRootPathList = user.assignedRootPathList
       this.favoritePathList = user.favoritePathList
     }
   }

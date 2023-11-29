@@ -31,7 +31,7 @@ export const initialize = async () => {
         UserPermission.write,
         UserPermission.delete,
       ],
-      assignedPathList: [],
+      assignedRootPathList: [],
       favoritePathList: [],
     }
     writeUsersData([administrator])

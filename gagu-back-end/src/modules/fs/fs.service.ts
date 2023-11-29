@@ -1,12 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import {
-  EntryType,
-  IDisk,
-  IEntry,
-  IRootEntry,
-  IBaseData,
-  User,
-} from '../../types'
+import { EntryType, IDisk, IEntry, IRootEntry, User } from '../../types'
 import {
   createReadStream,
   readdirSync,
@@ -17,7 +10,6 @@ import {
 } from 'fs'
 import {
   GAGU_PATH,
-  GAGU_VERSION,
   getExtension,
   ServerOS,
   GEN_THUMBNAIL_VIDEO_LIST,
@@ -104,7 +96,7 @@ export class FsService {
     return list
   }
 
-  getBaseData(presetDeviceName?: string) {
+  getRootEntryList() {
     const rootEntryList: IRootEntry[] = []
     if (ServerOS.isMacOS) {
       const driveList = nodeDiskInfo
@@ -113,7 +105,7 @@ export class FsService {
 
       const homeEntry: IRootEntry = {
         name: ServerOS.username,
-        type: 'directory',
+        type: EntryType.directory,
         hidden: false,
         lastModified: 0,
         extension: '_dir',
@@ -124,7 +116,7 @@ export class FsService {
 
       const diskList: IDisk[] = driveList.map((drive) => ({
         name: drive.mounted.replace('/Volumes/', ''),
-        type: 'directory',
+        type: EntryType.directory,
         hidden: false,
         lastModified: 0,
         parentPath: '/Volumes',
@@ -141,7 +133,7 @@ export class FsService {
       const driveList = nodeDiskInfo.getDiskInfoSync()
       const diskList: IDisk[] = driveList.map((drive) => ({
         name: drive.mounted,
-        type: 'directory',
+        type: EntryType.directory,
         hidden: false,
         lastModified: 0,
         parentPath: '',
@@ -157,7 +149,7 @@ export class FsService {
     } else if (ServerOS.isLinux) {
       const homeEntry: IRootEntry = {
         name: ServerOS.username,
-        type: 'directory',
+        type: EntryType.directory,
         hidden: false,
         lastModified: 0,
         extension: '_dir',
@@ -170,7 +162,7 @@ export class FsService {
 
       const diskList: IDisk[] = driveList.map((drive) => ({
         name: drive.mounted.replace('/Volumes/', ''),
-        type: 'directory',
+        type: EntryType.directory,
         hidden: false,
         lastModified: 0,
         parentPath: '/Volumes',
@@ -187,7 +179,7 @@ export class FsService {
       rootEntryList.push(
         {
           name: 'shared',
-          type: 'directory',
+          type: EntryType.directory,
           hidden: false,
           lastModified: 0,
           extension: '_dir',
@@ -197,7 +189,7 @@ export class FsService {
         },
         {
           name: 'home',
-          type: 'directory',
+          type: EntryType.directory,
           hidden: false,
           lastModified: 0,
           parentPath: '/data/data/com.termux/files',
@@ -207,7 +199,7 @@ export class FsService {
         },
         {
           name: 'com.termux',
-          type: 'directory',
+          type: EntryType.directory,
           hidden: false,
           lastModified: 0,
           parentPath: '/data/data',
@@ -218,16 +210,7 @@ export class FsService {
       )
     }
 
-    const baseData: IBaseData = {
-      version: GAGU_VERSION,
-      serverOS: ServerOS,
-      deviceName: presetDeviceName || ServerOS.hostname,
-      desktopEntryList: this.getEntryList(`${GAGU_PATH.ROOT}/desktop`),
-      rootEntryList,
-      favoritePathList: [],
-    }
-
-    return baseData
+    return rootEntryList
   }
 
   getDirectorySize(path: string) {

@@ -31,7 +31,7 @@ export class UserService {
       password,
       expiredAt,
       permissions,
-      assignedPathList,
+      assignedRootPathList,
       favoritePathList,
     } = userForm
 
@@ -43,7 +43,7 @@ export class UserService {
       createdAt: Date.now(),
       expiredAt,
       permissions,
-      assignedPathList,
+      assignedRootPathList,
       favoritePathList,
     }
 
@@ -58,7 +58,7 @@ export class UserService {
       password,
       expiredAt,
       permissions,
-      assignedPathList,
+      assignedRootPathList,
       favoritePathList,
     } = userForm
 
@@ -68,7 +68,7 @@ export class UserService {
       user.nickname = nickname
       user.expiredAt = expiredAt
       user.permissions = permissions
-      user.assignedPathList = assignedPathList
+      user.assignedRootPathList = assignedRootPathList
       user.favoritePathList = favoritePathList
       if (password) {
         user.password = password
@@ -98,10 +98,12 @@ export class UserService {
   createFavorite(username: User.Username, path: string) {
     const user = this.userList.find((user) => user.username === username)
     if (user) {
-      const list = Array.from(new Set([...(user.favoritePathList || []), path]))
-      user.favoritePathList = list
+      const pathList = Array.from(
+        new Set([...(user.favoritePathList || []), path]),
+      )
+      user.favoritePathList = pathList
       this.sync()
-      return list
+      return pathList
     } else {
       return []
     }
@@ -110,10 +112,10 @@ export class UserService {
   removeFavorite(username: User.Username, path: string) {
     const user = this.userList.find((user) => user.username === username)
     if (user) {
-      const list = user.favoritePathList?.filter((p) => p !== path) || []
-      user.favoritePathList = list
+      const pathList = user.favoritePathList?.filter((p) => p !== path) || []
+      user.favoritePathList = pathList
       this.sync()
-      return list
+      return pathList
     } else {
       return []
     }

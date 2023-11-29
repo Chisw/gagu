@@ -39,7 +39,7 @@ export interface IBaseData {
   deviceName: string
   desktopEntryList: IEntry[]
   rootEntryList: IRootEntry[]
-  favoritePathList: string[]
+  favoriteEntryList: ISideEntry[]
 }
 
 export enum Sort {

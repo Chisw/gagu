@@ -46,7 +46,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
     disabledMap, supportThumbnail, thumbScrollWatcher,
     currentPath, activeRootEntry,
     querying, sizeQuerying, deleting,
-    entryList, rootEntryList, favoriteEntryList, sharingEntryList,
+    entryList, favoriteEntryList, sideEntryList, sharingEntryList,
     isEntryListEmpty,
     folderCount, fileCount,
     // editMode, setEditMode,
@@ -154,9 +154,9 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
           sideShow,
           setSideShow,
           currentPath,
+          sideEntryList,
           asSelector,
         }}
-        sideEntryList={[...rootEntryList, ...favoriteEntryList]}
         onSideEntryClick={(sideEntry) => {
           setSideShow(false)
           // navigate(`/touch?path=${getEntryPath(sideEntry)}`)

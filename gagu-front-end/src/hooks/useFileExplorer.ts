@@ -4,8 +4,8 @@ import {
   IEntry,
   INestedFile,
   IRootEntry,
-  IBaseData,
   IScrollerWatcher,
+  ISideEntry,
   IUploadTransferTask,
   IVisitHistory,
   Sort,
@@ -14,7 +14,7 @@ import {
   TransferTaskType,
   TunnelType,
 } from '../types'
-import { DOWNLOAD_PERIOD, getDownloadInfo, getEntryPath, isSameEntry, path2SideEntry, sortMethodMap } from '../utils'
+import { DOWNLOAD_PERIOD, getDownloadInfo, getEntryPath, isSameEntry, sortMethodMap } from '../utils'
 import { useRecoilState } from 'recoil'
 import {
   entryPathMapState,
@@ -69,12 +69,12 @@ export function useFileExplorer(props: Props) {
   const { request: createFavorite } = useRequest(FsApi.createFavorite)
   const { request: removeFavorite } = useRequest(FsApi.removeFavorite)
 
-  const { rootEntryList, rootEntryPathList, favoriteEntryList, supportThumbnail } = useMemo(() => {
-    const { rootEntryList, favoritePathList, serverOS } = baseData
+  const { rootEntryList, rootEntryPathList, favoriteEntryList, sideEntryList, supportThumbnail } = useMemo(() => {
+    const { rootEntryList, favoriteEntryList, serverOS } = baseData
     const { supportThumbnail } = serverOS
     const rootEntryPathList = rootEntryList.map(getEntryPath)
-    const favoriteEntryList = favoritePathList?.map(path2SideEntry).filter(Boolean) || []
-    return { rootEntryList, rootEntryPathList, favoriteEntryList, supportThumbnail }
+    const sideEntryList: ISideEntry[] = [...rootEntryList, ...favoriteEntryList]
+    return { rootEntryList, rootEntryPathList, favoriteEntryList, sideEntryList, supportThumbnail }
   }, [baseData])
 
   const isInRoot = useMemo(() => rootEntryPathList.includes(currentPath), [rootEntryPathList, currentPath])
@@ -331,9 +331,9 @@ export function useFileExplorer(props: Props) {
       onConfirm: async (close) => {
         const path = getEntryPath(entry)
         const fn = isFavorited ? removeFavorite : createFavorite
-        const { success, list } = await fn(path)
+        const { success, data: favoriteEntryList } = await fn(path)
         if (success) {
-          setBaseData({ ...baseData, favoritePathList: list } as IBaseData)
+          setBaseData({ ...baseData, favoriteEntryList })
         }
         close()
       },
@@ -359,8 +359,8 @@ export function useFileExplorer(props: Props) {
           const { success } = await deleteEntry(path)
           if (success) {
             document.querySelector(`.gagu-entry-node[data-entry-name="${name}"]`)?.setAttribute('style', 'opacity:0;')
-            const { favoritePathList } = baseData
-            setBaseData({ ...baseData, favoritePathList: favoritePathList.filter((p) => p !== path) } as IBaseData)
+            const { favoriteEntryList } = baseData
+            setBaseData({ ...baseData, favoriteEntryList: favoriteEntryList.filter((entry) => getEntryPath(entry) !== path) })
           }
         }
         handleNavRefresh()
@@ -427,7 +427,7 @@ export function useFileExplorer(props: Props) {
     disabledMap, supportThumbnail, thumbScrollWatcher,
     currentPath, activeRootEntry,
     querying, sizeQuerying, deleting,
-    entryList, rootEntryList, favoriteEntryList, sharingEntryList,
+    entryList, favoriteEntryList, sideEntryList, sharingEntryList,
     isEntryListEmpty,
     folderCount, fileCount,
     editMode, setEditMode,

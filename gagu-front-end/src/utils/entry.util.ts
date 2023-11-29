@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 import { FsApi } from '../api'
 import { CALLABLE_APP_LIST } from '../apps'
-import { EntryType, IEntry, INestedFile, ISideEntry } from '../types'
+import { EntryType, IEntry, INestedFile } from '../types'
 import { getReadableSize } from './common.util'
 
 export const isSameEntry = (a: IEntry, b: IEntry) => {
@@ -93,24 +93,6 @@ export const getDataTransferNestedFileList = async (dataTransfer: DataTransfer) 
     }
   }))
   return nestedFileList
-}
-
-export const path2SideEntry = (path: string) => {
-  const names = path.split('/')
-  const lastName = names.pop()
-
-  const entry: ISideEntry = {
-    name: lastName!,
-    type: EntryType.directory,
-    hidden: false,
-    lastModified: 0,
-    parentPath: names.join('/'),
-    hasChildren: false,
-    extension: '_dir',
-    isDisk: false,
-    isFavorited: true,
-  }
-  return entry
 }
 
 export const getEntryLabels = (entry: IEntry) => {

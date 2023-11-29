@@ -61,7 +61,7 @@ export default function FileExplorer(props: FileExplorerProps) {
     disabledMap, supportThumbnail, thumbScrollWatcher,
     currentPath, activeRootEntry,
     querying, sizeQuerying, deleting,
-    entryList, rootEntryList, favoriteEntryList, sharingEntryList,
+    entryList, favoriteEntryList, sideEntryList, sharingEntryList,
     isEntryListEmpty,
     folderCount, fileCount,
     editMode, setEditMode,
@@ -408,8 +408,7 @@ export default function FileExplorer(props: FileExplorerProps) {
       <div className={`absolute inset-0 flex ${asSelector ? '' : 'border-t border-gray-100'}`}>
         {/* side */}
         <Side
-          {...{ sideCollapse, currentPath }}
-          sideEntryList={[...rootEntryList, ...favoriteEntryList]}
+          {...{ sideCollapse, currentPath, sideEntryList }}
           onSideEntryClick={(entry) => handleDirectoryOpen(entry, true)}
           onFavoriteCancel={(entry) => handleFavoriteClick(entry, true)}
         />
