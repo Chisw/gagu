@@ -108,3 +108,5 @@ export const getEntryPath = (entry: IEntry | null | undefined) => {
   const { name, parentPath } = entry
   return `${parentPath ? `${parentPath}/` : ''}${name}`
 }
+
+export const safeQuotes = (path: string) => path.replace(/"/g, '\\"')

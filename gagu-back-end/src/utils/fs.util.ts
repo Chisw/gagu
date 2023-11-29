@@ -8,6 +8,7 @@ import {
   unlinkSync,
 } from 'fs'
 import { GAGU_PATH, ServerOS } from './constant.util'
+import { safeQuotes } from './entry.util'
 
 export const getExtension = (name: string) => {
   if (!name || !name.includes('.') || name.startsWith('.')) return ''
@@ -25,15 +26,20 @@ export const getExists = (path: string) => {
   return exists
 }
 
-export const deleteEntry = (path: string) => {
-  try {
-    const stat = statSync(path)
-    if (stat.isDirectory()) {
-      exec(`rm -rf ${path}`)
-    } else {
-      unlinkSync(path)
+export const deleteEntry = async (path: string) => {
+  return new Promise((resolve, reject) => {
+    try {
+      const stat = statSync(path)
+      if (stat.isDirectory()) {
+        exec(`rm -rf "${safeQuotes(path)}"`, (error) => resolve(!error))
+      } else {
+        unlinkSync(path)
+        resolve(true)
+      }
+    } catch (err) {
+      reject(false)
     }
-  } catch (err) {}
+  })
 }
 
 export const completeNestedPath = (path: string) => {

@@ -14,7 +14,14 @@ import {
   TransferTaskType,
   TunnelType,
 } from '../types'
-import { DOWNLOAD_PERIOD, getDownloadInfo, getEntryPath, isSameEntry, sortMethodMap } from '../utils'
+import {
+  DOWNLOAD_PERIOD,
+  getDownloadInfo,
+  getEntryPath,
+  isSameEntry,
+  safeQuotes,
+  sortMethodMap,
+} from '../utils'
 import { useRecoilState } from 'recoil'
 import {
   entryPathMapState,
@@ -353,16 +360,21 @@ export function useFileExplorer(props: Props) {
       type: 'delete',
       content: message,
       onConfirm: async (close) => {
+        const deletedPaths: string[] = []
         for (const entry of processList) {
           const { name } = entry
           const path = getEntryPath(entry)
           const { success } = await deleteEntry(path)
           if (success) {
-            document.querySelector(`.gagu-entry-node[data-entry-name="${name}"]`)?.setAttribute('style', 'opacity:0;')
-            const { favoriteEntryList } = baseData
-            setBaseData({ ...baseData, favoriteEntryList: favoriteEntryList.filter((entry) => getEntryPath(entry) !== path) })
+            // TODO: current window
+            document.querySelector(`.gagu-entry-node[data-entry-name="${safeQuotes(name)}"]`)
+              ?.setAttribute('style', 'opacity:0;')
+            deletedPaths.push(path)
           }
         }
+        const { favoriteEntryList: list } = baseData
+        const favoriteEntryList = list.filter((entry) => !deletedPaths.includes(getEntryPath(entry)))
+        setBaseData({ ...baseData, favoriteEntryList })
         handleNavRefresh()
         close()
       },

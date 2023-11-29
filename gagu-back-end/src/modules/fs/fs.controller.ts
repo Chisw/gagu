@@ -152,12 +152,17 @@ export class FsController {
 
   @Delete('delete')
   @Permission(UserPermission.delete)
-  remove(@Query('path') path: string) {
-    deleteEntry(path)
-    this.userService.removeAllUsersFavorite(path)
+  async remove(@Query('path') path: string) {
+    await deleteEntry(path)
+    const success = !getExists(path)
+    if (success) {
+      this.userService.removeAllUsersFavorite(path)
+    }
     return {
-      success: true,
-      message: SERVER_MESSAGE_MAP.OK,
+      success,
+      message: success
+        ? SERVER_MESSAGE_MAP.OK
+        : SERVER_MESSAGE_MAP.ERROR_FILE_DELETE_FAIL,
     }
   }
 
