@@ -92,7 +92,6 @@ export default function UserFormModal(props: UserFormModalProps) {
       expiredAt,
       permissions: permissions.sort(permissionSorter),
       assignedRootPathList,
-      favoritePathList: [],
     })
 
     if (res.success) {
@@ -260,13 +259,13 @@ export default function UserFormModal(props: UserFormModalProps) {
                 </div>
               ))}
             </Form.CheckboxGroup>
-            {/* <Form.TagInput
-              label="根目录"
-              placeholder="请选择根目录"
+            <Form.TagInput
+              label={t`label.accessiblePaths`}
               field="assignedRootPathList"
               className="w-full"
-              // onChange={value => setForm({ ...form, assignedRootPathList: value as string[] })}
-            /> */}
+              extraText={t`hint.accessiblePaths_extra`}
+              onChange={value => setForm({ ...form, assignedRootPathList: value as string[] })}
+            />
             <div className="pt-2 flex justify-end">
               <Button
                 type="tertiary"

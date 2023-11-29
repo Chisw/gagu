@@ -113,6 +113,7 @@
       "permission_read_extra": "读取目录，下载文件，获取缩略图、Exif 信息等",
       "permission_write_extra": "新建文件夹，上传文件，移动文件、文件夹等",
       "permission_delete_extra": "删除文件、文件夹（若无删除权限，上传时无法覆盖同名文件）",
+      "accessiblePaths_extra": "留空时将与管理员的可访问路径一致",
       "required": "必填",
       "username_extra": "创建后无法修改，只能使用小写英文字母和数字，不能以数字开头，不区分大小写"
     },
@@ -135,6 +136,7 @@
       "permission_read": "读取（必选）",
       "permission_write": "写入",
       "permission_delete": "删除",
+      "accessiblePaths": "可访问路径",
       "remainingSaves": "剩余保存次数：",
       "remainingValidityPeriod": "剩余有效期：",
       "serviceHost": "服务主机名",

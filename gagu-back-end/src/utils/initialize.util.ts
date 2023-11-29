@@ -9,13 +9,13 @@ import { exec } from 'child_process'
 
 export const initialize = async () => {
   completeNestedPath(`${GAGU_PATH.ROOT}/data/_`)
-  completeNestedPath(`${GAGU_PATH.ROOT}/desktop/_`)
   completeNestedPath(`${GAGU_PATH.ROOT}/log/_`)
   completeNestedPath(`${GAGU_PATH.ROOT}/public/_`)
   completeNestedPath(`${GAGU_PATH.ROOT}/public/avatar/_`)
   completeNestedPath(`${GAGU_PATH.ROOT}/public/image/_`)
   completeNestedPath(`${GAGU_PATH.ROOT}/public/lib/_`)
   completeNestedPath(`${GAGU_PATH.ROOT}/thumbnail/_`)
+  completeNestedPath(`${GAGU_PATH.ROOT}/users/_`)
 
   if (!getExists(GAGU_PATH.DATA_USERS)) {
     const administrator: IUser = {

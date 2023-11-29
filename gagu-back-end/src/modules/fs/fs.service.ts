@@ -311,8 +311,8 @@ export class FsService {
   async getThumbnailPath(path: string) {
     const { mtimeMs } = statSync(path)
     const thumbnailId = md5(`${path}-${mtimeMs}`)
-    const thumbnailDirPath = `${GAGU_PATH.ROOT}/thumbnail`
-    const thumbnailFilePath = `${thumbnailDirPath}/${thumbnailId}`
+    const thumbnailPath = GAGU_PATH.THUMBNAIL
+    const thumbnailFilePath = `${thumbnailPath}/${thumbnailId}`
 
     if (!getExists(thumbnailFilePath)) {
       const extension = getExtension(path)
@@ -326,7 +326,7 @@ export class FsService {
           size: thumbsupply.ThumbSize.MEDIUM,
           timestamp: '10%',
           mimetype: 'video/mp4',
-          cacheDir: thumbnailDirPath,
+          cacheDir: thumbnailPath,
         })
         targetPath = cacheThumbnailPath
       } else if (isGenAudio) {
@@ -359,10 +359,10 @@ export class FsService {
   }
 
   getAvatarPath(username: User.Username) {
-    return `${GAGU_PATH.ROOT}/public/avatar/${username}`
+    return `${GAGU_PATH.PUBLIC_AVATAR}/${username}`
   }
 
   getImagePath(name: string) {
-    return `${GAGU_PATH.ROOT}/public/image/${name}`
+    return `${GAGU_PATH.PUBLIC_IMAGE}/${name}`
   }
 }

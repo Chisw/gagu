@@ -36,14 +36,13 @@ export const ServerOS: IServerOS = {
   supportThumbnail: false,
 }
 
-export const PATH_MAP: { [PLATFORM: string]: string } = {
+const PATH_MAP: { [PLATFORM: string]: string } = {
   darwin: `/Users/${ServerOS.username}/.io.gagu`,
   win32: `C:/Users/${ServerOS.username}/.io.gagu`,
   android: `/data/data/com.termux/files/home/.io.gagu`,
 }
 
-export const ROOT_PATH =
-  (PATH_MAP[ServerOS.platform] || '') + (IS_DEV ? '.dev' : '')
+const ROOT_PATH = `${PATH_MAP[ServerOS.platform] || ''}${IS_DEV ? '.dev' : ''}`
 
 // TODO: use path check
 export const FORBIDDEN_ENTRY_NAME_LIST = ['.io.gagu', '.io.gagu.dev']
@@ -56,8 +55,12 @@ export const GAGU_PATH = {
   DATA_TUNNELS: `${ROOT_PATH}/data/tunnels.json`,
   DATA_SETTINGS: `${ROOT_PATH}/data/settings.json`,
   LOG: `${ROOT_PATH}/log`,
+  PUBLIC: `${ROOT_PATH}/public`,
   PUBLIC_AVATAR: `${ROOT_PATH}/public/avatar`,
   PUBLIC_IMAGE: `${ROOT_PATH}/public/image`,
+  PUBLIC_LIB: `${ROOT_PATH}/public/lib`,
+  THUMBNAIL: `${ROOT_PATH}/thumbnail`,
+  USERS: `${ROOT_PATH}/users`,
 }
 
 export const HELP_INFO = `
@@ -124,6 +127,7 @@ export const SERVER_MESSAGE_MAP = {
   ERROR_USER_DISABLED: 'ERROR_USER_DISABLED',
   ERROR_USER_EXPIRED: 'ERROR_USER_EXPIRED',
   ERROR_TOKEN_INVALID: 'ERROR_TOKEN_INVALID',
+  ERROR_FILE_DELETE_FAIL: 'ERROR_FILE_DELETE_FAIL',
   ERROR_TUNNEL_NOT_EXISTED: 'ERROR_TUNNEL_NOT_EXISTED',
   ERROR_TUNNEL_NO_LEFT: 'ERROR_TUNNEL_NO_LEFT',
   ERROR_TUNNEL_EXPIRED: 'ERROR_TUNNEL_EXPIRED',

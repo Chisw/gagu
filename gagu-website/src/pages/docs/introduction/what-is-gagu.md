@@ -15,14 +15,14 @@ GAGU can also run on public networks, but this has not been tested for safety, p
 
 GAGU choose NestJS to open some file system I/O operations as a web interface that can be controlled through HTTP requests, and choose React to develop a web interface that can be operated in a browser, and it was hosted by NestJS.
 
-## Desktop Version
+## Binary Version
 
-GAGU will provide a desktop program that can be double-clicked to run after v1.0.0 is released. It is packaged with Vercel/pkg, including the Node.js execution environment, dependency packages, and the built GAGU program code.
+GAGU will provide a binary program that can be double-clicked to run after v1.0.0 is released. It is packaged with Vercel/pkg, including the Node.js execution environment, dependency packages, and the built GAGU program code.
 
-The desktop version is available out of the box and can be run directly on newly purchased devices or devices without a development environment, which is very friendly to users who do not know much about Node.js.
+The binary version is available out of the box and can be run directly on newly purchased devices or devices without a development environment, which is very friendly to users who do not know much about Node.js.
 
 <div class="apply-tip">
-The desktop version is not available on Android.
+The binary version is not available on Android.
 </div>
 
 ## Inspiration

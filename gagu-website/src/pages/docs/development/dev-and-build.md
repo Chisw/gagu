@@ -69,9 +69,9 @@ $ yarn start
 
 4. Dry run publish, update package size info, publish to NPM
 
-## Build Desktop Version
+## Build Binary Version
 
-1. The desktop version needs to complete the previous built step above
+1. The binary version needs to complete the previous built step above
 
 2. Install the dependencies in `gagu/package.json`, yes, this is a bit redundant, this is caused by the original decision to put the three parts in the same repository, fortunately, it is not a big problem
 

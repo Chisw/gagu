@@ -159,6 +159,7 @@ After the root directory is successfully created, the following subdirectories w
 - `public/image` is used to store some config images
 - `public/lib` is used to store third-party js libraries that may be used in the future
 - `thumbnail` is used to store thumbnails generated in use
+- `users` is used to store user's personal space files
 
 <div class="apply-tip">
 The root directory will be created as `WORKSPACE/.io.gagu.dev` in local development.
@@ -190,7 +191,7 @@ The default port number of the GAGU service is `9293`. After the service is star
 There are two ways to modify the port number:
 
 - Modify through "Settings / Advanced / Service Port"
-- Modify by starting the command parameter `gagu -p 80` (desktop version does not support)
+- Modify by starting the command parameter `gagu -p 80` (binary version does not support)
 
 The modification of command parameters has the highest priority, followed by the modification in the settings, and the last is the default port number.
 

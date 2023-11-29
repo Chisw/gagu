@@ -113,6 +113,7 @@
       "permission_read_extra": "Read directories, download files, get thumbnails, Exif information, etc.",
       "permission_write_extra": "Create new folders, upload files, move files, folders, etc.",
       "permission_delete_extra": "Delete files and folders (if there is no delete permission, files with the same name cannot be overwritten when uploading)",
+      "accessiblePaths_extra": "If left blank, it will be consistent with the administrator's accessible paths",
       "required": "Required",
       "username_extra": "It cannot be modified after creation, only lowercase English letters and numbers can be used, it cannot start with a number, and it is not case sensitive"
     },
@@ -135,6 +136,7 @@
       "permission_read": "Read (Required)",
       "permission_write": "Write",
       "permission_delete": "Delete",
+      "accessiblePaths": "Accessible paths",
       "remainingSaves": "Remaining Saves: ",
       "remainingValidityPeriod": "Remaining validity period: ",
       "serviceHost": "Service host name",

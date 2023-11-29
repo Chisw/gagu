@@ -10,6 +10,7 @@ import {
 import { UserService } from './user.service'
 import { User, IUserForm, UserPermission, UserValidityType } from '../../types'
 import {
+  completeNestedPath,
   deleteEntry,
   GAGU_PATH,
   getIsExpired,
@@ -56,6 +57,7 @@ export class UserController {
     } else {
       this.fsService.uploadAvatar(username, avatar)
       this.userService.create(userForm)
+      completeNestedPath(`${GAGU_PATH.USERS}/${username}/desktop/_`)
       return {
         success: true,
         message: SERVER_MESSAGE_MAP.OK,
@@ -91,6 +93,7 @@ export class UserController {
     this.userService.remove(username)
     this.authService.removeUser(username)
     deleteEntry(`${GAGU_PATH.PUBLIC_AVATAR}/${username}`)
+    deleteEntry(`${GAGU_PATH.USERS}/${username}`)
     return {
       success: true,
       message: SERVER_MESSAGE_MAP.OK,
