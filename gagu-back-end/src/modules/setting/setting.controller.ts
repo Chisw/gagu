@@ -45,9 +45,7 @@ export class SettingController {
   @Permission(UserPermission.administer)
   async updateVersion() {
     await this.settingService.updateVersion()
-    setTimeout(() => {
-      process.exit(0)
-    }, 1000)
+    setTimeout(() => process.exit(0), 1000)
     return {
       success: true,
       message: SERVER_MESSAGE_MAP.OK,

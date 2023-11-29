@@ -20,9 +20,9 @@ const handleScrollToError = () => {
 interface UserFormModalProps {
   form: IUserForm
   formMode: formModeType
-  refresh: () => void
   setForm: (form: IUserForm) => void
   setFormMode: (mode: formModeType) => void
+  onRefresh: () => void
 }
 
 export default function UserFormModal(props: UserFormModalProps) {
@@ -30,9 +30,9 @@ export default function UserFormModal(props: UserFormModalProps) {
   const {
     form,
     formMode,
-    refresh,
     setForm,
     setFormMode,
+    onRefresh,
   } = props
 
   const { t } = useTranslation()
@@ -71,38 +71,22 @@ export default function UserFormModal(props: UserFormModalProps) {
 
   const handleSubmit = useCallback(async () => {
     const {
-      avatar,
-      nickname,
-      username,
       password,
-      invalid,
-      expiredAt,
       permissions,
-      assignedRootPathList,
     } = form
 
-    const res = await (MODE.isCreate ? createUser : updateUser)({
-      avatar,
-      nickname,
-      username,
+    const { success } = await (MODE.isCreate ? createUser : updateUser)({
+      ...form,
       password: password ? md5(password) : '',
       password2: '',
-      invalid,
-      createdAt: 0,
-      expiredAt,
       permissions: permissions.sort(permissionSorter),
-      assignedRootPathList,
     })
 
-    if (res.success) {
+    if (success) {
       setFormMode('CLOSE')
-      refresh()
-      toast.success('OK')
-    } else {
-      toast.error(res.message)
+      onRefresh()
     }
-
-  }, [refresh, createUser, updateUser, setFormMode, form, MODE])
+  }, [onRefresh, createUser, updateUser, setFormMode, form, MODE])
 
   return (
     <>
@@ -126,7 +110,7 @@ export default function UserFormModal(props: UserFormModalProps) {
             labelAlign={touchMode ? 'left': 'right'}
             labelWidth={200}
             initValues={form}
-            onSubmit={() => handleSubmit()}
+            onSubmit={handleSubmit}
           >
             <Form.Slot label={t`label.avatar`}>
               <div
@@ -251,10 +235,13 @@ export default function UserFormModal(props: UserFormModalProps) {
                 { label: t`label.permission_write`, value: UserPermission.write, extra: t`hint.permission_write_extra` },
                 { label: t`label.permission_delete`, value: UserPermission.delete, extra: t`hint.permission_delete_extra` },
               ].map(({ label, value, extra, disabled }) => (
-                <div
-                  key={value}
-                >
-                  <Form.Checkbox value={value} disabled={disabled}>{label}</Form.Checkbox>
+                <div key={value}>
+                  <Form.Checkbox
+                    value={value}
+                    disabled={disabled}
+                  >
+                    {label}
+                  </Form.Checkbox>
                   <p className="mt-1 text-xs text-gray-500">{extra}</p>
                 </div>
               ))}

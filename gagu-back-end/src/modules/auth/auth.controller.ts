@@ -105,6 +105,10 @@ export class AuthController {
   @Post('shutdown')
   @Permission(UserPermission.administer)
   shutdown() {
-    return process.exit(0)
+    setTimeout(() => process.exit(0), 1000)
+    return {
+      success: true,
+      message: SERVER_MESSAGE_MAP.OK,
+    }
   }
 }

@@ -13,9 +13,9 @@ const getTimestampSuffix = () => `?timestamp=${Date.now()}`
 interface UserListProps {
   list: IUser[]
   loggedInList: string[]
-  refresh: () => void
   setForm: (form: IUserForm) => void
   setFormMode: (mode: formModeType) => void
+  onRefresh: () => void
 }
 
 export default function UserList(props: UserListProps) {
@@ -23,9 +23,9 @@ export default function UserList(props: UserListProps) {
   const {
     list: userList,
     loggedInList,
-    refresh,
     setForm,
     setFormMode,
+    onRefresh,
   } = props
 
   const { t } = useTranslation()
@@ -34,24 +34,18 @@ export default function UserList(props: UserListProps) {
   const { request: deleteUser } = useRequest(UserApi.deleteUser)
 
   const handleUpdateAbility = useCallback(async (username: User.Username, ability: UserValidityType) => {
-    const res = await updateUserValidity(username, ability)
-    if (res.success) {
-      refresh()
-      toast.success(res.message)
-    } else {
-      toast.error(res.message)
+    const { success } = await updateUserValidity(username, ability)
+    if (success) {
+      onRefresh()
     }
-  }, [updateUserValidity, refresh])
+  }, [updateUserValidity, onRefresh])
 
   const handleRemove = useCallback(async (username: string) => {
-    const { success, message } = await deleteUser(username)
+    const { success } = await deleteUser(username)
     if (success) {
-      refresh()
-      toast.success('OK')
-    } else {
-      toast.error(message)
+      onRefresh()
     }
-  }, [refresh, deleteUser])
+  }, [onRefresh, deleteUser])
 
   const getButtonList = useCallback((user: IUser) => {
     const isAdmin = user.permissions.includes(UserPermission.administer)

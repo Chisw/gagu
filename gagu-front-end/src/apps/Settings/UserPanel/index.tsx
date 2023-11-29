@@ -16,11 +16,11 @@ export default function UserPanel() {
   const [formMode, setFormMode] = useState<formModeType>('CLOSE')
   const [form, setForm] = useState<IUserForm>(new UserForm())
 
-  const { request: refresh, data } = useRequest(UserApi.queryUser)
+  const { request: handleRefresh, data } = useRequest(UserApi.queryUser)
 
   useEffect(() => {
-    refresh()
-  }, [refresh])
+    handleRefresh()
+  }, [handleRefresh])
 
   const { userList, loggedInList } = useMemo(() => {
     const userList: IUser[] = data?.userList || []
@@ -38,7 +38,7 @@ export default function UserPanel() {
             <div
               title={t`action.refresh`}
               className="w-6 h-6 cursor-pointer hover:bg-gray-100 flex justify-center items-center rounded"
-              onClick={refresh}
+              onClick={handleRefresh}
             >
               <SvgIcon.Refresh className="text-gray-500" />
             </div>
@@ -59,20 +59,24 @@ export default function UserPanel() {
           <UserList
             list={userList}
             loggedInList={loggedInList}
-            refresh={refresh}
-            setForm={setForm}
-            setFormMode={setFormMode}
+            {...{
+              setForm,
+              setFormMode,
+            }}
+            onRefresh={handleRefresh}
           />
         </div>
 
       </div>
 
       <UserFormSheet
-        form={form}
-        formMode={formMode}
-        refresh={refresh}
-        setForm={setForm}
-        setFormMode={setFormMode}
+        {...{
+          form,
+          formMode,
+          setForm,
+          setFormMode,
+        }}
+        onRefresh={handleRefresh}
       />
     </>
   )

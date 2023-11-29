@@ -1,5 +1,4 @@
 import { useMemo, useCallback, useEffect, useState } from 'react'
-import toast from 'react-hot-toast'
 import { DownloadApi, FsApi, TunnelApi } from '../../api'
 import { Confirmor, IconButton, SvgIcon } from '../../components/common'
 import { useRequest } from '../../hooks'
@@ -101,17 +100,15 @@ export default function Toolbar(props: ToolbarProps) {
         onClick: async () => {
           if (activeEntry) {
             const { name: downloadName } = activeEntry
-            const res = await createTunnel({
+            const { success, code } = await createTunnel({
               type: TunnelType.download,
               entryList: [activeEntry],
               downloadName,
               leftTimes: 1,
               expiredAt: Date.now() + DOWNLOAD_PERIOD,
             })
-            if (res && res.success && res.code) {
-              DownloadApi.download(res.code)
-            } else {
-              res && toast.error(res.message)
+            if (success) {
+              DownloadApi.download(code)
             }
           }
         },
