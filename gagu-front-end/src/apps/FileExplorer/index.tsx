@@ -18,7 +18,7 @@ import {
   getEntryPath,
   GEN_THUMBNAIL_IMAGE_LIST,
 } from '../../utils'
-import { contextMenuDataState, openOperationState } from '../../states'
+import { contextMenuDataState, openEventState } from '../../states'
 import {
   FileExplorerProps,
   EntryType,
@@ -29,6 +29,7 @@ import {
   EditModeType,
   EditMode,
   CreationType,
+  EventTransaction,
 } from '../../types'
 import { useTranslation } from 'react-i18next'
 import EntryNode from './EntryNode'
@@ -40,13 +41,14 @@ export default function FileExplorer(props: FileExplorerProps) {
     windowSize: { width: windowWidth },
     setWindowTitle,
     asSelector = false,
+    onCurrentPathChange = () => {},
     onSelect = () => {},
-    onSelectConfirm = () => {},
+    onSelectDoubleConfirm = () => {},
   } = props
 
   const { t } = useTranslation()
 
-  const [, setOpenOperation] = useRecoilState(openOperationState)
+  const [, setOpenEvent] = useRecoilState(openEventState)
   const [, setContextMenuData] = useRecoilState(contextMenuDataState)
 
   const [sideCollapse, setSideCollapse] = useState(false)
@@ -80,10 +82,6 @@ export default function FileExplorer(props: FileExplorerProps) {
     handleShareClick, handleFavoriteClick, handleDeleteClick,
   } = useFileExplorer({ containerRef })
 
-  useEffect(() => {
-    setWindowTitle(currentPath.split('/').pop() as string)
-  }, [currentPath, setWindowTitle])
-
   const handleEdit = useCallback((editModeType: EditModeType) => {
     if (editModeType !== EditMode.rename) {
       setSelectedEntryList([])
@@ -114,39 +112,6 @@ export default function FileExplorer(props: FileExplorerProps) {
       setEditMode(null)
     }
   }, [setEditMode])
-
-  useEffect(() => {
-    const container: any = containerRef.current
-    if (container && locationScrollWatcher.wait && !querying) {
-      const target: any = document.querySelector('.gagu-entry-node[data-selected="true"]')
-      const top = target ? target.offsetTop - 10 : 0
-      container!.scrollTo({ top, behavior: locationScrollWatcher.smooth ? 'smooth' : undefined })
-      setLocationScrollWatcher({ wait: false })
-      setLastVisitedPath('')
-    }
-  }, [locationScrollWatcher, querying, setLastVisitedPath])
-
-  useEffect(() => {
-    setEditMode(null)
-    setSelectedEntryList([])
-    setFilterMode(false)
-    setFilterText('')
-  }, [currentPath, setSelectedEntryList, setFilterMode, setFilterText, setEditMode])
-
-  useEffect(() => {
-    const prevEntry = entryList.find((entry) => getEntryPath(entry) === lastVisitedPath)
-    if (prevEntry) {
-      setSelectedEntryList([prevEntry])
-      setLocationScrollWatcher({ wait: true })
-    }
-  }, [entryList, lastVisitedPath, setSelectedEntryList])
-
-  useEffect(() => {
-    onSelect(selectedEntryList)
-    if (selectedEntryList.length === 0) {
-      setShiftFromIndex(0)
-    }
-  }, [onSelect, selectedEntryList])
 
   const handleEntryClick = useCallback((e: any, entry: IEntry) => {
     if (editMode) return
@@ -179,17 +144,21 @@ export default function FileExplorer(props: FileExplorerProps) {
       handleDirectoryOpen(entry)
     } else {
       if (asSelector) {
-        onSelectConfirm()
+        onSelectDoubleConfirm()
         return
       }
       const app = getMatchedApp(entry)
       if (app) {
-        setOpenOperation({ appId: app.id, entryList: [entry] })
+        setOpenEvent({
+          transaction: EventTransaction.app_run,
+          appId: app.id,
+          entryList: [entry],
+        })
       } else {
         handleDownloadClick()
       }
     }
-  }, [editMode, asSelector, onSelectConfirm, handleDirectoryOpen, handleDownloadClick, setOpenOperation])
+  }, [editMode, asSelector, onSelectDoubleConfirm, handleDirectoryOpen, handleDownloadClick, setOpenEvent])
 
   const handleLassoSelect = useCallback((info: ILassoInfo) => {
     const entryElements = document.querySelectorAll('.gagu-entry-node')
@@ -322,7 +291,12 @@ export default function FileExplorer(props: FileExplorerProps) {
         children: CALLABLE_APP_LIST.map(app => ({
           icon: <div className="gagu-app-icon w-4 h-4" data-app-id={app.id} />,
           name: t(`app.${app.id}`),
-          onClick: () => setOpenOperation({ appId: app.id, entryList: [activeEntry], force: true }),
+          onClick: () => setOpenEvent({
+            transaction: EventTransaction.app_run,
+            appId: app.id,
+            entryList: [activeEntry],
+            forceOpen: true,
+          }),
         })).concat({
           icon: <div className="gagu-app-icon w-4 h-4" data-app-id="iina" />,
           name: 'IINA',
@@ -393,7 +367,7 @@ export default function FileExplorer(props: FileExplorerProps) {
     handleEdit,
     setContextMenuData,
     setSelectedEntryList,
-    setOpenOperation,
+    setOpenEvent,
     handleNavRefresh,
     handleUploadClick,
     handleDirectorySizeUpdate,
@@ -402,6 +376,47 @@ export default function FileExplorer(props: FileExplorerProps) {
     handleShareClick,
     handleDeleteClick,
   ])
+
+  useEffect(() => {
+    setWindowTitle(currentPath.split('/').pop() as string)
+  }, [currentPath, setWindowTitle])
+
+  useEffect(() => {
+    const container: any = containerRef.current
+    if (container && locationScrollWatcher.wait && !querying) {
+      const target: any = document.querySelector('.gagu-entry-node[data-selected="true"]')
+      const top = target ? target.offsetTop - 10 : 0
+      container!.scrollTo({ top, behavior: locationScrollWatcher.smooth ? 'smooth' : undefined })
+      setLocationScrollWatcher({ wait: false })
+      setLastVisitedPath('')
+    }
+  }, [locationScrollWatcher, querying, setLastVisitedPath])
+
+  useEffect(() => {
+    setEditMode(null)
+    setSelectedEntryList([])
+    setFilterMode(false)
+    setFilterText('')
+  }, [currentPath, setSelectedEntryList, setFilterMode, setFilterText, setEditMode])
+
+  useEffect(() => {
+    const prevEntry = entryList.find((entry) => getEntryPath(entry) === lastVisitedPath)
+    if (prevEntry) {
+      setSelectedEntryList([prevEntry])
+      setLocationScrollWatcher({ wait: true })
+    }
+  }, [entryList, lastVisitedPath, setSelectedEntryList])
+
+  useEffect(() => {
+    onSelect(selectedEntryList)
+    if (selectedEntryList.length === 0) {
+      setShiftFromIndex(0)
+    }
+  }, [onSelect, selectedEntryList])
+
+  useEffect(() => {
+    onCurrentPathChange(currentPath)
+  }, [onCurrentPathChange, currentPath])
 
   return (
     <>

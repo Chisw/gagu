@@ -7,11 +7,14 @@ export interface AppComponentProps {
   onClose: () => void
 }
 
-export interface FileExplorerProps extends AppComponentProps {
+export interface ExplorerSelectorProps {
   asSelector?: boolean
+  onCurrentPathChange?: (path: string) => void
   onSelect?: (entryList: IEntry[]) => void
-  onSelectConfirm?: () => void
+  onSelectDoubleConfirm?: () => void
 }
+
+export interface FileExplorerProps extends AppComponentProps, ExplorerSelectorProps {}
 
 export interface IAppComponent {
   (props: AppComponentProps | FileExplorerProps): JSX.Element
@@ -47,15 +50,25 @@ export interface IApp {
   touchModeShow?: boolean
 }
 
-export interface IOpenOperation {
-  appId: string
-  entryList: IEntry[]
-  force?: boolean
+export enum EventTransaction {
+  app_run = 'app_run',
+  settings_accessible_paths = 'settings_accessible_paths',
 }
 
-export interface IEntrySelectorOperation {
+export type EventTransactionType = keyof typeof EventTransaction
+
+export interface IOpenEvent {
+  transaction: EventTransactionType
   appId: string
-  multiple?: boolean
+  entryList: IEntry[]
+  forceOpen?: boolean
+  extraData?: { [KEY: string]: any }
+}
+
+export interface IEntrySelectorEvent {
+  transaction: EventTransactionType
+  mode: 'open' | 'save'
+  appId: string
   type?: EntryType.directory | EntryType.file
-  saveMode?: boolean
+  multiple?: boolean
 }

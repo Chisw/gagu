@@ -1,6 +1,7 @@
 {
   "translation": {
     "action": {
+      "add": "Add",
       "backward": "Backward",
       "navToParent": "Back to parent directory",
       "cancel": "Cancel",

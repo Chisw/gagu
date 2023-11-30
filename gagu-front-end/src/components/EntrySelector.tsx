@@ -1,8 +1,8 @@
 import { Button, Modal, SideSheet } from '@douyinfe/semi-ui'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRecoilState } from 'recoil'
-import { entrySelectorOperationState, openOperationState } from '../states'
-import { IEntry } from '../types'
+import { entrySelectorEventState, openEventState } from '../states'
+import { EntryType, IEntry } from '../types'
 import { useTranslation } from 'react-i18next'
 import FileExplorer from '../apps/FileExplorer'
 import { APP_LIST } from '../apps'
@@ -43,72 +43,129 @@ import FileExplorerTouch from '../apps/FileExplorerTouch'
 //   })
 // }
 
+/*
+mode
+  - open: multiple?
+    - file
+    - directory
+    - [both]
+  - save: single
+    - directory & name input
+*/
+
 export function EntrySelector() {
 
   const { t } = useTranslation()
 
-  const [entrySelectorOperation, setEntrySelectorOperation] = useRecoilState(entrySelectorOperationState)
-  const [, setOpenOperation] = useRecoilState(openOperationState)
+  const [entrySelectorEvent, setEntrySelectorEvent] = useRecoilState(entrySelectorEventState)
+  const [, setOpenEvent] = useRecoilState(openEventState)
 
   const touchMode = useTouchMode()
 
+  const [currentPath, setCurrentPath] = useState('')
   const [selectedEntryList, setSelectedEntryList] = useState<IEntry[]>([])
   const [sideShow, setSideShow] = useState(false)
   const [isSelectionMode, setIsSelectionMode] = useState(false)
 
-  const selectorShow = useMemo(() => !!entrySelectorOperation, [entrySelectorOperation])
+  const selectorShow = useMemo(() => !!entrySelectorEvent, [entrySelectorEvent])
 
-  const { appId, multiple, type, matchList } = useMemo(() => {
-    const { appId, multiple = false, type = '' } = entrySelectorOperation || {}
+  const selectedPath = useMemo(() => {
+    const selectedEntryPath = selectedEntryList.length === 1 ? `/${selectedEntryList[0].name}` : ''
+    return `${currentPath}${selectedEntryPath}`
+  }, [currentPath, selectedEntryList])
+
+  const { transaction, appId, type, selectorState, matchList } = useMemo(() => {
+    const { transaction, mode, appId, multiple = false, type } = entrySelectorEvent || {}
+    const selectorState = {
+      isOpenMode: mode === 'open',
+      isSaveMode: mode === 'save',
+      isMultiple: multiple,
+      isSingle: !multiple,
+      isSelectFile: type === EntryType.file,
+      isSelectDirectory: type === EntryType.directory,
+      isSelectBoth: !type,
+    }
     const matchList = APP_LIST.find(app => app.id === appId)?.matchList || []
-    return { appId, multiple, type, matchList }
-  }, [entrySelectorOperation])
+    return { transaction, appId, type, selectorState, matchList }
+  }, [entrySelectorEvent])
 
   const { disabled, isExtensionMatched } = useMemo(() => {
     const selectedCount = selectedEntryList.length
-    const isEnough = multiple ? selectedCount > 0 : selectedCount === 1
-    const isTypeMatched = type ? selectedEntryList.every((entry) => entry.type === type) : true
+    const { isMultiple, isSelectDirectory } = selectorState
+
+    const isEnough = type
+      ? isSelectDirectory
+        ? true
+        : isMultiple ? selectedCount > 1 : selectedCount === 1
+      : true
+
+    const isTypeMatched = type
+      ? selectedEntryList.every((entry) => entry.type === type)
+      : true
+
+    const isExtensionMatched = type
+      ? isSelectDirectory
+        ? selectedEntryList.every(({ extension }) => ['_dir', '_dir_empty'].includes(extension))
+        : selectedEntryList.every(({ extension }) => matchList.includes(extension))
+      : true
+
     const disabled = !isEnough || !isTypeMatched
-    const isExtensionMatched = selectedEntryList.every(({ extension }) => matchList.includes(extension))
+
     return { disabled, isExtensionMatched }
-  }, [multiple, type, selectedEntryList, matchList])
+  }, [selectorState, type, selectedEntryList, matchList])
 
   const handleConfirm = useCallback(() => {
-    if (!disabled && appId && selectedEntryList) {
-      setOpenOperation({ appId, entryList: selectedEntryList })
-      setEntrySelectorOperation(null)
+    if (disabled || !transaction) return // disabled: avoid double click
+    if (appId && selectedEntryList) {
+      setOpenEvent({
+        transaction,
+        appId,
+        entryList: selectedEntryList,
+        extraData: { selectedPath },
+      })
+      setEntrySelectorEvent(null)
     }
-  }, [disabled, appId, selectedEntryList, setOpenOperation, setEntrySelectorOperation])
+  }, [disabled, transaction, appId, selectedEntryList, selectedPath, setOpenEvent, setEntrySelectorEvent])
 
+  // TODO: check usage
   useEffect(() => {
     setSideShow(false)
   }, [selectorShow])
 
+  // TODO: fix animation
   const Actions = () => (
-    <div className="flex justify-between items-center">
-      <div>
+    <div className="py-1">
+      {(selectorState.isSaveMode || (selectorState.isSelectDirectory && selectorState.isSingle)) && (
+        <div className={`p-2 bg-gray-100 rounded flex items-center border border-gray-200 ${touchMode ? 'mb-1 text-xs' : 'mb-2'}`}>
+          <SvgIcon.Folder className="flex-shrink-0" />
+          <div className="flex-grow ml-1 break-all text-left">{selectedPath}</div>
+        </div>
+      )}
+      <div className="flex justify-between items-center">
+        <div className="w-1/2">
 
-      </div>
-      <div>
-        <Button
-          style={{ margin: 0 }}
-          onClick={() => setEntrySelectorOperation(null)}
-        >
-          {t`action.cancel`}
-        </Button>
-        <Button
-          theme="solid"
-          className={`ml-1 md:ml-2 ${touchMode ? '' : 'w-32'}`}
-          disabled={disabled}
-          onClick={handleConfirm}
-        >
-          <div className="flex items-center">
-            <div className={`transition-all duration-200 overflow-hidden ${!disabled && !isExtensionMatched ? 'w-5' : 'w-0'}`}>
-              <SvgIcon.Warning />
+        </div>
+        <div className="flex-shrink-0">
+          <Button
+            style={{ margin: 0 }}
+            onClick={() => setEntrySelectorEvent(null)}
+          >
+            {t`action.cancel`}
+          </Button>
+          <Button
+            theme="solid"
+            className={`ml-1 md:ml-2 ${touchMode ? 'w-20' : 'w-32'}`}
+            disabled={disabled}
+            onClick={handleConfirm}
+          >
+            <div className="flex items-center">
+              <div className={`transition-all duration-200 overflow-hidden ${!disabled && !isExtensionMatched ? 'w-5' : 'w-0'}`}>
+                <SvgIcon.Warning />
+              </div>
+              <span>{t`action.open`}</span>
             </div>
-            <span>{t`action.open`}</span>
-          </div>
-        </Button>
+          </Button>
+        </div>
       </div>
     </div>
   )
@@ -123,8 +180,9 @@ export function EntrySelector() {
           bodyStyle={{ position: 'relative', padding: 0 }}
           visible={selectorShow}
           height="calc(100% - 3rem)"
+          className="gagu-entry-selector-touch"
           style={{ borderTopRightRadius: 10, borderTopLeftRadius: 10 }}
-          onCancel={() => setEntrySelectorOperation(null)}
+          onCancel={() => setEntrySelectorEvent(null)}
           title={<Actions />}
         >
           <div className="absolute inset-0 border-t overflow-hidden">
@@ -137,6 +195,7 @@ export function EntrySelector() {
                 isSelectionMode,
                 setIsSelectionMode,
               }}
+              onCurrentPathChange={setCurrentPath}
               onSelect={setSelectedEntryList}
             />
           </div>
@@ -179,8 +238,9 @@ export function EntrySelector() {
               windowSize={{ width: 1020, height: 540 }}
               setWindowTitle={() => {}}
               onClose={() => {}}
+              onCurrentPathChange={setCurrentPath}
               onSelect={setSelectedEntryList}
-              onSelectConfirm={handleConfirm}
+              onSelectDoubleConfirm={handleConfirm}
             />
           </div>
         </div>

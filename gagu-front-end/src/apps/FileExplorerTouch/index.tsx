@@ -9,19 +9,17 @@ import SelectionMenu from './SelectionMenu'
 import Side from './Side'
 import { useFileExplorer } from '../../hooks'
 import { SharingModal } from '../../components'
-import { openOperationState } from '../../states'
+import { openEventState } from '../../states'
 import { useRecoilState } from 'recoil'
-import { IEntry } from '../../types'
+import { EventTransaction, ExplorerSelectorProps, IEntry } from '../../types'
 // import { useNavigate } from 'react-router'
 
-interface FileExplorerTouchProps {
+interface FileExplorerTouchProps extends ExplorerSelectorProps {
   show: boolean
   sideShow: boolean
   setSideShow: (show: boolean) => void
   isSelectionMode: boolean
   setIsSelectionMode: (show: boolean) => void
-  asSelector?: boolean
-  onSelect?: (entryList: IEntry[]) => void
 }
 
 export default function FileExplorerTouch(props: FileExplorerTouchProps) {
@@ -33,12 +31,13 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
     isSelectionMode,
     setIsSelectionMode,
     asSelector = false,
+    onCurrentPathChange = () => {},
     onSelect = () => {},
   } = props
 
   // const navigate = useNavigate()
 
-  const [, setOpenOperation] = useRecoilState(openOperationState)
+  const [, setOpenEvent] = useRecoilState(openEventState)
 
   const containerRef = useRef(null)
 
@@ -88,7 +87,11 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
       }
       const app = getMatchedApp(entry)
       if (app) {
-        setOpenOperation({ appId: app.id, entryList: [entry] })
+        setOpenEvent({
+          transaction: EventTransaction.app_run,
+          appId: app.id,
+          entryList: [entry],
+        })
       } else {
         handleDownloadClick([entry])
       }
@@ -101,7 +104,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
     // navigate,
     asSelector,
     setIsSelectionMode,
-    setOpenOperation,
+    setOpenEvent,
     handleDownloadClick,
   ])
 
@@ -140,12 +143,16 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
   }, [currentPath, setSelectedEntryList, setFilterMode, setFilterText, setIsSelectionMode])
 
   useEffect(() => {
-    onSelect(selectedEntryList)
-  }, [onSelect, selectedEntryList])
-
-  useEffect(() => {
     setIsSelectionMode(false)
   }, [setIsSelectionMode, sideShow])
+
+  useEffect(() => {
+    onCurrentPathChange(currentPath)
+  }, [onCurrentPathChange, currentPath])
+
+  useEffect(() => {
+    onSelect(selectedEntryList)
+  }, [onSelect, selectedEntryList])
 
   return (
     <>

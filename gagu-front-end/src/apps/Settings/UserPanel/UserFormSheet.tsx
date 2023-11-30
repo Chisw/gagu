@@ -1,14 +1,16 @@
 import md5 from 'md5'
-import { useCallback, useMemo, useRef } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 import toast from 'react-hot-toast'
 import { formModeType } from '.'
 import { UserApi } from '../../../api'
-import { SvgIcon } from '../../../components/common'
+import { SvgIcon, IconButton } from '../../../components/common'
 import { useRequest, useTouchMode } from '../../../hooks'
-import { IUserForm, UserPermission } from '../../../types'
+import { AppId, EntryType, EventTransaction, IUserForm, UserPermission } from '../../../types'
 import { getImageTypeBase64ByURL, line, permissionSorter } from '../../../utils'
 import { Button, Form, SideSheet } from '@douyinfe/semi-ui'
 import { useTranslation } from 'react-i18next'
+import { entrySelectorEventState, openEventState } from '../../../states'
+import { useRecoilState } from 'recoil'
 
 const handleScrollToError = () => {
   const top = document.querySelector('.gagu-app-settings-user-form .semi-form-field-error-message')?.closest('.semi-form-field')?.getBoundingClientRect()?.top
@@ -37,6 +39,9 @@ export default function UserFormModal(props: UserFormModalProps) {
 
   const { t } = useTranslation()
 
+  const [, setEntrySelectorEvent] = useRecoilState(entrySelectorEventState)
+  const [openEvent, setOpenEvent] = useRecoilState(openEventState)
+
   const touchMode = useTouchMode()
 
   const MODE = useMemo(() => {
@@ -51,6 +56,12 @@ export default function UserFormModal(props: UserFormModalProps) {
   const { request: updateUser, loading: updating } = useRequest(UserApi.updateUser)
 
   const fileInputRef = useRef<any>(null)
+
+  const { isAdminister, isAssigned } = useMemo(() => {
+    const isAdminister = form.permissions.includes(UserPermission.administer)
+    const isAssigned = form.assignedRootPathList.length > 0
+    return { isAdminister, isAssigned }
+  }, [form])
 
   const handleFileChange = useCallback(() => {
     const file = fileInputRef?.current?.files[0]
@@ -87,6 +98,15 @@ export default function UserFormModal(props: UserFormModalProps) {
       onRefresh()
     }
   }, [onRefresh, createUser, updateUser, setFormMode, form, MODE])
+
+  useEffect(() => {
+    if (openEvent?.transaction === EventTransaction.settings_accessible_paths) {
+      const selectedPath: string = openEvent.extraData?.selectedPath
+      const assignedRootPathList = Array.from(new Set([...form.assignedRootPathList, selectedPath]))
+      setForm({ ...form, assignedRootPathList })
+      setOpenEvent(null)
+    }
+  }, [openEvent, form, setForm, setOpenEvent])
 
   return (
     <>
@@ -227,7 +247,13 @@ export default function UserFormModal(props: UserFormModalProps) {
             <Form.CheckboxGroup
               label={t`label.permissions`}
               field="permissions"
-              onChange={value => setForm({ ...form, permissions: value })}
+              onChange={permissions => {
+                if (permissions.includes(UserPermission.administer)) {
+                  setForm({ ...form, permissions, assignedRootPathList: [] })
+                } else {
+                  setForm({ ...form, permissions })
+                }
+              }}
             >
               {[
                 { label: t`label.permission_administer`, value: UserPermission.administer, extra: t`hint.permission_administer_extra` },
@@ -246,14 +272,52 @@ export default function UserFormModal(props: UserFormModalProps) {
                 </div>
               ))}
             </Form.CheckboxGroup>
-            <Form.TagInput
-              label={t`label.accessiblePaths`}
-              field="assignedRootPathList"
-              className="w-full"
-              extraText={t`hint.accessiblePaths_extra`}
-              onChange={value => setForm({ ...form, assignedRootPathList: value as string[] })}
-            />
-            <div className="pt-2 flex justify-end">
+            <Form.Slot label={t`label.accessiblePaths`}>
+              <div className="py-1">
+                <Button
+                  size="small"
+                  icon={<SvgIcon.Add />}
+                  disabled={isAdminister}
+                  onClick={() => {
+                    setEntrySelectorEvent({
+                      transaction: EventTransaction.settings_accessible_paths,
+                      mode: 'open',
+                      appId: AppId.settings,
+                      type: EntryType.directory,
+                    })
+                  }}
+                >
+                  {t`action.add`}
+                </Button>
+              </div>
+              <div className="py-1">
+                {form.assignedRootPathList?.map((path) => (
+                  <div
+                    key={path}
+                    className="mb-1 pl-2 pr-1 py-1 text-xs bg-gray-100 text-gray-800 rounded border border-gray-200 flex items-center"
+                  >
+                    <SvgIcon.Folder className="mr-1 flex-shrink-0" />
+                    <div className="mr-2 flex-grow break-all">{path}</div>
+                    <IconButton
+                      size="xs"
+                      icon={<SvgIcon.Close className="text-gray-400 hover:text-gray-900" />}
+                      onClick={() => {
+                        const { assignedRootPathList: list } = form
+                        const assignedRootPathList = list.filter((p) => p !== path)
+                        setForm({ ...form, assignedRootPathList })
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+              {(!isAdminister && !isAssigned) && (
+                <p className="mt-1 text-xs text-gray-500 flex items-center">
+                  <SvgIcon.Warning />
+                  <span className="ml-1">{t`hint.accessiblePaths_extra`}</span>
+                </p>
+              )}
+            </Form.Slot>
+            <div className="pt-2 pb-4 flex justify-end select-none">
               <Button
                 type="tertiary"
                 children={t`action.cancel`}

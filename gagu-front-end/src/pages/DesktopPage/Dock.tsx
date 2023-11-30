@@ -1,8 +1,8 @@
 import { useCallback, useEffect } from 'react'
 import { useRecoilState } from 'recoil'
-import { openOperationState, runningAppListState, topWindowIndexState, contextMenuDataState, activePageState } from '../../states'
+import { openEventState, runningAppListState, topWindowIndexState, contextMenuDataState, activePageState } from '../../states'
 import { APP_LIST } from '../../apps'
-import { AppId, IApp, IContextMenuItem, Page } from '../../types'
+import { AppId, EventTransaction, IApp, IContextMenuItem, Page } from '../../types'
 import { line } from '../../utils'
 import { SvgIcon } from '../../components/common'
 import toast from 'react-hot-toast'
@@ -14,7 +14,7 @@ export default function Dock() {
 
   const [topWindowIndex, setTopWindowIndex] = useRecoilState(topWindowIndexState)
   const [runningAppList, setRunningAppList] = useRecoilState(runningAppListState)
-  const [openOperation] = useRecoilState(openOperationState)
+  const [openEvent] = useRecoilState(openEventState)
   const [, setContextMenuData] = useRecoilState(contextMenuDataState)
   const [activePage] = useRecoilState(activePageState)
 
@@ -40,12 +40,11 @@ export default function Dock() {
   }, [topWindowIndex, setTopWindowIndex, runningAppList, setRunningAppList])
 
   useEffect(() => {
-    // console.log('openOperation', openOperation)
-    if (openOperation) {
-      const app = APP_LIST.find(a => a.id === openOperation.appId)!
+    if (openEvent?.transaction === EventTransaction.app_run) {
+      const app = APP_LIST.find(a => a.id === openEvent.appId)!
       handleOpenApp(app)
     }
-  }, [openOperation, handleOpenApp])
+  }, [openEvent, handleOpenApp])
 
   const handleContextMenu = useCallback((event: any, app: IApp) => {
     const appId = app.id

@@ -1,6 +1,7 @@
 {
   "translation": {
     "action": {
+      "add": "に追加",
       "backward": "あとずさりする",
       "navToParent": "親ディレクトリに戻る",
       "cancel": "キャンセル",

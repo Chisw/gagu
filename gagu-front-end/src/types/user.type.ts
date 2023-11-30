@@ -33,6 +33,7 @@ export interface IUser {
 export interface IUserForm extends Omit<IUser, 'favoritePathList'> {
   avatar: string
   password2: string
+  assignedRootPathList: string[]
 }
 
 export class UserForm implements IUserForm {

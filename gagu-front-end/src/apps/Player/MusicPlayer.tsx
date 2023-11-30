@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { AppComponentProps, AppId, EntryType } from '../../types'
-import { useRequest, useOpenOperation, usePlayInfo } from '../../hooks'
+import { AppComponentProps, AppId, EntryType, EventTransaction } from '../../types'
+import { useRequest, useOpenEvent, usePlayInfo } from '../../hooks'
 import { FsApi } from '../../api'
 import { getEntryPath, getIndexLabel, getReadableSize, line } from '../../utils'
 import SpectrumCanvas from './common/SpectrumCanvas'
@@ -8,7 +8,7 @@ import VolumeSlider from './common/VolumeSlider'
 import ProgressSlider from './common/ProgressSlider'
 import { IconButton, SvgIcon } from '../../components/common'
 import { useRecoilState } from 'recoil'
-import { entrySelectorOperationState } from '../../states'
+import { entrySelectorEventState } from '../../states'
 import { useTranslation } from 'react-i18next'
 
 const nextPlayMode: any = {
@@ -37,9 +37,9 @@ export default function MusicPlayer(props: AppComponentProps) {
     activeEntry,
     activeEntryStreamUrl,
     setActiveIndex,
-  } = useOpenOperation(appId)
+  } = useOpenEvent(appId)
 
-  const [, setEntrySelectorOperation] = useRecoilState(entrySelectorOperationState)
+  const [, setEntrySelectorEvent] = useRecoilState(entrySelectorEventState)
 
   const [isPlaying, setIsPlaying] = useState(false)
   const [playMode, setPlayMode] = useState('order')
@@ -173,7 +173,14 @@ export default function MusicPlayer(props: AppComponentProps) {
         {!activeEntry && (
           <div
             className="m-2 p-2 border border-pink-500 cursor-pointer text-xs text-white rounded-sm text-center hover:border-pink-300"
-            onClick={() => setEntrySelectorOperation({ appId, type: EntryType.file })}
+            onClick={() => {
+              setEntrySelectorEvent({
+                transaction: EventTransaction.app_run,
+                mode: 'open',
+                appId,
+                type: EntryType.file,
+              })
+            }}
           >
             {t`action.openFile`}
           </div>

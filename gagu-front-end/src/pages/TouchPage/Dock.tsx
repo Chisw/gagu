@@ -3,9 +3,9 @@ import { line } from '../../utils'
 import { SvgIcon } from '../../components/common'
 import { useTranslation } from 'react-i18next'
 import { useRecoilState } from 'recoil'
-import { openOperationState, runningAppListState } from '../../states'
+import { openEventState, runningAppListState } from '../../states'
 import { APP_LIST } from '../../apps'
-import { AppId, IApp } from '../../types'
+import { AppId, EventTransaction, IApp } from '../../types'
 import { useClickAway } from '../../hooks'
 
 interface DockProps {
@@ -24,7 +24,7 @@ export default function Dock(props: DockProps) {
   const { t } = useTranslation()
 
   const [runningAppList, setRunningAppList] = useRecoilState(runningAppListState)
-  const [openOperation] = useRecoilState(openOperationState)
+  const [openEvent] = useRecoilState(openEventState)
 
   const [expanded, setExpanded] = useState(false)
 
@@ -53,12 +53,12 @@ export default function Dock(props: DockProps) {
   }, [runningAppList, setRunningAppList, activeAppId])
 
   useEffect(() => {
-    if (openOperation) {
-      const app = APP_LIST.find(a => a.id === openOperation.appId)!
+    if (openEvent?.transaction === EventTransaction.app_run) {
+      const app = APP_LIST.find(a => a.id === openEvent.appId)!
       setActiveAppId(app.id)
       handleOpenApp(app)
     }
-  }, [openOperation, setActiveAppId, handleOpenApp])
+  }, [openEvent, setActiveAppId, handleOpenApp])
 
   return (
     <>

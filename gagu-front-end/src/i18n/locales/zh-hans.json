@@ -1,6 +1,7 @@
 {
   "translation": {
     "action": {
+      "add": "添加",
       "backward": "后退",
       "navToParent": "返回上级",
       "cancel": "取消",

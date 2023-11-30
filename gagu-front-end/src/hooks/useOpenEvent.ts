@@ -1,21 +1,21 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useRecoilState } from 'recoil'
 import { FsApi } from '../api'
-import { entryPathMapState, openOperationState } from '../states'
-import { IEntry } from '../types'
+import { entryPathMapState, openEventState } from '../states'
+import { EventTransaction, IEntry } from '../types'
 import { getIndexLabel } from '../utils'
 import { APP_LIST } from '../apps'
 
-export function useOpenOperation(appId: string) {
+export function useOpenEvent(appId: string) {
   const [entryPathMap] = useRecoilState(entryPathMapState)
-  const [openOperation, setOpenOperation] = useRecoilState(openOperationState)
+  const [openEvent, setOpenEvent] = useRecoilState(openEventState)
 
   const [matchedEntryList, setMatchedEntryList] = useState<IEntry[]>([])
   const [activeIndex, setActiveIndex] = useState(0)
 
   useEffect(() => {
-    if (openOperation?.appId === appId) {
-      const { appId, entryList, force } = openOperation
+    if (openEvent?.appId === appId && openEvent.transaction === EventTransaction.app_run) {
+      const { appId, entryList, forceOpen } = openEvent
       const matchList = APP_LIST.find(app => app.id === appId)?.matchList
 
       let matchedEntryList: IEntry[]
@@ -25,7 +25,7 @@ export function useOpenOperation(appId: string) {
         const { name: openName, parentPath} = entryList[0]
         matchedEntryList = (entryPathMap[parentPath]?.list || [])
           .filter(({ name, extension }) => {
-            const isForceOpen = force && name === openName
+            const isForceOpen = forceOpen && name === openName
             const isMatched = matchList?.includes(extension)
             return isForceOpen || isMatched
           })
@@ -37,9 +37,9 @@ export function useOpenOperation(appId: string) {
 
       setMatchedEntryList(matchedEntryList)
       setActiveIndex(activeIndex)
-      setOpenOperation(null)
+      setOpenEvent(null)
     }
-  }, [appId, openOperation, entryPathMap, setOpenOperation])
+  }, [appId, openEvent, entryPathMap, setOpenEvent])
 
   const {
     indexLabel,

@@ -58,7 +58,7 @@ body {
 }
 
 [data-customized-scrollbar] ::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
 }
 
 [data-customized-scrollbar] ::-webkit-scrollbar-track {
@@ -124,6 +124,11 @@ body {
 
 .gagu-entry-selector .semi-modal-footer {
   margin: 16px 0 20px 0;
+}
+
+.gagu-entry-selector-touch .semi-sidesheet-title {
+  flex: unset;
+  width: 100%;
 }
 
 /* animate */

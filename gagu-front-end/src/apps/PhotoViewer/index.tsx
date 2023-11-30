@@ -1,13 +1,13 @@
 import { Spinner } from '../../components/common'
 import { useEffect, useMemo, useRef, useState, useCallback } from 'react'
-import { AppComponentProps, AppId, EntryType } from '../../types'
-import { useOpenOperation, useHotKey } from '../../hooks'
+import { AppComponentProps, AppId, EntryType, EventTransaction } from '../../types'
+import { useOpenEvent, useHotKey } from '../../hooks'
 import ThumbnailList from './ThumbnailList'
 import Toolbar from './Toolbar'
 import Viewer from './Viewer'
 import { line } from '../../utils'
 import { useRecoilState } from 'recoil'
-import { entrySelectorOperationState } from '../../states'
+import { entrySelectorEventState } from '../../states'
 import { useTranslation } from 'react-i18next'
 
 const appId = AppId.photoViewer
@@ -31,9 +31,9 @@ export default function PhotoViewer(props: AppComponentProps) {
     activeEntryStreamUrl,
     setMatchedEntryList,
     setActiveIndex,
-  } = useOpenOperation(appId)
+  } = useOpenEvent(appId)
 
-  const [, setEntrySelectorOperation] = useRecoilState(entrySelectorOperationState)
+  const [, setEntrySelectorEvent] = useRecoilState(entrySelectorEventState)
 
   const [loading, setLoading] = useState(false)
   const [isLight, setIsLight] = useState(false)
@@ -92,7 +92,14 @@ export default function PhotoViewer(props: AppComponentProps) {
             {!activeEntry && (
               <div
                 className="m-2 p-2 border border-gray-500 cursor-pointer text-xs text-white rounded-sm text-center hover:border-gray-300"
-                onClick={() => setEntrySelectorOperation({ appId, type: EntryType.file })}
+                onClick={() => {
+                  setEntrySelectorEvent({
+                    transaction: EventTransaction.app_run,
+                    mode: 'open',
+                    appId,
+                    type: EntryType.file,
+                  })
+                }}
               >
                 {t`action.openFile`}
               </div>

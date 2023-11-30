@@ -1,8 +1,8 @@
 import { useCallback, useEffect } from 'react'
 import { useRecoilState } from 'recoil'
-import { openOperationState, runningAppListState, activePageState } from '../../states'
+import { openEventState, runningAppListState, activePageState } from '../../states'
 import { APP_LIST } from '../../apps'
-import { AppId, IApp, Page } from '../../types'
+import { AppId, EventTransaction, IApp, Page } from '../../types'
 import { line } from '../../utils'
 import { useTranslation } from 'react-i18next'
 
@@ -18,7 +18,7 @@ export default function Dock(props: DockProps) {
   const { t } = useTranslation()
 
   const [runningAppList, setRunningAppList] = useRecoilState(runningAppListState)
-  const [openOperation] = useRecoilState(openOperationState)
+  const [openEvent] = useRecoilState(openEventState)
   const [activePage] = useRecoilState(activePageState)
 
   const handleOpenApp = useCallback((app: IApp) => {
@@ -29,12 +29,12 @@ export default function Dock(props: DockProps) {
   }, [runningAppList, setRunningAppList])
 
   useEffect(() => {
-    if (openOperation) {
-      const app = APP_LIST.find(a => a.id === openOperation.appId)!
+    if (openEvent?.transaction === EventTransaction.app_run) {
+      const app = APP_LIST.find(a => a.id === openEvent.appId)!
       setActiveAppId(app.id)
       handleOpenApp(app)
     }
-  }, [openOperation, handleOpenApp, setActiveAppId])
+  }, [openEvent, handleOpenApp, setActiveAppId])
 
   return (
     <>

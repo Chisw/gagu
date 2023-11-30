@@ -2,12 +2,12 @@ import { atom } from 'recoil'
 import {
   IApp,
   IBaseData,
-  IOpenOperation,
+  IOpenEvent,
   IContextMenuState,
   IUserInfo,
   Page,
   IEntryPathMap,
-  IEntrySelectorOperation,
+  IEntrySelectorEvent,
 } from '../types'
 
 export const userInfoState = atom<IUserInfo | null>({
@@ -44,19 +44,14 @@ export const activePageState = atom<Page>({
   default: Page.PENDING
 })
 
-export const topWindowIndexState = atom<number>({
-  key: 'topWindowIndexState',
-  default: 0,
-})
-
 export const runningAppListState = atom<IApp[]>({
   key: 'runningAppListState',
   default: [],
 })
 
-export const openOperationState = atom<IOpenOperation | null>({
-  key: 'openOperationState',
-  default: null,
+export const topWindowIndexState = atom<number>({
+  key: 'topWindowIndexState',
+  default: 0,
 })
 
 export const contextMenuDataState = atom<IContextMenuState | null>({
@@ -64,12 +59,17 @@ export const contextMenuDataState = atom<IContextMenuState | null>({
   default: null,
 })
 
-export const entrySelectorOperationState = atom<IEntrySelectorOperation | null>({
-  key: 'entrySelectorOperationState',
-  default: null,
-})
-
 export const entryPathMapState = atom<IEntryPathMap>({
   key: 'entryPathMapState',
   default: {},
+})
+
+export const openEventState = atom<IOpenEvent | null>({
+  key: 'openEventState',
+  default: null,
+})
+
+export const entrySelectorEventState = atom<IEntrySelectorEvent | null>({
+  key: 'entrySelectorEventState',
+  default: null,
 })

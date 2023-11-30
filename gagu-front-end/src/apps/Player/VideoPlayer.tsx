@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { AppComponentProps, AppId, EntryType } from '../../types'
-import { useOpenOperation, usePlayInfo } from '../../hooks'
+import { AppComponentProps, AppId, EntryType, EventTransaction } from '../../types'
+import { useOpenEvent, usePlayInfo } from '../../hooks'
 import ProgressSlider from './common/ProgressSlider'
 import { line } from '../../utils'
 import { SvgIcon } from '../../components/common'
 import VolumeSlider from './common/VolumeSlider'
 import { useRecoilState } from 'recoil'
-import { entrySelectorOperationState } from '../../states'
+import { entrySelectorEventState } from '../../states'
 import { useTranslation } from 'react-i18next'
 
 const appId = AppId.videoPlayer
@@ -23,9 +23,9 @@ export default function VideoPlayer(props: AppComponentProps) {
     activeEntry,
     activeEntryStreamUrl,
     // setActiveIndex,
-  } = useOpenOperation(appId)
+  } = useOpenEvent(appId)
 
-  const [, setEntrySelectorOperation] = useRecoilState(entrySelectorOperationState)
+  const [, setEntrySelectorEvent] = useRecoilState(entrySelectorEventState)
 
   const [, setLoading] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
@@ -107,7 +107,14 @@ export default function VideoPlayer(props: AppComponentProps) {
           {!activeEntry && (
             <div
               className="m-2 p-2 border border-gray-500 cursor-pointer text-xs text-white rounded-sm text-center hover:border-gray-300"
-              onClick={() => setEntrySelectorOperation({ appId, type: EntryType.file })}
+              onClick={() => {
+                setEntrySelectorEvent({
+                  transaction: EventTransaction.app_run,
+                  mode: 'open',
+                  appId,
+                  type: EntryType.file,
+                })
+              }}
             >
               {t`action.openFile`}
             </div>

@@ -53,7 +53,7 @@ export default function SelectionMenu(props: SelectionMenuProps) {
     }
 
     const onOpenEntry = (app: IApp) => {
-      // setOpenOperation({
+      // setOpenEvent({
       //   app,
       //   matchedEntryList: contextEntryList,
       //   activeEntryIndex: 0,
