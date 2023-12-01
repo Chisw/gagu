@@ -186,6 +186,7 @@ export default function Toolbar(props: ToolbarProps) {
           md:opacity-0 group-hover:opacity-100
           cursor-default
           ${thumbnailListShow ? 'opacity-100' : ''}
+          ${activeEntry ? '' : 'hidden'}
         `)}
         onClick={e => e.stopPropagation()}
       >

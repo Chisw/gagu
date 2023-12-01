@@ -1,14 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { AppComponentProps, AppId, EntryType, EventTransaction } from '../../types'
+import { AppComponentProps, AppId } from '../../types'
 import { useRequest, useOpenEvent, usePlayInfo } from '../../hooks'
 import { FsApi } from '../../api'
 import { getEntryPath, getIndexLabel, getReadableSize, line } from '../../utils'
 import SpectrumCanvas from './common/SpectrumCanvas'
 import VolumeSlider from './common/VolumeSlider'
 import ProgressSlider from './common/ProgressSlider'
-import { IconButton, SvgIcon } from '../../components/common'
-import { useRecoilState } from 'recoil'
-import { entrySelectorEventState } from '../../states'
+import { IconButton, Opener, SvgIcon } from '../../components/common'
 import { useTranslation } from 'react-i18next'
 
 const nextPlayMode: any = {
@@ -38,8 +36,6 @@ export default function MusicPlayer(props: AppComponentProps) {
     activeEntryStreamUrl,
     setActiveIndex,
   } = useOpenEvent(appId)
-
-  const [, setEntrySelectorEvent] = useRecoilState(entrySelectorEventState)
 
   const [isPlaying, setIsPlaying] = useState(false)
   const [playMode, setPlayMode] = useState('order')
@@ -170,23 +166,9 @@ export default function MusicPlayer(props: AppComponentProps) {
   return (
     <>
       <div className="absolute inset-0 flex flex-col bg-gradient-to-br from-pink-700 to-pink-900 select-none">
-        {!activeEntry && (
-          <div
-            className="m-2 p-2 border border-pink-500 cursor-pointer text-xs text-white rounded-sm text-center hover:border-pink-300"
-            onClick={() => {
-              setEntrySelectorEvent({
-                transaction: EventTransaction.app_run,
-                mode: 'open',
-                appId,
-                type: EntryType.file,
-              })
-            }}
-          >
-            {t`action.openFile`}
-          </div>
-        )}
+        {!activeEntry && <Opener appId={appId} />}
         {/* list */}
-        <div className="relative flex-grow pb-3 overflow-y-auto">
+        <div className="relative z-0 flex-grow pb-3 overflow-y-auto">
           {matchedEntryList.map((entry, entryIndex) => {
             const { name, size } = entry
             const isActive = entryIndex === activeIndex
@@ -233,13 +215,6 @@ export default function MusicPlayer(props: AppComponentProps) {
           })}
         </div>
 
-        <ProgressSlider
-          duration={audioEl?.duration || 0}
-          playPercent={playInfo.playPercent}
-          frontAndBackColorClassNames={['bg-pink-600', 'bg-pink-300']}
-          onProgressClick={handleProgressClick}
-        />
-
         <VolumeSlider
           show={volumeSliderShow}
           volume={volume}
@@ -249,8 +224,17 @@ export default function MusicPlayer(props: AppComponentProps) {
           onVolumeChange={setVolume}
         />
 
+        {activeEntry && (
+          <ProgressSlider
+            duration={audioEl?.duration || 0}
+            playPercent={playInfo.playPercent}
+            frontAndBackColorClassNames={['bg-pink-600', 'bg-pink-300']}
+            onProgressClick={handleProgressClick}
+          />
+        )}
+
         {/* bottom */}
-        <div className="relative z-0 w-full h-16 bg-black bg-opacity-10 flex-shrink-0">
+        <div className={`relative z-0 w-full h-16 bg-black bg-opacity-10 flex-shrink-0 ${activeEntry ? '' : 'hidden'}`}>
           {/* SpectrumCanvas */}
           <div className="absolute z-0 inset-0">
             <SpectrumCanvas audioEl={audioEl} />

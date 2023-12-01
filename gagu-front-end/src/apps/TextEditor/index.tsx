@@ -1,12 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
-import { SvgIcon, ToolButton } from '../../components/common'
+import { Opener, SvgIcon, ToolButton } from '../../components/common'
 import { copy, ENTRY_ICON_LIST, getEntryPath, line } from '../../utils'
 import { FsApi } from '../../api'
-import { AppComponentProps, AppId, EntryType, EventTransaction } from '../../types'
+import { AppComponentProps, AppId } from '../../types'
 import { useOpenEvent, useRequest } from '../../hooks'
-import { useRecoilState } from 'recoil'
-import { entrySelectorEventState } from '../../states'
 import { useTranslation } from 'react-i18next'
 import ReactMarkdown from 'react-markdown'
 import 'github-markdown-css/github-markdown-light.css'
@@ -26,8 +24,6 @@ export default function TextEditor(props: AppComponentProps) {
     // activeEntryStreamUrl,
     // setActiveIndex,
   } = useOpenEvent(appId)
-
-  const [, setEntrySelectorEvent] = useRecoilState(entrySelectorEventState)
 
   const [value, setValue] = useState('')
   const [monoMode, setMonoMode] = useState(false)
@@ -96,7 +92,7 @@ export default function TextEditor(props: AppComponentProps) {
   return (
     <>
       <div className="absolute inset-0 flex flex-col">
-        <div className="h-10 md:h-8 flex-shrink-0 flex items-center border-b bg-white">
+        <div className={`relative z-10 h-10 md:h-8 flex-shrink-0 flex items-center border-b bg-white ${activeEntry ? '' : 'hidden'}`}>
           <ToolButton
             title={t`action.save`}
             icon={<SvgIcon.Save />}
@@ -155,7 +151,8 @@ export default function TextEditor(props: AppComponentProps) {
           />
         </div>
         <div className="flex-grow relative">
-          {activeEntry ? (
+          {!activeEntry && <Opener appId={appId} />}
+          {activeEntry && (
             <code
               className="absolute inset-0"
               style={monoMode ? undefined : { fontFamily: 'unset' }}
@@ -195,20 +192,6 @@ export default function TextEditor(props: AppComponentProps) {
                 )}
               </div>
             </code>
-          ) : (
-            <div
-              className="m-2 p-2 border border-gray-400 cursor-pointer text-xs rounded-sm text-center hover:border-gray-600"
-              onClick={() => {
-                setEntrySelectorEvent({
-                  transaction: EventTransaction.app_run,
-                  mode: 'open',
-                  appId,
-                  type: EntryType.file,
-                })
-              }}
-            >
-              {t`action.openFile`}
-            </div>
           )}
         </div>
       </div>

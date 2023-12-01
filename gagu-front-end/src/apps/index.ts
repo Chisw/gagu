@@ -40,7 +40,7 @@ export const APP_LIST: IApp[] = [
     id: AppId.photoViewer,
     runningId: 0,
     AppComponent: PhotoViewer,
-    width: 960,
+    width: 900,
     height: 520,
     resizeRange: {
       minWidth: 480,

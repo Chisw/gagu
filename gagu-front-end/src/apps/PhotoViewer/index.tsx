@@ -1,14 +1,11 @@
-import { Spinner } from '../../components/common'
+import { Opener, Spinner } from '../../components/common'
 import { useEffect, useMemo, useRef, useState, useCallback } from 'react'
-import { AppComponentProps, AppId, EntryType, EventTransaction } from '../../types'
+import { AppComponentProps, AppId } from '../../types'
 import { useOpenEvent, useHotKey } from '../../hooks'
 import ThumbnailList from './ThumbnailList'
 import Toolbar from './Toolbar'
 import Viewer from './Viewer'
 import { line } from '../../utils'
-import { useRecoilState } from 'recoil'
-import { entrySelectorEventState } from '../../states'
-import { useTranslation } from 'react-i18next'
 
 const appId = AppId.photoViewer
 
@@ -21,8 +18,6 @@ export default function PhotoViewer(props: AppComponentProps) {
     onClose,
   } = props
 
-  const { t } = useTranslation()
-
   const {
     indexLabel,
     matchedEntryList,
@@ -32,8 +27,6 @@ export default function PhotoViewer(props: AppComponentProps) {
     setMatchedEntryList,
     setActiveIndex,
   } = useOpenEvent(appId)
-
-  const [, setEntrySelectorEvent] = useRecoilState(entrySelectorEventState)
 
   const [loading, setLoading] = useState(false)
   const [isLight, setIsLight] = useState(false)
@@ -89,21 +82,7 @@ export default function PhotoViewer(props: AppComponentProps) {
         >
           {loading && <Spinner />}
           <div className={`absolute z-0 inset-0 ${activeEntry ? 'flex justify-center items-center' : ''}`}>
-            {!activeEntry && (
-              <div
-                className="m-2 p-2 border border-gray-500 cursor-pointer text-xs text-white rounded-sm text-center hover:border-gray-300"
-                onClick={() => {
-                  setEntrySelectorEvent({
-                    transaction: EventTransaction.app_run,
-                    mode: 'open',
-                    appId,
-                    type: EntryType.file,
-                  })
-                }}
-              >
-                {t`action.openFile`}
-              </div>
-            )}
+            {!activeEntry && <Opener appId={appId} />}
             {activeEntry && (
               <img
                 ref={imgRef}

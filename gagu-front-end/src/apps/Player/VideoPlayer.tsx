@@ -1,12 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { AppComponentProps, AppId, EntryType, EventTransaction } from '../../types'
+import { AppComponentProps, AppId } from '../../types'
 import { useOpenEvent, usePlayInfo } from '../../hooks'
 import ProgressSlider from './common/ProgressSlider'
 import { line } from '../../utils'
-import { SvgIcon } from '../../components/common'
+import { Opener, SvgIcon } from '../../components/common'
 import VolumeSlider from './common/VolumeSlider'
-import { useRecoilState } from 'recoil'
-import { entrySelectorEventState } from '../../states'
 import { useTranslation } from 'react-i18next'
 
 const appId = AppId.videoPlayer
@@ -24,8 +22,6 @@ export default function VideoPlayer(props: AppComponentProps) {
     activeEntryStreamUrl,
     // setActiveIndex,
   } = useOpenEvent(appId)
-
-  const [, setEntrySelectorEvent] = useRecoilState(entrySelectorEventState)
 
   const [, setLoading] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
@@ -51,7 +47,7 @@ export default function VideoPlayer(props: AppComponentProps) {
     if (videoEl && activeEntryStreamUrl) {
       videoEl.src = activeEntryStreamUrl
       videoEl.load()
-      videoEl.play()
+      videoEl?.play()
       setIsPlaying(true)
     }
   }, [videoEl, activeEntryStreamUrl])
@@ -67,7 +63,7 @@ export default function VideoPlayer(props: AppComponentProps) {
       videoEl.pause()
       setIsPlaying(false)
     } else {
-      videoEl.play()
+      videoEl?.play()
       setIsPlaying(true)
     }
   }, [videoEl, isPlaying])
@@ -104,21 +100,7 @@ export default function VideoPlayer(props: AppComponentProps) {
           className="absolute z-0 inset-0"
           onClick={handlePlayOrPause}
         >
-          {!activeEntry && (
-            <div
-              className="m-2 p-2 border border-gray-500 cursor-pointer text-xs text-white rounded-sm text-center hover:border-gray-300"
-              onClick={() => {
-                setEntrySelectorEvent({
-                  transaction: EventTransaction.app_run,
-                  mode: 'open',
-                  appId,
-                  type: EntryType.file,
-                })
-              }}
-            >
-              {t`action.openFile`}
-            </div>
-          )}
+          {!activeEntry && <Opener appId={appId} />}
           <video
             autoPlay
             ref={videoRef}
@@ -135,6 +117,7 @@ export default function VideoPlayer(props: AppComponentProps) {
             flex justify-between items-center
             backdrop-blur bg-black bg-opacity-50
             text-xs text-white
+            ${activeEntry ? '' : 'hidden'}
           `)}
         >
           <div className="absolute top-0 right-0 left-0 -mt-[2px]">
@@ -149,7 +132,7 @@ export default function VideoPlayer(props: AppComponentProps) {
           <VolumeSlider
             show={volumeSliderShow}
             volume={volume}
-            right={8}
+            right={44}
             bottom={44}
             onClose={() => setVolumeSliderShow(false)}
             onVolumeChange={setVolume}
