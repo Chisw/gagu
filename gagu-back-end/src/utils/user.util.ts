@@ -7,6 +7,7 @@ import {
   QUERY_TOKEN_KEY,
 } from './constant.util'
 import { Request } from 'express'
+import { JSONFormat } from './fs.util'
 
 export const getAuthorizationToken = (authorization: string) => {
   return (authorization || '').replace(HEADERS_AUTH_PREFIX, '')
@@ -21,7 +22,7 @@ export const getRequestToken = (request: Request) => {
 }
 
 export const writeUsersData = (userList: IUser[]) => {
-  writeFileSync(GAGU_PATH.DATA_USERS, JSON.stringify(userList))
+  writeFileSync(GAGU_PATH.DATA_USERS, JSONFormat(userList))
 }
 
 export const readUsersData = () => {
@@ -31,7 +32,7 @@ export const readUsersData = () => {
 }
 
 export const writeAuthData = (authRecordList: IAuthRecord[]) => {
-  writeFileSync(GAGU_PATH.DATA_AUTH, JSON.stringify(authRecordList))
+  writeFileSync(GAGU_PATH.DATA_AUTH, JSONFormat(authRecordList))
 }
 
 export const readAuthData = () => {

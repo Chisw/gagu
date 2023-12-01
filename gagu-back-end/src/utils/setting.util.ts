@@ -1,9 +1,10 @@
 import { readFileSync, writeFileSync } from 'fs'
 import { ISetting } from '../types'
 import { GAGU_PATH } from './constant.util'
+import { JSONFormat } from './fs.util'
 
 export const writeSettingsData = (settings: ISetting) => {
-  writeFileSync(GAGU_PATH.DATA_SETTINGS, JSON.stringify(settings))
+  writeFileSync(GAGU_PATH.DATA_SETTINGS, JSONFormat(settings))
 }
 
 export const readSettingsData = () => {

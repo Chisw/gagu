@@ -240,7 +240,8 @@ export function MenuBar() {
               className="px-2 h-full flex items-center cursor-pointer hover:bg-white hover:bg-opacity-30 active:bg-black active:bg-opacity-10 select-none"
               onClick={() => setSystemPopoverShow(true)}
             >
-              <SvgIcon.G size={12} />
+              <SvgIcon.G size={12} className="hidden md:block" />
+              <SvgIcon.G size={14} className="block md:hidden" />
               <span className="hidden md:inline ml-2 text-gray-700 font-din">
                 {/* TODO: i18n */}
                 {loading ? 'Loading..' : `${baseData.deviceName}`}
@@ -309,7 +310,7 @@ export function MenuBar() {
               {userInfo ? (
                 <>
                   <div
-                    className="w-3 h-3 rounded-full filter grayscale opacity-80 bg-center bg-cover bg-black bg-opacity-20"
+                    className="w-4 h-4 md:w-3 md:h-3 rounded-full filter grayscale opacity-80 bg-center bg-cover bg-black bg-opacity-20"
                     style={{ backgroundImage: `url("${FsApi.getAvatarStreamUrl(userInfo?.username || '')}")` }}
                   />
                   <span className="hidden md:inline ml-2 font-din text-gray-700">{userInfo.nickname}</span>

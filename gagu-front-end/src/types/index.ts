@@ -33,7 +33,6 @@ export enum NameFail {
   cancel = 'cancel',
   empty = 'empty',
   existed = 'existed',
-  net_error = 'net_error',
   invalid = 'invalid',
 }
 

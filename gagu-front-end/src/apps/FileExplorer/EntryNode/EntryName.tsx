@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useRequest } from '../../../hooks'
-import { line, setSelection } from '../../../utils'
+import { line, setInputSelection } from '../../../utils'
 import { FsApi } from '../../../api'
 import { INVALID_NAME_CHAR_LIST } from '../../../utils'
 import { EditMode, CreationType, EntryType, IEntry, NameFailType } from '../../../types'
@@ -80,8 +80,6 @@ export default function EntryName(props: EntryNameProps) {
         const { success } = await updateName(oldPath, newPath)
         if (success) {
           onSuccess({ ...entry!, name: finalName })
-        } else {
-          onFail('net_error')
         }
       } else {
         if (creationType === EditMode.createFolder) {
@@ -96,8 +94,6 @@ export default function EntryName(props: EntryNameProps) {
               hidden: false,
               extension: '_dir',
             })
-          } else {
-            onFail('net_error')
           }
         } else if (creationType === EditMode.createText) {
           const blob = new Blob([''], { type: 'text/plain;charset=utf-8' })
@@ -114,8 +110,6 @@ export default function EntryName(props: EntryNameProps) {
               hidden: false,
               extension: '',
             })
-          } else {
-            onFail('net_error')
           }
         }
       }
@@ -153,8 +147,8 @@ export default function EntryName(props: EntryNameProps) {
               const input = document.getElementById('file-explorer-name-input') as HTMLInputElement | undefined
               if (input && entry) {
                 const { name, extension } = entry
-                const end = extension ? name.replace(`.${extension}`, '').length : name.length
-                setSelection(input, 0, end)
+                const end = extension ? name.lastIndexOf(`.${extension}`) : name.length
+                setInputSelection(input, 0, end)
               }
             }}
             onBlur={handleName}

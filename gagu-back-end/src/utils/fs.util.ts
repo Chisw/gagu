@@ -101,3 +101,51 @@ export const writeLog = (date: string, log: string) => {
     err && console.log(err)
   })
 }
+
+export const JSONFormat = (data: any) => {
+  let json = JSON.stringify(data)
+  const p: string[] = []
+
+  const push = (m: string) => `\\${p.push(m)}\\`
+  const pop = (m: string, i: number) => p[i - 1]
+  const tabs = (count: number) => new Array(count + 1).join('  ')
+
+  let out = ''
+  let indent = 0
+
+  json = json
+    .replace(/\\./g, push)
+    .replace(/(".*?"|'.*?')/g, push)
+    .replace(/\s+/, '')
+
+  for (let i = 0; i < json.length; i++) {
+    const c = json.charAt(i)
+
+    switch (c) {
+      case '{':
+      case '[':
+        out += c + '\n' + tabs(++indent)
+        break
+      case '}':
+      case ']':
+        out += '\n' + tabs(--indent) + c
+        break
+      case ',':
+        out += ',\n' + tabs(indent)
+        break
+      case ':':
+        out += ': '
+        break
+      default:
+        out += c
+        break
+    }
+  }
+
+  out = out
+    .replace(/\[[\d,\s]+?\]/g, (m) => m.replace(/\s/g, ''))
+    .replace(/\\(\d+)\\/g, pop)
+    .replace(/\\(\d+)\\/g, pop)
+
+  return out
+}

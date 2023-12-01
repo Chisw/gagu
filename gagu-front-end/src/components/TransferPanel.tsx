@@ -108,11 +108,12 @@ export function TransferPanel() {
           `}
           style={{ width: `${uploadInfo.ratio * 100}%` }}
         />
-        <SvgIcon.Transfer />
-        <span className="font-din text-xs text-center flex-grow">
+        <SvgIcon.Transfer className="hidden md:block" />
+        <SvgIcon.Transfer size={18} className="block md:hidden" />
+        <span className="font-din text-center flex-grow">
           {uploading && uploadInfo.speed}
         </span>
-        <span className="ml-2 font-din">
+        <span className={`ml-2 font-din ${transferTaskList.length ? '' : 'hidden'}`}>
           {transferTaskList.filter(t => t.status === 'success').length}
           &nbsp;/&nbsp;
           {transferTaskList.length}

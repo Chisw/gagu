@@ -177,7 +177,7 @@ export const setFavicon = async (imgUrl: string) => {
   }
 }
 
-export const setSelection = (input: HTMLInputElement, start: number, end: number) => {
+export const setInputSelection = (input: HTMLInputElement, start: number, end: number) => {
   input.focus()
 
   const selection = document as any
