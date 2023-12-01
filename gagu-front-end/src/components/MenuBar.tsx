@@ -310,7 +310,7 @@ export function MenuBar() {
               {userInfo ? (
                 <>
                   <div
-                    className="w-4 h-4 md:w-3 md:h-3 rounded-full filter grayscale opacity-80 bg-center bg-cover bg-black bg-opacity-20"
+                    className="w-4 h-4 md:w-3 md:h-3 md:box-content rounded-full filter opacity-80 bg-center bg-cover bg-black bg-opacity-20 border border-white"
                     style={{ backgroundImage: `url("${FsApi.getAvatarStreamUrl(userInfo?.username || '')}")` }}
                   />
                   <span className="hidden md:inline ml-2 font-din text-gray-700">{userInfo.nickname}</span>

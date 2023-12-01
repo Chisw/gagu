@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { isSameEntry, line } from '../../utils'
-import { IApp, IEntry } from '../../types'
+import { EditMode, EditModeType, IApp, IEntry } from '../../types'
 import { useTranslation } from 'react-i18next'
 import { SvgIcon } from '../../components/common'
 import { CALLABLE_APP_LIST } from '../../apps'
@@ -10,6 +10,7 @@ interface SelectionMenuProps {
   asSelector?: boolean
   favoriteEntryList: IEntry[]
   selectedEntryList: IEntry[]
+  onEdit: (mode: EditModeType, entry?: IEntry) => void
   onDirectorySizeUpdate: (entry: IEntry) => void
   onFavoriteClick: (entry: IEntry, isFavorited: boolean) => void
   onUploadClick: () => void
@@ -26,6 +27,7 @@ export default function SelectionMenu(props: SelectionMenuProps) {
     asSelector = false,
     favoriteEntryList,
     selectedEntryList,
+    onEdit,
     onDirectorySizeUpdate,
     onFavoriteClick,
     onUploadClick,
@@ -65,13 +67,13 @@ export default function SelectionMenu(props: SelectionMenuProps) {
         icon: <SvgIcon.FolderAdd />,
         name: t`action.newFolder`,
         isShow: true,
-        onClick: () => {},
+        onClick: () => onEdit(EditMode.createFolder),
       },
       {
         icon: <SvgIcon.FileAdd />,
         name: t`action.newTextFile`,
         isShow: true,
-        onClick: () => {},
+        onClick: () => onEdit(EditMode.createText),
       },
       {
         icon: <SvgIcon.Upload />,
@@ -96,7 +98,7 @@ export default function SelectionMenu(props: SelectionMenuProps) {
         icon: <SvgIcon.Rename />,
         name: t`action.rename`,
         isShow: isSingle,
-        onClick: () => {},
+        onClick: () => onEdit(EditMode.rename, selectedEntryList[0]),
       },
       {
         icon: <SvgIcon.Apps />,
@@ -146,6 +148,7 @@ export default function SelectionMenu(props: SelectionMenuProps) {
     selectedEntryList,
     onSelectAll,
     favoriteEntryList,
+    onEdit,
     onDirectorySizeUpdate,
     onFavoriteClick,
     onUploadClick,

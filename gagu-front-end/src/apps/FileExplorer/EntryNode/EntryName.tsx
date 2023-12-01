@@ -41,7 +41,7 @@ export default function EntryName(props: EntryNameProps) {
 
   const { request: queryExists, loading: loadingExist } = useRequest(FsApi.queryExists)
   const { request: createDirectory, loading: loadingNewDir } = useRequest(FsApi.createDirectory)
-  const { request: updateName, loading: loadingRename } = useRequest(FsApi.updateName)
+  const { request: updateEntryName, loading: loadingRename } = useRequest(FsApi.updateEntryName)
   const { request: uploadFile } = useRequest(FsApi.uploadFile)
 
   const handleName = useCallback(async (e: any) => {
@@ -77,7 +77,7 @@ export default function EntryName(props: EntryNameProps) {
     } else {
       if (oldName) {  // rename
         const oldPath = `${parentPath}/${oldName}`
-        const { success } = await updateName(oldPath, newPath)
+        const { success } = await updateEntryName(oldPath, newPath)
         if (success) {
           onSuccess({ ...entry!, name: finalName })
         }
@@ -114,7 +114,18 @@ export default function EntryName(props: EntryNameProps) {
         }
       }
     }
-  }, [entry, parentPath, creationType, queryExists, createDirectory, updateName, uploadFile, onSuccess, onFail, t])
+  }, [
+    t,
+    entry,
+    parentPath,
+    creationType,
+    queryExists,
+    createDirectory,
+    updateEntryName,
+    uploadFile,
+    onSuccess,
+    onFail,
+  ])
 
   return (
     <div

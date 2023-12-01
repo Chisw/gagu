@@ -35,13 +35,13 @@ export class FsApi {
   }
 
   // TODO: name limit
-  static updateName = async (oldPath: string, newPath: string, config?: AxiosRequestConfig) => {
+  static updateEntryName = async (oldPath: string, newPath: string, config?: AxiosRequestConfig) => {
     const { data } = await service.put(`/api/fs/rename`, { oldPath, newPath }, config)
     return data
   }
 
   // TODO: add api
-  static updatePath = async (oldPath: string, newPath: string, config?: AxiosRequestConfig) => {
+  static updateEntryPath = async (oldPath: string, newPath: string, config?: AxiosRequestConfig) => {
     const { data } = await service.put(`/api/fs/rename`, { oldPath, newPath }, config)
     return data
   }

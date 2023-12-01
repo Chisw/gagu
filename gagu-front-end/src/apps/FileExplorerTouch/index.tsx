@@ -1,5 +1,5 @@
 
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { EmptyPanel } from '../../components/common'
 import { getMatchedApp, isSameEntry, line } from '../../utils'
 import ControlBar from '../FileExplorer/ControlBar'
@@ -12,6 +12,7 @@ import { SharingModal } from '../../components'
 import { openEventState } from '../../states'
 import { useRecoilState } from 'recoil'
 import { EventTransaction, ExplorerSelectorProps, IEntry } from '../../types'
+import EntryNameDialog from './EntryNameDialog'
 // import { useNavigate } from 'react-router'
 
 interface FileExplorerTouchProps extends ExplorerSelectorProps {
@@ -38,6 +39,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
   // const navigate = useNavigate()
 
   const [, setOpenEvent] = useRecoilState(openEventState)
+  const [activeEntry, setActiveEntry] = useState<IEntry | null>(null)
 
   const containerRef = useRef(null)
 
@@ -48,7 +50,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
     entryList, favoriteEntryList, sideEntryList, sharingEntryList,
     isEntryListEmpty,
     folderCount, fileCount,
-    // editMode, setEditMode,
+    editMode, setEditMode,
     filterMode, setFilterMode,
     filterText, setFilterText,
     hiddenShow, handleHiddenShowChange,
@@ -261,6 +263,10 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
           favoriteEntryList,
           selectedEntryList,
         }}
+        onEdit={(mode, entry) => {
+          setEditMode(mode)
+          setActiveEntry(entry || null)
+        }}
         onDirectorySizeUpdate={handleDirectorySizeUpdate}
         onFavoriteClick={handleFavoriteClick}
         onUploadClick={handleUploadClick}
@@ -278,6 +284,19 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
         visible={sharingModalShow}
         entryList={sharingEntryList}
         onClose={() => setSharingModalShow(false)}
+      />
+
+      <EntryNameDialog
+        {...{
+          editMode,
+          setEditMode,
+          currentPath,
+          activeEntry,
+        }}
+        onSuccess={() => {
+          setEditMode(null)
+          handleNavRefresh()
+        }}
       />
     </>
   )
