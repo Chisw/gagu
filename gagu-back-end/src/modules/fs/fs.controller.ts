@@ -132,7 +132,23 @@ export class FsController {
 
   @Put('rename')
   @Permission(UserPermission.write)
-  update(@Body('oldPath') oldPath: string, @Body('newPath') newPath: string) {
+  updateName(
+    @Body('oldPath') oldPath: string,
+    @Body('newPath') newPath: string,
+  ) {
+    renameSync(oldPath, newPath)
+    return {
+      success: true,
+      message: SERVER_MESSAGE_MAP.OK,
+    }
+  }
+
+  @Put('move')
+  @Permission([UserPermission.write, UserPermission.delete])
+  updatePath(
+    @Body('oldPath') oldPath: string,
+    @Body('newPath') newPath: string,
+  ) {
     renameSync(oldPath, newPath)
     return {
       success: true,

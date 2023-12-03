@@ -19,6 +19,15 @@ Clear data directory means that all users, download tunnels and other data will 
 
 ## v0.0.*
 
+- v0.0.49 (2023-12-03)
+  - feat: support assigning specified accessible paths to users
+  - feat: new folder, text file and rename functions in Touch mode
+  - fix: folders whose size has been obtained cannot be sorted by file size
+  - fix: add a tip when the file cannot be actually deleted under certain circumstances
+  - fix: use quotes safely in filenames
+  - fix: default opening interface in every apps
+  - fix: moving files requires both write and delete permissions
+
 - v0.0.48 (2023-11-27)
   - feat: Settings/Advanced/Service host name
   - fix: Sharing page missing

@@ -40,9 +40,8 @@ export class FsApi {
     return data
   }
 
-  // TODO: add api
   static updateEntryPath = async (oldPath: string, newPath: string, config?: AxiosRequestConfig) => {
-    const { data } = await service.put(`/api/fs/rename`, { oldPath, newPath }, config)
+    const { data } = await service.put(`/api/fs/move`, { oldPath, newPath }, config)
     return data
   }
 

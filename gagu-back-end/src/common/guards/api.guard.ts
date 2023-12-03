@@ -27,8 +27,10 @@ export class ApiGuard implements CanActivate {
   ): boolean | Promise<boolean> | Observable<boolean> {
     const handler = context.getHandler()
     const isPublic = this.reflector.get(PUBLIC_DECORATOR_KEY, handler)
-    const requiredPermission: UserPermissionType | undefined =
-      this.reflector.get(PERMISSION_DECORATOR_KEY, handler)
+    const requiredPermissions:
+      | UserPermissionType
+      | UserPermissionType[]
+      | undefined = this.reflector.get(PERMISSION_DECORATOR_KEY, handler)
 
     if (isPublic) {
       return true
@@ -45,10 +47,16 @@ export class ApiGuard implements CanActivate {
       const isLoggedIn = !!username
 
       if (isLoggedIn) {
-        if (requiredPermission) {
+        if (requiredPermissions) {
           const user = this.userService.findOne(username)
           request.user = user
-          return !!user?.permissions.includes(requiredPermission)
+          if (Array.isArray(requiredPermissions)) {
+            return requiredPermissions.every((permission) => {
+              return user?.permissions.includes(permission)
+            })
+          } else {
+            return !!user?.permissions.includes(requiredPermissions)
+          }
         } else {
           return true
         }
