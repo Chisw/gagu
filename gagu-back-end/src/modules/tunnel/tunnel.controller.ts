@@ -29,7 +29,7 @@ export class TunnelController {
     return {
       success: true,
       message: SERVER_MESSAGE_MAP.OK,
-      tunnels,
+      data: tunnels,
     }
   }
 
@@ -44,7 +44,7 @@ export class TunnelController {
     return {
       success: true,
       message: SERVER_MESSAGE_MAP.OK,
-      code,
+      data: code,
     }
   }
 
@@ -62,12 +62,14 @@ export class TunnelController {
           return {
             success: true,
             message: SERVER_MESSAGE_MAP.ERROR_TUNNEL_PASSWORD_NEEDED,
-            tunnel: {
-              ...tunnel,
-              password: undefined,
-              entryList: [],
+            data: {
+              tunnel: {
+                ...tunnel,
+                password: undefined,
+                entryList: [],
+              },
+              flattenList: [],
             },
-            flattenList: [],
           }
         } else if (inputtedPassword !== password) {
           return {
@@ -80,11 +82,13 @@ export class TunnelController {
       return {
         success: true,
         message: SERVER_MESSAGE_MAP.OK,
-        tunnel: {
-          ...tunnel,
-          password: undefined,
+        data: {
+          tunnel: {
+            ...tunnel,
+            password: undefined,
+          },
+          flattenList,
         },
-        flattenList,
       }
     } else {
       return {
@@ -119,7 +123,7 @@ export class TunnelController {
     @Query('password') inputtedPassword?: string,
   ) {
     const tunnel = this.tunnelService.findOne(code)
-    const checkRes = checkTunnel(tunnel, inputtedPassword)
-    return checkRes
+    const result = checkTunnel(tunnel, inputtedPassword)
+    return result
   }
 }

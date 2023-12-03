@@ -289,7 +289,7 @@ export function useFileExplorer(props: Props) {
       type: 'download',
       content: message,
       onConfirm: async (close) => {
-        const { success, message, code } = await createTunnel({
+        const { success, message, data: code } = await createTunnel({
           type: TunnelType.download,
           entryList,
           downloadName,

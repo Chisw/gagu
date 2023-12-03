@@ -47,7 +47,7 @@ export class AuthController {
             return {
               success: true,
               message: SERVER_MESSAGE_MAP.OK,
-              userInfo: generateUserInfo(user, token),
+              data: generateUserInfo(user, token),
             }
           }
         }
@@ -76,7 +76,7 @@ export class AuthController {
         return {
           success: true,
           message: SERVER_MESSAGE_MAP.OK,
-          userInfo: generateUserInfo(user, token),
+          data: generateUserInfo(user, token),
         }
       } else {
         return {

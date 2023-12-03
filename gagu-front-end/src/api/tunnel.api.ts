@@ -1,15 +1,7 @@
-import { TunnelForm, ITunnel, IEntry, ResponseBase } from '../types'
+import { TunnelForm } from '../types'
 import { getPasswordParam } from '../utils'
 import service from './service'
 
-interface CreateResponse extends ResponseBase {
-  code?: string
-}
-
-interface TunnelResponse extends ResponseBase {
-  flattenList?: IEntry[]
-  tunnel?: ITunnel
-}
 
 export class TunnelApi {
   static queryTunnels = async () => {
@@ -18,12 +10,12 @@ export class TunnelApi {
   }
 
   static createTunnel = async (tunnelForm: TunnelForm) => {
-    const { data } = await service.post<CreateResponse>('/api/tunnel', tunnelForm)
+    const { data } = await service.post('/api/tunnel', tunnelForm)
     return data
   }
 
   static queryTunnel = async (code: string, password?: string) => {
-    const { data } = await service.get<TunnelResponse>(`/api/tunnel/${code}${getPasswordParam(password)}`)
+    const { data } = await service.get(`/api/tunnel/${code}${getPasswordParam(password)}`)
     return data
   }
 
@@ -33,7 +25,7 @@ export class TunnelApi {
   }
 
   static queryTunnelCheck = async (code: string, password?: string) => {
-    const { data } = await service.get<ResponseBase>(`/api/tunnel/${code}/check${getPasswordParam(password)}`)
+    const { data } = await service.get(`/api/tunnel/${code}/check${getPasswordParam(password)}`)
     return data
   }
 }

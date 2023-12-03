@@ -69,7 +69,7 @@ export default function EntryName(props: EntryNameProps) {
       : `${newName}.txt`
 
     const newPath = `${parentPath}/${finalName}`
-    const { exists } = await queryExists(newPath)
+    const { data: exists } = await queryExists(newPath)
 
     if (exists) {
       onFail('existed')

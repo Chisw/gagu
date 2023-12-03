@@ -40,8 +40,10 @@ export class UserController {
     return {
       success: true,
       message: SERVER_MESSAGE_MAP.OK,
-      userList,
-      loggedInList,
+      data: {
+        userList,
+        loggedInList,
+      },
     }
   }
 

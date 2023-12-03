@@ -50,7 +50,7 @@ export default function LoginPage() {
       username,
       password: md5(password),
     }
-    const { success, message, userInfo } = await login(formData)
+    const { success, message, data: userInfo } = await login(formData)
     if (success) {
       setUserInfo(userInfo)
       UserInfoStore.set(userInfo)

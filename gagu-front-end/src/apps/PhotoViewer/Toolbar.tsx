@@ -100,7 +100,7 @@ export default function Toolbar(props: ToolbarProps) {
         onClick: async () => {
           if (activeEntry) {
             const { name: downloadName } = activeEntry
-            const { success, code } = await createTunnel({
+            const { success, data: code } = await createTunnel({
               type: TunnelType.download,
               entryList: [activeEntry],
               downloadName,

@@ -94,7 +94,7 @@ export class FsController {
     return {
       success: true,
       message: SERVER_MESSAGE_MAP.OK,
-      flattenList,
+      data: flattenList,
     }
   }
 
@@ -104,7 +104,7 @@ export class FsController {
     return {
       success: true,
       message: SERVER_MESSAGE_MAP.OK,
-      exists,
+      data: exists,
     }
   }
 
@@ -175,9 +175,11 @@ export class FsController {
         const filePath = await this.fsService.getThumbnailPath(path)
         response.sendFile(filePath)
       } catch (err) {
+        // TODO:
         response.end(`ERROR: ${err}`)
       }
     } else {
+      // TODO:
       response.end('ERROR: FFMPEG and GM are required.')
     }
   }
@@ -194,9 +196,11 @@ export class FsController {
       if (getExists(avatarPath)) {
         response.sendFile(avatarPath)
       } else {
+        // TODO:
         response.end('ERROR_AVATAR_NOT_EXISTED')
       }
     } catch (err) {
+      // TODO:
       response.end('ERROR_AVATAR')
     }
   }
@@ -282,6 +286,7 @@ export class FsController {
     } catch (err) {
       return {
         success: false,
+        // TODO:
         message: err.toString(),
       }
     }
@@ -303,6 +308,7 @@ export class FsController {
     } catch (err) {
       return {
         success: false,
+        // TODO:
         message: err.toString(),
       }
     }

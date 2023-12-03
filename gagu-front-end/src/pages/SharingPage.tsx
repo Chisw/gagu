@@ -61,11 +61,8 @@ export default function SharePage() {
     leftTimes,
     downloadName,
   } = useMemo(() => {
-    const {
-      flattenList,
-      success,
-      message,
-    } = data || {}
+    const { success, message } = data || {}
+
     const {
       entryList,
       username,
@@ -74,8 +71,9 @@ export default function SharePage() {
       expiredAt,
       leftTimes,
       downloadName,
-    } = data?.tunnel || {}
+    } = data?.data?.tunnel || {}
 
+    const flattenList = data?.data?.flattenList || []
     const isSuccess = success
     const isShowInput = success && message === SERVER_MESSAGE_MAP.ERROR_TUNNEL_PASSWORD_NEEDED
     const isShowError = !success

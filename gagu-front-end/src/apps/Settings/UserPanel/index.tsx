@@ -16,15 +16,15 @@ export default function UserPanel() {
   const [formMode, setFormMode] = useState<formModeType>('CLOSE')
   const [form, setForm] = useState<IUserForm>(new UserForm())
 
-  const { request: handleRefresh, data } = useRequest(UserApi.queryUser)
+  const { request: handleRefresh, data } = useRequest(UserApi.queryUserList)
 
   useEffect(() => {
     handleRefresh()
   }, [handleRefresh])
 
   const { userList, loggedInList } = useMemo(() => {
-    const userList: IUser[] = data?.userList || []
-    const loggedInList: User.Username[] = data?.loggedInList || []
+    const userList: IUser[] = data?.data?.userList || []
+    const loggedInList: User.Username[] = data?.data?.loggedInList || []
     return { userList, loggedInList }
   }, [data])
 

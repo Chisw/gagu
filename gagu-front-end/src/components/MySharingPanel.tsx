@@ -1,5 +1,5 @@
 import { Button, SideSheet } from '@douyinfe/semi-ui'
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import toast from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
 import { TunnelApi } from '../api'
@@ -21,6 +21,8 @@ export function MySharingPanel(props: MySharingPanelProps) {
 
   const { request: queryTunnels, data } = useRequest(TunnelApi.queryTunnels)
   const { request: deleteTunnel } = useRequest(TunnelApi.deleteTunnel)
+
+  const tunnels = useMemo(() => data?.data || [], [data])
 
   useEffect(() => {
     if (visible) {
@@ -69,10 +71,10 @@ export function MySharingPanel(props: MySharingPanelProps) {
         onCancel={onClose}
       >
         <div className="relative w-full h-full overflow-y-auto">
-          <EmptyPanel dark show={!data?.tunnels.length} />
+          <EmptyPanel dark show={!tunnels.length} />
 
           <div>
-            {data?.tunnels.map((tunnel: ITunnel) => {
+            {tunnels.map((tunnel: ITunnel) => {
               const { code, createdAt, downloadName, expiredAt, leftTimes } = tunnel
               return (
                 <div

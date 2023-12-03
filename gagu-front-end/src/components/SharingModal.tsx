@@ -68,21 +68,17 @@ export function SharingModal(props: SharingModalProps) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [entryList])
 
-  const flattenList = useMemo(() => {
-    return data?.flattenList || []
-  }, [data])
-
   const handleCreate = useCallback(async () => {
     const { downloadName, password } = form
     if (downloadName && entryList.length) {
-      const res = await createTunnel({
+      const { success, data: code } = await createTunnel({
         ...form,
         password: password ? md5(password) : undefined,
         type: TunnelType.share,
         entryList,
       })
-      if (res?.success && res.code) {
-        setTunnelLink(`${window.location.origin}/sharing/${res.code}`)
+      if (success && code) {
+        setTunnelLink(`${window.location.origin}/sharing/${code}`)
       }
     }
   }, [form, entryList, createTunnel])
@@ -185,7 +181,7 @@ export function SharingModal(props: SharingModalProps) {
             <EntryListPanel
               downloadName={form.downloadName}
               entryList={entryList}
-              flattenList={flattenList}
+              flattenList={data?.data || []}
             />
           </>
         ) : (

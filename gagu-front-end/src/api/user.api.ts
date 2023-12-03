@@ -3,7 +3,7 @@ import service from './service'
 
 export class UserApi {
 
-  static queryUser = async () => {
+  static queryUserList = async () => {
     const { data } = await service.get('/api/user')
     return data
   }

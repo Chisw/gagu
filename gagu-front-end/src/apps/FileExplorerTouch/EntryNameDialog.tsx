@@ -57,7 +57,7 @@ export default function EntryNameDialog(props: EntryNameDialogProps) {
       : newName
 
     const newPath = `${currentPath}/${finalName}`
-    const { exists } = await queryExists(newPath)
+    const { data: exists } = await queryExists(newPath)
 
     if (exists) {
       toast.error(t('tip.targetExists', { name: finalName }))

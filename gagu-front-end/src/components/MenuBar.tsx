@@ -55,7 +55,7 @@ export function MenuBar() {
 
   useEffect(() => {
     const timer = setInterval(async () => {
-      const { success, userInfo } = await pulse()
+      const { success, data: userInfo } = await pulse()
       if (success) {
         setUserInfo(userInfo)
         UserInfoStore.set(userInfo)
