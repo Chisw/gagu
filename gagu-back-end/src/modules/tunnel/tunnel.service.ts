@@ -1,4 +1,4 @@
-import { ITunnel, User } from '../../types'
+import { ITunnel, TunnelType, User } from '../../types'
 import { Injectable } from '@nestjs/common'
 import { TunnelForm } from '../../types'
 import {
@@ -16,7 +16,9 @@ export class TunnelService {
   }
 
   sync() {
-    writeTunnelData(this.tunnelList)
+    writeTunnelData(
+      this.tunnelList.filter((t) => t.type !== TunnelType.download),
+    )
   }
 
   findOne(code: string) {
@@ -37,12 +39,17 @@ export class TunnelService {
     tunnelForm: TunnelForm,
   ) {
     const code = generateRandomCode()
+    const { type, leftTimes, expiredAt } = tunnelForm
+    const isDownload = type === TunnelType.download
+    const createdAt = Date.now()
     const tunnel: ITunnel = {
       code,
       username,
       nickname,
-      createdAt: Date.now(),
+      createdAt,
       ...tunnelForm,
+      leftTimes: isDownload ? 1 : leftTimes,
+      expiredAt: isDownload ? createdAt + 60 * 1000 : expiredAt,
     }
     this.tunnelList.push(tunnel)
     this.sync()

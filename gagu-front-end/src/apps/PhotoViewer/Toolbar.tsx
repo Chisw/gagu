@@ -3,7 +3,7 @@ import { DownloadApi, FsApi, TunnelApi } from '../../api'
 import { Confirmor, IconButton, SvgIcon } from '../../components/common'
 import { useRequest } from '../../hooks'
 import { TunnelType, IEntry } from '../../types'
-import { DOWNLOAD_PERIOD, getEntryPath, getReadableSize, line } from '../../utils'
+import { getEntryPath, getReadableSize, line } from '../../utils'
 import { getBaiduMapPinUrl } from '../../utils'
 import { useTranslation } from 'react-i18next'
 import { useRecoilState } from 'recoil'
@@ -104,8 +104,6 @@ export default function Toolbar(props: ToolbarProps) {
               type: TunnelType.download,
               entryList: [activeEntry],
               downloadName,
-              leftTimes: 1,
-              expiredAt: Date.now() + DOWNLOAD_PERIOD,
             })
             if (success) {
               DownloadApi.download(code)

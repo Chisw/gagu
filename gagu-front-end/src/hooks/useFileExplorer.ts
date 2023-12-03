@@ -15,7 +15,6 @@ import {
   TunnelType,
 } from '../types'
 import {
-  DOWNLOAD_PERIOD,
   getDownloadInfo,
   getEntryPath,
   isSameEntry,
@@ -294,8 +293,6 @@ export function useFileExplorer(props: Props) {
           type: TunnelType.download,
           entryList,
           downloadName,
-          leftTimes: 1,
-          expiredAt: Date.now() + DOWNLOAD_PERIOD,
         })
         if (success && code) {
           DownloadApi.download(code)

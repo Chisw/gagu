@@ -21,17 +21,20 @@ export class DownloadController {
     @Res() response: ZipResponse,
   ) {
     const tunnel = this.tunnelService.findOne(code)
-    const checkRes = checkTunnel(tunnel, inputtedPassword)
+    const result = checkTunnel(tunnel, inputtedPassword)
 
-    if (checkRes.success && tunnel) {
+    if (result.success && tunnel) {
       const { entryList, downloadName } = tunnel
       const firstEntry = entryList[0]
       const isSingleFile =
         entryList.length === 1 && firstEntry.type === EntryType.file
+
       this.tunnelService.minusTimes(code)
+
       if (isSingleFile) {
         return response.download(getEntryPath(firstEntry))
       }
+
       const rootParentPath = firstEntry.parentPath
       const list = this.fsService.getFlattenRecursiveEntryList(entryList)
       const files: ZipResponseFile[] = list.map((entry) => {
@@ -39,9 +42,10 @@ export class DownloadController {
         const name = path.replace(rootParentPath, '')
         return { name, path }
       })
+
       response.zip(files, encodeURIComponent(downloadName))
     } else {
-      return checkRes
+      response.end(JSON.stringify(result))
     }
   }
 }

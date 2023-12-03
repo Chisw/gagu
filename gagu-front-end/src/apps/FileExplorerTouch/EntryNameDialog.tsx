@@ -130,7 +130,7 @@ export default function EntryNameDialog(props: EntryNameDialogProps) {
           </div>
         )}
       >
-        <div className="-mb-8">
+        <div className="-mb-4">
           <div className="text-center text-lg font-bold">
             {editMode && t(`action.${titleMap[editMode]}`)}
           </div>
