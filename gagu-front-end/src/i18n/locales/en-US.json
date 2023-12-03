@@ -194,6 +194,7 @@
       "noUploadableFilesDetected": "No uploadable files detected",
       "sharingWithPassword": "Ops, the sharer has set an access password",
       "sureToDelete": "Sure to delete?",
+      "sureToOpenTextFile": "The file size has exceed {{size}}. Are you sure you want to open it?",
       "targetExists": "Target exists: {{name}}",
       "totalUsers": "{{count}} user(s) in total",
       "unfavoriteItem": "Unfavorite {{name}} ?",

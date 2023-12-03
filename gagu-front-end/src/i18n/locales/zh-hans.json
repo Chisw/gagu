@@ -194,6 +194,7 @@
       "noUploadableFilesDetected": "没有检测到可以上传的文件",
       "sharingWithPassword": "啊喔，分享者设置了访问密码",
       "sureToDelete": "确定要删除吗？",
+      "sureToOpenTextFile": "该文件大小已经超过 {{size}}，确定要打开吗?",
       "targetExists": "目标已存在：{{name}}",
       "totalUsers": "共 {{count}} 位用户",
       "unfavoriteItem": "取消收藏 {{name}} ？",

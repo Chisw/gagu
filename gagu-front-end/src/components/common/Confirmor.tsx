@@ -7,6 +7,7 @@ interface ConfirmorProps {
   type: 'download' | 'delete' | 'tip' | 'favorite' | 'unfavorite' | 'upgrade' | 'ok'
   content: ReactNode
   onConfirm: (close: () => void) => void
+  onCancel?: (close: () => void) => void
 }
 
 const iconMap = {
@@ -26,6 +27,7 @@ export function Confirmor(props: ConfirmorProps) {
     type,
     content,
     onConfirm,
+    onCancel,
   } = props
 
   const confirm = Modal.confirm({
@@ -50,7 +52,13 @@ export function Confirmor(props: ConfirmorProps) {
         <Button
           className="w-full"
           style={{ margin: 0 }}
-          onClick={() => confirm.destroy()}
+          onClick={() => {
+            if (onCancel) {
+              onCancel(confirm.destroy)
+            } else {
+              confirm.destroy()
+            }
+          }}
         >
           {t`action.cancel`}
         </Button>

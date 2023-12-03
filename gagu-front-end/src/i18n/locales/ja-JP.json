@@ -194,6 +194,7 @@
       "noUploadableFilesDetected": "アップロード可能なファイルが検出されませんでした",
       "sharingWithPassword": "共有者がアクセスパスワードを設定しました",
       "sureToDelete": "削除しますか",
+      "sureToOpenTextFile": "ファイルサイズが {{size}} を超えています。開いてもよろしいですか?",
       "targetExists": "ターゲットはすでに存在します：{{name}}",
       "totalUsers": "合計 {{count}} ユーザー",
       "unfavoriteItem": "お気に入りをキャンセルする {{name}}",

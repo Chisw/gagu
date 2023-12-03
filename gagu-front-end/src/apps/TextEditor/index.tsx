@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
-import { Opener, SvgIcon, ToolButton } from '../../components/common'
+import { Confirmor, Opener, SvgIcon, ToolButton } from '../../components/common'
 import { copy, ENTRY_ICON_LIST, getEntryPath, line } from '../../utils'
 import { FsApi } from '../../api'
-import { AppComponentProps, AppId } from '../../types'
+import { AppComponentProps, AppId, IEntry } from '../../types'
 import { useOpenEvent, useRequest } from '../../hooks'
 import { useTranslation } from 'react-i18next'
 import ReactMarkdown from 'react-markdown'
@@ -22,7 +22,7 @@ export default function TextEditor(props: AppComponentProps) {
     // activeIndex,
     activeEntry,
     // activeEntryStreamUrl,
-    // setActiveIndex,
+    setActiveIndex,
   } = useOpenEvent(appId)
 
   const [value, setValue] = useState('')
@@ -46,18 +46,40 @@ export default function TextEditor(props: AppComponentProps) {
     }
   }, [isMarkdown])
 
-  useEffect(() => {
-    if (activeEntry) {
-      const { name, extension } = activeEntry
-      queryTextContent(getEntryPath(activeEntry))
+  const handleOpen = useCallback((entry: IEntry) => {
+      const { name, extension } = entry
+      queryTextContent(getEntryPath(entry))
       setWindowTitle(name)
       const isMono = ENTRY_ICON_LIST.filter(icon => ['code', 'data'].includes(icon.type))
         .some(icon => icon.matchList.includes(extension))
       if (isMono) {
         setMonoMode(true)
       }
+  }, [queryTextContent, setWindowTitle])
+
+  useEffect(() => {
+    if (activeEntry) {
+      const { size } = activeEntry
+      // TODO: 1024 and size control
+      if (size && size > 512000) {
+          Confirmor({
+            t,
+            type: 'tip',
+            content: t('tip.sureToOpenTextFile', { size: '500KB' }),
+            onConfirm: (close) => {
+              handleOpen(activeEntry)
+              close()
+            },
+            onCancel: (close) => {
+              setActiveIndex(-1)
+              close()
+            },
+          })
+      } else {
+        handleOpen(activeEntry)
+      }
     }
-  }, [activeEntry, queryTextContent, setWindowTitle])
+  }, [t, activeEntry, handleOpen, setActiveIndex])
 
   useEffect(() => {
     setValue(typeof textContent === 'object' ? JSON.stringify(textContent) : textContent)
