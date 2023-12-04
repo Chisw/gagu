@@ -151,15 +151,16 @@ After the root directory is successfully created, the following subdirectories w
   |  |- image
   |  |- lib
   |- thumbnail
+  |- users
 ```
 
-- `data` is used to persistently store some data files in JSON format such as users, logins, download tunnels, settings, logs, etc
+- `data` is used to persistently store some data files in JSON format such as users, logins, download tunnels, settings, etc
 - `log` is used to store API log
 - `public/avatar` is used to store the user's avatar, and the file name is the username
 - `public/image` is used to store some config images
 - `public/lib` is used to store third-party js libraries that may be used in the future
 - `thumbnail` is used to store thumbnails generated in use
-- `users` is used to store user's personal space files
+- `users` is used to store user's personal files
 
 <div class="apply-tip">
 The root directory will be created as `WORKSPACE/.io.gagu.dev` in local development.

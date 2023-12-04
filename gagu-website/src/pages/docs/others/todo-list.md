@@ -16,17 +16,21 @@ Many unrealized ideas will be recorded here, waiting for development.
 - Sound Recorder, Calendar, Note, Calculator, Relative calculator and other gadgets
 - Public sharing list page
 - When running on Termux, add user login vibration reminder and pop-up notification
+- HTTPS certificate
+- thumbnail of PDF/APK
 
 ## User
 
 - Support personal modification of avatar, nickname, password
 - Sharing link can be edited
+- Manage login device credentials
 
 ## Apps
 
 ### File Explorer
 
 - Copy, Cut, Move
+- Path jumper
 - Slice upload
 - Drag and drop to move files
 - Tree structure display
@@ -39,9 +43,13 @@ Many unrealized ideas will be recorded here, waiting for development.
 - Custom folder icon extension CSS
 - Desktop and Recycle Bin
 - One-click to clean up the specified directory
+- File favorite
+- Directory link
 
 ### Text Editor
 
+- New text file
+- Live local draft
 - Code highlighting
 - Generate pictures for sharing
 
@@ -53,6 +61,7 @@ Many unrealized ideas will be recorded here, waiting for development.
 ### Music Player
 
 - Playlist favorites
+- Style on fullscreen
 
 ### Video Player
 
@@ -63,7 +72,10 @@ Many unrealized ideas will be recorded here, waiting for development.
 ### Settings
 
 - General settings
-   - Default mode
+  - Default open mode on PC
+  - Operation style: Win or macOS
+    - Shortcuts
+    - Size calculation method
 
 - Advanced settings
    - IP whitelist, blacklist
@@ -73,6 +85,8 @@ Many unrealized ideas will be recorded here, waiting for development.
 - User Management
    - Import and Export
 
+- System space usage management
+
 - Log Management
 
 ## Website
@@ -80,6 +94,11 @@ Many unrealized ideas will be recorded here, waiting for development.
 - Demo of online interaction
 - Video introduction
 - Algolia search
+
+## Clients
+
+- Android client (React Native)
+- Windows client (aardio)
 
 ## Buy me a cola
 

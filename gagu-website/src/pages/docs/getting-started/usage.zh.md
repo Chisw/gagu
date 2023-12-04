@@ -151,15 +151,16 @@ GAGU 的根目录 `.io.gagu` 是一个以 `.` 开头命名的隐藏文件夹，�
   |  |- image
   |  |- lib
   |- thumbnail
+  |- users
 ```
 
-- `data` 用于持久化存储一些用户、登录、下载通道、设置、日志等 JSON 格式的数据文件
+- `data` 用于持久化存储一些用户、登录、下载通道、设置等 JSON 格式的数据文件
 - `log` 用于存放 API 日志
 - `public/avatar` 用于存放用户头像，文件名即用户名
 - `public/image` 用于存放一些配置图片
 - `public/lib` 用于存放将来可能会用到的第三方 js 库
 - `thumbnail` 用于存放使用中生成的缩略图
-- `users` 用于存放用户个人空间文件
+- `users` 用于存放用户个人文件
 
 <div class="apply-tip">
 本地开发时，根目录会被创建为 `WORKSPACE/.io.gagu.dev`。

@@ -16,17 +16,20 @@ layout: ../../../layouts/DocLayout.astro
 - 录音机、日历、记事本、计算器、亲戚计算器等小工具
 - 可公开分享列表页面
 - Termux 上运行时，添加用户登录震动提醒和弹窗通知
+- HTTPS 证书
 
 ## 用户
 
 - 支持个人修改头像、昵称、密码
 - 分享链接可编辑
+- 管理登录设备凭证
 
 ## 应用
 
 ### 文件管理器
 
 - 复制、剪切、移动
+- 路径跳转
 - 切片上传
 - 拖拽移动文件
 - 树结构显示
@@ -39,9 +42,14 @@ layout: ../../../layouts/DocLayout.astro
 - 自定义文件夹图标扩展 CSS
 - 桌面与回收站
 - 一键清理指定目录
+- PDF/APK 缩略图
+- 文件收藏
+- 目录链接
 
 ### 文本编辑器
 
+- 新建文件
+- 实时本地草稿
 - 代码高亮
 - 生成分享图片
 
@@ -53,6 +61,7 @@ layout: ../../../layouts/DocLayout.astro
 ### 音乐播放器
 
 - 播放列表
+- 全屏播放样式
 
 ### 视频播放器
 
@@ -63,7 +72,10 @@ layout: ../../../layouts/DocLayout.astro
 ### 设置
 
 - 通用设置
-  - 默认模式
+  - PC 默认打开模式
+  - 操作风格：Win or macOS
+    - 快捷键
+    - 大小计算方式
 
 - 高级设置
   - IP 白名单、黑名单
@@ -73,6 +85,8 @@ layout: ../../../layouts/DocLayout.astro
 - 用户管理
   - 导入导出
 
+- 系统空间用量管理
+
 - 日志管理
 
 ## 网站
@@ -80,6 +94,11 @@ layout: ../../../layouts/DocLayout.astro
 - 在线交互示例
 - 视频介绍
 - Algolia 搜索
+
+## 客户端
+
+- Android 客户端 (React Native)
+- Windows 客户端 (aardio)
 
 ## 请我喝可乐
 
