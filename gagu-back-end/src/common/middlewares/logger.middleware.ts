@@ -13,30 +13,47 @@ export class LoggerMiddleware implements NestMiddleware {
     const startTime = Date.now()
     const token = getRequestToken(request)
     const username = this.authService.findOneUsername(token) || 'UNKNOWN'
-    const { method, originalUrl, ip } = request
-    const { statusCode } = response
+    const { originalUrl } = request
+
+    const skippableList = [
+      '/api/auth/pulse',
+      '/api/fs/avatar',
+      '/api/fs/background',
+      '/api/fs/tags',
+      '/api/fs/thumbnail',
+    ]
+
     if (
       originalUrl.startsWith('/api/') &&
-      !originalUrl.startsWith('/api/fs/thumbnail') &&
-      !originalUrl.startsWith('/api/fs/avatar') &&
-      !originalUrl.startsWith('/api/fs/background') &&
-      !originalUrl.startsWith('/api/fs/tags')
+      skippableList.every((item) => !originalUrl.startsWith(item))
     ) {
-      const now = DateTime.now()
-      const dateTime = now.toFormat('yyyy-MM-dd HH:mm:ss')
-      const ipStr = String(ip).replace('::ffff:', '')
-      const userInfo = `${username}@${ipStr}`
+      const { method, body, ip: IP } = request
+      const { statusCode } = response
+      const nowTime = DateTime.now()
+      const datetime = nowTime.toFormat('yyyy-MM-dd HH:mm:ss')
+      const ip = String(IP).replace('::ffff:', '')
+      const userInfo = `${username}@${ip}`
       const status = `${method}/${statusCode}`
-      const urlStr = decodeURIComponent(originalUrl)
+      const url = decodeURIComponent(originalUrl)
 
       response.once('finish', () => {
-        const interval = `${Date.now() - startTime}ms`
+        const duration = `${Date.now() - startTime}ms`
 
-        const logRowConsole = `${chalk.green('[GAGU-LOG]')} ${dateTime} ${chalk.green(userInfo)} ${status} ${chalk.yellow(interval)} ${urlStr}`
-        console.log(logRowConsole)
+        // eslint-disable-next-line prettier/prettier
+        console.log(`${chalk.green('[GAGU-LOG]')} ${datetime} ${chalk.green(userInfo)} ${status} ${chalk.yellow(duration)} ${url}`)
 
-        const logRowText = `${dateTime} ${userInfo} ${status} ${interval} ${urlStr}\n`
-        writeLog(now.toFormat('yyyy-MM-dd'), logRowText)
+        const row = {
+          datetime,
+          ip,
+          username,
+          method,
+          url,
+          statusCode,
+          duration,
+          body,
+        }
+
+        writeLog(nowTime.toFormat('yyyy-MM-dd'), JSON.stringify(row) + '\n')
       })
     }
     next()

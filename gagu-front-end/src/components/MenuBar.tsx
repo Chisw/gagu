@@ -99,10 +99,12 @@ export function MenuBar() {
 
   const handleLogout = useCallback(async () => {
     setUserPopoverShow(false)
-    await logout()
-    UserInfoStore.remove()
-    setActivePage(Page.PENDING)
-    setTimeout(() => navigate('/login'), 500)
+    const { success } = await logout()
+    if (success) {
+      UserInfoStore.remove()
+      setActivePage(Page.PENDING)
+      setTimeout(() => navigate('/login'), 500)
+    }
   }, [logout, navigate, setActivePage])
 
   return (
@@ -122,6 +124,7 @@ export function MenuBar() {
           <Dropdown
             trigger="click"
             position="bottomLeft"
+            className="bg-white bg-opacity-90 backdrop-blur"
             visible={systemPopoverShow}
             render={(
               <Dropdown.Menu className="w-48">
@@ -174,6 +177,7 @@ export function MenuBar() {
                 </Dropdown.Item>
                 <Dropdown
                   position="rightTop"
+                  className="bg-white bg-opacity-90 backdrop-blur"
                   render={(
                     <div className="px-4 py-8 w-48">
                       <div className="flex justify-center">
@@ -193,6 +197,7 @@ export function MenuBar() {
                 <Dropdown
                   showTick
                   position="rightTop"
+                  className="bg-white bg-opacity-90 backdrop-blur"
                   render={(
                     <Dropdown.Menu className="w-48">
                       {pageList.map(({ key, icon }) => {
@@ -251,6 +256,7 @@ export function MenuBar() {
           <Dropdown
             trigger="click"
             position="bottomLeft"
+            className="bg-white bg-opacity-90 backdrop-blur"
             visible={userPopoverShow}
             render={(
               <Dropdown.Menu className="w-48">

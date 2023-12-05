@@ -186,7 +186,7 @@ export default function MusicPlayer(props: AppComponentProps) {
                 >
                   <div
                     className="w-full h-full bg-cover bg-center"                    
-                    style={{ backgroundImage: `url("${FsApi.getThumbnailUrl(entry)}")` }}
+                    style={{ backgroundImage: `url("${FsApi.getThumbnailStreamUrl(entry)}")` }}
                   />
                 </div>
                 <div className="flex-grow">

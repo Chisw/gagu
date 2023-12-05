@@ -79,7 +79,7 @@ export default function ThumbnailList(props: ThumbnailListProps) {
         }}
       >
         {show && matchedEntryList.map((entry, entryIndex) => {
-          const src = FsApi.getThumbnailUrl(entry)
+          const src = FsApi.getThumbnailStreamUrl(entry)
           const entryName = entry.name
           const isActive = entryIndex === activeIndex
           if (startIndex <= entryIndex && entryIndex <= endIndex) {

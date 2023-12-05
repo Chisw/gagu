@@ -4,12 +4,12 @@ import { useRequest } from '../hooks'
 import { AuthApi, FsApi } from '../api'
 import md5 from 'md5'
 import { PublicFooter, SvgIcon } from '../components/common'
-import { SERVER_MESSAGE_MAP, UserInfoStore, line } from '../utils'
+import { UserInfoStore, line } from '../utils'
 import { Input } from '@douyinfe/semi-ui'
 import { useRecoilState } from 'recoil'
 import { activePageState, userInfoState } from '../states'
 import { useTranslation } from 'react-i18next'
-import { Page } from '../types'
+import { Page, ServerMessage } from '../types'
 
 export default function LoginPage() {
 
@@ -57,9 +57,9 @@ export default function LoginPage() {
       setActivePage(Page.PENDING)
       setTimeout(handleNavigate, 500)
     } else {
-      if (message === SERVER_MESSAGE_MAP.ERROR_USER_NOT_EXISTED) {
+      if (message === ServerMessage.ERROR_USER_NOT_EXISTED) {
         setClassNames(['animate-shake-x', ''])
-      } else if (message === SERVER_MESSAGE_MAP.ERROR_PASSWORD_WRONG) {
+      } else if (message === ServerMessage.ERROR_PASSWORD_WRONG) {
         setClassNames(['', 'animate-shake-x'])
         setPassword('')
       }

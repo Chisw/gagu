@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { UserApi } from '../../../api'
 import { SvgIcon } from '../../../components/common'
 import { useRequest } from '../../../hooks'
-import { IUser, IUserForm, User, UserForm } from '../../../types'
+import { IUserForm, UserForm } from '../../../types'
 import UserFormSheet from './UserFormSheet'
 import UserList from './UserList'
 
@@ -23,8 +23,8 @@ export default function UserPanel() {
   }, [handleRefresh])
 
   const { userList, loggedInList } = useMemo(() => {
-    const userList: IUser[] = data?.data?.userList || []
-    const loggedInList: User.Username[] = data?.data?.loggedInList || []
+    const userList = data?.data?.userList || []
+    const loggedInList = data?.data?.loggedInList || []
     return { userList, loggedInList }
   }, [data])
 

@@ -8,10 +8,10 @@ import { useParams } from 'react-router-dom'
 import { DownloadApi, FsApi, TunnelApi } from '../api'
 import { EntryListPanel, PublicFooter, Spinner, SvgIcon } from '../components/common'
 import { useRequest } from '../hooks'
-import { copy, getDateTime, line, SERVER_MESSAGE_MAP } from '../utils'
+import { copy, getDateTime, line } from '../utils'
 import { useRecoilState } from 'recoil'
 import { activePageState } from '../states'
-import { Page } from '../types'
+import { Page, ServerMessage } from '../types'
 
 const sharingUrl = window.location.href
 
@@ -75,7 +75,7 @@ export default function SharePage() {
 
     const flattenList = data?.data?.flattenList || []
     const isSuccess = success
-    const isShowInput = success && message === SERVER_MESSAGE_MAP.ERROR_TUNNEL_PASSWORD_NEEDED
+    const isShowInput = success && message === ServerMessage.ERROR_TUNNEL_PASSWORD_NEEDED
     const isShowError = !success
 
     return {

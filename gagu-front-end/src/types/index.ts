@@ -1,3 +1,4 @@
+import { ServerMessage } from './common.type'
 import { IEntry, SortType } from './entry.type'
 
 export * from './common.type'
@@ -47,9 +48,9 @@ export interface IScrollerWatcher {
   height: number
 }
 
-export interface IResponse<T> {
+export interface IResponse<T = undefined> {
   success: boolean
-  message: string
+  message: keyof typeof ServerMessage
   data: T
 }
 

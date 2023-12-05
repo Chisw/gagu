@@ -118,7 +118,7 @@ export class UserService {
     }
   }
 
-  removeAllUsersFavorite(path: string) {
+  removeFavoriteOfAllUsers(path: string) {
     this.userList.forEach((user) => {
       user.favoritePathList =
         user.favoritePathList?.filter((p) => p !== path) || []

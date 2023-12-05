@@ -126,7 +126,11 @@ export const getIndexLabel = (currentIndex: number, total: number, options?: { m
 }
 
 export const getPasswordParam = (password?: string) => {
-  return password ? `?password=${md5(password)}` : ''
+  return password ? `password=${md5(password)}` : ''
+}
+
+export const getPathParam = (path: string) => {
+  return `path=${encodeURIComponent(path)}`
 }
 
 export const getBaiduMapPinUrl = (exifData: any, content?: string) => {

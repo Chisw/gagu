@@ -5,11 +5,11 @@ import {
   deleteEntry,
   ServerOS,
   getExists,
-  SERVER_MESSAGE_MAP,
   GAGU_VERSION,
   GAGU_PATH,
   favoritePath2SideEntry,
   rootPath2RootEntry,
+  respond,
 } from '../../utils'
 import { FsService } from './fs.service'
 import {
@@ -33,6 +33,7 @@ import {
   SettingKey,
   User,
   UserPermission,
+  ServerMessage,
 } from '../../types'
 import { mkdirSync, renameSync } from 'fs'
 import { Permission } from '../../common/decorators/permission.decorator'
@@ -58,7 +59,7 @@ export class FsController {
     const hasAssigned = assignedRootPathList.length > 0
 
     // TODO: add personal space to root
-    const data: IBaseData = {
+    const baseData: IBaseData = {
       version: GAGU_VERSION,
       serverOS: ServerOS,
       deviceName: deviceName || ServerOS.hostname,
@@ -69,65 +70,41 @@ export class FsController {
       favoriteEntryList: favoritePathList.map(favoritePath2SideEntry),
     }
 
-    return {
-      success: true,
-      message: SERVER_MESSAGE_MAP.OK,
-      data,
-    }
+    return respond(baseData)
   }
 
   @Get('list')
   @Permission(UserPermission.read)
   findAll(@Query('path') path: string) {
     const entryList = this.fsService.getEntryList(path)
-    return {
-      success: true,
-      message: SERVER_MESSAGE_MAP.OK,
-      data: entryList,
-    }
+    return respond(entryList)
   }
 
   @Post('list/flatten')
   @Permission(UserPermission.read)
   findFlattenAll(@Body('entryList') entryList: IEntry[]) {
     const flattenList = this.fsService.getFlattenRecursiveEntryList(entryList)
-    return {
-      success: true,
-      message: SERVER_MESSAGE_MAP.OK,
-      data: flattenList,
-    }
+    return respond(flattenList)
   }
 
   @Get('exists')
   readExists(@Query('path') path: string) {
     const exists = getExists(path)
-    return {
-      success: true,
-      message: SERVER_MESSAGE_MAP.OK,
-      data: exists,
-    }
+    return respond(exists)
   }
 
   @Get('size')
   @Permission(UserPermission.read)
   readSize(@Query('path') path: string) {
     const size = this.fsService.getDirectorySize(path)
-    return {
-      success: true,
-      message: SERVER_MESSAGE_MAP.OK,
-      data: size,
-    }
+    return respond(size)
   }
 
   @Get('text')
   @Permission(UserPermission.read)
   readTextContent(@Query('path') path: string) {
-    const data = this.fsService.getTextContent(path)
-    return {
-      success: true,
-      message: SERVER_MESSAGE_MAP.OK,
-      data,
-    }
+    const text = this.fsService.getTextContent(path)
+    return respond(text)
   }
 
   @Put('rename')
@@ -136,11 +113,9 @@ export class FsController {
     @Body('oldPath') oldPath: string,
     @Body('newPath') newPath: string,
   ) {
+    // TODO:
     renameSync(oldPath, newPath)
-    return {
-      success: true,
-      message: SERVER_MESSAGE_MAP.OK,
-    }
+    return respond()
   }
 
   @Put('move')
@@ -150,35 +125,26 @@ export class FsController {
     @Body('newPath') newPath: string,
   ) {
     renameSync(oldPath, newPath)
-    return {
-      success: true,
-      message: SERVER_MESSAGE_MAP.OK,
-    }
+    return respond()
   }
 
   @Post('mkdir')
   @Permission(UserPermission.write)
   create(@Body('path') path: string) {
     mkdirSync(path)
-    return {
-      success: true,
-      message: SERVER_MESSAGE_MAP.OK,
-    }
+    return respond()
   }
 
   @Delete('delete')
   @Permission(UserPermission.delete)
   async remove(@Query('path') path: string) {
     await deleteEntry(path)
-    const success = !getExists(path)
-    if (success) {
-      this.userService.removeAllUsersFavorite(path)
-    }
-    return {
-      success,
-      message: success
-        ? SERVER_MESSAGE_MAP.OK
-        : SERVER_MESSAGE_MAP.ERROR_FILE_DELETE_FAIL,
+    const deleted = !getExists(path)
+    if (deleted) {
+      this.userService.removeFavoriteOfAllUsers(path)
+      return respond()
+    } else {
+      return respond(null, ServerMessage.ERROR_FILE_DELETE_FAIL)
     }
   }
 
@@ -230,9 +196,11 @@ export class FsController {
       if (getExists(path)) {
         response.sendFile(path)
       } else {
+        // TODO:
         response.end('ERROR_IMAGE_NOT_EXISTED')
       }
     } catch (err) {
+      // TODO:
       response.end('ERROR_IMAGE')
     }
   }
@@ -242,16 +210,9 @@ export class FsController {
   async getExif(@Query('path') path: string) {
     try {
       const data = await this.fsService.getExif(path)
-      return {
-        success: true,
-        message: SERVER_MESSAGE_MAP.OK,
-        data,
-      }
+      return respond(data)
     } catch (err) {
-      return {
-        success: false,
-        message: SERVER_MESSAGE_MAP.ERROR_EXIF,
-      }
+      return respond(null, ServerMessage.ERROR_EXIF)
     }
   }
 
@@ -260,16 +221,9 @@ export class FsController {
   async getAudioTags(@Query('path') path: string) {
     try {
       const data = await this.fsService.getAudioTags(path)
-      return {
-        success: true,
-        message: SERVER_MESSAGE_MAP.OK,
-        data,
-      }
+      return respond(data)
     } catch (err) {
-      return {
-        success: false,
-        message: SERVER_MESSAGE_MAP.ERROR_TAGS,
-      }
+      return respond(null, ServerMessage.ERROR_TAGS)
     }
   }
 
@@ -288,17 +242,12 @@ export class FsController {
     @UserGetter() user: IUser,
   ) {
     if (getExists(path) && !user.permissions.includes(UserPermission.delete)) {
-      return {
-        success: false,
-        message: SERVER_MESSAGE_MAP.ERROR_403,
-      }
+      // TODO: 403 detail
+      return respond(null, ServerMessage.ERROR_403)
     }
     try {
       this.fsService.uploadFile(path, file.buffer)
-      return {
-        success: true,
-        message: SERVER_MESSAGE_MAP.OK,
-      }
+      return respond()
     } catch (err) {
       return {
         success: false,
@@ -317,10 +266,7 @@ export class FsController {
   ) {
     try {
       this.fsService.uploadImage(name, file.buffer)
-      return {
-        success: true,
-        message: SERVER_MESSAGE_MAP.OK,
-      }
+      return respond()
     } catch (err) {
       return {
         success: false,
@@ -334,21 +280,13 @@ export class FsController {
   @Permission(UserPermission.read)
   updateFavorite(@Query('path') path: string, @UserGetter() user: IUser) {
     const pathList = this.userService.createFavorite(user.username, path)
-    return {
-      success: true,
-      message: SERVER_MESSAGE_MAP.OK,
-      data: pathList.map(favoritePath2SideEntry),
-    }
+    return respond(pathList.map(favoritePath2SideEntry))
   }
 
   @Delete('favorite')
   @Permission(UserPermission.read)
   removeFavorite(@Query('path') path: string, @UserGetter() user: IUser) {
     const pathList = this.userService.removeFavorite(user.username, path)
-    return {
-      success: true,
-      message: SERVER_MESSAGE_MAP.OK,
-      data: pathList.map(favoritePath2SideEntry),
-    }
+    return respond(pathList.map(favoritePath2SideEntry))
   }
 }

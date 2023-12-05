@@ -3,7 +3,7 @@ import { SettingService } from './setting.service'
 import { Body, Controller, Get, Post, Put } from '@nestjs/common'
 import { UserPermission } from '../../types'
 import { Permission } from '../../common/decorators/permission.decorator'
-import { SERVER_MESSAGE_MAP } from '../../utils'
+import { respond } from '../../utils'
 
 @Controller('setting')
 export class SettingController {
@@ -13,32 +13,21 @@ export class SettingController {
   @Permission(UserPermission.administer)
   findAll() {
     const settings: ISetting = this.settingService.findAll()
-    return {
-      success: true,
-      message: SERVER_MESSAGE_MAP.OK,
-      data: settings,
-    }
+    return respond(settings)
   }
 
   @Put()
   @Permission(UserPermission.administer)
   update(@Body() settings: ISetting) {
     this.settingService.update(settings)
-    return {
-      success: true,
-      message: SERVER_MESSAGE_MAP.OK,
-    }
+    return respond()
   }
 
   @Get('version')
   @Permission(UserPermission.administer)
   async getLatestVersion() {
     const version = await this.settingService.getLatestVersion()
-    return {
-      success: true,
-      message: SERVER_MESSAGE_MAP.OK,
-      data: version,
-    }
+    return respond(version)
   }
 
   @Post('version')
@@ -46,9 +35,6 @@ export class SettingController {
   async updateVersion() {
     await this.settingService.updateVersion()
     setTimeout(() => process.exit(0), 1000)
-    return {
-      success: true,
-      message: SERVER_MESSAGE_MAP.OK,
-    }
+    return respond()
   }
 }

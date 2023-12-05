@@ -1,7 +1,8 @@
 import { readFileSync, writeFileSync } from 'fs'
-import { ITunnel } from '../types'
-import { GAGU_PATH, SERVER_MESSAGE_MAP } from './constant.util'
+import { ITunnel, ServerMessage } from '../types'
+import { GAGU_PATH } from './constant.util'
 import { JSONFormat } from './fs.util'
+import { respond } from './common.util'
 
 export const writeTunnelData = (tunnelList: ITunnel[]) => {
   writeFileSync(GAGU_PATH.DATA_TUNNELS, JSONFormat(tunnelList))
@@ -21,30 +22,15 @@ export const checkTunnel = (
     const { leftTimes, expiredAt, password } = tunnel
 
     if (leftTimes === 0) {
-      return {
-        success: false,
-        message: SERVER_MESSAGE_MAP.ERROR_TUNNEL_NO_LEFT,
-      }
+      return respond(null, ServerMessage.ERROR_TUNNEL_NO_LEFT)
     } else if (expiredAt && expiredAt < Date.now()) {
-      return {
-        success: false,
-        message: SERVER_MESSAGE_MAP.ERROR_TUNNEL_EXPIRED,
-      }
+      return respond(null, ServerMessage.ERROR_TUNNEL_EXPIRED)
     } else if (password && inputtedPassword !== password) {
-      return {
-        success: false,
-        message: SERVER_MESSAGE_MAP.ERROR_TUNNEL_PASSWORD_WRONG,
-      }
+      return respond(null, ServerMessage.ERROR_TUNNEL_PASSWORD_WRONG)
     } else {
-      return {
-        success: true,
-        message: SERVER_MESSAGE_MAP.OK,
-      }
+      return respond()
     }
   } else {
-    return {
-      success: false,
-      message: SERVER_MESSAGE_MAP.ERROR_TUNNEL_NOT_EXISTED,
-    }
+    return respond(null, ServerMessage.ERROR_TUNNEL_NOT_EXISTED)
   }
 }

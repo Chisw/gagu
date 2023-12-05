@@ -1,24 +1,24 @@
-import { ISetting } from '../types'
+import { IResponse, ISetting, IVersion } from '../types'
 import service from './service'
 
 export class SettingApi {
   static querySettingAll = async () => {
-    const { data } = await service.get('/api/setting')
+    const { data } = await service.get<IResponse<ISetting>>('/api/setting')
     return data
   }
 
   static updateSetting = async (settings: ISetting) => {
-    const { data } = await service.put('/api/setting', settings)
+    const { data } = await service.put<IResponse<ISetting>>('/api/setting', settings)
     return data
   }
 
   static queryLatestVersion = async () => {
-    const { data } = await service.get('/api/setting/version')
+    const { data } = await service.get<IResponse<IVersion>>('/api/setting/version')
     return data
   }
 
   static updateVersion = async () => {
-    const { data } = await service.post('/api/setting/version', undefined, { timeout: 0 })
+    const { data } = await service.post<IResponse>('/api/setting/version', undefined, { timeout: 0 })
     return data
   } 
 }

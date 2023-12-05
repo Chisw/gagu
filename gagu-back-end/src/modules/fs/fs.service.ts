@@ -1,5 +1,13 @@
 import { Injectable } from '@nestjs/common'
-import { EntryType, IDisk, IEntry, IRootEntry, User } from '../../types'
+import {
+  EntryType,
+  IAudioTag,
+  IDisk,
+  IEntry,
+  IExif,
+  IRootEntry,
+  User,
+} from '../../types'
 import {
   createReadStream,
   readdirSync,
@@ -264,7 +272,7 @@ export class FsService {
         exifData[ifd][key] = value
       }
     }
-    return exifData
+    return exifData as IExif
   }
 
   async getAudioTags(path: string) {
@@ -289,7 +297,7 @@ export class FsService {
             base64String += String.fromCharCode(data[i])
           }
           const base64 = `data:${format};base64,${btoa(base64String)}`
-          const tagData = {
+          const tagData: IAudioTag = {
             title,
             artist,
             album,

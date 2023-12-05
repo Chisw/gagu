@@ -8,14 +8,20 @@ import {
   Patch,
 } from '@nestjs/common'
 import { UserService } from './user.service'
-import { User, IUserForm, UserPermission, UserValidityType } from '../../types'
+import {
+  User,
+  IUserForm,
+  UserPermission,
+  UserValidityType,
+  ServerMessage,
+} from '../../types'
 import {
   completeNestedPath,
   deleteEntry,
   GAGU_PATH,
   getIsExpired,
   PULSE_INTERVAL,
-  SERVER_MESSAGE_MAP,
+  respond,
 } from '../../utils'
 import { FsService } from '../fs/fs.service'
 import { Permission } from '../../common/decorators/permission.decorator'
@@ -37,14 +43,7 @@ export class UserController {
     const loggedInList = authRecordList
       .filter((record) => record.timestamp > Date.now() - PULSE_INTERVAL)
       .map((record) => record.username)
-    return {
-      success: true,
-      message: SERVER_MESSAGE_MAP.OK,
-      data: {
-        userList,
-        loggedInList,
-      },
-    }
+    return respond({ userList, loggedInList })
   }
 
   @Post()
@@ -52,18 +51,12 @@ export class UserController {
   create(@Body() userForm: IUserForm) {
     const { avatar, username } = userForm
     if (this.userService.findOne(username)) {
-      return {
-        success: false,
-        message: SERVER_MESSAGE_MAP.ERROR_USER_EXISTED,
-      }
+      return respond(null, ServerMessage.ERROR_USER_EXISTED)
     } else {
       this.fsService.uploadAvatar(username, avatar)
       this.userService.create(userForm)
       completeNestedPath(`${GAGU_PATH.USERS}/${username}/desktop/_`)
-      return {
-        success: true,
-        message: SERVER_MESSAGE_MAP.OK,
-      }
+      return respond()
     }
   }
 
@@ -72,20 +65,14 @@ export class UserController {
   update(@Body() userForm: IUserForm) {
     const { avatar, username, password } = userForm
     if (!this.userService.findOne(username)) {
-      return {
-        success: false,
-        message: SERVER_MESSAGE_MAP.ERROR_USER_NOT_EXISTED,
-      }
+      return respond(null, ServerMessage.ERROR_USER_NOT_EXISTED)
     } else {
       if (password || getIsExpired(userForm.expiredAt)) {
         this.authService.removeUser(username)
       }
       this.fsService.uploadAvatar(username, avatar)
       this.userService.update(userForm)
-      return {
-        success: true,
-        message: SERVER_MESSAGE_MAP.OK,
-      }
+      return respond()
     }
   }
 
@@ -96,10 +83,7 @@ export class UserController {
     this.authService.removeUser(username)
     deleteEntry(`${GAGU_PATH.PUBLIC_AVATAR}/${username}`)
     deleteEntry(`${GAGU_PATH.USERS}/${username}`)
-    return {
-      success: true,
-      message: SERVER_MESSAGE_MAP.OK,
-    }
+    return respond()
   }
 
   @Patch(':username/validity/:validity')
@@ -113,9 +97,6 @@ export class UserController {
     if (!isValid) {
       this.authService.removeUser(username)
     }
-    return {
-      success: true,
-      message: SERVER_MESSAGE_MAP.OK,
-    }
+    return respond()
   }
 }

@@ -91,7 +91,7 @@ export default function EntryIcon(props: IconProps) {
         <ThumbnailWrapper type={thumbnailType} loading={thumbnailLoading}>
           <img
             alt=""
-            src={FsApi.getThumbnailUrl(entry)}
+            src={FsApi.getThumbnailStreamUrl(entry)}
             className={line(`max-w-full max-h-full bg-white ${imageThumbnailClassName}`)}
             onLoad={() => setThumbnailLoading(false)}
             onError={() => {

@@ -10,9 +10,9 @@ import {
   Post,
   Query,
 } from '@nestjs/common'
-import { UserPermission, TunnelForm, IUser } from '../../types'
+import { UserPermission, TunnelForm, IUser, ServerMessage } from '../../types'
 import { Permission } from '../../common/decorators/permission.decorator'
-import { SERVER_MESSAGE_MAP, checkTunnel } from '../../utils'
+import { checkTunnel, respond } from '../../utils'
 import { UserGetter } from 'src/common/decorators/user.decorator'
 
 @Controller('tunnel')
@@ -26,11 +26,7 @@ export class TunnelController {
   @Permission(UserPermission.read)
   findSelfTunnels(@UserGetter() user: IUser) {
     const tunnels = this.tunnelService.findUserTunnels(user.username)
-    return {
-      success: true,
-      message: SERVER_MESSAGE_MAP.OK,
-      data: tunnels,
-    }
+    return respond(tunnels)
   }
 
   @Post()
@@ -41,11 +37,7 @@ export class TunnelController {
       user.nickname,
       tunnelForm,
     )
-    return {
-      success: true,
-      message: SERVER_MESSAGE_MAP.OK,
-      data: code,
-    }
+    return respond(code)
   }
 
   @Public()
@@ -59,10 +51,8 @@ export class TunnelController {
       const { entryList, password } = tunnel
       if (password) {
         if (!inputtedPassword) {
-          return {
-            success: true,
-            message: SERVER_MESSAGE_MAP.ERROR_TUNNEL_PASSWORD_NEEDED,
-            data: {
+          return respond(
+            {
               tunnel: {
                 ...tunnel,
                 password: undefined,
@@ -70,31 +60,23 @@ export class TunnelController {
               },
               flattenList: [],
             },
-          }
+            undefined,
+            ServerMessage.ERROR_TUNNEL_PASSWORD_NEEDED,
+          )
         } else if (inputtedPassword !== password) {
-          return {
-            success: false,
-            message: SERVER_MESSAGE_MAP.ERROR_TUNNEL_PASSWORD_WRONG,
-          }
+          return respond(null, ServerMessage.ERROR_TUNNEL_PASSWORD_WRONG)
         }
       }
       const flattenList = this.fsService.getFlattenRecursiveEntryList(entryList)
-      return {
-        success: true,
-        message: SERVER_MESSAGE_MAP.OK,
-        data: {
-          tunnel: {
-            ...tunnel,
-            password: undefined,
-          },
-          flattenList,
+      return respond({
+        tunnel: {
+          ...tunnel,
+          password: undefined,
         },
-      }
+        flattenList,
+      })
     } else {
-      return {
-        success: false,
-        message: SERVER_MESSAGE_MAP.ERROR_TUNNEL_NOT_EXISTED,
-      }
+      return respond(null, ServerMessage.ERROR_TUNNEL_NOT_EXISTED)
     }
   }
 
@@ -104,15 +86,10 @@ export class TunnelController {
     const tunnel = this.tunnelService.findOne(code)
     if (tunnel?.username === user.username) {
       this.tunnelService.remove(code)
-      return {
-        success: true,
-        message: SERVER_MESSAGE_MAP.OK,
-      }
+      return respond()
     } else {
-      return {
-        success: false,
-        messsage: SERVER_MESSAGE_MAP.ERROR_403,
-      }
+      // TODO: 403 detail
+      return respond(null, ServerMessage.ERROR_403)
     }
   }
 

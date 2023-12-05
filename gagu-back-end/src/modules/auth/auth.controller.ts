@@ -1,14 +1,14 @@
 import { Controller, Post, Body, Headers, Get } from '@nestjs/common'
 import { Public } from '../../common/decorators/public.decorator'
 import { AuthService } from './auth.service'
-import { User, UserPermission } from '../../types'
+import { ServerMessage, User, UserPermission } from '../../types'
 import {
   generateRandomCode,
   generateUserInfo,
-  SERVER_MESSAGE_MAP,
   HEADERS_AUTH_KEY,
   getIsExpired,
   getAuthorizationToken,
+  respond,
 } from '../../utils'
 import { UserService } from '../user/user.service'
 import { Permission } from '../../common/decorators/permission.decorator'
@@ -33,35 +33,19 @@ export class AuthController {
         const token = Buffer.from(generateRandomCode()).toString('base64')
         this.authService.create(token, username)
         if (invalid) {
-          return {
-            success: false,
-            message: SERVER_MESSAGE_MAP.ERROR_USER_DISABLED,
-          }
+          return respond(null, ServerMessage.ERROR_USER_DISABLED)
         } else {
           if (getIsExpired(user.expiredAt)) {
-            return {
-              success: false,
-              message: SERVER_MESSAGE_MAP.ERROR_USER_EXPIRED,
-            }
+            return respond(null, ServerMessage.ERROR_USER_EXPIRED)
           } else {
-            return {
-              success: true,
-              message: SERVER_MESSAGE_MAP.OK,
-              data: generateUserInfo(user, token),
-            }
+            return respond(generateUserInfo(user, token))
           }
         }
       } else {
-        return {
-          success: false,
-          message: SERVER_MESSAGE_MAP.ERROR_PASSWORD_WRONG,
-        }
+        return respond(null, ServerMessage.ERROR_PASSWORD_WRONG)
       }
     } else {
-      return {
-        success: false,
-        message: SERVER_MESSAGE_MAP.ERROR_USER_NOT_EXISTED,
-      }
+      return respond(null, ServerMessage.ERROR_USER_NOT_EXISTED)
     }
   }
 
@@ -73,22 +57,12 @@ export class AuthController {
       const user = this.userService.findOne(username)
       if (user) {
         this.authService.update(token)
-        return {
-          success: true,
-          message: SERVER_MESSAGE_MAP.OK,
-          data: generateUserInfo(user, token),
-        }
+        return respond(generateUserInfo(user, token))
       } else {
-        return {
-          success: false,
-          message: SERVER_MESSAGE_MAP.ERROR_USER_NOT_EXISTED,
-        }
+        return respond(null, ServerMessage.ERROR_USER_NOT_EXISTED)
       }
     } else {
-      return {
-        success: false,
-        message: SERVER_MESSAGE_MAP.ERROR_TOKEN_INVALID,
-      }
+      return respond(null, ServerMessage.ERROR_TOKEN_INVALID)
     }
   }
 
@@ -96,19 +70,13 @@ export class AuthController {
   logout(@Headers(HEADERS_AUTH_KEY) authorization: string) {
     const token = getAuthorizationToken(authorization)
     this.authService.remove(token)
-    return {
-      success: true,
-      message: SERVER_MESSAGE_MAP.OK,
-    }
+    return respond()
   }
 
   @Post('shutdown')
   @Permission(UserPermission.administer)
   shutdown() {
     setTimeout(() => process.exit(0), 1000)
-    return {
-      success: true,
-      message: SERVER_MESSAGE_MAP.OK,
-    }
+    return respond()
   }
 }

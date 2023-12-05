@@ -1,4 +1,4 @@
-import { ISetting, SettingKeys } from '../../types'
+import { ISetting, IVersion, SettingKeys } from '../../types'
 import { Injectable } from '@nestjs/common'
 import { readSettingsData, writeSettingsData } from '../../utils'
 import { exec } from 'child_process'
@@ -31,7 +31,7 @@ export class SettingService {
   getLatestVersion() {
     return new Promise((resolve) => {
       exec('npm search gagu', (err, out) => {
-        const version = out
+        const version: IVersion | undefined = out
           .split('\n')
           .filter(Boolean)
           .map((s) => {

@@ -31,11 +31,14 @@ export default function TextEditor(props: AppComponentProps) {
   const [markdownFullView, setMarkdownFullView] = useState(false)
   const [fontSize, setFontSize] = useState(14)
 
-  const { request: queryTextContent, data: { data: textContent }, setData: setTextContent } = useRequest(FsApi.queryTextContent, { data: '' })
+  const { request: queryTextContent, data, setData } = useRequest(FsApi.queryTextContent, { success: true, message: 'OK', data: '' })
   const { request: uploadFile, loading: saving } = useRequest(FsApi.uploadFile)
 
   const isMarkdown = useMemo(() => activeEntry?.extension === 'md', [activeEntry])
-  const submitDisabled = useMemo(() => (value === textContent && !saving )|| !activeEntry, [activeEntry, saving, textContent, value])
+  const textContent = useMemo(() => data?.data || '', [data])
+  const submitDisabled = useMemo(() => {
+    return (value === textContent && !saving ) || !activeEntry
+  }, [activeEntry, saving, textContent, value])
 
   useEffect(() => {
     if (isMarkdown) {
@@ -89,13 +92,14 @@ export default function TextEditor(props: AppComponentProps) {
     if (activeEntry) {
       const blob = new Blob([value], { type: 'text/plain;charset=utf-8' })
       const file = new File([blob], activeEntry.name)
+      // TODO: use patch
       const { success } = await uploadFile(getEntryPath(activeEntry), file)
       if (success) {
         toast.success('OK')
-        setTextContent(value)
+        setData({ success: true, message: 'OK', data: value })
       }
     }
-  }, [value, activeEntry, uploadFile, setTextContent])
+  }, [value, activeEntry, uploadFile, setData])
 
   const bindCtrlS = useCallback((e: any) => {
     const currKey = e.keyCode || e.which || e.charCode

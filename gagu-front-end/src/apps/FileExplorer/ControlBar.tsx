@@ -236,6 +236,7 @@ export default function ControlBar(props: ControlBarProps) {
           />
           <Dropdown
             position="bottomRight"
+            className="bg-white bg-opacity-80 backdrop-blur"
             spacing={0}
             visible={sortVisible}
             onVisibleChange={setSortVisible}

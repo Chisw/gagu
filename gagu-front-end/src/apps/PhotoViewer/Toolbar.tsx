@@ -253,7 +253,7 @@ export default function Toolbar(props: ToolbarProps) {
                   >
                     <div className="flex-shrink-0 w-1/2 text-right">{_key}:</div>
                     <div className="ml-2 flex-grow flex break-all max-h-10 overflow-y-auto">
-                      {_value}
+                      {_value as string}
                     </div>
                   </div>
                 ))}

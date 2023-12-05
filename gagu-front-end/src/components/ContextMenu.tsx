@@ -66,7 +66,7 @@ export function ContextMenu() {
         <Dropdown
           trigger="custom"
           position="bottomLeft"
-          className="select-none"
+          className={`select-none bg-white ${isDock ? '' : 'bg-opacity-80 backdrop-blur'}`}
           visible={menuShow}
           onClickOutSide={() => setMenuShow(false)}
           render={
@@ -76,6 +76,7 @@ export function ContextMenu() {
                   <Dropdown
                     key={name}
                     position="rightTop"
+                    className="bg-white bg-opacity-80 backdrop-blur"
                     menu={children.map(m => ({ ...m, node: 'item', onClick: closeAfterClick(m.onClick) }))}
                   >
                     <Dropdown.Item icon={icon} >
