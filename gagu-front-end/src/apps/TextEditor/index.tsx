@@ -66,7 +66,6 @@ export default function TextEditor(props: AppComponentProps) {
       // TODO: 1024 and size control
       if (size && size > 512000) {
           Confirmor({
-            t,
             type: 'tip',
             content: t('tip.sureToOpenTextFile', { size: '500KB' }),
             onConfirm: (close) => {

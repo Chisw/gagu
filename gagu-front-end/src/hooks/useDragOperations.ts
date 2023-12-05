@@ -5,7 +5,6 @@ import { useRecoilState } from 'recoil'
 import { lastChangedPathState } from '../states'
 import { useRequest } from './useRequest'
 import { FsApi } from '../api'
-import { useTranslation } from 'react-i18next'
 import { Confirmor } from '../components/common'
 
 interface useDragOperationsProps {
@@ -31,7 +30,6 @@ export function useDragOperations(props: useDragOperationsProps) {
     onDrop,
   } = props
 
-  const { t } = useTranslation()
   const [, setLastChangedPath] = useRecoilState(lastChangedPathState)
   const [isInnerDrag, setIsInnerDrag] = useState(false)
 
@@ -39,7 +37,6 @@ export function useDragOperations(props: useDragOperationsProps) {
 
   const handleMoveTransfer = useCallback(async (transferEntryList: IEntry[], targetDirectory: IEntry) => {
     Confirmor({
-      t,
       type: 'tip',
       content: `${transferEntryList.map(({ name }) => name).join(', ')} -> ${targetDirectory.name}`,
       onConfirm: async (close) => {
@@ -58,7 +55,7 @@ export function useDragOperations(props: useDragOperationsProps) {
         close()
       },
     })
-  }, [t, updateEntryPath, setLastChangedPath])
+  }, [updateEntryPath, setLastChangedPath])
 
   useEffect(() => {
     const containerInner: any = containerInnerRef.current
@@ -117,14 +114,14 @@ export function useDragOperations(props: useDragOperationsProps) {
         setIsInnerDrag(false)
         containerInner.setAttribute('data-drag-hover', 'false')
         const transferData = dataTransfer.getData('text/plain')
-        // inner
+        // from inner
         if (transferData) {
-          const transferEntryList = JSON.parse(transferData)
+          const transferEntryList: IEntry[] = JSON.parse(transferData)
           const targetDirectory = entryList.find(e => e.name === entryName && e.type === entryType)
           if (targetDirectory && entryType === 'directory') {
             handleMoveTransfer(transferEntryList, targetDirectory)
           }
-        // outer
+        // from outer
         } else {
           const type = entryList.find(e => e.name === closestEntryName)?.type
           if (type === 'file') return

@@ -90,14 +90,14 @@ export class FsService {
     return entryList
   }
 
-  getFlattenRecursiveEntryList(entryList: IEntry[]) {
+  getRecursiveFlattenEntryList(entryList: IEntry[]) {
     const list: IEntry[] = []
     entryList.forEach((entry) => {
       if (entry.type === EntryType.file) {
         list.push(entry)
       } else {
         const subEntryList = this.getEntryList(getEntryPath(entry))
-        const subList = this.getFlattenRecursiveEntryList(subEntryList)
+        const subList = this.getRecursiveFlattenEntryList(subEntryList)
         list.push(...subList)
       }
     })

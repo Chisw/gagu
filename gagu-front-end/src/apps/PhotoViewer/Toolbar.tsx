@@ -124,7 +124,6 @@ export default function Toolbar(props: ToolbarProps) {
         onClick: () => {
           const { name } = activeEntry!
           Confirmor({
-            t,
             type: 'delete',
             content: t('tip.deleteItem', { name }),
             onConfirm: async (close) => {

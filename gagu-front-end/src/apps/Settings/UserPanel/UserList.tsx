@@ -78,7 +78,6 @@ export default function UserList(props: UserListProps) {
         show: true,
         onClick: () => {
           Confirmor({
-            t,
             type: 'delete',
             content: (
               <div>

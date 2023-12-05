@@ -83,7 +83,7 @@ export class FsController {
   @Post('list/flatten')
   @Permission(UserPermission.read)
   findFlattenAll(@Body('entryList') entryList: IEntry[]) {
-    const flattenList = this.fsService.getFlattenRecursiveEntryList(entryList)
+    const flattenList = this.fsService.getRecursiveFlattenEntryList(entryList)
     return respond(flattenList)
   }
 

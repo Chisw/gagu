@@ -32,7 +32,6 @@ export function MySharingPanel(props: MySharingPanelProps) {
 
   const handleDeleteClick = useCallback((code: string) => {
     Confirmor({
-      t,
       type: 'delete',
       content: t`tip.sureToDelete`,
       onConfirm: async close => {

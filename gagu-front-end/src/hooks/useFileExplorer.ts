@@ -285,7 +285,6 @@ export function useFileExplorer(props: Props) {
     const entryList = contextEntryList || selectedEntryList
     const { message, downloadName } = getDownloadInfo(currentPath, entryList, t)
     Confirmor({
-      t,
       type: 'download',
       content: message,
       onConfirm: async (close) => {
@@ -329,7 +328,6 @@ export function useFileExplorer(props: Props) {
 
   const handleFavoriteClick = useCallback((entry: IEntry, isFavorited: boolean) => {
     Confirmor({
-      t,
       type: isFavorited ? 'unfavorite' : 'favorite',
       content: t(isFavorited ? 'tip.unfavoriteItem' : 'tip.favoriteItem', { name: entry.name }),
       onConfirm: async (close) => {
@@ -353,7 +351,6 @@ export function useFileExplorer(props: Props) {
       : t('tip.deleteItems', { count })
 
     Confirmor({
-      t,
       type: 'delete',
       content: message,
       onConfirm: async (close) => {

@@ -1,5 +1,6 @@
 body {
   font-family: PingFang, Arial, Helvetica, sans-serif;
+  overflow: hidden;
 }
 
 /* common  */

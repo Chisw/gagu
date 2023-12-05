@@ -67,7 +67,7 @@ export class TunnelController {
           return respond(null, ServerMessage.ERROR_TUNNEL_PASSWORD_WRONG)
         }
       }
-      const flattenList = this.fsService.getFlattenRecursiveEntryList(entryList)
+      const flattenList = this.fsService.getRecursiveFlattenEntryList(entryList)
       return respond({
         tunnel: {
           ...tunnel,

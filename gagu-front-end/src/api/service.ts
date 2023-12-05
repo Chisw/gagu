@@ -35,6 +35,7 @@ service.interceptors.response.use(
     }
 
     if (!response && message !== 'canceled') {
+      // TODO:
       toast.error(t`server.ERROR_NO_RESPONSE`)
       return
     }
@@ -45,8 +46,10 @@ service.interceptors.response.use(
       UserInfoStore.remove()
       window.location.href = '/login'
     } else if (status === 403) {
+      // TODO:
       toast.error(t`server.ERROR_403`)
     } else if (status >= 500) {
+      // TODO:
       toast.error(`ERROR_${status}: ${message}`)
     }
   }

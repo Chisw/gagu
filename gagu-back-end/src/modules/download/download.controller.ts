@@ -36,7 +36,7 @@ export class DownloadController {
       }
 
       const rootParentPath = firstEntry.parentPath
-      const list = this.fsService.getFlattenRecursiveEntryList(entryList)
+      const list = this.fsService.getRecursiveFlattenEntryList(entryList)
       const files: ZipResponseFile[] = list.map((entry) => {
         const path = getEntryPath(entry)
         const name = path.replace(rootParentPath, '')
