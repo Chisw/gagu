@@ -9,6 +9,7 @@ import QrCode from 'qrcode.react'
 import toast from 'react-hot-toast'
 import md5 from 'md5'
 import { useTranslation } from 'react-i18next'
+import { semiLocaleMap } from '../i18n'
 
 const newForm = () => ({
   downloadName: '',
@@ -31,7 +32,7 @@ export function SharingModal(props: SharingModalProps) {
     onClose,
   } = props
 
-  const { t } = useTranslation()
+  const { t, i18n: { language } } = useTranslation()
 
   const touchMode = useTouchMode()
 
@@ -172,6 +173,7 @@ export function SharingModal(props: SharingModalProps) {
                       format="yyyy-MM-dd HH:mm"
                       disabledDate={date => date ? date?.getTime() <= (Date.now() - 24 * 60 * 60 * 1000) : false}
                       timePickerOpts={{ minuteStep: 10 }}
+                      locale={semiLocaleMap[language].DatePicker}
                       onChange={date => setForm({ ...form, expiredAt: date ? new Date(date as Date).getTime() : undefined })}
                     />
                   </div>

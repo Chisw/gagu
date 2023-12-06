@@ -11,6 +11,7 @@ import { Button, Form, SideSheet } from '@douyinfe/semi-ui'
 import { useTranslation } from 'react-i18next'
 import { entrySelectorEventState, openEventState } from '../../../states'
 import { useRecoilState } from 'recoil'
+import { semiLocaleMap } from '../../../i18n'
 
 const handleScrollToError = () => {
   const top = document.querySelector('.gagu-app-settings-user-form .semi-form-field-error-message')?.closest('.semi-form-field')?.getBoundingClientRect()?.top
@@ -37,7 +38,7 @@ export default function UserFormModal(props: UserFormModalProps) {
     onRefresh,
   } = props
 
-  const { t } = useTranslation()
+  const { t, i18n: { language } } = useTranslation()
 
   const [, setEntrySelectorEvent] = useRecoilState(entrySelectorEventState)
   const [openEvent, setOpenEvent] = useRecoilState(openEventState)
@@ -242,6 +243,7 @@ export default function UserFormModal(props: UserFormModalProps) {
               extraText={t`hint.noLimitLeaveBlank`}
               format="yyyy-MM-dd HH:mm"
               timePickerOpts={{ minuteStep: 10 }}
+              locale={semiLocaleMap[language].DatePicker}
               onChange={date => setForm({ ...form, expiredAt: new Date(date as Date).getTime() })}
             />
             <Form.CheckboxGroup

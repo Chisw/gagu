@@ -42,7 +42,7 @@ body {
   display: block;
 }
 
-[data-drag-hover="true"] {
+[data-drag-over-outline-show="true"] {
   @apply animate-pulse;
   outline: 2px solid #3b82f6;
   outline-offset: -2px;

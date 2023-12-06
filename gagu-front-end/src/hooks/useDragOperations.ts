@@ -15,7 +15,7 @@ interface useDragOperationsProps {
 }
 
 const clearOutline = () => document.querySelectorAll('.gagu-entry-node')
-  .forEach(el => el.removeAttribute('data-drag-hover'))
+  .forEach(el => el.removeAttribute('data-drag-over-outline-show'))
 
 const dragImage = new Image()
 dragImage.src = `data:image/svg+xml,%3Csvg width='57' height='66' viewBox='0 0 19 22' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.209 2.723l11.95-1.097L16.42 4.34l1.371 14.937-14.937 1.37L1.209 2.724z' fill='%23EEE'/%3E%3Cpath d='M1.209 2.723l11.95-1.097L16.42 4.34l1.371 14.937-14.937 1.37L1.209 2.724z' fill='%23EEE'/%3E%3Cpath d='M1.209 2.723l1.645 17.925 14.937-1.371-1.37-14.937-3.262-2.714-11.95 1.097z' stroke='%23fff'/%3E%3Cpath d='M15.922 4.385l-2.718-2.26.229 2.489 2.49-.229z' fill='%23DDD'/%3E%3Cpath d='M2.991 1.259l11.934 1.266 2.666 3.3L16.01 20.74 1.092 19.158l1.9-17.9z' fill='%23EEE'/%3E%3Cpath d='M2.991 1.259l11.934 1.266 2.666 3.3L16.01 20.74 1.092 19.158l1.9-17.9z' fill='%23EEE'/%3E%3Cpath d='M2.991 1.259l-1.899 17.9L16.01 20.74 17.59 5.825l-2.666-3.3L2.99 1.259z' stroke='%23fff'/%3E%3Cpath d='M17.094 5.772l-2.222-2.75-.264 2.486 2.486.264z' fill='%23DDD'/%3E%3Cpath d='M13.367 7.793l-6.814-.757-.53 4.77 6.813.757.31-2.783-1.704-.189-.176 1.59-1.704-.19.265-2.384 3.407.379.133-1.193z' fill='%23000' fill-opacity='.2'/%3E%3C/svg%3E`
@@ -79,7 +79,7 @@ export function useDragOperations(props: useDragOperationsProps) {
 
       if (closestEntryNode && entryType === EntryType.directory) {
         clearOutline()
-        closestEntryNode.setAttribute('data-drag-hover', 'true')
+        closestEntryNode.setAttribute('data-drag-over-outline-show', 'true')
       } else {
         clearOutline()
       }
@@ -100,19 +100,19 @@ export function useDragOperations(props: useDragOperationsProps) {
 
       if (type === 'dragenter') {
         if (!isInnerDrag && target === containerInner) {
-          containerInner.setAttribute('data-drag-hover', 'true')
+          containerInner.setAttribute('data-drag-over-outline-show', 'true')
         }
       }
 
       if (type === 'dragleave') {
         if (target === containerInner) {
-          containerInner.setAttribute('data-drag-hover', 'false')
+          containerInner.setAttribute('data-drag-over-outline-show', 'false')
         }
       }
 
       if (type === 'drop') {
         setIsInnerDrag(false)
-        containerInner.setAttribute('data-drag-hover', 'false')
+        containerInner.setAttribute('data-drag-over-outline-show', 'false')
         const transferData = dataTransfer.getData('text/plain')
         // from inner
         if (transferData) {
