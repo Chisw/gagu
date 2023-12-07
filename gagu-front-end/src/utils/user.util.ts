@@ -23,6 +23,10 @@ export const UserInfoStore = {
     return this.get()?.token || ''
   },
 
+  getUsername() {
+    return this.get()?.username || ''
+  },
+
   set(userInfo: IUserInfo) {
     localStorage.setItem(GAGU_USER_INFO_KEY, JSON.stringify(userInfo))
   },

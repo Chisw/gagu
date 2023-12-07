@@ -1,3 +1,4 @@
+export * from './ChangePasswordModal'
 export * from './ContextMenu'
 export * from './EntrySelector'
 export * from './MenuBar'

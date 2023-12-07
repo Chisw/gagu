@@ -32,6 +32,7 @@ export class UserService {
       expiredAt,
       permissions,
       assignedRootPathList,
+      passwordLocked,
     } = userForm
 
     const user: IUser = {
@@ -44,6 +45,7 @@ export class UserService {
       permissions,
       assignedRootPathList,
       favoritePathList: [],
+      passwordLocked,
     }
 
     this.userList.push(user)
@@ -58,6 +60,7 @@ export class UserService {
       expiredAt,
       permissions,
       assignedRootPathList,
+      passwordLocked,
     } = userForm
 
     const user = this.userList.find((u) => u.username === username)
@@ -67,6 +70,7 @@ export class UserService {
       user.expiredAt = expiredAt
       user.permissions = permissions
       user.assignedRootPathList = assignedRootPathList
+      user.passwordLocked = passwordLocked
       if (password) {
         user.password = password
       }
@@ -77,6 +81,14 @@ export class UserService {
   remove(username: User.Username) {
     this.userList = this.userList.filter((u) => u.username !== username)
     this.sync()
+  }
+
+  updatePassword(username: User.Username, password: User.Password) {
+    const user = this.userList.find((user) => user.username === username)
+    if (user) {
+      user.password = password
+      this.sync()
+    }
   }
 
   updateValidity(username: User.Username, isValid: boolean) {

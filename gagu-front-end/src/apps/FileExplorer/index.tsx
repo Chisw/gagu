@@ -541,7 +541,7 @@ export default function FileExplorer(props: FileExplorerProps) {
       </div>
 
       <SharingModal
-        visible={sharingModalShow}
+        show={sharingModalShow}
         entryList={sharingEntryList}
         onClose={() => setSharingModalShow(false)}
       />

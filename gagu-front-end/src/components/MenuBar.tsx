@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { TransferPanel, MySharingPanel } from '.'
-import { Dropdown, Modal } from '@douyinfe/semi-ui'
+import { TransferPanel, MySharingPanel, ChangePasswordModal } from '.'
+import { Dropdown } from '@douyinfe/semi-ui'
 import { DateTime } from 'luxon'
 import { useNavigate } from 'react-router-dom'
 import { AuthApi, FsApi } from '../api'
@@ -34,8 +34,8 @@ export function MenuBar() {
   const [systemPopoverShow, setSystemPopoverShow] = useState(false)
   const [userPopoverShow, setUserPopoverShow] = useState(false)
   const [isFullScreen, setIsFullScreen] = useState(false)
-  const [passwordModalShow, setPasswordModalShow] = useState(false)
   const [sharingPanelShow, setSharingPanelShow] = useState(false)
+  const [changePasswordModalShow, setChangePasswordModalShow] = useState(false)
 
   const { request: pulse } = useRequest(AuthApi.pulse)
   const { request: logout } = useRequest(AuthApi.logout)
@@ -291,15 +291,15 @@ export function MenuBar() {
                 >
                   {t`action.mySharing`}
                 </Dropdown.Item>
-                {/* <Dropdown.Item
+                <Dropdown.Item
                   icon={<SvgIcon.Key />}
                   onClick={() => {
                     setUserPopoverShow(false)
-                    setTimeout(() => setPasswordModalShow(true))
+                    setTimeout(() => setChangePasswordModalShow(true))
                   }}
                 >
                   {t`action.changePassword`}
-                </Dropdown.Item> */}
+                </Dropdown.Item>
                 <Dropdown.Item
                   icon={<SvgIcon.Logout />}
                   onClick={handleLogout}
@@ -335,17 +335,14 @@ export function MenuBar() {
         </div>
       </div>
 
-      <Modal
-        title={t`title.changePassword`}
-        visible={passwordModalShow}
-        onCancel={() => setPasswordModalShow(false)}
-      >
-        
-      </Modal>
-
       <MySharingPanel
-        visible={sharingPanelShow}
+        show={sharingPanelShow}
         onClose={() => setSharingPanelShow(false)}
+      />
+
+      <ChangePasswordModal
+        show={changePasswordModalShow}
+        onClose={() => setChangePasswordModalShow(false)}
       />
     </>
   )

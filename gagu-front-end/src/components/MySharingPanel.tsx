@@ -9,13 +9,13 @@ import { getDateTime } from '../utils'
 import { Confirmor, EmptyPanel, SvgIcon } from './common'
 
 interface MySharingPanelProps {
-  visible: boolean
+  show: boolean
   onClose: () => void
 }
 
 export function MySharingPanel(props: MySharingPanelProps) {
 
-  const { visible, onClose } = props
+  const { show, onClose } = props
 
   const { t } = useTranslation()
 
@@ -25,10 +25,10 @@ export function MySharingPanel(props: MySharingPanelProps) {
   const tunnels = useMemo(() => data?.data || [], [data])
 
   useEffect(() => {
-    if (visible) {
+    if (show) {
       queryTunnels()
     }
-  }, [visible, queryTunnels])
+  }, [show, queryTunnels])
 
   const handleDeleteClick = useCallback((code: string) => {
     Confirmor({
@@ -66,7 +66,7 @@ export function MySharingPanel(props: MySharingPanelProps) {
         maskStyle={{ background: 'rgba(0, 0, 0, .1)' }}
         style={{ background: 'rgba(255, 255, 255, .6)', backdropFilter: 'blur(12px)', maxWidth: '90vw' }}
         width={600}
-        visible={visible}
+        visible={show}
         onCancel={onClose}
       >
         <div className="relative w-full h-full overflow-y-auto">

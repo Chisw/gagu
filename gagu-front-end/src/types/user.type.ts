@@ -28,12 +28,14 @@ export interface IUser {
   permissions: UserPermissionType[]
   assignedRootPathList?: string[]
   favoritePathList?: string[]
+  passwordLocked?: boolean
 }
 
 export interface IUserForm extends Omit<IUser, 'favoritePathList'> {
   avatar: string
   password2: string
   assignedRootPathList: string[]
+  passwordLocked: boolean
 }
 
 export class UserForm implements IUserForm {
@@ -47,6 +49,7 @@ export class UserForm implements IUserForm {
   expiredAt?: number
   permissions: UserPermissionType[] = [UserPermission.read]
   assignedRootPathList: string[] = []
+  passwordLocked = false
 
   constructor(user?: IUser, avatarPath?: string) {
     if (user) {
@@ -57,8 +60,15 @@ export class UserForm implements IUserForm {
       this.expiredAt = user.expiredAt
       this.permissions = user.permissions
       this.assignedRootPathList = user.assignedRootPathList || []
+      this.passwordLocked = user.passwordLocked || false
     }
   }
+}
+
+export class UserPasswordForm {
+  password: User.Password = ''
+  newPassword: User.Password = ''
+  newPassword2: User.Password = ''
 }
 
 export interface IAuthRecord {
@@ -72,5 +82,6 @@ export interface IUserInfo {
   nickname: User.Nickname
   username: User.Username
   expiredAt?: number
+  passwordLocked?: boolean
   permissions: UserPermissionType[]
 }

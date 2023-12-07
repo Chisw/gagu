@@ -1,4 +1,5 @@
-import { IResponse, IUser, IUserForm, User, UserValidityType } from '../types'
+import { IResponse, IUser, IUserForm, UserPasswordForm, User, UserValidityType } from '../types'
+import { UserInfoStore } from '../utils'
 import service from './service'
 
 export class UserApi {
@@ -20,6 +21,12 @@ export class UserApi {
 
   static deleteUser = async (username: string) => {
     const { data } = await service.delete<IResponse>(`/api/user/${username}`)
+    return data
+  }
+
+  static updateUserPassword = async (formData: UserPasswordForm) => {
+    const username = UserInfoStore.getUsername()
+    const { data } = await service.put<IResponse>(`/api/user/${username}/password`, formData)
     return data
   }
 

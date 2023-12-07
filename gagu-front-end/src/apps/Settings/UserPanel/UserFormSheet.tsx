@@ -125,7 +125,7 @@ export default function UserFormModal(props: UserFormModalProps) {
         onCancel={() => setFormMode('CLOSE')}
         getPopupContainer={() => document.querySelector('.gagu-app-settings-user-form')!}
       >
-        <div className="gagu-app-settings-user-form-container py-4 max-w-lg overflow-y-auto">
+        <div className="py-4 max-w-lg overflow-y-auto">
           <Form
             labelPosition={touchMode ? 'top' : 'left'}
             labelAlign={touchMode ? 'left': 'right'}
@@ -234,6 +234,14 @@ export default function UserFormModal(props: UserFormModalProps) {
                 },
               ]}
             />
+            <Form.Checkbox
+              label={t`label.passwordLock`}
+              field="passwordLocked"
+              className="mt-1.5"
+              onChange={(e) => setForm({ ...form, passwordLocked: e.target.checked || false })}
+            >
+              {t`label.passwordLock_locked`}
+            </Form.Checkbox>
             <Form.DatePicker
               type="dateTime"
               label={t`label.validUntil`}

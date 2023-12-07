@@ -19,7 +19,7 @@ const newForm = () => ({
 })
 
 interface SharingModalProps {
-  visible: boolean
+  show: boolean
   entryList: IEntry[]
   onClose: () => void
 }
@@ -27,7 +27,7 @@ interface SharingModalProps {
 export function SharingModal(props: SharingModalProps) {
 
   const {
-    visible,
+    show,
     entryList,
     onClose,
   } = props
@@ -49,11 +49,11 @@ export function SharingModal(props: SharingModalProps) {
   const { request: createTunnel, loading: creating } = useRequest(TunnelApi.createTunnel)
 
   useEffect(() => {
-    if (!visible) {
+    if (!show) {
       setTunnelLink('')
       setForm(newForm())
     }
-  }, [visible])
+  }, [show])
 
   useEffect(() => {
     if (entryList.length) {
@@ -99,7 +99,7 @@ export function SharingModal(props: SharingModalProps) {
         fullScreen={touchMode}
         bodyStyle={{ maxHeight: '80%', overflowY: 'auto' }}
         width={isCreating ? 640 : 480}
-        visible={visible}
+        visible={show}
         footer={isCreating ? (
           <div className="relative z-10 flex justify-end">
             <Button
@@ -205,7 +205,7 @@ export function SharingModal(props: SharingModalProps) {
                   icon={<SvgIcon.Copy />}
                   onClick={() => {
                     copy(tunnelLink)
-                    toast.success(t('copied', { value: tunnelLink }))
+                    toast.success(t('tip.copied', { value: tunnelLink }))
                     onClose()
                   }}
                 >

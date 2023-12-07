@@ -281,7 +281,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
       />
 
       <SharingModal
-        visible={sharingModalShow}
+        show={sharingModalShow}
         entryList={sharingEntryList}
         onClose={() => setSharingModalShow(false)}
       />
