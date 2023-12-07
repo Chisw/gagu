@@ -1,5 +1,4 @@
 import SideEntryList from '../FileExplorer/SideEntryList'
-import { SvgIcon } from '../../components/common'
 import { ISideEntry } from '../../types'
 import { line } from '../../utils'
 
@@ -41,12 +40,6 @@ export default function Side(props: SideProps) {
           onSideEntryClick={onSideEntryClick}
           onFavoriteCancel={onFavoriteCancel}
         />
-        <div
-          className="absolute right-0 bottom-0 left-0 px-4 h-12 flex items-center"
-          onClick={() => setSideShow(false)}
-        >
-          <SvgIcon.ArrowLeft />
-        </div>
       </div>
       <div
         className={`absolute z-10 top-8 md:top-6 right-0 bottom-0 left-64 ${sideShow ? '' : 'hidden'}`}

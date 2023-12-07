@@ -1,5 +1,3 @@
-// https://juejin.cn/post/6844903478934896647
-
 import { useEffect } from 'react'
 
 interface SpectrumCanvasProps {

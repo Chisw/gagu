@@ -63,15 +63,22 @@ export const getEntryNestedFileList = async (entry: FileSystemEntry) => {
       })
     })
   } else {
-    await new Promise((resolve, reject) => {
-      const reader = (entry as FileSystemDirectoryEntry).createReader()
-      reader.readEntries(async (entryList: FileSystemEntry[]) => {
-        for (const entry of entryList) {
-          const list = await getEntryNestedFileList(entry)
-          nestedFileList.push(...list)
-        }
-        resolve(true)
-      })
+    await new Promise(async (resolve, reject) => {
+      const directoryReader = (entry as FileSystemDirectoryEntry).createReader()
+      const scanFiles = async () => {
+        directoryReader.readEntries(async (entryList: FileSystemEntry[]) => {
+          if (entryList.length) {
+            for (const entry of entryList) {
+              const list = await getEntryNestedFileList(entry)
+              nestedFileList.push(...list)
+            }
+            await scanFiles()
+          } else {
+            resolve(true)
+          }
+        })
+      }
+      await scanFiles()
     })
   }
   return nestedFileList
