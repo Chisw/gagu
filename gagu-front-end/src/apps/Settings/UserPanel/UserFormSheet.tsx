@@ -267,7 +267,7 @@ export default function UserFormModal(props: UserFormModalProps) {
             >
               {[
                 { label: t`label.permission_administer`, value: UserPermission.administer, extra: t`hint.permission_administer_extra` },
-                { label: t`label.permission_read`, value: UserPermission.read, extra: t`hint.permission_read_extra`, disabled: true, checked: true },
+                { label: t`label.permission_read`, value: UserPermission.read, extra: t`hint.permission_read_extra`, disabled: true },
                 { label: t`label.permission_write`, value: UserPermission.write, extra: t`hint.permission_write_extra` },
                 { label: t`label.permission_delete`, value: UserPermission.delete, extra: t`hint.permission_delete_extra` },
               ].map(({ label, value, extra, disabled }) => (

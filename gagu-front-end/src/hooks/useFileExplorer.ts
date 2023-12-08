@@ -38,6 +38,13 @@ import { throttle } from 'lodash-es'
 import { IControlBarDisabledMap } from '../apps/FileExplorer/ControlBar'
 import { useTouchMode } from './useTouchMode'
 
+const refreshTimerMap: {
+  [PATH: string]: {
+    timer: NodeJS.Timeout,
+    stamp: number,
+  }
+} = {}
+
 interface Props {
   containerRef: any
 }
@@ -225,9 +232,9 @@ export function useFileExplorer(props: Props) {
     handlePathChange({ path, direction: 'forward', updateActiveRootEntry: true })
   }, [visitHistory, handlePathChange])
 
-  const handleNavRefresh = useCallback(async () => {
+  const handleNavRefresh = useCallback(async (assignedPath?: string) => {
     setSelectedEntryList([])
-    await handleQueryEntryList(currentPath, true)
+    await handleQueryEntryList(assignedPath || currentPath, true)
   }, [handleQueryEntryList, currentPath])
 
   const handleNavAbort = useCallback(() => {
@@ -250,6 +257,7 @@ export function useFileExplorer(props: Props) {
     const newTaskList: IUploadTransferTask[] = nestedFileList.map(nestedFile => {
       const { name, fullPath } = nestedFile
       const file = nestedFile as File
+      // TODO: randomID
       const id = `${Date.now()}-${Math.random().toString(36).slice(-8)}`
       const newPath = `${currentPath}${targetDir ? `/${targetDir}` : ''}${fullPath || `/${name}`}`
       if (file.size > 2147483647) {
@@ -414,8 +422,23 @@ export function useFileExplorer(props: Props) {
 
   useEffect(() => {
     if (lastChangedPath.path === currentPath) {
-      handleNavRefresh()
-      setLastChangedPath({ path: '', timestamp: 0 })
+      if (refreshTimerMap[currentPath]) {
+        const { timer, stamp } = refreshTimerMap[currentPath]
+        clearTimeout(timer)
+        if (Date.now() - stamp > 1000) {
+          handleNavRefresh()
+          setLastChangedPath({ path: '', timestamp: 0 })
+          return
+        }
+      }
+      refreshTimerMap[currentPath] = {
+        timer: setTimeout(() => {
+          handleNavRefresh(currentPath)
+          setLastChangedPath({ path: '', timestamp: 0 })
+          delete refreshTimerMap[currentPath]
+        }, 200),
+        stamp: Date.now(),
+      }
     }
   }, [lastChangedPath, currentPath, handleNavRefresh, setLastChangedPath])
 

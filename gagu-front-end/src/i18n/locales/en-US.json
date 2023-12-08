@@ -175,7 +175,7 @@
     },
     "tip": {
       "2GBLimited": "Uploading files >= 2GB is not currently supported",
-      "copied": "Copied: {{value}}",
+      "copied": "Copied",
       "createdAt": "Created at {{time}}",
       "currentlyLatestVersion": "Currently the latest version",
       "currentlyNeedsUpdating": "GAGU has released a new version v{{version}} on {{date}}. Are you sure you want to update?",

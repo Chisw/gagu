@@ -110,7 +110,7 @@ export default function StatusBar(props: StatusBarProps) {
             onClick={() => {
               const value = `${rootEntryPath}/${centerPathList.join('/')}`
               copy(value)
-              toast.success(t('tip.copied', { value }))
+              toast.success(t`tip.copied`)
             }}
           >
             <SvgIcon.Copy size={12} className="inline -mt-[2px]" />

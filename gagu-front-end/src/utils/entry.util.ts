@@ -22,7 +22,7 @@ export const getMatchedApp = (entry: IEntry) => {
 }
 
 export const getDownloadInfo = (parentPath: string, selectedEntryList: IEntry[], t: (key: string | TemplateStringsArray, params?: any) => string) => {
-  const pathName = parentPath.split('/').reverse()[0]
+  const parentPathName = parentPath.split('/').reverse()[0]
   const count = selectedEntryList.length
   const firstEntry: IEntry | undefined = selectedEntryList[0]
   const isDownloadAll = !count
@@ -31,12 +31,12 @@ export const getDownloadInfo = (parentPath: string, selectedEntryList: IEntry[],
   const singleEntryName = firstEntry?.name
 
   const downloadName = isDownloadAll
-    ? `${pathName}.zip`
+    ? `${parentPathName}.zip`
     : isDownloadSingle
       ? isDownloadSingleDir
         ? `${singleEntryName}.zip`
         : singleEntryName
-      : `${pathName}.zip`
+      : `${parentPathName}.zip`
 
   const message = isDownloadAll
     ? t('tip.downloadAllAs', { name: downloadName })
@@ -65,20 +65,20 @@ export const getEntryNestedFileList = async (entry: FileSystemEntry) => {
   } else {
     await new Promise(async (resolve, reject) => {
       const directoryReader = (entry as FileSystemDirectoryEntry).createReader()
-      const scanFiles = async () => {
+      const readFiles = async () => {
         directoryReader.readEntries(async (entryList: FileSystemEntry[]) => {
           if (entryList.length) {
             for (const entry of entryList) {
               const list = await getEntryNestedFileList(entry)
               nestedFileList.push(...list)
             }
-            await scanFiles()
+            await readFiles()
           } else {
             resolve(true)
           }
         })
       }
-      await scanFiles()
+      await readFiles()
     })
   }
   return nestedFileList

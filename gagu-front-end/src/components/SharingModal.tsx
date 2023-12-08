@@ -205,7 +205,7 @@ export function SharingModal(props: SharingModalProps) {
                   icon={<SvgIcon.Copy />}
                   onClick={() => {
                     copy(tunnelLink)
-                    toast.success(t('tip.copied', { value: tunnelLink }))
+                    toast.success(t`tip.copied`)
                     onClose()
                   }}
                 >

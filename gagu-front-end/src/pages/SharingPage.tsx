@@ -195,7 +195,7 @@ export default function SharePage() {
                     className="ml-3 md:ml-2 cursor-pointer"
                     onClick={() => {
                       copy(sharingUrl)
-                      toast.success(t('tip.copied', { value: sharingUrl }))
+                      toast.success(t`tip.copied`)
                     }}
                   >
                     <SvgIcon.Copy className="text-gray-400" />
