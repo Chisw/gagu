@@ -7,7 +7,7 @@ import { getEntryPath, getReadableSize, line } from '../../utils'
 import { getBaiduMapPinUrl } from '../../utils'
 import { useTranslation } from 'react-i18next'
 import { useRecoilState } from 'recoil'
-import { lastChangedPathState } from '../../states'
+import { lastChangedDirectoryState } from '../../states'
 
 interface ToolbarProps {
   imgEl: HTMLImageElement | null
@@ -45,7 +45,7 @@ export default function Toolbar(props: ToolbarProps) {
 
   const { t } = useTranslation()
 
-  const [, setLastChangedPath] = useRecoilState(lastChangedPathState)
+  const [, setLastChangedDirectory] = useRecoilState(lastChangedDirectoryState)
 
   const { request: queryExif, data: exifData, setData, loading: querying } = useRequest(FsApi.queryExif)
   const { request: createTunnel } = useRequest(TunnelApi.createTunnel)
@@ -129,7 +129,7 @@ export default function Toolbar(props: ToolbarProps) {
             onConfirm: async (close) => {
               const { success } = await deleteEntry(getEntryPath(activeEntry))
               if (success) {
-                setLastChangedPath({ path: activeEntry!.parentPath, timestamp: Date.now() })
+                setLastChangedDirectory({ path: activeEntry!.parentPath, timestamp: Date.now() })
                 const len = matchedEntryList.length
                 if (len === 1) {
                   onClose()
@@ -164,7 +164,7 @@ export default function Toolbar(props: ToolbarProps) {
     isLight,
     createTunnel,
     deleteEntry,
-    setLastChangedPath,
+    setLastChangedDirectory,
     onClose,
     activeIndex,
     setActiveIndex,

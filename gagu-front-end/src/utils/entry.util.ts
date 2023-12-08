@@ -109,6 +109,8 @@ export const getEntryLabels = (entry: IEntry) => {
   return { sizeLabel, dateLabel }
 }
 
+export const getParentPath = (path: string) => path.split('/').slice(0, -1).join('/')
+
 // Sync following code to BE & FE
 export const getEntryPath = (entry: IEntry | null | undefined) => {
   if (!entry) return ''

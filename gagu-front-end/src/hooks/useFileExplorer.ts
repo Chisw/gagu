@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   EditModeType,
   IEntry,
+  IEntryPathMap,
   INestedFile,
   IRootEntry,
   IScrollerWatcher,
@@ -17,6 +18,7 @@ import {
 import {
   getDownloadInfo,
   getEntryPath,
+  getParentPath,
   isSameEntry,
   safeQuotes,
   sortMethodMap,
@@ -24,7 +26,7 @@ import {
 import { useRecoilState } from 'recoil'
 import {
   entryPathMapState,
-  lastChangedPathState,
+  lastChangedDirectoryState,
   baseDataState,
   transferSignalState,
   transferTaskListState,
@@ -38,10 +40,10 @@ import { throttle } from 'lodash-es'
 import { IControlBarDisabledMap } from '../apps/FileExplorer/ControlBar'
 import { useTouchMode } from './useTouchMode'
 
-const refreshTimerMap: {
+const RefreshTimerMap: {
   [PATH: string]: {
     timer: NodeJS.Timeout,
-    stamp: number,
+    timestamp: number,
   }
 } = {}
 
@@ -58,7 +60,7 @@ export function useFileExplorer(props: Props) {
   const [entryPathMap, setEntryPathMap] = useRecoilState(entryPathMapState)
   const [transferTaskList, setTransferTaskList] = useRecoilState(transferTaskListState)
   const [transferSignal, setTransferSignal] = useRecoilState(transferSignalState)
-  const [lastChangedPath, setLastChangedPath] = useRecoilState(lastChangedPathState)
+  const [lastChangedDirectory, setLastChangedDirectory] = useRecoilState(lastChangedDirectoryState)
 
   const touchMode = useTouchMode()
 
@@ -75,7 +77,7 @@ export function useFileExplorer(props: Props) {
   const [sharingEntryList, setSharingEntryList] = useState<IEntry[]>([])
   const [thumbScrollWatcher, setThumbScrollWatcher] = useState<IScrollerWatcher>({ top: 0, height: 0 })
 
-  const { request: queryEntryList, loading: querying, setData } = useRequest(FsApi.queryEntryList)
+  const { request: queryEntryList, loading: querying } = useRequest(FsApi.queryEntryList)
   const { request: queryDirectorySize, loading: sizeQuerying } = useRequest(FsApi.queryDirectorySize)
   const { request: deleteEntry, loading: deleting } = useRequest(FsApi.deleteEntry)
   const { request: createTunnel } = useRequest(TunnelApi.createTunnel)
@@ -170,23 +172,23 @@ export function useFileExplorer(props: Props) {
     setVisitHistory({ position, list })
   }, [visitHistory])
 
-  const handleQueryEntryList = useCallback(async (path: string, keepData?: boolean) => {
+  const handleQueryEntryList = useCallback(async (path: string, inheritedMap?: IEntryPathMap) => {
     if (!path) return
-    if (!keepData) {
-      setData(null)
-    }
     const controller = new AbortController()
     const config = { signal: controller.signal }
     setAbortController(controller)
     const { success, data: list } = await queryEntryList(path, config)
     if (success) {
+      const targetMap = inheritedMap || entryPathMap
       const res = {
-        ...(entryPathMap[path] || {}),
+        ...(targetMap[path] || {}),
         list,
       }
-      setEntryPathMap({ ...entryPathMap, [path]: res })
+      const newEntryPathMap = { ...targetMap, [path]: res }
+      setEntryPathMap(newEntryPathMap)
+      return newEntryPathMap
     }
-  }, [queryEntryList, setData, entryPathMap, setEntryPathMap])
+  }, [queryEntryList, entryPathMap, setEntryPathMap])
 
   // path callback
   const handlePathChange = useCallback((props: {
@@ -232,9 +234,15 @@ export function useFileExplorer(props: Props) {
     handlePathChange({ path, direction: 'forward', updateActiveRootEntry: true })
   }, [visitHistory, handlePathChange])
 
-  const handleNavRefresh = useCallback(async (assignedPath?: string) => {
+  const handleNavRefresh = useCallback(async (option?: { assignedPath?: string, refreshParent?: boolean }) => {
+    const { assignedPath, refreshParent } = option || {}
+    const targetPath = assignedPath || currentPath
     setSelectedEntryList([])
-    await handleQueryEntryList(assignedPath || currentPath, true)
+    const newEntryPathMap = await handleQueryEntryList(targetPath)
+    if (refreshParent) {
+      const parentPath = getParentPath(targetPath)
+      handleQueryEntryList(parentPath, newEntryPathMap)
+    }
   }, [handleQueryEntryList, currentPath])
 
   const handleNavAbort = useCallback(() => {
@@ -242,9 +250,7 @@ export function useFileExplorer(props: Props) {
   }, [abortController])
 
   const handleNavToParent = useCallback(() => {
-    const list = currentPath.split('/')
-    list.pop()
-    const path = list.join('/')
+    const path = getParentPath(currentPath)
     handlePathChange({ path, direction: 'forward', pushPath: true })
   }, [currentPath, handlePathChange])
 
@@ -377,7 +383,7 @@ export function useFileExplorer(props: Props) {
         const { favoriteEntryList: list } = baseData
         const favoriteEntryList = list.filter((entry) => !deletedPaths.includes(getEntryPath(entry)))
         setBaseData({ ...baseData, favoriteEntryList })
-        handleNavRefresh()
+        handleNavRefresh({ refreshParent: true })
         close()
       },
     })
@@ -421,26 +427,26 @@ export function useFileExplorer(props: Props) {
   }, [containerRef])
 
   useEffect(() => {
-    if (lastChangedPath.path === currentPath) {
-      if (refreshTimerMap[currentPath]) {
-        const { timer, stamp } = refreshTimerMap[currentPath]
+    if (lastChangedDirectory.path === currentPath) {
+      if (RefreshTimerMap[currentPath]) {
+        const { timer, timestamp } = RefreshTimerMap[currentPath]
         clearTimeout(timer)
-        if (Date.now() - stamp > 1000) {
-          handleNavRefresh()
-          setLastChangedPath({ path: '', timestamp: 0 })
+        if (Date.now() - timestamp > 600) {
+          handleNavRefresh({ refreshParent: true })
+          setLastChangedDirectory({ path: '', timestamp: 0 })
           return
         }
       }
-      refreshTimerMap[currentPath] = {
+      RefreshTimerMap[currentPath] = {
         timer: setTimeout(() => {
-          handleNavRefresh(currentPath)
-          setLastChangedPath({ path: '', timestamp: 0 })
-          delete refreshTimerMap[currentPath]
+          handleNavRefresh({ assignedPath: currentPath, refreshParent: true })
+          setLastChangedDirectory({ path: '', timestamp: 0 })
+          delete RefreshTimerMap[currentPath]
         }, 200),
-        stamp: Date.now(),
+        timestamp: Date.now(),
       }
     }
-  }, [lastChangedPath, currentPath, handleNavRefresh, setLastChangedPath])
+  }, [lastChangedDirectory, currentPath, handleNavRefresh, setLastChangedDirectory])
 
   useEffect(() => {
     setSelectedEntryList([])

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { EntryType, IEntry, INestedFile } from '../types'
 import { getDataTransferNestedFileList, getEntryPath } from '../utils'
 import { useRecoilState } from 'recoil'
-import { lastChangedPathState } from '../states'
+import { lastChangedDirectoryState } from '../states'
 import { useRequest } from './useRequest'
 import { FsApi } from '../api'
 import { Confirmor } from '../components/common'
@@ -30,7 +30,8 @@ export function useDragOperations(props: useDragOperationsProps) {
     onDrop,
   } = props
 
-  const [, setLastChangedPath] = useRecoilState(lastChangedPathState)
+  const [, setLastChangedDirectory] = useRecoilState(lastChangedDirectoryState)
+
   const [isInnerDrag, setIsInnerDrag] = useState(false)
 
   const { request: updateEntryPath } = useRequest(FsApi.updateEntryPath)
@@ -49,13 +50,13 @@ export function useDragOperations(props: useDragOperationsProps) {
 
           const { success } = await updateEntryPath(oldPath, newPath)
           if (success) {
-            setLastChangedPath({ path: transferEntry.parentPath, timestamp: Date.now() })
+            setLastChangedDirectory({ path: transferEntry.parentPath, timestamp: Date.now() })
           }
         }
         close()
       },
     })
-  }, [updateEntryPath, setLastChangedPath])
+  }, [updateEntryPath, setLastChangedDirectory])
 
   useEffect(() => {
     const containerInner: any = containerInnerRef.current

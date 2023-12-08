@@ -5,7 +5,7 @@ import { EmptyPanel, SvgIcon } from './common'
 import { useRequest } from '../hooks'
 import { IUploadTransferTask } from '../types'
 import { getReadableSize, line } from '../utils'
-import { lastChangedPathState, transferSignalState, transferTaskListState } from '../states'
+import { lastChangedDirectoryState, transferSignalState, transferTaskListState } from '../states'
 import { Button, SideSheet } from '@douyinfe/semi-ui'
 import { useTranslation } from 'react-i18next'
 import { cloneDeep } from 'lodash-es'
@@ -26,7 +26,7 @@ export function TransferPanel() {
 
   const [transferTaskList, setTransferTaskList] = useRecoilState(transferTaskListState)
   const [transferSignal] = useRecoilState(transferSignalState)
-  const [, setLastChangedPath] = useRecoilState(lastChangedPathState)
+  const [, setLastChangedDirectory] = useRecoilState(lastChangedDirectoryState)
 
   const [visible, setVisible] = useState(false)
   const [uploadInfo, setUploadInfo] = useState({ ratio: 0, speed: '' })
@@ -59,6 +59,7 @@ export function TransferPanel() {
         lastUpload = { time: now, size: loaded }
       }
 
+      // TODO:
       if (file.size > 2147483647) {
         continue
       }
@@ -67,7 +68,7 @@ export function TransferPanel() {
       if (success) {
         setUploadInfo({ ratio: 0, speed: '' })
         const match = file.fullPath || `/${file.name}`
-        setLastChangedPath({ path: newPath.replace(match, ''), timestamp: Date.now() })
+        setLastChangedDirectory({ path: newPath.replace(match, ''), timestamp: Date.now() })
       }
     }
 
@@ -77,7 +78,7 @@ export function TransferPanel() {
     })
     setTransferTaskList(list)
     setActiveId('')
-  }, [uploadFile, setLastChangedPath, transferTaskList, setTransferTaskList])
+  }, [uploadFile, setLastChangedDirectory, transferTaskList, setTransferTaskList])
 
   useEffect(() => {
     if (transferSignal !== transferSignalCache) {
@@ -103,7 +104,8 @@ export function TransferPanel() {
           className={`
             absolute left-0 bottom-0 right-0
             h-[2px] bg-green-400
-            transition-width duration-200
+            transition-width
+            ${uploadInfo.ratio === 0 ? '' : 'duration-200'}
             ${uploading ? 'block' : 'hidden'}
           `}
           style={{ width: `${uploadInfo.ratio * 100}%` }}
@@ -190,7 +192,8 @@ export function TransferPanel() {
                     className={`
                       absolute left-0 bottom-0 right-0
                       h-1 bg-green-400
-                      transition-width duration-200
+                      transition-width
+                      ${uploadInfo.ratio === 0 ? '' : 'duration-200'}
                       ${uploading ? 'block' : 'hidden'}
                     `}
                     style={{ width: `${uploadInfo.ratio * 100}%` }}
