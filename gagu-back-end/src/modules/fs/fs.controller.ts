@@ -138,6 +138,10 @@ export class FsController {
   @Delete('delete')
   @Permission(UserPermission.delete)
   async remove(@Query('path') path: string) {
+    const isExisted = getExists(path)
+    if (!isExisted) {
+      return respond()
+    }
     await deleteEntry(path)
     const deleted = !getExists(path)
     if (deleted) {

@@ -37,7 +37,7 @@ export const deleteEntry = async (path: string) => {
         resolve(true)
       }
     } catch (err) {
-      reject(false)
+      reject(err)
     }
   })
 }
