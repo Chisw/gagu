@@ -21,7 +21,8 @@ interface useDragTransferProps {
   currentPath: string
   entryList: IEntry[]
   selectedEntryList: IEntry[]
-  onDrop: (files: INestedFile[], dir?: string) => void
+  onDrop: (files: INestedFile[], targetDirName?: string) => void
+  onOpen: (path: string) => void
 }
 
 export function useDragTransfer(props: useDragTransferProps) {
@@ -32,6 +33,7 @@ export function useDragTransfer(props: useDragTransferProps) {
     entryList,
     selectedEntryList,
     onDrop,
+    onOpen,
   } = props
 
   const { t } = useTranslation()
@@ -49,9 +51,7 @@ export function useDragTransfer(props: useDragTransferProps) {
           const oldPath = getEntryPath(transferEntry)
           const newPath = `${targetPath}/${transferEntry.name}`
 
-          if (oldPath === targetPath) {
-            continue
-          }
+          if (oldPath === targetPath) continue
 
           const { success } = await updateEntryPath(oldPath, newPath)
           if (success) {
@@ -71,7 +71,13 @@ export function useDragTransfer(props: useDragTransferProps) {
     const containerInner: any = containerInnerRef.current
     if (!containerInner) return
 
-    const clearStyles = () => {
+    let openTimer: NodeJS.Timeout
+    let isDragFromCurrentAppWindow = false
+
+    const resetAll = () => {
+      clearTimeout(openTimer)
+      isDragFromCurrentAppWindow = false
+
       containerInner.classList.remove('gagu-dragenter-outline')
       containerInner.querySelectorAll('.gagu-entry-node')
         .forEach((el: any) => {
@@ -80,10 +86,8 @@ export function useDragTransfer(props: useDragTransferProps) {
         })
     }
 
-    let isDragFromCurrentWindow = false
-
     const dragStartListener = (e: any) => {
-      isDragFromCurrentWindow = true
+      isDragFromCurrentAppWindow = true
 
       const { target, dataTransfer } = e
 
@@ -139,15 +143,24 @@ export function useDragTransfer(props: useDragTransferProps) {
     const dragEnterListener = (e: any) => {
       const { target } = e
 
+      clearTimeout(openTimer)
+
       if (target === containerInner) {
-        if (isDragFromCurrentWindow) return
+        if (isDragFromCurrentAppWindow) return
         containerInner.classList.add('gagu-dragenter-outline')
       } else {
         const closestEntryNode = target.closest('.gagu-entry-node:not(.gagu-dragging-grayscale)')
+        const closestEntryName = closestEntryNode?.getAttribute('data-entry-name')
         const closestEntryType = closestEntryNode?.getAttribute('data-entry-type')
 
         if (closestEntryNode && closestEntryType === EntryType.directory) {
           closestEntryNode.classList.add('gagu-dragenter-outline')
+          openTimer = setTimeout(() => {
+            const targetDirectory = entryList.find(e => e.name === closestEntryName)
+            if (targetDirectory) {
+              onOpen(getEntryPath(targetDirectory))
+            }
+          }, 2000)
         }
       }
     }
@@ -172,10 +185,10 @@ export function useDragTransfer(props: useDragTransferProps) {
       // from browser inner
       if (transferData) {
         const transferEntryList: IEntry[] = JSON.parse(transferData || '[]')
-        const targetDirectory = entryList.find(e => e.name === closestEntryName && e.type === closestEntryType)
+        const targetDirectory = entryList.find(e => e.name === closestEntryName)
         if (targetDirectory && closestEntryType === 'directory') {
           handleMoveTransfer(transferEntryList, getEntryPath(targetDirectory))
-        } else if (!isDragFromCurrentWindow) {
+        } else if (!isDragFromCurrentAppWindow) {
           handleMoveTransfer(transferEntryList, currentPath)
         }
       // from browser outer
@@ -187,15 +200,12 @@ export function useDragTransfer(props: useDragTransferProps) {
         })
       }
 
-      isDragFromCurrentWindow = false
-      clearStyles()
+      resetAll()
     }
 
     const dragEndListener = (e: any) => {
       e.preventDefault()
-
-      isDragFromCurrentWindow = false
-      clearStyles()
+      resetAll()
     }
 
     containerInner.addEventListener('dragstart', dragStartListener)
@@ -213,5 +223,5 @@ export function useDragTransfer(props: useDragTransferProps) {
       containerInner.removeEventListener('drop', dropListener)
       containerInner.removeEventListener('dragend', dragEndListener)
     }
-  }, [containerInnerRef, currentPath, entryList, selectedEntryList, onDrop, handleMoveTransfer])
+  }, [containerInnerRef, currentPath, entryList, selectedEntryList, onDrop, onOpen, handleMoveTransfer])
 }

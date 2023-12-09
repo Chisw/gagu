@@ -200,8 +200,9 @@ export function NameLabel(props: NameLabelProps) {
       title={entryName}
       className={line(`
         px-1 rounded text-xs
-        ${isSelected ? 'bg-blue-600 text-white' : 'text-gray-700'}
         ${gridMode ? 'max-w-full line-clamp-2' : 'w-full truncate'}
+        ${isSelected ? 'text-white' : 'text-gray-700'}
+        ${isSelected && gridMode ? 'bg-blue-600' : ''}
       `)}
     >
       {entryName}

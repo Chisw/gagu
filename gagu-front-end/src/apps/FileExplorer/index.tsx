@@ -189,6 +189,7 @@ export default function FileExplorer(props: FileExplorerProps) {
     entryList,
     selectedEntryList,
     onDrop: handleUploadTaskAdd,
+    onOpen: handleGoFullPath,
   })
 
   useHotKey({

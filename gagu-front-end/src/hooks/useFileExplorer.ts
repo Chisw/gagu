@@ -250,7 +250,6 @@ export function useFileExplorer(props: Props) {
     }
     for (const path of restPaths) {
       newEntryPathMap = await handleQueryEntryList(path, newEntryPathMap)
-
     }
   }, [handleQueryEntryList, currentPath])
 
@@ -264,7 +263,7 @@ export function useFileExplorer(props: Props) {
   }, [currentPath, handlePathChange])
 
   // entry callback
-  const handleUploadTaskAdd = useCallback((nestedFileList: INestedFile[], targetDir?: string) => {
+  const handleUploadTaskAdd = useCallback((nestedFileList: INestedFile[], targetDirName?: string) => {
     if (!nestedFileList.length) {
       toast.error(t`tip.noUploadableFilesDetected`)
       return
@@ -274,7 +273,7 @@ export function useFileExplorer(props: Props) {
       const file = nestedFile as File
       // TODO: randomID
       const id = `${Date.now()}-${Math.random().toString(36).slice(-8)}`
-      const newPath = `${currentPath}${targetDir ? `/${targetDir}` : ''}${fullPath || `/${name}`}`
+      const newPath = `${currentPath}${targetDirName ? `/${targetDirName}` : ''}${fullPath || `/${name}`}`
       if (file.size > 2147483647) {
         toast.error(t`tip.2GBLimited`)
       }
@@ -436,12 +435,12 @@ export function useFileExplorer(props: Props) {
 
   useEffect(() => {
     const { path, otherPaths = [] } = lastChangedDirectory
-    if (path === currentPath) {
+    if (path === currentPath || otherPaths.includes(currentPath)) {
       if (RefreshTimerMap[currentPath]) {
         const { timer, timestamp } = RefreshTimerMap[currentPath]
         clearTimeout(timer)
         if (Date.now() - timestamp > 600) {
-          handleNavRefresh({ refreshParent: true })
+          handleNavRefresh({ refreshParent: true, otherPaths })
           setLastChangedDirectory({ path: '', timestamp: 0 })
           return
         }
