@@ -132,6 +132,7 @@ export default function EntryName(props: EntryNameProps) {
       className={line(`
         w-full leading-none
         ${gridMode ? 'mt-1 text-center' : 'ml-4 flex justify-start items-center'}
+        ${inputMode ? '' : 'pointer-events-none'}
       `)}
     >
       {inputMode ? (

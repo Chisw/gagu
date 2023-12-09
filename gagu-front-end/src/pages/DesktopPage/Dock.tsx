@@ -110,7 +110,7 @@ export default function Dock() {
               />
               <span
                 className={line(`
-                  absolute left-1/2 bottom-0 w-1 h-1 rounded-full bg-black
+                  absolute left-1/2 bottom-0 w-1 h-1 rounded-full bg-black bg-opacity-60
                   -translate-x-1/2 translate-y-[6px]
                   transition-all duration-300
                   ${isRunning ? 'opacity-100' : 'opacity-0'}

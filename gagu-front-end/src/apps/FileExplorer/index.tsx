@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { SharingModal } from '../../components'
-import { useLassoSelect, useDragOperations, useHotKey, useFileExplorer } from '../../hooks'
+import { useLassoSelect, useDragTransfer, useHotKey, useFileExplorer } from '../../hooks'
 import StatusBar from './StatusBar'
 import ControlBar from './ControlBar'
 import Side from './Side'
@@ -183,8 +183,9 @@ export default function FileExplorer(props: FileExplorerProps) {
     onDragging: handleLassoSelect,
   })
 
-  useDragOperations({
+  useDragTransfer({
     containerInnerRef,
+    currentPath,
     entryList,
     selectedEntryList,
     onDrop: handleUploadTaskAdd,
@@ -545,7 +546,7 @@ export default function FileExplorer(props: FileExplorerProps) {
         entryList={sharingEntryList}
         onClose={() => setSharingModalShow(false)}
       />
-      
+
     </>
   )
 }

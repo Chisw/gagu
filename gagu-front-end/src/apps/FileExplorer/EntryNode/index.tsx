@@ -72,6 +72,7 @@ export default function EntryNode(props: EntryNodeProps) {
       className={line(`
         gagu-entry-node
         relative overflow-hidden group
+        transition-opacity duration-300
         ${hidden ? 'opacity-50' : ''}
         ${gridMode ? 'm-1 px-1 py-2 w-28 rounded-sm' : 'px-3 py-[3px] w-full flex items-center'}
         ${isSelected && !gridMode ? 'bg-blue-600' : ''}
@@ -108,7 +109,7 @@ export default function EntryNode(props: EntryNodeProps) {
       />
       <div
         className={line(`
-          text-xs whitespace-nowrap font-din min-w-16
+          text-xs whitespace-nowrap font-din min-w-16 pointer-events-none
           ${isSelected && !gridMode ? 'text-white' : 'text-gray-400'}
           ${gridMode ? 'w-full text-center' : 'pl-2 w-24 text-right'}
           ${(isSelected && requestState?.sizeQuerying) ? 'bg-loading' : ''}
@@ -119,7 +120,7 @@ export default function EntryNode(props: EntryNodeProps) {
       </div>
       <div
         className={line(`
-          text-xs whitespace-nowrap font-din
+          text-xs whitespace-nowrap font-din pointer-events-none
           ${isSelected && !gridMode ? 'text-white' : 'text-gray-400'}
           ${gridMode ? 'hidden' : 'w-36 pl-2 text-right'}
         `)}

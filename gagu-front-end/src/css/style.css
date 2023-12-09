@@ -42,7 +42,11 @@ body {
   display: block;
 }
 
-[data-drag-over-outline-show="true"] {
+.gagu-dragging-grayscale {
+  @apply opacity-20 grayscale;
+}
+
+.gagu-dragenter-outline {
   @apply animate-pulse;
   outline: 2px solid #3b82f6;
   outline-offset: -2px;
@@ -114,6 +118,10 @@ body {
 .gagu-entry-name-editor .semi-modal-mask,
 .gagu-confirmor .semi-modal-mask {
   @apply bg-black bg-opacity-10 !important;
+}
+
+.gagu-confirmor .semi-modal-content {
+  @apply bg-white bg-opacity-90 backdrop-blur border-none;
 }
 
 .gagu-entry-selector .semi-modal-content {

@@ -4,7 +4,7 @@ import { SvgIcon } from './SvgIcon'
 import { t } from 'i18next'
 
 interface ConfirmorProps {
-  type: 'download' | 'delete' | 'tip' | 'favorite' | 'unfavorite' | 'upgrade' | 'ok'
+  type: 'download' | 'delete' | 'tip' | 'favorite' | 'unfavorite' | 'upgrade' | 'ok' | 'move'
   content: ReactNode
   onConfirm: (close: () => void) => void
   onCancel?: (close: () => void) => void
@@ -18,6 +18,7 @@ const iconMap = {
   unfavorite: <SvgIcon.Star size={36} className="text-gray-400" />,
   upgrade: <SvgIcon.Upgrade size={36} className="text-blue-600" />,
   ok: <SvgIcon.CheckCircle size={36} className="text-green-600" />,
+  move: <SvgIcon.MoveTo size={36} className="text-blue-600" />,
 }
 
 export function Confirmor(props: ConfirmorProps) {

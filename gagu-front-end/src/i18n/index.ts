@@ -54,7 +54,8 @@ i18n
     lng: language,
     interpolation: {
       escapeValue: false,
-    }
+    },
+    pluralSeparator: '_',
   })
 
 const setLanguage = (language: string) => {

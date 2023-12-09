@@ -234,14 +234,22 @@ export function useFileExplorer(props: Props) {
     handlePathChange({ path, direction: 'forward', updateActiveRootEntry: true })
   }, [visitHistory, handlePathChange])
 
-  const handleNavRefresh = useCallback(async (option?: { assignedPath?: string, refreshParent?: boolean }) => {
-    const { assignedPath, refreshParent } = option || {}
+  const handleNavRefresh = useCallback(async (option?: {
+    assignedPath?: string,
+    refreshParent?: boolean,
+    otherPaths?: string[],
+  })=> {
+    const { assignedPath, refreshParent, otherPaths = [] } = option || {}
     const targetPath = assignedPath || currentPath
     setSelectedEntryList([])
-    const newEntryPathMap = await handleQueryEntryList(targetPath)
+    let newEntryPathMap = await handleQueryEntryList(targetPath)
+    const restPaths = [...otherPaths]
     if (refreshParent) {
-      const parentPath = getParentPath(targetPath)
-      handleQueryEntryList(parentPath, newEntryPathMap)
+      restPaths.push(getParentPath(targetPath))
+    }
+    for (const path of restPaths) {
+      newEntryPathMap = await handleQueryEntryList(path, newEntryPathMap)
+
     }
   }, [handleQueryEntryList, currentPath])
 
@@ -374,8 +382,7 @@ export function useFileExplorer(props: Props) {
           const path = getEntryPath(entry)
           const { success } = await deleteEntry(path)
           if (success) {
-            // TODO: current window
-            document.querySelector(`.gagu-entry-node[data-entry-name="${safeQuotes(name)}"]`)
+            containerRef?.current?.querySelector(`.gagu-entry-node[data-entry-name="${safeQuotes(name)}"]`)
               ?.setAttribute('style', 'opacity:0;')
             deletedPaths.push(path)
           }
@@ -387,7 +394,7 @@ export function useFileExplorer(props: Props) {
         close()
       },
     })
-  }, [deleteEntry, selectedEntryList, handleNavRefresh, t, setBaseData, baseData])
+  }, [deleteEntry, selectedEntryList, handleNavRefresh, t, setBaseData, baseData, containerRef])
 
   const handleHiddenShowChange = useCallback((show: boolean) => {
     const res = {
@@ -427,7 +434,8 @@ export function useFileExplorer(props: Props) {
   }, [containerRef])
 
   useEffect(() => {
-    if (lastChangedDirectory.path === currentPath) {
+    const { path, otherPaths = [] } = lastChangedDirectory
+    if (path === currentPath) {
       if (RefreshTimerMap[currentPath]) {
         const { timer, timestamp } = RefreshTimerMap[currentPath]
         clearTimeout(timer)
@@ -439,7 +447,7 @@ export function useFileExplorer(props: Props) {
       }
       RefreshTimerMap[currentPath] = {
         timer: setTimeout(() => {
-          handleNavRefresh({ assignedPath: currentPath, refreshParent: true })
+          handleNavRefresh({ assignedPath: currentPath, refreshParent: true, otherPaths })
           setLastChangedDirectory({ path: '', timestamp: 0 })
           delete RefreshTimerMap[currentPath]
         }, 200),
