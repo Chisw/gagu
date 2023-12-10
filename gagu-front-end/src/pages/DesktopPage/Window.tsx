@@ -126,7 +126,7 @@ export default function Window(props: WindowProps) {
       <Rnd
         ref={setRndInstance}
         id={`gagu-app-window-${runningId}`}
-        dragHandleClassName="gagu-drag-handler"
+        dragHandleClassName="gagu-window-drag-handler"
         data-hidden={hidden}
         className="gagu-app-window"
         default={defaultInfo}
@@ -172,7 +172,7 @@ export default function Window(props: WindowProps) {
             <div
               className={line(`
                 flex items-center flex-grow px-2 h-full truncate
-                ${isFullScreen ? '' : 'gagu-drag-handler'}
+                ${isFullScreen ? '' : 'gagu-window-drag-handler'}
               `)}
               onDoubleClick={() => handleFullScreen()}
             >
@@ -187,7 +187,7 @@ export default function Window(props: WindowProps) {
             {/* Mask: prevent out of focus in iframe */}
             <div
               className={line(`
-                gagu-drag-handler-hover-mask
+                gagu-window-drag-handler-hover-mask
                 absolute z-10 inset-0 mt-8
                 ${isTopWindow ? 'hidden' : ''}
               `)}

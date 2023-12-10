@@ -38,8 +38,12 @@ body {
   display: none !important;
 }
 
-.gagu-drag-handler:hover + .gagu-drag-handler-hover-mask {
+.gagu-window-drag-handler:hover + .gagu-window-drag-handler-hover-mask {
   display: block;
+}
+
+.gagu-inner-in-dragging .gagu-entry-node[data-entry-type="file"] {
+  @apply pointer-events-none;
 }
 
 .gagu-dragging-grayscale {
@@ -50,16 +54,16 @@ body {
   @apply animate-pulse;
   outline: 2px solid #3b82f6;
   outline-offset: -2px;
-  animation-duration: 1s;
+  animation-duration: 2s;
 }
 
 .gagu-entry-node[data-entry-type="directory"]::after {
-  @apply content-[""] block absolute z-[-1] right-0 bottom-0 left-0 h-0 bg-blue-200 bg-opacity-40;
+  @apply content-[""] block absolute z-[-1] top-0 bottom-0 left-0 w-0 bg-blue-200 bg-opacity-40;
 }
 
 .gagu-entry-node.gagu-dragenter-outline::after {
-  @apply h-full;
-  transition: height 2s linear;
+  @apply w-full;
+  transition: width 1s linear;
 }
 
 /* customized-scrollbar */
