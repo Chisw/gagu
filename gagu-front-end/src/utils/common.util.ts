@@ -203,6 +203,8 @@ export const vibrate = (p?: VibratePattern) => {
 }
 
 // Sync following code to BE & FE
+export const generateRandomCode = () => md5(Math.random().toString())
+
 export const getIsExpired = (expiredAt?: number) => {
   return expiredAt && expiredAt < Date.now()
 }

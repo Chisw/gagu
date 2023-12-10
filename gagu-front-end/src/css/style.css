@@ -63,6 +63,7 @@ body {
 
 .gagu-entry-node.gagu-dragenter-outline::after {
   @apply w-full;
+  /* 1000: AUTO_OPEN_DURATION */
   transition: width 1s linear;
 }
 

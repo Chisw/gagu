@@ -3,8 +3,6 @@ import { ServerOS } from './constant.util'
 import { ServerMessage } from 'src/types'
 import * as md5 from 'md5'
 
-export const generateRandomCode = () => md5(Math.random().toString())
-
 export const openInBrowser = (url: string) => {
   if (ServerOS.isMacOS) {
     exec(`open ${url}`)
@@ -29,6 +27,8 @@ export const respond = <T>(
 }
 
 // Sync following code to BE & FE
+export const generateRandomCode = () => md5(Math.random().toString())
+
 export const getIsExpired = (expiredAt?: number) => {
   return expiredAt && expiredAt < Date.now()
 }

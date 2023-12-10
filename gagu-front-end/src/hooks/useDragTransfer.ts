@@ -56,7 +56,7 @@ export function useDragTransfer(props: useDragTransferProps) {
           const oldPath = getEntryPath(transferEntry)
           const newPath = `${targetPath}/${transferEntry.name}`
 
-          if (oldPath === targetPath) continue
+          if (targetPath === oldPath) continue
 
           const { success } = await updateEntryPath(oldPath, newPath)
           if (success) {
@@ -162,12 +162,8 @@ export function useDragTransfer(props: useDragTransferProps) {
         containerInner.classList.add('gagu-dragenter-outline')
       } else if (closestEntryType === EntryType.directory) {
         closestEntryNode.classList.add('gagu-dragenter-outline')
-        openTimer = setTimeout(() => {
-          const targetDirectory = entryList.find(e => e.name === closestEntryName)
-          if (targetDirectory) {
-            onOpen(getEntryPath(targetDirectory))
-          }
-        }, 1000)
+        // 1000: AUTO_OPEN_DURATION
+        openTimer = setTimeout(() => onOpen(`${currentPath}/${closestEntryName}`), 1000)
       }
     }
 
@@ -183,24 +179,23 @@ export function useDragTransfer(props: useDragTransferProps) {
       e.preventDefault()
 
       const { target, dataTransfer } = e
+      const transferData = dataTransfer.getData('text/plain')
       const closestEntryNode = target.closest('.gagu-entry-node:not(.gagu-dragging-grayscale)')
       const closestEntryName = closestEntryNode?.getAttribute('data-entry-name')
       const closestEntryType = closestEntryNode?.getAttribute('data-entry-type')
-      const transferData = dataTransfer.getData('text/plain')
 
       // from browser inner
       if (transferData) {
         const transferEntryList: IEntry[] = JSON.parse(transferData || '[]')
-        const targetDirectory = entryList.find(e => e.name === closestEntryName)
-        if (targetDirectory && closestEntryType === EntryType.directory) {
-          handleMoveTransfer(transferEntryList, getEntryPath(targetDirectory))
+        if (closestEntryType === EntryType.directory) {
+          const targetPath = `${currentPath}/${closestEntryName}`
+          handleMoveTransfer(transferEntryList, targetPath)
         } else if (!isDragFromCurrentPath) {
           handleMoveTransfer(transferEntryList, currentPath)
         }
       // from browser outer
       } else {
-        const type = entryList.find(e => e.name === closestEntryName)?.type
-        if (type === 'file') return
+        if (closestEntryType === EntryType.file) return
         getDataTransferNestedFileList(dataTransfer).then(files => {
           onDrop(files, closestEntryName)
         })

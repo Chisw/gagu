@@ -44,7 +44,7 @@ export default function Window(props: WindowProps) {
   const sameAppCount = useMemo(() => runningAppList.filter(a => a.id === appId).length, [runningAppList, appId])
 
   const defaultInfo = useMemo(() => {
-    const offset = sameAppCount * 24
+    const offset = (sameAppCount - 1) * 24
     const x = Math.max((window.innerWidth - width) / 2, 10) + offset
     const y = Math.max((window.innerHeight - 100 - height) / 2, 10) + offset
     return { x, y, width, height }

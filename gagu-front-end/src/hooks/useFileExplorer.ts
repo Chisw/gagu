@@ -17,6 +17,7 @@ import {
 } from '../types'
 import {
   WINDOW_DURATION,
+  generateRandomCode,
   getDownloadInfo,
   getEntryPath,
   getParentPath,
@@ -271,8 +272,7 @@ export function useFileExplorer(props: Props) {
     const newTaskList: IUploadTransferTask[] = nestedFileList.map(nestedFile => {
       const { name, fullPath } = nestedFile
       const file = nestedFile as File
-      // TODO: randomID
-      const id = `${Date.now()}-${Math.random().toString(36).slice(-8)}`
+      const id = generateRandomCode()
       const newPath = `${currentPath}${targetDirName ? `/${targetDirName}` : ''}${fullPath || `/${name}`}`
       if (file.size > 2147483647) {
         toast.error(t`tip.2GBLimited`)
@@ -435,7 +435,8 @@ export function useFileExplorer(props: Props) {
 
   useEffect(() => {
     const { path, otherPaths = [] } = lastChangedDirectory
-    if (path === currentPath || otherPaths.includes(currentPath)) {
+    const needRefresh = [path, getParentPath(path), ...otherPaths].includes(currentPath)
+    if (needRefresh) {
       if (RefreshTimerMap[currentPath]) {
         const { timer, timestamp } = RefreshTimerMap[currentPath]
         clearTimeout(timer)

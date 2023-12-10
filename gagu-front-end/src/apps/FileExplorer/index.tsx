@@ -460,7 +460,7 @@ export default function FileExplorer(props: FileExplorerProps) {
           />
           <div
             ref={containerRef}
-            className="relative flex-grow overflow-x-hidden overflow-y-auto select-none"
+            className="gagu-entry-list-container relative flex-grow overflow-x-hidden overflow-y-auto select-none"
             onMouseDownCapture={handleSelectCancel}
           >
             <div
@@ -473,7 +473,7 @@ export default function FileExplorer(props: FileExplorerProps) {
             <div
               ref={containerInnerRef}
               className={line(`
-                gagu-entry-list-container
+                gagu-entry-list-container-inner
                 relative min-h-full flex flex-wrap content-start
                 ${gridMode ? 'p-2' : 'p-4'}
               `)}
