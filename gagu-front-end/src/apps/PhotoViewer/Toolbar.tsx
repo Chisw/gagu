@@ -21,7 +21,6 @@ interface ToolbarProps {
   setMatchedEntryList: (entryList: IEntry[]) => void
   setIsLight: (is: boolean) => void
   setThumbnailListShow: (is: boolean) => void
-  onPrevOrNext: (offset: number) => void
   onClose: () => void
 }
 
@@ -39,7 +38,6 @@ export default function Toolbar(props: ToolbarProps) {
     setMatchedEntryList,
     setIsLight,
     setThumbnailListShow,
-    onPrevOrNext,
     onClose,
   } = props
 
@@ -77,11 +75,6 @@ export default function Toolbar(props: ToolbarProps) {
 
   const buttonList = useMemo(() => {
     return [
-      {
-        icon: <SvgIcon.ChevronLeft size={14} />,
-        title: t`action.previousPicture`,
-        onClick: () => onPrevOrNext(-1),
-      },
       {
         icon: <SvgIcon.LayoutBottom size={14} />,
         title: t`action.more`,
@@ -146,18 +139,12 @@ export default function Toolbar(props: ToolbarProps) {
           })
         },
       },
-      {
-        icon: <SvgIcon.ChevronRight size={14} />,
-        title: t`action.nextPicture`,
-        onClick: () => onPrevOrNext(1),
-      },
     ]
   }, [
     t,
     matchedEntryList,
     activeEntry,
     getExifData,
-    onPrevOrNext,
     setThumbnailListShow,
     thumbnailListShow,
     setIsLight,

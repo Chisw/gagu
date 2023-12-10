@@ -1,4 +1,4 @@
-import { Opener, Spinner } from '../../components/common'
+import { Opener, Spinner, SvgIcon } from '../../components/common'
 import { useEffect, useMemo, useRef, useState, useCallback } from 'react'
 import { AppComponentProps, AppId } from '../../types'
 import { useOpenEvent, useHotKey } from '../../hooks'
@@ -78,10 +78,13 @@ export default function PhotoViewer(props: AppComponentProps) {
             ${isLight ? 'bg-grid-light' : 'bg-grid-dark'}
             ${activeEntry ? 'cursor-zoom-in' : ''}
           `)}
-          onClick={() => activeEntry && setViewerShow(true)}
         >
           {loading && <Spinner />}
-          <div className={`absolute z-0 inset-0 ${activeEntry ? 'flex justify-center items-center' : ''}`}>
+
+          <div
+            className={`absolute z-0 inset-0 ${activeEntry ? 'flex justify-center items-center' : ''}`}
+            onClick={() => activeEntry && setViewerShow(true)}
+          >
             {!activeEntry && <Opener appId={appId} />}
             {activeEntry && (
               <img
@@ -94,6 +97,37 @@ export default function PhotoViewer(props: AppComponentProps) {
               />
             )}
           </div>
+
+          {matchedEntryList.length > 1 && (
+            <>
+              <div
+                className={line(`
+                  opacity-0 group-hover:opacity-100 flex justify-center items-center
+                  absolute z-10 top-1/2 left-4 md:left-8 -translate-y-1/2
+                  w-12 h-12 rounded-full bg-black bg-opacity-40 backdrop-blur
+                  text-white md:text-opacity-60 hover:text-opacity-100 active:text-opacity-20
+                  transition-all duration-200 cursor-pointer
+                  active:scale-90
+                `)}
+                onClick={() => handlePrevOrNext(-1)}
+              >
+                <SvgIcon.ChevronLeft size={24} />
+              </div>
+              <div
+                className={line(`
+                  opacity-0 group-hover:opacity-100 flex justify-center items-center
+                  absolute z-10 top-1/2 right-4 md:right-8 -translate-y-1/2
+                  w-12 h-12 rounded-full bg-black bg-opacity-40 backdrop-blur
+                  text-white md:text-opacity-60 hover:text-opacity-100 active:text-opacity-20
+                  transition-all duration-200 cursor-pointer
+                  active:scale-90
+                `)}
+                onClick={() => handlePrevOrNext(1)}
+              >
+                <SvgIcon.ChevronRight size={24} />
+              </div>
+            </>
+          )}
 
           <Toolbar
             {...{
@@ -109,7 +143,6 @@ export default function PhotoViewer(props: AppComponentProps) {
               setIsLight,
               setThumbnailListShow,
             }}
-            onPrevOrNext={handlePrevOrNext}
             onClose={onClose}
           />
 

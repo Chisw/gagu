@@ -65,7 +65,7 @@ $ yarn start
 
 2. 同步 `gagu/gagu-back-end/package.json` 中的依赖项到 `gagu/package.json` 中
 
-3. 执行构建脚本 `yarn build:bin`，参考 [build.sh](https://github.com/Chisw/gagu/blob/main/build.sh)
+3. 执行构建脚本 `yarn build:npm`，参考 [build.sh](https://github.com/Chisw/gagu/blob/main/build.sh)
 
 4. 预发布检查，更新包体积信息，发布到 NPM
 

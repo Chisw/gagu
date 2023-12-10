@@ -1,12 +1,12 @@
 {
   "name": "gagu",
-  "version": "0.0.49",
+  "version": "0.0.50",
   "description": "A web-based file management system",
   "bin": {
     "gagu": "./bin/gagu"
   },
   "scripts": {
-    "build:bin": "./build.sh",
+    "build:npm": "./build.sh",
     "pkg": "pkg . --out-path=pkg"
   },
   "pkg": {

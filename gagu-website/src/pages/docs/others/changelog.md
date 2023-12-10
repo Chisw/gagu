@@ -19,6 +19,21 @@ Clear data directory means that all users, download tunnels and other data will 
 
 ## v0.0.*
 
+- v0.0.50 (2023-12-10)
+  - feat: password lock and password modification
+  - feat: auto open folders on drag hover
+  - feat: support drag-and-drop placement of the sidebar and path navigation in FileExplorer
+  - feat: API type definition
+  - fix: i18n in DatePicker
+  - fix: only 100 files can be read when uploading nested folders
+  - fix: use throttling query to reduce request frequency after batch uploading
+  - fix: when the subdirectory changes, the parent directory data is refreshed at the same time
+  - fix: deleting a entry that not exists reports an error
+  - fix: drag-and-drop interaction for moving files
+  - fix: adjust thumbnail loading timing
+  - fix: when dragging on a file, drag to the current directory
+  - fix: adjust PhotoViewer toggle button position
+
 - v0.0.49 (2023-12-03)
   - feat: support assigning specified accessible paths to users
   - feat: new folder, text file and rename functions in Touch mode

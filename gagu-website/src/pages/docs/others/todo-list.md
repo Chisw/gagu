@@ -32,7 +32,6 @@ Many unrealized ideas will be recorded here, waiting for development.
 - Copy, Cut, Move
 - Path jumper
 - Slice upload
-- Drag and drop to move files
 - Tree structure display
 - Scan and connect multiple devices in LAN
 - Drag tray (file clipboard)
