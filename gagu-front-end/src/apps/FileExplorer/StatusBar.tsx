@@ -4,7 +4,7 @@ import { SvgIcon } from '../../components/common'
 import { copy, getEntryPath, line } from '../../utils'
 import { IEntry, IRootEntry } from '../../types'
 import { useTranslation } from 'react-i18next'
-import { useTouchMode } from '../../hooks'
+import { useDragDrop, useTouchMode } from '../../hooks'
 
 interface StatusBarProps {
   loading: boolean
@@ -55,6 +55,8 @@ export default function StatusBar(props: StatusBarProps) {
     }
   }, [currentPath, rootEntry, selectedEntryList])
 
+  const dragDropProps = useDragDrop({ onOpen: onDirClick })
+
   if (!rootEntry) return <div />
 
   return (
@@ -70,14 +72,22 @@ export default function StatusBar(props: StatusBarProps) {
         <div className={`mr-4 ${touchMode ? 'whitespace-nowrap' : ''}`}>
           <span
             title={rootEntryPath}
-            className={isRootEntryDisabled ? '' : 'cursor-pointer hover:text-black'}
+            {...dragDropProps}
+            data-is-drag-drop-node={isRootEntryDisabled ? 'false' : 'true'}
+            data-entry-path={rootEntryPath}
+            className={line(`
+              gagu-file-explorer-status-bar-folder relative
+              ${isRootEntryDisabled ? '' : 'cursor-pointer hover:text-black'}
+            `)}
             onClick={() => !isRootEntryDisabled && rootEntry && onRootEntryClick(rootEntry)}
           >
-            {rootEntry.isDisk
-              ? <SvgIcon.HardDrive className="-mt-[2px] mr-1 inline-block" size={12} />
-              : <SvgIcon.Folder className="-mt-[2px] mr-1 inline-block" size={12} />
-            }
-            {rootEntry.name}
+            <span className="pointer-events-none">
+              {rootEntry.isDisk
+                ? <SvgIcon.HardDrive className="-mt-[2px] mr-1 inline-block" size={12} />
+                : <SvgIcon.Folder className="-mt-[2px] mr-1 inline-block" size={12} />
+              }
+              {rootEntry.name}
+            </span>
           </span>
           {centerPathList.map((path, pathIndex) => {
             const prefix = centerPathList.filter((p, pIndex) => pIndex < pathIndex).join('/')
@@ -92,14 +102,22 @@ export default function StatusBar(props: StatusBarProps) {
                 <SvgIcon.ChevronRight size={14} className="inline -mt-[2px] text-gray-300" />
                 <span
                   title={fullPath}
-                  className={disabled ? '' : 'cursor-pointer hover:text-black'}
+                  {...dragDropProps}
+                  data-is-drag-drop-node={isLast ? 'false' : 'true'}
+                  data-entry-path={fullPath}
+                  className={line(`
+                    gagu-file-explorer-status-bar-folder relative
+                    ${disabled ? '' : 'cursor-pointer hover:text-black'}
+                  `)}
                   onClick={() => !disabled && onDirClick(fullPath)}
                 >
-                  {showFileIcon
-                    ? <SvgIcon.File className="-mt-[2px] mr-1 inline-block" size={12} />
-                    : <SvgIcon.Folder className="-mt-[2px] mr-1 inline-block" size={12} />
-                  }
-                  {path}
+                  <span className="pointer-events-none">
+                    {showFileIcon
+                      ? <SvgIcon.File className="-mt-[2px] mr-1 inline-block" size={12} />
+                      : <SvgIcon.Folder className="-mt-[2px] mr-1 inline-block" size={12} />
+                    }
+                    {path}
+                  </span>
                 </span>
               </span>
             )

@@ -3,21 +3,16 @@ import {
   EditModeType,
   IEntry,
   IEntryPathMap,
-  INestedFile,
   IRootEntry,
   IScrollerWatcher,
   ISideEntry,
-  IUploadTransferTask,
   IVisitHistory,
   Sort,
   SortType,
-  TransferTaskStatus,
-  TransferTaskType,
   TunnelType,
 } from '../types'
 import {
   WINDOW_DURATION,
-  generateRandomCode,
   getDownloadInfo,
   getEntryPath,
   getParentPath,
@@ -30,8 +25,6 @@ import {
   entryPathMapState,
   lastChangedDirectoryState,
   baseDataState,
-  transferSignalState,
-  transferTaskListState,
 } from '../states'
 import { useRequest } from './useRequest'
 import { DownloadApi, FsApi, TunnelApi } from '../api'
@@ -41,6 +34,7 @@ import toast from 'react-hot-toast'
 import { throttle } from 'lodash-es'
 import { IControlBarDisabledMap } from '../apps/FileExplorer/ControlBar'
 import { useTouchMode } from './useTouchMode'
+import { useAddUploadingTask } from './useAddUploadingTask'
 
 const RefreshTimerMap: {
   [PATH: string]: {
@@ -60,8 +54,6 @@ export function useFileExplorer(props: Props) {
 
   const [baseData, setBaseData] = useRecoilState(baseDataState)
   const [entryPathMap, setEntryPathMap] = useRecoilState(entryPathMapState)
-  const [transferTaskList, setTransferTaskList] = useRecoilState(transferTaskListState)
-  const [transferSignal, setTransferSignal] = useRecoilState(transferSignalState)
   const [lastChangedDirectory, setLastChangedDirectory] = useRecoilState(lastChangedDirectoryState)
 
   const touchMode = useTouchMode()
@@ -85,6 +77,8 @@ export function useFileExplorer(props: Props) {
   const { request: createTunnel } = useRequest(TunnelApi.createTunnel)
   const { request: createFavorite } = useRequest(FsApi.createFavorite)
   const { request: removeFavorite } = useRequest(FsApi.removeFavorite)
+
+  const { handleUploadTaskAdd } = useAddUploadingTask()
 
   const { rootEntryList, rootEntryPathList, favoriteEntryList, sideEntryList, supportThumbnail } = useMemo(() => {
     const { rootEntryList, favoriteEntryList, serverOS } = baseData
@@ -264,31 +258,6 @@ export function useFileExplorer(props: Props) {
   }, [currentPath, handlePathChange])
 
   // entry callback
-  const handleUploadTaskAdd = useCallback((nestedFileList: INestedFile[], targetDirName?: string) => {
-    if (!nestedFileList.length) {
-      toast.error(t`tip.noUploadableFilesDetected`)
-      return
-    }
-    const newTaskList: IUploadTransferTask[] = nestedFileList.map(nestedFile => {
-      const { name, fullPath } = nestedFile
-      const file = nestedFile as File
-      const id = generateRandomCode()
-      const newPath = `${currentPath}${targetDirName ? `/${targetDirName}` : ''}${fullPath || `/${name}`}`
-      if (file.size > 2147483647) {
-        toast.error(t`tip.2GBLimited`)
-      }
-      return {
-        id,
-        type: TransferTaskType.upload,
-        status: TransferTaskStatus.waiting,
-        file,
-        newPath,
-      }
-    })
-    setTransferTaskList([...transferTaskList, ...newTaskList])
-    setTransferSignal(transferSignal + 1)
-  }, [currentPath, transferTaskList, setTransferTaskList, transferSignal, setTransferSignal, t])
-
   const handleSelectAll = useCallback((force?: boolean) => {
     const isSelectAll = force || (selectedEntryList.length < entryList.length)
     setSelectedEntryList(isSelectAll ? entryList : [])
@@ -299,9 +268,9 @@ export function useFileExplorer(props: Props) {
     input.multiple = true
     input.type = 'file'
     input.className = 'hidden'
-    input.onchange = (e: any) => handleUploadTaskAdd([...e.target.files])
+    input.onchange = (e: any) => handleUploadTaskAdd([...e.target.files], currentPath)
     input.click()
-  }, [handleUploadTaskAdd])
+  }, [handleUploadTaskAdd, currentPath])
 
   const handleDownloadClick = useCallback((contextEntryList?: IEntry[]) => {
     const entryList = contextEntryList || selectedEntryList

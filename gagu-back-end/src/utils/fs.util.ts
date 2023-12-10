@@ -27,7 +27,7 @@ export const getExists = (path: string) => {
 }
 
 export const deleteEntry = async (path: string) => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     try {
       const stat = statSync(path)
       if (stat.isDirectory()) {
@@ -36,9 +36,7 @@ export const deleteEntry = async (path: string) => {
         unlinkSync(path)
         resolve(true)
       }
-    } catch (err) {
-      reject(err)
-    }
+    } catch (err) {}
   })
 }
 

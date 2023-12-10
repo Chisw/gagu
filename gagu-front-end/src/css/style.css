@@ -42,7 +42,7 @@ body {
   display: block;
 }
 
-.gagu-inner-in-dragging .gagu-entry-node[data-entry-type="file"] {
+.gagu-dragging-children-events-none .gagu-entry-node[data-entry-type="file"] {
   @apply pointer-events-none;
 }
 
@@ -57,14 +57,25 @@ body {
   animation-duration: 2s;
 }
 
-.gagu-entry-node[data-entry-type="directory"]::after {
+.gagu-dragenter-outline[data-is-drag-drop-node="true"] * {
+  @apply pointer-events-none;
+}
+
+.gagu-dragenter-outline.gagu-file-explorer-status-bar-folder {
+  outline-offset: -1px;
+}
+
+.gagu-entry-node[data-entry-type="directory"]::after,
+.gagu-file-explorer-side-entry::after,
+.gagu-file-explorer-status-bar-folder::after {
   @apply content-[""] block absolute z-[-1] top-0 bottom-0 left-0 w-0 bg-blue-200 bg-opacity-40;
 }
 
-.gagu-entry-node.gagu-dragenter-outline::after {
+.gagu-dragenter-outline.gagu-entry-node::after,
+.gagu-dragenter-outline.gagu-file-explorer-side-entry::after,
+.gagu-dragenter-outline.gagu-file-explorer-status-bar-folder::after {
   @apply w-full;
-  /* 1000: AUTO_OPEN_DURATION */
-  transition: width 1s linear;
+  transition: width 1.5s linear;
 }
 
 /* customized-scrollbar */

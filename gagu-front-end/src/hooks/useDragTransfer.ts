@@ -1,12 +1,7 @@
-import { useCallback, useEffect } from 'react'
+import { useEffect } from 'react'
 import { EntryType, IEntry, INestedFile } from '../types'
-import { getDataTransferNestedFileList, getEntryPath, safeQuotes } from '../utils'
-import { useRecoilState } from 'recoil'
-import { lastChangedDirectoryState } from '../states'
-import { useRequest } from './useRequest'
-import { FsApi } from '../api'
-import { Confirmor } from '../components/common'
-import { useTranslation } from 'react-i18next'
+import { getDataTransferNestedFileList, safeQuotes } from '../utils'
+import { useMoveEntries } from './useMoveEntries'
 
 const canvas: any = document.getElementById('gagu-drag-img-canvas')
 const ctx = canvas.getContext('2d')
@@ -23,7 +18,7 @@ interface useDragTransferProps {
   currentPath: string
   entryList: IEntry[]
   selectedEntryList: IEntry[]
-  onDrop: (files: INestedFile[], targetDirName?: string) => void
+  onDrop: (files: INestedFile[], basePath: string, targetDirName?: string) => void
   onOpen: (path: string) => void
 }
 
@@ -38,39 +33,7 @@ export function useDragTransfer(props: useDragTransferProps) {
     onOpen,
   } = props
 
-  const { t } = useTranslation()
-
-  const [, setLastChangedDirectory] = useRecoilState(lastChangedDirectoryState)
-
-  const { request: updateEntryPath } = useRequest(FsApi.updateEntryPath)
-
-  const handleMoveTransfer = useCallback(async (transferEntryList: IEntry[], targetPath: string) => {
-    Confirmor({
-      type: 'move',
-      content: t('tip.moveEntriesTo', {
-        count: transferEntryList.length,
-        target: targetPath.split('/').pop(),
-      }),
-      onConfirm: async (close) => {
-        for (const transferEntry of transferEntryList) {
-          const oldPath = getEntryPath(transferEntry)
-          const newPath = `${targetPath}/${transferEntry.name}`
-
-          if (targetPath === oldPath) continue
-
-          const { success } = await updateEntryPath(oldPath, newPath)
-          if (success) {
-            setLastChangedDirectory({
-              path: transferEntry.parentPath,
-              timestamp: Date.now(),
-              otherPaths: [targetPath],
-            })
-          }
-        }
-        close()
-      },
-    })
-  }, [t, updateEntryPath, setLastChangedDirectory])
+  const { handleMove } = useMoveEntries()
 
   useEffect(() => {
     const containerInner: any = containerInnerRef.current
@@ -82,7 +45,7 @@ export function useDragTransfer(props: useDragTransferProps) {
       clearTimeout(openTimer)
       isDragFromCurrentPath = false
 
-      containerInner.classList.remove('gagu-dragenter-outline', 'gagu-inner-in-dragging')
+      containerInner.classList.remove('gagu-dragenter-outline', 'gagu-dragging-children-events-none')
       containerInner.querySelectorAll('.gagu-dragenter-outline, .gagu-dragging-grayscale')
         .forEach((el: any) => {
           el.classList.remove('gagu-dragenter-outline', 'gagu-dragging-grayscale')
@@ -148,9 +111,7 @@ export function useDragTransfer(props: useDragTransferProps) {
     const dragEnterListener = (e: any) => {
       clearTimeout(openTimer)
 
-      setTimeout(() => {
-        containerInner.classList.add('gagu-inner-in-dragging')
-      })
+      setTimeout(() => containerInner.classList.add('gagu-dragging-children-events-none'))
 
       const { target } = e
       const closestEntryNode = target.closest('.gagu-entry-node:not(.gagu-dragging-grayscale)')
@@ -162,8 +123,7 @@ export function useDragTransfer(props: useDragTransferProps) {
         containerInner.classList.add('gagu-dragenter-outline')
       } else if (closestEntryType === EntryType.directory) {
         closestEntryNode.classList.add('gagu-dragenter-outline')
-        // 1000: AUTO_OPEN_DURATION
-        openTimer = setTimeout(() => onOpen(`${currentPath}/${closestEntryName}`), 1000)
+        openTimer = setTimeout(() => onOpen(`${currentPath}/${closestEntryName}`), 1500)
       }
     }
 
@@ -189,15 +149,15 @@ export function useDragTransfer(props: useDragTransferProps) {
         const transferEntryList: IEntry[] = JSON.parse(transferData || '[]')
         if (closestEntryType === EntryType.directory) {
           const targetPath = `${currentPath}/${closestEntryName}`
-          handleMoveTransfer(transferEntryList, targetPath)
+          handleMove(transferEntryList, targetPath)
         } else if (!isDragFromCurrentPath) {
-          handleMoveTransfer(transferEntryList, currentPath)
+          handleMove(transferEntryList, currentPath)
         }
       // from browser outer
       } else {
         if (closestEntryType === EntryType.file) return
         getDataTransferNestedFileList(dataTransfer).then(files => {
-          onDrop(files, closestEntryName)
+          onDrop(files, currentPath, closestEntryName)
         })
       }
 
@@ -215,6 +175,7 @@ export function useDragTransfer(props: useDragTransferProps) {
     containerInner.addEventListener('dragleave', dragLeaveListener)
     containerInner.addEventListener('drop', dropListener)
     containerInner.addEventListener('dragend', dragEndListener)
+    document.addEventListener('mouseup', resetAll)
 
     return () => {
       containerInner.removeEventListener('dragstart', dragStartListener)
@@ -223,6 +184,7 @@ export function useDragTransfer(props: useDragTransferProps) {
       containerInner.removeEventListener('dragleave', dragLeaveListener)
       containerInner.removeEventListener('drop', dropListener)
       containerInner.removeEventListener('dragend', dragEndListener)
+      document.removeEventListener('mouseup', resetAll)
     }
   }, [
     containerInnerRef,
@@ -231,6 +193,6 @@ export function useDragTransfer(props: useDragTransferProps) {
     selectedEntryList,
     onDrop,
     onOpen,
-    handleMoveTransfer,
+    handleMove,
   ])
 }
