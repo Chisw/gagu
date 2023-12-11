@@ -2,6 +2,7 @@ import axios from 'axios'
 import { BASE_URL, ERROR_TIMEOUT, HEADERS_AUTH_KEY, HEADERS_AUTH_PREFIX, UserInfoStore } from '../utils'
 import toast from 'react-hot-toast'
 import { t } from 'i18next'
+import { ServerMessage } from '../types'
 
 const service = axios.create({
   baseURL: BASE_URL,
@@ -35,8 +36,7 @@ service.interceptors.response.use(
     }
 
     if (!response && message !== 'canceled') {
-      // TODO:
-      toast.error(t`server.ERROR_NO_RESPONSE`)
+      toast.error(t`server.${ServerMessage.ERROR_NO_RESPONSE}`)
       return
     }
 
@@ -46,11 +46,9 @@ service.interceptors.response.use(
       UserInfoStore.remove()
       window.location.href = '/login'
     } else if (status === 403) {
-      // TODO:
-      toast.error(t`server.ERROR_403`)
+      toast.error(t`server.${ServerMessage.ERROR_403}`)
     } else if (status >= 500) {
-      // TODO:
-      toast.error(`ERROR_${status}: ${message}`)
+      toast.error(`[ERROR ${status}]: ${message}`)
     }
   }
 )

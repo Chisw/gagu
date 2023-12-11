@@ -88,8 +88,7 @@ export class TunnelController {
       this.tunnelService.remove(code)
       return respond()
     } else {
-      // TODO: 403 detail
-      return respond(null, ServerMessage.ERROR_403)
+      return respond(null, ServerMessage.ERROR_403_USER_NOT_MATCHED)
     }
   }
 

@@ -21,7 +21,7 @@ Many unrealized ideas will be recorded here, waiting for development.
 
 ## User
 
-- Support personal modification of avatar, nickname, password
+- Support personal modification of avatar, nickname
 - Sharing link can be edited
 - Manage login device credentials
 

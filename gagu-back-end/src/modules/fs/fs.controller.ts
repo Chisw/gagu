@@ -161,12 +161,14 @@ export class FsController {
         const filePath = await this.fsService.getThumbnailPath(path)
         response.sendFile(filePath)
       } catch (err) {
-        // TODO:
-        response.end(`ERROR: ${err}`)
+        response.end(JSON.stringify(respond(null, err.toString())))
       }
     } else {
-      // TODO:
-      response.end('ERROR: FFMPEG and GM are required.')
+      response.end(
+        JSON.stringify(
+          respond(null, ServerMessage.ERROR_NOT_SUPPORT_THUMBNAIL),
+        ),
+      )
     }
   }
 
@@ -177,17 +179,13 @@ export class FsController {
     @Param('username') username: User.Username,
     @Res() response: Response,
   ) {
-    try {
-      const avatarPath = this.fsService.getAvatarPath(username)
-      if (getExists(avatarPath)) {
-        response.sendFile(avatarPath)
-      } else {
-        // TODO:
-        response.end('ERROR_AVATAR_NOT_EXISTED')
-      }
-    } catch (err) {
-      // TODO:
-      response.end('ERROR_AVATAR')
+    const avatarPath = this.fsService.getAvatarPath(username)
+    if (getExists(avatarPath)) {
+      response.sendFile(avatarPath)
+    } else {
+      response.end(
+        JSON.stringify(respond(null, ServerMessage.ERROR_FILE_NOT_EXISTED)),
+      )
     }
   }
 
@@ -195,17 +193,13 @@ export class FsController {
   @Get('image/:name')
   @Header('Content-Type', 'image/jpg')
   readImage(@Param('name') name: User.Username, @Res() response: Response) {
-    try {
-      const path = this.fsService.getImagePath(name)
-      if (getExists(path)) {
-        response.sendFile(path)
-      } else {
-        // TODO:
-        response.end('ERROR_IMAGE_NOT_EXISTED')
-      }
-    } catch (err) {
-      // TODO:
-      response.end('ERROR_IMAGE')
+    const path = this.fsService.getImagePath(name)
+    if (getExists(path)) {
+      response.sendFile(path)
+    } else {
+      response.end(
+        JSON.stringify(respond(null, ServerMessage.ERROR_FILE_NOT_EXISTED)),
+      )
     }
   }
 
@@ -246,18 +240,13 @@ export class FsController {
     @UserGetter() user: IUser,
   ) {
     if (getExists(path) && !user.permissions.includes(UserPermission.delete)) {
-      // TODO: 403 detail
-      return respond(null, ServerMessage.ERROR_403)
+      return respond(null, ServerMessage.ERROR_403_PERMISSION_DELETE)
     }
     try {
       this.fsService.uploadFile(path, file.buffer)
       return respond()
     } catch (err) {
-      return {
-        success: false,
-        // TODO:
-        message: err.toString(),
-      }
+      return respond(null, err.toString())
     }
   }
 
@@ -272,11 +261,7 @@ export class FsController {
       this.fsService.uploadImage(name, file.buffer)
       return respond()
     } catch (err) {
-      return {
-        success: false,
-        // TODO:
-        message: err.toString(),
-      }
+      return respond(null, err.toString())
     }
   }
 

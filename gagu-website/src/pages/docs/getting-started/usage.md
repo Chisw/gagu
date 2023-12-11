@@ -34,7 +34,7 @@ $ sudo npm i -g gagu
 ### Download
 
 <div class="apply-tip">
-Stable package built via Vercel/pkg will be available after v1.0.0 is released.
+Stable binary package built via Vercel/pkg will be available after v1.0.0 is released.
 </div>
 
 ## Available Parameters

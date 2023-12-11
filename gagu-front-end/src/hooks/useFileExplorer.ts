@@ -243,7 +243,7 @@ export function useFileExplorer(props: Props) {
     if (refreshParent) {
       restPaths.push(getParentPath(targetPath))
     }
-    for (const path of restPaths) {
+    for (const path of Array.from(new Set(restPaths))) {
       newEntryPathMap = await handleQueryEntryList(path, newEntryPathMap)
     }
   }, [handleQueryEntryList, currentPath])

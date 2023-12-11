@@ -159,6 +159,8 @@
       "ERROR_USER_DISABLED": "用戶已禁用",
       "ERROR_USER_EXPIRED": "用戶已過期",
       "ERROR_TOKEN_INVALID": "非法令牌",
+      "ERROR_FILE_DELETE_FAIL": "文件刪除失敗",
+      "ERROR_FILE_NOT_EXISTED": "文件不存在",
       "ERROR_TUNNEL_NOT_EXISTED": "通道不存在",
       "ERROR_TUNNEL_NO_LEFT": "通道無可下載次數",
       "ERROR_TUNNEL_EXPIRED": "通道已過期",
@@ -166,7 +168,10 @@
       "ERROR_TUNNEL_PASSWORD_NEEDED": "通道需要密碼",
       "ERROR_EXIF": "EXIF 獲取失敗",
       "ERROR_TAGS": "音樂信息獲取失敗",
-      "ERROR_403": "[403] 權限不足"
+      "ERROR_NOT_SUPPORT_THUMBNAIL": "未安裝縮略圖功能所需依賴",
+      "ERROR_403": "權限不足",
+      "ERROR_403_USER_NOT_MATCHED": "用戶不匹配",
+      "ERROR_403_PERMISSION_DELETE": "缺少“刪除”權限"
     },
     "text": {
       "noTitle": "無標題",

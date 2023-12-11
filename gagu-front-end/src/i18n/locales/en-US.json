@@ -159,6 +159,8 @@
       "ERROR_USER_DISABLED": "User disabled",
       "ERROR_USER_EXPIRED": "User expired",
       "ERROR_TOKEN_INVALID": "Invalid token",
+      "ERROR_FILE_DELETE_FAIL": "File deletion failed",
+      "ERROR_FILE_NOT_EXISTED": "File does not exist",
       "ERROR_TUNNEL_NOT_EXISTED": "Tunnel does not exist",
       "ERROR_TUNNEL_NO_LEFT": "Tunnel has no left download times",
       "ERROR_TUNNEL_EXPIRED": "Tunnel expired",
@@ -166,7 +168,10 @@
       "ERROR_TUNNEL_PASSWORD_NEEDED": "Tunnel needs password",
       "ERROR_EXIF": "Failed to get EXIF info",
       "ERROR_TAGS": "Failed to get music tags",
-      "ERROR_403": "[403] Insufficient permissions"
+      "ERROR_NOT_SUPPORT_THUMBNAIL": "Dependencies required for thumbnail api are not installed",
+      "ERROR_403": "Insufficient permissions",
+      "ERROR_403_USER_NOT_MATCHED": "User does not match",
+      "ERROR_403_PERMISSION_DELETE": "Missing \"delete\" permission"
     },
     "text": {
       "noTitle": "No title",
