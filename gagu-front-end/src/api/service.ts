@@ -36,7 +36,7 @@ service.interceptors.response.use(
     }
 
     if (!response && message !== 'canceled') {
-      toast.error(t`server.${ServerMessage.ERROR_NO_RESPONSE}`)
+      toast.error(t(`server.${ServerMessage.ERROR_NO_RESPONSE}`))
       return
     }
 
@@ -46,7 +46,7 @@ service.interceptors.response.use(
       UserInfoStore.remove()
       window.location.href = '/login'
     } else if (status === 403) {
-      toast.error(t`server.${ServerMessage.ERROR_403}`)
+      toast.error(t(`server.${ServerMessage.ERROR_403}`))
     } else if (status >= 500) {
       toast.error(`[ERROR ${status}]: ${message}`)
     }

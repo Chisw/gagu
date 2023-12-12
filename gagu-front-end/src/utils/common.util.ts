@@ -176,7 +176,7 @@ export const setFavicon = async (imgUrl: string) => {
   try {
     const base64 = await getImageTypeBase64ByURL(imgUrl, options)
     set(base64)
-  } catch (err) {
+  } catch (error) {
     set(default_favicon)
   }
 }

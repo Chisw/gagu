@@ -10,6 +10,7 @@ import {
   favoritePath2SideEntry,
   rootPath2RootEntry,
   respond,
+  catchError,
 } from '../../utils'
 import { FsService } from './fs.service'
 import {
@@ -160,8 +161,9 @@ export class FsController {
       try {
         const filePath = await this.fsService.getThumbnailPath(path)
         response.sendFile(filePath)
-      } catch (err) {
-        response.end(JSON.stringify(respond(null, err.toString())))
+      } catch (error) {
+        catchError(error)
+        response.end(JSON.stringify(respond(null, error.toString())))
       }
     } else {
       response.end(
@@ -209,7 +211,8 @@ export class FsController {
     try {
       const data = await this.fsService.getExif(path)
       return respond(data)
-    } catch (err) {
+    } catch (error) {
+      catchError(error)
       return respond(null, ServerMessage.ERROR_EXIF)
     }
   }
@@ -220,7 +223,8 @@ export class FsController {
     try {
       const data = await this.fsService.getAudioTags(path)
       return respond(data)
-    } catch (err) {
+    } catch (error) {
+      catchError(error)
       return respond(null, ServerMessage.ERROR_TAGS)
     }
   }
@@ -234,7 +238,7 @@ export class FsController {
   @Post('upload')
   @Permission(UserPermission.write)
   @UseInterceptors(FileInterceptor('file'))
-  uploadFile(
+  async uploadFile(
     @Query('path') path: string,
     @UploadedFile() file: Express.Multer.File,
     @UserGetter() user: IUser,
@@ -243,10 +247,11 @@ export class FsController {
       return respond(null, ServerMessage.ERROR_403_PERMISSION_DELETE)
     }
     try {
-      this.fsService.uploadFile(path, file.buffer)
+      await this.fsService.uploadFile(path, file.buffer)
       return respond()
-    } catch (err) {
-      return respond(null, err.toString())
+    } catch (error) {
+      catchError(error)
+      return respond(null, error.toString())
     }
   }
 
@@ -260,8 +265,9 @@ export class FsController {
     try {
       this.fsService.uploadImage(name, file.buffer)
       return respond()
-    } catch (err) {
-      return respond(null, err.toString())
+    } catch (error) {
+      catchError(error)
+      return respond(null, error.toString())
     }
   }
 

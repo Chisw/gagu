@@ -179,7 +179,6 @@
       "unknownArtist": "Unknown artist"
     },
     "tip": {
-      "2GBLimited": "Uploading files >= 2GB is not currently supported",
       "copied": "Copied",
       "createdAt": "Created at {{time}}",
       "currentlyLatestVersion": "Currently the latest version",

@@ -59,11 +59,6 @@ export function TransferPanel() {
         lastUpload = { time: now, size: loaded }
       }
 
-      // TODO:
-      if (file.size > 2147483647) {
-        continue
-      }
-
       const { success } = await uploadFile(newPath, file, { onUploadProgress })
       if (success) {
         setUploadInfo({ ratio: 0, speed: '' })
@@ -73,9 +68,7 @@ export function TransferPanel() {
     }
 
     const list = cloneDeep(transferTaskList)
-    list.forEach(t => {
-      t.status = (t.file?.size || 0) > 2147483647 ? 'exceed' : 'success'
-    })
+    list.forEach(t => t.status = 'success')
     setTransferTaskList(list)
     setActiveId('')
   }, [uploadFile, setLastChangedDirectory, transferTaskList, setTransferTaskList])

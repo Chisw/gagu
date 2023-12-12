@@ -21,9 +21,7 @@ export function useAddUploadingTask () {
       const file = nestedFile as File
       const id = generateRandomCode()
       const newPath = `${basePath}${targetDirName ? `/${targetDirName}` : ''}${fullPath || `/${name}`}`
-      if (file.size > 2147483647) {
-        toast.error(t`tip.2GBLimited`)
-      }
+
       return {
         id,
         type: TransferTaskType.upload,

@@ -179,7 +179,6 @@
       "unknownArtist": "未知藝術家"
     },
     "tip": {
-      "2GBLimited": "暫不支持上傳 >= 2GB 的文件",
       "copied": "已複製",
       "createdAt": "{{time}} 創建",
       "currentlyLatestVersion": "當前已是最新版本",

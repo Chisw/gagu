@@ -9,6 +9,7 @@ import {
 } from 'fs'
 import { GAGU_PATH, ServerOS } from './constant.util'
 import { safeQuotes } from './entry.util'
+import { catchError } from 'rxjs'
 
 export const getExtension = (name: string) => {
   if (!name || !name.includes('.') || name.startsWith('.')) return ''
@@ -20,7 +21,8 @@ export const getExists = (path: string) => {
   try {
     accessSync(path, constants.F_OK)
     exists = true
-  } catch (err) {
+  } catch (error) {
+    catchError(error)
     exists = false
   }
   return exists
@@ -36,7 +38,9 @@ export const deleteEntry = async (path: string) => {
         unlinkSync(path)
         resolve(true)
       }
-    } catch (err) {}
+    } catch (error) {
+      catchError(error)
+    }
   })
 }
 
@@ -95,8 +99,8 @@ export const dataURLtoBuffer = (base64: string) => {
 export const writeLog = (date: string, log: string) => {
   const logFileName = `${date}.log`
   const logFilePath = `${GAGU_PATH.LOG}/${logFileName}`
-  appendFile(logFilePath, log, (err) => {
-    err && console.log(err)
+  appendFile(logFilePath, log, (error) => {
+    error && console.log(error)
   })
 }
 

@@ -26,6 +26,10 @@ export const respond = <T>(
   return response
 }
 
+export const catchError = (error: any) => {
+  console.log('[ERROR CATCHER]:', error)
+}
+
 // Sync following code to BE & FE
 export const generateRandomCode = () => md5(Math.random().toString())
 

@@ -10,6 +10,7 @@ import {
 } from '../../types'
 import {
   createReadStream,
+  createWriteStream,
   readdirSync,
   readFileSync,
   statSync,
@@ -27,6 +28,7 @@ import {
   getEntryPath,
   FORBIDDEN_ENTRY_NAME_LIST,
   GEN_THUMBNAIL_AUDIO_LIST,
+  catchError,
 } from '../../utils'
 import * as nodeDiskInfo from 'node-disk-info'
 import * as md5 from 'md5'
@@ -40,7 +42,8 @@ export class FsService {
   getHasChildren(path: string) {
     try {
       return readdirSync(path).some((name) => !name.startsWith('.'))
-    } catch (err) {
+    } catch (error) {
+      catchError(error)
       return false
     }
   }
@@ -51,7 +54,8 @@ export class FsService {
       const isWindowsDisk = ServerOS.isWindows && !path.includes('/')
       const _path = isWindowsDisk ? `${path}/` : path
       entryNameList = readdirSync(_path)
-    } catch (err) {
+    } catch (error) {
+      catchError(error)
       return []
     }
     const entryList = entryNameList
@@ -82,7 +86,8 @@ export class FsService {
             extension,
           }
           return entry
-        } catch (err) {
+        } catch (error) {
+          catchError(error)
           return null
         }
       })
@@ -241,7 +246,26 @@ export class FsService {
 
   uploadFile(path: string, buffer: Buffer) {
     completeNestedPath(path)
-    writeFileSync(path, buffer)
+
+    return new Promise((resolve, reject) => {
+      const stream = createWriteStream(path)
+
+      stream.on('open', () => {
+        const chunkSize = 128
+        const bufferLength = buffer.length
+        const count = Math.ceil(bufferLength / chunkSize)
+        for (let i = 0; i < count; i++) {
+          const chunk = buffer.slice(
+            chunkSize * i,
+            Math.min(chunkSize * (i + 1), bufferLength),
+          )
+          stream.write(chunk)
+        }
+        stream.end()
+      })
+      stream.on('error', (error) => reject(error))
+      stream.on('finish', () => resolve(true))
+    })
   }
 
   uploadImage(name: string, buffer: Buffer) {
@@ -352,9 +376,9 @@ export class FsService {
           .selectFrame(4)
           .resize(100)
           .noProfile()
-          .write(thumbnailFilePath, (err) => {
-            if (err) {
-              reject(err)
+          .write(thumbnailFilePath, (error) => {
+            if (error) {
+              reject(error)
             } else {
               resolve(thumbnailFilePath)
               isGenVideo && unlinkSync(targetPath)
