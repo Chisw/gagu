@@ -1,9 +1,12 @@
-import { useMemo } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { isSameEntry, line } from '../../utils'
-import { EditMode, EditModeType, IApp, IEntry } from '../../types'
+import { EditMode, EditModeType, EventTransaction, IEntry } from '../../types'
 import { useTranslation } from 'react-i18next'
 import { SvgIcon } from '../../components/common'
 import { CALLABLE_APP_LIST } from '../../apps'
+import { Modal } from '@douyinfe/semi-ui'
+import { useRecoilState } from 'recoil'
+import { openEventState } from '../../states'
 
 interface SelectionMenuProps {
   show: boolean
@@ -40,6 +43,10 @@ export default function SelectionMenu(props: SelectionMenuProps) {
 
   const { t } = useTranslation()
 
+  const [, setOpenEvent] = useRecoilState(openEventState)
+
+  const [appsModalShow, setAppsModalShow] = useState(false)
+
   const menuItemList = useMemo(() => {
     const confirmedCount = selectedEntryList.length
     const isOnBlank = confirmedCount === 0
@@ -52,14 +59,6 @@ export default function SelectionMenu(props: SelectionMenuProps) {
       const activeEntry = selectedEntryList[0]
       isFavorited = isSingle && favoriteEntryList.some(entry => isSameEntry(entry, activeEntry))
       isOnDirectory = activeEntry.type === 'directory'
-    }
-
-    const onOpenEntry = (app: IApp) => {
-      // setOpenEvent({
-      //   app,
-      //   matchedEntryList: contextEntryList,
-      //   activeEntryIndex: 0,
-      // })
     }
 
     return [
@@ -104,12 +103,8 @@ export default function SelectionMenu(props: SelectionMenuProps) {
         icon: <SvgIcon.Apps />,
         name: t`action.openWith`,
         isShow: !isOnDirectory && isSingle && !asSelector,
-        onClick: () => { },
-        children: CALLABLE_APP_LIST.map(app => ({
-          icon: <div className="gagu-app-icon w-4 h-4" data-app-id={app.id} />,
-          name: t(`app.${app.id}`),
-          onClick: () => onOpenEntry(app),
-        })),
+        noCancel: true,
+        onClick: () => setAppsModalShow(true),
       },
       {
         icon: <SvgIcon.FolderInfo />,
@@ -157,6 +152,14 @@ export default function SelectionMenu(props: SelectionMenuProps) {
     onDeleteClick,
   ])
 
+  const handleOpenEntry = useCallback((appId: string) => {
+    setOpenEvent({
+      transaction: EventTransaction.app_run,
+      appId,
+      entryList: selectedEntryList,
+    })
+  }, [selectedEntryList, setOpenEvent])
+
   return (
     <>
       <div
@@ -187,6 +190,37 @@ export default function SelectionMenu(props: SelectionMenuProps) {
           </div>
         ))}
       </div>
+
+      <Modal
+        centered
+        width="80vw"
+        visible={appsModalShow}
+        closable={false}
+        footer={null}
+        className="gagu-touch-open-with-apps select-none"
+        onCancel={() => setAppsModalShow(false)}
+      >
+        {CALLABLE_APP_LIST.map(({ id }) => (
+          <div
+            key={id}
+            className="p-3 flex items-center transition-all duration-100 active:scale-95 active:bg-gray-100 rounded-lg"
+            onClick={() => {
+              onCancel()
+              setAppsModalShow(false)
+              handleOpenEntry(id)
+            }}
+          >
+            <div
+              className="gagu-app-icon w-12 h-12"
+              data-app-id={id}
+            />
+            <div className="ml-3 text-lg">
+              {t(`app.${id}`)}
+            </div>
+          </div>
+        ))}
+        
+      </Modal>
     </>
   )
 }

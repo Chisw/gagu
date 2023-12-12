@@ -102,7 +102,7 @@ export default function PhotoViewer(props: AppComponentProps) {
             <>
               <div
                 className={line(`
-                  opacity-0 group-hover:opacity-100 flex justify-center items-center
+                  md:opacity-0 group-hover:opacity-100 flex justify-center items-center
                   absolute z-10 top-1/2 left-4 md:left-8 -translate-y-1/2
                   w-12 h-12 rounded-full bg-black bg-opacity-40 backdrop-blur
                   text-white md:text-opacity-60 hover:text-opacity-100 active:text-opacity-20
@@ -115,7 +115,7 @@ export default function PhotoViewer(props: AppComponentProps) {
               </div>
               <div
                 className={line(`
-                  opacity-0 group-hover:opacity-100 flex justify-center items-center
+                  md:opacity-0 group-hover:opacity-100 flex justify-center items-center
                   absolute z-10 top-1/2 right-4 md:right-8 -translate-y-1/2
                   w-12 h-12 rounded-full bg-black bg-opacity-40 backdrop-blur
                   text-white md:text-opacity-60 hover:text-opacity-100 active:text-opacity-20

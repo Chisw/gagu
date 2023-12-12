@@ -75,51 +75,61 @@ export default function Dock(props: DockProps) {
           }
         `)}
       >
-        {expanded ? (
-          <div className="gagu-dock p-3 grid grid-cols-3 gap-3">
-            {APP_LIST.filter(app => app.touchModeShow).map(app => {
-              const appId = app.id
-              const isFileExplorer = appId === AppId.fileExplorer
-              const isRunning = !!runningAppList.find(a => a.id === app.id)
-              return (
+        <div
+          className={line(`
+            gagu-dock
+            absolute p-3 w-full grid grid-cols-3 gap-3
+            transition-opacity duration-200
+            ${expanded ? 'z-10 opacity-100' : 'z-0 opacity-0'}
+          `)}
+        >
+          {APP_LIST.filter(app => app.touchModeShow).map(app => {
+            const appId = app.id
+            const isFileExplorer = appId === AppId.fileExplorer
+            const isRunning = !!runningAppList.find(a => a.id === app.id)
+            return (
+              <div
+                key={appId}
+                className="relative aspect-square transition-all duration-50 active:scale-90"
+                title={t(`app.${appId}`)}
+                onClick={() => {
+                  setActiveAppId(appId)
+                  if (isFileExplorer) return
+                  handleOpenApp(app)
+                }}
+              >
                 <div
-                  key={appId}
-                  className="relative aspect-square transition-all duration-50 active:scale-90"
-                  title={t(`app.${appId}`)}
-                  onClick={() => {
-                    setActiveAppId(appId)
-                    if (isFileExplorer) return
-                    handleOpenApp(app)
-                  }}
-                >
-                  <div
-                    className="gagu-app-icon w-full h-full"
-                    data-app-id={app.id}
-                  />
-                  {isRunning && <div className="absolute bottom-1 right-1 w-1 h-1 rounded-full bg-green-400 shadow shadow-green-500 border border-green-700" />}
-                </div>
-              )
-            })}
-            <div
-              className={line(`
-                aspect-square border rounded-lg
-                flex justify-center items-center
-                transition-all duration-200 active:scale-90
-              `)}
-              onClick={() => setExpanded(false)}
-            >
-              <SvgIcon.Close size={18} />
-            </div>
-          </div>
-        ) : (
+                  className="gagu-app-icon w-full h-full"
+                  data-app-id={app.id}
+                />
+                {isRunning && <div className="absolute bottom-1 right-1 w-1 h-1 rounded-full bg-green-400 shadow shadow-green-500 border border-green-700" />}
+              </div>
+            )
+          })}
           <div
-            className="w-full h-full flex justify-center items-center text-gray-800"
-            onClick={() => setExpanded(true)}
+            className={line(`
+              aspect-square border rounded-lg
+              flex justify-center items-center
+              transition-all duration-200 active:scale-90
+            `)}
+            onClick={() => setExpanded(false)}
           >
-            <SvgIcon.Apps />
-            {(runningAppList.length > 0) && <div className="absolute bottom-2 right-2 w-1 h-1 rounded-full bg-green-400 shadow shadow-green-500 border border-green-700" />}
+            <SvgIcon.Close size={18} />
           </div>
-        )}
+        </div>
+
+        <div
+          className={line(`
+            absolute w-full h-full flex justify-center items-center text-gray-800
+            transition-opacity duration-200
+            ${expanded ? 'z-0 opacity-0' : 'z-10 opacity-100'}
+          `)}
+          onClick={() => setExpanded(true)}
+        >
+          <SvgIcon.Apps />
+          {(runningAppList.length > 0) && <div className="absolute bottom-2 right-2 w-1 h-1 rounded-full bg-green-400 shadow shadow-green-500 border border-green-700" />}
+        </div>
+
       </div>
     </>
   )

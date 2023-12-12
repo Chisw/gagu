@@ -149,6 +149,18 @@ body {
   @apply bg-white bg-opacity-90 backdrop-blur border-none;
 }
 
+.gagu-touch-open-with-apps .semi-modal-mask {
+  @apply bg-black bg-opacity-10 !important;
+}
+
+.gagu-touch-open-with-apps .semi-modal-content {
+  @apply p-2 bg-white bg-opacity-90 backdrop-blur border-none;
+}
+
+.gagu-touch-open-with-apps .semi-modal-body-wrapper {
+  @apply m-0;
+}
+
 .gagu-entry-selector .semi-modal-content {
   padding: 0 16px;
 }
