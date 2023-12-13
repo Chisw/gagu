@@ -94,11 +94,6 @@ layout: ../../../layouts/DocLayout.astro
 - 视频介绍
 - Algolia 搜索
 
-## 客户端
-
-- Android 客户端 (React Native)
-- Windows 客户端 (aardio)
-
 ## 请我喝可乐
 
 如果你想鼓励一下 GAGU 的工作，可以[请我喝杯可乐🥤](https://jisuowei.com/cola?from=gagu)哟！
