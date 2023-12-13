@@ -48,7 +48,7 @@ service.interceptors.response.use(
     } else if (status === 403) {
       toast.error(t(`server.${ServerMessage.ERROR_403}`))
     } else if (status >= 500) {
-      toast.error(`[ERROR ${status}]: ${message}`)
+      toast.error(`[ERROR ${status}] ${message}`)
     }
   }
 )

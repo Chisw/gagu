@@ -18,10 +18,10 @@ import {
   UserPasswordForm,
 } from '../../types'
 import {
-  completeNestedPath,
   deleteEntry,
   GAGU_PATH,
   getIsExpired,
+  initUserPaths,
   PULSE_INTERVAL,
   respond,
 } from '../../utils'
@@ -35,7 +35,10 @@ export class UserController {
     private readonly userService: UserService,
     private readonly authService: AuthService,
     private readonly fsService: FsService,
-  ) {}
+  ) {
+    const users = userService.findAll()
+    users.forEach(({ username }) => initUserPaths(username))
+  }
 
   @Get()
   @Permission(UserPermission.administer)
@@ -57,7 +60,7 @@ export class UserController {
     } else {
       this.fsService.uploadAvatar(username, avatar)
       this.userService.create(userForm)
-      completeNestedPath(`${GAGU_PATH.USERS}/${username}/desktop/_`)
+      initUserPaths(username)
       return respond()
     }
   }

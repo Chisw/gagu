@@ -7,7 +7,7 @@ import {
   QUERY_TOKEN_KEY,
 } from './constant.util'
 import { Request } from 'express'
-import { JSONFormat } from './fs.util'
+import { JSONFormat, completeNestedPath } from './fs.util'
 
 export const getAuthorizationToken = (authorization: string) => {
   return (authorization || '').replace(HEADERS_AUTH_PREFIX, '')
@@ -53,4 +53,8 @@ export const generateUserInfo = (user: IUser, token: User.Token) => {
     permissions,
   }
   return userInfo
+}
+
+export const initUserPaths = (username: User.Username) => {
+  completeNestedPath(`${GAGU_PATH.USERS}/${username}/desktop/_`)
 }

@@ -2,6 +2,7 @@ import { exec, spawn } from 'child_process'
 import { ServerOS } from './constant.util'
 import { ServerMessage } from 'src/types'
 import * as md5 from 'md5'
+import * as chalk from 'chalk'
 
 export const openInBrowser = (url: string) => {
   if (ServerOS.isMacOS) {
@@ -27,7 +28,7 @@ export const respond = <T>(
 }
 
 export const catchError = (error: any) => {
-  console.log('[ERROR CATCHER]:', error)
+  console.log(chalk.red('[GAGU-ERROR-CATCHER]'), error)
 }
 
 // Sync following code to BE & FE

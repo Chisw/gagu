@@ -60,7 +60,9 @@ export class FsService {
     }
     const entryList = entryNameList
       .filter((entryName: string) => {
-        return !FORBIDDEN_ENTRY_NAME_LIST.includes(entryName)
+        const isForbidden = FORBIDDEN_ENTRY_NAME_LIST.includes(entryName)
+        const isMacTrash = ServerOS.isMacOS && entryName === '.Trash'
+        return !isForbidden && !isMacTrash
       })
       .map((entryName: string) => {
         try {
