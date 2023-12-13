@@ -1,5 +1,5 @@
 import { Button, Modal, SideSheet } from '@douyinfe/semi-ui'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { entrySelectorEventState, openEventState } from '../states'
 import { EntryType, IEntry } from '../types'
@@ -69,7 +69,7 @@ export function EntrySelector() {
 
   const selectorShow = useMemo(() => !!entrySelectorEvent, [entrySelectorEvent])
 
-  const selectedPath = useMemo(() => {
+  const pathShow = useMemo(() => {
     const selectedEntryPath = selectedEntryList.length === 1 ? `/${selectedEntryList[0].name}` : ''
     return `${currentPath}${selectedEntryPath}`
   }, [currentPath, selectedEntryList])
@@ -121,54 +121,11 @@ export function EntrySelector() {
         transaction,
         appId,
         entryList: selectedEntryList,
-        extraData: { selectedPath },
+        extraData: { pathShow },
       })
       setEntrySelectorEvent(null)
     }
-  }, [disabled, transaction, appId, selectedEntryList, selectedPath, setOpenEvent, setEntrySelectorEvent])
-
-  // TODO: check usage
-  useEffect(() => {
-    setSideShow(false)
-  }, [selectorShow])
-
-  // TODO: fix animation
-  const Actions = () => (
-    <div className="py-1">
-      {(selectorState.isSaveMode || (selectorState.isSelectDirectory && selectorState.isSingle)) && (
-        <div className={`p-2 bg-gray-100 rounded flex items-center border border-gray-200 ${touchMode ? 'mb-1 text-xs' : 'mb-2'}`}>
-          <SvgIcon.Folder className="flex-shrink-0" />
-          <div className="flex-grow ml-1 break-all text-left">{selectedPath}</div>
-        </div>
-      )}
-      <div className="flex justify-between items-center">
-        <div className="w-1/2">
-
-        </div>
-        <div className="flex-shrink-0">
-          <Button
-            style={{ margin: 0 }}
-            onClick={() => setEntrySelectorEvent(null)}
-          >
-            {t`action.cancel`}
-          </Button>
-          <Button
-            theme="solid"
-            className={`ml-1 md:ml-2 ${touchMode ? 'w-20' : 'w-32'}`}
-            disabled={disabled}
-            onClick={handleConfirm}
-          >
-            <div className="flex items-center">
-              <div className={`transition-all duration-200 overflow-hidden ${!disabled && !isExtensionMatched ? 'w-5' : 'w-0'}`}>
-                <SvgIcon.Warning />
-              </div>
-              <span>{t`action.open`}</span>
-            </div>
-          </Button>
-        </div>
-      </div>
-    </div>
-  )
+  }, [disabled, transaction, appId, selectedEntryList, pathShow, setOpenEvent, setEntrySelectorEvent])
 
   if (touchMode) {
     return (
@@ -183,7 +140,17 @@ export function EntrySelector() {
           className="gagu-entry-selector-touch"
           style={{ borderTopRightRadius: 10, borderTopLeftRadius: 10 }}
           onCancel={() => setEntrySelectorEvent(null)}
-          title={<Actions />}
+          title={(
+            <Actions
+              touchMode={touchMode}
+              disabled={disabled}
+              isSelectingPath={(selectorState.isSaveMode || (selectorState.isSelectDirectory && selectorState.isSingle))}
+              pathShow={pathShow}
+              warningShow={!disabled && !isExtensionMatched}
+              onCancel={() => setEntrySelectorEvent(null)}
+              onConfirm={handleConfirm}
+            />
+          )}
         >
           <div className="absolute inset-0 border-t overflow-hidden">
             <FileExplorerTouch
@@ -212,7 +179,17 @@ export function EntrySelector() {
         width={1020}
         visible={selectorShow}
         className="gagu-entry-selector"
-        footer={<Actions />}
+        footer={(
+          <Actions
+            touchMode={touchMode}
+            disabled={disabled}
+            isSelectingPath={(selectorState.isSaveMode || (selectorState.isSelectDirectory && selectorState.isSingle))}
+            pathShow={pathShow}
+            warningShow={!disabled && !isExtensionMatched}
+            onCancel={() => setEntrySelectorEvent(null)}
+            onConfirm={handleConfirm}
+          />
+        )}
       >
         <div data-customized-scrollbar>
           <div className="flex items-center justify-between select-none">
@@ -246,5 +223,66 @@ export function EntrySelector() {
         </div>
       </Modal>
     </>
+  )
+}
+
+interface ActionsProps {
+  touchMode: boolean
+  disabled: boolean
+  isSelectingPath: boolean
+  pathShow: string
+  warningShow: boolean
+  onCancel: () => void
+  onConfirm: () => void
+}
+
+function Actions(props: ActionsProps) {
+  const {
+    touchMode,
+    disabled,
+    isSelectingPath,
+    pathShow,
+    warningShow,
+    onCancel,
+    onConfirm,
+  } = props
+
+  const { t } = useTranslation()
+
+  return (
+    <div className="py-1">
+      {isSelectingPath && (
+        <div className={`p-2 bg-gray-100 rounded flex items-center border border-gray-200 ${touchMode ? 'mb-1 text-xs' : 'mb-2'}`}>
+          <SvgIcon.Folder className="flex-shrink-0" />
+          <div className="flex-grow ml-1 break-all text-left">{pathShow}</div>
+        </div>
+      )}
+      <div className="flex justify-between items-center">
+        <div className="w-1/2">
+
+        </div>
+        <div className="flex-shrink-0">
+          <Button
+            style={{ margin: 0 }}
+            onClick={() => onCancel()}
+          >
+            {t`action.cancel`}
+          </Button>
+          <Button
+            theme="solid"
+            className={`ml-1 md:ml-2 ${touchMode ? 'w-24' : 'w-32'}`}
+            disabled={disabled}
+            onClick={onConfirm}
+          >
+            <div className="flex items-center">
+              <div className={`transition-all duration-200 overflow-hidden ${warningShow ? 'w-5' : 'w-0'}`}>
+                <SvgIcon.Warning />
+              </div>
+              <span>{t`action.open`}</span>
+            </div>
+          </Button>
+        </div>
+      </div>
+    </div>
   )
 }

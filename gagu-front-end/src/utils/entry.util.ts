@@ -55,7 +55,6 @@ export const getEntryNestedFileList = async (entry: FileSystemEntry) => {
     await new Promise((resolve, reject) => {
       (entry as FileSystemFileEntry).file((file: File) => {
         const fileName = file.name
-        // TODO:
         if (fileName !== '.DS_Store' && !fileName.startsWith('._')) {
           nestedFileList.push(Object.assign(file, { fullPath: entry.fullPath }))
         }

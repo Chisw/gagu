@@ -16,7 +16,6 @@ export function useRequest<A extends any[], D>(requestFn: RequestFn<A, D>, initi
       return data as D
     } catch (error) {
       setLoading(false)
-      // TODO: handle error string
       const fallbackData = { success: false, message: `${error}`} as D
       setData(fallbackData)
       return fallbackData
