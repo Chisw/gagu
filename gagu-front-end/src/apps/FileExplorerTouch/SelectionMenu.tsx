@@ -192,34 +192,32 @@ export default function SelectionMenu(props: SelectionMenuProps) {
       </div>
 
       <Modal
-        centered
-        width="80vw"
         visible={appsModalShow}
         closable={false}
         footer={null}
         className="gagu-touch-open-with-apps select-none"
         onCancel={() => setAppsModalShow(false)}
       >
-        {CALLABLE_APP_LIST.map(({ id }) => (
-          <div
-            key={id}
-            className="p-3 flex items-center transition-all duration-100 active:scale-95 active:bg-gray-100 rounded-lg"
-            onClick={() => {
-              onCancel()
-              setAppsModalShow(false)
-              handleOpenEntry(id)
-            }}
-          >
-            <div
-              className="gagu-app-icon w-12 h-12"
-              data-app-id={id}
-            />
-            <div className="ml-3 text-lg">
-              {t(`app.${id}`)}
-            </div>
+        <div className="p-3">
+          <div className="mb-4 text-gray-600">
+            {t(`action.openWith`)}
           </div>
-        ))}
-        
+          <div className="flex">
+            {CALLABLE_APP_LIST.map(({ id }) => (
+              <div
+                key={id}
+                data-app-id={id}
+                className="gagu-app-icon mr-4 w-12 h-12 transition-all duration-100 active:scale-95"
+                onClick={() => {
+                  onCancel()
+                  setAppsModalShow(false)
+                  handleOpenEntry(id)
+                }}
+              >
+              </div>
+            ))}
+          </div>
+        </div>
       </Modal>
     </>
   )

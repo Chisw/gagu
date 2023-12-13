@@ -5,6 +5,7 @@ import { runningAppListState } from '../../states'
 import { WINDOW_DURATION, WINDOW_STATUS_MAP, line } from '../../utils'
 import { SvgIcon } from '../../components/common'
 import { useTranslation } from 'react-i18next'
+import { useWindowSize } from '../../hooks'
 
 interface WindowProps {
   app: IApp
@@ -30,6 +31,8 @@ export default function Window(props: WindowProps) {
   const [runningAppList, setRunningAppList] = useRecoilState(runningAppListState)
   const [windowTitle, setWindowTitle] = useState('')
   const [windowStatus, setWindowStatus] = useState<WindowStatus>('opening')
+
+  const windowSize = useWindowSize(false)
 
   useEffect(() => {
     setTimeout(() => {
@@ -92,7 +95,7 @@ export default function Window(props: WindowProps) {
         <div className="relative flex-grow overflow-hidden bg-black bg-opacity-5">
           <AppComponent
             isTopWindow={isTopWindow}
-            windowSize={{ width: 1920, height: 1080 }}
+            windowSize={windowSize}
             setWindowTitle={setWindowTitle}
             onClose={handleClose}
           />

@@ -153,6 +153,10 @@ body {
   @apply bg-black bg-opacity-10 !important;
 }
 
+.gagu-touch-open-with-apps .semi-modal {
+  @apply absolute right-[8px] bottom-[8px] left-[8px] m-0 w-auto;
+}
+
 .gagu-touch-open-with-apps .semi-modal-content {
   @apply p-2 bg-white bg-opacity-90 backdrop-blur border-none;
 }
