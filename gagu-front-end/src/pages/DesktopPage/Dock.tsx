@@ -1,9 +1,9 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { openEventState, runningAppListState, topWindowIndexState, contextMenuDataState, activePageState } from '../../states'
 import { APP_LIST } from '../../apps'
 import { AppId, EventTransaction, IApp, IContextMenuItem, Page } from '../../types'
-import { line } from '../../utils'
+import { UserConfigStore, WINDOW_DURATION, line } from '../../utils'
 import { SvgIcon } from '../../components/common'
 import toast from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
@@ -12,6 +12,7 @@ export default function Dock() {
 
   const { t } = useTranslation()
 
+  const [loaded, setLoaded] = useState(false)
   const [topWindowIndex, setTopWindowIndex] = useRecoilState(topWindowIndexState)
   const [runningAppList, setRunningAppList] = useRecoilState(runningAppListState)
   const [openEvent] = useRecoilState(openEventState)
@@ -24,7 +25,7 @@ export default function Dock() {
     if (isRunning && !openNew) {
       sameRunningAppList.forEach(app => {
         const windowId = `gagu-app-window-${app.runningId}`
-        if (document.getElementById(windowId)!.getAttribute('data-hidden') === 'true') {
+        if (document.getElementById(windowId)?.getAttribute('data-hidden') === 'true') {
           const hiddenSwitchTrigger = document.querySelector(`#${windowId} .gagu-hidden-switch-trigger`) as any
           hiddenSwitchTrigger.click()
         }
@@ -38,6 +39,16 @@ export default function Dock() {
       setRunningAppList(list)
     }
   }, [topWindowIndex, setTopWindowIndex, runningAppList, setRunningAppList])
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (!loaded && UserConfigStore.get().fileExplorerAutoOpen) {
+        const app = APP_LIST.find(a => a.id === AppId.fileExplorer)!
+        setRunningAppList([app])
+        setLoaded(true)
+      }
+    }, WINDOW_DURATION + 1)
+  }, [loaded, setRunningAppList])
 
   useEffect(() => {
     if (openEvent?.transaction === EventTransaction.app_run) {

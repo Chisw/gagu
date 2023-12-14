@@ -36,7 +36,7 @@ import { IControlBarDisabledMap } from '../apps/FileExplorer/ControlBar'
 import { useTouchMode } from './useTouchMode'
 import { useAddUploadingTask } from './useAddUploadingTask'
 
-const RefreshTimerMap: {
+const RefreshTimerCache: {
   [PATH: string]: {
     timer: NodeJS.Timeout,
     timestamp: number,
@@ -396,7 +396,7 @@ export function useFileExplorer(props: Props) {
       const { top, height } = container.getBoundingClientRect()
       setThumbScrollWatcher({ top, height })
     }
-    setTimeout(listener, WINDOW_DURATION * 2 + 1)
+    setTimeout(listener, WINDOW_DURATION * 4)
     const throttleListener = throttle(listener, 500)
     container.addEventListener('scroll', throttleListener)
     return () => container.removeEventListener('scroll', throttleListener)
@@ -406,8 +406,8 @@ export function useFileExplorer(props: Props) {
     const { path, otherPaths = [] } = lastChangedDirectory
     const needRefresh = [path, getParentPath(path), ...otherPaths].includes(currentPath)
     if (needRefresh) {
-      if (RefreshTimerMap[currentPath]) {
-        const { timer, timestamp } = RefreshTimerMap[currentPath]
+      if (RefreshTimerCache[currentPath]) {
+        const { timer, timestamp } = RefreshTimerCache[currentPath]
         clearTimeout(timer)
         if (Date.now() - timestamp > 600) {
           handleNavRefresh({ refreshParent: true, otherPaths })
@@ -415,11 +415,11 @@ export function useFileExplorer(props: Props) {
           return
         }
       }
-      RefreshTimerMap[currentPath] = {
+      RefreshTimerCache[currentPath] = {
         timer: setTimeout(() => {
           handleNavRefresh({ assignedPath: currentPath, refreshParent: true, otherPaths })
           setLastChangedDirectory({ path: '', timestamp: 0 })
-          delete RefreshTimerMap[currentPath]
+          delete RefreshTimerCache[currentPath]
         }, 200),
         timestamp: Date.now(),
       }

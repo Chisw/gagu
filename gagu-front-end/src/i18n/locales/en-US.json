@@ -102,6 +102,7 @@
     "hint": {
       "atLeastCharacters": "At least {{count}} character(s)",
       "choose": "Choose",
+      "fileExplorerAutoOpen_extra": "Auto-open in Desktop mode",
       "filter": "Filter",
       "input": "Input",
       "inputAccessPassword": "Input access password",
@@ -127,6 +128,7 @@
       "downloadName": "Download name",
       "downloadTimes": "Download times",
       "favicon": "Tab icon",
+      "fileExplorerAutoOpen": "Auto-open",
       "language": "Language",
       "mode": "Mode",
       "nickname": "Nickname",
@@ -225,6 +227,7 @@
       "settings_log": "Log",
       "settings_system": "System",
       "settings_system_advanced": "Advanced",
+      "settings_system_apps": "Apps",
       "settings_system_general": "General",
       "settings_users": "Users",
       "settings_users_editUser": "Edit user: ",

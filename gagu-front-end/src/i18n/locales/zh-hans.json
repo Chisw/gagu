@@ -102,6 +102,7 @@
     "hint": {
       "atLeastCharacters": "至少 {{count}} 个字符",
       "choose": "请选择",
+      "fileExplorerAutoOpen_extra": "Desktop 模式下自动打开",
       "filter": "筛选",
       "input": "请输入",
       "inputAccessPassword": "请输入访问密码",
@@ -127,6 +128,7 @@
       "downloadName": "保存名称",
       "downloadTimes": "下载次数",
       "favicon": "标签图标",
+      "fileExplorerAutoOpen": "自动打开",
       "language": "语言",
       "mode": "模式",
       "nickname": "昵称",
@@ -225,6 +227,7 @@
       "settings_log": "日志",
       "settings_system": "系统",
       "settings_system_advanced": "高级",
+      "settings_system_apps": "应用",
       "settings_system_general": "通用",
       "settings_users": "用户",
       "settings_users_editUser": "编辑用户：",

@@ -1,11 +1,11 @@
-import { IUserInfo, UserPermission, UserPermissionType } from '../types'
-import { GAGU_USER_INFO_KEY } from './constant.util'
+import { IUserConfig, IUserInfo, UserPermission, UserPermissionType } from '../types'
+import { GAGU_USER_CONFIG_KEY, GAGU_USER_INFO_KEY } from './constant.util'
 
 export const UserInfoStore = {
   get() {
-    const userInfoStr = localStorage.getItem(GAGU_USER_INFO_KEY) || ''
-    if (userInfoStr) {
-      const storeUserInfo = JSON.parse(userInfoStr)
+    const userInfoValue = localStorage.getItem(GAGU_USER_INFO_KEY) || ''
+    if (userInfoValue) {
+      const storeUserInfo = JSON.parse(userInfoValue)
       const userInfo: IUserInfo = {
         token: storeUserInfo.token || '',
         nickname: storeUserInfo.nickname || 'NO_NICKNAME',
@@ -33,6 +33,29 @@ export const UserInfoStore = {
 
   remove() {
     localStorage.removeItem(GAGU_USER_INFO_KEY)
+  },
+}
+
+export const UserConfigStore = {
+  get() {
+    const userConfig: IUserConfig = {
+      fileExplorerAutoOpen: false,
+      fileExplorerDefaultPath: '',
+    }
+    const userConfigValue = localStorage.getItem(GAGU_USER_CONFIG_KEY) || ''
+    if (userConfigValue) {
+      const config = JSON.parse(userConfigValue)
+      Object.assign(userConfig, config)
+    }
+    return userConfig
+  },
+
+  set(userConfig: IUserConfig) {
+    localStorage.setItem(GAGU_USER_CONFIG_KEY, JSON.stringify(userConfig))
+  },
+
+  remove() {
+    localStorage.removeItem(GAGU_USER_CONFIG_KEY)
   },
 }
 

@@ -102,6 +102,7 @@
     "hint": {
       "atLeastCharacters": "少なくとも {{count}} 文字",
       "choose": "選んでください",
+      "fileExplorerAutoOpen_extra": "デスクトップモードで自動的に開きます",
       "filter": "フィルター",
       "input": "入ってください",
       "inputAccessPassword": "アクセスパスワードを入力してください",
@@ -127,6 +128,7 @@
       "downloadName": "保存時の名前",
       "downloadTimes": "ダウンロード時間",
       "favicon": "タブアイコン",
+      "fileExplorerAutoOpen": "自動的に開きます",
       "language": "言語",
       "mode": "モデル",
       "nickname": "ニックネーム",
@@ -225,6 +227,7 @@
       "settings_log": "ログ",
       "settings_system": "システム",
       "settings_system_advanced": "高度",
+      "settings_system_apps": "アプリ",
       "settings_system_general": "ユニバーサル",
       "settings_users": "ユーザー",
       "settings_users_editUser": "ユーザーの編集：",

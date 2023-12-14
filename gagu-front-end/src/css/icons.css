@@ -106,11 +106,15 @@
   background-image: url("data: image/svg+xml, %3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' %3E%3Cpath fill='%23d97706' d='M2 20h20v2H2v-2zm2-8h2v7H4v-7zm5 0h2v7H9v-7zm4 0h2v7h-2v-7zm5 0h2v7h-2v-7zM2 7l10-5 10 5v4H2V7zm2 1.236V9h16v-.764l-8-4-8 4zM12 8a1 1 0 1 1 0-2 1 1 0 0 1 0 2z' /%3E%3C/svg%3E");
 }
 
+.gagu-entry-icon.--entry-folder[data-folder-name="video"]::before,
+.gagu-entry-icon.--entry-folder[data-folder-name="videos"]::before,
+.gagu-entry-icon.--entry-folder[data-folder-name="mp4"]::before,
 .gagu-entry-icon.--entry-folder[data-folder-name="movie"]::before,
 .gagu-entry-icon.--entry-folder[data-folder-name="movies"]::before {
   background-image: url("data: image/svg+xml, %3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' %3E%3Cpath fill='none' d='M0 0h24v24H0z' /%3E%3Cpath fill='%23d97706' d='M2 3.993A1 1 0 0 1 2.992 3h18.016c.548 0 .992.445.992.993v16.014a1 1 0 0 1-.992.993H2.992A.993.993 0 0 1 2 20.007V3.993zM8 5v14h8V5H8zM4 5v2h2V5H4zm14 0v2h2V5h-2zM4 9v2h2V9H4zm14 0v2h2V9h-2zM4 13v2h2v-2H4zm14 0v2h2v-2h-2zM4 17v2h2v-2H4zm14 0v2h2v-2h-2z' /%3E%3C/svg%3E");
 }
 
+.gagu-entry-icon.--entry-folder[data-folder-name="mp3"]::before,
 .gagu-entry-icon.--entry-folder[data-folder-name="music"]::before,
 .gagu-entry-icon.--entry-folder[data-folder-name="musics"]::before {
   background-image: url("data: image/svg+xml, %3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' %3E%3Cpath fill='none' d='M0 0h24v24H0z' /%3E%3Cpath fill='%23d97706' d='M20 3v14a4 4 0 1 1-2-3.465V5H9v12a4 4 0 1 1-2-3.465V3h13zM5 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm11 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4z' /%3E%3C/svg%3E");
@@ -120,6 +124,8 @@
 .gagu-entry-icon.--entry-folder[data-folder-name="imgs"]::before,
 .gagu-entry-icon.--entry-folder[data-folder-name="image"]::before,
 .gagu-entry-icon.--entry-folder[data-folder-name="images"]::before,
+.gagu-entry-icon.--entry-folder[data-folder-name="photo"]::before,
+.gagu-entry-icon.--entry-folder[data-folder-name="photos"]::before,
 .gagu-entry-icon.--entry-folder[data-folder-name="picture"]::before,
 .gagu-entry-icon.--entry-folder[data-folder-name="pictures"]::before {
   background-image: url("data: image/svg+xml, %3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' %3E%3Cpath fill='none' d='M0 0h24v24H0z' /%3E%3Cpath fill='%23d97706' d='M4.828 21l-.02.02-.021-.02H2.992A.993.993 0 0 1 2 20.007V3.993A1 1 0 0 1 2.992 3h18.016c.548 0 .992.445.992.993v16.014a1 1 0 0 1-.992.993H4.828zM20 15V5H4v14L14 9l6 6zm0 2.828l-6-6L6.828 19H20v-1.172zM8 11a2 2 0 1 1 0-4 2 2 0 0 1 0 4z' /%3E%3C/svg%3E");

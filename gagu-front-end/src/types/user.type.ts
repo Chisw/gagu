@@ -1,3 +1,8 @@
+export interface IUserConfig {
+  fileExplorerAutoOpen: boolean
+  fileExplorerDefaultPath: string
+}
+
 // Sync following code to BE & FE
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export declare namespace User {
