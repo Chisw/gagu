@@ -12,6 +12,7 @@ import {
   TunnelType,
 } from '../types'
 import {
+  UserConfigStore,
   WINDOW_DURATION,
   getDownloadInfo,
   getEntryPath,
@@ -213,8 +214,8 @@ export function useFileExplorer(props: Props) {
     handlePathChange({ path, direction: 'forward', pushPath: true, updateActiveRootEntry })
   }, [handlePathChange])
 
-  const handleGoFullPath = useCallback((path: string) => {
-    handlePathChange({ path, direction: 'forward', pushPath: true })
+  const handleGoFullPath = useCallback((path: string, updateActiveRootEntry?: boolean) => {
+    handlePathChange({ path, direction: 'forward', pushPath: true, updateActiveRootEntry })
   }, [handlePathChange])
 
   // nav callback
@@ -431,10 +432,15 @@ export function useFileExplorer(props: Props) {
   }, [filterText, setSelectedEntryList])
 
   useEffect(() => {
-    if (!currentPath && rootEntryList.length) {
-      handleDirectoryOpen(rootEntryList[0], true)
+    if (!currentPath) {
+      const { fileExplorerDefaultPath } = UserConfigStore.get()
+      if (fileExplorerDefaultPath) {
+        handleGoFullPath(fileExplorerDefaultPath, true)
+      } else if (rootEntryList.length) {
+        handleDirectoryOpen(rootEntryList[0], true)
+      }
     }
-  }, [currentPath, rootEntryList, handleDirectoryOpen])
+  }, [currentPath, rootEntryList, handleDirectoryOpen, handleGoFullPath])
 
   return {
     disabledMap, supportThumbnail, thumbScrollWatcher,
