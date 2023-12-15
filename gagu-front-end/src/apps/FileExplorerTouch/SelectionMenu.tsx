@@ -165,30 +165,34 @@ export default function SelectionMenu(props: SelectionMenuProps) {
       <div
         className={line(`
           fixed z-10 right-[8px] bottom-[8px] left-[8px]
-          p-2 border rounded-xl shadow-lg
-          flex flex-wrap
-          bg-white bg-opacity-80 backdrop-blur select-none overflow-y-auto
+          border rounded-xl shadow-lg overflow-hidden
+          bg-white bg-opacity-90 backdrop-blur select-none
           transition-all duration-300
           ${show ? 'h-28 scale-100' : 'h-0 scale-0'}
         `)}
       >
-        {menuItemList.map(({ icon, name, noCancel, onClick }) => (
-          <div
-            key={name}
-            className={line(`
-              mb-1 w-1/5 h-10 rounded-md
-              transition-all duration-100
-              active:scale-90 active:bg-gray-100
-            `)}
-            onClick={() => {
-              onClick()
-              !noCancel && onCancel()
-            }}
-          >
-            <div className="mt-1 flex justify-center">{icon}</div>
-            <div className="mt-1 -mx-1 text-xs text-center truncate scale-90">{name}</div>
-          </div>
-        ))}
+        <div className="absolute z-0 inset-0 p-2 overflow-y-auto flex flex-wrap">
+          {menuItemList.map(({ icon, name, noCancel, onClick }) => (
+            <div
+              key={name}
+              className={line(`
+                mb-1 w-1/5 h-10 rounded-md
+                transition-all duration-100
+                active:scale-90 active:bg-gray-100
+              `)}
+              onClick={() => {
+                onClick()
+                !noCancel && onCancel()
+              }}
+            >
+              <div className="mt-1 flex justify-center">{icon}</div>
+              <div className="mt-1 -mx-1 text-xs text-center truncate scale-90">{name}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className="absolute z-10 top-0 left-0 w-full h-4 bg-gradient-to-b from-white to-transparent" />
+        <div className="absolute z-10 bottom-0 left-0 w-full h-4 bg-gradient-to-t from-white to-transparent" />
       </div>
 
       <Modal

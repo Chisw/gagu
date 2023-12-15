@@ -432,11 +432,11 @@ export function useFileExplorer(props: Props) {
   }, [filterText, setSelectedEntryList])
 
   useEffect(() => {
-    if (!currentPath) {
+    if (!currentPath && rootEntryList.length) {
       const { fileExplorerDefaultPath } = UserConfigStore.get()
       if (fileExplorerDefaultPath) {
         handleGoFullPath(fileExplorerDefaultPath, true)
-      } else if (rootEntryList.length) {
+      } else {
         handleDirectoryOpen(rootEntryList[0], true)
       }
     }
