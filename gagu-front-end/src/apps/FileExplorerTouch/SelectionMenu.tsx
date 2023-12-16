@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { isSameEntry, line } from '../../utils'
 import { EditMode, EditModeType, EventTransaction, IEntry } from '../../types'
 import { useTranslation } from 'react-i18next'
@@ -159,6 +159,10 @@ export default function SelectionMenu(props: SelectionMenuProps) {
       entryList: selectedEntryList,
     })
   }, [selectedEntryList, setOpenEvent])
+
+  useEffect(() => {
+    !show && setAppsModalShow(false)
+  }, [show])
 
   return (
     <>

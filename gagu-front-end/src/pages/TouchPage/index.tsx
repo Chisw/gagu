@@ -17,6 +17,7 @@ export default function TouchPage() {
   const [sideShow, setSideShow] = useState(false)
   const [isSelectionMode, setIsSelectionMode] = useState(false)
   const [activeAppId, setActiveAppId] = useState<string>(AppId.fileExplorer)
+  const [dockExpanded, setDockExpanded] = useState(false)
 
   useEffect(() => {
     setTimeout(() => setActivePage(Page.touch))
@@ -73,14 +74,20 @@ export default function TouchPage() {
             setSideShow,
             isSelectionMode,
             setIsSelectionMode,
+            activeAppId,
+            setDockExpanded,
           }}
         />
       </div>
 
       <Dock
         show={!sideShow && !isSelectionMode && activeAppId === AppId.fileExplorer}
-        activeAppId={activeAppId}
-        setActiveAppId={setActiveAppId}
+        {...{
+          activeAppId,
+          setActiveAppId,
+          dockExpanded,
+          setDockExpanded,
+        }}
       />
 
     </>

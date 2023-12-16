@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { line } from '../../utils'
 import { SvgIcon } from '../../components/common'
 import { useTranslation } from 'react-i18next'
@@ -12,6 +12,8 @@ interface DockProps {
   show: boolean
   activeAppId: string
   setActiveAppId: (id: string) => void
+  dockExpanded: boolean
+  setDockExpanded: (expanded: boolean) => void
 }
 
 export default function Dock(props: DockProps) {
@@ -19,6 +21,8 @@ export default function Dock(props: DockProps) {
     show,
     activeAppId,
     setActiveAppId,
+    dockExpanded,
+    setDockExpanded,
   } = props
 
   const { t } = useTranslation()
@@ -26,11 +30,9 @@ export default function Dock(props: DockProps) {
   const [runningAppList, setRunningAppList] = useRecoilState(runningAppListState)
   const [openEvent] = useRecoilState(openEventState)
 
-  const [expanded, setExpanded] = useState(false)
-
   const dockRef = useRef(null)
   
-  useClickAway(dockRef, () => setExpanded(false))
+  useClickAway(dockRef, () => setDockExpanded(false))
 
   const handleOpenApp = useCallback((app: IApp) => {
     const appId = app.id
@@ -39,6 +41,7 @@ export default function Dock(props: DockProps) {
     const sameRunningAppList = runningAppList.filter(a => a.id === appId)
     if (isRunning) {
       if (isActive) return
+      // switch from hiding to showing
       sameRunningAppList.forEach(app => {
         const windowId = `gagu-app-window-${app.runningId}`
         if (document.getElementById(windowId)!.getAttribute('data-hidden') === 'true') {
@@ -69,7 +72,7 @@ export default function Dock(props: DockProps) {
           border shadow-lg overflow-hidden
           transition-all duration-200 select-none
           ${show ? 'scale-100 origin-bottom-right' : 'scale-0 origin-center'}
-          ${expanded
+          ${dockExpanded
             ? 'right-[10px] bottom-[10px] w-48 h-48 rounded-xl bg-gradient-to-b from-gray-200 via-gray-100 to-gray-100'
             : 'right-[1rem] bottom-[1rem] w-12 h-12 rounded-3xl bg-white'
           }
@@ -80,7 +83,7 @@ export default function Dock(props: DockProps) {
             gagu-dock
             absolute p-3 w-full grid grid-cols-3 gap-3
             transition-opacity duration-200
-            ${expanded ? 'z-10 opacity-100' : 'z-0 opacity-0'}
+            ${dockExpanded ? 'z-10 opacity-100' : 'z-0 opacity-0'}
           `)}
         >
           {APP_LIST.filter(app => app.touchModeShow).map(app => {
@@ -112,7 +115,7 @@ export default function Dock(props: DockProps) {
               flex justify-center items-center
               transition-all duration-200 active:scale-90
             `)}
-            onClick={() => setExpanded(false)}
+            onClick={() => setDockExpanded(false)}
           >
             <SvgIcon.Close size={18} />
           </div>
@@ -122,9 +125,9 @@ export default function Dock(props: DockProps) {
           className={line(`
             absolute w-full h-full flex justify-center items-center text-gray-800
             transition-opacity duration-200
-            ${expanded ? 'z-0 opacity-0' : 'z-10 opacity-100'}
+            ${dockExpanded ? 'z-0 opacity-0' : 'z-10 opacity-100'}
           `)}
-          onClick={() => setExpanded(true)}
+          onClick={() => setDockExpanded(true)}
         >
           <SvgIcon.Apps />
           {(runningAppList.length > 0) && <div className="absolute bottom-2 right-2 w-1 h-1 rounded-full bg-green-400 shadow shadow-green-500 border border-green-700" />}

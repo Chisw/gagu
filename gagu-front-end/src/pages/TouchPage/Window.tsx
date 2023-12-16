@@ -70,7 +70,7 @@ export default function Window(props: WindowProps) {
         className={line(`
           gagu-app-window absolute z-30 inset-0 bg-white bg-opacity-80 backdrop-blur-sm overflow-hidden
           transition-box-shadow duration-200 flex flex-col
-          ${isTopWindow ? '' : 'hidden'}
+          ${isTopWindow ? 'gagu-is-top-window' : 'hidden'}
         `)}
         data-hidden={hidden}
         style={WINDOW_STATUS_MAP[windowStatus]}

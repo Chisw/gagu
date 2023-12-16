@@ -48,6 +48,7 @@ export function MySharingPanel(props: MySharingPanelProps) {
   return (
     <>
       <SideSheet
+        className="gagu-sync-popstate-overlay"
         title={(
           <div className="flex justify-between">
             <div>{t`title.mySharing`}</div>
@@ -55,6 +56,7 @@ export function MySharingPanel(props: MySharingPanelProps) {
               type="danger"
               size="small"
               icon={<SvgIcon.Close />}
+              className="gagu-sync-popstate-overlay-close-button"
               onClick={onClose}
             />
           </div>

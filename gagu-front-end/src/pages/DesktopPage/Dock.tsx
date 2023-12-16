@@ -23,6 +23,7 @@ export default function Dock() {
     const sameRunningAppList = runningAppList.filter(a => a.id === app.id)
     const isRunning = !!sameRunningAppList.length
     if (isRunning && !openNew) {
+      // switch from hiding to showing
       sameRunningAppList.forEach(app => {
         const windowId = `gagu-app-window-${app.runningId}`
         if (document.getElementById(windowId)?.getAttribute('data-hidden') === 'true') {

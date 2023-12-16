@@ -137,6 +137,16 @@ export default function AdvancedSettings() {
             </Form.Slot>
             <Form.Input
               showClear
+              field="deviceName"
+              label={t`label.deviceName`}
+              placeholder="Device name"
+              autoComplete="off"
+              maxLength={32}
+              suffix={<span className="pr-1 text-xs font-din text-gray-500">{form.deviceName.length}/32</span>}
+              onChange={value => setForm({ ...form, deviceName: value })}
+            />
+            <Form.Input
+              showClear
               field="host"
               label={t`label.serviceHost`}
               placeholder="127.0.0.1"
@@ -178,16 +188,6 @@ export default function AdvancedSettings() {
                   message: t`hint.invalid`,
                 },
               ]}
-            />
-            <Form.Input
-              showClear
-              field="deviceName"
-              label={t`label.deviceName`}
-              placeholder="Device name"
-              autoComplete="off"
-              maxLength={32}
-              suffix={<span className="pr-1 text-xs font-din text-gray-500">{form.deviceName.length}/32</span>}
-              onChange={value => setForm({ ...form, deviceName: value })}
             />
             <div className="pt-2 flex justify-end">
               <Button

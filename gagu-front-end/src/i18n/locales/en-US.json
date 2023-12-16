@@ -205,6 +205,7 @@
       "noTimeLimit": "No time limit",
       "noTimesLimit": "No times limit",
       "noUploadableFilesDetected": "No uploadable files detected",
+      "reachTheEndOfHistory": "We have reached the end of history",
       "sharingWithPassword": "Ops, the sharer has set an access password",
       "sureToDelete": "Sure to delete?",
       "sureToOpenTextFile": "The file size has exceed {{size}}. Are you sure you want to open it?",

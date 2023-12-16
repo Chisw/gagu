@@ -454,7 +454,7 @@ export function useFileExplorer(props: Props) {
     currentPath, activeRootEntry,
     querying, sizeQuerying, deleting,
     entryList, favoriteEntryList, sideEntryList, sharingEntryList,
-    isEntryListEmpty,
+    isEntryListEmpty, visitHistory,
     folderCount, fileCount,
     editMode, setEditMode,
     filterMode, setFilterMode,

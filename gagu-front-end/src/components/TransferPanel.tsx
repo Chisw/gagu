@@ -116,6 +116,7 @@ export function TransferPanel() {
       </div>
 
       <SideSheet
+        className="gagu-sync-popstate-overlay"
         title={(
           <div className="flex items-center">
             <SvgIcon.Transfer size={24} />
@@ -138,6 +139,7 @@ export function TransferPanel() {
                 type="danger"
                 size="small"
                 icon={<SvgIcon.Close />}
+                className="gagu-sync-popstate-overlay-close-button"
                 onClick={() => setVisible(false)}
               />
             </div>

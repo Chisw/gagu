@@ -9,11 +9,13 @@ import SelectionMenu from './SelectionMenu'
 import Side from './Side'
 import { useFileExplorer } from '../../hooks'
 import { SharingModal } from '../../components'
-import { openEventState } from '../../states'
+import { entrySelectorEventState, openEventState } from '../../states'
 import { useRecoilState } from 'recoil'
-import { EventTransaction, ExplorerSelectorProps, IEntry } from '../../types'
+import { AppId, EventTransaction, ExplorerSelectorProps, IEntry } from '../../types'
 import EntryNameDialog from './EntryNameDialog'
-// import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router'
+import toast from 'react-hot-toast'
+import { useTranslation } from 'react-i18next'
 
 interface FileExplorerTouchProps extends ExplorerSelectorProps {
   show: boolean
@@ -21,6 +23,8 @@ interface FileExplorerTouchProps extends ExplorerSelectorProps {
   setSideShow: (show: boolean) => void
   isSelectionMode: boolean
   setIsSelectionMode: (show: boolean) => void
+  activeAppId?: string
+  setDockExpanded?: (expanded: boolean) => void
 }
 
 export default function FileExplorerTouch(props: FileExplorerTouchProps) {
@@ -34,11 +38,16 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
     asSelector = false,
     onCurrentPathChange = () => {},
     onSelect = () => {},
+    activeAppId = '',
+    setDockExpanded = () => {},
   } = props
 
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
+  const { t } = useTranslation()
 
   const [, setOpenEvent] = useRecoilState(openEventState)
+  const [entrySelectorEvent, setEntrySelectorEvent] = useRecoilState(entrySelectorEventState)
+
   const [activeEntry, setActiveEntry] = useState<IEntry | null>(null)
 
   const containerRef = useRef(null)
@@ -48,7 +57,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
     currentPath, activeRootEntry,
     querying, sizeQuerying, deleting,
     entryList, favoriteEntryList, sideEntryList, sharingEntryList,
-    isEntryListEmpty,
+    isEntryListEmpty, visitHistory,
     folderCount, fileCount,
     editMode, setEditMode,
     filterMode, setFilterMode,
@@ -80,7 +89,6 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
     const { type } = entry
     if (type === 'directory') {
       handleDirectoryOpen(entry)
-      // navigate(`/touch?path=${getEntryPath(entry)}`)
     } else {
       if (asSelector) {
         setIsSelectionMode(true)
@@ -103,7 +111,6 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
     selectedEntryList,
     setSelectedEntryList,
     handleDirectoryOpen,
-    // navigate,
     asSelector,
     setIsSelectionMode,
     setOpenEvent,
@@ -132,10 +139,60 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
 
   }, [sideShow, selectedEntryList, entryList, setSelectedEntryList, setIsSelectionMode])
 
-  // useEffect(() => {
-  //   window.addEventListener('popstate', handleNavBack)
-  //   return () => window.removeEventListener('popstate', handleNavBack)
-  // }, [handleNavBack])
+
+  const handleStatePop = useCallback(() => {
+    const keepPath = () => navigate(`/touch?path=${currentPath}`)
+    setDockExpanded(false)
+
+    if (sideShow) {
+      keepPath()
+      setSideShow(false)
+    } else if (isSelectionMode) {
+      keepPath()
+      setIsSelectionMode(false)
+    } else if (entrySelectorEvent) {
+      keepPath()
+      setEntrySelectorEvent(null)
+    } else if (activeAppId !== AppId.fileExplorer) {
+      keepPath()
+      ;(document.querySelector('.gagu-is-top-window .gagu-hidden-switch-trigger') as any)?.click()
+    } else if (sharingModalShow) {
+      keepPath()
+      setSharingModalShow(false)
+    } else if (editMode) {
+      keepPath()
+      setEditMode(null)
+    } else if (document.querySelector('.gagu-sync-popstate-overlay')) {
+      keepPath()
+      ;(document.querySelector('.gagu-sync-popstate-overlay-close-button') as any)?.click()
+    } else {
+      const { position } = visitHistory
+      if (position >= 1) {
+        handleNavBack()
+      } else {
+        keepPath()
+        toast.error(t`tip.reachTheEndOfHistory`, { icon: '⚠️' })
+      }
+    }
+  }, [
+    t,
+    navigate,
+    currentPath,
+    editMode,
+    setEditMode,
+    activeAppId,
+    entrySelectorEvent,
+    handleNavBack,
+    setDockExpanded,
+    sharingModalShow,
+    setSharingModalShow,
+    isSelectionMode,
+    setEntrySelectorEvent,
+    setIsSelectionMode,
+    setSideShow,
+    sideShow,
+    visitHistory,
+  ])
 
   useEffect(() => {
     setSelectedEntryList([])
@@ -156,6 +213,15 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
     onSelect(selectedEntryList)
   }, [onSelect, selectedEntryList])
 
+  useEffect(() => {
+    window.addEventListener('popstate', handleStatePop)
+    return () => window.removeEventListener('popstate', handleStatePop)
+  }, [handleStatePop])
+
+  useEffect(() => {
+    !asSelector && navigate(`/touch?path=${currentPath}`)
+  }, [asSelector, currentPath, navigate])
+
   return (
     <>
       <Side
@@ -168,7 +234,6 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
         }}
         onSideEntryClick={(sideEntry) => {
           setSideShow(false)
-          // navigate(`/touch?path=${getEntryPath(sideEntry)}`)
           handleDirectoryOpen(sideEntry, true)
         }}
         onFavoriteCancel={(entry) => handleFavoriteClick(entry, true)}
@@ -178,7 +243,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
         ref={containerRef}
         data-vibrate-disabled="true"
         className={line(`
-          absolute z-0 inset-0 bg-white transition-all duration-500
+          absolute z-0 inset-0 bg-white transition-all duration-300
           ${show ? 'opacity-100' : 'opacity-0'}
           ${sideShow ? 'ease-in-out translate-x-64 opacity-20 overflow-y-hidden pointer-events-none' : 'overflow-y-auto'}
           ${asSelector ? 'top-0' : 'top-8 md:top-6'}

@@ -35,7 +35,7 @@ export function Confirmor(props: ConfirmorProps) {
     centered: true,
     maskClosable: true,
     width: 300,
-    className: 'gagu-confirmor',
+    className: 'gagu-confirmor gagu-sync-popstate-overlay',
     icon: undefined,
     content: (
       <>
@@ -50,7 +50,7 @@ export function Confirmor(props: ConfirmorProps) {
     footer: (
       <div className="flex">
         <Button
-          className="w-full"
+          className="gagu-sync-popstate-overlay-close-button w-full"
           style={{ margin: 0 }}
           onClick={() => {
             if (onCancel) {

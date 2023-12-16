@@ -61,6 +61,7 @@ export function ChangePasswordModal(props: ChangePasswordModalProps) {
       <Modal
         centered
         maskClosable={false}
+        className="gagu-sync-popstate-overlay"
         title={t`title.changePassword`}
         fullScreen={touchMode}
         width={400}
@@ -138,6 +139,7 @@ export function ChangePasswordModal(props: ChangePasswordModalProps) {
               <Button
                 type="tertiary"
                 children={t`action.cancel`}
+                className="gagu-sync-popstate-overlay-close-button"
                 onClick={onClose}
               />
               &emsp;
