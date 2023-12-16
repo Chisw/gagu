@@ -157,6 +157,7 @@ export default function SelectionMenu(props: SelectionMenuProps) {
       transaction: EventTransaction.app_run,
       appId,
       entryList: selectedEntryList,
+      forceOpen: true,
     })
   }, [selectedEntryList, setOpenEvent])
 

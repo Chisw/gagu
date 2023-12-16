@@ -7,7 +7,7 @@ layout: ../../../layouts/DocLayout.astro
 
 Many unrealized ideas will be recorded here, waiting for development.
 
-## System
+## Global
 
 - Dark mode
 - Multi-window automatic arrangement
@@ -15,24 +15,34 @@ Many unrealized ideas will be recorded here, waiting for development.
 - favicon shows file transfer percentage
 - Sound Recorder, Calendar, Note, Calculator, Relative calculator and other gadgets
 - Public sharing list page
-- When running on Termux, add user login vibration reminder and pop-up notification
+- When running on Termux, add user login vibration reminder and pop-up notification, SMS list
 - HTTPS certificate
-- thumbnail of PDF/APK
+- Thumbnail of PDF/APK
+- Separate login tokens and access tokens
+- Permission-related access and button controls
+- Use middleware to replace the pulse interface to update the last active time
+- Remember the last opened window size of different applications in Desktop mode
+- Use virtual scrolling for all long lists
+  - remove thumbScrollWatcher
+  - Solve the problem of lasso selection under multiple windows
 
 ## User
 
 - Support personal modification of avatar, nickname
 - Sharing link can be edited
-- Manage login device credentials
+- Manage login and access credentials
 
 ## Apps
 
 ### File Explorer
 
-- Copy, Cut, Move
+- Path access restriction check
+- Copy, Cut(Move)
+- Perform a second confirmation when overwriting the file on the front-end, includes moves and uploads
+- Moving files on the back-end requires verifying the required permissions
 - Path jumper
 - Slice upload
-- Tree structure display
+- Tree structure display and resizeable width on side
 - Scan and connect multiple devices in LAN
 - Drag tray (file clipboard)
 - File compression, decompression
@@ -44,6 +54,7 @@ Many unrealized ideas will be recorded here, waiting for development.
 - One-click to clean up the specified directory
 - File favorite
 - Directory link
+- Drag entries out of browser and download them directly
 
 ### Text Editor
 
@@ -61,12 +72,16 @@ Many unrealized ideas will be recorded here, waiting for development.
 
 - Playlist favorites
 - Style on fullscreen
+- DnD of progress bar
+- Horizontal volume slider
 
 ### Video Player
 
 - Playlist favorites
 - Play continuously
 - Generate content screenshots
+- DnD of progress bar
+- Horizontal volume slider
 
 ### Settings
 
@@ -83,6 +98,7 @@ Many unrealized ideas will be recorded here, waiting for development.
 
 - User Management
    - Import and Export
+   - Space allocation
 
 - System space usage management
 

@@ -81,6 +81,16 @@ $ yarn start
 
 ## 感谢
 
+### 参考项
+
+1. SVG 压缩：[SVG在线压缩合并工具](https://www.zhangxinxu.com/sp/svgo/)
+2. 音频频谱效果：[做一个酷酷的音乐频谱](https://juejin.cn/post/6844903478934896647)
+3. 调用 IINA：[Chrome_Open_In_IINA](https://github.com/iina/iina/blob/develop/browser/Chrome_Open_In_IINA/common.js#L59C18-L59C18)
+4. JSON 格式化：[json-format](https://github.com/luizstacio/json-format/blob/master/index.js)
+5. 扫描 100+ 文件：[readEntries](https://developer.mozilla.org/en-US/docs/Web/API/DataTransferItem/webkitGetAsEntry#javascript)
+
+### 依赖项
+
 整个项目中还用到了很多依赖：
 
 [@craco/craco](https://npmjs.com/package/@craco/craco)&emsp;

@@ -81,6 +81,16 @@ $ yarn start
 
 ## Thanks
 
+### References
+
+1. SVG compression: [SVG在线压缩合并工具](https://www.zhangxinxu.com/sp/svgo/)
+2. Audio spectrum effects: [做一个酷酷的音乐频谱](https://juejin.cn/post/6844903478934896647)
+3. Call IINA: [Chrome_Open_In_IINA](https://github.com/iina/iina/blob/develop/browser/Chrome_Open_In_IINA/common.js#L59C18-L59C18)
+4. JSON format: [json-format](https://github.com/luizstacio/json-format/blob/master/index.js)
+5. Read 100+ files: [readEntries](https://developer.mozilla.org/en-US/docs/Web/API/DataTransferItem/webkitGetAsEntry#javascript)
+
+### Dependencies
+
 There are also many dependencies used throughout the project:
 
 [@craco/craco](https://npmjs.com/package/@craco/craco)&emsp;
