@@ -91,13 +91,13 @@ export interface IContextMenuState {
   isDock?: boolean
 }
 
-export interface IEntryPathMapRes {
+export interface IEntryPathCacheData {
   list?: IEntry[]
   hiddenShow?: boolean
   gridMode?: boolean
   sortType?: SortType
 }
 
-export interface IEntryPathMap {
-  [ENTRY_PATH: string]: IEntryPathMapRes | undefined
+export interface IEntryPathCache {
+  [ENTRY_PATH: string]: IEntryPathCacheData | undefined
 }

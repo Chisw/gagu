@@ -1,13 +1,13 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useRecoilState } from 'recoil'
 import { FsApi } from '../api'
-import { entryPathMapState, openEventState } from '../states'
+import { entryPathCacheState, openEventState } from '../states'
 import { EventTransaction, IEntry } from '../types'
 import { getIndexLabel } from '../utils'
 import { APP_LIST } from '../apps'
 
 export function useOpenEvent(appId: string) {
-  const [entryPathMap] = useRecoilState(entryPathMapState)
+  const [entryPathCache] = useRecoilState(entryPathCacheState)
   const [openEvent, setOpenEvent] = useRecoilState(openEventState)
 
   const [matchedEntryList, setMatchedEntryList] = useState<IEntry[]>([])
@@ -23,7 +23,7 @@ export function useOpenEvent(appId: string) {
 
       if (entryList.length === 1) {
         const { name: openName, parentPath} = entryList[0]
-        matchedEntryList = (entryPathMap[parentPath]?.list || [])
+        matchedEntryList = (entryPathCache[parentPath]?.list || [])
           .filter(({ name, extension }) => {
             const isForceOpen = forceOpen && name === openName
             const isMatched = matchList?.includes(extension)
@@ -39,7 +39,7 @@ export function useOpenEvent(appId: string) {
       setActiveIndex(activeIndex)
       setOpenEvent(null)
     }
-  }, [appId, openEvent, entryPathMap, setOpenEvent])
+  }, [appId, openEvent, entryPathCache, setOpenEvent])
 
   const {
     indexLabel,

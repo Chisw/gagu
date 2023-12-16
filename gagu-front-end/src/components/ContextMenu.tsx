@@ -76,7 +76,7 @@ export function ContextMenu() {
                   <Dropdown
                     key={name}
                     position="rightTop"
-                    className="bg-white bg-opacity-80 backdrop-blur"
+                    className="bg-white bg-opacity-80 backdrop-blur min-w-[160px]"
                     menu={children.map(m => ({ ...m, node: 'item', onClick: closeAfterClick(m.onClick) }))}
                   >
                     <Dropdown.Item icon={icon} >

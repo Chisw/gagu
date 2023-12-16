@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   EditModeType,
   IEntry,
-  IEntryPathMap,
+  IEntryPathCache,
   IRootEntry,
   IScrollerWatcher,
   ISideEntry,
@@ -12,6 +12,7 @@ import {
   TunnelType,
 } from '../types'
 import {
+  EntryPathCacheStore,
   UserConfigStore,
   WINDOW_DURATION,
   getDownloadInfo,
@@ -23,7 +24,7 @@ import {
 } from '../utils'
 import { useRecoilState } from 'recoil'
 import {
-  entryPathMapState,
+  entryPathCacheState,
   lastChangedDirectoryState,
   baseDataState,
 } from '../states'
@@ -32,7 +33,7 @@ import { DownloadApi, FsApi, TunnelApi } from '../api'
 import { useTranslation } from 'react-i18next'
 import { Confirmor } from '../components/common'
 import toast from 'react-hot-toast'
-import { throttle } from 'lodash-es'
+import { omit, throttle } from 'lodash-es'
 import { IControlBarDisabledMap } from '../apps/FileExplorer/ControlBar'
 import { useTouchMode } from './useTouchMode'
 import { useAddUploadingTask } from './useAddUploadingTask'
@@ -54,7 +55,7 @@ export function useFileExplorer(props: Props) {
   const { t } = useTranslation()
 
   const [baseData, setBaseData] = useRecoilState(baseDataState)
-  const [entryPathMap, setEntryPathMap] = useRecoilState(entryPathMapState)
+  const [entryPathCache, setEntryPathCache] = useRecoilState(entryPathCacheState)
   const [lastChangedDirectory, setLastChangedDirectory] = useRecoilState(lastChangedDirectoryState)
 
   const touchMode = useTouchMode()
@@ -97,7 +98,7 @@ export function useFileExplorer(props: Props) {
       hiddenShow = false,
       gridMode = !touchMode,
       sortType = Sort.default,
-    } = entryPathMap[currentPath] || {}
+    } = entryPathCache[currentPath] || {}
 
     const allEntryList = [...list].sort(sortMethodMap[sortType])
     const text = filterText.toLowerCase()
@@ -137,7 +138,7 @@ export function useFileExplorer(props: Props) {
     const isEntryListEmpty = entryList.length === 0
 
     return { entryList, isEntryListEmpty, folderCount, fileCount, hiddenShow, gridMode, sortType }
-  }, [currentPath, entryPathMap, filterText, touchMode])
+  }, [currentPath, entryPathCache, filterText, touchMode])
 
   const disabledMap = useMemo(() => {
     const { position, list } = visitHistory
@@ -169,23 +170,23 @@ export function useFileExplorer(props: Props) {
     setVisitHistory({ position, list })
   }, [visitHistory])
 
-  const handleQueryEntryList = useCallback(async (path: string, inheritedMap?: IEntryPathMap) => {
+  const handleQueryEntryList = useCallback(async (path: string, inheritedCache?: IEntryPathCache) => {
     if (!path) return
     const controller = new AbortController()
     const config = { signal: controller.signal }
     setAbortController(controller)
     const { success, data: list } = await queryEntryList(path, config)
     if (success) {
-      const targetMap = inheritedMap || entryPathMap
-      const res = {
-        ...(targetMap[path] || {}),
+      const targetCache = inheritedCache || entryPathCache
+      const data = {
+        ...(targetCache[path] || {}),
         list,
       }
-      const newEntryPathMap = { ...targetMap, [path]: res }
-      setEntryPathMap(newEntryPathMap)
-      return newEntryPathMap
+      const newEntryPathCache = { ...targetCache, [path]: data }
+      setEntryPathCache(newEntryPathCache)
+      return newEntryPathCache
     }
-  }, [queryEntryList, entryPathMap, setEntryPathMap])
+  }, [queryEntryList, entryPathCache, setEntryPathCache])
 
   // path callback
   const handlePathChange = useCallback((props: {
@@ -239,13 +240,13 @@ export function useFileExplorer(props: Props) {
     const { assignedPath, refreshParent, otherPaths = [] } = option || {}
     const targetPath = assignedPath || currentPath
     setSelectedEntryList([])
-    let newEntryPathMap = await handleQueryEntryList(targetPath)
+    let newEntryPathCache = await handleQueryEntryList(targetPath)
     const restPaths = [...otherPaths]
     if (refreshParent) {
       restPaths.push(getParentPath(targetPath))
     }
     for (const path of Array.from(new Set(restPaths))) {
-      newEntryPathMap = await handleQueryEntryList(path, newEntryPathMap)
+      newEntryPathCache = await handleQueryEntryList(path, newEntryPathCache)
     }
   }, [handleQueryEntryList, currentPath])
 
@@ -305,18 +306,18 @@ export function useFileExplorer(props: Props) {
     const { success, data: size } = await queryDirectorySize(path)
     if (success) {
       const { parentPath } = entry
-      const currentList = [...entryPathMap[parentPath]?.list || []]
+      const currentList = [...entryPathCache[parentPath]?.list || []]
       const index = currentList.findIndex((e) => isSameEntry(e, entry))!
       currentList.splice(index, 1, { ...entry, size })
-      setEntryPathMap({
-        ...entryPathMap,
+      setEntryPathCache({
+        ...entryPathCache,
         [parentPath]: {
-          ...(entryPathMap[parentPath] || {}),
+          ...(entryPathCache[parentPath] || {}),
           list: currentList,
         }
       })
     }
-  }, [queryDirectorySize, entryPathMap, setEntryPathMap])
+  }, [queryDirectorySize, entryPathCache, setEntryPathCache])
 
   const handleFavoriteClick = useCallback((entry: IEntry, isFavorited: boolean) => {
     Confirmor({
@@ -368,27 +369,27 @@ export function useFileExplorer(props: Props) {
 
   const handleHiddenShowChange = useCallback((show: boolean) => {
     const res = {
-      ...(entryPathMap[currentPath] || {}),
+      ...(entryPathCache[currentPath] || {}),
       hiddenShow: show,
     }
-    setEntryPathMap({ ...entryPathMap, [currentPath]: res })
-  }, [currentPath, entryPathMap, setEntryPathMap])
+    setEntryPathCache({ ...entryPathCache, [currentPath]: res })
+  }, [currentPath, entryPathCache, setEntryPathCache])
 
   const handleGridModeChange = useCallback((mode: boolean) => {
     const res = {
-      ...(entryPathMap[currentPath] || {}),
+      ...(entryPathCache[currentPath] || {}),
       gridMode: mode,
     }
-    setEntryPathMap({ ...entryPathMap, [currentPath]: res })
-  }, [currentPath, entryPathMap, setEntryPathMap])
+    setEntryPathCache({ ...entryPathCache, [currentPath]: res })
+  }, [currentPath, entryPathCache, setEntryPathCache])
 
   const handleSortChange = useCallback((sortType: SortType) => {
     const res = {
-      ...(entryPathMap[currentPath] || {}),
+      ...(entryPathCache[currentPath] || {}),
       sortType: sortType,
     }
-    setEntryPathMap({ ...entryPathMap, [currentPath]: res })
-  }, [currentPath, entryPathMap, setEntryPathMap])
+    setEntryPathCache({ ...entryPathCache, [currentPath]: res })
+  }, [currentPath, entryPathCache, setEntryPathCache])
 
   useEffect(() => {
     const container: any = containerRef.current
@@ -441,6 +442,12 @@ export function useFileExplorer(props: Props) {
       }
     }
   }, [currentPath, rootEntryList, handleDirectoryOpen, handleGoFullPath])
+
+  useEffect(() => {
+    const cache = Object.fromEntries(Object.entries(entryPathCache)
+      .map(([path, data]) => [path, omit(data, 'list')]))
+    EntryPathCacheStore.set(cache)
+  }, [entryPathCache])
 
   return {
     disabledMap, supportThumbnail, thumbScrollWatcher,
