@@ -19,6 +19,17 @@ Clear data directory means that all users, download tunnels and other data will 
 
 ## v0.0.*
 
+- v0.0.51 (2023-12-17)
+  - feat: allow uploading files larger than 2GB
+  - feat: add open-with in Touch mode
+  - feat: Settings/System/Apps/FileExplorer/Desktop auto-open
+  - feat: Settings/System/Apps/FileExplorer/Default path
+  - feat: remember config of hidden items, view mode and sort type in different folders
+  - feat: bottom back-button operations in touch mode
+  - fix: refined server-side error message
+  - fix: Thumbnail list at the bottom of the PhotoViewer are misaligned in Explorer and Touch modes
+  - fix: chaos of lasso selection under multiple FileExplorer windows
+
 - v0.0.50 (2023-12-10)
   - feat: password lock and password modification
   - feat: auto open folders on drag hover
