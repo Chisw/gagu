@@ -1,0 +1,445 @@
+import { useRecoilState } from 'recoil'
+import { contextMenuDataState, openEventState } from '../states'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useDragTransfer, useFileExplorer, useHotKey, useLassoSelect } from '.'
+import { EditMode, EditModeType, EntryType, EventTransaction, IContextMenuItem, IEntry, ILassoInfo, NameFailType } from '../types'
+import { GEN_THUMBNAIL_IMAGE_LIST, getEntryPath, getIsContained, getMatchedApp, isSameEntry, openInIINA } from '../utils'
+import { pick, throttle } from 'lodash-es'
+import { SvgIcon } from '../components/common'
+import { useTranslation } from 'react-i18next'
+import { CALLABLE_APP_LIST } from '../apps'
+import toast from 'react-hot-toast'
+
+interface useWorkAreaProps {
+  isUserDesktop: boolean
+  isTopWindow: boolean
+  asSelector: boolean
+  specifiedPath: string
+  onCurrentPathChange: (path: string) => void
+  onSelect: (entryList: IEntry[]) => void
+  onSelectDoubleConfirm: () => void
+  onOpenDesktopDirectory: (entry: IEntry) => void
+}
+
+export function useWorkArea(props: useWorkAreaProps) {
+  const {
+    isUserDesktop,
+    isTopWindow,
+    asSelector,
+    specifiedPath,
+    onCurrentPathChange,
+    onSelect,
+    onSelectDoubleConfirm,
+    onOpenDesktopDirectory,
+  } = props
+
+  const { t } = useTranslation()
+
+  const [, setOpenEvent] = useRecoilState(openEventState)
+  const [, setContextMenuData] = useRecoilState(contextMenuDataState)
+
+  const [locationScrollWatcher, setLocationScrollWatcher] = useState<{ wait: boolean, smooth?: boolean }>({ wait: false })
+  const [shiftFromIndex, setShiftFromIndex] = useState<number>(0)
+
+  const lassoRef = useRef(null)
+  const containerRef = useRef(null)      // container of containerInner, overflow-y-auto
+  const containerInnerRef = useRef(null) // container of entryList, its min-height is consistent with its container
+
+  const {
+    disabledMap, supportThumbnail, thumbScrollWatcher,
+    currentPath, activeRootEntry,
+    querying, sizeQuerying, deleting,
+    entryList, favoriteEntryList, sideEntryList, sharingEntryList,
+    isEntryListEmpty,
+    folderCount, fileCount,
+    editMode, setEditMode,
+    filterMode, setFilterMode,
+    filterText, setFilterText,
+    hiddenShow, handleHiddenShowChange,
+    gridMode, handleGridModeChange,
+    sortType, handleSortChange,
+    lastVisitedPath, setLastVisitedPath,
+    selectedEntryList, setSelectedEntryList,
+    sharingModalShow, setSharingModalShow,
+    handleSelectAll, handleDirectorySizeUpdate, handleUploadTaskAdd, 
+    handleDirectoryOpen, handleGoFullPath,
+    handleNavBack, handleNavForward, handleNavRefresh, handleNavAbort, handleNavToParent,
+    handleUploadClick, handleDownloadClick,
+    handleShareClick, handleFavoriteClick, handleDeleteClick,
+  } = useFileExplorer({ containerRef, specifiedPath })
+
+  const handleEdit = useCallback((editModeType: EditModeType) => {
+    if (editModeType !== EditMode.rename) {
+      setSelectedEntryList([])
+    }
+    setEditMode(editModeType)
+  }, [setSelectedEntryList, setEditMode])
+
+  const handleSelectCancel = useCallback((e: any) => {
+    const isOnContextMenu = e.button === 2
+    const isSameEntry = e.target.closest('.gagu-entry-node')
+    const isMultipleSelect = e.metaKey || e.ctrlKey || e.shiftKey
+    const isRename = document.getElementById('file-explorer-name-input')
+
+    if (isOnContextMenu || isSameEntry || isMultipleSelect || isRename) return
+
+    setSelectedEntryList([])
+  }, [setSelectedEntryList])
+
+  const handleNameSuccess = useCallback(async (entry: IEntry) => {
+    setEditMode(null)
+    await handleNavRefresh()
+    setSelectedEntryList([entry])
+    setLocationScrollWatcher({ wait: true, smooth: true })
+  }, [handleNavRefresh, setSelectedEntryList, setEditMode])
+
+  const handleNameFail = useCallback((failType: NameFailType) => {
+    if (['cancel', 'empty'].includes(failType)) {
+      setEditMode(null)
+    }
+  }, [setEditMode])
+
+  const handleEntryClick = useCallback((e: any, entry: IEntry) => {
+    if (editMode) return
+
+    let list = [...selectedEntryList]
+    const { metaKey, ctrlKey, shiftKey } = e
+    const currentIndex = entryList.findIndex((e) => isSameEntry(e, entry))
+
+    if (!shiftKey) {
+      setShiftFromIndex(currentIndex)
+    }
+
+    if (metaKey || ctrlKey) {
+      list = list.find(o => isSameEntry(o, entry))
+        ? list.filter(o => !isSameEntry(o, entry))
+        : list.concat(entry)
+    } else if (shiftKey) {
+      const [start, end] = [shiftFromIndex, currentIndex].sort((a, b) => a > b ? 1 : -1)
+      list = entryList.slice(start, end + 1)
+    } else {
+      list = [entry]
+    }
+    setSelectedEntryList(list)
+  }, [editMode, selectedEntryList, setSelectedEntryList, shiftFromIndex, entryList])
+
+  const handleEntryDoubleClick = useCallback((entry: IEntry) => {
+    if (editMode) return
+    const { type } = entry
+    if (type === EntryType.directory) {
+      if (isUserDesktop) {
+        onOpenDesktopDirectory(entry)
+      } else {
+        handleDirectoryOpen(entry)
+      }
+    } else {
+      if (asSelector) {
+        onSelectDoubleConfirm()
+        return
+      }
+      const app = getMatchedApp(entry)
+      if (app) {
+        setOpenEvent({
+          transaction: EventTransaction.app_run,
+          appId: app.id,
+          entryList: [entry],
+        })
+      } else {
+        handleDownloadClick()
+      }
+    }
+  }, [editMode, isUserDesktop, onOpenDesktopDirectory, handleDirectoryOpen, asSelector, onSelectDoubleConfirm, setOpenEvent, handleDownloadClick])
+
+  const handleLassoSelect = useCallback((info: ILassoInfo) => {
+    const entryElements: Element[] = (containerInnerRef.current as any)?.querySelectorAll('.gagu-entry-node')
+    if (!entryElements.length) return
+    const indexList: number[] = []
+    entryElements.forEach((el: any, elIndex) => {
+      const isContained = getIsContained({
+        ...info,
+        ...pick(el, 'offsetTop', 'offsetLeft', 'offsetWidth', 'offsetHeight'),
+      })
+      isContained && indexList.push(elIndex)
+    })
+    const entries = entryList.filter((entry, entryIndex) => indexList.includes(entryIndex))
+    setSelectedEntryList(entries)
+  }, [setSelectedEntryList, entryList])
+
+  const throttledLassoSelectHandler = useMemo(() => throttle(handleLassoSelect, 100), [handleLassoSelect])
+
+  useLassoSelect({
+    binding: !asSelector,
+    lassoRef,
+    containerRef,
+    containerInnerRef,
+    onDragging: throttledLassoSelectHandler,
+  })
+
+  useDragTransfer({
+    containerInnerRef,
+    currentPath,
+    entryList,
+    selectedEntryList,
+    onDrop: handleUploadTaskAdd,
+    onOpen: path => {
+      if (isUserDesktop) {
+        const entry = entryList.find(entry => getEntryPath(entry) === path)!
+        onOpenDesktopDirectory(entry)
+      } else {
+        handleGoFullPath(path)
+      }
+    },
+  })
+
+  useHotKey({
+    type: 'keyup',
+    binding: isTopWindow && !editMode && !filterMode,
+    hotKeyMap: {
+      'Delete': disabledMap.delete ? null : handleDeleteClick,
+      'Escape': () => setSelectedEntryList([]),
+      'Shift+A': disabledMap.selectAll ? null : () => handleSelectAll(true),
+      'Shift+D': disabledMap.download ? null : handleDownloadClick,
+      'Shift+E': disabledMap.rename ? null : () => handleEdit(EditMode.rename),
+      'Shift+F': isUserDesktop ? null : () => setFilterMode(true),
+      'Shift+G': isUserDesktop ? null : () => handleGridModeChange(true),
+      'Shift+H': () => handleHiddenShowChange(!hiddenShow),
+      'Shift+L': isUserDesktop ? null : () => handleGridModeChange(false),
+      'Shift+N': disabledMap.createFolder ? null : () => handleEdit(EditMode.createFolder),
+      'Shift+R': disabledMap.navRefresh ? null : handleNavRefresh,
+      'Shift+T': disabledMap.createText ? null : () => handleEdit(EditMode.createText),
+      'Shift+U': disabledMap.upload ? null : handleUploadClick,
+      'Shift+ArrowUp': (isUserDesktop || disabledMap.navToParent) ? null : handleNavToParent,
+      'Shift+ArrowRight': (isUserDesktop || disabledMap.navForward) ? null : handleNavForward,
+      'Shift+ArrowLeft': (isUserDesktop || disabledMap.navBack) ? null : handleNavBack,
+      'Shift+ArrowDown': (
+        selectedEntryList.length === 1
+        && selectedEntryList[0].type === 'directory'
+        && !isUserDesktop
+      )
+        ? () => handleDirectoryOpen(selectedEntryList[0])
+        : null,
+    },
+  })
+
+  const handleContextMenu = useCallback((event: any) => {
+    if (asSelector) return
+
+    let isOnBlank = true
+    let isOnDirectory = false
+    let isOnImage = false
+    let contextEntryList: IEntry[] = [...selectedEntryList]
+
+    const unconfirmedCount = contextEntryList.length
+    const { target, clientX, clientY } = event
+    const eventData = { target, clientX, clientY }
+    const targetEntryEl = target.closest('.gagu-entry-node')
+
+    if (targetEntryEl) {
+      isOnBlank = false
+
+      const targetEntryName = targetEntryEl.getAttribute('data-entry-name')
+      const isDirectory = targetEntryEl.getAttribute('data-entry-type') === EntryType.directory
+      const foundEntry = entryList.find(o => o.name === targetEntryName)
+
+      if (isDirectory) {
+        isOnDirectory = true
+      }
+
+      if (GEN_THUMBNAIL_IMAGE_LIST.includes(targetEntryEl.getAttribute('data-entry-extension'))) {
+        isOnImage = true
+      }
+
+      if (unconfirmedCount <= 1 && foundEntry) {
+        contextEntryList = [foundEntry]
+        setSelectedEntryList(contextEntryList)
+      }
+    } else {
+      contextEntryList = []
+      setSelectedEntryList([])
+    }
+
+    const confirmedCount = contextEntryList.length
+    const activeEntry = contextEntryList[0]
+    const isSingle = confirmedCount === 1
+    const isFavorited = isSingle && favoriteEntryList.some(entry => isSameEntry(entry, activeEntry))
+
+    const menuItemList: IContextMenuItem[] = [
+      {
+        icon: <SvgIcon.FolderAdd />,
+        name: t`action.newFolder`,
+        isShow: isOnBlank,
+        onClick: () => handleEdit(EditMode.createFolder),
+      },
+      {
+        icon: <SvgIcon.FileAdd />,
+        name: t`action.newTextFile`,
+        isShow: isOnBlank,
+        onClick: () => handleEdit(EditMode.createText),
+      },
+      {
+        icon: <SvgIcon.Refresh />,
+        name: t`action.refresh`,
+        isShow: isOnBlank,
+        onClick: handleNavRefresh,
+      },
+      {
+        icon: <SvgIcon.Rename />,
+        name: t`action.rename`,
+        isShow: isSingle,
+        onClick: () => setTimeout(() => handleEdit(EditMode.rename), 0),
+      },
+      {
+        icon: <SvgIcon.Apps />,
+        name: t`action.openWith`,
+        isShow: !isOnDirectory && isSingle,
+        onClick: () => { },
+        children: CALLABLE_APP_LIST.map(app => ({
+          icon: <div className="gagu-app-icon w-4 h-4" data-app-id={app.id} />,
+          name: t(`app.${app.id}`),
+          onClick: () => setOpenEvent({
+            transaction: EventTransaction.app_run,
+            appId: app.id,
+            entryList: [activeEntry],
+            forceOpen: true,
+          }),
+        })).concat({
+          icon: <div className="gagu-app-icon w-4 h-4" data-app-id="iina" />,
+          name: 'IINA',
+          onClick: () => openInIINA(activeEntry),
+        }),
+      },
+      {
+        icon: <SvgIcon.Settings />,
+        name: t`action.setAs`,
+        isShow: isOnImage && isSingle,
+        onClick: () => {},
+        children: [
+          { name: 'bg-desktop', title: 'Desktop Wallpaper' },
+          { name: 'bg-sharing', title: 'Sharing Wallpaper' },
+          { name: 'favicon', title: 'Favicon' },
+        ].map(o => ({
+          icon: <div className="w-4 h-4">⏳</div>,
+          // TODO: i18n
+          name: t(`${o.title}`),
+          onClick: () => toast.error('⏳'),
+        }))
+      },
+      {
+        icon: <SvgIcon.FolderInfo />,
+        name: t`action.folderSize`,
+        isShow: isOnDirectory && isSingle,
+        onClick: () => handleDirectorySizeUpdate(activeEntry),
+      },
+      {
+        icon: isFavorited ? <SvgIcon.Star /> : <SvgIcon.StarSolid />,
+        name: isFavorited ? t`action.unfavorite` : t`action.favorite`,
+        isShow: isOnDirectory && isSingle,
+        onClick: () => handleFavoriteClick(activeEntry, isFavorited),
+      },
+      {
+        icon: <SvgIcon.Upload />,
+        name: t`action.upload`,
+        isShow: isOnBlank,
+        onClick: handleUploadClick,
+      },
+      {
+        icon: <SvgIcon.Download />,
+        name: t`action.download`,
+        isShow: true,
+        onClick: () => handleDownloadClick(contextEntryList),
+      },
+      {
+        icon: <SvgIcon.Share />,
+        name: t`action.newSharing`,
+        isShow: !isOnBlank,
+        onClick: () => handleShareClick(contextEntryList),
+      },
+      {
+        icon: <SvgIcon.Delete />,
+        name: t`action.delete`,
+        isShow: !isOnBlank,
+        onClick: () => handleDeleteClick(contextEntryList),
+      },
+    ]
+
+    setContextMenuData({ eventData, menuItemList })
+  }, [
+    t,
+    asSelector,
+    entryList,
+    selectedEntryList,
+    favoriteEntryList,
+    handleEdit,
+    setContextMenuData,
+    setSelectedEntryList,
+    setOpenEvent,
+    handleNavRefresh,
+    handleUploadClick,
+    handleDirectorySizeUpdate,
+    handleFavoriteClick,
+    handleDownloadClick,
+    handleShareClick,
+    handleDeleteClick,
+  ])
+
+  useEffect(() => {
+    const container: any = containerRef.current
+    if (container && locationScrollWatcher.wait && !querying) {
+      const target: any = document.querySelector('.gagu-entry-node[data-selected="true"]')
+      const top = target ? target.offsetTop - 10 : 0
+      container!.scrollTo({ top, behavior: locationScrollWatcher.smooth ? 'smooth' : undefined })
+      setLocationScrollWatcher({ wait: false })
+      setLastVisitedPath('')
+    }
+  }, [locationScrollWatcher, querying, setLastVisitedPath])
+
+  useEffect(() => {
+    setEditMode(null)
+    setSelectedEntryList([])
+    setFilterMode(false)
+    setFilterText('')
+  }, [currentPath, setSelectedEntryList, setFilterMode, setFilterText, setEditMode])
+
+  useEffect(() => {
+    const prevEntry = entryList.find((entry) => getEntryPath(entry) === lastVisitedPath)
+    if (prevEntry) {
+      setSelectedEntryList([prevEntry])
+      setLocationScrollWatcher({ wait: true })
+    }
+  }, [entryList, lastVisitedPath, setSelectedEntryList])
+
+  useEffect(() => {
+    onSelect(selectedEntryList)
+    if (selectedEntryList.length === 0) {
+      setShiftFromIndex(0)
+    }
+  }, [onSelect, selectedEntryList])
+
+  useEffect(() => {
+    onCurrentPathChange(currentPath)
+  }, [onCurrentPathChange, currentPath])
+
+  return {
+    lassoRef, containerRef, containerInnerRef,
+    supportThumbnail, thumbScrollWatcher,
+    currentPath, activeRootEntry,
+    entryList, selectedEntryList,
+    favoriteEntryList, sideEntryList, sharingEntryList,
+    isEntryListEmpty, disabledMap,
+    folderCount, fileCount,
+    querying, sizeQuerying, deleting,
+    filterMode, setFilterMode,
+    filterText, setFilterText,
+    hiddenShow, handleHiddenShowChange,
+    gridMode, handleGridModeChange,
+    sortType, handleSortChange,
+    sharingModalShow, setSharingModalShow,
+    editMode, handleEdit, handleNameSuccess, handleNameFail,
+    handleEntryClick, handleEntryDoubleClick,
+    handleDirectoryOpen, handleGoFullPath,
+    handleFavoriteClick, handleDeleteClick,
+    handleSelectAll, handleSelectCancel,
+    handleNavBack, handleNavForward, handleNavRefresh, handleNavAbort, handleNavToParent,
+    handleUploadClick, handleDownloadClick, handleContextMenu,
+  }
+}

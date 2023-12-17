@@ -47,10 +47,11 @@ const RefreshTimerCache: {
 
 interface Props {
   containerRef: any
+  specifiedPath?: string
 }
 
 export function useFileExplorer(props: Props) {
-  const { containerRef } = props
+  const { containerRef, specifiedPath = '' } = props
 
   const { t } = useTranslation()
 
@@ -205,7 +206,7 @@ export function useFileExplorer(props: Props) {
       const activeRootEntry = rootEntryList
         .map(entry => ({ path: getEntryPath(entry), entry }))
         .filter(o => path.startsWith(o.path))
-        .sort((a, b) => a.path.length > b.path.length ? -1 : 1)[0].entry
+        .sort((a, b) => a.path.length > b.path.length ? -1 : 1)[0]?.entry
       setActiveRootEntry(activeRootEntry)
     }
   }, [abortController, currentPath, handleQueryEntryList, rootEntryList, updateHistory])
@@ -434,14 +435,14 @@ export function useFileExplorer(props: Props) {
 
   useEffect(() => {
     if (!currentPath && rootEntryList.length) {
-      const { fileExplorerDefaultPath } = UserConfigStore.get()
-      if (fileExplorerDefaultPath) {
-        handleGoFullPath(fileExplorerDefaultPath, true)
+      const { fileExplorerDefaultPath: storedPath } = UserConfigStore.get()
+      if (specifiedPath || storedPath) {
+        handleGoFullPath(specifiedPath || storedPath, true)
       } else {
         handleDirectoryOpen(rootEntryList[0], true)
       }
     }
-  }, [currentPath, rootEntryList, handleDirectoryOpen, handleGoFullPath])
+  }, [specifiedPath, currentPath, rootEntryList, handleDirectoryOpen, handleGoFullPath])
 
   useEffect(() => {
     const cache = Object.fromEntries(Object.entries(entryPathCache)

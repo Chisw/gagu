@@ -1,4 +1,4 @@
-import { IApp, WindowStatus } from '../../types'
+import { IApp, IEntry, WindowStatus } from '../../types'
 import { Rnd } from 'react-rnd'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRecoilState } from 'recoil'
@@ -10,6 +10,7 @@ import { throttle } from 'lodash-es'
 
 interface WindowProps {
   app: IApp
+  addtionalEntryList?: IEntry[]
 }
 
 export default function Window(props: WindowProps) {
@@ -24,6 +25,7 @@ export default function Window(props: WindowProps) {
       headerClassName,
       AppComponent,
     },
+    addtionalEntryList,
   } = props
 
   const { t } = useTranslation()
@@ -238,6 +240,7 @@ export default function Window(props: WindowProps) {
               windowSize={windowSize}
               setWindowTitle={setWindowTitle}
               onClose={handleClose}
+              addtionalEntryList={addtionalEntryList}
             />
           </div>
         </div>
