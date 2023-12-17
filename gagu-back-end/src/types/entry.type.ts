@@ -37,7 +37,6 @@ export interface IBaseData {
   version: string
   serverOS: IServerOS
   deviceName: string
-  desktopEntryList: IEntry[]
   rootEntryList: IRootEntry[]
   favoriteEntryList: ISideEntry[]
 }

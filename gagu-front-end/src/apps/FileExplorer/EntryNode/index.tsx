@@ -74,12 +74,13 @@ export default function EntryNode(props: EntryNodeProps) {
         relative overflow-hidden group
         transition-opacity duration-300
         ${hidden ? 'opacity-50' : ''}
-        ${gridMode ? 'm-1 px-1 py-2 w-28 rounded-sm' : 'px-3 py-[3px] w-full flex items-center'}
+        ${isSelected ? 'is-selected' : ''}
+        ${gridMode ? 'm-1 px-1 py-2 w-[112px] h-[128px] rounded-sm' : 'px-3 py-[3px] w-full flex items-center'}
         ${isSelected && !gridMode ? 'bg-blue-600' : ''}
-        ${isSelected && gridMode ? 'bg-gray-100' : ''}
+        ${isSelected && gridMode ? 'bg-black bg-opacity-5' : ''}
         ${isSelected && requestState?.deleting ? 'bg-loading' : ''}
         ${!isSelected && !gridMode ? 'even:bg-black even:bg-opacity-[2%]' : ''}
-        ${!isSelected && !hideAppIcon ? 'hover:bg-gray-100' : ''}
+        ${!isSelected && !hideAppIcon ? 'hover:bg-black hover:bg-opacity-5' : ''}
       `)}
       onClick={e => onClick(e, entry)}
       onDoubleClick={() => onDoubleClick(entry)}
@@ -109,6 +110,7 @@ export default function EntryNode(props: EntryNodeProps) {
       />
       <div
         className={line(`
+          gagu-entry-node-size
           text-xs whitespace-nowrap font-din min-w-16 pointer-events-none
           ${isSelected && !gridMode ? 'text-white' : 'text-gray-400'}
           ${gridMode ? 'w-full text-center' : 'pl-2 w-24 text-right'}

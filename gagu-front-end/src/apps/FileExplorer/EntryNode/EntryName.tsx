@@ -199,6 +199,7 @@ export function NameLabel(props: NameLabelProps) {
     <span
       title={entryName}
       className={line(`
+        gagu-entry-node-name
         px-1 rounded text-xs
         ${gridMode ? 'max-w-full line-clamp-2' : 'w-full truncate'}
         ${isSelected ? 'text-white' : 'text-gray-700'}

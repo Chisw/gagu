@@ -23,7 +23,6 @@ layout: ../../../layouts/DocLayout.astro
 - Desktop 模式记住不同应用最后打开的窗口尺寸
 - 所有的长列表使用虚拟滚动
   - 移除 thumbScrollWatcher
-  - 解决多个窗口下套索选择的问题
 
 ## 用户
 
@@ -55,6 +54,7 @@ layout: ../../../layouts/DocLayout.astro
 - 文件收藏
 - 目录链接
 - 拖拽项目至浏览器外直接下载
+- Touch 模式下滑动多选
 
 ### 文本编辑器
 

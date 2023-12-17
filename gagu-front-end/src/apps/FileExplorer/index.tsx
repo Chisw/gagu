@@ -1,11 +1,11 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { SharingModal } from '../../components'
 import { useLassoSelect, useDragTransfer, useHotKey, useFileExplorer } from '../../hooks'
 import StatusBar from './StatusBar'
 import ControlBar from './ControlBar'
 import Side from './Side'
-import { pick } from 'lodash-es'
+import { pick, throttle } from 'lodash-es'
 import { EmptyPanel, SvgIcon } from '../../components/common'
 import { CALLABLE_APP_LIST } from '..'
 import toast from 'react-hot-toast'
@@ -161,7 +161,7 @@ export default function FileExplorer(props: FileExplorerProps) {
   }, [editMode, asSelector, onSelectDoubleConfirm, handleDirectoryOpen, handleDownloadClick, setOpenEvent])
 
   const handleLassoSelect = useCallback((info: ILassoInfo) => {
-    const entryElements = document.querySelectorAll('.gagu-entry-node')
+    const entryElements: Element[] = (containerInnerRef.current as any)?.querySelectorAll('.gagu-entry-node')
     if (!entryElements.length) return
     const indexList: number[] = []
     entryElements.forEach((el: any, elIndex) => {
@@ -175,12 +175,14 @@ export default function FileExplorer(props: FileExplorerProps) {
     setSelectedEntryList(entries)
   }, [setSelectedEntryList, entryList])
 
+  const throttledLassoSelectHandler = useMemo(() => throttle(handleLassoSelect, 100), [handleLassoSelect])
+
   useLassoSelect({
     binding: !asSelector,
     lassoRef,
     containerRef,
     containerInnerRef,
-    onDragging: handleLassoSelect,
+    onDragging: throttledLassoSelectHandler,
   })
 
   useDragTransfer({

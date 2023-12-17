@@ -3,8 +3,12 @@ body {
   overflow: hidden;
 }
 
+*::selection {
+  @apply text-black bg-blue-200;
+}
+
 /* common  */
-.hover-show-parent>.hover-show-child {
+.hover-show-parent > .hover-show-child {
   display: none;
 }
 
@@ -34,6 +38,16 @@ body {
 }
 
 /* window and entry */
+.gagu-desktop .gagu-entry-node:not(.is-selected) .gagu-entry-node-name {
+  text-shadow: 0 0 4px rgba(0, 0, 0, .9);
+  color: rgba(255, 255, 255, .95);
+}
+
+.gagu-desktop .gagu-entry-node:not(.is-selected) .gagu-entry-node-size {
+  text-shadow: 0 0 4px rgba(0, 0, 0, .9);
+  color: rgba(255, 255, 255, .6);
+}
+
 .gagu-app-window[data-hidden="true"] {
   display: none !important;
 }

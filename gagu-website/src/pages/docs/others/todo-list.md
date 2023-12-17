@@ -24,7 +24,6 @@ Many unrealized ideas will be recorded here, waiting for development.
 - Remember the last opened window size of different applications in Desktop mode
 - Use virtual scrolling for all long lists
   - remove thumbScrollWatcher
-  - Solve the problem of lasso selection under multiple windows
 
 ## User
 
@@ -55,6 +54,7 @@ Many unrealized ideas will be recorded here, waiting for development.
 - File favorite
 - Directory link
 - Drag entries out of browser and download them directly
+- Slide to select multiple entries in Touch mode
 
 ### Text Editor
 

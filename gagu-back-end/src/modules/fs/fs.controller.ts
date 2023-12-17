@@ -6,7 +6,6 @@ import {
   ServerOS,
   getExists,
   GAGU_VERSION,
-  GAGU_PATH,
   favoritePath2SideEntry,
   rootPath2RootEntry,
   respond,
@@ -55,8 +54,7 @@ export class FsController {
   @Permission(UserPermission.read)
   getRoot(@UserGetter() user: IUser) {
     const deviceName = this.settingService.findOne(SettingKey.deviceName)
-    const { username, favoritePathList = [], assignedRootPathList = [] } = user
-    const desktopPath = `${GAGU_PATH.USERS}/${username}/desktop`
+    const { favoritePathList = [], assignedRootPathList = [] } = user
     const hasAssigned = assignedRootPathList.length > 0
 
     // TODO: add personal space to root
@@ -64,7 +62,6 @@ export class FsController {
       version: GAGU_VERSION,
       serverOS: ServerOS,
       deviceName: deviceName || ServerOS.hostname,
-      desktopEntryList: this.fsService.getEntryList(desktopPath),
       rootEntryList: hasAssigned
         ? assignedRootPathList.map(rootPath2RootEntry)
         : this.fsService.getRootEntryList(),

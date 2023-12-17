@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { line } from '../../utils'
-import { activePageState, baseDataState } from '../../states'
+import { activePageState } from '../../states'
 import EntryNode from '../../apps/FileExplorer/EntryNode'
 import { Page } from '../../types'
 
 export default function Desktop() {
 
-  const [baseData] = useRecoilState(baseDataState)
   const [activePage] = useRecoilState(activePageState)
 
   const [show, setShow] = useState(false)
@@ -30,10 +29,10 @@ export default function Desktop() {
             ${show ? 'opacity-100' : 'opacity-0'}
           `)}
         >
-          {baseData.desktopEntryList.map(entry => {
+          {[].map(entry => {
             return (
               <EntryNode
-                key={entry.parentPath + entry.name}
+                // key={entry.parentPath + entry.name}
                 gridMode
                 entry={entry}
               />

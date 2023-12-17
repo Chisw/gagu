@@ -35,7 +35,6 @@ export const baseDataState = atom<IBaseData>({
       supportCurl: false,
     },
     deviceName: '--',
-    desktopEntryList: [],
     rootEntryList: [],
     favoriteEntryList: [],
   },
