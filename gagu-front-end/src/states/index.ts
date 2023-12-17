@@ -37,6 +37,7 @@ export const baseDataState = atom<IBaseData>({
     deviceName: '--',
     rootEntryList: [],
     favoriteEntryList: [],
+    userPath: '',
   },
 })
 

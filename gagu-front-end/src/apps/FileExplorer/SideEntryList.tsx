@@ -28,12 +28,14 @@ export default function SideEntryList(props: SideEntryListProps) {
 
   return (
     <>
-      {sideEntryList.map(sideEntry => {
+      {sideEntryList.map((sideEntry, sideEntryIndex) => {
         const { spaceFree, spaceTotal, name, isDisk = false, isFavorited = false } = sideEntry
         const sideEntryPath = getEntryPath(sideEntry)
         const isActive = sideEntryPath === currentPath
         const canSideEntryClick = currentPath !== sideEntryPath
         const spaceUsed = isDisk ? spaceTotal! - spaceFree! : 0
+        const isPersonal = sideEntryIndex === 0
+
         return (
           <div
             key={sideEntryPath}
@@ -53,7 +55,12 @@ export default function SideEntryList(props: SideEntryListProps) {
           >
             <div className="flex justify-between items-center">
               <div className="flex-shrink-0">
-                {isDisk ? <SvgIcon.HardDrive /> : <SvgIcon.Folder />}
+                {isPersonal
+                  ? <SvgIcon.FolderUser />
+                  : isDisk
+                    ? <SvgIcon.HardDrive />
+                    : <SvgIcon.Folder />
+                }
               </div>
               <div
                 className="ml-1 truncate flex-grow"

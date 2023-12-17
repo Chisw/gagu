@@ -47,7 +47,6 @@ export const PULSE_INTERVAL = 60 * 1000
 export const HEADERS_AUTH_KEY = 'Authorization'
 export const HEADERS_AUTH_PREFIX = 'Bearer '
 export const QUERY_TOKEN_KEY = 'access_token'
-export const USER_DESKTOP = 'USER_DESKTOP'
 
 export const GEN_THUMBNAIL_VIDEO_LIST = [
   'mp4',

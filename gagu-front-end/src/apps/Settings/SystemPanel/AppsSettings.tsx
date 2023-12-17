@@ -61,6 +61,8 @@ export default function AppsSettings() {
           <Input
             readOnly
             readonly
+            showClear
+            onClear={() => setUserConfig({ ...userConfig, fileExplorerDefaultPath: '' })}
             placeholder={t`hint.choose`}
             autoComplete="off"
             value={userConfig.fileExplorerDefaultPath}
