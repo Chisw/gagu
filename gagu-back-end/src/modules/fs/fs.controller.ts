@@ -55,17 +55,22 @@ export class FsController {
   @Permission(UserPermission.read)
   getRoot(@UserGetter() user: IUser) {
     const deviceName = this.settingService.findOne(SettingKey.deviceName)
-    const { username, favoritePathList = [], assignedRootPathList = [] } = user
-    const hasAssigned = assignedRootPathList.length > 0
+    const {
+      username,
+      permissions,
+      favoritePathList = [],
+      assignedRootPathList = [],
+    } = user
+
+    const isAdmin = permissions.includes(UserPermission.administer)
     const userPath = `${GAGU_PATH.USERS}/${username}`
+
     const rootEntryList = [
       rootPath2RootEntry(userPath),
-      ...(hasAssigned
-        ? assignedRootPathList.map(rootPath2RootEntry)
-        : this.fsService.getRootEntryList()),
+      ...(isAdmin ? this.fsService.getRootEntryList() : []),
+      ...assignedRootPathList.map(rootPath2RootEntry),
     ]
 
-    // TODO: add personal space to root
     const baseData: IBaseData = {
       version: GAGU_VERSION,
       serverOS: ServerOS,

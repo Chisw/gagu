@@ -115,7 +115,7 @@
       "permission_read_extra": "读取目录，下载文件，获取缩略图、Exif 信息等",
       "permission_write_extra": "新建文件夹、文本文件，上传文件",
       "permission_delete_extra": "删除文件、文件夹（若无删除权限，则无法移动文件，且上传时无法覆盖同名文件）",
-      "accessiblePaths_extra": "留空时将与管理员的可访问路径一致",
+      "accessiblePaths_extra": "留空时只能访问个人文件夹",
       "required": "必填",
       "username_extra": "创建后无法修改，只能使用小写英文字母和数字，不能以数字开头，不区分大小写"
     },

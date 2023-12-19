@@ -282,12 +282,14 @@ export default function UserFormModal(props: UserFormModalProps) {
                 </div>
               ))}
             </Form.CheckboxGroup>
-            <Form.Slot label={t`label.accessiblePaths`}>
+            <Form.Slot
+              label={t`label.accessiblePaths`}
+              style={{ display: isAdminister ? 'none' : undefined }}
+            >
               <div className="py-1">
                 <Button
                   size="small"
                   icon={<SvgIcon.Add />}
-                  disabled={isAdminister}
                   onClick={() => {
                     setEntrySelectorEvent({
                       transaction: EventTransaction.settings_accessible_paths,

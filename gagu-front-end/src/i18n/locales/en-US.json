@@ -115,7 +115,7 @@
       "permission_read_extra": "Read directories, download files, get thumbnails, Exif information, etc.",
       "permission_write_extra": "Create new folders or text files, upload files",
       "permission_delete_extra": "Delete files and folders (if you do not have delete permission, you cannot move files, and files with the same name cannot be overwritten when uploading)",
-      "accessiblePaths_extra": "If left blank, it will be consistent with the administrator's accessible paths",
+      "accessiblePaths_extra": "If left blank, only personal folders can be accessed",
       "required": "Required",
       "username_extra": "It cannot be modified after creation, only lowercase English letters and numbers can be used, it cannot start with a number, and it is not case sensitive"
     },
