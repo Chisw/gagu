@@ -59,7 +59,7 @@ export const getReadableSize = (size: number, options?: getReadableSizeOption) =
   return `${readableSize}${separator}${unit}`
 }
 
-export const getIsContained = (props: ILassoInfo & IOffsetInfo) => {
+export const getIsCovered = (props: ILassoInfo & IOffsetInfo) => {
   const {
     startX,
     startY,

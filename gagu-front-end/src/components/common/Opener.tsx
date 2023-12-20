@@ -49,7 +49,7 @@ export function Opener(props: OpenerProps) {
               `)}
               onClick={() => {
                 setEntrySelectorEvent({
-                  transaction: EventTransaction.app_run,
+                  transaction: EventTransaction.run_app,
                   mode: 'open',
                   appId,
                   type: EntryType.file,

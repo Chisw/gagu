@@ -6,7 +6,7 @@ import { EventTransaction, IEntry } from '../types'
 import { getIndexLabel } from '../utils'
 import { APP_LIST } from '../apps'
 
-export function useOpenEvent(appId: string) {
+export function useRunAppEvent(appId: string) {
   const [entryPathCache] = useRecoilState(entryPathCacheState)
   const [openEvent, setOpenEvent] = useRecoilState(openEventState)
 
@@ -14,7 +14,7 @@ export function useOpenEvent(appId: string) {
   const [activeIndex, setActiveIndex] = useState(0)
 
   useEffect(() => {
-    if (openEvent?.appId === appId && openEvent.transaction === EventTransaction.app_run) {
+    if (openEvent?.appId === appId && openEvent.transaction === EventTransaction.run_app) {
       const { appId, entryList, forceOpen } = openEvent
       const matchList = APP_LIST.find(app => app.id === appId)?.matchList
 

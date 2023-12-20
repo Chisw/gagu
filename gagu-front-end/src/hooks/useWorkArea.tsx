@@ -3,7 +3,7 @@ import { contextMenuDataState, openEventState } from '../states'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useDragTransfer, useFileExplorer, useHotKey, useLassoSelect } from '.'
 import { EditMode, EditModeType, EntryType, EventTransaction, IContextMenuItem, IEntry, ILassoInfo, NameFailType } from '../types'
-import { GEN_THUMBNAIL_IMAGE_LIST, getEntryPath, getIsContained, getMatchedApp, isSameEntry, openInIINA } from '../utils'
+import { GEN_THUMBNAIL_IMAGE_LIST, getEntryPath, getIsCovered, getMatchedApp, sameEntry, openInIINA } from '../utils'
 import { pick, throttle } from 'lodash-es'
 import { SvgIcon } from '../components/common'
 import { useTranslation } from 'react-i18next'
@@ -77,11 +77,11 @@ export function useWorkArea(props: useWorkAreaProps) {
 
   const handleSelectCancel = useCallback((e: any) => {
     const isOnContextMenu = e.button === 2
-    const isSameEntry = e.target.closest('.gagu-entry-node')
+    const sameEntry = e.target.closest('.gagu-entry-node')
     const isMultipleSelect = e.metaKey || e.ctrlKey || e.shiftKey
     const isRename = document.getElementById('file-explorer-name-input')
 
-    if (isOnContextMenu || isSameEntry || isMultipleSelect || isRename) return
+    if (isOnContextMenu || sameEntry || isMultipleSelect || isRename) return
 
     setSelectedEntryList([])
   }, [setSelectedEntryList])
@@ -104,15 +104,15 @@ export function useWorkArea(props: useWorkAreaProps) {
 
     let list = [...selectedEntryList]
     const { metaKey, ctrlKey, shiftKey } = e
-    const currentIndex = entryList.findIndex((e) => isSameEntry(e, entry))
+    const currentIndex = entryList.findIndex((e) => sameEntry(e, entry))
 
     if (!shiftKey) {
       setShiftFromIndex(currentIndex)
     }
 
     if (metaKey || ctrlKey) {
-      list = list.find(o => isSameEntry(o, entry))
-        ? list.filter(o => !isSameEntry(o, entry))
+      list = list.find(o => sameEntry(o, entry))
+        ? list.filter(o => !sameEntry(o, entry))
         : list.concat(entry)
     } else if (shiftKey) {
       const [start, end] = [shiftFromIndex, currentIndex].sort((a, b) => a > b ? 1 : -1)
@@ -140,7 +140,7 @@ export function useWorkArea(props: useWorkAreaProps) {
       const app = getMatchedApp(entry)
       if (app) {
         setOpenEvent({
-          transaction: EventTransaction.app_run,
+          transaction: EventTransaction.run_app,
           appId: app.id,
           entryList: [entry],
         })
@@ -155,7 +155,7 @@ export function useWorkArea(props: useWorkAreaProps) {
     if (!entryElements.length) return
     const indexList: number[] = []
     entryElements.forEach((el: any, elIndex) => {
-      const isContained = getIsContained({
+      const isContained = getIsCovered({
         ...info,
         ...pick(el, 'offsetTop', 'offsetLeft', 'offsetWidth', 'offsetHeight'),
       })
@@ -192,7 +192,6 @@ export function useWorkArea(props: useWorkAreaProps) {
   })
 
   useHotKey({
-    type: 'keyup',
     binding: isTopWindow && !editMode && !filterMode,
     hotKeyMap: {
       'Delete': disabledMap.delete ? null : handleDeleteClick,
@@ -261,7 +260,7 @@ export function useWorkArea(props: useWorkAreaProps) {
     const confirmedCount = contextEntryList.length
     const activeEntry = contextEntryList[0]
     const isSingle = confirmedCount === 1
-    const isFavorited = isSingle && favoriteEntryList.some(entry => isSameEntry(entry, activeEntry))
+    const isFavorited = isSingle && favoriteEntryList.some(entry => sameEntry(entry, activeEntry))
 
     const menuItemList: IContextMenuItem[] = [
       {
@@ -297,7 +296,7 @@ export function useWorkArea(props: useWorkAreaProps) {
           icon: <div className="gagu-app-icon w-4 h-4" data-app-id={app.id} />,
           name: t(`app.${app.id}`),
           onClick: () => setOpenEvent({
-            transaction: EventTransaction.app_run,
+            transaction: EventTransaction.run_app,
             appId: app.id,
             entryList: [activeEntry],
             forceOpen: true,

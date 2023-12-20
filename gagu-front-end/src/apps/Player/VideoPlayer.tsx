@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { AppComponentProps, AppId } from '../../types'
-import { useOpenEvent, usePlayInfo } from '../../hooks'
+import { useRunAppEvent, usePlayInfo } from '../../hooks'
 import ProgressSlider from './common/ProgressSlider'
 import { line } from '../../utils'
 import { Opener, SvgIcon } from '../../components/common'
@@ -21,7 +21,7 @@ export default function VideoPlayer(props: AppComponentProps) {
     activeEntry,
     activeEntryStreamUrl,
     // setActiveIndex,
-  } = useOpenEvent(appId)
+  } = useRunAppEvent(appId)
 
   const [, setLoading] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)

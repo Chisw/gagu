@@ -18,7 +18,7 @@ import {
   getDownloadInfo,
   getEntryPath,
   getParentPath,
-  isSameEntry,
+  sameEntry,
   safeQuotes,
   sortMethodMap,
 } from '../utils'
@@ -308,7 +308,7 @@ export function useFileExplorer(props: Props) {
     if (success) {
       const { parentPath } = entry
       const currentList = [...entryPathCache[parentPath]?.list || []]
-      const index = currentList.findIndex((e) => isSameEntry(e, entry))!
+      const index = currentList.findIndex((e) => sameEntry(e, entry))!
       currentList.splice(index, 1, { ...entry, size })
       setEntryPathCache({
         ...entryPathCache,

@@ -1,7 +1,7 @@
 import { Opener, Spinner, SvgIcon } from '../../components/common'
 import { useEffect, useMemo, useRef, useState, useCallback } from 'react'
 import { AppComponentProps, AppId } from '../../types'
-import { useOpenEvent, useHotKey } from '../../hooks'
+import { useRunAppEvent, useHotKey } from '../../hooks'
 import ThumbnailList from './ThumbnailList'
 import Toolbar from './Toolbar'
 import Viewer from './Viewer'
@@ -26,7 +26,7 @@ export default function PhotoViewer(props: AppComponentProps) {
     activeEntryStreamUrl,
     setMatchedEntryList,
     setActiveIndex,
-  } = useOpenEvent(appId)
+  } = useRunAppEvent(appId)
 
   const [loading, setLoading] = useState(false)
   const [isLight, setIsLight] = useState(false)
@@ -55,7 +55,6 @@ export default function PhotoViewer(props: AppComponentProps) {
   }, [matchedEntryList, activeIndex, setActiveIndex])
 
   useHotKey({
-    type: 'keyup',
     binding: isTopWindow && !viewerShow,
     hotKeyMap: {
       'ArrowRight': () => handlePrevOrNext(1),

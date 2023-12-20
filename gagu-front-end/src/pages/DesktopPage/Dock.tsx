@@ -52,7 +52,7 @@ export default function Dock() {
   }, [loaded, setRunningAppList])
 
   useEffect(() => {
-    if (openEvent?.transaction === EventTransaction.app_run) {
+    if (openEvent?.transaction === EventTransaction.run_app) {
       const app = APP_LIST.find(a => a.id === openEvent.appId)!
       handleOpenApp(app)
     }

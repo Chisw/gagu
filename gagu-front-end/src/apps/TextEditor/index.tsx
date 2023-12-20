@@ -4,7 +4,7 @@ import { Confirmor, Opener, SvgIcon, ToolButton } from '../../components/common'
 import { copy, ENTRY_ICON_LIST, getEntryPath, line } from '../../utils'
 import { FsApi } from '../../api'
 import { AppComponentProps, AppId, IEntry } from '../../types'
-import { useOpenEvent, useRequest } from '../../hooks'
+import { useRunAppEvent, useRequest } from '../../hooks'
 import { useTranslation } from 'react-i18next'
 import ReactMarkdown from 'react-markdown'
 import 'github-markdown-css/github-markdown-light.css'
@@ -23,7 +23,7 @@ export default function TextEditor(props: AppComponentProps) {
     activeEntry,
     // activeEntryStreamUrl,
     setActiveIndex,
-  } = useOpenEvent(appId)
+  } = useRunAppEvent(appId)
 
   const [value, setValue] = useState('')
   const [monoMode, setMonoMode] = useState(false)

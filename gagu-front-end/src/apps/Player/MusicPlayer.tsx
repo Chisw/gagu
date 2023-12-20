@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { AppComponentProps, AppId } from '../../types'
-import { useRequest, useOpenEvent, usePlayInfo } from '../../hooks'
+import { useRequest, useRunAppEvent, usePlayInfo } from '../../hooks'
 import { FsApi } from '../../api'
 import { getEntryPath, getIndexLabel, getReadableSize, line } from '../../utils'
 import SpectrumCanvas from './common/SpectrumCanvas'
@@ -35,7 +35,7 @@ export default function MusicPlayer(props: AppComponentProps) {
     activeEntry,
     activeEntryStreamUrl,
     setActiveIndex,
-  } = useOpenEvent(appId)
+  } = useRunAppEvent(appId)
 
   const [isPlaying, setIsPlaying] = useState(false)
   const [playMode, setPlayMode] = useState('order')
