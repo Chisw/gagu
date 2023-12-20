@@ -154,6 +154,7 @@
     },
     "server": {
       "OK": "OK",
+      "ERROR_CATCHER_CAUGHT": "服務出現了一些問題",
       "ERROR_NO_RESPONSE": "服務未響應",
       "ERROR_PASSWORD_WRONG": "密碼錯誤",
       "ERROR_PASSWORD_LOCKED": "密碼已經被鎖定",

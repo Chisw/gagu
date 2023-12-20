@@ -29,6 +29,7 @@ import {
   FORBIDDEN_ENTRY_NAME_LIST,
   GEN_THUMBNAIL_AUDIO_LIST,
   catchError,
+  GEN_THUMBNAIL_IMAGE_LIST,
 } from '../../utils'
 import * as nodeDiskInfo from 'node-disk-info'
 import * as md5 from 'md5'
@@ -311,26 +312,26 @@ export class FsService {
             tags: { title, artist, album, track, picture, TDRC, TDRL },
           } = tagInfo
 
-          if (!picture) {
-            reject(null)
-            return
-          }
-
-          const { data, format } = picture || {}
           const { data: recordingTime } = TDRC || {}
           const { data: releaseTime } = TDRL || {}
 
-          let base64String = ''
-          for (let i = 0; i < data.length; i++) {
-            base64String += String.fromCharCode(data[i])
+          let coverBase64: string | undefined = undefined
+
+          if (picture) {
+            const { data, format } = picture
+            let base64String = ''
+            for (let i = 0; i < data.length; i++) {
+              base64String += String.fromCharCode(data[i])
+            }
+            coverBase64 = `data:${format};base64,${btoa(base64String)}`
           }
-          const base64 = `data:${format};base64,${btoa(base64String)}`
+
           const tagData: IAudioTag = {
             title,
             artist,
             album,
             track,
-            base64,
+            coverBase64,
             recordingTime,
             releaseTime,
           }
@@ -347,36 +348,43 @@ export class FsService {
   async getThumbnailPath(path: string) {
     const { mtimeMs } = statSync(path)
     const thumbnailId = md5(`${path}-${mtimeMs}`)
-    const thumbnailPath = GAGU_PATH.THUMBNAIL
-    const thumbnailFilePath = `${thumbnailPath}/${thumbnailId}`
+    const thumbnailFolderPath = GAGU_PATH.THUMBNAIL
+    const thumbnailFilePath = `${thumbnailFolderPath}/${thumbnailId}`
 
     if (!getExists(thumbnailFilePath)) {
-      const extension = getExtension(path)
-      let targetPath = path
+      let convertionTargetPath = ''
 
+      const extension = getExtension(path)
+      const isGenImage = GEN_THUMBNAIL_IMAGE_LIST.includes(extension)
       const isGenVideo = GEN_THUMBNAIL_VIDEO_LIST.includes(extension)
       const isGenAudio = GEN_THUMBNAIL_AUDIO_LIST.includes(extension)
 
-      if (isGenVideo) {
-        const cacheThumbnailPath = await thumbsupply.generateThumbnail(path, {
+      if (isGenImage) {
+        convertionTargetPath = path
+      } else if (isGenVideo) {
+        const screenshotPath = await thumbsupply.generateThumbnail(path, {
           size: thumbsupply.ThumbSize.MEDIUM,
           timestamp: '10%',
           mimetype: 'video/mp4',
-          cacheDir: thumbnailPath,
+          cacheDir: thumbnailFolderPath,
         })
-        targetPath = cacheThumbnailPath
+        convertionTargetPath = screenshotPath
       } else if (isGenAudio) {
-        const tagData: any = await this.getAudioTags(path)
-        const base64 = tagData?.base64
+        const tagData: IAudioTag | any = await this.getAudioTags(path)
+        const base64 = tagData?.coverBase64
         if (base64) {
           const buffer = dataURLtoBuffer(base64)
           buffer && writeFileSync(thumbnailFilePath, buffer)
-          targetPath = thumbnailFilePath
+          convertionTargetPath = thumbnailFilePath
         }
       }
 
+      if (!convertionTargetPath) {
+        return ''
+      }
+
       await new Promise(async (resolve, reject) => {
-        gm(createReadStream(targetPath))
+        gm(createReadStream(convertionTargetPath))
           .selectFrame(4)
           .resize(100)
           .noProfile()
@@ -385,7 +393,7 @@ export class FsService {
               reject(error)
             } else {
               resolve(thumbnailFilePath)
-              isGenVideo && unlinkSync(targetPath)
+              isGenVideo && unlinkSync(convertionTargetPath)
             }
           })
       })

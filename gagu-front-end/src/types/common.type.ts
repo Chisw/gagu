@@ -1,6 +1,7 @@
 // Sync following code to BE & FE
 export enum ServerMessage {
   OK = 'OK',
+  ERROR_CATCHER_CAUGHT = 'ERROR_CATCHER_CAUGHT',
   ERROR_NO_RESPONSE = 'ERROR_NO_RESPONSE',
   ERROR_PASSWORD_WRONG = 'ERROR_PASSWORD_WRONG',
   ERROR_PASSWORD_LOCKED = 'ERROR_PASSWORD_LOCKED',
@@ -54,11 +55,11 @@ export interface IExif {
 }
 
 export interface IAudioTag {
-  title: string
-  artist: string
-  album: string
-  track: string
-  base64: string
-  recordingTime: string
-  releaseTime: string
+  title?: string
+  artist?: string
+  album?: string
+  track?: string
+  coverBase64?: string
+  recordingTime?: string
+  releaseTime?: string
 }

@@ -169,10 +169,18 @@ export class FsController {
     if (ServerOS.supportThumbnail) {
       try {
         const filePath = await this.fsService.getThumbnailPath(path)
-        response.sendFile(filePath)
+        if (filePath) {
+          response.sendFile(filePath)
+        } else {
+          response.end(
+            JSON.stringify(respond(null, ServerMessage.ERROR_CATCHER_CAUGHT)),
+          )
+        }
       } catch (error) {
         catchError(error)
-        response.end(JSON.stringify(respond(null, error.toString())))
+        response.end(
+          JSON.stringify(respond(null, ServerMessage.ERROR_CATCHER_CAUGHT)),
+        )
       }
     } else {
       response.end(
@@ -260,7 +268,7 @@ export class FsController {
       return respond()
     } catch (error) {
       catchError(error)
-      return respond(null, error.toString())
+      return respond(null, ServerMessage.ERROR_CATCHER_CAUGHT)
     }
   }
 
@@ -276,7 +284,7 @@ export class FsController {
       return respond()
     } catch (error) {
       catchError(error)
-      return respond(null, error.toString())
+      return respond(null, ServerMessage.ERROR_CATCHER_CAUGHT)
     }
   }
 

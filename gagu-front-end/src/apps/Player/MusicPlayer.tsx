@@ -117,14 +117,14 @@ export default function MusicPlayer(props: AppComponentProps) {
     }
   }, [audioEl, playMode, handlePrevOrNext])
 
-  const { title, artist, album, base64 } = useMemo(() => {
-    const { title, artist, album, base64 } = data?.data || {
-      title: activeEntry?.name || t`text.noTitle`,
-      artist: t`text.unknownArtist`,
-      album: t`text.unknownAlbum`,
-      base64: '',
-    }
-    return { title, artist, album, base64 }
+  const { title, artist, album, coverBase64 } = useMemo(() => {
+    const {
+      title = activeEntry?.name || t`text.noTitle`,
+      artist = t`text.unknownArtist`,
+      album = t`text.unknownAlbum`,
+      coverBase64 = '',
+    } = data?.data || {}
+    return { title, artist, album, coverBase64 }
   }, [data, activeEntry, t])
 
   const buttonList = useMemo(() => {
@@ -246,7 +246,7 @@ export default function MusicPlayer(props: AppComponentProps) {
               <div
                 className="gagu-app-icon w-12 h-12 rounded shadow-lg"
                 data-app-id="music-player"
-                style={base64 ? { backgroundImage: `url("${base64}")` } : undefined}
+                style={coverBase64 ? { backgroundImage: `url("${coverBase64}")` } : undefined}
               />
               <div className="ml-2 text-xs text-pink-100 truncate">
                 <p className="truncate" title={`${title} - ${artist}`}>{title} - {artist}</p>

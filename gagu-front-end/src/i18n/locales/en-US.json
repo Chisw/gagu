@@ -154,6 +154,7 @@
     },
     "server": {
       "OK": "OK",
+      "ERROR_CATCHER_CAUGHT": "There are some problems with the service",
       "ERROR_NO_RESPONSE": "No response",
       "ERROR_PASSWORD_WRONG": "Wrong password",
       "ERROR_PASSWORD_LOCKED": "Password has been locked",

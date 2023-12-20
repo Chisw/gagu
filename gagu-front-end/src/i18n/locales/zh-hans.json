@@ -154,6 +154,7 @@
     },
     "server": {
       "OK": "OK",
+      "ERROR_CATCHER_CAUGHT": "服务出现了一些问题",
       "ERROR_NO_RESPONSE": "服务未响应",
       "ERROR_PASSWORD_WRONG": "密码错误",
       "ERROR_PASSWORD_LOCKED": "密码已经被锁定",

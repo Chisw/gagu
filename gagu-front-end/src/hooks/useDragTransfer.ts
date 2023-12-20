@@ -105,6 +105,8 @@ export function useDragTransfer(props: useDragTransferProps) {
 
         dataTransfer.setDragImage(canvas, -64, -64)
         dataTransfer.setData('text/plain', JSON.stringify(transferEntryList))
+        // TODO: convert paths to download-tunnel on the back-end
+        // dataTransfer.setData('DownloadURL', `application/octet-stream:${fileName}:${urlWithPaths}`)
       }
     }
 

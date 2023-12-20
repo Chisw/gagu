@@ -3,6 +3,7 @@ import { FsApi } from '../api'
 import { CALLABLE_APP_LIST } from '../apps'
 import { EntryType, IEntry, INestedFile } from '../types'
 import { getReadableSize } from './common.util'
+import { t } from 'i18next'
 
 export const isSameEntry = (a: IEntry, b: IEntry) => {
   return a.name === b.name && a.parentPath === b.parentPath
@@ -21,7 +22,7 @@ export const getMatchedApp = (entry: IEntry) => {
   return CALLABLE_APP_LIST.find(({ matchList }) => matchList!.includes(extension))
 }
 
-export const getDownloadInfo = (parentPath: string, selectedEntryList: IEntry[], t: (key: string | TemplateStringsArray, params?: any) => string) => {
+export const getDownloadInfo = (parentPath: string, selectedEntryList: IEntry[]) => {
   const parentPathName = parentPath.split('/').reverse()[0]
   const count = selectedEntryList.length
   const firstEntry: IEntry | undefined = selectedEntryList[0]

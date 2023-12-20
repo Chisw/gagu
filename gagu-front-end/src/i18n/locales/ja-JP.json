@@ -154,6 +154,7 @@
     },
     "server": {
       "OK": "OK",
+      "ERROR_CATCHER_CAUGHT": "サービスにいくつかの問題があります",
       "ERROR_NO_RESPONSE": "サービスが応答しない",
       "ERROR_PASSWORD_WRONG": "間違ったパスワード",
       "ERROR_PASSWORD_LOCKED": "パスワードがロックされています",

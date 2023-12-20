@@ -277,7 +277,7 @@ export function useFileExplorer(props: Props) {
 
   const handleDownloadClick = useCallback((contextEntryList?: IEntry[]) => {
     const entryList = contextEntryList || selectedEntryList
-    const { message, downloadName } = getDownloadInfo(currentPath, entryList, t)
+    const { message, downloadName } = getDownloadInfo(currentPath, entryList)
     Confirmor({
       type: 'download',
       content: message,
@@ -295,7 +295,7 @@ export function useFileExplorer(props: Props) {
         close()
       },
     })
-  }, [currentPath, selectedEntryList, createTunnel, t])
+  }, [currentPath, selectedEntryList, createTunnel])
 
   const handleShareClick = useCallback((entryList: IEntry[]) => {
     setSharingEntryList(entryList)

@@ -63,7 +63,7 @@ export function SharingModal(props: SharingModalProps) {
 
   useEffect(() => {
     if (entryList.length) {
-      const { downloadName } = getDownloadInfo(entryList[0].parentPath, entryList, t)
+      const { downloadName } = getDownloadInfo(entryList[0].parentPath, entryList)
       setForm({ ...form, downloadName })
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
