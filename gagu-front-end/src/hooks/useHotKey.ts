@@ -1,4 +1,6 @@
 import { useEffect } from 'react'
+import { useUserConfig } from './useUserConfig'
+import { HotkeyStyle } from '../types'
 
 interface useHotKeyProps {
   binding: boolean
@@ -11,10 +13,14 @@ export function useHotKey(props: useHotKeyProps) {
     fnMap,
   } = props
 
+  const { userConfig: { hotkeyStyle } } = useUserConfig()
+
   useEffect(() => {
     const fnKeyList = Object.keys(fnMap)
 
     const listener = (e: any) => {
+      if (document.querySelector('.gagu-sync-popstate-overlay')) return
+
       e.preventDefault()
 
       const { code, altKey, ctrlKey, metaKey, shiftKey } = e
@@ -27,9 +33,14 @@ export function useHotKey(props: useHotKeyProps) {
         code,
       ].join('')
 
-      console.log(pressedHotKey, { code, altKey, ctrlKey, metaKey, shiftKey })
+      // console.log(pressedHotKey, { code, altKey, ctrlKey, metaKey, shiftKey })
 
-      const fnKey = fnKeyList.find(key => key.split(', ')[0] === pressedHotKey)
+      const styleIndex = {
+        [HotkeyStyle.mac]: 0,
+        [HotkeyStyle.win]: 1,
+      }[hotkeyStyle]
+
+      const fnKey = fnKeyList.find(key => key.split(', ')[styleIndex] === pressedHotKey)
 
       if (fnKey) {
         const fn = fnMap[fnKey]
@@ -43,5 +54,5 @@ export function useHotKey(props: useHotKeyProps) {
     binding ? bind() : unbind()
 
     return unbind
-  }, [binding, fnMap])
+  }, [binding, fnMap, hotkeyStyle])
 }

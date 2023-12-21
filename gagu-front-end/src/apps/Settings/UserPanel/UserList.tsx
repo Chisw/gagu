@@ -115,7 +115,7 @@ export default function UserList(props: UserListProps) {
           return (
             <div
               key={username}
-              className="relative mr-2 w-44 transition-shadow duration-200 md:hover:shadow-lg group rounded-lg border overflow-hidden select-none"
+              className="relative mr-2 w-44 transition-shadow duration-200 group rounded border overflow-hidden select-none"
             >
               <div className="absolute z-10 top-0 right-0 m-1 scale-90 origin-top-right text-xs font-din">
                 {isExpired && (

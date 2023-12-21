@@ -1,4 +1,10 @@
+export enum HotkeyStyle {
+  mac = 'mac',
+  win = 'win',
+}
+
 export interface IUserConfig {
+  hotkeyStyle: keyof typeof HotkeyStyle
   fileExplorerAutoOpen: boolean
   fileExplorerDefaultPath: string
 }

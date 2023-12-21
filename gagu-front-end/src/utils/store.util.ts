@@ -1,4 +1,4 @@
-import { IEntryPathCache } from './../types/index';
+import { HotkeyStyle, IEntryPathCache } from './../types/index';
 import { IUserConfig, IUserInfo } from '../types'
 import { GAGU_ENTRY_PATH_CACHE_KEY, GAGU_USER_CONFIG_KEY, GAGU_USER_INFO_KEY } from './constant.util'
 
@@ -40,6 +40,7 @@ export const UserInfoStore = {
 export const UserConfigStore = {
   get() {
     const userConfig: IUserConfig = {
+      hotkeyStyle: HotkeyStyle.mac,
       fileExplorerAutoOpen: false,
       fileExplorerDefaultPath: '',
     }

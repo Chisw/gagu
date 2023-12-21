@@ -1,8 +1,7 @@
 import { Button, Divider, Form, Input } from '@douyinfe/semi-ui'
-import { useTouchMode } from '../../../hooks'
+import { useTouchMode, useUserConfig } from '../../../hooks'
 import { useTranslation } from 'react-i18next'
-import { useCallback, useEffect, useState } from 'react'
-import { UserConfigStore } from '../../../utils'
+import { useCallback, useEffect } from 'react'
 import { SvgIcon } from '../../../components/common'
 import { useRecoilState } from 'recoil'
 import { entrySelectorEventState, openEventState } from '../../../states'
@@ -17,11 +16,7 @@ export default function AppsSettings() {
   const [, setEntrySelectorEvent] = useRecoilState(entrySelectorEventState)
   const [openEvent, setOpenEvent] = useRecoilState(openEventState)
 
-  const [userConfig, setUserConfig] = useState(UserConfigStore.get())
-
-  useEffect(() => {
-    UserConfigStore.set(userConfig)
-  }, [userConfig])
+  const { userConfig, setUserConfig } = useUserConfig()
 
   const handleSelectClick = useCallback(() => {
     setEntrySelectorEvent({
@@ -38,7 +33,7 @@ export default function AppsSettings() {
       setUserConfig({ ...userConfig, fileExplorerDefaultPath })
       setOpenEvent(null)
     }
-  }, [openEvent, userConfig, setOpenEvent])
+  }, [openEvent, userConfig, setOpenEvent, setUserConfig])
 
   return (
     <div className="max-w-lg">
@@ -50,6 +45,25 @@ export default function AppsSettings() {
         <Divider margin="12px" align="left">
           {t`app.file-explorer`}
         </Divider>
+        <Form.Slot label={t`label.defaultPath`}>
+          <div className="flex">
+            <Input
+              readOnly
+              readonly
+              showClear
+              onClear={() => setUserConfig({ ...userConfig, fileExplorerDefaultPath: '' })}
+              placeholder={t`hint.choose`}
+              autoComplete="off"
+              value={userConfig.fileExplorerDefaultPath}
+            />
+            <Button
+              className="ml-1 flex-shrink-0"
+              onClick={handleSelectClick}
+            >
+              <SvgIcon.FolderOpen />
+            </Button>
+          </div>
+        </Form.Slot>
         <Form.Switch
           field="fileExplorerAutoOpen"
           label={t`label.fileExplorerAutoOpen`}
@@ -57,22 +71,6 @@ export default function AppsSettings() {
           initValue={userConfig.fileExplorerAutoOpen}
           onChange={(fileExplorerAutoOpen) => setUserConfig({ ...userConfig, fileExplorerAutoOpen })}
         />
-        <Form.Slot label={t`label.defaultPath`}>
-          <Input
-            readOnly
-            readonly
-            showClear
-            onClear={() => setUserConfig({ ...userConfig, fileExplorerDefaultPath: '' })}
-            placeholder={t`hint.choose`}
-            autoComplete="off"
-            value={userConfig.fileExplorerDefaultPath}
-            suffix={(
-              <Button onClick={handleSelectClick}>
-                <SvgIcon.FolderOpen />
-              </Button>
-            )}
-          />
-        </Form.Slot>
       </Form>
     </div>
   )

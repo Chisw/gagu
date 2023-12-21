@@ -114,21 +114,21 @@ export default function AdvancedSettings() {
             onSubmit={() => handleSubmit()}
           >
             <Form.Slot label={t`label.currentVersion`}>
-              <div className="flex justify-between items-center">
-                <div className="flex items-center">
-                  <span>v{ baseData.version }</span>
-                  <a
-                    href="https://github.com/Chisw/gagu/issues"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="ml-2 flex items-center text-sm text-blue-500 hover:text-blue-600"
-                  >
-                    <span>{t`action.feedback`}</span>
-                    <SvgIcon.Feedback size={12} className="-translate-y-1" />
-                  </a>
+              <div className="flex items-center">
+                <div className="flex-grow">
+                  v{ baseData.version }
                 </div>
                 <Button
+                  type="tertiary"
+                  title={t`action.feedback`}
+                  className="flex-shrink-0"
+                  onClick={() => window.open('https://github.com/Chisw/gagu/issues')}
+                >
+                  <SvgIcon.Feedback />
+                </Button>
+                <Button
                   loading={getting}
+                  className="ml-1 flex-shrink-0"
                   onClick={handleVersionCheck}
                 >
                   <SvgIcon.Refresh className="text-blue-500" />

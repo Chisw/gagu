@@ -1,11 +1,12 @@
 import { useTranslation } from 'react-i18next'
 import { languageList, setLanguage } from '../../../i18n'
-import { Form } from '@douyinfe/semi-ui'
+import { Button, Form, Radio, RadioGroup } from '@douyinfe/semi-ui'
 import { SvgIcon } from '../../../components/common'
 import { line, refreshImage, setFavicon } from '../../../utils'
 import { useCallback, useRef } from 'react'
-import { useRequest, useTouchMode } from '../../../hooks'
+import { useRequest, useTouchMode, useUserConfig } from '../../../hooks'
 import { FsApi } from '../../../api'
+import { HotkeyStyle } from '../../../types'
 
 export default function GeneralSettings() {
   const { t, i18n: { language } } = useTranslation()
@@ -15,6 +16,8 @@ export default function GeneralSettings() {
   const faviconFileInputRef = useRef<any>(null)
   const desktopWallpaperFileInputRef = useRef<any>(null)
   const sharingWallpaperFileInputRef = useRef<any>(null)
+
+  const { userConfig, setUserConfig } = useUserConfig()
 
   const { request: uploadImage } = useRequest(FsApi.uploadImage)
 
@@ -53,6 +56,34 @@ export default function GeneralSettings() {
             initValue={language}
             onChange={(key) => setLanguage(key as any as string)}
           />
+          <Form.Slot label={t`label.hotkeyStyle`}>
+            <div className="flex">
+              <div className="flex-grow">
+                <RadioGroup
+                  type="button"
+                  value={userConfig.hotkeyStyle}
+                  onChange={(e) => setUserConfig({ ...userConfig, hotkeyStyle: e.target.value })}
+                >
+                  <Radio value={HotkeyStyle.mac}>
+                    <div className="-mx-1 flex items-center">
+                      <SvgIcon.Apple size={12} /><span className="ml-1">Mac</span>
+                    </div>
+                  </Radio>
+                  <Radio value={HotkeyStyle.win}>
+                    <div className="-mx-1 flex items-center">
+                      <SvgIcon.Windows size={12} /><span className="ml-1">Win</span>
+                    </div>
+                  </Radio>
+                </RadioGroup>
+              </div>
+              <Button
+                type="tertiary"
+                onClick={() => window.open('https://gagu.io/docs/getting-started/hotkeys')}
+              >
+                <SvgIcon.Keyboard />
+              </Button>
+            </div>
+          </Form.Slot>
           <Form.Slot label={t`label.favicon`}>
             <div
               className={line(`

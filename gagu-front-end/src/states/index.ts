@@ -9,12 +9,18 @@ import {
   IEntryPathCache,
   IEntrySelectorEvent,
   ITransferTask,
+  IUserConfig,
 } from '../types'
-import { GAGU_ENTRY_PATH_CACHE_KEY } from '../utils'
+import { EntryPathCacheStore, UserConfigStore } from '../utils/store.util'
 
 export const userInfoState = atom<IUserInfo | null>({
   key: 'userInfoState',
   default: null,
+})
+
+export const userConfigState = atom<IUserConfig>({
+  key: 'userConfigState',
+  default: UserConfigStore.get(),
 })
 
 export const baseDataState = atom<IBaseData>({
@@ -63,7 +69,7 @@ export const contextMenuDataState = atom<IContextMenuState | null>({
 
 export const entryPathCacheState = atom<IEntryPathCache>({
   key: 'entryPathCacheState',
-  default: JSON.parse(localStorage.getItem(GAGU_ENTRY_PATH_CACHE_KEY) || '{}') as IEntryPathCache,
+  default: EntryPathCacheStore.get(),
 })
 
 export const openEventState = atom<IOpenEvent | null>({
