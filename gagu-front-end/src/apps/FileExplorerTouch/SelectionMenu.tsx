@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { sameEntry, line } from '../../utils'
+import { getIsSameEntry, line } from '../../utils'
 import { EditMode, EditModeType, EventTransaction, IEntry } from '../../types'
 import { useTranslation } from 'react-i18next'
 import { SvgIcon } from '../../components/common'
@@ -57,7 +57,7 @@ export default function SelectionMenu(props: SelectionMenuProps) {
 
     if (isSingle) {
       const activeEntry = selectedEntryList[0]
-      isFavorited = isSingle && favoriteEntryList.some(entry => sameEntry(entry, activeEntry))
+      isFavorited = isSingle && favoriteEntryList.some(entry => getIsSameEntry(entry, activeEntry))
       isOnDirectory = activeEntry.type === 'directory'
     }
 

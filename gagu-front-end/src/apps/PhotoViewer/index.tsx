@@ -56,14 +56,14 @@ export default function PhotoViewer(props: AppComponentProps) {
 
   useHotKey({
     binding: isTopWindow && !viewerShow,
-    hotKeyMap: {
-      'ArrowRight': () => handlePrevOrNext(1),
-      'ArrowLeft': () => handlePrevOrNext(-1),
-      'Shift+ArrowRight': () => handlePrevOrNext(6),
-      'Shift+ArrowLeft': () => handlePrevOrNext(-6),
-      'Enter': () => setViewerShow(true),
-      'Shift': () => setIsLight(!isLight),
-      ' ': () => setThumbnailListShow(!thumbnailListShow),
+    fnMap: {
+      'ArrowRight, ArrowRight': () => handlePrevOrNext(1),
+      'ArrowLeft, ArrowLeft': () => handlePrevOrNext(-1),
+      'Shift+ArrowRight, Shift+ArrowRight': () => handlePrevOrNext(6),
+      'Shift+ArrowLeft, Shift+ArrowLeft': () => handlePrevOrNext(-6),
+      'Enter, Enter': () => setViewerShow(true),
+      'Shift+ , Shift+ ': () => setIsLight(!isLight),
+      ' ,  ': () => setThumbnailListShow(!thumbnailListShow),
     },
   })
 

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRecoilState } from 'recoil'
-import { sameEntry, line } from '../../utils'
+import { getIsSameEntry, line } from '../../utils'
 import { activePageState, baseDataState, runningAppListState, topWindowIndexState } from '../../states'
 import EntryNode from '../../apps/FileExplorer/EntryNode'
 import { AppId, CreationType, EditMode, IApp, IEntry, Page } from '../../types'
@@ -109,8 +109,8 @@ export default function Desktop() {
 
           {/* entry list */}
           {entryList.map(entry => {
-            const isSelected = selectedEntryList.some(o => sameEntry(o, entry))
-            const isFavorited = favoriteEntryList.some(o => sameEntry(o, entry))
+            const isSelected = selectedEntryList.some(o => getIsSameEntry(o, entry))
+            const isFavorited = favoriteEntryList.some(o => getIsSameEntry(o, entry))
             const inputMode = editMode === EditMode.rename && isSelected
             return (
               <EntryNode

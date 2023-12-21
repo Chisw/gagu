@@ -5,7 +5,7 @@ import StatusBar from './StatusBar'
 import ControlBar from './ControlBar'
 import Side from './Side'
 import { EmptyPanel } from '../../components/common'
-import { getEntryPath, sameEntry, line } from '../../utils'
+import { getEntryPath, getIsSameEntry, line } from '../../utils'
 import { FileExplorerProps, EditMode, CreationType } from '../../types'
 import EntryNode from './EntryNode'
 
@@ -142,8 +142,8 @@ export default function FileExplorer(props: FileExplorerProps) {
 
               {/* entry list */}
               {entryList.map(entry => {
-                const isSelected = selectedEntryList.some(o => sameEntry(o, entry))
-                const isFavorited = favoriteEntryList.some(o => sameEntry(o, entry))
+                const isSelected = selectedEntryList.some(o => getIsSameEntry(o, entry))
+                const isFavorited = favoriteEntryList.some(o => getIsSameEntry(o, entry))
                 const inputMode = editMode === EditMode.rename && isSelected
                 return (
                   <EntryNode

@@ -3,24 +3,11 @@ import { SvgIcon, ToolButton } from '../../components/common'
 import { Dropdown } from '@douyinfe/semi-ui'
 import { useCallback, useMemo, useState } from 'react'
 import { EditMode, Sort, SortType } from '../../types'
-
-export interface IControlBarDisabledMap {
-  navBack: boolean
-  navForward: boolean
-  navRefresh: boolean
-  navToParent: boolean
-  createFolder: boolean
-  createText: boolean
-  rename: boolean
-  upload: boolean
-  download: boolean
-  delete: boolean
-  selectAll: boolean
-}
+import { IFileExplorerDisabledMap } from '../../hooks'
 
 interface ControlBarProps {
   windowWidth: number
-  disabledMap: IControlBarDisabledMap
+  disabledMap: IFileExplorerDisabledMap
   gridMode: boolean
   filterMode: boolean
   filterText: string
@@ -101,13 +88,13 @@ export default function ControlBar(props: ControlBarProps) {
         />
         <div className="md:mx-1 h-3 border-l" />
         <ToolButton
-          title={`${t`action.backward`} [Shift + ←]`}
+          title={t`action.backward`}
           icon={<SvgIcon.ArrowLeft />}
           disabled={disabledMap.navBack}
           onClick={onNavBack}
         />
         <ToolButton
-          title={`${t`action.forward`} [Shift + →]`}
+          title={t`action.forward`}
           icon={<SvgIcon.ArrowRight />}
           disabled={disabledMap.navForward}
           onClick={onNavForward}
@@ -121,13 +108,13 @@ export default function ControlBar(props: ControlBarProps) {
           />
         ) : (
           <ToolButton
-            title={`${t`action.refresh`} [Shift + R]`}
+            title={t`action.refresh`}
             icon={<SvgIcon.Refresh />}
             onClick={onNavRefresh}
           />
         )}
         <ToolButton
-          title={`${t`action.navToParent`} [Shift + ↑]`}
+          title={t`action.navToParent`}
           icon={<SvgIcon.ArrowUp />}
           disabled={disabledMap.navToParent}
           onClick={onNavToParent}
@@ -138,48 +125,48 @@ export default function ControlBar(props: ControlBarProps) {
         {windowWidth > 720 && (
           <>
             <ToolButton
-              title={`${t`action.newFolder`} [Shift + N]`}
+              title={t`action.newFolder`}
               className="hidden md:flex"
               icon={<SvgIcon.FolderAdd />}
               disabled={disabledMap.createFolder}
               onClick={() => onEdit(EditMode.createFolder)}
             />
             <ToolButton
-              title={`${t`action.newTextFile`} [Shift + T]`}
+              title={t`action.newTextFile`}
               className="hidden md:flex"
               icon={<SvgIcon.FileAdd />}
               disabled={disabledMap.createText}
               onClick={() => onEdit(EditMode.createText)}
             />
             <ToolButton
-              title={`${t`action.upload`} [Shift + U]`}
+              title={t`action.upload`}
               className="hidden md:flex"
               icon={<SvgIcon.Upload />}
               onClick={onUpload}
             />
             <ToolButton
-              title={`${t`action.download`} [Shift + D]`}
+              title={t`action.download`}
               className="hidden md:flex"
               icon={<SvgIcon.Download />}
               disabled={disabledMap.download}
               onClick={onDownload}
             />
             <ToolButton
-              title={`${t`action.selectAll`} [Shift + A]`}
+              title={t`action.selectAll`}
               className="hidden md:flex"
               icon={<SvgIcon.Check />}
               disabled={disabledMap.selectAll}
               onClick={onSelectAll}
             />
             <ToolButton
-              title={`${t`action.rename`} [Shift + e]`}
+              title={t`action.rename`}
               className="hidden md:flex"
               icon={<SvgIcon.Rename />}
               disabled={disabledMap.rename}
               onClick={() => onEdit(EditMode.rename)}
             />
             <ToolButton
-              title={`${t`action.delete`} [Del]`}
+              title={t`action.delete`}
               className="hidden md:flex"
               icon={<SvgIcon.Delete />}
               disabled={disabledMap.delete}
@@ -210,7 +197,7 @@ export default function ControlBar(props: ControlBarProps) {
             </div>
           ) : (
             <ToolButton
-              title={`${t`action.filter`} [Shift + F]`}
+              title={t`action.filter`}
               icon={<SvgIcon.Filter />}
               onClick={() => setFilterMode(true)}
             />
@@ -219,12 +206,12 @@ export default function ControlBar(props: ControlBarProps) {
 
         <div className={`h-full flex items-center ${(windowWidth < 720 && filterMode) ? 'hidden' : ''}`}>
           <ToolButton
-            title={`${hiddenShow ? t`action.hideHiddenItems` : t`action.showHiddenItems`} [Shift + H]`}
+            title={hiddenShow ? t`action.hideHiddenItems` : t`action.showHiddenItems`}
             icon={hiddenShow ? <SvgIcon.EyeOff /> : <SvgIcon.Eye />}
             onClick={() => onHiddenShowChange(!hiddenShow)}
           />
           <ToolButton
-            title={gridMode ? `${t`action.listView`} [Shift + L]` : `${t`action.gridView`} [Shift + G]`}
+            title={gridMode ? t`action.listView` : t`action.gridView`}
             icon={gridMode ? <SvgIcon.ViewList /> : <SvgIcon.ViewGrid />}
             onClick={() => onGridModeChange(!gridMode)}
           />

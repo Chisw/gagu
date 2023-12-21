@@ -1,7 +1,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { EmptyPanel } from '../../components/common'
-import { getMatchedApp, sameEntry, line } from '../../utils'
+import { getMatchedApp, getIsSameEntry, line } from '../../utils'
 import ControlBar from '../FileExplorer/ControlBar'
 import StatusBar from '../FileExplorer/StatusBar'
 import EntryNode from './EntryNode'
@@ -77,8 +77,8 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
   const handleEntryClick = useCallback((entry: IEntry) => {
     if (isSelectionMode) {
       let list = [...selectedEntryList]
-      if (list.find(e => sameEntry(e, entry))) {
-        list = list.filter(e => !sameEntry(e, entry))
+      if (list.find(e => getIsSameEntry(e, entry))) {
+        list = list.filter(e => !getIsSameEntry(e, entry))
       } else {
         list.push(entry)
       }
@@ -296,8 +296,8 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
           className="flex flex-wrap px-1 py-2 pb-36 select-none"
         >
           {entryList.map(entry => {
-            const isSelected = selectedEntryList.some(o => sameEntry(o, entry))
-            const isFavorited = favoriteEntryList.some(o => sameEntry(o, entry))
+            const isSelected = selectedEntryList.some(o => getIsSameEntry(o, entry))
+            const isFavorited = favoriteEntryList.some(o => getIsSameEntry(o, entry))
             return (
               <EntryNode
                 key={encodeURIComponent(`${entry.name}-${entry.type}`)}

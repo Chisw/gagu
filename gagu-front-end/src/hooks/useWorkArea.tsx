@@ -3,7 +3,7 @@ import { contextMenuDataState, openEventState } from '../states'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useDragTransfer, useFileExplorer, useHotKey, useLassoSelect } from '.'
 import { EditMode, EditModeType, EntryType, EventTransaction, IContextMenuItem, IEntry, ILassoInfo, NameFailType } from '../types'
-import { GEN_THUMBNAIL_IMAGE_LIST, getEntryPath, getIsCovered, getMatchedApp, sameEntry, openInIINA } from '../utils'
+import { GEN_THUMBNAIL_IMAGE_LIST, getEntryPath, getIsCovered, getMatchedApp, getIsSameEntry, openInIINA } from '../utils'
 import { pick, throttle } from 'lodash-es'
 import { SvgIcon } from '../components/common'
 import { useTranslation } from 'react-i18next'
@@ -66,7 +66,7 @@ export function useWorkArea(props: useWorkAreaProps) {
     handleNavBack, handleNavForward, handleNavRefresh, handleNavAbort, handleNavToParent,
     handleUploadClick, handleDownloadClick,
     handleShareClick, handleFavoriteClick, handleDeleteClick,
-  } = useFileExplorer({ containerRef, specifiedPath })
+  } = useFileExplorer({ containerRef, specifiedPath, isUserDesktop })
 
   const handleEdit = useCallback((editModeType: EditModeType) => {
     if (editModeType !== EditMode.rename) {
@@ -76,15 +76,16 @@ export function useWorkArea(props: useWorkAreaProps) {
   }, [setSelectedEntryList, setEditMode])
 
   const handleSelectCancel = useCallback((e: any) => {
-    const isOnContextMenu = e.button === 2
-    const sameEntry = e.target.closest('.gagu-entry-node')
-    const isMultipleSelect = e.metaKey || e.ctrlKey || e.shiftKey
-    const isRename = document.getElementById('file-explorer-name-input')
+    const { button, ctrlKey, metaKey, shiftKey, target } = e
+    const isOnContextMenu = button === 2
+    const isMultipleSelect = ctrlKey || metaKey || shiftKey
+    const isOnEntry = !!target.closest('.gagu-entry-node')
+    const isRename = editMode === EditMode.rename
 
-    if (isOnContextMenu || sameEntry || isMultipleSelect || isRename) return
+    if (isOnContextMenu || isMultipleSelect || isOnEntry || isRename) return
 
     setSelectedEntryList([])
-  }, [setSelectedEntryList])
+  }, [editMode, setSelectedEntryList])
 
   const handleNameSuccess = useCallback(async (entry: IEntry) => {
     setEditMode(null)
@@ -103,16 +104,16 @@ export function useWorkArea(props: useWorkAreaProps) {
     if (editMode) return
 
     let list = [...selectedEntryList]
-    const { metaKey, ctrlKey, shiftKey } = e
-    const currentIndex = entryList.findIndex((e) => sameEntry(e, entry))
+    const { ctrlKey, metaKey, shiftKey } = e
+    const currentIndex = entryList.findIndex((e) => getIsSameEntry(e, entry))
 
     if (!shiftKey) {
       setShiftFromIndex(currentIndex)
     }
 
-    if (metaKey || ctrlKey) {
-      list = list.find(o => sameEntry(o, entry))
-        ? list.filter(o => !sameEntry(o, entry))
+    if (ctrlKey || metaKey) {
+      list = list.find(o => getIsSameEntry(o, entry))
+        ? list.filter(o => !getIsSameEntry(o, entry))
         : list.concat(entry)
     } else if (shiftKey) {
       const [start, end] = [shiftFromIndex, currentIndex].sort((a, b) => a > b ? 1 : -1)
@@ -193,30 +194,28 @@ export function useWorkArea(props: useWorkAreaProps) {
 
   useHotKey({
     binding: isTopWindow && !editMode && !filterMode,
-    hotKeyMap: {
-      'Delete': disabledMap.delete ? null : handleDeleteClick,
-      'Escape': () => setSelectedEntryList([]),
-      'Shift+A': disabledMap.selectAll ? null : () => handleSelectAll(true),
-      'Shift+D': disabledMap.download ? null : handleDownloadClick,
-      'Shift+E': disabledMap.rename ? null : () => handleEdit(EditMode.rename),
-      'Shift+F': isUserDesktop ? null : () => setFilterMode(true),
-      'Shift+G': isUserDesktop ? null : () => handleGridModeChange(true),
-      'Shift+H': () => handleHiddenShowChange(!hiddenShow),
-      'Shift+L': isUserDesktop ? null : () => handleGridModeChange(false),
-      'Shift+N': disabledMap.createFolder ? null : () => handleEdit(EditMode.createFolder),
-      'Shift+R': disabledMap.navRefresh ? null : handleNavRefresh,
-      'Shift+T': disabledMap.createText ? null : () => handleEdit(EditMode.createText),
-      'Shift+U': disabledMap.upload ? null : handleUploadClick,
-      'Shift+ArrowUp': (isUserDesktop || disabledMap.navToParent) ? null : handleNavToParent,
-      'Shift+ArrowRight': (isUserDesktop || disabledMap.navForward) ? null : handleNavForward,
-      'Shift+ArrowLeft': (isUserDesktop || disabledMap.navBack) ? null : handleNavBack,
-      'Shift+ArrowDown': (
-        selectedEntryList.length === 1
-        && selectedEntryList[0].type === 'directory'
-        && !isUserDesktop
-      )
-        ? () => handleDirectoryOpen(selectedEntryList[0])
-        : null,
+    fnMap: {
+      'Meta+Backspace, Shift+Delete': disabledMap.delete ? null : handleDeleteClick,
+      'Escape, Escape': () => setSelectedEntryList([]),
+      'Meta+KeyA, Ctrl+KeyA': disabledMap.selectAll ? null : () => handleSelectAll(true),
+      'Meta+KeyD, Ctrl+KeyD': disabledMap.download ? null : handleDownloadClick,
+      'Enter, F2': disabledMap.rename ? null : () => handleEdit(EditMode.rename),
+      'Meta+KeyF, Ctrl+KeyF': disabledMap.filter ? null : () => setFilterMode(true),
+      'Meta+KeyG, Ctrl+KeyG': disabledMap.gridView ? null : () => handleGridModeChange(true),
+      'Meta+KeyH, Ctrl+KeyH': () => handleHiddenShowChange(!hiddenShow),
+      'Meta+KeyL, Ctrl+KeyL': disabledMap.listView ? null : () => handleGridModeChange(false),
+      'Meta+Alt+KeyN, Ctrl+Alt+KeyN': disabledMap.createFolder ? null : () => handleEdit(EditMode.createFolder),
+      'Meta+KeyR, Ctrl+KeyR': disabledMap.navRefresh ? null : handleNavRefresh,
+      'Meta+Alt+KeyT, Ctrl+Alt+KeyT': disabledMap.createText ? null : () => handleEdit(EditMode.createText),
+      'Meta+KeyU, Ctrl+KeyU': disabledMap.upload ? null : handleUploadClick,
+      'Meta+ArrowUp, Backspace': disabledMap.navToParent ? null : handleNavToParent,
+      'Meta+ArrowRight, Ctrl+ArrowRight': disabledMap.navForward ? null : handleNavForward,
+      'Meta+ArrowLeft, Ctrl+ArrowLeft': disabledMap.navBack ? null : handleNavBack,
+      'Meta+ArrowDown, Enter': disabledMap.openFolder
+        ? null
+        : () => isUserDesktop
+          ? onOpenDesktopDirectory(selectedEntryList[0])
+          : handleDirectoryOpen(selectedEntryList[0]),
     },
   })
 
@@ -260,7 +259,7 @@ export function useWorkArea(props: useWorkAreaProps) {
     const confirmedCount = contextEntryList.length
     const activeEntry = contextEntryList[0]
     const isSingle = confirmedCount === 1
-    const isFavorited = isSingle && favoriteEntryList.some(entry => sameEntry(entry, activeEntry))
+    const isFavorited = isSingle && favoriteEntryList.some(entry => getIsSameEntry(entry, activeEntry))
 
     const menuItemList: IContextMenuItem[] = [
       {

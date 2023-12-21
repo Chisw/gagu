@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   EditModeType,
+  EntryType,
   IEntry,
   IEntryPathCache,
   IRootEntry,
@@ -18,7 +19,7 @@ import {
   getDownloadInfo,
   getEntryPath,
   getParentPath,
-  sameEntry,
+  getIsSameEntry,
   safeQuotes,
   sortMethodMap,
 } from '../utils'
@@ -34,7 +35,6 @@ import { useTranslation } from 'react-i18next'
 import { Confirmor } from '../components/common'
 import toast from 'react-hot-toast'
 import { omit, throttle } from 'lodash-es'
-import { IControlBarDisabledMap } from '../apps/FileExplorer/ControlBar'
 import { useTouchMode } from './useTouchMode'
 import { useAddUploadingTask } from './useAddUploadingTask'
 
@@ -45,13 +45,36 @@ const RefreshTimerCache: {
   }
 } = {}
 
+export interface IFileExplorerDisabledMap {
+  navBack: boolean
+  navForward: boolean
+  navRefresh: boolean
+  navToParent: boolean
+  createFolder: boolean
+  createText: boolean
+  rename: boolean
+  upload: boolean
+  download: boolean
+  delete: boolean
+  selectAll: boolean
+  filter: boolean
+  gridView: boolean
+  listView: boolean
+  openFolder: boolean
+}
+
 interface Props {
   containerRef: any
   specifiedPath?: string
+  isUserDesktop?: boolean
 }
 
 export function useFileExplorer(props: Props) {
-  const { containerRef, specifiedPath = '' } = props
+  const {
+    containerRef,
+    specifiedPath = '',
+    isUserDesktop = false,
+  } = props
 
   const { t } = useTranslation()
 
@@ -143,21 +166,29 @@ export function useFileExplorer(props: Props) {
 
   const disabledMap = useMemo(() => {
     const { position, list } = visitHistory
-    const disabledMap: IControlBarDisabledMap = {
-      navBack: position <= 0,
-      navForward: list.length === position + 1,
+    const selectedCount = selectedEntryList.length
+    const isSingle = selectedCount === 1
+    const isSingleDirectory = isSingle && selectedEntryList[0].type === EntryType.directory
+
+    const disabledMap: IFileExplorerDisabledMap = {
+      navBack: position <= 0 || isUserDesktop,
+      navForward: list.length === position + 1 || isUserDesktop,
       navRefresh: querying || !currentPath,
-      navToParent: !currentPath || isInRoot,
+      navToParent: !currentPath || isInRoot || isUserDesktop,
       createFolder: touchMode ? false : !!editMode,
       createText: touchMode ? false : !!editMode,
-      rename: selectedEntryList.length !== 1,
+      rename: !isSingle,
       upload: false,
       download: isEntryListEmpty,
-      delete: !selectedEntryList.length,
+      delete: !selectedCount,
       selectAll: isEntryListEmpty,
+      filter: isUserDesktop,
+      gridView: isUserDesktop,
+      listView: isUserDesktop,
+      openFolder: !isSingleDirectory,
     }
     return disabledMap
-  }, [touchMode, visitHistory, querying, currentPath, isInRoot, editMode, selectedEntryList, isEntryListEmpty])
+  }, [visitHistory, querying, currentPath, isInRoot, isUserDesktop, touchMode, editMode, selectedEntryList, isEntryListEmpty])
 
   const updateHistory = useCallback((direction: 'forward' | 'backward', path?: string) => {
     const map = { forward: 1, backward: -1 }
@@ -308,7 +339,7 @@ export function useFileExplorer(props: Props) {
     if (success) {
       const { parentPath } = entry
       const currentList = [...entryPathCache[parentPath]?.list || []]
-      const index = currentList.findIndex((e) => sameEntry(e, entry))!
+      const index = currentList.findIndex((e) => getIsSameEntry(e, entry))!
       currentList.splice(index, 1, { ...entry, size })
       setEntryPathCache({
         ...entryPathCache,

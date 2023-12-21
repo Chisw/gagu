@@ -2,34 +2,46 @@ import { useEffect } from 'react'
 
 interface useHotKeyProps {
   binding: boolean
-  hotKeyMap: {[KEY: string]: any}  // null | () => void
+  fnMap: {[KEY: string]: any}  // null | () => void
 }
 
 export function useHotKey(props: useHotKeyProps) {
   const {
     binding,
-    hotKeyMap,
+    fnMap,
   } = props
 
   useEffect(() => {
-    const hotKeyList = Object.keys(hotKeyMap)
+    const fnKeyList = Object.keys(fnMap)
 
     const listener = (e: any) => {
       e.preventDefault()
-      const { key, shiftKey } = e
-      const pressedHotKey = `${shiftKey ? 'Shift+' : ''}${key}`
-      // console.log({ key, shiftKey })
-      if (hotKeyList.includes(pressedHotKey)) {
-        const fn = hotKeyMap[pressedHotKey]
+
+      const { code, altKey, ctrlKey, metaKey, shiftKey } = e
+
+      const pressedHotKey = [
+        ctrlKey ? 'Ctrl+' : '',
+        metaKey ? 'Meta+' : '',
+        altKey ? 'Alt+' : '',
+        shiftKey ? 'Shift+' : '',
+        code,
+      ].join('')
+
+      console.log(pressedHotKey, { code, altKey, ctrlKey, metaKey, shiftKey })
+
+      const fnKey = fnKeyList.find(key => key.split(', ')[0] === pressedHotKey)
+
+      if (fnKey) {
+        const fn = fnMap[fnKey]
         fn && fn()
       }
     }
 
-    const bind = () => document.addEventListener('keyup', listener)
-    const unbind = () => document.removeEventListener('keyup', listener)
+    const bind = () => document.addEventListener('keydown', listener)
+    const unbind = () => document.removeEventListener('keydown', listener)
 
     binding ? bind() : unbind()
 
     return unbind
-  }, [binding, hotKeyMap])
+  }, [binding, fnMap])
 }

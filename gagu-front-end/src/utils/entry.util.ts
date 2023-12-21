@@ -5,7 +5,7 @@ import { EntryType, IEntry, INestedFile } from '../types'
 import { getReadableSize } from './common.util'
 import { t } from 'i18next'
 
-export const sameEntry = (a: IEntry, b: IEntry) => {
+export const getIsSameEntry = (a: IEntry, b: IEntry) => {
   return a.name === b.name && a.parentPath === b.parentPath
 }
 
