@@ -45,6 +45,13 @@ export default function AppsSettings() {
         <Divider margin="12px" align="left">
           {t`app.file-explorer`}
         </Divider>
+        <Form.Switch
+          field="fileExplorerAutoOpen"
+          label={t`label.fileExplorerAutoOpen`}
+          extraText={t`hint.fileExplorerAutoOpen_extra`}
+          initValue={userConfig.fileExplorerAutoOpen}
+          onChange={(fileExplorerAutoOpen) => setUserConfig({ ...userConfig, fileExplorerAutoOpen })}
+        />
         <Form.Slot label={t`label.defaultPath`}>
           <div className="flex">
             <Input
@@ -64,13 +71,6 @@ export default function AppsSettings() {
             </Button>
           </div>
         </Form.Slot>
-        <Form.Switch
-          field="fileExplorerAutoOpen"
-          label={t`label.fileExplorerAutoOpen`}
-          extraText={t`hint.fileExplorerAutoOpen_extra`}
-          initValue={userConfig.fileExplorerAutoOpen}
-          onChange={(fileExplorerAutoOpen) => setUserConfig({ ...userConfig, fileExplorerAutoOpen })}
-        />
       </Form>
     </div>
   )

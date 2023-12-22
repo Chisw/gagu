@@ -1,7 +1,7 @@
 import { IconButton, SvgIcon } from '../../components/common'
 import { ISideEntry } from '../../types'
 import { getReadableSize, getEntryPath, line } from '../../utils'
-import { useDragDrop } from '../../hooks'
+import { useDragDrop, useUserConfig } from '../../hooks'
 
 interface SideEntryListProps {
   currentPath: string
@@ -18,6 +18,8 @@ export default function SideEntryList(props: SideEntryListProps) {
     onSideEntryClick,
     onFavoriteCancel,
   } = props
+
+  const { userConfig: { kiloSize } } = useUserConfig()
 
   const dragDropProps = useDragDrop({
     onOpen: (path) => {
@@ -70,7 +72,7 @@ export default function SideEntryList(props: SideEntryListProps) {
               </div>
               {isDisk && (
                 <div className="flex-shrink-0 font-din scale-75 origin-right opacity-60">
-                  {`${getReadableSize(spaceUsed!)} / ${getReadableSize(spaceTotal!)}`}
+                  {`${getReadableSize(spaceUsed!, kiloSize)} / ${getReadableSize(spaceTotal!, kiloSize)}`}
                 </div>
               )}
               {isFavorited && (

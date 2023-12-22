@@ -106,7 +106,7 @@ export default function UserList(props: UserListProps) {
 
   return (
     <>
-      <div className="relative z-0 flex flex-wrap -mx-2">
+      <div className="relative z-0 flex flex-wrap">
         {userList.map((user) => {
           const { nickname, username, expiredAt, createdAt, invalid, permissions } = user
           const isLoggedIn = loggedInList.includes(username)
@@ -115,7 +115,7 @@ export default function UserList(props: UserListProps) {
           return (
             <div
               key={username}
-              className="relative mr-2 w-44 transition-shadow duration-200 group rounded border overflow-hidden select-none"
+              className="relative mr-2 mb-2 w-44 transition-shadow duration-200 group rounded border overflow-hidden select-none"
             >
               <div className="absolute z-10 top-0 right-0 m-1 scale-90 origin-top-right text-xs font-din">
                 {isExpired && (

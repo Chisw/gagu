@@ -102,9 +102,9 @@ export const getDataTransferNestedFileList = async (dataTransfer: DataTransfer) 
   return nestedFileList
 }
 
-export const getEntryLabels = (entry: IEntry) => {
+export const getEntryLabels = (entry: IEntry, kiloSize: 1000 | 1024) => {
   const { size, lastModified } = entry
-  const sizeLabel = size === undefined ? '--' : getReadableSize(size)
+  const sizeLabel = size === undefined ? '--' : getReadableSize(size, kiloSize)
   const dateLabel = lastModified ? DateTime.fromMillis(lastModified).toFormat('yyyy-MM-dd HH:mm') : ''
   return { sizeLabel, dateLabel }
 }

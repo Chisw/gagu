@@ -84,6 +84,16 @@ export default function GeneralSettings() {
               </Button>
             </div>
           </Form.Slot>
+          <Form.RadioGroup
+            field="kiloSize"
+            label="1K ="
+            type="button"
+            initValue={userConfig.kiloSize}
+            onChange={(e) => setUserConfig({ ...userConfig, kiloSize: e.target.value })}
+          >
+            <Radio value={1000}>1000</Radio>
+            <Radio value={1024}>1024</Radio>
+          </Form.RadioGroup>
           <Form.Slot label={t`label.favicon`}>
             <div
               className={line(`

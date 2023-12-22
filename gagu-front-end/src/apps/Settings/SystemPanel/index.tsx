@@ -10,7 +10,7 @@ export default function SystemPanel() {
 
   return (
     <>
-      <div className="absolute inset-0 px-4">
+      <div className="absolute inset-0 px-4 overflow-y-auto">
         <Tabs
           lazyRender
           type="line"

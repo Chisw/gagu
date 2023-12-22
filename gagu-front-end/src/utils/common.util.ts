@@ -26,17 +26,15 @@ export const getDateTime = (millis: number) => {
 interface getReadableSizeOption {
   keepFloat?: boolean
   separator?: string
-  stepSize?: 1000 | 1024
 }
 
-export const getReadableSize = (size: number, options?: getReadableSizeOption) => {
+export const getReadableSize = (size: number, kiloSize: 1000 | 1024, options?: getReadableSizeOption) => {
   const {
     keepFloat = false,
     separator = '',
-    stepSize = 1024,
   } = options || {}
 
-  const stepList = [stepSize, Math.pow(stepSize, 2), Math.pow(stepSize, 3), Math.pow(stepSize, 4)]
+  const stepList = [kiloSize, Math.pow(kiloSize, 2), Math.pow(kiloSize, 3), Math.pow(kiloSize, 4)]
 
   let unit = ''
   if (!unit) {

@@ -53,6 +53,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
   const containerRef = useRef(null)
 
   const {
+    kiloSize,
     disabledMap, supportThumbnail, thumbScrollWatcher,
     currentPath, activeRootEntry,
     querying, sizeQuerying, deleting,
@@ -303,6 +304,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
                 key={encodeURIComponent(`${entry.name}-${entry.type}`)}
                 {...{
                   entry,
+                  kiloSize,
                   gridMode,
                   isSelectionMode,
                   isSelected,

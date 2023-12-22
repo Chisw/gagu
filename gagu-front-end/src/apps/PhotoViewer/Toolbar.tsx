@@ -1,7 +1,7 @@
 import { useMemo, useCallback, useEffect, useState } from 'react'
 import { DownloadApi, FsApi, TunnelApi } from '../../api'
 import { Confirmor, IconButton, SvgIcon } from '../../components/common'
-import { useRequest } from '../../hooks'
+import { useRequest, useUserConfig } from '../../hooks'
 import { TunnelType, IEntry } from '../../types'
 import { getEntryPath, getReadableSize, line } from '../../utils'
 import { getBaiduMapPinUrl } from '../../utils'
@@ -44,6 +44,8 @@ export default function Toolbar(props: ToolbarProps) {
   const { t } = useTranslation()
 
   const [, setLastChangedDirectory] = useRecoilState(lastChangedDirectoryState)
+
+  const { userConfig: { kiloSize } } = useUserConfig()
 
   const { request: queryExif, data: exifData, setData, loading: querying } = useRequest(FsApi.queryExif)
   const { request: createTunnel } = useRequest(TunnelApi.createTunnel)
@@ -194,7 +196,7 @@ export default function Toolbar(props: ToolbarProps) {
         <div className="w-28 font-din text-right">
           {sizeInfo.width} &times; {sizeInfo.height}PX
           &nbsp;&nbsp;
-          {getReadableSize(activeEntry?.size || 0)}
+          {getReadableSize(activeEntry?.size || 0, kiloSize)}
         </div>
       </div>
 

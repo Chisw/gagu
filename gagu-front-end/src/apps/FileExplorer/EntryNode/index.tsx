@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from 'react'
 
 interface EntryNodeProps {
   entry: IEntry
+  kiloSize: 1000 | 1024
   gridMode: boolean
   isSelected?: boolean
   isFavorited?: boolean
@@ -28,6 +29,7 @@ interface EntryNodeProps {
 export default function EntryNode(props: EntryNodeProps) {
   const {
     entry,
+    kiloSize,
     gridMode,
     isSelected = false,
     isFavorited = false,
@@ -45,7 +47,7 @@ export default function EntryNode(props: EntryNodeProps) {
   } = props
 
   const { name, type, parentPath, extension, hidden } = entry
-  const { sizeLabel, dateLabel } = getEntryLabels(entry)
+  const { sizeLabel, dateLabel } = getEntryLabels(entry, kiloSize)
 
   const [isViewable, setIsViewable] = useState(false)
 

@@ -46,6 +46,7 @@ export function useWorkArea(props: useWorkAreaProps) {
   const containerInnerRef = useRef(null) // container of entryList, its min-height is consistent with its container
 
   const {
+    kiloSize,
     disabledMap, supportThumbnail, thumbScrollWatcher,
     currentPath, activeRootEntry,
     querying, sizeQuerying, deleting,
@@ -418,6 +419,7 @@ export function useWorkArea(props: useWorkAreaProps) {
   }, [onCurrentPathChange, currentPath])
 
   return {
+    kiloSize,
     lassoRef, containerRef, containerInnerRef,
     supportThumbnail, thumbScrollWatcher,
     currentPath, activeRootEntry,

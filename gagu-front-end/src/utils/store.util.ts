@@ -40,6 +40,7 @@ export const UserInfoStore = {
 export const UserConfigStore = {
   get() {
     const userConfig: IUserConfig = {
+      kiloSize: 1000,
       hotkeyStyle: HotkeyStyle.mac,
       fileExplorerAutoOpen: false,
       fileExplorerDefaultPath: '',

@@ -3,6 +3,7 @@ import { IEntry } from '../../types'
 import { getReadableSize } from '../../utils'
 import { useTranslation } from 'react-i18next'
 import EntryNode from '../../apps/FileExplorer/EntryNode'
+import { useUserConfig } from '../../hooks'
 
 interface EntryListPanelProps {
   downloadName: string
@@ -20,6 +21,8 @@ export function EntryListPanel(props: EntryListPanelProps) {
 
   const { t } = useTranslation()
 
+  const { userConfig: { kiloSize } } = useUserConfig()
+
   const [allMode, setAllMode] = useState(false)
 
   const hasFolder = useMemo(() => {
@@ -33,7 +36,14 @@ export function EntryListPanel(props: EntryListPanelProps) {
           <span>
             <span className="text-gray-600">{downloadName || 'Unknown'}</span>
             <span className="text-gray-400">
-              &emsp;{getReadableSize(flattenList.map(e => e.size).filter(Boolean).reduce((a, b) => a! + b!, 0) as number)}
+              &emsp;{
+                getReadableSize(
+                  flattenList.map(e => e.size)
+                    .filter(Boolean)
+                    .reduce((a, b) => a! + b!, 0) as number,
+                  kiloSize,
+                )
+              }
             </span>
           </span>
           {hasFolder && (
@@ -53,6 +63,7 @@ export function EntryListPanel(props: EntryListPanelProps) {
                 hideAppIcon
                 gridMode
                 entry={entry}
+                kiloSize={kiloSize}
               />
             ))}
           </div>

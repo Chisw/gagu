@@ -5,6 +5,7 @@ export enum HotkeyStyle {
 
 export interface IUserConfig {
   hotkeyStyle: keyof typeof HotkeyStyle
+  kiloSize: 1000 | 1024
   fileExplorerAutoOpen: boolean
   fileExplorerDefaultPath: string
 }

@@ -25,6 +25,7 @@ export default function FileExplorer(props: FileExplorerProps) {
   const [sideCollapse, setSideCollapse] = useState(false)
 
   const {
+    kiloSize,
     lassoRef, containerRef, containerInnerRef,
     supportThumbnail, thumbScrollWatcher,
     currentPath, activeRootEntry,
@@ -134,6 +135,7 @@ export default function FileExplorer(props: FileExplorerProps) {
                     parentPath: currentPath,
                     extension: editMode === EditMode.createFolder ? '_dir_new' : '_txt_new',
                   }}
+                  kiloSize={kiloSize}
                   creationType={editMode as CreationType}
                   onNameSuccess={handleNameSuccess}
                   onNameFail={handleNameFail}
@@ -150,6 +152,7 @@ export default function FileExplorer(props: FileExplorerProps) {
                     key={encodeURIComponent(`${entry.name}-${entry.type}`)}
                     {...{
                       entry,
+                      kiloSize,
                       gridMode,
                       inputMode,
                       isSelected,

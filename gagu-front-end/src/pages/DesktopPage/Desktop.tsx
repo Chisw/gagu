@@ -34,6 +34,7 @@ export default function Desktop() {
   }, [runningAppList, setRunningAppList, setTopWindowIndex, topWindowIndex])
 
   const {
+    kiloSize,
     lassoRef, containerRef, containerInnerRef,
     supportThumbnail, thumbScrollWatcher,
     currentPath,
@@ -101,6 +102,7 @@ export default function Desktop() {
                 parentPath: currentPath,
                 extension: editMode === EditMode.createFolder ? '_dir_new' : '_txt_new',
               }}
+              kiloSize={kiloSize}
               creationType={editMode as CreationType}
               onNameSuccess={handleNameSuccess}
               onNameFail={handleNameFail}
@@ -116,6 +118,7 @@ export default function Desktop() {
               <EntryNode
                 key={encodeURIComponent(`${entry.name}-${entry.type}`)}
                 {...{
+                  kiloSize,
                   entry,
                   gridMode: true,
                   inputMode,

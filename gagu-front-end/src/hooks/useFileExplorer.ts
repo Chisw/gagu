@@ -37,6 +37,7 @@ import toast from 'react-hot-toast'
 import { omit, throttle } from 'lodash-es'
 import { useTouchMode } from './useTouchMode'
 import { useAddUploadingTask } from './useAddUploadingTask'
+import { useUserConfig } from './useUserConfig'
 
 const RefreshTimerCache: {
   [PATH: string]: {
@@ -83,6 +84,7 @@ export function useFileExplorer(props: Props) {
   const [lastChangedDirectory, setLastChangedDirectory] = useRecoilState(lastChangedDirectoryState)
 
   const touchMode = useTouchMode()
+  const { userConfig: { kiloSize } } = useUserConfig()
 
   const [currentPath, setCurrentPath] = useState('')
   const [lastVisitedPath, setLastVisitedPath] = useState('')
@@ -482,6 +484,7 @@ export function useFileExplorer(props: Props) {
   }, [entryPathCache])
 
   return {
+    kiloSize,
     disabledMap, supportThumbnail, thumbScrollWatcher,
     currentPath, activeRootEntry,
     querying, sizeQuerying, deleting,

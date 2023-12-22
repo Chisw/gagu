@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { FsApi } from '../api'
 import { EmptyPanel, SvgIcon } from './common'
-import { useRequest } from '../hooks'
+import { useRequest, useUserConfig } from '../hooks'
 import { IUploadTransferTask } from '../types'
 import { getReadableSize, line } from '../utils'
 import { lastChangedDirectoryState, transferSignalState, transferTaskListState } from '../states'
@@ -27,6 +27,8 @@ export function TransferPanel() {
   const [transferTaskList, setTransferTaskList] = useRecoilState(transferTaskListState)
   const [transferSignal] = useRecoilState(transferSignalState)
   const [, setLastChangedDirectory] = useRecoilState(lastChangedDirectoryState)
+
+  const { userConfig: { kiloSize } } = useUserConfig()
 
   const [visible, setVisible] = useState(false)
   const [uploadInfo, setUploadInfo] = useState({ ratio: 0, speed: '' })
@@ -54,7 +56,7 @@ export function TransferPanel() {
         const now = Date.now()
         const interval = (now - time) / 1000
         const delta = loaded - size
-        const speed = getReadableSize(delta / interval, { keepFloat: true }) + '/s'
+        const speed = getReadableSize(delta / interval, kiloSize, { keepFloat: true }) + '/s'
         setUploadInfo({ ratio: loaded / total, speed })
         lastUpload = { time: now, size: loaded }
       }
@@ -71,7 +73,7 @@ export function TransferPanel() {
     list.forEach(t => t.status = 'success')
     setTransferTaskList(list)
     setActiveId('')
-  }, [uploadFile, setLastChangedDirectory, transferTaskList, setTransferTaskList])
+  }, [transferTaskList, setTransferTaskList, uploadFile, kiloSize, setLastChangedDirectory])
 
   useEffect(() => {
     if (transferSignal !== transferSignalCache) {

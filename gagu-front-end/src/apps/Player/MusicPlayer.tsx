@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { AppComponentProps, AppId } from '../../types'
-import { useRequest, useRunAppEvent, usePlayInfo } from '../../hooks'
+import { useRequest, useRunAppEvent, usePlayInfo, useUserConfig } from '../../hooks'
 import { FsApi } from '../../api'
 import { getEntryPath, getIndexLabel, getReadableSize, line } from '../../utils'
 import SpectrumCanvas from './common/SpectrumCanvas'
@@ -36,6 +36,8 @@ export default function MusicPlayer(props: AppComponentProps) {
     activeEntryStreamUrl,
     setActiveIndex,
   } = useRunAppEvent(appId)
+
+  const { userConfig: { kiloSize } } = useUserConfig()
 
   const [isPlaying, setIsPlaying] = useState(false)
   const [playMode, setPlayMode] = useState('order')
@@ -194,7 +196,7 @@ export default function MusicPlayer(props: AppComponentProps) {
                     <span className="font-din opacity-60">{indexNo}. </span>{name}
                   </div>
                   <div>
-                    <span className="opacity-50 font-din">{getReadableSize(size!)}</span>
+                    <span className="opacity-50 font-din">{getReadableSize(size!, kiloSize)}</span>
                   </div>
                 </div>
                 <div

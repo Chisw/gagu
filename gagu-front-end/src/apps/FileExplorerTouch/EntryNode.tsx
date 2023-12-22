@@ -6,6 +6,7 @@ import { SvgIcon } from '../../components/common'
 
 interface EntryNodeProps {
   entry: IEntry
+  kiloSize: 1000 | 1024
   isSelected?: boolean
   isFavorited?: boolean
   gridMode: boolean
@@ -23,6 +24,7 @@ interface EntryNodeProps {
 export default function EntryNode(props: EntryNodeProps) {
   const {
     entry,
+    kiloSize,
     isSelected = false,
     isFavorited = false,
     gridMode,
@@ -35,7 +37,7 @@ export default function EntryNode(props: EntryNodeProps) {
   } = props
 
   const { name, type, extension, hidden } = entry
-  const { sizeLabel, dateLabel } = getEntryLabels(entry)
+  const { sizeLabel, dateLabel } = getEntryLabels(entry, kiloSize)
 
   const [isViewable, setIsViewable] = useState(false)
 
