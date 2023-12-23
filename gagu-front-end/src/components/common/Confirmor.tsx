@@ -35,7 +35,7 @@ export function Confirmor(props: ConfirmorProps) {
     centered: true,
     maskClosable: true,
     width: 300,
-    className: 'gagu-confirmor gagu-sync-popstate-overlay',
+    className: 'gagu-confirmor gagu-sync-popstate-overlay gagu-prevent-hotkeys-overlay',
     icon: undefined,
     content: (
       <>

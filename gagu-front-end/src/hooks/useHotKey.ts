@@ -19,7 +19,7 @@ export function useHotKey(props: useHotKeyProps) {
     const fnKeyList = Object.keys(fnMap)
 
     const listener = (e: any) => {
-      if (document.querySelector('.gagu-sync-popstate-overlay')) return
+      if (document.querySelector('.gagu-prevent-hotkeys-overlay')) return
 
       const { code, altKey, ctrlKey, metaKey, shiftKey } = e
 

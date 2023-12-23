@@ -77,7 +77,6 @@ export default function VideoPlayer(props: AppComponentProps) {
       videoEl.currentTime += offsetSeconds
     } else {
       videoEl.currentTime = videoEl.duration * ratio
-      console.log(videoEl.currentTime)
     }
     if (!isPlaying) handlePlayOrPause()
   }, [videoEl, isPlaying, handlePlayOrPause])

@@ -118,7 +118,6 @@ export default function MusicPlayer(props: AppComponentProps) {
       audioEl.currentTime += offsetSeconds
     } else {
       audioEl.currentTime = audioEl.duration * ratio
-      console.log(audioEl.currentTime)
     }
     if (!isPlaying) handlePlayOrPause()
   }, [audioEl, isPlaying, handlePlayOrPause])

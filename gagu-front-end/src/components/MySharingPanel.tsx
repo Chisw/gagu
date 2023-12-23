@@ -48,7 +48,7 @@ export function MySharingPanel(props: MySharingPanelProps) {
   return (
     <>
       <SideSheet
-        className="gagu-sync-popstate-overlay"
+        className="gagu-sync-popstate-overlay gagu-prevent-hotkeys-overlay"
         title={(
           <div className="flex justify-between">
             <div>{t`title.mySharing`}</div>

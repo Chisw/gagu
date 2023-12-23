@@ -67,7 +67,7 @@ layout: ../../../layouts/DocLayout.astro
 | 切换亮度 | Shift + Space| Shift + Space |
 | 下载 | ⌘ + D | Ctrl + D |
 | 图片信息 | ⌘ + I | Ctrl + I |
-| 退出 （图片信息面板） | Esc | Esc |
+| 退出 （图片信息） | Esc | Esc |
 | 删除 | ⌘ + Backspace | Shift + Del |
 | 滑动模式 | Enter | Enter |
 | 放大（滑动模式） | ↑ | ↑ |

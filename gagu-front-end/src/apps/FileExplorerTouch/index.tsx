@@ -154,6 +154,9 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
     } else if (entrySelectorEvent) {
       keepPath()
       setEntrySelectorEvent(null)
+    } else if (document.querySelector('.gagu-sync-popstate-overlay')) {
+      keepPath()
+      ;(document.querySelector('.gagu-sync-popstate-overlay-close-button') as any)?.click()
     } else if (activeAppId !== AppId.fileExplorer) {
       keepPath()
       ;(document.querySelector('.gagu-is-top-window .gagu-hidden-switch-trigger') as any)?.click()
@@ -163,9 +166,6 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
     } else if (editMode) {
       keepPath()
       setEditMode(null)
-    } else if (document.querySelector('.gagu-sync-popstate-overlay')) {
-      keepPath()
-      ;(document.querySelector('.gagu-sync-popstate-overlay-close-button') as any)?.click()
     } else {
       const { position } = visitHistory
       if (position >= 1) {

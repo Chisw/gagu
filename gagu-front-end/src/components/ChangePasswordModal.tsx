@@ -61,7 +61,7 @@ export function ChangePasswordModal(props: ChangePasswordModalProps) {
       <Modal
         centered
         maskClosable={false}
-        className="gagu-sync-popstate-overlay"
+        className="gagu-sync-popstate-overlay gagu-prevent-hotkeys-overlay"
         title={t`title.changePassword`}
         fullScreen={touchMode}
         width={400}

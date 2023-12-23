@@ -118,7 +118,7 @@ export function TransferPanel() {
       </div>
 
       <SideSheet
-        className="gagu-sync-popstate-overlay"
+        className="gagu-sync-popstate-overlay gagu-prevent-hotkeys-overlay"
         title={(
           <div className="flex items-center">
             <SvgIcon.Transfer size={24} />
