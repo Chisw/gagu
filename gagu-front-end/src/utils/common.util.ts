@@ -120,7 +120,7 @@ export const getIndexLabel = (currentIndex: number, total: number, options?: { m
   const i = total === 0 ? -1 : currentIndex
   const currentNo = String(i + 1).padStart(width, '0')
   const totalNo = total.toString().padStart(width, '0')
-  return `${currentNo}${hideTotal ? '' : ` / ${totalNo}`}`
+  return `${currentNo}${hideTotal ? '' : `/${totalNo}`}`
 }
 
 export const getPasswordParam = (password?: string) => {

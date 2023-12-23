@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { AppComponentProps, AppId } from '../../types'
-import { useRequest, useRunAppEvent, usePlayInfo, useUserConfig } from '../../hooks'
+import { useRequest, useRunAppEvent, usePlayInfo, useUserConfig, useHotKey } from '../../hooks'
 import { FsApi } from '../../api'
 import { getEntryPath, getIndexLabel, getReadableSize, line } from '../../utils'
 import SpectrumCanvas from './common/SpectrumCanvas'
@@ -9,23 +9,22 @@ import ProgressSlider from './common/ProgressSlider'
 import { IconButton, Opener, SvgIcon } from '../../components/common'
 import { useTranslation } from 'react-i18next'
 
-const nextPlayMode: any = {
-  order: 'repeat',
-  repeat: 'random',
-  random: 'order',
-}
+const appId = AppId.musicPlayer
+
+type PlayMode = 'ORDER' | 'SINGLE' | 'RANDOM'
 
 const playModeIcon: any = {
-  order: <SvgIcon.PlayOrder size={14} />,
-  repeat: <SvgIcon.PlayRepeat size={14} />,
-  random: <SvgIcon.PlayRandom size={14} />,
+  ORDER: <SvgIcon.PlayOrder size={14} />,
+  SINGLE: <SvgIcon.PlayRepeat size={14} />,
+  RANDOM: <SvgIcon.PlayRandom size={14} />,
 }
-
-const appId = AppId.musicPlayer
 
 export default function MusicPlayer(props: AppComponentProps) {
 
-  const { setWindowTitle } = props
+  const {
+    isTopWindow,
+    setWindowTitle,
+  } = props
 
   const { t } = useTranslation()
 
@@ -40,11 +39,21 @@ export default function MusicPlayer(props: AppComponentProps) {
   const { userConfig: { kiloSize } } = useUserConfig()
 
   const [isPlaying, setIsPlaying] = useState(false)
-  const [playMode, setPlayMode] = useState('order')
+  const [playMode, setPlayMode] = useState<PlayMode>('ORDER')
   const [volume, setVolume] = useState(1)
   const [volumeSliderShow, setVolumeSliderShow] = useState(false)
 
   const { request: queryAudioTags, data } = useRequest(FsApi.queryAudioTags)
+
+  const { title, artist, album, coverBase64 } = useMemo(() => {
+    const {
+      title = activeEntry?.name || t`text.noTitle`,
+      artist = t`text.unknownArtist`,
+      album = t`text.unknownAlbum`,
+      coverBase64 = '',
+    } = data?.data || {}
+    return { title, artist, album, coverBase64 }
+  }, [data, activeEntry, t])
 
   const audioRef = useRef<HTMLAudioElement>(null)
   const audioEl = useMemo(() => {
@@ -93,7 +102,7 @@ export default function MusicPlayer(props: AppComponentProps) {
   const handlePrevOrNext = useCallback((offset: number) => {
     const max = matchedEntryList.length - 1
     let targetIndex = 0
-    if (playMode === 'random') {
+    if (playMode === 'RANDOM') {
       targetIndex = Math.round(Math.random() * max)
     } else {
       targetIndex = activeIndex + offset
@@ -103,31 +112,43 @@ export default function MusicPlayer(props: AppComponentProps) {
     setActiveIndex(targetIndex)
   }, [playMode, matchedEntryList, activeIndex, setActiveIndex])
 
-  const handleProgressClick = useCallback((ratio: number) => {
+  const handleProgressChange = useCallback((ratio: number, offsetSeconds?: number) => {
     if (!audioEl) return
-    audioEl.currentTime = audioEl.duration * ratio
+    if (offsetSeconds) {
+      audioEl.currentTime += offsetSeconds
+    } else {
+      audioEl.currentTime = audioEl.duration * ratio
+      console.log(audioEl.currentTime)
+    }
     if (!isPlaying) handlePlayOrPause()
   }, [audioEl, isPlaying, handlePlayOrPause])
 
+  const handlePlayModeChange = useCallback((mode?: PlayMode) => {
+    const targetMode = mode || {
+      ORDER: 'SINGLE',
+      SINGLE: 'RANDOM',
+      RANDOM: 'ORDER',
+    }[playMode] as PlayMode
+
+    setPlayMode(targetMode)
+  }, [playMode])
+
+  const handleVolumeChange = useCallback((offset: number) => {
+    const volumeValue = volume * 100
+    if ((offset < 0 && volumeValue <= 0) || (offset > 0 && volumeValue >= 100)) return
+    const targetVolume = Math.max(Math.min((volumeValue + offset) / 100, 1), 0)
+    setVolume(targetVolume)
+  }, [volume])
+
   const handleEnded = useCallback(() => {
     if (!audioEl) return
-    if (playMode === 'repeat') {
+    if (playMode === 'SINGLE') {
       audioEl.currentTime = 0
       audioEl.play()
     } else {
       handlePrevOrNext(1)
     }
   }, [audioEl, playMode, handlePrevOrNext])
-
-  const { title, artist, album, coverBase64 } = useMemo(() => {
-    const {
-      title = activeEntry?.name || t`text.noTitle`,
-      artist = t`text.unknownArtist`,
-      album = t`text.unknownAlbum`,
-      coverBase64 = '',
-    } = data?.data || {}
-    return { title, artist, album, coverBase64 }
-  }, [data, activeEntry, t])
 
   const buttonList = useMemo(() => {
     let volumeIcon = <SvgIcon.VolumeDown size={14} />
@@ -140,7 +161,7 @@ export default function MusicPlayer(props: AppComponentProps) {
       {
         title: t`action.playMode`,
         icon: playModeIcon[playMode],
-        onClick: () => setPlayMode(nextPlayMode[playMode]),
+        onClick: handlePlayModeChange,
       },
       {
         title: t`action.previousSong`,
@@ -163,7 +184,27 @@ export default function MusicPlayer(props: AppComponentProps) {
         onClick: () => setVolumeSliderShow(true),
       },
     ]
-  }, [volume, playMode, isPlaying, handlePlayOrPause, handlePrevOrNext, t])
+  }, [volume, t, playMode, handlePlayModeChange, isPlaying, handlePlayOrPause, handlePrevOrNext])
+
+  useHotKey({
+    binding: isTopWindow,
+    fnMap: {
+      'Space, Space': handlePlayOrPause,
+      'Meta+ArrowLeft, Ctrl+ArrowLeft': () => handlePrevOrNext(-1),
+      'Meta+ArrowRight, Ctrl+ArrowRight': () => handlePrevOrNext(1),
+      'ArrowUp, ArrowUp': () => handleVolumeChange(1),
+      'ArrowDown, ArrowDown': () => handleVolumeChange(-1),
+      'Shift+ArrowUp, Shift+ArrowUp': () => handleVolumeChange(5),
+      'Shift+ArrowDown, Shift+ArrowDown': () => handleVolumeChange(-5),
+      'ArrowRight, ArrowRight': () => handleProgressChange(0, 1),
+      'ArrowLeft, ArrowLeft': () => handleProgressChange(0, -1),
+      'Shift+ArrowRight, Shift+ArrowRight': () => handleProgressChange(0, 5),
+      'Shift+ArrowLeft, Shift+ArrowLeft': () => handleProgressChange(0, -5),
+      'KeyO, KeyO': () => handlePlayModeChange('ORDER'),
+      'KeyR, KeyR': () => handlePlayModeChange('RANDOM'),
+      'KeyS, KeyS': () => handlePlayModeChange('SINGLE'),
+    },
+  })
 
   return (
     <>
@@ -231,7 +272,7 @@ export default function MusicPlayer(props: AppComponentProps) {
             duration={audioEl?.duration || 0}
             playPercent={playInfo.playPercent}
             frontAndBackColorClassNames={['bg-pink-600', 'bg-pink-300']}
-            onProgressClick={handleProgressClick}
+            onProgressClick={handleProgressChange}
           />
         )}
 

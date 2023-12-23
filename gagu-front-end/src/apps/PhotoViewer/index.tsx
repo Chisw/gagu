@@ -1,11 +1,15 @@
-import { Opener, Spinner, SvgIcon } from '../../components/common'
+import { Confirmor, Opener, Spinner, SvgIcon } from '../../components/common'
 import { useEffect, useMemo, useRef, useState, useCallback } from 'react'
-import { AppComponentProps, AppId } from '../../types'
-import { useRunAppEvent, useHotKey } from '../../hooks'
+import { AppComponentProps, AppId, TunnelType } from '../../types'
+import { useRunAppEvent, useHotKey, useRequest } from '../../hooks'
 import ThumbnailList from './ThumbnailList'
 import Toolbar from './Toolbar'
 import Viewer from './Viewer'
-import { line } from '../../utils'
+import { getBaiduMapPinUrl, getEntryPath, line } from '../../utils'
+import { DownloadApi, FsApi, TunnelApi } from '../../api'
+import { useTranslation } from 'react-i18next'
+import { useRecoilState } from 'recoil'
+import { lastChangedDirectoryState } from '../../states'
 
 const appId = AppId.photoViewer
 
@@ -15,8 +19,10 @@ export default function PhotoViewer(props: AppComponentProps) {
     isTopWindow,
     windowSize: { width: windowWidth },
     setWindowTitle,
-    onClose,
+    closeWindow,
   } = props
+
+  const { t } = useTranslation()
 
   const {
     indexLabel,
@@ -28,10 +34,13 @@ export default function PhotoViewer(props: AppComponentProps) {
     setActiveIndex,
   } = useRunAppEvent(appId)
 
+  const [, setLastChangedDirectory] = useRecoilState(lastChangedDirectoryState)
+
   const [loading, setLoading] = useState(false)
   const [isLight, setIsLight] = useState(false)
   const [viewerShow, setViewerShow] = useState(false)
   const [thumbnailListShow, setThumbnailListShow] = useState(false)
+  const [mapPinUrl, setMapPinUrl] = useState('')
 
   const imgRef = useRef<HTMLImageElement>(null)
   const imgEl = useMemo(() => {
@@ -39,11 +48,9 @@ export default function PhotoViewer(props: AppComponentProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imgRef.current])
 
-  useEffect(() => {
-    if (activeEntry) {
-      setWindowTitle(activeEntry.name)
-    }
-  }, [activeEntry, setWindowTitle])
+  const { request: createTunnel } = useRequest(TunnelApi.createTunnel)
+  const { request: queryExif, data: exifData, setData: setExifData, loading: queryingExifData } = useRequest(FsApi.queryExif)
+  const { request: deleteEntry } = useRequest(FsApi.deleteEntry)
 
   const handlePrevOrNext = useCallback((offset: number) => {
     const max = matchedEntryList.length - 1
@@ -54,16 +61,76 @@ export default function PhotoViewer(props: AppComponentProps) {
     setActiveIndex(targetIndex)
   }, [matchedEntryList, activeIndex, setActiveIndex])
 
+  const handleDownloadClick = useCallback(async () => {
+    if (activeEntry) {
+      const { name: downloadName } = activeEntry
+      const { success, data: code } = await createTunnel({
+        type: TunnelType.download,
+        entryList: [activeEntry],
+        downloadName,
+      })
+      if (success) {
+        DownloadApi.download(code)
+      }
+    }
+  }, [activeEntry, createTunnel])
+
+  const handleGetExifData = useCallback(async () => {
+    if (activeEntry && ['jpg', 'jpeg'].includes(activeEntry.extension)) {
+      const { data } = await queryExif(`${activeEntry.parentPath}/${activeEntry.name}`)
+      const url = getBaiduMapPinUrl(data, activeEntry?.name)
+      setMapPinUrl(url)
+    }
+  }, [activeEntry, queryExif])
+
+  const handleDeleteClick = useCallback(() => {
+    const { name } = activeEntry!
+    Confirmor({
+      type: 'delete',
+      content: t('tip.deleteItem', { name }),
+      onConfirm: async (close) => {
+        const { success } = await deleteEntry(getEntryPath(activeEntry))
+        if (success) {
+          setLastChangedDirectory({ path: activeEntry!.parentPath, timestamp: Date.now() })
+          const len = matchedEntryList.length
+          if (len === 1) {
+            closeWindow()
+          } else {
+            const newActiveIndex = activeIndex === matchedEntryList.length - 1
+              ? activeIndex - 1
+              : activeIndex
+            setActiveIndex(newActiveIndex)
+            setMatchedEntryList(matchedEntryList.filter(e => e.name !== name))
+          }
+          close()
+        }
+      },
+    })
+  }, [activeEntry, activeIndex, deleteEntry, matchedEntryList, closeWindow, setActiveIndex, setLastChangedDirectory, setMatchedEntryList, t])
+
+  useEffect(() => {
+    if (activeEntry) {
+      setWindowTitle(`[${indexLabel}] ${activeEntry.name}`)
+    }
+  }, [indexLabel, activeEntry, setWindowTitle])
+
   useHotKey({
-    binding: isTopWindow && !viewerShow,
+    binding: isTopWindow,
     fnMap: {
       'ArrowRight, ArrowRight': () => handlePrevOrNext(1),
       'ArrowLeft, ArrowLeft': () => handlePrevOrNext(-1),
       'Shift+ArrowRight, Shift+ArrowRight': () => handlePrevOrNext(6),
       'Shift+ArrowLeft, Shift+ArrowLeft': () => handlePrevOrNext(-6),
       'Enter, Enter': () => setViewerShow(true),
-      'Shift+ , Shift+ ': () => setIsLight(!isLight),
-      ' ,  ': () => setThumbnailListShow(!thumbnailListShow),
+      'Shift+Space, Shift+Space': () => setIsLight(!isLight),
+      'Space, Space': () => setThumbnailListShow(!thumbnailListShow),
+      'Meta+KeyD, Ctrl+KeyD': handleDownloadClick,
+      'Meta+KeyI, Ctrl+KeyI': handleGetExifData,
+      'Escape, Escape': () => setExifData(null),
+      'Meta+Backspace, Shift+Delete': handleDeleteClick,
+      'ArrowUp, ArrowUp': () => (document.querySelector('.gagu-photo-viewer-scale-large') as any)?.click(),
+      'ArrowDown, ArrowDown': () => (document.querySelector('.gagu-photo-viewer-scale-small') as any)?.click(),
+      'KeyR, KeyR': () => (document.querySelector('.gagu-photo-viewer-rotate') as any)?.click(),
     },
   })
 
@@ -131,18 +198,21 @@ export default function PhotoViewer(props: AppComponentProps) {
           <Toolbar
             {...{
               imgEl,
-              indexLabel,
               activeIndex,
-              setActiveIndex,
               activeEntry,
               matchedEntryList,
-              setMatchedEntryList,
               isLight,
               thumbnailListShow,
               setIsLight,
               setThumbnailListShow,
+              mapPinUrl,
+              exifData,
+              setExifData,
+              queryingExifData,
             }}
-            onClose={onClose}
+            onDownloadClick={handleDownloadClick}
+            onGetExifData={handleGetExifData}
+            onDeleteClick={handleDeleteClick}
           />
 
         </div>

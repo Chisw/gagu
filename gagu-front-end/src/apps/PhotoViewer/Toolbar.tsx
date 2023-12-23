@@ -1,58 +1,53 @@
-import { useMemo, useCallback, useEffect, useState } from 'react'
-import { DownloadApi, FsApi, TunnelApi } from '../../api'
-import { Confirmor, IconButton, SvgIcon } from '../../components/common'
-import { useRequest, useUserConfig } from '../../hooks'
-import { TunnelType, IEntry } from '../../types'
-import { getEntryPath, getReadableSize, line } from '../../utils'
-import { getBaiduMapPinUrl } from '../../utils'
+import { useMemo, useEffect, useState } from 'react'
+import { IconButton, SvgIcon } from '../../components/common'
+import { useUserConfig } from '../../hooks'
+import { IEntry } from '../../types'
+import { getReadableSize, line } from '../../utils'
 import { useTranslation } from 'react-i18next'
-import { useRecoilState } from 'recoil'
-import { lastChangedDirectoryState } from '../../states'
 
 interface ToolbarProps {
   imgEl: HTMLImageElement | null
-  indexLabel: string
   activeIndex: number
   activeEntry?: IEntry
   matchedEntryList: IEntry[]
   isLight: boolean
   thumbnailListShow: boolean
-  setActiveIndex: (index: number) => void
-  setMatchedEntryList: (entryList: IEntry[]) => void
+  mapPinUrl: string
+  exifData: any
+  queryingExifData: boolean
   setIsLight: (is: boolean) => void
   setThumbnailListShow: (is: boolean) => void
-  onClose: () => void
+  setExifData: (data: any) => void
+  onDownloadClick: () => void
+  onGetExifData: () => void
+  onDeleteClick: () => void
 }
 
 export default function Toolbar(props: ToolbarProps) {
 
   const {
     imgEl,
-    indexLabel,
     activeIndex,
     activeEntry,
     matchedEntryList,
     isLight,
     thumbnailListShow,
-    setActiveIndex,
-    setMatchedEntryList,
+    mapPinUrl,
+    exifData,
+    queryingExifData,
     setIsLight,
     setThumbnailListShow,
-    onClose,
+    setExifData,
+    onDownloadClick,
+    onGetExifData,
+    onDeleteClick,
   } = props
 
   const { t } = useTranslation()
 
-  const [, setLastChangedDirectory] = useRecoilState(lastChangedDirectoryState)
-
   const { userConfig: { kiloSize } } = useUserConfig()
 
-  const { request: queryExif, data: exifData, setData, loading: querying } = useRequest(FsApi.queryExif)
-  const { request: createTunnel } = useRequest(TunnelApi.createTunnel)
-  const { request: deleteEntry } = useRequest(FsApi.deleteEntry)
-
   const [sizeInfo, setSizeInfo] = useState({ width: 0, height: 0 })
-  const [mapPinUrl, setMapPinUrl] = useState('')
 
   useEffect(() => {
     if (imgEl) {
@@ -64,16 +59,8 @@ export default function Toolbar(props: ToolbarProps) {
   }, [imgEl, activeEntry])
 
   useEffect(() => {
-    setData(null)
-  }, [activeIndex, setData])
-
-  const getExifData = useCallback(async () => {
-    if (activeEntry && ['jpg', 'jpeg'].includes(activeEntry.extension)) {
-      const { data } = await queryExif(`${activeEntry.parentPath}/${activeEntry.name}`)
-      const url = getBaiduMapPinUrl(data, activeEntry?.name)
-      setMapPinUrl(url)
-    }
-  }, [activeEntry, queryExif])
+    setExifData(null)
+  }, [activeIndex, setExifData])
 
   const buttonList = useMemo(() => {
     return [
@@ -92,73 +79,33 @@ export default function Toolbar(props: ToolbarProps) {
         icon: <SvgIcon.Download size={14} />,
         title: t`action.download`,
         disabled: !activeEntry,
-        onClick: async () => {
-          if (activeEntry) {
-            const { name: downloadName } = activeEntry
-            const { success, data: code } = await createTunnel({
-              type: TunnelType.download,
-              entryList: [activeEntry],
-              downloadName,
-            })
-            if (success) {
-              DownloadApi.download(code)
-            }
-          }
-        },
+        onClick: onDownloadClick,
       },
       {
         icon: <SvgIcon.Info size={14} />,
         title: t`action.exifInfo`,
-        disabled: !activeEntry || !['jpg', 'jpeg'].includes(activeEntry.extension) || querying,
-        onClick: getExifData,
+        disabled: !activeEntry || !['jpg', 'jpeg'].includes(activeEntry.extension) || queryingExifData,
+        onClick: onGetExifData,
       },
       {
         icon: <SvgIcon.Delete size={14} />,
         title: t`action.delete`,
         disabled: !activeEntry,
-        onClick: () => {
-          const { name } = activeEntry!
-          Confirmor({
-            type: 'delete',
-            content: t('tip.deleteItem', { name }),
-            onConfirm: async (close) => {
-              const { success } = await deleteEntry(getEntryPath(activeEntry))
-              if (success) {
-                setLastChangedDirectory({ path: activeEntry!.parentPath, timestamp: Date.now() })
-                const len = matchedEntryList.length
-                if (len === 1) {
-                  onClose()
-                } else {
-                  const newActiveIndex = activeIndex === matchedEntryList.length - 1
-                    ? activeIndex - 1
-                    : activeIndex
-                  setActiveIndex(newActiveIndex)
-                  setMatchedEntryList(matchedEntryList.filter(e => e.name !== name))
-                }
-                close()
-              }
-            },
-          })
-        },
+        onClick: onDeleteClick,
       },
     ]
   }, [
     t,
     matchedEntryList,
     activeEntry,
-    getExifData,
+    onGetExifData,
     setThumbnailListShow,
     thumbnailListShow,
     setIsLight,
     isLight,
-    createTunnel,
-    deleteEntry,
-    setLastChangedDirectory,
-    onClose,
-    activeIndex,
-    setActiveIndex,
-    setMatchedEntryList,
-    querying,
+    onDownloadClick,
+    onDeleteClick,
+    queryingExifData,
   ])
 
   return (
@@ -177,7 +124,7 @@ export default function Toolbar(props: ToolbarProps) {
         onClick={e => e.stopPropagation()}
       >
         <div className="w-28 font-din">
-          {indexLabel}
+          {getReadableSize(activeEntry?.size || 0, kiloSize)}
         </div>
 
         <div className="flex-grow flex justify-center">
@@ -195,8 +142,6 @@ export default function Toolbar(props: ToolbarProps) {
         </div>
         <div className="w-28 font-din text-right">
           {sizeInfo.width} &times; {sizeInfo.height}PX
-          &nbsp;&nbsp;
-          {getReadableSize(activeEntry?.size || 0, kiloSize)}
         </div>
       </div>
 
@@ -222,7 +167,7 @@ export default function Toolbar(props: ToolbarProps) {
           <IconButton
             icon={<SvgIcon.Close size={12} />}
             size="sm"
-            onClick={() => setData(null)}
+            onClick={() => setExifData(null)}
             className="absolute z-10 top-1 right-1"
           />
         )}

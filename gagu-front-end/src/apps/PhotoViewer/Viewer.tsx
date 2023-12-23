@@ -36,20 +36,23 @@ export default function Viewer(props: ViewerProps) {
           return (
             <div className="absolute z-10 top-0 right-0 left-0 pl-2 pr-1 h-10 flex justify-between items-center bg-black bg-opacity-50">
               <span className="text-white font-din text-sm">
-                {indexLabel}
-                &emsp;
+                [{indexLabel}]
+                &nbsp;
                 {matchedEntryList[activeIndex].name}
               </span>
               <div className="flex items-center">
                 <IconButton
+                  className="gagu-photo-viewer-scale-small"
                   icon={<SvgIcon.SubtractCircle size={18} />}
-                  onClick={() => onScale(scale - 1)}
+                  onClick={() => onScale(scale - 0.5)}
                 />
                 <IconButton
+                  className="gagu-photo-viewer-scale-large"
                   icon={<SvgIcon.AddCircle size={18} />}
-                  onClick={() => onScale(scale + 1)}
+                  onClick={() => onScale(scale + 0.5)}
                 />
                 <IconButton
+                  className="gagu-photo-viewer-rotate"
                   icon={<SvgIcon.Restart size={18} />}
                   onClick={() => onRotate(rotate + 90)}
                 />

@@ -4,7 +4,7 @@ export interface AppComponentProps {
   isTopWindow: boolean
   windowSize: { width: number, height: number }
   setWindowTitle: (title: string) => void
-  onClose: () => void
+  closeWindow: () => void
   addtionalEntryList?: IEntry[]
 }
 

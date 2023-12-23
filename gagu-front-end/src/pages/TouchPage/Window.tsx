@@ -125,7 +125,7 @@ export default function Window(props: WindowProps) {
             isTopWindow={isTopWindow}
             windowSize={windowSize}
             setWindowTitle={setWindowTitle}
-            onClose={handleClose}
+            closeWindow={handleClose}
           />
         </div>
       </div>

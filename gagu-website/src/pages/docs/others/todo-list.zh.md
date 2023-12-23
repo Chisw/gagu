@@ -9,7 +9,6 @@ layout: ../../../layouts/DocLayout.astro
 
 ## 全局
 
-- 深色模式
 - 多窗口自动排列
 - 窗口布局分配
 - favicon 显示文件传输百分比
@@ -86,10 +85,7 @@ layout: ../../../layouts/DocLayout.astro
 ### 设置
 
 - 通用设置
-  - PC 默认打开模式
-  - 操作风格：Win or macOS
-    - 快捷键
-    - 大小计算方式
+  - 深色模式
 
 - 高级设置
   - IP 白名单、黑名单

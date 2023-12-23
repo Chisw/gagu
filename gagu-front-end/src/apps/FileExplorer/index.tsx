@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { SharingModal } from '../../components'
 import { useWorkArea } from '../../hooks'
 import StatusBar from './StatusBar'
@@ -22,8 +22,6 @@ export default function FileExplorer(props: FileExplorerProps) {
     onSelectDoubleConfirm = () => {},
   } = props
 
-  const [sideCollapse, setSideCollapse] = useState(false)
-
   const {
     kiloSize,
     lassoRef, containerRef, containerInnerRef,
@@ -34,6 +32,7 @@ export default function FileExplorer(props: FileExplorerProps) {
     isEntryListEmpty, disabledMap,
     folderCount, fileCount,
     querying, sizeQuerying, deleting,
+    sideCollapse, setSideCollapse,
     filterMode, setFilterMode,
     filterText, setFilterText,
     hiddenShow, handleHiddenShowChange,

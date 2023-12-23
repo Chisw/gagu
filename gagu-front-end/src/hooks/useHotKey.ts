@@ -21,8 +21,6 @@ export function useHotKey(props: useHotKeyProps) {
     const listener = (e: any) => {
       if (document.querySelector('.gagu-sync-popstate-overlay')) return
 
-      e.preventDefault()
-
       const { code, altKey, ctrlKey, metaKey, shiftKey } = e
 
       const pressedHotKey = [
@@ -33,8 +31,6 @@ export function useHotKey(props: useHotKeyProps) {
         code,
       ].join('')
 
-      // console.log(pressedHotKey, { code, altKey, ctrlKey, metaKey, shiftKey })
-
       const styleIndex = {
         [HotkeyStyle.mac]: 0,
         [HotkeyStyle.win]: 1,
@@ -43,8 +39,8 @@ export function useHotKey(props: useHotKeyProps) {
       const fnKey = fnKeyList.find(key => key.split(', ')[styleIndex] === pressedHotKey)
 
       if (fnKey) {
-        const fn = fnMap[fnKey]
-        fn && fn()
+        e.preventDefault()
+        fnMap[fnKey]()
       }
     }
 
@@ -55,4 +51,5 @@ export function useHotKey(props: useHotKeyProps) {
 
     return unbind
   }, [binding, fnMap, hotkeyStyle])
+
 }

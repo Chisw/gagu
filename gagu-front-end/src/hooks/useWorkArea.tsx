@@ -38,6 +38,7 @@ export function useWorkArea(props: useWorkAreaProps) {
   const [, setOpenEvent] = useRecoilState(openEventState)
   const [, setContextMenuData] = useRecoilState(contextMenuDataState)
 
+  const [sideCollapse, setSideCollapse] = useState(false)
   const [locationScrollWatcher, setLocationScrollWatcher] = useState<{ wait: boolean, smooth?: boolean }>({ wait: false })
   const [shiftFromIndex, setShiftFromIndex] = useState<number>(0)
 
@@ -199,6 +200,7 @@ export function useWorkArea(props: useWorkAreaProps) {
       'Meta+Backspace, Shift+Delete': disabledMap.delete ? null : handleDeleteClick,
       'Escape, Escape': () => setSelectedEntryList([]),
       'Meta+KeyA, Ctrl+KeyA': disabledMap.selectAll ? null : () => handleSelectAll(true),
+      'Meta+KeyB, Ctrl+KeyB': () => setSideCollapse(!sideCollapse),
       'Meta+KeyD, Ctrl+KeyD': disabledMap.download ? null : handleDownloadClick,
       'Enter, F2': disabledMap.rename ? null : () => handleEdit(EditMode.rename),
       'Meta+KeyF, Ctrl+KeyF': disabledMap.filter ? null : () => setFilterMode(true),
@@ -214,9 +216,7 @@ export function useWorkArea(props: useWorkAreaProps) {
       'Meta+ArrowLeft, Ctrl+ArrowLeft': disabledMap.navBack ? null : handleNavBack,
       'Meta+ArrowDown, Enter': disabledMap.openFolder
         ? null
-        : () => isUserDesktop
-          ? onOpenDesktopDirectory(selectedEntryList[0])
-          : handleDirectoryOpen(selectedEntryList[0]),
+        : () => handleEntryDoubleClick(selectedEntryList[0]),
     },
   })
 
@@ -428,6 +428,7 @@ export function useWorkArea(props: useWorkAreaProps) {
     isEntryListEmpty, disabledMap,
     folderCount, fileCount,
     querying, sizeQuerying, deleting,
+    sideCollapse, setSideCollapse,
     filterMode, setFilterMode,
     filterText, setFilterText,
     hiddenShow, handleHiddenShowChange,

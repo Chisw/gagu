@@ -61,7 +61,7 @@ export default function ExplorePage() {
             isTopWindow={AppId.fileExplorer === activeAppId}
             windowSize={{ width: 1080, height: 1920 }}
             setWindowTitle={() => {}}
-            onClose={() => {}}
+            closeWindow={() => {}}
           />
         </div>
 

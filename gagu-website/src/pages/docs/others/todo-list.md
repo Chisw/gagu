@@ -9,7 +9,6 @@ Many unrealized ideas will be recorded here, waiting for development.
 
 ## Global
 
-- Dark mode
 - Multi-window automatic arrangement
 - Window layout assignment
 - favicon shows file transfer percentage
@@ -87,9 +86,7 @@ Many unrealized ideas will be recorded here, waiting for development.
 
 - General settings
   - Default open mode on PC
-  - Operation style: Win or macOS
-    - Shortcuts
-    - Size calculation method
+  - Dark mode
 
 - Advanced settings
    - IP whitelist, blacklist

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { AppComponentProps, AppId } from '../../types'
-import { useRunAppEvent, usePlayInfo } from '../../hooks'
+import { useRunAppEvent, usePlayInfo, useHotKey } from '../../hooks'
 import ProgressSlider from './common/ProgressSlider'
 import { line } from '../../utils'
 import { Opener, SvgIcon } from '../../components/common'
@@ -11,7 +11,10 @@ const appId = AppId.videoPlayer
 
 export default function VideoPlayer(props: AppComponentProps) {
 
-  const { setWindowTitle } = props
+  const {
+    isTopWindow,
+    setWindowTitle,
+  } = props
 
   const { t } = useTranslation()
 
@@ -68,10 +71,23 @@ export default function VideoPlayer(props: AppComponentProps) {
     }
   }, [videoEl, isPlaying])
 
-  const handleProgressClick = useCallback((ratio: number) => {
+  const handleProgressChange = useCallback((ratio: number, offsetSeconds?: number) => {
     if (!videoEl) return
-    videoEl.currentTime = videoEl.duration * ratio
-  }, [videoEl])
+    if (offsetSeconds) {
+      videoEl.currentTime += offsetSeconds
+    } else {
+      videoEl.currentTime = videoEl.duration * ratio
+      console.log(videoEl.currentTime)
+    }
+    if (!isPlaying) handlePlayOrPause()
+  }, [videoEl, isPlaying, handlePlayOrPause])
+
+  const handleVolumeChange = useCallback((offset: number) => {
+    const volumeValue = volume * 100
+    if ((offset < 0 && volumeValue <= 0) || (offset > 0 && volumeValue >= 100)) return
+    const targetVolume = Math.max(Math.min((volumeValue + offset) / 100, 1), 0)
+    setVolume(targetVolume)
+  }, [volume])
 
   const buttonList = useMemo(() => {
     return [
@@ -92,6 +108,26 @@ export default function VideoPlayer(props: AppComponentProps) {
     }
     return volumeIcon
   }, [volume])
+
+  useHotKey({
+    binding: isTopWindow,
+    fnMap: {
+      'Space, Space': handlePlayOrPause,
+      // 'Meta+ArrowLeft, Ctrl+ArrowLeft': () => handlePrevOrNext(-1),
+      // 'Meta+ArrowRight, Ctrl+ArrowRight': () => handlePrevOrNext(1),
+      'ArrowUp, ArrowUp': () => handleVolumeChange(1),
+      'ArrowDown, ArrowDown': () => handleVolumeChange(-1),
+      'Shift+ArrowUp, Shift+ArrowUp': () => handleVolumeChange(5),
+      'Shift+ArrowDown, Shift+ArrowDown': () => handleVolumeChange(-5),
+      'ArrowRight, ArrowRight': () => handleProgressChange(0, 1),
+      'ArrowLeft, ArrowLeft': () => handleProgressChange(0, -1),
+      'Shift+ArrowRight, Shift+ArrowRight': () => handleProgressChange(0, 5),
+      'Shift+ArrowLeft, Shift+ArrowLeft': () => handleProgressChange(0, -5),
+      // 'KeyO, KeyO': () => handlePlayModeChange('ORDER'),
+      // 'KeyR, KeyR': () => handlePlayModeChange('RANDOM'),
+      // 'KeyS, KeyS': () => handlePlayModeChange('SINGLE'),
+    },
+  })
 
   return (
     <>
@@ -126,7 +162,7 @@ export default function VideoPlayer(props: AppComponentProps) {
               playPercent={playInfo.playPercent}
               frontAndBackColorClassNames={['bg-blue-700', 'bg-gray-400']}
               maxUnit="H"
-              onProgressClick={handleProgressClick}
+              onProgressClick={handleProgressChange}
             />
           </div>
           <VolumeSlider

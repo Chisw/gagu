@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   EditModeType,
-  EntryType,
   IEntry,
   IEntryPathCache,
   IRootEntry,
@@ -170,7 +169,6 @@ export function useFileExplorer(props: Props) {
     const { position, list } = visitHistory
     const selectedCount = selectedEntryList.length
     const isSingle = selectedCount === 1
-    const isSingleDirectory = isSingle && selectedEntryList[0].type === EntryType.directory
 
     const disabledMap: IFileExplorerDisabledMap = {
       navBack: position <= 0 || isUserDesktop,
@@ -187,7 +185,7 @@ export function useFileExplorer(props: Props) {
       filter: isUserDesktop,
       gridView: isUserDesktop,
       listView: isUserDesktop,
-      openFolder: !isSingleDirectory,
+      openFolder: !isSingle,
     }
     return disabledMap
   }, [visitHistory, querying, currentPath, isInRoot, isUserDesktop, touchMode, editMode, selectedEntryList, isEntryListEmpty])

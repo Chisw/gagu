@@ -268,7 +268,7 @@ export function EntrySelector() {
               isTopWindow={selectorShow}
               windowSize={{ width: 1020, height: 540 }}
               setWindowTitle={() => {}}
-              onClose={() => {}}
+              closeWindow={() => {}}
               onCurrentPathChange={setCurrentPath}
               onSelect={setSelectedEntryList}
               onSelectDoubleConfirm={handleConfirm}
