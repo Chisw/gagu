@@ -11,7 +11,7 @@ Currently available hotkeys, more are being added gradually
 
 <div class="hotkeys-table-container">
 
-| ![](../../../img/icons/app-file-explorer.svg) FileExplorer | Mac | Win |
+| ![](/assets/icons/app-file-explorer.svg) FileExplorer | Mac | Win |
 | -- | -- | -- |
 | Sidebar | ⌘ + B | Ctrl + B |
 | Nav back | ⌘ + ← | Ctrl + ← |
@@ -40,7 +40,7 @@ Currently available hotkeys, more are being added gradually
 
 <div class="hotkeys-table-container">
 
-| ![](../../../img/icons/app-text-editor.svg) TextEditor | Mac | Win |
+| ![](/assets/icons/app-text-editor.svg) TextEditor | Mac | Win |
 | -- | -- | -- |
 | Save | ⌘ + S | Ctrl + S |
 | Reset | ⌘ + R | Ctrl + R |
@@ -57,7 +57,7 @@ Currently available hotkeys, more are being added gradually
 
 <div class="hotkeys-table-container">
 
-| ![](../../../img/icons/app-photo-viewer.svg) PhotoViewer | Mac | Win |
+| ![](/assets/icons/app-photo-viewer.svg) PhotoViewer | Mac | Win |
 | -- | -- | -- |
 | Previous photo | ← | ← |
 | Next photo | → | → |
@@ -81,7 +81,7 @@ Currently available hotkeys, more are being added gradually
 
 <div class="hotkeys-table-container">
 
-| ![](../../../img/icons/app-music-player.svg) MusicPlayer | Mac | Win |
+| ![](/assets/icons/app-music-player.svg) MusicPlayer | Mac | Win |
 | -- | -- | -- |
 | Play/Pause | Space | Space |
 | Previous song | ⌘ + ← | Ctrl + ← |
@@ -104,7 +104,7 @@ Currently available hotkeys, more are being added gradually
 
 <div class="hotkeys-table-container">
 
-| ![](../../../img/icons/app-video-player.svg) VideoPlayer | Mac | Win |
+| ![](/assets/icons/app-video-player.svg) VideoPlayer | Mac | Win |
 | -- | -- | -- |
 | Play/Pause | Space | Space |
 | Increase volume | ↑ | ↑ |

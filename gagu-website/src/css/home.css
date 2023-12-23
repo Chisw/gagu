@@ -81,12 +81,12 @@
 
 .copy-button {
   background-size: 40%;
-  background-image: url("../img/icons/copy.svg");
+  background-image: url("../../public/assets/icons/copy.svg");
 }
 
 .copy-button[data-clicked="true"] {
   display: block;
-  background-image: url("../img/icons/check.svg");
+  background-image: url("../../public/assets/icons/check.svg");
 }
 
 #header-i18n {

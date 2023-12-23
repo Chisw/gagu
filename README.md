@@ -16,6 +16,8 @@
 <br>
 </div>
 
+![screenshot](https://raw.githubusercontent.com/Chisw/gagu/main/gagu-website/public/assets/gagu.jpg)
+
 ## 📦 Getting started
 
 GAGU is published on NPM, so install [Node.js](https://nodejs.org/) on your device first.

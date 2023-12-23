@@ -1055,7 +1055,7 @@
 
 .apply-tip {
   @apply px-4 py-3 pl-8 rounded-lg  text-yellow-600 bg-yellow-100 text-sm bg-no-repeat;
-  background-image: url("../img/icons/warning.svg");
+  background-image: url("../../public/assets/icons/warning.svg");
   background-size: 14px;
   background-position: 14px 15px;
 }

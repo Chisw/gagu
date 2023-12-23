@@ -11,7 +11,7 @@ layout: ../../../layouts/DocLayout.astro
 
 <div class="hotkeys-table-container">
 
-| ![](../../../img/icons/app-file-explorer.svg) 文件管理器 | Mac | Win |
+| ![](/assets/icons/app-file-explorer.svg) 文件管理器 | Mac | Win |
 | -- | -- | -- |
 | 侧边栏 | ⌘ + B | Ctrl + B |
 | 返回 | ⌘ + ← | Ctrl + ← |
@@ -40,7 +40,7 @@ layout: ../../../layouts/DocLayout.astro
 
 <div class="hotkeys-table-container">
 
-| ![](../../../img/icons/app-text-editor.svg) 文本编辑器 | Mac | Win |
+| ![](/assets/icons/app-text-editor.svg) 文本编辑器 | Mac | Win |
 | -- | -- | -- |
 | 保存 | ⌘ + S | Ctrl + S |
 | 重置 | ⌘ + R | Ctrl + R |
@@ -57,7 +57,7 @@ layout: ../../../layouts/DocLayout.astro
 
 <div class="hotkeys-table-container">
 
-| ![](../../../img/icons/app-photo-viewer.svg) 图片浏览器 | Mac | Win |
+| ![](/assets/icons/app-photo-viewer.svg) 图片浏览器 | Mac | Win |
 | -- | -- | -- |
 | 上一张 | ← | ← |
 | 下一张 | → | → |
@@ -81,7 +81,7 @@ layout: ../../../layouts/DocLayout.astro
 
 <div class="hotkeys-table-container">
 
-| ![](../../../img/icons/app-music-player.svg) 音乐播放器 | Mac | Win |
+| ![](/assets/icons/app-music-player.svg) 音乐播放器 | Mac | Win |
 | -- | -- | -- |
 | 播放/暂停 | Space | Space |
 | 上一首 | ⌘ + ← | Ctrl + ← |
@@ -104,7 +104,7 @@ layout: ../../../layouts/DocLayout.astro
 
 <div class="hotkeys-table-container">
 
-| ![](../../../img/icons/app-video-player.svg) 视频播放器 | Mac | Win |
+| ![](/assets/icons/app-video-player.svg) 视频播放器 | Mac | Win |
 | -- | -- | -- |
 | 播放/暂停 | Space | Space |
 | 增大音量 | ↑ | ↑ |

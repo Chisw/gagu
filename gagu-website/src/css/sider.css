@@ -15,11 +15,11 @@
 }
 
 #doc-sider-switch ~ .doc-sider-switch-button {
-  background-image: url("../img/icons/icon-menu.svg");
+  background-image: url("../../public/assets/icons/icon-menu.svg");
 }
 
 #doc-sider-switch:checked ~ .doc-sider-switch-button {
-  background-image: url("../img/icons/icon-close.svg");
+  background-image: url("../../public/assets/icons/icon-close.svg");
 }
 
 #header-Docs {
