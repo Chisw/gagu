@@ -45,5 +45,21 @@ const nextDoc = docList[activeIndex + 1]
   <DocTOC />
 </Page>
 <script is:inline>
-Array.from(document.querySelectorAll('.markdown-body a[href^=http]')).forEach(a => a.setAttribute('target', '_blank'));
+document.querySelectorAll('.markdown-body a[href^=http]')
+  .forEach(a => a.setAttribute('target', '_blank'));
+
+document.querySelectorAll(`
+  .hotkeys-table-container tr td:nth-child(2),
+  .hotkeys-table-container tr td:nth-child(3)
+`).forEach(td => {
+  const inner = td.textContent
+    .split(' + ')
+    .map(text => {
+      const prefix = text === 'Shift' ? '⇧ ' : ''
+      const content = `${prefix}${text.replace('Click', '').replace('Backspace', '').replace('Space', '_')}`
+      return `<div class="key key-${text.toLowerCase()}" data-content="${content}"></div>`
+    })
+    .join('&nbsp;')
+  td.innerHTML = `<div class="hotkeys">${inner}</div>`
+})
 </script>

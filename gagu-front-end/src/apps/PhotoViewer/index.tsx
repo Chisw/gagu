@@ -141,7 +141,7 @@ export default function PhotoViewer(props: AppComponentProps) {
         <div
           className={line(`
             relative flex-grow group
-            ${isLight ? 'bg-grid-light' : 'bg-grid-dark'}
+            ${isLight ? 'bg-grid-light' : 'bg-grid-dark bg-gray-900'}
             ${activeEntry ? 'cursor-zoom-in' : ''}
           `)}
         >
