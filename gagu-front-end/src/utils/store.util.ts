@@ -44,6 +44,8 @@ export const UserConfigStore = {
       hotkeyStyle: HotkeyStyle.mac,
       fileExplorerAutoOpen: false,
       fileExplorerDefaultPath: '',
+      musicPlayerVolume: 0.5,
+      videoPlayerVolume: 0.5,
     }
     const userConfigValue = localStorage.getItem(GAGU_USER_CONFIG_KEY) || ''
     if (userConfigValue) {

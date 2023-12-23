@@ -8,6 +8,8 @@ import VolumeSlider from './common/VolumeSlider'
 import ProgressSlider from './common/ProgressSlider'
 import { IconButton, Opener, SvgIcon } from '../../components/common'
 import { useTranslation } from 'react-i18next'
+import VolumeIcon from './common/VolumeIcon'
+import VolumeIndicator from './common/VolumeIndicator'
 
 const appId = AppId.musicPlayer
 
@@ -36,12 +38,20 @@ export default function MusicPlayer(props: AppComponentProps) {
     setActiveIndex,
   } = useRunAppEvent(appId)
 
-  const { userConfig: { kiloSize } } = useUserConfig()
+  const {
+    userConfig,
+    userConfig: {
+      kiloSize,
+      musicPlayerVolume,
+    },
+    setUserConfig,
+} = useUserConfig()
 
   const [isPlaying, setIsPlaying] = useState(false)
   const [playMode, setPlayMode] = useState<PlayMode>('ORDER')
-  const [volume, setVolume] = useState(1)
+  const [volume, setVolume] = useState(musicPlayerVolume)
   const [volumeSliderShow, setVolumeSliderShow] = useState(false)
+  const [volumeChangedTime, setVolumeChangedTime] = useState(0)
 
   const { request: queryAudioTags, data } = useRequest(FsApi.queryAudioTags)
 
@@ -132,12 +142,18 @@ export default function MusicPlayer(props: AppComponentProps) {
     setPlayMode(targetMode)
   }, [playMode])
 
-  const handleVolumeChange = useCallback((offset: number) => {
-    const volumeValue = volume * 100
-    if ((offset < 0 && volumeValue <= 0) || (offset > 0 && volumeValue >= 100)) return
-    const targetVolume = Math.max(Math.min((volumeValue + offset) / 100, 1), 0)
-    setVolume(targetVolume)
-  }, [volume])
+  const handleVolumeChange = useCallback((vol: number, offset?: number) => {
+    let targetVolume: number
+    if (offset) {
+      targetVolume = volume + offset
+    } else {
+      targetVolume = vol
+    }
+    const musicPlayerVolume = +Math.max(Math.min(targetVolume, 1), 0).toFixed(2)
+    setVolume(musicPlayerVolume)
+    setUserConfig({ ...userConfig, musicPlayerVolume })
+    setVolumeChangedTime(Date.now())
+  }, [setUserConfig, userConfig, volume])
 
   const handleEnded = useCallback(() => {
     if (!audioEl) return
@@ -150,12 +166,6 @@ export default function MusicPlayer(props: AppComponentProps) {
   }, [audioEl, playMode, handlePrevOrNext])
 
   const buttonList = useMemo(() => {
-    let volumeIcon = <SvgIcon.VolumeDown size={14} />
-    if (volume > .5) {
-      volumeIcon = <SvgIcon.VolumeUp size={14} />
-    } else if (volume === 0) {
-      volumeIcon = <SvgIcon.VolumeMute size={14} />
-    }
     return [
       {
         title: t`action.playMode`,
@@ -179,7 +189,7 @@ export default function MusicPlayer(props: AppComponentProps) {
       },
       {
         title: t`action.volume`,
-        icon: volumeIcon,
+        icon: <VolumeIcon volume={volume} size={14} />,
         onClick: () => setVolumeSliderShow(true),
       },
     ]
@@ -191,10 +201,10 @@ export default function MusicPlayer(props: AppComponentProps) {
       'Space, Space': handlePlayOrPause,
       'Meta+ArrowLeft, Ctrl+ArrowLeft': () => handlePrevOrNext(-1),
       'Meta+ArrowRight, Ctrl+ArrowRight': () => handlePrevOrNext(1),
-      'ArrowUp, ArrowUp': () => handleVolumeChange(1),
-      'ArrowDown, ArrowDown': () => handleVolumeChange(-1),
-      'Shift+ArrowUp, Shift+ArrowUp': () => handleVolumeChange(5),
-      'Shift+ArrowDown, Shift+ArrowDown': () => handleVolumeChange(-5),
+      'ArrowUp, ArrowUp': () => handleVolumeChange(0, 0.01),
+      'ArrowDown, ArrowDown': () => handleVolumeChange(0, -0.01),
+      'Shift+ArrowUp, Shift+ArrowUp': () => handleVolumeChange(0, 0.05),
+      'Shift+ArrowDown, Shift+ArrowDown': () => handleVolumeChange(0, -0.05),
       'ArrowRight, ArrowRight': () => handleProgressChange(0, 1),
       'ArrowLeft, ArrowLeft': () => handleProgressChange(0, -1),
       'Shift+ArrowRight, Shift+ArrowRight': () => handleProgressChange(0, 5),
@@ -209,6 +219,9 @@ export default function MusicPlayer(props: AppComponentProps) {
     <>
       <div className="absolute inset-0 flex flex-col bg-gradient-to-br from-pink-700 to-pink-900 select-none">
         {!activeEntry && <Opener appId={appId} />}
+
+        <VolumeIndicator volume={volume} time={volumeChangedTime} />
+
         {/* list */}
         <div className="relative z-0 flex-grow pb-3 overflow-y-auto">
           {matchedEntryList.map((entry, entryIndex) => {
@@ -263,7 +276,7 @@ export default function MusicPlayer(props: AppComponentProps) {
           right={8}
           bottom={50}
           onClose={() => setVolumeSliderShow(false)}
-          onVolumeChange={setVolume}
+          onVolumeChange={handleVolumeChange}
         />
 
         {activeEntry && (

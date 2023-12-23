@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { AppComponentProps, AppId } from '../../types'
-import { useRunAppEvent, usePlayInfo, useHotKey } from '../../hooks'
+import { useRunAppEvent, usePlayInfo, useHotKey, useUserConfig } from '../../hooks'
 import ProgressSlider from './common/ProgressSlider'
 import { line } from '../../utils'
 import { Opener, SvgIcon } from '../../components/common'
 import VolumeSlider from './common/VolumeSlider'
 import { useTranslation } from 'react-i18next'
+import VolumeIndicator from './common/VolumeIndicator'
+import VolumeIcon from './common/VolumeIcon'
 
 const appId = AppId.videoPlayer
 
@@ -26,10 +28,20 @@ export default function VideoPlayer(props: AppComponentProps) {
     // setActiveIndex,
   } = useRunAppEvent(appId)
 
+  const {
+    userConfig,
+    userConfig: {
+      // kiloSize,
+      videoPlayerVolume,
+    },
+    setUserConfig,
+} = useUserConfig()
+
   const [, setLoading] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
-  const [volume, setVolume] = useState(1)
+  const [volume, setVolume] = useState(videoPlayerVolume)
   const [volumeSliderShow, setVolumeSliderShow] = useState(false)
+  const [volumeChangedTime, setVolumeChangedTime] = useState(0)
 
   const videoRef = useRef<HTMLVideoElement>(null)
   const videoEl = useMemo(() => {
@@ -81,12 +93,18 @@ export default function VideoPlayer(props: AppComponentProps) {
     if (!isPlaying) handlePlayOrPause()
   }, [videoEl, isPlaying, handlePlayOrPause])
 
-  const handleVolumeChange = useCallback((offset: number) => {
-    const volumeValue = volume * 100
-    if ((offset < 0 && volumeValue <= 0) || (offset > 0 && volumeValue >= 100)) return
-    const targetVolume = Math.max(Math.min((volumeValue + offset) / 100, 1), 0)
-    setVolume(targetVolume)
-  }, [volume])
+  const handleVolumeChange = useCallback((vol: number, offset?: number) => {
+    let targetVolume: number
+    if (offset) {
+      targetVolume = volume + offset
+    } else {
+      targetVolume = vol
+    }
+    const videoPlayerVolume = +Math.max(Math.min(targetVolume, 1), 0).toFixed(2)
+    setVolume(videoPlayerVolume)
+    setUserConfig({ ...userConfig, videoPlayerVolume })
+    setVolumeChangedTime(Date.now())
+  }, [setUserConfig, userConfig, volume])
 
   const buttonList = useMemo(() => {
     return [
@@ -98,26 +116,16 @@ export default function VideoPlayer(props: AppComponentProps) {
     ]
   }, [isPlaying, handlePlayOrPause, t])
 
-  const volumeIcon = useMemo(() => {
-    let volumeIcon = <SvgIcon.VolumeDown size={14} />
-    if (volume > .5) {
-      volumeIcon = <SvgIcon.VolumeUp size={14} />
-    } else if (volume === 0) {
-      volumeIcon = <SvgIcon.VolumeMute size={14} />
-    }
-    return volumeIcon
-  }, [volume])
-
   useHotKey({
     binding: isTopWindow,
     fnMap: {
       'Space, Space': handlePlayOrPause,
       // 'Meta+ArrowLeft, Ctrl+ArrowLeft': () => handlePrevOrNext(-1),
       // 'Meta+ArrowRight, Ctrl+ArrowRight': () => handlePrevOrNext(1),
-      'ArrowUp, ArrowUp': () => handleVolumeChange(1),
-      'ArrowDown, ArrowDown': () => handleVolumeChange(-1),
-      'Shift+ArrowUp, Shift+ArrowUp': () => handleVolumeChange(5),
-      'Shift+ArrowDown, Shift+ArrowDown': () => handleVolumeChange(-5),
+      'ArrowUp, ArrowUp': () => handleVolumeChange(0, 0.01),
+      'ArrowDown, ArrowDown': () => handleVolumeChange(0, -0.01),
+      'Shift+ArrowUp, Shift+ArrowUp': () => handleVolumeChange(0, 0.05),
+      'Shift+ArrowDown, Shift+ArrowDown': () => handleVolumeChange(0, -0.05),
       'ArrowRight, ArrowRight': () => handleProgressChange(0, 1),
       'ArrowLeft, ArrowLeft': () => handleProgressChange(0, -1),
       'Shift+ArrowRight, Shift+ArrowRight': () => handleProgressChange(0, 5),
@@ -131,11 +139,14 @@ export default function VideoPlayer(props: AppComponentProps) {
   return (
     <>
       <div className="absolute inset-0 bg-black select-none group">
+        {!activeEntry && <Opener appId={appId} />}
+
+        <VolumeIndicator volume={volume} time={volumeChangedTime} />
+
         <div
           className="absolute z-0 inset-0"
           onClick={handlePlayOrPause}
         >
-          {!activeEntry && <Opener appId={appId} />}
           <video
             autoPlay
             ref={videoRef}
@@ -143,6 +154,7 @@ export default function VideoPlayer(props: AppComponentProps) {
             onEnded={() => setTimeout(() => setIsPlaying(false), 1000)}
           />
         </div>
+
         <div
           className={line(`
             absolute z-10 right-0 bottom-0 left-0
@@ -170,7 +182,7 @@ export default function VideoPlayer(props: AppComponentProps) {
             right={44}
             bottom={44}
             onClose={() => setVolumeSliderShow(false)}
-            onVolumeChange={setVolume}
+            onVolumeChange={handleVolumeChange}
           />
           <div className="w-24">
             <p className="opacity-50 font-din">{playInfo.currentTimeLabel} / {playInfo.durationLabel}</p>
@@ -193,7 +205,7 @@ export default function VideoPlayer(props: AppComponentProps) {
               className="w-8 h-8 text-white cursor-pointer hover:bg-white hover:bg-opacity-20 active:bg-opacity-10 flex justify-center items-center rounded"
               onClick={() => setVolumeSliderShow(true)}
             >
-              {volumeIcon}
+              <VolumeIcon volume={volume} size={14} />
             </div>
             <div
               className="ml-1 w-8 h-8 text-white cursor-pointer hover:bg-white hover:bg-opacity-20 active:bg-opacity-10 flex justify-center items-center rounded"

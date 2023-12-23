@@ -8,6 +8,8 @@ export interface IUserConfig {
   kiloSize: 1000 | 1024
   fileExplorerAutoOpen: boolean
   fileExplorerDefaultPath: string
+  musicPlayerVolume: number
+  videoPlayerVolume: number
 }
 
 // Sync following code to BE & FE
