@@ -90,7 +90,7 @@ export const APP_LIST: IApp[] = [
       minWidth: 600,
       minHeight: 300,
     },
-    headerClassName: 'bg-gray-700 text-gray-100',
+    headerClassName: 'bg-zinc-700 text-zinc-100',
     touchModeShow: true,
   },
   {

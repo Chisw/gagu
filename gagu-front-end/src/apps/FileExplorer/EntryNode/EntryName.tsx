@@ -202,7 +202,7 @@ export function NameLabel(props: NameLabelProps) {
         gagu-entry-node-name
         px-1 rounded text-xs
         ${gridMode ? 'max-w-full line-clamp-2' : 'w-full truncate'}
-        ${isSelected ? 'text-white' : 'text-gray-700'}
+        ${isSelected ? 'text-white' : 'text-gray-700 dark:text-zinc-200'}
         ${isSelected && gridMode ? 'bg-blue-600' : ''}
       `)}
     >

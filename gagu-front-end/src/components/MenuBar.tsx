@@ -113,9 +113,10 @@ export function MenuBar() {
         className={line(`
           gagu-menu-bar
           absolute z-20 top-0 right-0 left-0
-          px-1 h-8 md:h-6
+          px-1 h-8 md:h-6 shadow-sm backdrop-blur
           flex justify-between items-center
-           bg-white bg-opacity-50 shadow-sm backdrop-blur
+           bg-white bg-opacity-50
+           dark:bg-black dark:bg-opacity-40 dark:text-zinc-200
           transition-all duration-500 ease-out
           ${[Page.desktop, Page.explore, Page.touch].includes(activePage) ? 'translate-y-0' : '-translate-y-20'}
         `)}
@@ -124,11 +125,11 @@ export function MenuBar() {
           <Dropdown
             trigger="click"
             position="bottomLeft"
-            className="bg-white bg-opacity-90 backdrop-blur"
+            className="bg-white bg-opacity-90 backdrop-blur dark:bg-black dark:bg-opacity-40"
             visible={systemPopoverShow}
             render={(
               <Dropdown.Menu className="w-48">
-                <div className="mb-[2px] px-2 pb-1 border-b text-xs font-din flex justify-between">
+                <div className="mb-[2px] px-2 pb-1 border-b text-xs font-din flex justify-between dark:text-zinc-200 dark:border-black dark:border-opacity-20">
                   <div>
                     GAGU v{baseData.version}
                   </div>
@@ -137,7 +138,7 @@ export function MenuBar() {
                       title={t`action.visitWebsite`}
                       target="_blank"
                       rel="noreferrer"
-                      className="text-gray-300 hover:text-gray-500"
+                      className="text-gray-300 hover:text-gray-500 dark:hover:text-zinc-100"
                       href="https://gagu.io"
                     >
                       <SvgIcon.Earth />
@@ -146,7 +147,7 @@ export function MenuBar() {
                       title={t`action.visitGithub`}
                       target="_blank"
                       rel="noreferrer"
-                      className="ml-1 text-gray-300 hover:text-gray-500"
+                      className="ml-1 text-gray-300 hover:text-gray-500 dark:hover:text-zinc-100"
                       href="https://github.com/Chisw/gagu"
                     >
                       <SvgIcon.Github />
@@ -177,27 +178,29 @@ export function MenuBar() {
                 </Dropdown.Item>
                 <Dropdown
                   position="rightTop"
-                  className="bg-white bg-opacity-90 backdrop-blur"
+                  className="bg-white bg-opacity-90 backdrop-blur dark:bg-black dark:bg-opacity-40"
                   render={(
-                    <div className="px-4 py-8 w-48">
+                    <div className="px-4 py-8 w-48 dark:text-zinc-200">
                       <div className="flex justify-center">
-                        <QrCode value={localAddress} />
+                        <QrCode value={localAddress} className="border-2 border-white" />
                       </div>
                       <p className="mt-2 text-xs text-center font-din">{localAddress}</p>
                     </div>
                   )}
                 >
-                  <Dropdown.Item icon={<SvgIcon.QrCode />}>
+                  <Dropdown.Item
+                    icon={<SvgIcon.QrCode />}
+                  >
                     <div className="w-full flex justify-between items-center">
                       <span>{t`action.qrCode`}</span>
-                      <SvgIcon.ChevronRight className="text-gray-400"/>
+                      <SvgIcon.ChevronRight className="text-gray-400 dark:text-zinc-200"/>
                     </div>
                   </Dropdown.Item>
                 </Dropdown>
                 <Dropdown
                   showTick
                   position="rightTop"
-                  className="bg-white bg-opacity-90 backdrop-blur"
+                  className="bg-white bg-opacity-90 backdrop-blur dark:bg-black dark:bg-opacity-40"
                   render={(
                     <Dropdown.Menu className="w-48">
                       {pageList.map(({ key, icon }) => {
@@ -225,7 +228,7 @@ export function MenuBar() {
                   <Dropdown.Item icon={<SvgIcon.Device />}>
                     <div className="w-full flex justify-between items-center">
                       <span>{t`action.switchTo`}</span>
-                      <SvgIcon.ChevronRight className="text-gray-400"/>
+                      <SvgIcon.ChevronRight className="text-gray-400 dark:text-zinc-200"/>
                     </div>
                   </Dropdown.Item>
                 </Dropdown>
@@ -247,7 +250,7 @@ export function MenuBar() {
             >
               <SvgIcon.G size={12} className="hidden md:block" />
               <SvgIcon.G size={14} className="block md:hidden" />
-              <span className="hidden md:inline ml-2 text-gray-700 font-din">
+              <span className="hidden md:inline ml-2 text-gray-700 font-din dark:text-zinc-200">
                 {/* TODO: i18n */}
                 {loading ? 'Loading..' : `${baseData.deviceName}`}
               </span>
@@ -256,26 +259,30 @@ export function MenuBar() {
           <Dropdown
             trigger="click"
             position="bottomLeft"
-            className="bg-white bg-opacity-90 backdrop-blur"
+            className="bg-white bg-opacity-90 backdrop-blur dark:bg-black dark:bg-opacity-40"
             visible={userPopoverShow}
             render={(
               <Dropdown.Menu className="w-48">
-                <div className="mb-[2px] px-2 pt-1 pb-2 border-b">
+                <div className="mb-[2px] px-2 pt-1 pb-2 border-b dark:border-black dark:border-opacity-20">
                   <div className="flex items-center">
                     <div
-                      className="w-10 h-10 rounded-full border-2 border-white shadow bg-center bg-cover"
+                      className="w-10 h-10 rounded-full border-2 border-white shadow bg-center bg-cover dark:border-zinc-400"
                       style={{ backgroundImage: `url("${FsApi.getAvatarStreamUrl(userInfo?.username || '')}")` }}
                     />
                     <div className="ml-2 text-sm leading-none flex-grow">
-                      <p className="font-bold">{userInfo?.nickname}</p>
-                      <p className="text-xs text-gray-500">@{userInfo?.username}</p>
+                      <p className="font-bold dark:text-zinc-100">{userInfo?.nickname}</p>
+                      <p className="text-xs text-gray-500 dark:text-zinc-300">@{userInfo?.username}</p>
                     </div>
                   </div>
                   <div className="mt-1 font-din">
                     {userInfo?.permissions.map(p => (
                       <span
                         key={p}
-                        className="inline-block mr-[2px] mb-[2px] px-1 py-0 text-xs text-blue-600 bg-blue-100 rounded select-none capitalize"
+                        className={line(`
+                          inline-block mr-[2px] mb-[2px] px-1 py-0
+                          text-xs text-blue-600 bg-blue-100 rounded select-none capitalize
+                          dark:text-blue-200 dark:bg-blue-600
+                        `)}
                       >
                         {p}
                       </span>
@@ -319,7 +326,7 @@ export function MenuBar() {
                     className="w-4 h-4 md:w-3 md:h-3 md:box-content rounded-full filter opacity-80 bg-center bg-cover bg-black bg-opacity-20 border border-white"
                     style={{ backgroundImage: `url("${FsApi.getAvatarStreamUrl(userInfo?.username || '')}")` }}
                   />
-                  <span className="hidden md:inline ml-2 font-din text-gray-700">{userInfo.nickname}</span>
+                  <span className="hidden md:inline ml-2 font-din text-gray-700 dark:text-zinc-200">{userInfo.nickname}</span>
                 </>
               ) : (
                 <SvgIcon.User />

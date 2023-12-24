@@ -8,9 +8,12 @@ import TouchPage from './pages/TouchPage'
 import SharingPage from './pages/SharingPage'
 import { FsApi } from './api'
 import { setFavicon } from './utils'
+import { useColorScheme } from './hooks'
 import './css/index.css'
 
 export default function App() {
+
+  useColorScheme()
 
   useEffect(() => {
     setFavicon(FsApi.getImageStreamUrl('favicon'))
@@ -20,7 +23,7 @@ export default function App() {
     <BrowserRouter>
       <Toaster containerClassName="break-all" />
       <Routes>
-        {/* sync to roots */}
+        {/* sync to roots in back-end */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/" element={<DesktopPage />} />
         <Route path="/desktop" element={<DesktopPage />} />

@@ -5,7 +5,7 @@ layout: ../../../layouts/DocLayout.astro
 
 # 待办项
 
-很多构想会被记录在此，等待开发。
+很多构想会被记录在此，等待开发
 
 ## 全局
 
@@ -83,9 +83,6 @@ layout: ../../../layouts/DocLayout.astro
 - 水平音量滑块
 
 ### 设置
-
-- 通用设置
-  - 深色模式
 
 - 高级设置
   - IP 白名单、黑名单

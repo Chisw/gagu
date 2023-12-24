@@ -1,7 +1,7 @@
 import { TabPane, Tabs } from '@douyinfe/semi-ui'
 import { useTranslation } from 'react-i18next'
 import GeneralSettings from './GeneralSettings'
-import AppsSettings from './AppsSettings'
+import ImagesSettings from './ImagesSettings'
 import AdvancedSettings from './AdvancedSettings'
 
 export default function SystemPanel() {
@@ -19,8 +19,8 @@ export default function SystemPanel() {
           <TabPane tab={t`title.settings_system_general`} itemKey="general">
             <GeneralSettings />
           </TabPane>
-          <TabPane tab={t`title.settings_system_apps`} itemKey="apps">
-            <AppsSettings />
+          <TabPane tab={t`title.settings_system_images`} itemKey="images">
+            <ImagesSettings />
           </TabPane>
           <TabPane tab={t`title.settings_system_advanced`} itemKey="advanced">
             <AdvancedSettings />

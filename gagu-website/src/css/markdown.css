@@ -960,7 +960,7 @@
 .markdown-body a[href^=http]::after {
   @apply inline-block ml-[2px] w-2 h-2 bg-contain -translate-y-1;
   content: "";
-  background-image: url("../img/icons/external.svg");
+  background-image: url("/assets/icons/external.svg");
 }
 
 .markdown-body .hotkeys-table-container table {

@@ -5,7 +5,7 @@ layout: ../../../layouts/DocLayout.astro
 
 # Todo List
 
-Many unrealized ideas will be recorded here, waiting for development.
+Many unrealized ideas will be recorded here, waiting for development
 
 ## Global
 
@@ -83,10 +83,6 @@ Many unrealized ideas will be recorded here, waiting for development.
 - Horizontal volume slider
 
 ### Settings
-
-- General settings
-  - Default open mode on PC
-  - Dark mode
 
 - Advanced settings
    - IP whitelist, blacklist

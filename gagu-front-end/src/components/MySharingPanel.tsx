@@ -48,7 +48,7 @@ export function MySharingPanel(props: MySharingPanelProps) {
   return (
     <>
       <SideSheet
-        className="gagu-sync-popstate-overlay gagu-prevent-hotkeys-overlay"
+        className="gagu-side-drawer gagu-sync-popstate-overlay gagu-prevent-hotkeys-overlay"
         title={(
           <div className="flex justify-between">
             <div>{t`title.mySharing`}</div>
@@ -66,7 +66,6 @@ export function MySharingPanel(props: MySharingPanelProps) {
         headerStyle={{ padding: '8px 12px' }}
         bodyStyle={{ padding: 0 }}
         maskStyle={{ background: 'rgba(0, 0, 0, .1)' }}
-        style={{ background: 'rgba(255, 255, 255, .6)', backdropFilter: 'blur(12px)', maxWidth: '90vw' }}
         width={600}
         visible={show}
         onCancel={onClose}
@@ -83,8 +82,8 @@ export function MySharingPanel(props: MySharingPanelProps) {
                   className="px-4 py-2 flex justify-between items-center group"
                 >
                   <div>
-                    <div className="font-bold">{downloadName}</div>
-                    <div className="mt-1 text-xs text-gray-600">
+                    <div className="font-bold dark:text-zinc-100">{downloadName}</div>
+                    <div className="mt-1 text-xs text-gray-600 dark:text-zinc-300">
                       {getDateTime(createdAt)}
                       &emsp;
                       {leftTimes === undefined ? t`tip.noTimesLimit` : leftTimes}

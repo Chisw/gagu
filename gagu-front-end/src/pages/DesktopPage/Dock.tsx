@@ -103,6 +103,7 @@ export default function Dock() {
           rounded-xl
           transition-all duration-500 ease-out
           -translate-x-1/2
+          dark:bg-black dark:bg-opacity-20
           ${activePage === Page.desktop ? 'translate-y-0' : 'translate-y-20'}
         `)}
       >

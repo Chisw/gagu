@@ -27,7 +27,13 @@ export default function Side(props: SideProps) {
         ${sideCollapse ? 'w-0' : 'w-56'}
       `)}
     >
-      <div className="w-56 h-full border-r border-gray-100 overflow-x-hidden overflow-y-auto">
+      <div
+        className={line(`
+          w-56 h-full border-r border-gray-100
+          overflow-x-hidden overflow-y-auto
+          dark:border-zinc-700
+        `)}
+      >
         <SideEntryList
           {...{ currentPath, sideEntryList }}
           onSideEntryClick={onSideEntryClick}

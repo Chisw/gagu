@@ -90,7 +90,8 @@ export function TransferPanel() {
           relative px-2 h-full
           text-xs select-none
           transition-width duration-200
-          flex items-center cursor-pointer hover:bg-white hover:bg-opacity-30 active:bg-black active:bg-opacity-10
+          flex items-center cursor-pointer
+          hover:bg-white hover:bg-opacity-30 active:bg-black active:bg-opacity-10
           ${uploading ? 'w-28 bg-white bg-opacity-40' : ''}
         `}
         onClick={() => setVisible(true)}
@@ -118,7 +119,7 @@ export function TransferPanel() {
       </div>
 
       <SideSheet
-        className="gagu-sync-popstate-overlay gagu-prevent-hotkeys-overlay"
+        className="gagu-side-drawer gagu-sync-popstate-overlay gagu-prevent-hotkeys-overlay"
         title={(
           <div className="flex items-center">
             <SvgIcon.Transfer size={24} />
@@ -151,7 +152,6 @@ export function TransferPanel() {
         headerStyle={{ padding: '8px 12px' }}
         bodyStyle={{ padding: 0 }}
         maskStyle={{ background: 'rgba(0, 0, 0, .1)' }}
-        style={{ background: 'rgba(255, 255, 255, .6)', backdropFilter: 'blur(12px)', maxWidth: '90vw' }}
         width={400}
         visible={visible}
         onCancel={() => setVisible(false)}
@@ -169,19 +169,29 @@ export function TransferPanel() {
             return (
               <div
                 key={id}
-                className="relative px-4 py-2 flex justify-between items-center border-b border-gray-100"
+                className={line(`
+                  relative px-4 py-2
+                  flex justify-between items-center
+                  border-b border-gray-100
+                  dark:border-black dark:border-opacity-10
+                `)}
               >
                 <div>
-                  <p className={`mb-1 text-sm font-bold ${isActive ? 'text-green-500' : ''}`}>{indexStr}. {name}</p>
-                  <p className="text-xs text-gray-500 break-all">{newPath}</p>
+                  <p
+                    className={line(`
+                      mb-1 text-sm font-bold
+                      dark:text-zinc-100
+                      ${isActive ? 'text-green-500' : ''}
+                    `)}
+                  >
+                    {indexStr}. {name}
+                  </p>
+                  <p className="text-xs text-gray-500 break-all dark:text-zinc-300">
+                    {newPath}
+                  </p>
                 </div>
                 &nbsp;
-                <span
-                  className={line(`
-                    inline-block ml-4 p-1 rounded-full text-white
-                    ${bg}
-                  `)}
-                >
+                <span className={`inline-block ml-4 p-1 rounded-full text-white ${bg}`}>
                   {icon}
                 </span>
                 {isActive && (

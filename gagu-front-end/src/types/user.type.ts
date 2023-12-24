@@ -3,9 +3,16 @@ export enum HotkeyStyle {
   win = 'win',
 }
 
+export enum ColorScheme {
+  auto = 'auto',
+  light = 'light',
+  dark = 'dark',
+}
+
 export interface IUserConfig {
   hotkeyStyle: keyof typeof HotkeyStyle
   kiloSize: 1000 | 1024
+  colorScheme: keyof typeof ColorScheme
   fileExplorerAutoOpen: boolean
   fileExplorerDefaultPath: string
   musicPlayerVolume: number

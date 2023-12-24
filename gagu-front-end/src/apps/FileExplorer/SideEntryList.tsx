@@ -49,8 +49,8 @@ export default function SideEntryList(props: SideEntryListProps) {
               relative px-3 py-3 md:py-2 text-sm border-l-4
               transition-all duration-200
               ${isActive
-                ? 'border-blue-500 bg-white text-black'
-                : 'border-transparent text-gray-600 hover:text-black cursor-pointer'
+                ? 'border-blue-500 bg-white text-black dark:bg-zinc-800 dark:text-zinc-200'
+                : 'border-transparent text-gray-600 hover:text-black cursor-pointer dark:text-zinc-200 dark:hover:text-white'
               }
             `)}
             onClick={() => canSideEntryClick && onSideEntryClick(sideEntry)}

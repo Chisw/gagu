@@ -1,5 +1,6 @@
 body {
-  font-family: PingFang, Arial, Helvetica, sans-serif;
+  @apply dark:bg-zinc-800;
+  font-family: PingFang, Arial, Helvetica, sans-serif !important;
   overflow: hidden;
 }
 
@@ -151,7 +152,7 @@ body {
 }
 
 .semi-button.semi-button-disabled {
-  @apply bg-gray-100 cursor-not-allowed;
+  @apply bg-gray-100 cursor-not-allowed dark:bg-zinc-700;
 }
 
 .gagu-entry-name-editor .semi-modal-mask,
@@ -159,8 +160,12 @@ body {
   @apply bg-black bg-opacity-10 !important;
 }
 
+.gagu-side-drawer .semi-sidesheet-inner {
+  @apply bg-white bg-opacity-60 backdrop-blur-lg max-w-[90vw] dark:bg-zinc-700 dark:bg-opacity-40;
+}
+
 .gagu-confirmor .semi-modal-content {
-  @apply bg-white bg-opacity-90 backdrop-blur border-none;
+  @apply bg-white bg-opacity-90 backdrop-blur border-none dark:bg-black dark:bg-opacity-80;
 }
 
 .gagu-touch-open-with-apps .semi-modal-mask {

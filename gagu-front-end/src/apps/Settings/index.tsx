@@ -27,7 +27,7 @@ export default function Settings (props: AppComponentProps) {
   return (
     <>
       <div className="gagu-app-settings absolute inset-0 flex flex-col md:flex-row">
-        <div className="hidden md:block w-48 border-r h-full flex-shrink-0 select-none">
+        <div className="hidden md:block w-48 border-r h-full flex-shrink-0 select-none dark:border-zinc-700">
           {tabList.map(({ key, icon }) => (
             <div
               key={key}
@@ -37,8 +37,8 @@ export default function Settings (props: AppComponentProps) {
                 flex items-center
                 transition-all duration-200
                 ${key === activeTagKey
-                  ? 'border-blue-500 bg-white cursor-default'
-                  : 'border-transparent cursor-pointer'
+                ? 'border-blue-500 bg-white text-black dark:bg-zinc-800 dark:text-zinc-200'
+                : 'border-transparent text-gray-600 hover:text-black cursor-pointer dark:text-zinc-200 dark:hover:text-white'
                 }
               `)}
               onClick={() => setActiveTabKey(key)}
@@ -48,7 +48,7 @@ export default function Settings (props: AppComponentProps) {
             </div>
           ))}
         </div>
-        <div className="md:hidden pt-2 flex-shrink-0 select-none bg-white">
+        <div className="md:hidden pt-2 flex-shrink-0 select-none bg-white dark:bg-zinc-800">
           <Tabs
             collapsible
             type="card"
@@ -68,7 +68,7 @@ export default function Settings (props: AppComponentProps) {
               ))}
           </Tabs>
         </div>
-        <div className="relative w-full h-full bg-white">
+        <div className="relative w-full h-full bg-white dark:bg-zinc-800">
           <Panel />
         </div>
       </div>

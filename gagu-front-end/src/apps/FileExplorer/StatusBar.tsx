@@ -65,6 +65,7 @@ export default function StatusBar(props: StatusBarProps) {
         px-2
         flex-shrink-0 flex justify-between items-center
         text-xs text-gray-500 select-none bg-gray-100
+        dark:text-zinc-400 dark:bg-zinc-700
         ${touchMode ? 'h-6' : 'py-1'}
       `)}
     >
@@ -77,7 +78,7 @@ export default function StatusBar(props: StatusBarProps) {
             data-entry-path={rootEntryPath}
             className={line(`
               gagu-file-explorer-status-bar-folder relative
-              ${isRootEntryDisabled ? '' : 'cursor-pointer hover:text-black'}
+              ${isRootEntryDisabled ? '' : 'cursor-pointer hover:text-black dark:hover:text-zinc-200'}
             `)}
             onClick={() => !isRootEntryDisabled && rootEntry && onRootEntryClick(rootEntry)}
           >
@@ -99,7 +100,7 @@ export default function StatusBar(props: StatusBarProps) {
 
             return (
               <span key={encodeURIComponent(fullPath)}>
-                <SvgIcon.ChevronRight size={14} className="inline -mt-[2px] text-gray-300" />
+                <SvgIcon.ChevronRight size={14} className="inline -mt-[2px] text-gray-300 dark:text-zinc-500" />
                 <span
                   title={fullPath}
                   {...dragDropProps}
@@ -107,7 +108,7 @@ export default function StatusBar(props: StatusBarProps) {
                   data-entry-path={fullPath}
                   className={line(`
                     gagu-file-explorer-status-bar-folder relative
-                    ${disabled ? '' : 'cursor-pointer hover:text-black'}
+                    ${disabled ? '' : 'cursor-pointer hover:text-black dark:hover:text-zinc-200'}
                   `)}
                   onClick={() => !disabled && onDirClick(fullPath)}
                 >
@@ -124,7 +125,11 @@ export default function StatusBar(props: StatusBarProps) {
           })}
           <span
             title={t`action.copy`}
-            className="md:invisible ml-2 cursor-pointer group-hover:visible text-xs hover:text-gray-500 active:opacity-70"
+            className={line(`
+              md:invisible ml-2 cursor-pointer group-hover:visible text-xs
+            hover:text-gray-500 active:opacity-70
+              dark:hover:text-zinc-200
+            `)}
             onClick={() => {
               const value = `${rootEntryPath}/${centerPathList.join('/')}`
               copy(value)

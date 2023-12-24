@@ -1,5 +1,6 @@
 export * from './useAddUploadingTask'
 export * from './useClickAway'
+export * from './useColorScheme'
 export * from './useDragDrop'
 export * from './useDragTransfer'
 export * from './useFileExplorer'

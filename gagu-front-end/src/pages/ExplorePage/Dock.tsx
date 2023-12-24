@@ -45,6 +45,7 @@ export default function Dock(props: DockProps) {
           bg-gradient-to-b from-gray-200 to-gray-400
           flex justify-center items-center
           transition-all duration-500 ease-out
+          dark:border-zinc-600 dark:from-zinc-700 dark:to-zinc-900
           ${activePage === Page.explore ? 'translate-y-0' : 'translate-y-20'}
         `)}
       >
@@ -59,7 +60,9 @@ export default function Dock(props: DockProps) {
               className={line(`
                 relative w-10 h-10 flex justify-center items-center
                 transition-all duration-50
-                ${isActive ? 'bg-gray-100' : 'hover:bg-gray-200 active:bg-gray-400 cursor-pointer'}
+                ${isActive
+                  ? 'bg-gray-100 dark:bg-zinc-500'
+                  : 'hover:bg-gray-200 active:bg-gray-400 cursor-pointer dark:hover:bg-zinc-600 dark:active:bg-zinc-900'}
               `)}
               title={t(`app.${appId}`)}
               onClick={() => {

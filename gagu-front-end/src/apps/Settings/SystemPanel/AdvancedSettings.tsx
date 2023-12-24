@@ -104,7 +104,7 @@ export default function AdvancedSettings() {
 
   return (
     <>
-      <div className="max-w-lg">
+      <div className="mt-2 mx-auto max-w-lg">
         {(!loading && form) && (
           <Form
             labelPosition={touchMode ? 'top' : 'left'}

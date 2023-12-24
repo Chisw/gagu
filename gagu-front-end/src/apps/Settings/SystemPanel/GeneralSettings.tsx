@@ -1,48 +1,43 @@
 import { useTranslation } from 'react-i18next'
 import { languageList, setLanguage } from '../../../i18n'
-import { Button, Form, Radio, RadioGroup } from '@douyinfe/semi-ui'
+import { Button, Divider, Form, Input, Radio, RadioGroup } from '@douyinfe/semi-ui'
 import { SvgIcon } from '../../../components/common'
-import { line, refreshImage, setFavicon } from '../../../utils'
-import { useCallback, useRef } from 'react'
-import { useRequest, useTouchMode, useUserConfig } from '../../../hooks'
-import { FsApi } from '../../../api'
-import { HotkeyStyle } from '../../../types'
+import { useTouchMode, useUserConfig } from '../../../hooks'
+import { AppId, ColorScheme, EntryType, EventTransaction, HotkeyStyle } from '../../../types'
+import { entrySelectorEventState, openEventState } from '../../../states'
+import { useRecoilState } from 'recoil'
+import { useCallback, useEffect } from 'react'
 
 export default function GeneralSettings() {
   const { t, i18n: { language } } = useTranslation()
 
   const touchMode = useTouchMode()
 
-  const faviconFileInputRef = useRef<any>(null)
-  const desktopWallpaperFileInputRef = useRef<any>(null)
-  const sharingWallpaperFileInputRef = useRef<any>(null)
-
   const { userConfig, setUserConfig } = useUserConfig()
 
-  const { request: uploadImage } = useRequest(FsApi.uploadImage)
+  const [openEvent, setOpenEvent] = useRecoilState(openEventState)
+  const [, setEntrySelectorEvent] = useRecoilState(entrySelectorEventState)
 
-  const handleFaviconChange = useCallback(async () => {
-    const file = faviconFileInputRef?.current?.files[0]
-    await uploadImage('favicon', file)
-    refreshImage('favicon')
-    setFavicon(FsApi.getImageStreamUrl('favicon'))
-  }, [uploadImage])
+  const handleSelectClick = useCallback(() => {
+    setEntrySelectorEvent({
+      transaction: EventTransaction.settings_default_path,
+      mode: 'open',
+      appId: AppId.settings,
+      type: EntryType.directory,
+    })
+  }, [setEntrySelectorEvent])
 
-  const handleDesktopWallpaperChange = useCallback(async () => {
-    const file = desktopWallpaperFileInputRef?.current?.files[0]
-    await uploadImage('bg-desktop', file)
-    refreshImage('bg-desktop')
-  }, [uploadImage])
-
-  const handleSharingWallpaperChange = useCallback(async () => {
-    const file = sharingWallpaperFileInputRef?.current?.files[0]
-    await uploadImage('bg-sharing', file)
-    refreshImage('bg-sharing')
-  }, [uploadImage])
+  useEffect(() => {
+    if (openEvent?.transaction === EventTransaction.settings_default_path) {
+      const fileExplorerDefaultPath: string = openEvent.extraData?.selectedPath
+      setUserConfig({ ...userConfig, fileExplorerDefaultPath })
+      setOpenEvent(null)
+    }
+  }, [openEvent, userConfig, setOpenEvent, setUserConfig])
 
   return (
     <>
-      <div className="max-w-lg">
+      <div className="mt-2 mx-auto max-w-lg">
         <Form
           labelPosition={touchMode ? 'top' : 'left'}
           labelAlign={touchMode ? 'left': 'right'}
@@ -94,73 +89,52 @@ export default function GeneralSettings() {
             <Radio value={1000}>1000</Radio>
             <Radio value={1024}>1024</Radio>
           </Form.RadioGroup>
-          <Form.Slot label={t`label.favicon`}>
-            <div
-              className={line(`
-                relative z-0 w-12 h-12
-                border-2 border-dashed border-gray-300 hover:border-blue-500 hover:border-solid
-                text-gray-500 rounded flex justify-center items-center
-              `)}
-            >
-              <div className="absolute z-0 inset-0 flex justify-center items-center">
-                <SvgIcon.ImageAdd size={24} className="text-gray-200" />
-              </div>
+          <Form.RadioGroup
+            field="colorScheme"
+            label={t`label.colorScheme`}
+            type="button"
+            initValue={userConfig.colorScheme}
+            onChange={(e) => setUserConfig({ ...userConfig, colorScheme: e.target.value })}
+          >
+            <Radio value={ColorScheme.auto}>{t(`label.colorScheme_${ColorScheme.auto}`)}</Radio>
+            <Radio value={ColorScheme.light}>{t(`label.colorScheme_${ColorScheme.light}`)}</Radio>
+            <Radio value={ColorScheme.dark}>{t(`label.colorScheme_${ColorScheme.dark}`)}</Radio>
+          </Form.RadioGroup>
+
+          <Divider margin="12px" align="left" className="pt-4">
+            <div className="px-2 flex items-center">
               <div
-                className="gagu-public-image-favicon absolute z-10 inset-0 m-1 bg-cover bg-no-repeat bg-top rounded-sm"
-                style={{ backgroundImage: `url("${FsApi.getImageStreamUrl('favicon')}")` }}
+                className="gagu-app-icon w-5 h-5"
+                data-app-id={AppId.fileExplorer}
               />
-              <input
-                ref={faviconFileInputRef}
-                type="file"
-                className="absolute z-20 block w-full h-full opacity-0 cursor-pointer"
-                onChange={() => handleFaviconChange()}
-              />
+              <span className="ml-2">{t`app.file-explorer`}</span>
             </div>
-          </Form.Slot>
-          <Form.Slot label={t`label.desktopWallpaper`}>
-            <div
-              className={line(`
-                relative w-48 h-32
-                border-2 border-dashed border-gray-300 hover:border-blue-500 hover:border-solid
-                text-gray-500 rounded flex justify-center items-center
-              `)}
-            >
-              <div className="absolute z-0 inset-0 flex justify-center items-center">
-                <SvgIcon.ImageAdd size={48} className="text-gray-200" />
-              </div>
-              <div
-                className="gagu-public-image-bg-desktop absolute z-10 inset-0 m-1 bg-cover bg-no-repeat bg-center rounded-sm"
-                style={{ backgroundImage: `url("${FsApi.getImageStreamUrl('bg-desktop')}")` }}
+          </Divider>
+
+          <Form.Switch
+            field="fileExplorerAutoOpen"
+            label={t`label.fileExplorerAutoOpen`}
+            extraText={t`hint.fileExplorerAutoOpen_extra`}
+            initValue={userConfig.fileExplorerAutoOpen}
+            onChange={(fileExplorerAutoOpen) => setUserConfig({ ...userConfig, fileExplorerAutoOpen })}
+          />
+          <Form.Slot label={t`label.defaultPath`}>
+            <div className="flex">
+              <Input
+                readOnly
+                readonly
+                showClear
+                onClear={() => setUserConfig({ ...userConfig, fileExplorerDefaultPath: '' })}
+                placeholder={t`hint.choose`}
+                autoComplete="off"
+                value={userConfig.fileExplorerDefaultPath}
               />
-              <input
-                ref={desktopWallpaperFileInputRef}
-                type="file"
-                className="absolute z-20 block w-full h-full opacity-0 cursor-pointer"
-                onChange={() => handleDesktopWallpaperChange()}
-              />
-            </div>
-          </Form.Slot>
-          <Form.Slot label={t`label.sharingPageWallpaper`}>
-            <div
-              className={line(`
-                relative w-48 h-32
-                border-2 border-dashed border-gray-300 hover:border-blue-500 hover:border-solid
-                text-gray-500 rounded flex justify-center items-center
-              `)}
-            >
-              <div className="absolute z-0 inset-0 flex justify-center items-center">
-                <SvgIcon.ImageAdd size={48} className="text-gray-200" />
-              </div>
-              <div
-                className="gagu-public-image-bg-sharing absolute z-10 inset-0 m-1 bg-cover bg-no-repeat bg-center rounded-sm"
-                style={{ backgroundImage: `url("${FsApi.getImageStreamUrl('bg-sharing')}")` }}
-              />
-              <input
-                ref={sharingWallpaperFileInputRef}
-                type="file"
-                className="absolute z-20 block w-full h-full opacity-0 cursor-pointer"
-                onChange={() => handleSharingWallpaperChange()}
-              />
+              <Button
+                className="ml-1 flex-shrink-0"
+                onClick={handleSelectClick}
+              >
+                <SvgIcon.FolderOpen />
+              </Button>
             </div>
           </Form.Slot>
         </Form>

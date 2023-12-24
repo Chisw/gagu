@@ -54,12 +54,6 @@ export default function EntryIcon(props: IconProps) {
     return supportThumbnail && useThumbnail && isViewable && !thumbnailErr
   }, [supportThumbnail, useThumbnail, isViewable, thumbnailErr])
 
-  const imageThumbnailClassName = useMemo(() => {
-    return thumbnailType === 'image'
-    ? `border-white shadow ${isSmall ? 'border' : 'border-2'} ${thumbnailLoading ? 'h-full aspect-square bg-loading' : ''}`
-    : ''
-  }, [thumbnailType, isSmall, thumbnailLoading])
-
   return (
     <div
       data-extension-label={extensionLabel}
@@ -92,7 +86,17 @@ export default function EntryIcon(props: IconProps) {
           <img
             alt=""
             src={FsApi.getThumbnailStreamUrl(entry)}
-            className={line(`max-w-full max-h-full bg-white ${imageThumbnailClassName}`)}
+            className={line(`
+              max-w-full max-h-full bg-white
+              ${thumbnailType === 'image'
+                ? `
+                  border-white shadow
+                  dark:border-zinc-400
+                  ${isSmall ? 'border' : 'border-2'}
+                  ${thumbnailLoading ? 'h-full aspect-square bg-loading' : ''}
+                `
+                : ''}
+            `)}
             onLoad={() => setThumbnailLoading(false)}
             onError={() => {
               setThumbnailErr(true)

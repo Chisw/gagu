@@ -6,7 +6,7 @@ import { FsApi, UserApi } from '../../../api'
 import { Confirmor, SvgIcon } from '../../../components/common'
 import { useRequest } from '../../../hooks'
 import { IUser, IUserForm, User, UserValidityType, UserForm, UserPermission } from '../../../types'
-import { getDateTime, getIsExpired } from '../../../utils'
+import { getDateTime, getIsExpired, line } from '../../../utils'
 
 const getTimestampSuffix = () => `?timestamp=${Date.now()}`
 
@@ -163,7 +163,11 @@ export default function UserList(props: UserListProps) {
                   {permissions.map(p => (
                     <span
                       key={p}
-                      className="inline-block mr-[2px] mb-[2px] px-1 py-0 text-xs text-blue-600 bg-blue-100 rounded select-none capitalize"
+                      className={line(`
+                        inline-block mr-[2px] mb-[2px] px-1 py-0
+                        text-xs text-blue-600 bg-blue-100 rounded select-none capitalize
+                        dark:text-blue-200 dark:bg-blue-600
+                      `)}
                     >
                       {p}
                     </span>

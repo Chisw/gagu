@@ -4,6 +4,7 @@ import { useRecoilState } from 'recoil'
 import { SvgIcon } from './common'
 import { contextMenuDataState } from '../states'
 import { Dropdown } from '@douyinfe/semi-ui'
+import { line } from '../utils'
 
 export function ContextMenu() {
 
@@ -66,7 +67,10 @@ export function ContextMenu() {
         <Dropdown
           trigger="custom"
           position="bottomLeft"
-          className={`select-none bg-white ${isDock ? '' : 'bg-opacity-80 backdrop-blur'}`}
+          className={line(`
+            select-none bg-white dark:bg-black dark:text-zinc-300
+            ${isDock ? '' : 'bg-opacity-80 backdrop-blur dark:bg-black dark:bg-opacity-30'}
+          `)}
           visible={menuShow}
           onClickOutSide={() => setMenuShow(false)}
           render={
@@ -76,7 +80,10 @@ export function ContextMenu() {
                   <Dropdown
                     key={name}
                     position="rightTop"
-                    className="bg-white bg-opacity-80 backdrop-blur min-w-[160px]"
+                    className={line(`
+                      bg-white bg-opacity-80 backdrop-blur min-w-[160px]
+                      dark:bg-black dark:bg-opacity-30
+                    `)}
                     menu={children.map(m => ({ ...m, node: 'item', onClick: closeAfterClick(m.onClick) }))}
                   >
                     <Dropdown.Item icon={icon} >
@@ -97,7 +104,7 @@ export function ContextMenu() {
                 )
               })}
               {isDock && (
-                <div className="absolute z-[-1] left-0 bottom-0 -mb-1 ml-3 w-3 h-3 bg-white rotate-45 rounded-sm" />
+                <div className="absolute z-[-1] left-0 bottom-0 -mb-1 ml-3 w-3 h-3 bg-white rotate-45 rounded-sm dark:bg-black" />
               )}
             </Dropdown.Menu>
           }

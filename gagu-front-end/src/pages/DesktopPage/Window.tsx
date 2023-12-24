@@ -157,6 +157,7 @@ export default function Window(props: WindowProps) {
             gagu-move-to-front-trigger
             absolute inset-0 bg-white bg-opacity-80 backdrop-blur-sm overflow-hidden
             transition-box-shadow duration-200 flex flex-col
+            dark:bg-black dark:bg-opacity-80
             ${isFullScreen ? '' : 'rounded border border-black border-opacity-10 bg-clip-padding'}
             ${isTopWindow ? 'shadow-xl' : 'shadow'}
           `)}
@@ -168,7 +169,7 @@ export default function Window(props: WindowProps) {
           <div
             className={line(`
               relative w-full h-8 flex items-center select-none group
-              ${headerClassName ? headerClassName : 'bg-white text-gray-500'}
+              ${headerClassName ? headerClassName : 'bg-white text-gray-500 dark:bg-zinc-800 dark:text-zinc-200'}
             `)}
           >
             <div

@@ -16,7 +16,7 @@ export function EmptyPanel(props: EmptyPanelProps) {
     <div
       className={line(`
         absolute inset-0 flex justify-center items-center
-        ${dark ? 'text-black text-opacity-10' : 'text-gray-100'}
+        ${dark ? 'text-black text-opacity-10' : 'text-gray-100 dark:text-zinc-700'}
       `)}
     >
       <SvgIcon.G size={64} />

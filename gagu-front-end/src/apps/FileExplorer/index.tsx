@@ -63,7 +63,7 @@ export default function FileExplorer(props: FileExplorerProps) {
 
   return (
     <>
-      <div className={`absolute inset-0 flex ${asSelector ? '' : 'border-t border-gray-100'}`}>
+      <div className={`absolute inset-0 flex ${asSelector ? '' : 'border-t border-gray-100 dark:border-zinc-700'}`}>
         {/* side */}
         <Side
           {...{ sideCollapse, currentPath, sideEntryList }}
@@ -71,7 +71,7 @@ export default function FileExplorer(props: FileExplorerProps) {
           onFavoriteCancel={(entry) => handleFavoriteClick(entry, true)}
         />
         {/* main */}
-        <div className="relative flex-grow h-full bg-white flex flex-col">
+        <div className="relative flex-grow h-full bg-white dark:bg-zinc-800 flex flex-col">
           <ControlBar
             {...{
               windowWidth,

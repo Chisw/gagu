@@ -45,6 +45,7 @@ export function Opener(props: OpenerProps) {
                 cursor-pointer rounded bg-white bg-opacity-90
                 text-xs text-gray-600 hover:text-gray-900
                 transition-all duration-700
+                dark:bg-zinc dark:bg-opacity-20 dark:border-zinc-400 dark:border-opacity-20 dark:text-zinc-200
                 ${mounted ? '' : 'opacity-0'}
               `)}
               onClick={() => {

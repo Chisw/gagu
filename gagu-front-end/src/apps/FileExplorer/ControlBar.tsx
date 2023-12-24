@@ -80,13 +80,13 @@ export default function ControlBar(props: ControlBarProps) {
 
   return (
     <>
-      <div className="h-10 md:h-8 flex-shrink-0 flex items-center border-b border-gray-100">
+      <div className="h-10 md:h-8 flex-shrink-0 flex items-center border-b border-gray-100 dark:border-zinc-700">
         <ToolButton
           title={t`action.location`}
           icon={<SvgIcon.SideBar />}
           onClick={onSideBarClick}
         />
-        <div className="md:mx-1 h-3 border-l" />
+        <div className="md:mx-1 h-3 border-l dark:border-zinc-700" />
         <ToolButton
           title={t`action.backward`}
           icon={<SvgIcon.ArrowLeft />}
@@ -120,7 +120,7 @@ export default function ControlBar(props: ControlBarProps) {
           onClick={onNavToParent}
         />
 
-        <div className="hidden md:block md:mx-1 h-3 border-l" />
+        <div className="hidden md:block md:mx-1 h-3 border-l dark:border-zinc-700" />
 
         {windowWidth > 720 && (
           <>
@@ -175,15 +175,15 @@ export default function ControlBar(props: ControlBarProps) {
           </>
         )}
 
-        <div className="flex-grow md:mx-1 h-3 border-r" />
+        <div className="flex-grow md:mx-1 h-3 border-r dark:border-zinc-700" />
 
         <div className={`${filterMode ? 'w-40' : 'w-8'} h-full transition-all duration-200`}>
           {filterMode ? (
-            <div className="h-full flex justify-between items-center border-r border-gray-100">
+            <div className="h-full flex justify-between items-center border-r border-gray-100 dark:border-zinc-700">
               <input
                 autoFocus
                 placeholder={t`hint.filter`}
-                className="w-full px-2 py-1 text-xs outline-none"
+                className="w-full px-2 py-1 text-xs outline-none bg-transparent dark:text-zinc-200"
                 value={filterText}
                 onChange={e => setFilterText(e.target.value)}
                 onBlur={e => !e.target.value && setFilterMode(false)}

@@ -5,7 +5,7 @@ module.exports = {
     './src/**/*.tsx',
     './src/**/*.ts',
   ],
-  darkMode: false, // or 'media' or 'class'
+  darkMode: 'class',
   theme: {
     extend: {},
   },

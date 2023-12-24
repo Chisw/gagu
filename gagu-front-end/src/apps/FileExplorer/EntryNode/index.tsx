@@ -79,10 +79,10 @@ export default function EntryNode(props: EntryNodeProps) {
         ${isSelected ? 'is-selected' : ''}
         ${gridMode ? 'm-1 px-1 py-2 w-[112px] h-[116px] rounded-sm' : 'px-3 py-[3px] w-full flex items-center'}
         ${isSelected && !gridMode ? 'bg-blue-600' : ''}
-        ${isSelected && gridMode ? 'bg-black bg-opacity-5' : ''}
+        ${isSelected && gridMode ? 'bg-black bg-opacity-5 dark:bg-opacity-20' : ''}
         ${isSelected && requestState?.deleting ? 'bg-loading' : ''}
         ${!isSelected && !gridMode ? 'even:bg-black even:bg-opacity-[2%]' : ''}
-        ${!isSelected && !hideAppIcon ? 'hover:bg-black hover:bg-opacity-5' : ''}
+        ${!isSelected && !hideAppIcon ? 'hover:bg-black hover:bg-opacity-5 dark:hover:bg-opacity-20' : ''}
       `)}
       onClick={e => onClick(e, entry)}
       onDoubleClick={() => onDoubleClick(entry)}
