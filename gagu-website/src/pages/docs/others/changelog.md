@@ -19,6 +19,14 @@ Clear data directory means that all users, download tunnels and other data will 
 
 ## v0.0.*
 
+- v0.0.52 (2023-12-24)
+  - feat: Desktop file management is available (adjust the user's default access path to personal folders)
+  - feat: hotkeys divided by system style
+  - feat: User-defined file size calculation method (Settings/System/General/1K=)
+  - feat: dark mode
+  - feat: memorize the volume adjustment of the user's MusicPlayer and VideoPlayer
+  - fix: error occurs when obtaining info for an audio file without built-in cover
+
 - v0.0.51 (2023-12-17)
   - feat: allow uploading files larger than 2GB
   - feat: add open-with in Touch mode
