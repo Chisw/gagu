@@ -7,7 +7,6 @@ import { AppComponentProps, AppId, IEntry } from '../../types'
 import { useRunAppEvent, useRequest, useHotKey, useUserConfig } from '../../hooks'
 import { useTranslation } from 'react-i18next'
 import ReactMarkdown from 'react-markdown'
-import 'github-markdown-css/github-markdown-light.css'
 import { useRecoilState } from 'recoil'
 import { lastChangedDirectoryState } from '../../states'
 
@@ -141,7 +140,13 @@ export default function TextEditor(props: AppComponentProps) {
   return (
     <>
       <div className="absolute inset-0 flex flex-col">
-        <div className={`relative z-10 h-10 md:h-8 flex-shrink-0 flex items-center border-b bg-white ${activeEntry ? '' : 'hidden'}`}>
+        <div
+          className={line(`
+            relative z-10 h-10 md:h-8 flex-shrink-0 flex items-center border-b bg-white
+            dark:bg-zinc-800 dark:border-zinc-600
+            ${activeEntry ? '' : 'hidden'}
+          `)}
+        >
           <ToolButton
             title={t`action.save`}
             icon={<SvgIcon.Save />}
@@ -206,6 +211,7 @@ export default function TextEditor(props: AppComponentProps) {
                 <textarea
                   className={line(`
                     p-2 h-full outline-none resize-none bg-transparent
+                    dark:text-zinc-200
                     ${markdownView === 'NONE'
                       ? 'w-full'
                       : markdownView === 'FULL'
@@ -220,8 +226,10 @@ export default function TextEditor(props: AppComponentProps) {
                 {(isMarkdown && markdownView !== 'NONE') && (
                   <div
                     className={line(`
-                      markdown-body p-6 w-1/2 h-full bg-white overflow-y-auto
-                      ${markdownView === 'FULL' ? 'w-full' : 'border-l w-1/2'}
+                      markdown-body
+                      p-6 w-1/2 h-full bg-white overflow-y-auto
+                      dark:bg-zinc-800
+                      ${markdownView === 'FULL' ? 'w-full' : 'border-l w-1/2 dark:border-zinc-600'}
                     `)}
                   >
                     <ReactMarkdown

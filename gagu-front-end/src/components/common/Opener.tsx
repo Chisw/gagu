@@ -43,10 +43,10 @@ export function Opener(props: OpenerProps) {
                 flex justify-center items-center
                 mt-12 p-2 w-36 border
                 cursor-pointer rounded bg-white bg-opacity-90
-                text-xs text-gray-600 hover:text-gray-900
-                transition-all duration-700
+                text-xs text-gray-600 hover:text-gray-900 hover:opacity-80
+                transition-all
                 dark:bg-zinc dark:bg-opacity-20 dark:border-zinc-400 dark:border-opacity-20 dark:text-zinc-200
-                ${mounted ? '' : 'opacity-0'}
+                ${mounted ? 'duration-200' : 'duration-700 opacity-0'}
               `)}
               onClick={() => {
                 setEntrySelectorEvent({

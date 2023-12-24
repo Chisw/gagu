@@ -65,13 +65,16 @@ export default function AdvancedSettings() {
             icon: undefined,
             content: (
               <div className="relative pt-6 flex flex-col justify-center items-center">
-                <SvgIcon.Upgrade size={240} className="absolute z-0 top-0 left-0 -translate-x-1/3 -translate-y-1/3 text-gray-100" />
+                <SvgIcon.Upgrade
+                  size={240}
+                  className="absolute z-0 top-0 left-0 -translate-x-1/3 -translate-y-1/3 text-gray-100 dark:text-zinc-600"
+                />
                 <p className="relative z-10 mt-4 text-center font-bold">
                   {t`tip.upgrading`}
                 </p>
                 <p className="relative z-10 mt-6 px-3 py-1 text-center text-gray-400 border-2 bg-gray-800 border-gray-900 rounded flex items-center">
                   <code>npm i -g gagu</code>
-                  <Spinner className="ml-6" />
+                  <Spinner className="ml-12" />
                 </p>
               </div>
             ),

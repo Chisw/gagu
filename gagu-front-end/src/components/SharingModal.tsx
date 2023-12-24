@@ -120,7 +120,7 @@ export function SharingModal(props: SharingModalProps) {
         onCancel={onClose}
       >
         <div className="absolute z-0 bottom-0 left-0 -mb-16 -ml-16">
-          <SvgIcon.Share className="text-gray-100" size={320} />
+          <SvgIcon.Share className="text-gray-100 dark:text-gray-600" size={320} />
         </div>
         {isCreating ? (
           <>

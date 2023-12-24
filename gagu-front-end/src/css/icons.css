@@ -180,6 +180,10 @@
   background-image: url("data: image/svg+xml, %3Csvg width='17' height='20' viewBox='0 0 17 20' fill='none' xmlns='http://www.w3.org/2000/svg' %3E%3Cpath d='M1 1h12l3 3v15H1V1z' fill='%23fff' /%3E%3Cpath d='M1 1h12l3 3v15H1V1z' fill='%23fff' /%3E%3Cpath d='M1 1v18h15V4l-3-3H1z' stroke='%23EAEAEA' stroke-width='.5' /%3E%3Cpath d='M15.5 4L13 1.5V4h2.5z' fill='%23EAEAEA' /%3E%3C/svg%3E");
 }
 
+.dark .gagu-entry-icon.--entry-file {
+  background-image: url("data: image/svg+xml, %3Csvg width='17' height='20' viewBox='0 0 17 20' fill='none' xmlns='http://www.w3.org/2000/svg' %3E%3Cpath d='M1 1h12l3 3v15H1V1z' fill='%23E4E4E7' /%3E%3Cpath d='M1 1h12l3 3v15H1V1z' fill='%23E4E4E7' /%3E%3Cpath d='M1 1v18h15V4l-3-3H1z' stroke='%23F4F4F5' /%3E%3Cpath d='M15.5 4L13 1.5V4h2.5z' fill='%23D4D4D8' /%3E%3C/svg%3E");
+}
+
 .gagu-entry-icon.--entry-file::before {
   @apply absolute z-0 top-[40%] left-1/2 block w-3 h-3 bg-no-repeat bg-center bg-contain transform -translate-x-1/2 -translate-y-2;
   content: '';

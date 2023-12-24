@@ -9,6 +9,7 @@ import { APP_LIST } from '../apps'
 import { SvgIcon } from './common'
 import { useTouchMode } from '../hooks'
 import FileExplorerTouch from '../apps/FileExplorerTouch'
+import { line } from '../utils'
 
 // const entryToTree = (entryList: IRootEntry[], hiddenShow: boolean) => {
 //   const treeList: TreeNodeData[] = entryList.map(entry => {
@@ -79,7 +80,13 @@ function Form(props: FormProps) {
   return (
     <div className="py-1">
       {isSelectingPath && (
-        <div className={`p-2 bg-gray-100 rounded flex items-center border border-gray-200 ${touchMode ? 'mb-1 text-xs' : 'mb-2'}`}>
+        <div
+          className={line(`
+            p-2 bg-gray-100 rounded flex items-center border border-gray-200
+            dark:bg-zinc-800 dark:text-zinc-200 dark:border-zinc-600
+            ${touchMode ? 'mb-1 text-xs' : 'mb-2'}
+          `)}
+        >
           <SvgIcon.Folder className="flex-shrink-0" />
           <div className="flex-grow ml-1 break-all text-left">{selectedPath}</div>
         </div>
@@ -255,14 +262,14 @@ export function EntrySelector() {
               {matchList.map((extension) => (
                 <div
                   key={extension}
-                  className="ml-1 px-1 text-xs text-gray-400 font-din bg-gray-100 rounded uppercase"
+                  className="ml-1 px-1 text-xs text-gray-400 font-din bg-gray-100 rounded uppercase dark:bg-zinc-500 dark:text-zinc-300"
                 >
                   {extension}
                 </div>
               ))}
             </div>
           </div>
-          <div className="mt-3 relative h-[540px] overflow-y-auto border bg-gray-100 bg-opacity-50">
+          <div className="mt-3 relative h-[540px] overflow-y-auto border bg-gray-100 bg-opacity-50 dark:bg-black dark:border-zinc-600">
             <FileExplorer
               asSelector
               isTopWindow={selectorShow}

@@ -151,6 +151,7 @@ export default function EntryName(props: EntryNameProps) {
               block px-1 w-full h-full bg-transparent break-words
               text-xs text-gray-700 border-none shadow-inner
               resize-none overflow-x-hidden overflow-y-auto scrollbar-hidden
+              dark:bg-zinc-600 dark:text-zinc-200
               ${gridMode ? 'text-center' : 'text-left'}
             `)}
             value={inputValue}

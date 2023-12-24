@@ -52,7 +52,7 @@ export default function UserList(props: UserListProps) {
     const buttonList = [
       {
         label: t`action.edit`,
-        icon: <SvgIcon.Edit className="text-gray-500" />,
+        icon: <SvgIcon.Edit className="text-gray-500 dark:text-zinc-300" />,
         show: true,
         onClick: () => {
           const avatarPath = FsApi.getAvatarStreamUrl(user.username) + getTimestampSuffix()
@@ -115,7 +115,11 @@ export default function UserList(props: UserListProps) {
           return (
             <div
               key={username}
-              className="relative mr-2 mb-2 w-44 transition-shadow duration-200 group rounded border overflow-hidden select-none"
+              className={line(`
+                relative mr-2 mb-2 w-44 rounded border
+                transition-shadow duration-200 group overflow-hidden select-none
+                dark:border-zinc-500
+              `)}
             >
               <div className="absolute z-10 top-0 right-0 m-1 scale-90 origin-top-right text-xs font-din">
                 {isExpired && (
@@ -147,7 +151,7 @@ export default function UserList(props: UserListProps) {
               <div className="relative z-10 -mt-8 p-2">
                 <div className="flex items-center">
                   <div
-                    className="relative w-12 h-12 flex-shrink-0 rounded-full bg-cover bg-center bg-no-repeat bg-gray-300 border-2 border-white"
+                    className="relative w-12 h-12 flex-shrink-0 rounded-full bg-cover bg-center bg-no-repeat bg-gray-300 border-2 border-white dark:border-zinc-500"
                     style={{ backgroundImage: `url("${FsApi.getAvatarStreamUrl(username)}${getTimestampSuffix()}")` }}
                   >
                     {isLoggedIn && (
@@ -155,8 +159,8 @@ export default function UserList(props: UserListProps) {
                     )}
                   </div>
                   <div className="ml-2">
-                    <div className="text-sm font-bold">{nickname}</div>
-                    <div className="text-xs text-gray-400">@{username}</div>
+                    <div className="text-sm font-bold dark:text-zinc-100">{nickname}</div>
+                    <div className="text-xs text-gray-400 dark:text-zinc-300">@{username}</div>
                   </div>
                 </div>
                 <div className="mt-2 pb-4 min-h-[1.5rem] scale-90 origin-top-left font-din leading-none">

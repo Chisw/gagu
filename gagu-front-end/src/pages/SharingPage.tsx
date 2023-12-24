@@ -154,20 +154,28 @@ export default function SharePage() {
           `)}
           style={{ backgroundImage: `url("${FsApi.getImageStreamUrl('bg-sharing')}")` }}
         />
-        <div className="relative m-4 md:m-0 px-4 md:px-10 py-6 md:py-8 w-full md:w-[40rem] bg-white rounded-2xl shadow-2xl overflow-hidden">
+        <div
+          className={line(`
+            relative m-4 md:m-0 px-4 md:px-10 py-6 md:py-8 w-full md:w-[40rem]
+            bg-white rounded-2xl shadow-2xl overflow-hidden
+            dark:bg-zinc-700
+          `)}
+        >
           <div className="absolute z-0 top-0 right-0 -mt-16 -mr-16">
-            <SvgIcon.Share className="text-gray-100" size={320} />
+            <SvgIcon.Share className="text-gray-100 dark:text-zinc-600" size={320} />
           </div>
           {isSuccess && (
             <div className="relative z-10">
               <div className="flex items-center">
                 <div
-                  className="w-10 h-10 rounded-full border-2 border-white shadow bg-center bg-cover flex-shrink-0"
+                  className="w-10 h-10 rounded-full border-2 border-white shadow bg-center bg-cover flex-shrink-0 dark:border-zinc-400"
                   style={{ backgroundImage: `url("${FsApi.getAvatarStreamUrl(username)}")` }}
                 />
                 <div className="ml-4 flex-grow">
-                  <p className="text-sm md:text-base">{t('title.page_shared_by', { name: nickname })}</p>
-                  <p className="flex justify-between text-xs text-gray-500">
+                  <p className="text-sm md:text-base dark:text-zinc-200">
+                    {t('title.page_shared_by', { name: nickname })}
+                  </p>
+                  <p className="flex justify-between text-xs text-gray-500 dark:text-zinc-400">
                     {createdAt && getDateTime(createdAt).slice(0, -3)}
                   </p>
                 </div>
@@ -179,7 +187,7 @@ export default function SharePage() {
                     content={(
                       <div className="p-4">
                         <div className="w-56 h-40 flex justify-center items-center">
-                          <QRCodeCanvas value={sharingUrl} />
+                          <QRCodeCanvas value={sharingUrl} className="border-2 border-white" />
                         </div>
                         <p className="mt-2 w-56 break-all text-xs text-gray-400">
                           {sharingUrl}
@@ -188,7 +196,7 @@ export default function SharePage() {
                     )}
                   >
                     <span className="cursor-pointer">
-                      <SvgIcon.QrCode className="text-gray-400" />
+                      <SvgIcon.QrCode className="text-gray-400 dark:text-zinc-200" />
                     </span>
                   </Popover>
                   <span
@@ -198,7 +206,7 @@ export default function SharePage() {
                       toast.success(t`tip.copied`)
                     }}
                   >
-                    <SvgIcon.Copy className="text-gray-400" />
+                    <SvgIcon.Copy className="text-gray-400 dark:text-zinc-200" />
                   </span>
                 </div>
               </div>
@@ -236,8 +244,10 @@ export default function SharePage() {
               )}
               {code && (
                 <div className="flex flex-wrap justify-between items-center">
-                  <div className="w-full md:w-auto text-center md:text-left text-xs text-gray-500">
-                    <p>{t`label.remainingSaves`}{leftTimes === undefined ? t`tip.unlimited` : leftTimes}</p>
+                  <div className="w-full md:w-auto text-center md:text-left text-xs text-gray-500 dark:text-zinc-400">
+                    <p>
+                      {t`label.remainingSaves`}{leftTimes === undefined ? t`tip.unlimited` : leftTimes}
+                    </p>
                     <p>
                       <span className="mr-1">{t`label.remainingValidityPeriod`}{expiredAtTip}</span>
                       {expiredAt && (

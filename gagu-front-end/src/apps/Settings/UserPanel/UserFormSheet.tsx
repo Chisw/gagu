@@ -120,7 +120,7 @@ export default function UserFormModal(props: UserFormModalProps) {
           ? t`title.settings_users_newUser`
           : `${t`title.settings_users_editUser`}${form.username}`
         }
-        headerStyle={{ padding: '8px 20px', borderBottom: '1px solid #efefef' }}
+        headerStyle={{ padding: '8px 20px' }}
         visible={formMode !== 'CLOSE'}
         onCancel={() => setFormMode('CLOSE')}
         getPopupContainer={() => document.querySelector('.gagu-app-settings-user-form')!}
@@ -278,7 +278,7 @@ export default function UserFormModal(props: UserFormModalProps) {
                   >
                     {label}
                   </Form.Checkbox>
-                  <p className="mt-1 text-xs text-gray-500">{extra}</p>
+                  <p className="mt-1 text-xs text-gray-500 dark:text-zinc-400">{extra}</p>
                 </div>
               ))}
             </Form.CheckboxGroup>
@@ -306,7 +306,12 @@ export default function UserFormModal(props: UserFormModalProps) {
                 {form.assignedRootPathList?.map((path) => (
                   <div
                     key={path}
-                    className="mb-1 pl-2 pr-1 py-1 text-xs bg-gray-100 text-gray-800 rounded border border-gray-200 flex items-center"
+                    className={line(`
+                      mb-1 pl-2 pr-1 py-1 text-xs rounded border
+                      flex items-center
+                      bg-gray-100 text-gray-800 border-gray-200
+                      dark:bg-zinc-600 dark:text-zinc-300 dark:border-zinc-500
+                    `)}
                   >
                     <SvgIcon.Folder className="mr-1 flex-shrink-0" />
                     <div className="mr-2 flex-grow break-all">{path}</div>
@@ -323,7 +328,7 @@ export default function UserFormModal(props: UserFormModalProps) {
                 ))}
               </div>
               {(!isAdminister && !isAssigned) && (
-                <p className="mt-1 text-xs text-gray-500 flex items-center">
+                <p className="mt-1 text-xs text-gray-500 flex items-center dark:text-zinc-400">
                   <SvgIcon.Warning />
                   <span className="ml-1">{t`hint.accessiblePaths_extra`}</span>
                 </p>

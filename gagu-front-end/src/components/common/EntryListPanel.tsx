@@ -31,11 +31,11 @@ export function EntryListPanel(props: EntryListPanelProps) {
   
   return (
     <>
-      <div className="my-6 backdrop-blur border border-gray-200">
-        <div className="px-3 py-2 text-xs bg-white bg-opacity-50 border-b border-gray-200 font-din flex justify-between items-center">
+      <div className="my-6 backdrop-blur border border-gray-200 dark:border-zinc-600">
+        <div className="px-3 py-2 text-xs bg-white bg-opacity-50 border-b border-gray-200 font-din flex justify-between items-center dark:bg-black dark:bg-opacity-10 dark:border-zinc-600">
           <span>
-            <span className="text-gray-600">{downloadName || 'Unknown'}</span>
-            <span className="text-gray-400">
+            <span className="text-gray-600 dark:text-zinc-200">{downloadName || 'Unknown'}</span>
+            <span className="text-gray-400 dark:text-zinc-400">
               &emsp;{
                 getReadableSize(
                   flattenList.map(e => e.size)

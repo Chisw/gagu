@@ -158,7 +158,7 @@ export default function Window(props: WindowProps) {
             absolute inset-0 bg-white bg-opacity-80 backdrop-blur-sm overflow-hidden
             transition-box-shadow duration-200 flex flex-col
             dark:bg-black dark:bg-opacity-80
-            ${isFullScreen ? '' : 'rounded border border-black border-opacity-10 bg-clip-padding'}
+            ${isFullScreen ? '' : 'rounded border border-black border-opacity-10 bg-clip-padding dark:border-white dark:border-opacity-5'}
             ${isTopWindow ? 'shadow-xl' : 'shadow'}
           `)}
           style={WINDOW_STATUS_MAP[windowStatus]}

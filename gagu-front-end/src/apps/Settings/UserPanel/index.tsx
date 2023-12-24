@@ -32,7 +32,7 @@ export default function UserPanel() {
     <>
       <div className="gagu-app-settings-user-form absolute z-0 inset-0 px-4 py-2 overflow-x-hidden overflow-y-auto">
 
-        <div className="text-sm flex justify-between items-center">
+        <div className="text-sm flex justify-between items-center dark:text-zinc-200">
           <div>{t('tip.totalUsers', { count: userList.length })}</div>
           <div className="flex items-center">
             <div
