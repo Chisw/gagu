@@ -245,13 +245,14 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
         data-vibrate-disabled="true"
         className={line(`
           absolute z-0 inset-0 bg-white transition-all duration-300
+          dark:bg-zinc-800
           ${show ? 'opacity-100' : 'opacity-0'}
           ${sideShow ? 'ease-in-out translate-x-64 opacity-20 overflow-y-hidden pointer-events-none' : 'overflow-y-auto'}
           ${asSelector ? 'top-0' : 'top-8 md:top-6'}
         `)}
         onContextMenu={handleContextMenu}
       >
-        <div className="sticky z-20 top-0 bg-white select-none overflow-hidden">
+        <div className="sticky z-20 top-0 bg-white select-none overflow-hidden dark:bg-zinc-800">
           <ControlBar
             {...{
               windowWidth: 360,

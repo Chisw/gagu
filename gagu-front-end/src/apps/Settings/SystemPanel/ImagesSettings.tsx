@@ -50,6 +50,7 @@ export default function ImageSettings() {
                 relative z-0 w-12 h-12
                 border-2 border-dashed border-gray-300 hover:border-blue-500 hover:border-solid
                 text-gray-500 rounded flex justify-center items-center
+                dark:border-zinc-600 dark:hover:border-blue-600
               `)}
             >
               <div className="absolute z-0 inset-0 flex justify-center items-center">
@@ -73,6 +74,7 @@ export default function ImageSettings() {
                 relative w-48 h-32
                 border-2 border-dashed border-gray-300 hover:border-blue-500 hover:border-solid
                 text-gray-500 rounded flex justify-center items-center
+                dark:border-zinc-600 dark:hover:border-blue-600
               `)}
             >
               <div className="absolute z-0 inset-0 flex justify-center items-center">
@@ -96,6 +98,7 @@ export default function ImageSettings() {
                 relative w-48 h-32
                 border-2 border-dashed border-gray-300 hover:border-blue-500 hover:border-solid
                 text-gray-500 rounded flex justify-center items-center
+                dark:border-zinc-600 dark:hover:border-blue-600
               `)}
             >
               <div className="absolute z-0 inset-0 flex justify-center items-center">

@@ -21,7 +21,10 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      <Toaster containerClassName="break-all" />
+      <Toaster
+        containerClassName="break-all"
+        toastOptions={{ className: 'dark:bg-zinc-700 dark:text-zinc-200' }}
+      />
       <Routes>
         {/* sync to roots in back-end */}
         <Route path="/login" element={<LoginPage />} />

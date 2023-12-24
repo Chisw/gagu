@@ -71,10 +71,11 @@ export default function Dock(props: DockProps) {
           fixed z-20 
           border shadow-lg overflow-hidden
           transition-all duration-200 select-none
+          dark:border-zinc-500
           ${show ? 'scale-100 origin-bottom-right' : 'scale-0 origin-center'}
           ${dockExpanded
-            ? 'right-[10px] bottom-[10px] w-48 h-48 rounded-xl bg-gradient-to-b from-gray-200 via-gray-100 to-gray-100'
-            : 'right-[1rem] bottom-[1rem] w-12 h-12 rounded-3xl bg-white'
+            ? 'right-[10px] bottom-[10px] w-48 h-48 rounded-xl bg-gradient-to-b from-gray-200 via-gray-100 to-gray-100 dark:from-zinc-800 dark:via-zinc-700 dark:to-zinc-700'
+            : 'right-[1rem] bottom-[1rem] w-12 h-12 rounded-3xl bg-white dark:bg-zinc-600'
           }
         `)}
       >
@@ -114,6 +115,7 @@ export default function Dock(props: DockProps) {
               aspect-square border rounded-lg
               flex justify-center items-center
               transition-all duration-200 active:scale-90
+              dark:border-zinc-600 dark:text-zinc-200
             `)}
             onClick={() => setDockExpanded(false)}
           >
@@ -125,6 +127,7 @@ export default function Dock(props: DockProps) {
           className={line(`
             absolute w-full h-full flex justify-center items-center text-gray-800
             transition-opacity duration-200
+            dark:text-zinc-200
             ${dockExpanded ? 'z-0 opacity-0' : 'z-10 opacity-100'}
           `)}
           onClick={() => setDockExpanded(true)}

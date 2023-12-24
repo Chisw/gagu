@@ -29,8 +29,10 @@ export default function Side(props: SideProps) {
       <div
         data-vibrate-disabled="true"
         className={line(`
-          absolute z-0 bottom-0 left-0 pb-12 w-64 bg-gray-100 overflow-x-hidden overflow-y-auto border-r
+          absolute z-0 bottom-0 left-0 pb-12 w-64
+          bg-gray-100 overflow-x-hidden overflow-y-auto border-r
           duration-transform duration-300 ease-in-out
+          dark:bg-black dark:border-zinc-600
           ${sideShow ? 'translate-x-0' : '-translate-x-64'}
           ${asSelector ? 'top-0' : 'top-8 md:top-6'}
         `)}

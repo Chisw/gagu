@@ -135,7 +135,7 @@ export default function EntryNameDialog(props: EntryNameDialogProps) {
             {editMode && t(`action.${titleMap[editMode]}`)}
           </div>
           {activeEntry && (
-            <div className="text-xs text-gray-500 text-center">
+            <div className="text-xs text-gray-500 text-center dark:text-zinc-400">
               {activeEntry.name}
             </div>
           )}

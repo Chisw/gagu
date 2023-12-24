@@ -70,6 +70,7 @@ export default function Window(props: WindowProps) {
         className={line(`
           gagu-app-window absolute z-30 inset-0 bg-white bg-opacity-80 backdrop-blur-sm overflow-hidden
           transition-box-shadow duration-200 flex flex-col
+          dark:bg-black dark:bg-opacity-80
           ${isTopWindow ? 'gagu-is-top-window' : 'hidden'}
         `)}
         data-hidden={hidden}
@@ -79,7 +80,10 @@ export default function Window(props: WindowProps) {
         <div
           className={line(`
             relative w-full h-8 flex items-center select-none
-            ${headerClassName ? headerClassName : 'bg-white text-gray-500'}
+            ${headerClassName
+              ? headerClassName
+              : 'bg-white text-gray-500 dark:bg-zinc-800 dark:text-zinc-200'
+            }
           `)}
         >
           <div className="flex items-center flex-grow px-2 h-full truncate">

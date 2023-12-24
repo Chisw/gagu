@@ -173,6 +173,7 @@ export default function SelectionMenu(props: SelectionMenuProps) {
           border rounded-xl shadow-lg overflow-hidden
           bg-white bg-opacity-90 backdrop-blur select-none
           transition-all duration-300
+          dark:bg-zinc-700 dark:border-zinc-600
           ${show ? 'h-28 scale-100' : 'h-0 scale-0'}
         `)}
       >
@@ -184,6 +185,7 @@ export default function SelectionMenu(props: SelectionMenuProps) {
                 mb-1 w-1/5 h-10 rounded-md
                 transition-all duration-100
                 active:scale-90 active:bg-gray-100
+                dark:text-zinc-200
               `)}
               onClick={() => {
                 onClick()
@@ -196,8 +198,8 @@ export default function SelectionMenu(props: SelectionMenuProps) {
           ))}
         </div>
 
-        <div className="absolute z-10 top-0 left-0 w-full h-4 bg-gradient-to-b from-white to-transparent" />
-        <div className="absolute z-10 bottom-0 left-0 w-full h-4 bg-gradient-to-t from-white to-transparent" />
+        <div className="absolute z-10 top-0 left-0 w-full h-4 bg-gradient-to-b from-white to-transparent dark:from-zinc-700" />
+        <div className="absolute z-10 bottom-0 left-0 w-full h-4 bg-gradient-to-t from-white to-transparent dark:from-zinc-700" />
       </div>
 
       <Modal

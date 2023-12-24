@@ -86,7 +86,7 @@ export default function EntryNode(props: EntryNodeProps) {
               supportThumbnail
             }}
           />
-          <div className="text-center text-xs max-w-full line-clamp-2">
+          <div className="text-center text-xs max-w-full line-clamp-2 dark:text-zinc-200">
             {entry.name}
           </div>
           <div
@@ -115,7 +115,7 @@ export default function EntryNode(props: EntryNodeProps) {
             />
           </div>
           <div className="pl-2">
-            <div className="text-sm max-w-full line-clamp-2">
+            <div className="text-sm max-w-full line-clamp-2 dark:text-zinc-200">
               {entry.name}
             </div>
             <div>
