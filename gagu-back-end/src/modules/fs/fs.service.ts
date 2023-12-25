@@ -11,6 +11,7 @@ import {
 import {
   createReadStream,
   createWriteStream,
+  promises,
   readdirSync,
   readFileSync,
   statSync,
@@ -286,19 +287,12 @@ export class FsService {
   }
 
   async moveEntry(oldPath: string, newPath: string) {
-    return new Promise((resolve, reject) => {
-      try {
-        const readStream = createReadStream(oldPath)
-        const writeStream = createWriteStream(newPath)
-        readStream.on('end', () => {
-          unlinkSync(oldPath)
-          resolve(true)
-        })
-        readStream.pipe(writeStream)
-      } catch (error) {
-        reject(error)
-      }
-    })
+    try {
+      await promises.cp(oldPath, newPath, { recursive: true })
+      await promises.rm(oldPath, { recursive: true })
+    } catch (error) {
+      catchError(error)
+    }
   }
 
   getExif(path: string) {

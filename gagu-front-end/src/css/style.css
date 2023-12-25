@@ -181,7 +181,7 @@ body {
 }
 
 .gagu-touch-open-with-apps .semi-modal-content {
-  @apply p-2 bg-white bg-opacity-90 backdrop-blur border-none;
+  @apply p-2 bg-white bg-opacity-90 backdrop-blur border-none dark:bg-zinc-700 dark:bg-opacity-90;
 }
 
 .gagu-touch-open-with-apps .semi-modal-body-wrapper {

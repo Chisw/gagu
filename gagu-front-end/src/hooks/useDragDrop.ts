@@ -6,7 +6,7 @@ import { getDataTransferNestedFileList } from '../utils'
 
 const NODE_SELECTOR = '[data-is-drag-drop-node="true"]'
 
-const outline = (e: any, fn: 'add' | 'remove') => {
+const controlOutline = (e: any, fn: 'add' | 'remove') => {
   e.target.closest(NODE_SELECTOR)
     ?.classList[fn]('gagu-dragenter-outline')
 }
@@ -23,8 +23,8 @@ export function useDragDrop({ onOpen }: useDragDropProps) {
   const { handleUploadTaskAdd } = useAddUploadingTask()
 
   const onDragEnter = useCallback((e: any) => {
-    outline(e, 'add')
     clearTimeout(openTimer)
+    controlOutline(e, 'add')
 
     const path = e.target.closest(NODE_SELECTOR)
       ?.getAttribute('data-entry-path')
@@ -39,7 +39,7 @@ export function useDragDrop({ onOpen }: useDragDropProps) {
   }, [])
 
   const onDragLeave = useCallback((e: any) => {
-    outline(e, 'remove')
+    controlOutline(e, 'remove')
     clearTimeout(openTimer)
   }, [])
 
@@ -49,33 +49,34 @@ export function useDragDrop({ onOpen }: useDragDropProps) {
 
     const { target, dataTransfer } = e
     const transferData = dataTransfer.getData('text/plain')
-    const targetPath = target.closest(NODE_SELECTOR)
+    const targetDirectoryPath = target.closest(NODE_SELECTOR)
       ?.getAttribute('data-entry-path')
     
-    if (!targetPath) return
+    if (!targetDirectoryPath) return
 
     // from browser inner
     if (transferData) {
       const transferEntryList: IEntry[] = JSON.parse(transferData || '[]')
-      handleMove(transferEntryList, targetPath)
+      handleMove(transferEntryList, targetDirectoryPath)
     // from browser outer
     } else {
       getDataTransferNestedFileList(dataTransfer).then(files => {
-        handleUploadTaskAdd(files, targetPath)
+        handleUploadTaskAdd(files, targetDirectoryPath)
       })
     }
 
-    outline(e, 'remove')
+    controlOutline(e, 'remove')
   }, [handleMove, handleUploadTaskAdd])
 
   const onDragEnd = useCallback((e: any) => {
     e.preventDefault()
-    outline(e, 'remove')
+    controlOutline(e, 'remove')
     clearTimeout(openTimer)
   }, [])
 
   useEffect(() => {
     const listener = () => {
+      clearTimeout(openTimer)
       document.querySelectorAll('.gagu-dragenter-outline')
         .forEach(el => el.classList.remove('gagu-dragenter-outline'))
     }

@@ -150,8 +150,8 @@ export function useDragTransfer(props: useDragTransferProps) {
       if (transferData) {
         const transferEntryList: IEntry[] = JSON.parse(transferData || '[]')
         if (closestEntryType === EntryType.directory) {
-          const targetPath = `${currentPath}/${closestEntryName}`
-          handleMove(transferEntryList, targetPath)
+          const targetDirectoryPath = `${currentPath}/${closestEntryName}`
+          handleMove(transferEntryList, targetDirectoryPath)
         } else if (!isDragFromCurrentPath) {
           handleMove(transferEntryList, currentPath)
         }

@@ -173,7 +173,7 @@ export default function SelectionMenu(props: SelectionMenuProps) {
           border rounded-xl shadow-lg overflow-hidden
           bg-white bg-opacity-90 backdrop-blur select-none
           transition-all duration-300
-          dark:bg-zinc-700 dark:border-zinc-600
+          dark:bg-zinc-700 dark:bg-opacity-90 dark:border-zinc-600
           ${show ? 'h-28 scale-100' : 'h-0 scale-0'}
         `)}
       >
@@ -210,7 +210,7 @@ export default function SelectionMenu(props: SelectionMenuProps) {
         onCancel={() => setAppsModalShow(false)}
       >
         <div className="p-3">
-          <div className="mb-4 text-gray-600">
+          <div className="mb-4 text-gray-600 dark:bg-zinc-200">
             {t(`action.openWith`)}
           </div>
           <div className="flex">

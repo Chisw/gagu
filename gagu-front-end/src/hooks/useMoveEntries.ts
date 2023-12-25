@@ -15,26 +15,26 @@ export function useMoveEntries() {
 
   const { request: updateEntryPath } = useRequest(FsApi.updateEntryPath)
 
-  const handleMove = useCallback(async (transferEntryList: IEntry[], targetPath: string) => {
+  const handleMove = useCallback(async (transferEntryList: IEntry[], targetDirectoryPath: string) => {
+    const isMovementNoChange = transferEntryList.some(({ parentPath }) => parentPath === targetDirectoryPath)
+    if (isMovementNoChange) return
+
     Confirmor({
       type: 'move',
       content: t('tip.moveEntriesTo', {
         count: transferEntryList.length,
-        target: targetPath.split('/').pop(),
+        target: targetDirectoryPath.split('/').pop(),
       }),
       onConfirm: async (close) => {
         for (const transferEntry of transferEntryList) {
           const oldPath = getEntryPath(transferEntry)
-          const newPath = `${targetPath}/${transferEntry.name}`
-
-          if (targetPath === oldPath) continue
-
+          const newPath = `${targetDirectoryPath}/${transferEntry.name}`
           const { success } = await updateEntryPath(oldPath, newPath)
           if (success) {
             setLastChangedDirectory({
               path: transferEntry.parentPath,
               timestamp: Date.now(),
-              otherPaths: [targetPath],
+              otherPaths: [targetDirectoryPath],
             })
           }
         }
