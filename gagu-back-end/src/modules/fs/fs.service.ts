@@ -285,6 +285,22 @@ export class FsService {
     }
   }
 
+  async moveEntry(oldPath: string, newPath: string) {
+    return new Promise((resolve, reject) => {
+      try {
+        const readStream = createReadStream(oldPath)
+        const writeStream = createWriteStream(newPath)
+        readStream.on('end', () => {
+          unlinkSync(oldPath)
+          resolve(true)
+        })
+        readStream.pipe(writeStream)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
   getExif(path: string) {
     const base64 = readFileSync(path).toString('base64')
     const dataURL = `data:image/jpeg;base64,${base64}`

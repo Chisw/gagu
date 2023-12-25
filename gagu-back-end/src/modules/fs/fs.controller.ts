@@ -130,11 +130,11 @@ export class FsController {
 
   @Put('move')
   @Permission([UserPermission.write, UserPermission.delete])
-  updatePath(
+  async updatePath(
     @Body('oldPath') oldPath: string,
     @Body('newPath') newPath: string,
   ) {
-    renameSync(oldPath, newPath)
+    await this.fsService.moveEntry(oldPath, newPath)
     return respond()
   }
 

@@ -48,7 +48,7 @@ Many unrealized ideas will be recorded here, waiting for development
 - Global search
 - Custom sharing link code
 - Custom folder icon extension CSS
-- Desktop and Recycle Bin
+- Recycle Bin
 - One-click to clean up the specified directory
 - File favorite
 - Directory link

@@ -32,4 +32,4 @@ rm bin/main.js
 
 rm bin/public/static/js/*.LICENSE.txt
 
-echo '\n✨  Build GAGU bin successfully.'
+echo '\n✨  Build GAGU npm package successfully.'
