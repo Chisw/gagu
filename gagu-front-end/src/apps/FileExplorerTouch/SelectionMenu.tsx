@@ -185,7 +185,7 @@ export default function SelectionMenu(props: SelectionMenuProps) {
                 mb-1 w-1/5 h-10 rounded-md
                 transition-all duration-100
                 active:scale-90 active:bg-gray-100
-                dark:text-zinc-200
+                dark:text-zinc-200 dark:active:bg-zinc-800
               `)}
               onClick={() => {
                 onClick()
@@ -210,7 +210,7 @@ export default function SelectionMenu(props: SelectionMenuProps) {
         onCancel={() => setAppsModalShow(false)}
       >
         <div className="p-3">
-          <div className="mb-4 text-gray-600 dark:bg-zinc-200">
+          <div className="mb-4 text-gray-600 dark:text-zinc-200">
             {t(`action.openWith`)}
           </div>
           <div className="flex">

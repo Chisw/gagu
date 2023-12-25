@@ -2,7 +2,7 @@ import { useCallback, useEffect } from 'react'
 import { IEntry } from '../types'
 import { useMoveEntries } from './useMoveEntries'
 import { useAddUploadingTask } from './useAddUploadingTask'
-import { getDataTransferNestedFileList } from '../utils'
+import { HOVER_OPEN_TIMER, getDataTransferNestedFileList } from '../utils'
 
 const NODE_SELECTOR = '[data-is-drag-drop-node="true"]'
 
@@ -10,8 +10,6 @@ const controlOutline = (e: any, fn: 'add' | 'remove') => {
   e.target.closest(NODE_SELECTOR)
     ?.classList[fn]('gagu-dragenter-outline')
 }
-
-let openTimer: NodeJS.Timeout | undefined
 
 interface useDragDropProps {
   onOpen: (path: string) => void
@@ -23,14 +21,14 @@ export function useDragDrop({ onOpen }: useDragDropProps) {
   const { handleUploadTaskAdd } = useAddUploadingTask()
 
   const onDragEnter = useCallback((e: any) => {
-    clearTimeout(openTimer)
+    clearTimeout(HOVER_OPEN_TIMER.value)
     controlOutline(e, 'add')
 
     const path = e.target.closest(NODE_SELECTOR)
       ?.getAttribute('data-entry-path')
 
     setTimeout(() => {
-      openTimer = setTimeout(() => onOpen(path), 1500)
+      HOVER_OPEN_TIMER.value = setTimeout(() => onOpen(path), 1500)
     })
   }, [onOpen])
 
@@ -40,12 +38,12 @@ export function useDragDrop({ onOpen }: useDragDropProps) {
 
   const onDragLeave = useCallback((e: any) => {
     controlOutline(e, 'remove')
-    clearTimeout(openTimer)
+    clearTimeout(HOVER_OPEN_TIMER.value)
   }, [])
 
   const onDrop = useCallback((e: any) => {
     e.preventDefault()
-    clearTimeout(openTimer)
+    clearTimeout(HOVER_OPEN_TIMER.value)
 
     const { target, dataTransfer } = e
     const transferData = dataTransfer.getData('text/plain')
@@ -71,12 +69,12 @@ export function useDragDrop({ onOpen }: useDragDropProps) {
   const onDragEnd = useCallback((e: any) => {
     e.preventDefault()
     controlOutline(e, 'remove')
-    clearTimeout(openTimer)
+    clearTimeout(HOVER_OPEN_TIMER.value)
   }, [])
 
   useEffect(() => {
     const listener = () => {
-      clearTimeout(openTimer)
+      clearTimeout(HOVER_OPEN_TIMER.value)
       document.querySelectorAll('.gagu-dragenter-outline')
         .forEach(el => el.classList.remove('gagu-dragenter-outline'))
     }
