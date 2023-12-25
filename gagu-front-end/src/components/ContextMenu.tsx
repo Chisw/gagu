@@ -68,8 +68,10 @@ export function ContextMenu() {
           trigger="custom"
           position="bottomLeft"
           className={line(`
-            select-none bg-white dark:bg-black dark:text-zinc-300
-            ${isDock ? '' : 'bg-opacity-80 backdrop-blur dark:bg-black dark:bg-opacity-30'}
+            select-none bg-white
+            ${isDock
+              ? 'dark:bg-black dark:text-zinc-300'
+              : 'bg-opacity-80 backdrop-blur dark:bg-zinc-700 dark:bg-opacity-80'}
           `)}
           visible={menuShow}
           onClickOutSide={() => setMenuShow(false)}
@@ -82,7 +84,7 @@ export function ContextMenu() {
                     position="rightTop"
                     className={line(`
                       bg-white bg-opacity-80 backdrop-blur min-w-[160px]
-                      dark:bg-black dark:bg-opacity-30
+                      dark:bg-zinc-700 dark:bg-opacity-80
                     `)}
                     menu={children.map(m => ({ ...m, node: 'item', onClick: closeAfterClick(m.onClick) }))}
                   >

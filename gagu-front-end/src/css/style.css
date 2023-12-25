@@ -169,7 +169,7 @@ body {
 }
 
 .gagu-confirmor .semi-modal-content {
-  @apply bg-white bg-opacity-90 backdrop-blur border-none dark:bg-black dark:bg-opacity-80;
+  @apply bg-white bg-opacity-90 backdrop-blur border-none dark:bg-zinc-700 dark:bg-opacity-80;
 }
 
 .gagu-touch-open-with-apps .semi-modal-mask {

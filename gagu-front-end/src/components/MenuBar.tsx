@@ -115,8 +115,8 @@ export function MenuBar() {
           absolute z-20 top-0 right-0 left-0
           px-1 h-8 md:h-6 shadow-sm backdrop-blur
           flex justify-between items-center
-           bg-white bg-opacity-50
-           dark:bg-black dark:bg-opacity-40 dark:text-zinc-200
+           bg-white bg-opacity-60
+           dark:bg-zinc-700 dark:bg-opacity-80 dark:text-zinc-200
           transition-all duration-500 ease-out
           ${[Page.desktop, Page.explore, Page.touch].includes(activePage) ? 'translate-y-0' : '-translate-y-20'}
         `)}
@@ -125,7 +125,7 @@ export function MenuBar() {
           <Dropdown
             trigger="click"
             position="bottomLeft"
-            className="bg-white bg-opacity-90 backdrop-blur dark:bg-black dark:bg-opacity-40"
+            className="bg-white bg-opacity-80 backdrop-blur dark:bg-zinc-700 dark:bg-opacity-80"
             visible={systemPopoverShow}
             render={(
               <Dropdown.Menu className="w-48">
@@ -178,7 +178,7 @@ export function MenuBar() {
                 </Dropdown.Item>
                 <Dropdown
                   position="rightTop"
-                  className="bg-white bg-opacity-90 backdrop-blur dark:bg-black dark:bg-opacity-40"
+                  className="bg-white bg-opacity-80 backdrop-blur dark:bg-zinc-700 dark:bg-opacity-80"
                   render={(
                     <div className="px-4 py-8 w-48 dark:text-zinc-200">
                       <div className="flex justify-center">
@@ -200,7 +200,7 @@ export function MenuBar() {
                 <Dropdown
                   showTick
                   position="rightTop"
-                  className="bg-white bg-opacity-90 backdrop-blur dark:bg-black dark:bg-opacity-40"
+                  className="bg-white bg-opacity-80 backdrop-blur dark:bg-zinc-700 dark:bg-opacity-80"
                   render={(
                     <Dropdown.Menu className="w-48">
                       {pageList.map(({ key, icon }) => {
@@ -259,7 +259,7 @@ export function MenuBar() {
           <Dropdown
             trigger="click"
             position="bottomLeft"
-            className="bg-white bg-opacity-90 backdrop-blur dark:bg-black dark:bg-opacity-40"
+            className="bg-white bg-opacity-80 backdrop-blur dark:bg-zinc-700 dark:bg-opacity-80"
             visible={userPopoverShow}
             render={(
               <Dropdown.Menu className="w-48">
