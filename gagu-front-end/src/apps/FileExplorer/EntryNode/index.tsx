@@ -67,6 +67,7 @@ export default function EntryNode(props: EntryNodeProps) {
     <div
       draggable={draggable}
       ref={nodeRef}
+      title={name}
       data-entry-name={name}
       data-entry-type={type}
       data-entry-extension={extension}

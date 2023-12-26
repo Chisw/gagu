@@ -17,8 +17,18 @@ export function ContextMenu() {
   const menuRef = useRef(null)
 
   const { top, left, menuItemList, isDock } = useMemo(() => {
-    const { eventData, menuItemList, isDock } = contextMenuData || { eventData: null, menuItemList: [], isDock: false }
-    const { target, clientX, clientY } = eventData || { target: null, clientX: 0, clientY: 0 }
+    const { eventData, menuItemList, isDock } = contextMenuData || {
+      eventData: null,
+      menuItemList: [],
+      isDock: false,
+    }
+
+    const { target, clientX, clientY } = eventData || {
+      target: null,
+      clientX: 0,
+      clientY: 0,
+    }
+
     const filteredMenuItemList = menuItemList.filter(o => o.isShow)
 
     let top = 0
@@ -42,6 +52,13 @@ export function ContextMenu() {
     }
   }, [contextMenuData])
 
+  const closeAfterClick = useCallback((clickFn: () => void) => {
+    return () => {
+      clickFn()
+      setMenuShow(false)
+    }
+  }, [])
+
   useEffect(() => {
     setMenuShow(!!contextMenuData?.menuItemList.length)
   }, [contextMenuData])
@@ -49,13 +66,6 @@ export function ContextMenu() {
   useEffect(() => {
     setTimeout(() => setMenuShow(false))
   }, [pathname])
-
-  const closeAfterClick = useCallback((onClick: () => void) => {
-    return () => {
-      onClick()
-      setMenuShow(false)
-    }
-  }, [])
 
   return (
     <>
@@ -74,7 +84,10 @@ export function ContextMenu() {
               : 'bg-opacity-80 backdrop-blur dark:bg-zinc-700 dark:bg-opacity-80'}
           `)}
           visible={menuShow}
-          onClickOutSide={() => setMenuShow(false)}
+          onClickOutSide={(e: any) => {
+            if (e.target.closest('.gagu-context-menu-sub-menu')) return
+            setMenuShow(false)
+          }}
           render={
             <Dropdown.Menu className={isDock ? 'w-56' : 'w-44'}>
               {menuItemList?.map(({ icon, name, children, onClick }) => {
@@ -83,10 +96,17 @@ export function ContextMenu() {
                     key={name}
                     position="rightTop"
                     className={line(`
+                      gagu-context-menu-sub-menu
                       bg-white bg-opacity-80 backdrop-blur min-w-[160px]
                       dark:bg-zinc-700 dark:bg-opacity-80
                     `)}
-                    menu={children.map(m => ({ ...m, node: 'item', onClick: closeAfterClick(m.onClick) }))}
+                    menu={
+                      children.map(m => ({
+                        ...m,
+                        node: 'item',
+                        onClick: closeAfterClick(m.onClick),
+                      }))
+                    }
                   >
                     <Dropdown.Item icon={icon} >
                       <div className="w-full flex justify-between items-center">

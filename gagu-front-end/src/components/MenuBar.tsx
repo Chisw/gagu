@@ -42,6 +42,28 @@ export function MenuBar() {
   const { request: queryBaseData, loading } = useRequest(FsApi.queryBaseData)
   const { request: shutdown } = useRequest(AuthApi.shutdown)
 
+  const localAddress = useMemo(() => {
+    const { protocol, port } = window.location
+    return `${protocol}//${baseData.serverOS.host}:${port}/touch`
+  }, [baseData])
+
+  const handleLogout = useCallback(async () => {
+    setUserPopoverShow(false)
+    const { success } = await logout()
+    if (success) {
+      UserInfoStore.remove()
+      setActivePage(Page.PENDING)
+      setTimeout(() => navigate('/login'), 500)
+    }
+  }, [logout, navigate, setActivePage])
+
+  const handleSwitchMode = useCallback((key: string) => {
+    setActivePage(Page.PENDING)
+    setRunningAppList([])
+    setContextMenuData(null)
+    setTimeout(() => navigate(`/${key}`), 500)
+  }, [navigate, setActivePage, setContextMenuData, setRunningAppList])
+
   useEffect(() => {
     if (!userInfo) {
       const info = UserInfoStore.get()
@@ -91,21 +113,6 @@ export function MenuBar() {
   useEffect(() => {
     handleQueryBaseData()
   }, [handleQueryBaseData])
-
-  const localAddress = useMemo(() => {
-    const { protocol, port } = window.location
-    return `${protocol}//${baseData.serverOS.host}:${port}/touch`
-  }, [baseData])
-
-  const handleLogout = useCallback(async () => {
-    setUserPopoverShow(false)
-    const { success } = await logout()
-    if (success) {
-      UserInfoStore.remove()
-      setActivePage(Page.PENDING)
-      setTimeout(() => navigate('/login'), 500)
-    }
-  }, [logout, navigate, setActivePage])
 
   return (
     <>
@@ -211,14 +218,14 @@ export function MenuBar() {
                             icon={icon}
                             active={isActive}
                             disabled={isActive}
-                            onClick={() => {
-                              setActivePage(Page.PENDING)
-                              setRunningAppList([])
-                              setContextMenuData(null)
-                              setTimeout(() => navigate(`/${key}`), 500)
-                            }}
+                            className="relative"
                           >
                             <span className="capitalize">{key}</span>&nbsp;{t`label.mode`}
+                            <div
+                              className="absolute inset-0"
+                              onMouseDown={() => handleSwitchMode(key)}
+                              onTouchStart={() => handleSwitchMode(key)}
+                            />
                           </Dropdown.Item>
                         )
                       })}

@@ -198,7 +198,6 @@ export function NameLabel(props: NameLabelProps) {
 
   return (
     <span
-      title={entryName}
       className={line(`
         gagu-entry-node-name
         px-1 rounded text-xs
