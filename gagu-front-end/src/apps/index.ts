@@ -32,7 +32,7 @@ export const APP_LIST: IApp[] = [
       minHeight: 100,
     },
     matchList: ['txt', 'md', 'html', 'xml', 'css', 'js', 'json', 'php', 'java', 'sh', 'log', 'ts', 'tsx'],
-    headerClassName: 'bg-yellow-500 dark:bg-yellow-600 text-yellow-100',
+    headerClassName: 'bg-yellow-500 dark:bg-yellow-700 text-yellow-100',
     multiple: true,
     touchModeShow: true,
   },

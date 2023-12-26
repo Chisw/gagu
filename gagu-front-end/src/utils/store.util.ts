@@ -45,6 +45,7 @@ export const UserConfigStore = {
       colorScheme: ColorScheme.auto,
       fileExplorerAutoOpen: false,
       fileExplorerDefaultPath: '',
+      textEditorFontSize: 14,
       musicPlayerVolume: 0.5,
       videoPlayerVolume: 0.5,
     }

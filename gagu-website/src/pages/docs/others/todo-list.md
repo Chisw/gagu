@@ -12,8 +12,7 @@ Many unrealized ideas will be recorded here, waiting for development
 - Multi-window automatic arrangement
 - Window layout assignment
 - favicon shows file transfer percentage
-- Sound Recorder, Calendar, Note, Calculator, Relative calculator and other gadgets
-- Public sharing list page
+- Sound Recorder, Calendar, Calculator, Relative calculator and other gadgets
 - When running on Termux, add user login vibration reminder and pop-up notification, SMS list
 - HTTPS certificate
 - Thumbnail of PDF/APK
@@ -49,7 +48,6 @@ Many unrealized ideas will be recorded here, waiting for development
 - Custom sharing link code
 - Custom folder icon extension CSS
 - Recycle Bin
-- One-click to clean up the specified directory
 - File favorite
 - Directory link
 - Drag entries out of browser and download them directly

@@ -30,14 +30,25 @@ export default function TextEditor(props: AppComponentProps) {
 
   const [, setLastChangedDirectory] = useRecoilState(lastChangedDirectoryState)
 
-  const { userConfig: { kiloSize } } = useUserConfig()
+  const {
+    userConfig,
+    setUserConfig,
+    userConfig: {
+      kiloSize,
+      textEditorFontSize,
+    },
+  } = useUserConfig()
 
   const [value, setValue] = useState('')
   const [monoMode, setMonoMode] = useState(false)
   const [markdownView, setMarkdownView] = useState<MarkdownView>('NONE')
-  const [fontSize, setFontSize] = useState(14)
 
-  const { request: queryTextContent, data, setData } = useRequest(FsApi.queryTextContent, { success: true, message: 'OK', data: '' })
+  const { request: queryTextContent, data, setData } = useRequest(FsApi.queryTextContent, {
+    success: true,
+    message: 'OK',
+    data: '',
+  })
+
   const { request: uploadFile, loading: saving } = useRequest(FsApi.uploadFile)
 
   const isMarkdown = useMemo(() => activeEntry?.extension === 'md', [activeEntry])
@@ -109,9 +120,12 @@ export default function TextEditor(props: AppComponentProps) {
   }, [textContent])
 
   const handleFontSizeChange = useCallback((step: number) => {
-    if ((step < 0 && fontSize <= 12) || (step > 0 && fontSize >= 36)) return
-    setFontSize(fontSize + step)
-  }, [fontSize])
+    const isOutOfRange = (step < 0 && textEditorFontSize <= 12) ||
+      (step > 0 && textEditorFontSize >= 36)
+    if (isOutOfRange) return
+    const fontSize = textEditorFontSize + step
+    setUserConfig({ ...userConfig, textEditorFontSize: fontSize })
+  }, [setUserConfig, textEditorFontSize, userConfig])
 
   const handleMarkdownViewChange = useCallback((view?: MarkdownView) => {
     const targetView = view || {
@@ -172,13 +186,13 @@ export default function TextEditor(props: AppComponentProps) {
           <ToolButton
             title={t`action.fontSizeReduce`}
             icon={<SvgIcon.FontSmall />}
-            disabled={fontSize <= 12}
+            disabled={textEditorFontSize <= 12}
             onClick={() => handleFontSizeChange(-1)}
           />
           <ToolButton
             title={t`action.fontSizeIncrease`}
             icon={<SvgIcon.FontLarge />}
-            disabled={fontSize >= 36}
+            disabled={textEditorFontSize >= 36}
             onClick={() => handleFontSizeChange(1)}
           />
           <div className="flex-grow" />
@@ -219,7 +233,7 @@ export default function TextEditor(props: AppComponentProps) {
                         : 'w-1/2'
                     }
                   `)}
-                  style={{ fontSize }}
+                  style={{ fontSize: textEditorFontSize }}
                   value={value}
                   onChange={e => setValue(e.target.value)}
                 />
