@@ -43,6 +43,8 @@ Password: 9293
 
 ## 🛠 Development
 
+Only the `yarn.lock` file is uploaded in the project, so using `yarn` instead of `npm` to install dependencies can ensure that our running results in the development environment are consistent.
+
 GAGU app code consists of two parts: `./gagu-back-end` and `./gagu-front-end`.
 
 ```sh
@@ -69,13 +71,13 @@ $ yarn start
 
 1. Update following version info:
 
-- `version field` in `gagu/package.json`
-- `GAGU_VERSION` in `gagu/gagu-back-end/src/utils/constant.util.ts`
-- `version field` in `gagu/gagu-website/.env`
+- `version field` in `./package.json`
+- `GAGU_VERSION` in `./gagu-back-end/src/utils/constant.util.ts`
+- `version field` in `./gagu-website/.env`
 
-2. Sync dependencies in `gagu/gagu-back-end/package.json` to `gagu/package.json`.
+2. Sync dependencies in `./gagu-back-end/package.json` to `./package.json`.
 
-3. Run build script `yarn build:npm`, refer to [./build.sh](./build.sh).
+3. Run build script `npm run build:npm`, refer to [./build.sh](./build.sh).
 
 4. Dry run publish, update package size info, publish to NPM.
 

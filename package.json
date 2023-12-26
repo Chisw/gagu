@@ -7,7 +7,7 @@
   },
   "scripts": {
     "build:npm": "./build.sh",
-    "pkg": "pkg . --out-path=pkg"
+    "build:pkg": "pkg . --out-path=pkg"
   },
   "pkg": {
     "assets": ["bin/public/**/*"]

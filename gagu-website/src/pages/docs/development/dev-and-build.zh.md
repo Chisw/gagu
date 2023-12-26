@@ -14,6 +14,8 @@ gagu
 |- gagu-website
 ```
 
+项目中只上传了 `yarn.lock` 文件，所以使用 `yarn` 而不是 `npm` 来安装依赖，可以确保我们在开发坏境的运行结果是一致的。
+
 ## 构成
 
 ### 前端
@@ -59,13 +61,13 @@ $ yarn start
 
 1. 更新以下版本信息：
 
-- `version field` 位于 `gagu/package.json`
-- `GAGU_VERSION` 位于 `gagu/gagu-back-end/src/utils/constant.util.ts`
-- `version field` 位于 `gagu/gagu-website/.env`
+- `version field` 位于 `./package.json`
+- `GAGU_VERSION` 位于 `./gagu-back-end/src/utils/constant.util.ts`
+- `version field` 位于 `./gagu-website/.env`
 
-2. 同步 `gagu/gagu-back-end/package.json` 中的依赖项到 `gagu/package.json` 中
+2. 同步 `./gagu-back-end/package.json` 中的生产环境依赖项到 `./package.json` 中
 
-3. 执行构建脚本 `yarn build:npm`，参考 [build.sh](https://github.com/Chisw/gagu/blob/main/build.sh)
+3. 执行构建脚本 `npm run build:npm`，参考 [build.sh](https://github.com/Chisw/gagu/blob/main/build.sh)
 
 4. 预发布检查，更新包体积信息，发布到 NPM
 
@@ -73,11 +75,11 @@ $ yarn start
 
 1. 二进制版的构建需要先完成上一步骤
 
-2. 然后安装好 `gagu/package.json` 中的依赖，是的，这有点冗余，这是最初决定将三部分放至同一仓库造成的，好在问题不大
+2. 然后安装好 `./package.json` 中的依赖，是的，这有点冗余，这是最初决定将三部分放至同一仓库造成的，好在问题不大
 
-3. 在 `gagu` 目录下执行 `yarn pkg`，实际上执行的是 `pkg . --out-path=pkg`，你需要事先全局安装好 Vercel/pkg `npm i -g pkg`
+3. 在 `gagu` 目录下执行 `npm run build:pkg`，实际上执行的是 `pkg . --out-path=pkg`，你需要事先全局安装好 Vercel/pkg `npm i -g pkg`
 
-4. 构建后的内容会出现在 `gagu/pkg` 中
+4. 构建后的内容会出现在 `./pkg` 中
 
 ## 感谢
 

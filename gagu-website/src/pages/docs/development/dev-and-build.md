@@ -14,6 +14,8 @@ gagu
 |- gagu-website
 ```
 
+Only the `yarn.lock` file is uploaded in the project, so using `yarn` instead of `npm` to install dependencies can ensure that our running results in the development environment are consistent.
+
 ## Constitution
 
 ### Front-end
@@ -59,13 +61,13 @@ $ yarn start
 
 1. Update following version info:
 
-- `version field` in `gagu/package.json`
-- `GAGU_VERSION` in `gagu/gagu-back-end/src/utils/constant.util.ts`
-- `version field` in `gagu/gagu-website/.env`
+- `version field` in `./package.json`
+- `GAGU_VERSION` in `./gagu-back-end/src/utils/constant.util.ts`
+- `version field` in `./gagu-website/.env`
 
-2. Sync dependencies in `gagu/gagu-back-end/package.json` to `gagu/package.json`
+2. Sync production dependencies in `./gagu-back-end/package.json` to `./package.json`
 
-3. Run build script `yarn build:npm`, refer to [./build.sh](https://github.com/Chisw/gagu/blob/main/build.sh)
+3. Run build script `npm run build:npm`, refer to [./build.sh](https://github.com/Chisw/gagu/blob/main/build.sh)
 
 4. Dry run publish, update package size info, publish to NPM
 
@@ -73,11 +75,11 @@ $ yarn start
 
 1. The binary version needs to complete the previous built step above
 
-2. Install the dependencies in `gagu/package.json`, yes, this is a bit redundant, this is caused by the original decision to put the three parts in the same repository, fortunately, it is not a big problem
+2. Install the dependencies in `./package.json`, yes, this is a bit redundant, this is caused by the original decision to put the three parts in the same repository, fortunately, it is not a big problem
 
-3. Execute `yarn pkg` in the `gagu` directory, actually execute `pkg . --out-path=pkg`, you need to install Vercel/pkg globally in advance `npm i -g pkg`
+3. Execute `npm run build:pkg` in the `gagu` directory, actually execute `pkg . --out-path=pkg`, you need to install Vercel/pkg globally in advance `npm i -g pkg`
 
-4. The built content will appear in `gagu/pkg`
+4. The built content will appear in `./pkg`
 
 ## Thanks
 
