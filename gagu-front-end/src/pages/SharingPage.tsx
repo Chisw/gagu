@@ -215,7 +215,7 @@ export default function SharePage() {
                   <p className="text-sm text-gray-500 text-center">{t`tip.sharingWithPassword`}</p>
                   <div className="mt-4 flex justify-center">
                     <Input
-                      autofocus
+                      autoFocus
                       showClear
                       placeholder={t`hint.inputAccessPassword`}
                       className="w-48"

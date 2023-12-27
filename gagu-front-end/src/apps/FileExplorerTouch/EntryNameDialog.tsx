@@ -141,7 +141,7 @@ export default function EntryNameDialog(props: EntryNameDialogProps) {
           )}
           <div className="mt-4">
             <Input
-              autofocus
+              autoFocus
               showClear
               id="file-explorer-touch-name-input"
               size="large"

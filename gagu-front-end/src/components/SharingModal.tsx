@@ -172,7 +172,7 @@ export function SharingModal(props: SharingModalProps) {
                       className="w-full"
                       format="yyyy-MM-dd HH:mm"
                       disabledDate={date => date ? date?.getTime() <= (Date.now() - 24 * 60 * 60 * 1000) : false}
-                      timePickerOpts={{ minuteStep: 10 }}
+                      timePickerOpts={{ minuteStep: 10, stopPropagation: true }}
                       locale={semiLocaleMap[language].DatePicker}
                       onChange={date => setForm({ ...form, expiredAt: date ? new Date(date as Date).getTime() : undefined })}
                     />

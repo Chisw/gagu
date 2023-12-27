@@ -77,7 +77,7 @@ export function ChangePasswordModal(props: ChangePasswordModalProps) {
             onSubmit={handleSubmit}
           >
             <Form.Input
-              autofocus
+              autoFocus
               showClear
               label={t`label.passwordOld`}
               placeholder={t`hint.input`}

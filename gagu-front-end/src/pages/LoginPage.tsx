@@ -100,7 +100,7 @@ export default function LoginPage() {
             `)}
           >
             <Input
-              autofocus
+              autoFocus
               showClear
               size="large"
               placeholder={t`label.username`}

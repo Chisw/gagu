@@ -250,7 +250,7 @@ export default function UserFormModal(props: UserFormModalProps) {
               className="w-full"
               extraText={t`hint.noLimitLeaveBlank`}
               format="yyyy-MM-dd HH:mm"
-              timePickerOpts={{ minuteStep: 10 }}
+              timePickerOpts={{ minuteStep: 10, stopPropagation: true }}
               locale={semiLocaleMap[language].DatePicker}
               onChange={date => setForm({ ...form, expiredAt: new Date(date as Date).getTime() })}
             />
