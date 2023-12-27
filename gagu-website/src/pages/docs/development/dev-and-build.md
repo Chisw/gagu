@@ -115,6 +115,8 @@ There are also many dependencies used throughout the project:
 [react-photo-view](https://npmjs.com/package/react-photo-view)&emsp;
 [react-rnd](https://npmjs.com/package/react-rnd)&emsp;
 [recoil](https://npmjs.com/package/recoil)&emsp;
+[rehype-raw](https://npmjs.com/package/rehype-raw)&emsp;
+[remark-gfm](https://npmjs.com/package/recoil)&emsp;
 [thumbsupply](https://npmjs.com/package/thumbsupply)&emsp;
 
 My workload would be enormous without them and I am very grateful to them.

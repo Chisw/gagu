@@ -12,6 +12,7 @@ export const getIsSameEntry = (a: IEntry, b: IEntry) => {
 export const openInIINA = (entry: IEntry) => {
   if (!entry) return
   const a = document.createElement('a')
+  // TODO: check encodeURIComponent
   a.href = `iina://open?url=${encodeURIComponent(FsApi.getEntryStreamUrl(entry))}`
   a.click()
 }
@@ -110,6 +111,20 @@ export const getEntryLabels = (entry: IEntry, kiloSize: 1000 | 1024) => {
 }
 
 export const getParentPath = (path: string) => path.split('/').slice(0, -1).join('/')
+
+export const getAbsolutePath = (currentPath: string, relativePath: string) => {
+  const nameList = currentPath.split('/')
+  relativePath.split('/').forEach((name) => {
+    if (name === '..') {
+      nameList.pop()
+    } else if (['', '.'].includes(name)) {
+      // Nothing
+    } else {
+      nameList.push(name)
+    }
+  })
+  return nameList.join('/')
+}
 
 // Sync following code to BE & FE
 export const getEntryPath = (entry: IEntry | null | undefined) => {

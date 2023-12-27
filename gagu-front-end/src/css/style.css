@@ -108,6 +108,7 @@ body {
 
 [data-customized-scrollbar] ::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
 }
 
 [data-customized-scrollbar] ::-webkit-scrollbar-track {
@@ -221,13 +222,4 @@ body {
 
 .animate-shake-x {
   animation: shake-x 500ms infinite;
-}
-
-/* markdown */
-.markdown-body ol li {
-  list-style: decimal !important;
-}
-
-.markdown-body ul li {
-  list-style: disc !important;
 }

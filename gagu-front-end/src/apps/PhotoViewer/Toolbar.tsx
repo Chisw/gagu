@@ -124,7 +124,7 @@ export default function Toolbar(props: ToolbarProps) {
         onClick={e => e.stopPropagation()}
       >
         <div className="w-28 font-din">
-          {getReadableSize(activeEntry?.size || 0, kiloSize)}
+          {sizeInfo.width} &times; {sizeInfo.height}PX
         </div>
 
         <div className="flex-grow flex justify-center">
@@ -141,7 +141,7 @@ export default function Toolbar(props: ToolbarProps) {
           ))}
         </div>
         <div className="w-28 font-din text-right">
-          {sizeInfo.width} &times; {sizeInfo.height}PX
+          {getReadableSize(activeEntry?.size || 0, kiloSize)}
         </div>
       </div>
 

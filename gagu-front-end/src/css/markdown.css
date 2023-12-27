@@ -242,6 +242,7 @@
 }
 
 .markdown-body img {
+  display: inline-block;
   border-style: none;
   max-width: 100%;
   box-sizing: content-box;
@@ -1214,4 +1215,12 @@
 
 .markdown-body .markdown-alert.markdown-alert-warning {
   border-left-color: var(--color-attention-fg);
+}
+
+.markdown-body ol li {
+  list-style: decimal !important;
+}
+
+.markdown-body ul li {
+  list-style: disc !important;
 }

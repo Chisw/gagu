@@ -13,7 +13,7 @@ import VolumeIndicator from './common/VolumeIndicator'
 
 const appId = AppId.musicPlayer
 
-type PlayMode = 'ORDER' | 'SINGLE' | 'RANDOM'
+type PlayModeType = 'ORDER' | 'SINGLE' | 'RANDOM'
 
 const playModeIcon: any = {
   ORDER: <SvgIcon.PlayOrder size={14} />,
@@ -48,7 +48,7 @@ export default function MusicPlayer(props: AppComponentProps) {
 } = useUserConfig()
 
   const [isPlaying, setIsPlaying] = useState(false)
-  const [playMode, setPlayMode] = useState<PlayMode>('ORDER')
+  const [playMode, setPlayMode] = useState<PlayModeType>('ORDER')
   const [volume, setVolume] = useState(musicPlayerVolume)
   const [volumeSliderShow, setVolumeSliderShow] = useState(false)
   const [volumeChangedTime, setVolumeChangedTime] = useState(0)
@@ -132,12 +132,12 @@ export default function MusicPlayer(props: AppComponentProps) {
     if (!isPlaying) handlePlayOrPause()
   }, [audioEl, isPlaying, handlePlayOrPause])
 
-  const handlePlayModeChange = useCallback((mode?: PlayMode) => {
+  const handlePlayModeChange = useCallback((mode?: PlayModeType) => {
     const targetMode = mode || {
       ORDER: 'SINGLE',
       SINGLE: 'RANDOM',
       RANDOM: 'ORDER',
-    }[playMode] as PlayMode
+    }[playMode] as PlayModeType
 
     setPlayMode(targetMode)
   }, [playMode])

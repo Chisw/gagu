@@ -80,10 +80,10 @@ export default function Window(props: WindowProps) {
   const handleFullScreen = useCallback((force?: boolean) => {
     const fill = () => {
       const menuBarHeight = document.querySelector('.gagu-menu-bar')?.scrollHeight || 24
-      const dockOffsetAndHeight =  8 + 48
+      const dockHeightAndMargin =  48 + 4
       rndInstance.updatePosition({ x: 0, y: menuBarHeight })
       const width = window.innerWidth
-      const height = window.innerHeight - menuBarHeight - dockOffsetAndHeight
+      const height = window.innerHeight - menuBarHeight - dockHeightAndMargin
       rndInstance.updateSize({ width, height })  
       setIsFullScreen(true)
       setWindowSize({ width, height })

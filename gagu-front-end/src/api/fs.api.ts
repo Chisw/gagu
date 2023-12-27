@@ -89,8 +89,12 @@ export class FsApi {
     return data
   }
 
+  static getPathStreamUrl = (path: string) => {
+    return `${BASE_URL}/api/fs/stream?${getPathParam(path)}&${QUERY_TOKEN_KEY}=${UserInfoStore.getToken()}`
+  }
+
   static getEntryStreamUrl = (entry: IEntry) => {
-    return `${BASE_URL}/api/fs/stream?${getPathParam(getEntryPath(entry))}&${QUERY_TOKEN_KEY}=${UserInfoStore.getToken()}`
+    return this.getPathStreamUrl(getEntryPath(entry))
   }
 
   static getThumbnailStreamUrl = (entry: IEntry) => {
