@@ -13,8 +13,8 @@ export const APP_LIST: IApp[] = [
     id: AppId.fileExplorer,
     runningId: 0,
     AppComponent: FileExplorer,
-    width: 1240,
-    height: 720,
+    width: 980,
+    height: 540,
     resizeRange: {
       minWidth: 640,
       minHeight: 480,
@@ -25,8 +25,8 @@ export const APP_LIST: IApp[] = [
     id: AppId.textEditor,
     runningId: 0,
     AppComponent: TextEditor,
-    width: 1000,
-    height: 800,
+    width: 600,
+    height: 500,
     resizeRange: {
       minWidth: 240,
       minHeight: 100,
@@ -40,8 +40,8 @@ export const APP_LIST: IApp[] = [
     id: AppId.photoViewer,
     runningId: 0,
     AppComponent: PhotoViewer,
-    width: 900,
-    height: 520,
+    width: 800,
+    height: 400,
     resizeRange: {
       minWidth: 480,
       minHeight: 480,
@@ -56,7 +56,7 @@ export const APP_LIST: IApp[] = [
     runningId: 0,
     AppComponent: MusicPlayer,
     width: 480,
-    height: 640,
+    height: 520,
     resizeRange: {
       minWidth: 480,
       minHeight: 240,
@@ -69,8 +69,8 @@ export const APP_LIST: IApp[] = [
     id: AppId.videoPlayer,
     runningId: 0,
     AppComponent: VideoPlayer,
-    width: 1280,
-    height: 751,
+    width: 720,
+    height: 450,
     resizeRange: {
       minWidth: 640,
       minHeight: 400,

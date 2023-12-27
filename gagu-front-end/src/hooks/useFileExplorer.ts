@@ -33,7 +33,7 @@ import { DownloadApi, FsApi, TunnelApi } from '../api'
 import { useTranslation } from 'react-i18next'
 import { Confirmor } from '../components/common'
 import toast from 'react-hot-toast'
-import { omit, throttle } from 'lodash-es'
+import { throttle } from 'lodash-es'
 import { useTouchMode } from './useTouchMode'
 import { useAddUploadingTask } from './useAddUploadingTask'
 import { useUserConfig } from './useUserConfig'
@@ -476,10 +476,26 @@ export function useFileExplorer(props: Props) {
   }, [specifiedPath, currentPath, rootEntryList, handleDirectoryOpen, handleGoFullPath])
 
   useEffect(() => {
-    const cache = Object.fromEntries(Object.entries(entryPathCache)
-      .map(([path, data]) => [path, omit(data, 'list')]))
+    const cache = Object.fromEntries(
+      Object.entries(entryPathCache)
+        .map(([path, data]) => {
+          const newData = {...data}
+          if (newData?.hiddenShow === false) {
+            delete newData.hiddenShow
+          }
+          if (newData?.gridMode === !touchMode) {
+            delete newData.gridMode
+          }
+          if (newData?.sortType === Sort.default) {
+            delete newData.sortType
+          }
+          delete newData.list
+          return [path, newData]
+        })
+        .filter(([, data]) => data && Object.keys(data).length)
+    )
     EntryPathCacheStore.set(cache)
-  }, [entryPathCache])
+  }, [entryPathCache, touchMode])
 
   return {
     kiloSize,

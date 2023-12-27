@@ -19,7 +19,6 @@ Many unrealized ideas will be recorded here, waiting for development
 - Separate login tokens and access tokens
 - Permission-related access and button controls
 - Use middleware to replace the pulse interface to update the last active time
-- Remember the last opened window size of different applications in Desktop mode
 - Use virtual scrolling for all long lists
   - remove thumbScrollWatcher
 

@@ -18,7 +18,6 @@ layout: ../../../layouts/DocLayout.astro
 - 划分登录令牌和接入令牌
 - 权限相关的入口和按钮控制
 - 使用中间件取代 pulse 接口更新上次活跃时间
-- Desktop 模式记住不同应用最后打开的窗口尺寸
 - 所有的长列表使用虚拟滚动
   - 移除 thumbScrollWatcher
 

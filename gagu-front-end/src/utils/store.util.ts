@@ -48,6 +48,7 @@ export const UserConfigStore = {
       textEditorFontSize: 14,
       musicPlayerVolume: 0.5,
       videoPlayerVolume: 0.5,
+      windowInfoMap: {},
     }
     const userConfigValue = localStorage.getItem(GAGU_USER_CONFIG_KEY) || ''
     if (userConfigValue) {

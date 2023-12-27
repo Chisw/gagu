@@ -1,12 +1,21 @@
-import { IApp, IEntry, WindowStatus } from '../../types'
+import { IApp, IWindowInfo, IEntry, WindowStatus } from '../../types'
 import { Rnd } from 'react-rnd'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { runningAppListState, topWindowIndexState } from '../../states'
-import { WINDOW_DURATION, WINDOW_STATUS_MAP, line } from '../../utils'
+import {
+  SAME_APP_WINDOW_OFFSET,
+  WINDOW_DURATION,
+  WINDOW_OPEN_MIN_MARGIN,
+  WINDOW_STATUS_MAP,
+  line,
+} from '../../utils'
 import { SvgIcon } from '../../components/common'
 import { useTranslation } from 'react-i18next'
 import { throttle } from 'lodash-es'
+import { useUserConfig } from '../../hooks'
+
+const getMenuBarHeight = () => document.querySelector('.gagu-menu-bar')?.scrollHeight || 24
 
 interface WindowProps {
   app: IApp
@@ -30,12 +39,20 @@ export default function Window(props: WindowProps) {
 
   const { t } = useTranslation()
 
+  const {
+    userConfig,
+    setUserConfig,
+    userConfig: {
+      windowInfoMap,
+    },
+  } = useUserConfig()
+
   const [topWindowIndex, setTopWindowIndex] = useRecoilState(topWindowIndexState)
   const [runningAppList, setRunningAppList] = useRecoilState(runningAppListState)
+
   const [initIndex] = useState(topWindowIndex)
   const [currentIndex, setCurrentIndex] = useState(initIndex)
   const [windowTitle, setWindowTitle] = useState('')
-  const [windowSize, setWindowSize] = useState({ width, height })
   const [hidden, setHidden] = useState(false)
   const [isFullScreen, setIsFullScreen] = useState(false)
   const [rndInstance, setRndInstance] = useState<any>(null)
@@ -46,19 +63,38 @@ export default function Window(props: WindowProps) {
   const sameAppCount = useMemo(() => runningAppList.filter(a => a.id === appId).length, [runningAppList, appId])
 
   const defaultInfo = useMemo(() => {
-    const offset = (sameAppCount - 1) * 24
-    const x = Math.max((window.innerWidth - width) / 2, 10) + offset
-    const y = Math.max((window.innerHeight - 100 - height) / 2, 10) + offset
+    const offset = (sameAppCount - 1) * SAME_APP_WINDOW_OFFSET
+    const storedWindowInfo: IWindowInfo | undefined = windowInfoMap[appId]
+
+    if (storedWindowInfo) {
+      const { x, y, width, height } = storedWindowInfo
+      return {
+        x: Math.max(x, 0) + offset,
+        y: Math.max(y, getMenuBarHeight()) + offset,
+        width,
+        height,
+      }
+    }
+
+    const x = Math.max((window.innerWidth - width) / 2, WINDOW_OPEN_MIN_MARGIN) + offset
+    const y = Math.max((window.innerHeight - height - 50) / 2, WINDOW_OPEN_MIN_MARGIN) + offset
     return { x, y, width, height }
-  }, [width, height, sameAppCount])
+  }, [windowInfoMap, appId, sameAppCount, width, height])
 
-  const [memoInfo, setMemoInfo] = useState(defaultInfo)
+  // for app
+  const [windowSize, setWindowSize] = useState({ width: defaultInfo.width, height: defaultInfo.height })
+  // for restore: no change when window fulling screen
+  const [defaultInfoCache, setDefaultInfoCache] = useState<IWindowInfo>(defaultInfo)
 
-  useEffect(() => {
-    setTimeout(() => {
-      setWindowStatus('opened')
-    }, WINDOW_DURATION)
-  }, [])
+  const handleStoreWindowInfo = useCallback((info: IWindowInfo) => {
+    setUserConfig({
+      ...userConfig,
+      windowInfoMap: {
+        ...windowInfoMap,
+        [appId]: info,
+      },
+    })
+  }, [appId, setUserConfig, userConfig, windowInfoMap])
 
   const handleMoveToFront = useCallback((e: any) => {
     if (isTopWindow || e.target.closest('[prevent-move-to-front]')) return
@@ -78,8 +114,8 @@ export default function Window(props: WindowProps) {
   }, [hidden])
 
   const handleFullScreen = useCallback((force?: boolean) => {
-    const fill = () => {
-      const menuBarHeight = document.querySelector('.gagu-menu-bar')?.scrollHeight || 24
+    const full = () => {
+      const menuBarHeight = getMenuBarHeight()
       const dockHeightAndMargin =  48 + 4
       rndInstance.updatePosition({ x: 0, y: menuBarHeight })
       const width = window.innerWidth
@@ -90,7 +126,7 @@ export default function Window(props: WindowProps) {
     }
 
     const restore = () => {
-      const { x, y, width, height } = memoInfo
+      const { x, y, width, height } = defaultInfoCache
       rndInstance.updatePosition({ x, y })
       rndInstance.updateSize({ width, height })
       setIsFullScreen(false)
@@ -98,11 +134,11 @@ export default function Window(props: WindowProps) {
     }
 
     if (force) {
-      fill()
+      full()
     } else {
-      isFullScreen ? restore() : fill()
+      isFullScreen ? restore() : full()
     }
-  }, [memoInfo, isFullScreen, rndInstance])
+  }, [defaultInfoCache, isFullScreen, rndInstance])
 
   const handleClose = useCallback(() => {
     setWindowStatus('closing')
@@ -112,7 +148,40 @@ export default function Window(props: WindowProps) {
       setTopWindowIndex(currentIndex - 1)
       setWindowStatus('closed')
     }, WINDOW_DURATION)
-  }, [runningAppList, setRunningAppList, runningId, currentIndex, setTopWindowIndex])
+    handleStoreWindowInfo(defaultInfoCache)
+  }, [
+    handleStoreWindowInfo,
+    defaultInfoCache,
+    runningAppList,
+    setRunningAppList,
+    setTopWindowIndex,
+    currentIndex,
+    runningId,
+  ])
+
+  const handleDragStop = useCallback(({ x, y }: { x: number, y: number }) => {
+    const info = { ...defaultInfoCache, x, y }
+    setDefaultInfoCache(info)
+    handleStoreWindowInfo(info)
+    setIsDraggingOrResizing(false)
+  }, [defaultInfoCache, handleStoreWindowInfo])
+
+  const handleResizeStop = useCallback((delta: { w: number, h: number }) => {
+    const { w: deltaWidth, h: deltaHeight } = delta
+    const width = defaultInfoCache.width + deltaWidth
+    const height = defaultInfoCache.height + deltaHeight
+    const info = { ...defaultInfoCache, width, height }
+    setWindowSize({ width, height })
+    setDefaultInfoCache(info)
+    handleStoreWindowInfo(info)
+    setIsDraggingOrResizing(false)
+  }, [defaultInfoCache, handleStoreWindowInfo])
+
+  useEffect(() => {
+    setTimeout(() => {
+      setWindowStatus('opened')
+    }, WINDOW_DURATION)
+  }, [])
 
   useEffect(() => {
     const listener = throttle(() => {
@@ -139,18 +208,8 @@ export default function Window(props: WindowProps) {
         {...resizeRange}
         onDragStart={() => setIsDraggingOrResizing(true)}
         onResizeStart={() => setIsDraggingOrResizing(true)}
-        onDragStop={(e, { x, y }) => {
-          setIsDraggingOrResizing(false)
-          setMemoInfo({ ...memoInfo, x, y })
-        }}
-        onResizeStop={(e, d, el, delta) => {
-          const { width: dWidth, height: dHeight } = delta
-          const width = memoInfo.width + dWidth
-          const height = memoInfo.height + dHeight
-          setIsDraggingOrResizing(false)
-          setWindowSize({ width, height })
-          setMemoInfo({ ...memoInfo, width, height })
-        }}
+        onDragStop={(e, { x, y }) => handleDragStop({ x, y })}
+        onResizeStop={(e, d, el, { width: w, height: h }) => handleResizeStop({ w, h })}
       >
         <div
           className={line(`
@@ -158,8 +217,11 @@ export default function Window(props: WindowProps) {
             absolute inset-0 bg-white bg-opacity-80 backdrop-blur-sm overflow-hidden
             transition-box-shadow duration-200 flex flex-col
             dark:bg-black dark:bg-opacity-80
-            ${isFullScreen ? '' : 'rounded border border-black border-opacity-10 bg-clip-padding dark:border-white dark:border-opacity-5'}
             ${isTopWindow ? 'shadow-xl' : 'shadow'}
+            ${isFullScreen
+              ? ''
+              : 'rounded border border-black border-opacity-10 bg-clip-padding dark:border-white dark:border-opacity-5'
+            }
           `)}
           style={WINDOW_STATUS_MAP[windowStatus]}
           onMouseDownCapture={handleMoveToFront}  // click is too late

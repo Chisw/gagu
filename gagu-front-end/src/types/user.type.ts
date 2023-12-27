@@ -1,3 +1,5 @@
+import { IWindowInfoMap } from '.'
+
 export enum HotkeyStyle {
   mac = 'mac',
   win = 'win',
@@ -18,6 +20,7 @@ export interface IUserConfig {
   textEditorFontSize: number
   musicPlayerVolume: number
   videoPlayerVolume: number
+  windowInfoMap: IWindowInfoMap
 }
 
 // Sync following code to BE & FE

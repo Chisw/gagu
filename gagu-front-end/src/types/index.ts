@@ -101,3 +101,12 @@ export interface IEntryPathCacheData {
 export interface IEntryPathCache {
   [ENTRY_PATH: string]: IEntryPathCacheData | undefined
 }
+
+export interface IWindowInfo {
+  x: number
+  y: number
+  width: number
+  height: number
+}
+
+export interface IWindowInfoMap { [APP_ID: string]: IWindowInfo }
