@@ -17,15 +17,20 @@ export interface IEntry {
   size?: number
 }
 
+export enum RootEntryGroup {
+  user = 'user',
+  system = 'system',
+  favorite = 'favorite',
+}
+
+export type RootEntryGroupType = keyof typeof RootEntryGroup
+
 export interface IRootEntry extends IEntry {
   type: EntryType.directory
+  group: RootEntryGroupType
   isDisk: boolean
   spaceFree?: number
   spaceTotal?: number
-}
-
-export interface ISideEntry extends IRootEntry {
-  isFavorited?: boolean
 }
 
 export interface IDisk extends IRootEntry {
@@ -38,7 +43,6 @@ export interface IBaseData {
   serverOS: IServerOS
   deviceName: string
   rootEntryList: IRootEntry[]
-  favoriteEntryList: ISideEntry[]
   userPath: string
 }
 

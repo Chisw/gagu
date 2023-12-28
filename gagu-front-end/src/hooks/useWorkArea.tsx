@@ -51,7 +51,7 @@ export function useWorkArea(props: useWorkAreaProps) {
     disabledMap, supportThumbnail, thumbScrollWatcher,
     currentPath, activeRootEntry,
     querying, sizeQuerying, deleting,
-    entryList, favoriteEntryList, sideEntryList, sharingEntryList,
+    entryList, rootEntryList, favoriteRootEntryList, sharingEntryList,
     isEntryListEmpty,
     folderCount, fileCount,
     editMode, setEditMode,
@@ -260,20 +260,20 @@ export function useWorkArea(props: useWorkAreaProps) {
     const confirmedCount = contextEntryList.length
     const activeEntry = contextEntryList[0]
     const isSingle = confirmedCount === 1
-    const isFavorited = isSingle && favoriteEntryList.some(entry => getIsSameEntry(entry, activeEntry))
+    const isFavorited = isSingle && favoriteRootEntryList.some(entry => getIsSameEntry(entry, activeEntry))
 
     const menuItemList: IContextMenuItem[] = [
       {
         icon: <SvgIcon.FolderAdd />,
         name: t`action.newFolder`,
         isShow: isOnBlank,
-        onClick: () => handleEdit(EditMode.createFolder),
+        onClick: () => setTimeout(() => handleEdit(EditMode.createFolder)),
       },
       {
         icon: <SvgIcon.FileAdd />,
         name: t`action.newTextFile`,
         isShow: isOnBlank,
-        onClick: () => handleEdit(EditMode.createText),
+        onClick: () => setTimeout(() => handleEdit(EditMode.createText)),
       },
       {
         icon: <SvgIcon.Refresh />,
@@ -285,7 +285,7 @@ export function useWorkArea(props: useWorkAreaProps) {
         icon: <SvgIcon.Rename />,
         name: t`action.rename`,
         isShow: isSingle,
-        onClick: () => setTimeout(() => handleEdit(EditMode.rename), 0),
+        onClick: () => setTimeout(() => handleEdit(EditMode.rename)),
       },
       {
         icon: <SvgIcon.Apps />,
@@ -367,7 +367,7 @@ export function useWorkArea(props: useWorkAreaProps) {
     asSelector,
     entryList,
     selectedEntryList,
-    favoriteEntryList,
+    favoriteRootEntryList,
     handleEdit,
     setContextMenuData,
     setSelectedEntryList,
@@ -424,7 +424,7 @@ export function useWorkArea(props: useWorkAreaProps) {
     supportThumbnail, thumbScrollWatcher,
     currentPath, activeRootEntry,
     entryList, selectedEntryList,
-    favoriteEntryList, sideEntryList, sharingEntryList,
+    favoriteRootEntryList, rootEntryList, sharingEntryList,
     isEntryListEmpty, disabledMap,
     folderCount, fileCount,
     querying, sizeQuerying, deleting,

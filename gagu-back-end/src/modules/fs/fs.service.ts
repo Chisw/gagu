@@ -6,6 +6,7 @@ import {
   IEntry,
   IExif,
   IRootEntry,
+  RootEntryGroup,
   User,
 } from '../../types'
 import {
@@ -130,6 +131,7 @@ export class FsService {
         extension: '_dir',
         parentPath: '/Users',
         hasChildren: true,
+        group: RootEntryGroup.system,
         isDisk: false,
       }
 
@@ -142,6 +144,7 @@ export class FsService {
         hasChildren: true,
         extension: '_dir',
         label: drive.mounted.replace('/Volumes/', ''),
+        group: RootEntryGroup.system,
         isDisk: true,
         spaceFree: drive.available * 512,
         spaceTotal: drive.blocks * 512,
@@ -159,6 +162,7 @@ export class FsService {
         hasChildren: true,
         extension: '_dir',
         label: drive.mounted,
+        group: RootEntryGroup.system,
         isDisk: true,
         spaceFree: drive.available,
         spaceTotal: drive.blocks,
@@ -174,6 +178,7 @@ export class FsService {
         extension: '_dir',
         parentPath: '/home',
         hasChildren: true,
+        group: RootEntryGroup.system,
         isDisk: false,
       }
 
@@ -188,6 +193,7 @@ export class FsService {
         hasChildren: true,
         extension: '_dir',
         label: drive.mounted.replace('/Volumes/', ''),
+        group: RootEntryGroup.system,
         isDisk: true,
         spaceFree: drive.available * 512,
         spaceTotal: drive.blocks * 512,
@@ -204,6 +210,7 @@ export class FsService {
           extension: '_dir',
           parentPath: '/data/data/com.termux/files/home/storage',
           hasChildren: true,
+          group: RootEntryGroup.system,
           isDisk: false,
         },
         {
@@ -214,6 +221,7 @@ export class FsService {
           parentPath: '/data/data/com.termux/files',
           hasChildren: true,
           extension: '_dir',
+          group: RootEntryGroup.system,
           isDisk: false,
         },
         {
@@ -224,6 +232,7 @@ export class FsService {
           parentPath: '/data/data',
           hasChildren: true,
           extension: '_dir',
+          group: RootEntryGroup.system,
           isDisk: false,
         },
       )

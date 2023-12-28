@@ -57,7 +57,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
     disabledMap, supportThumbnail, thumbScrollWatcher,
     currentPath, activeRootEntry,
     querying, sizeQuerying, deleting,
-    entryList, favoriteEntryList, sideEntryList, sharingEntryList,
+    entryList, rootEntryList, favoriteRootEntryList, sharingEntryList,
     isEntryListEmpty, visitHistory,
     folderCount, fileCount,
     editMode, setEditMode,
@@ -230,12 +230,12 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
           sideShow,
           setSideShow,
           currentPath,
-          sideEntryList,
+          rootEntryList,
           asSelector,
         }}
-        onSideEntryClick={(sideEntry) => {
+        onRootEntryClick={(rootEntry) => {
           setSideShow(false)
-          handleDirectoryOpen(sideEntry, true)
+          handleDirectoryOpen(rootEntry, true)
         }}
         onFavoriteCancel={(entry) => handleFavoriteClick(entry, true)}
       />
@@ -299,7 +299,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
         >
           {entryList.map(entry => {
             const isSelected = selectedEntryList.some(o => getIsSameEntry(o, entry))
-            const isFavorited = favoriteEntryList.some(o => getIsSameEntry(o, entry))
+            const isFavorited = favoriteRootEntryList.some(o => getIsSameEntry(o, entry))
             return (
               <EntryNode
                 key={encodeURIComponent(`${entry.name}-${entry.type}`)}
@@ -328,7 +328,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
         show={isSelectionMode}
         {...{
           asSelector,
-          favoriteEntryList,
+          favoriteRootEntryList,
           selectedEntryList,
         }}
         onEdit={(mode, entry) => {

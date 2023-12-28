@@ -1,6 +1,6 @@
 import { AxiosRequestConfig } from 'axios'
 import { BASE_URL, QUERY_TOKEN_KEY, UserInfoStore, getEntryPath, getPathParam } from '../utils'
-import { IEntry, IResponse, IBaseData, ISideEntry, IExif, IAudioTag } from '../types'
+import { IEntry, IResponse, IBaseData, IRootEntry, IExif, IAudioTag } from '../types'
 import service from './service'
 
 export class FsApi {
@@ -80,12 +80,12 @@ export class FsApi {
   }
 
   static createFavorite = async (path: string) => {
-    const { data } = await service.post<IResponse<ISideEntry[]>>(`/api/fs/favorite?${getPathParam(path)}`)
+    const { data } = await service.post<IResponse<IRootEntry[]>>(`/api/fs/favorite?${getPathParam(path)}`)
     return data
   }
 
   static removeFavorite = async (path: string) => {
-    const { data } = await service.delete<IResponse<ISideEntry[]>>(`/api/fs/favorite?${getPathParam(path)}`)
+    const { data } = await service.delete<IResponse<IRootEntry[]>>(`/api/fs/favorite?${getPathParam(path)}`)
     return data
   }
 

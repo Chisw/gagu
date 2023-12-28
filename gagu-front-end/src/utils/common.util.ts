@@ -180,8 +180,6 @@ export const setFavicon = async (imgUrl: string) => {
 }
 
 export const setInputSelection = (input: HTMLInputElement, start: number, end: number) => {
-  input.focus()
-
   const selection = document as any
   if (typeof input.selectionStart != 'undefined') {
     input.selectionStart = start
@@ -198,6 +196,10 @@ export const setInputSelection = (input: HTMLInputElement, start: number, end: n
 
 export const vibrate = (p?: VibratePattern) => {
   window.navigator.vibrate(p || 1)
+}
+
+export const generateNewName = () => {
+  return DateTime.local().toFormat('yyyyMMdd-HHmmss')
 }
 
 // Sync following code to BE & FE

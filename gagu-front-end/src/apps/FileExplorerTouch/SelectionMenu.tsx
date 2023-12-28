@@ -11,7 +11,7 @@ import { openEventState } from '../../states'
 interface SelectionMenuProps {
   show: boolean
   asSelector?: boolean
-  favoriteEntryList: IEntry[]
+  favoriteRootEntryList: IEntry[]
   selectedEntryList: IEntry[]
   onEdit: (mode: EditModeType, entry?: IEntry) => void
   onDirectorySizeUpdate: (entry: IEntry) => void
@@ -28,7 +28,7 @@ export default function SelectionMenu(props: SelectionMenuProps) {
   const {
     show,
     asSelector = false,
-    favoriteEntryList,
+    favoriteRootEntryList,
     selectedEntryList,
     onEdit,
     onDirectorySizeUpdate,
@@ -57,7 +57,7 @@ export default function SelectionMenu(props: SelectionMenuProps) {
 
     if (isSingle) {
       const activeEntry = selectedEntryList[0]
-      isFavorited = isSingle && favoriteEntryList.some(entry => getIsSameEntry(entry, activeEntry))
+      isFavorited = isSingle && favoriteRootEntryList.some(entry => getIsSameEntry(entry, activeEntry))
       isOnDirectory = activeEntry.type === 'directory'
     }
 
@@ -142,7 +142,7 @@ export default function SelectionMenu(props: SelectionMenuProps) {
     asSelector,
     selectedEntryList,
     onSelectAll,
-    favoriteEntryList,
+    favoriteRootEntryList,
     onEdit,
     onDirectorySizeUpdate,
     onFavoriteClick,

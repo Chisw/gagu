@@ -39,7 +39,7 @@ export default function Desktop() {
     supportThumbnail, thumbScrollWatcher,
     currentPath,
     entryList, selectedEntryList,
-    favoriteEntryList, sharingEntryList,
+    favoriteRootEntryList, sharingEntryList,
     querying, sizeQuerying, deleting,
     sharingModalShow, setSharingModalShow,
     editMode, handleNameSuccess, handleNameFail,
@@ -112,7 +112,7 @@ export default function Desktop() {
           {/* entry list */}
           {entryList.map(entry => {
             const isSelected = selectedEntryList.some(o => getIsSameEntry(o, entry))
-            const isFavorited = favoriteEntryList.some(o => getIsSameEntry(o, entry))
+            const isFavorited = favoriteRootEntryList.some(o => getIsSameEntry(o, entry))
             const inputMode = editMode === EditMode.rename && isSelected
             return (
               <EntryNode

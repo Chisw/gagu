@@ -1,6 +1,11 @@
-import { EntryType, IEntry, IRootEntry, ISideEntry } from '../types/entry.type'
+import {
+  EntryType,
+  IEntry,
+  IRootEntry,
+  RootEntryGroupType,
+} from '../types/entry.type'
 
-export const rootPath2RootEntry = (path: string) => {
+export const path2RootEntry = (path: string, group: RootEntryGroupType) => {
   const names = path.split('/')
   const lastName = names.pop()
 
@@ -12,25 +17,8 @@ export const rootPath2RootEntry = (path: string) => {
     parentPath: names.join('/'),
     hasChildren: true,
     extension: '_dir',
+    group,
     isDisk: false,
-  }
-  return entry
-}
-
-export const favoritePath2SideEntry = (path: string) => {
-  const names = path.split('/')
-  const lastName = names.pop()
-
-  const entry: ISideEntry = {
-    name: lastName || '',
-    type: EntryType.directory,
-    hidden: false,
-    lastModified: 0,
-    parentPath: names.join('/'),
-    hasChildren: true,
-    extension: '_dir',
-    isDisk: false,
-    isFavorited: true,
   }
   return entry
 }

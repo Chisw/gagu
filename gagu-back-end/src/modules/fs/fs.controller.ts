@@ -6,8 +6,7 @@ import {
   ServerOS,
   getExists,
   GAGU_VERSION,
-  favoritePath2SideEntry,
-  rootPath2RootEntry,
+  path2RootEntry,
   respond,
   catchError,
   GAGU_PATH,
@@ -35,6 +34,7 @@ import {
   User,
   UserPermission,
   ServerMessage,
+  RootEntryGroup,
 } from '../../types'
 import { mkdirSync, renameSync } from 'fs'
 import { Permission } from '../../common/decorators/permission.decorator'
@@ -53,7 +53,7 @@ export class FsController {
 
   @Get('base-data')
   @Permission(UserPermission.read)
-  getRoot(@UserGetter() user: IUser) {
+  getBaseData(@UserGetter() user: IUser) {
     const deviceName = this.settingService.findOne(SettingKey.deviceName)
     const {
       username,
@@ -66,9 +66,14 @@ export class FsController {
     const userPath = `${GAGU_PATH.USERS}/${username}`
 
     const rootEntryList = [
-      rootPath2RootEntry(userPath),
+      path2RootEntry(userPath, RootEntryGroup.user),
       ...(isAdmin ? this.fsService.getRootEntryList() : []),
-      ...assignedRootPathList.map(rootPath2RootEntry),
+      ...assignedRootPathList.map((path) =>
+        path2RootEntry(path, RootEntryGroup.system),
+      ),
+      ...favoritePathList.map((path) =>
+        path2RootEntry(path, RootEntryGroup.favorite),
+      ),
     ]
 
     const baseData: IBaseData = {
@@ -76,7 +81,6 @@ export class FsController {
       serverOS: ServerOS,
       deviceName: deviceName || ServerOS.hostname,
       rootEntryList,
-      favoriteEntryList: favoritePathList.map(favoritePath2SideEntry),
       userPath,
     }
 
@@ -292,13 +296,17 @@ export class FsController {
   @Permission(UserPermission.read)
   updateFavorite(@Query('path') path: string, @UserGetter() user: IUser) {
     const pathList = this.userService.createFavorite(user.username, path)
-    return respond(pathList.map(favoritePath2SideEntry))
+    return respond(
+      pathList.map((path) => path2RootEntry(path, RootEntryGroup.favorite)),
+    )
   }
 
   @Delete('favorite')
   @Permission(UserPermission.read)
   removeFavorite(@Query('path') path: string, @UserGetter() user: IUser) {
     const pathList = this.userService.removeFavorite(user.username, path)
-    return respond(pathList.map(favoritePath2SideEntry))
+    return respond(
+      pathList.map((path) => path2RootEntry(path, RootEntryGroup.favorite)),
+    )
   }
 }

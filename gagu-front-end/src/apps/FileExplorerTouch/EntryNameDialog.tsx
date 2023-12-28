@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useCallback, useEffect, useState } from 'react'
 import { useRequest } from '../../hooks'
 import { FsApi } from '../../api'
-import { INVALID_NAME_CHAR_LIST, setInputSelection } from '../../utils'
+import { INVALID_NAME_CHAR_LIST, generateNewName, setInputSelection } from '../../utils'
 import toast from 'react-hot-toast'
 
 const titleMap = {
@@ -93,7 +93,10 @@ export default function EntryNameDialog(props: EntryNameDialogProps) {
   ])
 
   useEffect(() => {
-    setNewName(editMode === EditMode.rename ? activeEntry?.name || '' : '')
+    setNewName(editMode === EditMode.rename
+      ? activeEntry?.name || ''
+      : generateNewName()
+    )
   }, [activeEntry, editMode])
 
   return (
@@ -150,10 +153,13 @@ export default function EntryNameDialog(props: EntryNameDialogProps) {
               onChange={setNewName}
               onFocus={() => {
                 const input = document.getElementById('file-explorer-touch-name-input') as HTMLInputElement | undefined
-                if (input && activeEntry) {
-                  const { name, extension } = activeEntry
-                  const end = extension ? name.lastIndexOf(`.${extension}`) : name.length
-                  setInputSelection(input, 0, end)
+                if (input) {
+                  let end = -1 // create mode
+                  if (activeEntry) {
+                    const { name, extension } = activeEntry
+                    end = extension ? name.lastIndexOf(`.${extension}`) : name.length
+                  }
+                  setTimeout(() => setInputSelection(input, 0, end))
                 }
               }}
             />

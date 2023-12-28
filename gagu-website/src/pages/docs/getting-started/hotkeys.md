@@ -14,8 +14,8 @@ Currently available hotkeys, more are being added gradually
 | ![](/assets/icons/app-file-explorer.svg) FileExplorer | Mac | Win |
 | -- | -- | -- |
 | Sidebar | ⌘ + B | Ctrl + B |
-| Nav back | ⌘ + ← | Ctrl + ← |
-| Nav forward | ⌘ + → | Ctrl + → |
+| Go back | ⌘ + ← | Ctrl + ← |
+| Go forward | ⌘ + → | Ctrl + → |
 | Refresh | ⌘ + R | Ctrl + R |
 | Back to parent folder | ⌘ + ↑ | Backspace |
 | Open entry | ⌘ + ↓ | Enter |

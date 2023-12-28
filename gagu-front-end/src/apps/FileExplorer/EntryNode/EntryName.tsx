@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useRequest } from '../../../hooks'
-import { line, setInputSelection } from '../../../utils'
+import { generateNewName, line, setInputSelection } from '../../../utils'
 import { FsApi } from '../../../api'
 import { INVALID_NAME_CHAR_LIST } from '../../../utils'
 import { EditMode, CreationType, EntryType, IEntry, NameFailType } from '../../../types'
@@ -33,7 +33,8 @@ export default function EntryName(props: EntryNameProps) {
   const { t } = useTranslation()
 
   const entryName = entry?.name
-  const [inputValue, setInputValue] = useState(entryName)
+
+  const [inputValue, setInputValue] = useState<string>(entryName || generateNewName())
 
   const handleInputChange = useCallback((e: any) => {
     setInputValue(e.target.value)
@@ -161,6 +162,7 @@ export default function EntryName(props: EntryNameProps) {
               if (input && entry) {
                 const { name, extension } = entry
                 const end = extension ? name.lastIndexOf(`.${extension}`) : name.length
+                  console.log('end', end)
                 setInputSelection(input, 0, end)
               }
             }}

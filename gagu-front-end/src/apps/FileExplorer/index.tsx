@@ -28,7 +28,7 @@ export default function FileExplorer(props: FileExplorerProps) {
     supportThumbnail, thumbScrollWatcher,
     currentPath, activeRootEntry,
     entryList, selectedEntryList,
-    favoriteEntryList, sideEntryList, sharingEntryList,
+    favoriteRootEntryList, rootEntryList, sharingEntryList,
     isEntryListEmpty, disabledMap,
     folderCount, fileCount,
     querying, sizeQuerying, deleting,
@@ -66,8 +66,8 @@ export default function FileExplorer(props: FileExplorerProps) {
       <div className={`absolute inset-0 flex ${asSelector ? '' : 'border-t border-gray-100 dark:border-zinc-700'}`}>
         {/* side */}
         <Side
-          {...{ sideCollapse, currentPath, sideEntryList }}
-          onSideEntryClick={(entry) => handleDirectoryOpen(entry, true)}
+          {...{ sideCollapse, currentPath, rootEntryList }}
+          onRootEntryClick={(entry) => handleDirectoryOpen(entry, true)}
           onFavoriteCancel={(entry) => handleFavoriteClick(entry, true)}
         />
         {/* main */}
@@ -144,7 +144,7 @@ export default function FileExplorer(props: FileExplorerProps) {
               {/* entry list */}
               {entryList.map(entry => {
                 const isSelected = selectedEntryList.some(o => getIsSameEntry(o, entry))
-                const isFavorited = favoriteEntryList.some(o => getIsSameEntry(o, entry))
+                const isFavorited = favoriteRootEntryList.some(o => getIsSameEntry(o, entry))
                 const inputMode = editMode === EditMode.rename && isSelected
                 return (
                   <EntryNode

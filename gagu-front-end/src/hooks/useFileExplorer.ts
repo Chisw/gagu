@@ -5,11 +5,11 @@ import {
   IEntryPathCache,
   IRootEntry,
   IScrollerWatcher,
-  ISideEntry,
   IVisitHistory,
   Sort,
   SortType,
   TunnelType,
+  RootEntryGroup,
 } from '../types'
 import {
   EntryPathCacheStore,
@@ -107,12 +107,12 @@ export function useFileExplorer(props: Props) {
 
   const { handleUploadTaskAdd } = useAddUploadingTask()
 
-  const { rootEntryList, rootEntryPathList, favoriteEntryList, sideEntryList, supportThumbnail } = useMemo(() => {
-    const { rootEntryList, favoriteEntryList, serverOS } = baseData
+  const { rootEntryList, rootEntryPathList, favoriteRootEntryList, supportThumbnail } = useMemo(() => {
+    const { rootEntryList, serverOS } = baseData
     const { supportThumbnail } = serverOS
     const rootEntryPathList = rootEntryList.map(getEntryPath)
-    const sideEntryList: ISideEntry[] = [...rootEntryList, ...favoriteEntryList]
-    return { rootEntryList, rootEntryPathList, favoriteEntryList, sideEntryList, supportThumbnail }
+    const favoriteRootEntryList = rootEntryList.filter(entry => entry.group === RootEntryGroup.favorite)
+    return { rootEntryList, rootEntryPathList, favoriteRootEntryList, supportThumbnail }
   }, [baseData])
 
   const isInRoot = useMemo(() => rootEntryPathList.includes(currentPath), [rootEntryPathList, currentPath])
@@ -358,9 +358,13 @@ export function useFileExplorer(props: Props) {
       onConfirm: async (close) => {
         const path = getEntryPath(entry)
         const fn = isFavorited ? removeFavorite : createFavorite
-        const { success, data: favoriteEntryList } = await fn(path)
+        const { success, data: favoriteRootEntryList } = await fn(path)
+        const rootEntryList = [
+          ...baseData.rootEntryList.filter(entry => entry.group !== RootEntryGroup.favorite),
+          ...favoriteRootEntryList,
+        ]
         if (success) {
-          setBaseData({ ...baseData, favoriteEntryList })
+          setBaseData({ ...baseData, rootEntryList })
         }
         close()
       },
@@ -390,9 +394,9 @@ export function useFileExplorer(props: Props) {
             deletedPaths.push(path)
           }
         }
-        const { favoriteEntryList: list } = baseData
-        const favoriteEntryList = list.filter((entry) => !deletedPaths.includes(getEntryPath(entry)))
-        setBaseData({ ...baseData, favoriteEntryList })
+        const { rootEntryList: list } = baseData
+        const rootEntryList = list.filter((entry) => !deletedPaths.includes(getEntryPath(entry)))
+        setBaseData({ ...baseData, rootEntryList })
         handleNavRefresh({ refreshParent: true })
         close()
       },
@@ -502,7 +506,7 @@ export function useFileExplorer(props: Props) {
     disabledMap, supportThumbnail, thumbScrollWatcher,
     currentPath, activeRootEntry,
     querying, sizeQuerying, deleting,
-    entryList, favoriteEntryList, sideEntryList, sharingEntryList,
+    entryList, rootEntryList, favoriteRootEntryList, sharingEntryList,
     isEntryListEmpty, visitHistory,
     folderCount, fileCount,
     editMode, setEditMode,

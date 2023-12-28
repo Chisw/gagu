@@ -1,21 +1,21 @@
 import { IconButton, SvgIcon } from '../../components/common'
-import { ISideEntry } from '../../types'
+import { IRootEntry, RootEntryGroup } from '../../types'
 import { getReadableSize, getEntryPath, line } from '../../utils'
 import { useDragDrop, useUserConfig } from '../../hooks'
 
 interface SideEntryListProps {
   currentPath: string
-  sideEntryList: ISideEntry[]
-  onSideEntryClick: (sideEntry: ISideEntry) => void
-  onFavoriteCancel: (sideEntry: ISideEntry) => void
+  rootEntryList: IRootEntry[]
+  onRootEntryClick: (rootEntry: IRootEntry) => void
+  onFavoriteCancel: (rootEntry: IRootEntry) => void
 }
 
 export default function SideEntryList(props: SideEntryListProps) {
 
   const {
     currentPath,
-    sideEntryList,
-    onSideEntryClick,
+    rootEntryList,
+    onRootEntryClick,
     onFavoriteCancel,
   } = props
 
@@ -23,27 +23,26 @@ export default function SideEntryList(props: SideEntryListProps) {
 
   const dragDropProps = useDragDrop({
     onOpen: (path) => {
-      const sideEntry = sideEntryList.find(entry => getEntryPath(entry) === path)
-      sideEntry && onSideEntryClick(sideEntry)
+      const rootEntry = rootEntryList.find(entry => getEntryPath(entry) === path)
+      rootEntry && onRootEntryClick(rootEntry)
     }
   })
 
   return (
     <>
-      {sideEntryList.map((sideEntry, sideEntryIndex) => {
-        const { spaceFree, spaceTotal, name, isDisk = false, isFavorited = false } = sideEntry
-        const sideEntryPath = getEntryPath(sideEntry)
-        const isActive = sideEntryPath === currentPath
-        const canSideEntryClick = currentPath !== sideEntryPath
+      {rootEntryList.map((rootEntry) => {
+        const { spaceFree, spaceTotal, name, group, isDisk = false } = rootEntry
+        const rootEntryPath = getEntryPath(rootEntry)
+        const isActive = rootEntryPath === currentPath
+        const canRootEntryClick = currentPath !== rootEntryPath
         const spaceUsed = isDisk ? spaceTotal! - spaceFree! : 0
-        const isPersonal = sideEntryIndex === 0
 
         return (
           <div
-            key={sideEntryPath}
+            key={rootEntryPath}
             {...dragDropProps}
             data-is-drag-drop-node={isActive ? 'false' : 'true'}
-            data-entry-path={sideEntryPath}
+            data-entry-path={rootEntryPath}
             className={line(`
               gagu-file-explorer-side-entry
               relative px-3 py-3 md:py-2 text-sm border-l-4
@@ -53,11 +52,11 @@ export default function SideEntryList(props: SideEntryListProps) {
                 : 'border-transparent text-gray-600 hover:text-black cursor-pointer dark:text-zinc-200 dark:hover:text-white'
               }
             `)}
-            onClick={() => canSideEntryClick && onSideEntryClick(sideEntry)}
+            onClick={() => canRootEntryClick && onRootEntryClick(rootEntry)}
           >
             <div className="flex justify-between items-center">
               <div className="flex-shrink-0">
-                {isPersonal
+                {rootEntry.group === RootEntryGroup.user
                   ? <SvgIcon.FolderUser />
                   : isDisk
                     ? <SvgIcon.HardDrive />
@@ -75,13 +74,13 @@ export default function SideEntryList(props: SideEntryListProps) {
                   {`${getReadableSize(spaceUsed!, kiloSize)} / ${getReadableSize(spaceTotal!, kiloSize)}`}
                 </div>
               )}
-              {isFavorited && (
+              {group === RootEntryGroup.favorite && (
                 <div onClick={(e) => e.stopPropagation()}>
                   <IconButton
                     size="xs"
                     className="hover:outline-2 hover:outline-dashed hover:outline-yellow-400"
                     icon={<SvgIcon.StarSolid size={10} className="text-yellow-500" />}
-                    onClick={() => onFavoriteCancel(sideEntry)}
+                    onClick={() => onFavoriteCancel(rootEntry)}
                   />
                 </div>
               )}
