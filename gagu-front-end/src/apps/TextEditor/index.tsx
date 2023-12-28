@@ -169,7 +169,8 @@ export default function TextEditor(props: AppComponentProps) {
           onMarkdownViewChange={handleMarkdownViewChange}
         />
         <div className="flex-grow relative">
-          {!activeEntry && <Opener appId={appId} />}
+          <Opener show={!activeEntry} appId={appId} />
+
           {activeEntry && (
             <div className="absolute inset-0">
               <code

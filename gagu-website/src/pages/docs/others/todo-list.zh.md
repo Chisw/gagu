@@ -9,7 +9,6 @@ layout: ../../../layouts/DocLayout.astro
 
 ## 全局
 
-- 多窗口自动排列
 - 窗口布局分配
 - favicon 显示文件传输百分比
 - 录音机、日历、计算器、亲戚计算器等小工具
@@ -77,6 +76,7 @@ layout: ../../../layouts/DocLayout.astro
 - 连续播放
 - 生成内容截图
 - 进度条拖拽
+- 进度条缩略图
 - 水平音量滑块
 
 ### 设置

@@ -65,9 +65,9 @@ export default function EntryIcon(props: IconProps) {
         flex justify-center items-center flex-shrink-0
         bg-no-repeat bg-contain bg-center
         ${isSmall ? 'w-6 h-6 --small-icon' : 'w-14 h-12'}
-        ${isFolder ? '--entry-folder' : '--entry-file'}
+        ${isFolder ? '--folder' : '--file'}
         ${isFavorited ? '--is-favorited' : ''}
-        ${`--icon-${entryIconType || 'unknown'}`}
+        ${`--i-${entryIconType || 'unknown'}`}
       `)}
     >
       {(!hideAppIcon && callableAppId) && (

@@ -218,7 +218,7 @@ export default function MusicPlayer(props: AppComponentProps) {
   return (
     <>
       <div className="absolute inset-0 flex flex-col bg-gradient-to-br from-pink-700 to-pink-900 select-none">
-        {!activeEntry && <Opener appId={appId} />}
+        <Opener show={!activeEntry} appId={appId} />
 
         <VolumeIndicator volume={volume} time={volumeChangedTime} />
 

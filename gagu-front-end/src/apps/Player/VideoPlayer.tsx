@@ -139,7 +139,7 @@ export default function VideoPlayer(props: AppComponentProps) {
   return (
     <>
       <div className="absolute inset-0 bg-black select-none group">
-        {!activeEntry && <Opener appId={appId} />}
+        <Opener show={!activeEntry} appId={appId} />
 
         <VolumeIndicator volume={volume} time={volumeChangedTime} />
 

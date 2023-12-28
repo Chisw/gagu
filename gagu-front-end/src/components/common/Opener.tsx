@@ -7,11 +7,13 @@ import { line } from '../../utils'
 import { useEffect, useState } from 'react'
 
 interface OpenerProps {
+  show: boolean
   appId: string
 }
 
 export function Opener(props: OpenerProps) {
   const {
+    show,
     appId,
   } = props
 
@@ -27,8 +29,14 @@ export function Opener(props: OpenerProps) {
 
   return (
     <>
-      <div className="absolute z-50 inset-0 flex justify-center items-center">
-        <div className="pb-12">
+      <div
+        className={line(`
+          absolute z-50 inset-0
+          justify-center items-center
+          ${show ? 'flex' : 'hidden'}
+        `)}
+      >
+        <div className="pb-4">
           <div
             data-app-id={appId}
             className={line(`

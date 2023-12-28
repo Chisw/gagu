@@ -9,7 +9,6 @@ Many unrealized ideas will be recorded here, waiting for development
 
 ## Global
 
-- Multi-window automatic arrangement
 - Window layout assignment
 - favicon shows file transfer percentage
 - Sound Recorder, Calendar, Calculator, Relative calculator and other gadgets
@@ -77,6 +76,7 @@ Many unrealized ideas will be recorded here, waiting for development
 - Play continuously
 - Generate content screenshots
 - DnD of progress bar
+- Thumbnails on progress bar
 - Horizontal volume slider
 
 ### Settings

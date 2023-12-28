@@ -151,7 +151,8 @@ export default function PhotoViewer(props: AppComponentProps) {
             className={`absolute z-0 inset-0 ${activeEntry ? 'flex justify-center items-center' : ''}`}
             onClick={() => activeEntry && setViewerShow(true)}
           >
-            {!activeEntry && <Opener appId={appId} />}
+            <Opener show={!activeEntry} appId={appId} />
+
             {activeEntry && (
               <img
                 ref={imgRef}
