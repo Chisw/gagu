@@ -1,17 +1,14 @@
-import { Controller, Post, Body, Headers, Get } from '@nestjs/common'
-import { Public } from '../../common/decorators/public.decorator'
+import { Controller, Post, Body, Headers, Request } from '@nestjs/common'
+import { Public, Permission } from '../../common/decorators'
 import { AuthService } from './auth.service'
 import { ServerMessage, User, UserPermission } from '../../types'
 import {
-  generateRandomCode,
-  generateUserInfo,
   HEADERS_AUTH_KEY,
   getIsExpired,
   getAuthorizationToken,
   respond,
 } from '../../utils'
 import { UserService } from '../user/user.service'
-import { Permission } from '../../common/decorators/permission.decorator'
 
 @Controller('auth')
 export class AuthController {
@@ -25,20 +22,22 @@ export class AuthController {
   login(
     @Body('username') username: User.Username,
     @Body('password') password: User.Password,
+    @Request() request: any,
   ) {
     const user = this.userService.findOne(username)
     if (user) {
-      const { invalid } = user
       if (password === user.password) {
-        const token = Buffer.from(generateRandomCode()).toString('base64')
-        this.authService.create(token, username)
+        const { invalid } = user
         if (invalid) {
           return respond(null, ServerMessage.ERROR_USER_DISABLED)
         } else {
           if (getIsExpired(user.expiredAt)) {
             return respond(null, ServerMessage.ERROR_USER_EXPIRED)
           } else {
-            return respond(generateUserInfo(user, token))
+            const { ip = '', headers = {} } = request
+            const { 'user-agent': ua = '' } = headers
+            const userInfo = this.authService.create(user, ip, ua)
+            return respond(userInfo)
           }
         }
       } else {
@@ -46,23 +45,6 @@ export class AuthController {
       }
     } else {
       return respond(null, ServerMessage.ERROR_USER_NOT_EXISTED)
-    }
-  }
-
-  @Get('pulse')
-  pulse(@Headers(HEADERS_AUTH_KEY) authorization: string) {
-    const token = getAuthorizationToken(authorization)
-    const username = this.authService.findOneUsername(token)
-    if (username) {
-      const user = this.userService.findOne(username)
-      if (user) {
-        this.authService.update(token)
-        return respond(generateUserInfo(user, token))
-      } else {
-        return respond(null, ServerMessage.ERROR_USER_NOT_EXISTED)
-      }
-    } else {
-      return respond(null, ServerMessage.ERROR_TOKEN_INVALID)
     }
   }
 

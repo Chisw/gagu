@@ -10,6 +10,7 @@ export const UserInfoStore = {
       const storeUserInfo = JSON.parse(userInfoValue)
       const userInfo: IUserInfo = {
         token: storeUserInfo.token || '',
+        accessToken: storeUserInfo.accessToken || '',
         nickname: storeUserInfo.nickname || 'NO_NICKNAME',
         username: storeUserInfo.username || 'UNKNOWN',
         expiredAt: storeUserInfo.expiredAt,

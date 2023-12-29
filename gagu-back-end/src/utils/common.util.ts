@@ -34,6 +34,10 @@ export const catchError = (error: any) => {
 // Sync following code to BE & FE
 export const generateRandomCode = () => md5(Math.random().toString())
 
+export const generateRandomToken = () => {
+  return Buffer.from(generateRandomCode()).toString('base64')
+}
+
 export const getIsExpired = (expiredAt?: number) => {
   return expiredAt && expiredAt < Date.now()
 }

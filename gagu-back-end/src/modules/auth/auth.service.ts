@@ -1,6 +1,11 @@
 import { Injectable } from '@nestjs/common'
-import { User, IAuthRecord } from '../../types'
-import { readAuthData, writeAuthData } from '../../utils'
+import { User, IAuthRecord, IUser } from '../../types'
+import {
+  generateRandomToken,
+  generateUserInfo,
+  readAuthData,
+  writeAuthData,
+} from '../../utils'
 
 @Injectable()
 export class AuthService {
@@ -18,26 +23,35 @@ export class AuthService {
     return this.authRecordList
   }
 
-  findOneUsername(token: User.Token) {
-    const username = this.authRecordList.find(
-      (record) => record.token === token,
-    )?.username
-    return username
+  getUsername(token: User.Token) {
+    const record = this.authRecordList.find((record) => record.token === token)
+    return record?.username
   }
 
-  create(token: User.Token, username: User.Username) {
+  create(user: IUser, ip: string, ua: string) {
+    const token = generateRandomToken()
+    const accessToken = generateRandomToken()
+    const timestamp = Date.now()
+
     this.authRecordList.push({
       token,
-      username,
-      timestamp: Date.now(),
+      accessToken,
+      username: user.username,
+      loginAt: timestamp,
+      pulsedAt: timestamp,
+      ip,
+      ua,
     })
+
     this.sync()
+
+    return generateUserInfo(user, token, accessToken)
   }
 
-  update(token: User.Token) {
+  updatePulseTime(token: User.Token) {
     const record = this.authRecordList.find((record) => record.token === token)
     if (record) {
-      record.timestamp = Date.now()
+      record.pulsedAt = Date.now()
     }
     this.sync()
   }
@@ -49,7 +63,7 @@ export class AuthService {
     this.sync()
   }
 
-  removeUser(username: User.Username) {
+  removeUserAllRecords(username: User.Username) {
     this.authRecordList
       .filter((r) => r.username === username)
       .map((r) => r.token)

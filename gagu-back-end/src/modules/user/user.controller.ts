@@ -22,11 +22,10 @@ import {
   GAGU_PATH,
   getIsExpired,
   initUserPaths,
-  PULSE_INTERVAL,
   respond,
 } from '../../utils'
 import { FsService } from '../fs/fs.service'
-import { Permission } from '../../common/decorators/permission.decorator'
+import { Permission } from '../../common/decorators'
 import { AuthService } from '../auth/auth.service'
 
 @Controller('user')
@@ -45,10 +44,16 @@ export class UserController {
   query() {
     const userList = this.userService.findAll()
     const authRecordList = this.authService.findAll()
-    const loggedInList = authRecordList
-      .filter((record) => record.timestamp > Date.now() - PULSE_INTERVAL)
-      .map((record) => record.username)
-    return respond({ userList, loggedInList })
+
+    userList.forEach((user) => {
+      const sortedList = authRecordList
+        .filter((record) => record.username === user.username)
+        .sort((a, b) => (a.pulsedAt > b.pulsedAt ? 1 : -1))
+
+      user.pulsedAt = sortedList[0]?.pulsedAt
+    })
+
+    return respond(userList)
   }
 
   @Post()
@@ -71,7 +76,7 @@ export class UserController {
     const { avatar, username, password } = userForm
     if (this.userService.findOne(username)) {
       if (password || getIsExpired(userForm.expiredAt)) {
-        this.authService.removeUser(username)
+        this.authService.removeUserAllRecords(username)
       }
       this.fsService.uploadAvatar(username, avatar)
       this.userService.update(userForm)
@@ -85,7 +90,7 @@ export class UserController {
   @Permission(UserPermission.administer)
   remove(@Param('username') username: User.Username) {
     this.userService.remove(username)
-    this.authService.removeUser(username)
+    this.authService.removeUserAllRecords(username)
     deleteEntry(`${GAGU_PATH.PUBLIC_AVATAR}/${username}`)
     deleteEntry(`${GAGU_PATH.USERS}/${username}`)
     return respond()
@@ -105,7 +110,7 @@ export class UserController {
       const { password, newPassword } = userPasswordForm
       if (password === user.password) {
         this.userService.updatePassword(username, newPassword)
-        this.authService.removeUser(username)
+        this.authService.removeUserAllRecords(username)
         return respond()
       } else {
         return respond(null, ServerMessage.ERROR_PASSWORD_WRONG)
@@ -124,7 +129,7 @@ export class UserController {
     const isValid = validity === 'valid'
     this.userService.updateValidity(username, isValid)
     if (!isValid) {
-      this.authService.removeUser(username)
+      this.authService.removeUserAllRecords(username)
     }
     return respond()
   }

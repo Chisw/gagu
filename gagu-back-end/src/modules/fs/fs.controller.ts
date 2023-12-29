@@ -37,9 +37,7 @@ import {
   RootEntryGroup,
 } from '../../types'
 import { mkdirSync, renameSync } from 'fs'
-import { Permission } from '../../common/decorators/permission.decorator'
-import { Public } from 'src/common/decorators/public.decorator'
-import { UserGetter } from 'src/common/decorators/user.decorator'
+import { Permission, Public, UserGetter } from '../../common/decorators'
 import { UserService } from '../user/user.service'
 import 'express-zip'
 

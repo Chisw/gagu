@@ -40,10 +40,7 @@ export class ApiGuard implements CanActivate {
         .getRequest<Request & { user: IUser | undefined }>()
 
       const token = getRequestToken(request)
-      const username = token
-        ? this.authService.findOneUsername(token)
-        : undefined
-
+      const username = token ? this.authService.getUsername(token) : undefined
       const isLoggedIn = !!username
 
       if (isLoggedIn) {

@@ -1,5 +1,5 @@
 import { FsService } from './../fs/fs.service'
-import { Public } from '../../common/decorators/public.decorator'
+import { Public } from '../../common/decorators'
 import { Controller, Get, Param, Query, Res } from '@nestjs/common'
 import { EntryType, ZipResponse, ZipResponseFile } from '../../types'
 import { getEntryPath, checkTunnel } from '../../utils'

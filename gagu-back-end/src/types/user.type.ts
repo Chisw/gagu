@@ -2,6 +2,7 @@
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export declare namespace User {
   type Token = string
+  type AccessToken = string
   type Nickname = string
   type Username = string
   type Password = string
@@ -25,13 +26,15 @@ export interface IUser {
   invalid: boolean
   createdAt: number
   expiredAt?: number
+  pulsedAt?: number
   permissions: UserPermissionType[]
   assignedRootPathList?: string[]
   favoritePathList?: string[]
   passwordLocked?: boolean
 }
 
-export interface IUserForm extends Omit<IUser, 'favoritePathList'> {
+export interface IUserForm
+  extends Omit<IUser, 'favoritePathList' | 'pulsedAt'> {
   avatar: string
   password2: string
   assignedRootPathList: string[]
@@ -73,12 +76,17 @@ export class UserPasswordForm {
 
 export interface IAuthRecord {
   token: User.Token
+  accessToken: User.AccessToken
   username: User.Username
-  timestamp: number
+  loginAt: number
+  pulsedAt: number
+  ip: string
+  ua: string
 }
 
 export interface IUserInfo {
   token: User.Token
+  accessToken: User.AccessToken
   nickname: User.Nickname
   username: User.Username
   expiredAt?: number

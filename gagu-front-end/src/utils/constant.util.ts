@@ -46,7 +46,6 @@ export const WINDOW_STATUS_MAP = {
 }
 
 // Sync following code to BE & FE
-export const PULSE_INTERVAL = 60 * 1000
 export const HEADERS_AUTH_KEY = 'Authorization'
 export const HEADERS_AUTH_PREFIX = 'Bearer '
 export const QUERY_TOKEN_KEY = 'access_token'

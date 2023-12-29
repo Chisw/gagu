@@ -10,13 +10,13 @@ export class LoggerMiddleware implements NestMiddleware {
   constructor(private readonly authService: AuthService) {}
 
   use(request: Request, response: Response, next: NextFunction) {
-    const startTime = Date.now()
-    const token = getRequestToken(request)
-    const username = this.authService.findOneUsername(token) || 'UNKNOWN'
     const { originalUrl } = request
+    const token = getRequestToken(request)
+    const username = this.authService.getUsername(token) || 'UNKNOWN'
 
-    const skippableList = [
-      '/api/auth/pulse',
+    this.authService.updatePulseTime(token)
+
+    const skippableApiList = [
       '/api/fs/avatar',
       '/api/fs/image',
       '/api/fs/tags',
@@ -25,7 +25,7 @@ export class LoggerMiddleware implements NestMiddleware {
 
     if (
       originalUrl.startsWith('/api/') &&
-      skippableList.every((item) => !originalUrl.startsWith(item))
+      skippableApiList.every((item) => !originalUrl.startsWith(item))
     ) {
       const { method, body, ip: IP } = request
       const { statusCode } = response
@@ -35,6 +35,7 @@ export class LoggerMiddleware implements NestMiddleware {
       const userInfo = `${username}@${ip}`
       const status = `${method}/${statusCode}`
       const url = decodeURIComponent(originalUrl)
+      const startTime = Date.now()
 
       response.once('finish', () => {
         const duration = `${Date.now() - startTime}ms`

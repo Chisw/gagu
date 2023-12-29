@@ -1,5 +1,5 @@
 import { FsService } from '../fs/fs.service'
-import { Public } from '../../common/decorators/public.decorator'
+import { Public, Permission, UserGetter } from '../../common/decorators'
 import { TunnelService } from './tunnel.service'
 import {
   Body,
@@ -11,9 +11,7 @@ import {
   Query,
 } from '@nestjs/common'
 import { UserPermission, TunnelForm, IUser, ServerMessage } from '../../types'
-import { Permission } from '../../common/decorators/permission.decorator'
 import { checkTunnel, respond } from '../../utils'
-import { UserGetter } from 'src/common/decorators/user.decorator'
 
 @Controller('tunnel')
 export class TunnelController {

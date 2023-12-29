@@ -131,6 +131,10 @@ export const getPathParam = (path: string) => {
   return `path=${encodeURIComponent(path)}`
 }
 
+export const getTimestampParam = (timestamp?: number) => {
+  return `timestamp=${timestamp || Date.now()}`
+}
+
 export const getBaiduMapPinUrl = (exifData: any, content?: string) => {
   const { GPS } = exifData || {}
   const { GPSLatitude, GPSLongitude } = GPS || {}
@@ -204,6 +208,10 @@ export const generateNewName = () => {
 
 // Sync following code to BE & FE
 export const generateRandomCode = () => md5(Math.random().toString())
+
+export const generateRandomToken = () => {
+  return Buffer.from(generateRandomCode()).toString('base64')
+}
 
 export const getIsExpired = (expiredAt?: number) => {
   return expiredAt && expiredAt < Date.now()

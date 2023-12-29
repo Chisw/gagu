@@ -37,8 +37,8 @@ export default function Settings (props: AppComponentProps) {
                 flex items-center
                 transition-all duration-200
                 ${key === activeTagKey
-                ? 'border-blue-500 bg-white text-black dark:bg-zinc-800 dark:text-zinc-200'
-                : 'border-transparent text-gray-600 hover:text-black cursor-pointer dark:text-zinc-200 dark:hover:text-white'
+                  ? 'border-blue-500 bg-white text-black dark:bg-zinc-800 dark:text-zinc-200 dark:hover:text-zinc-200'
+                  : 'border-transparent text-gray-600 hover:text-black cursor-pointer dark:text-zinc-200 dark:hover:text-white'
                 }
               `)}
               onClick={() => setActiveTabKey(key)}

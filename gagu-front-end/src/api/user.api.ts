@@ -1,11 +1,11 @@
-import { IResponse, IUser, IUserForm, UserPasswordForm, User, UserValidityType } from '../types'
+import { IResponse, IUser, IUserForm, UserPasswordForm, UserValidityType } from '../types'
 import { UserInfoStore } from '../utils'
 import service from './service'
 
 export class UserApi {
 
   static queryUserList = async () => {
-    const { data } = await service.get<IResponse<{ userList: IUser[], loggedInList: User.Username[] }>>('/api/user')
+    const { data } = await service.get<IResponse<IUser[]>>('/api/user')
     return data
   }
 

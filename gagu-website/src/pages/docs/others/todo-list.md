@@ -17,7 +17,6 @@ Many unrealized ideas will be recorded here, waiting for development
 - Thumbnail of PDF/APK
 - Separate login tokens and access tokens
 - Permission-related access and button controls
-- Use middleware to replace the pulse interface to update the last active time
 - Use virtual scrolling for all long lists
   - remove thumbScrollWatcher
 

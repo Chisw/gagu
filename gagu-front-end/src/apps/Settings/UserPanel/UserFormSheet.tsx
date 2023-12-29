@@ -1,15 +1,15 @@
 import md5 from 'md5'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import toast from 'react-hot-toast'
-import { formModeType } from '.'
-import { UserApi } from '../../../api'
+import { FormModeType } from '.'
+import { FsApi, UserApi } from '../../../api'
 import { SvgIcon, IconButton } from '../../../components/common'
 import { useRequest, useTouchMode } from '../../../hooks'
 import { AppId, EntryType, EventTransaction, IUserForm, UserPermission } from '../../../types'
-import { getImageTypeBase64ByURL, line, permissionSorter } from '../../../utils'
+import { getImageTypeBase64ByURL, getTimestampParam, line, permissionSorter } from '../../../utils'
 import { Button, Form, SideSheet } from '@douyinfe/semi-ui'
 import { useTranslation } from 'react-i18next'
-import { entrySelectorEventState, openEventState } from '../../../states'
+import { entrySelectorEventState, openEventState, userInfoState } from '../../../states'
 import { useRecoilState } from 'recoil'
 import { semiLocaleMap } from '../../../i18n'
 
@@ -21,29 +21,34 @@ const handleScrollToError = () => {
 }
 
 interface UserFormModalProps {
+  formMode: FormModeType
   form: IUserForm
-  formMode: formModeType
   setForm: (form: IUserForm) => void
-  setFormMode: (mode: formModeType) => void
+  setFormMode: (mode: FormModeType) => void
   onRefresh: () => void
 }
 
 export default function UserFormModal(props: UserFormModalProps) {
 
   const {
-    form,
     formMode,
+    form,
     setForm,
     setFormMode,
     onRefresh,
   } = props
 
   const { t, i18n: { language } } = useTranslation()
+  const touchMode = useTouchMode()
 
+  const [userInfo] = useRecoilState(userInfoState)
   const [, setEntrySelectorEvent] = useRecoilState(entrySelectorEventState)
   const [openEvent, setOpenEvent] = useRecoilState(openEventState)
 
-  const touchMode = useTouchMode()
+  const { request: createUser, loading: creating } = useRequest(UserApi.createUser)
+  const { request: updateUser, loading: updating } = useRequest(UserApi.updateUser)
+
+  const fileInputRef = useRef<any>(null)
 
   const MODE = useMemo(() => {
     return {
@@ -53,10 +58,9 @@ export default function UserFormModal(props: UserFormModalProps) {
   }
   }, [formMode])
 
-  const { request: createUser, loading: creating } = useRequest(UserApi.createUser)
-  const { request: updateUser, loading: updating } = useRequest(UserApi.updateUser)
-
-  const fileInputRef = useRef<any>(null)
+  const isCurrentUser = useMemo(() => {
+    return form.username === userInfo?.username
+  }, [form.username, userInfo?.username])
 
   const { isAdminister, isAssigned } = useMemo(() => {
     const isAdminister = form.permissions.includes(UserPermission.administer)
@@ -97,8 +101,13 @@ export default function UserFormModal(props: UserFormModalProps) {
     if (success) {
       setFormMode('CLOSE')
       onRefresh()
+      if (isCurrentUser) {
+        document.querySelectorAll('.gagu-user-avatar').forEach((el: any) => {
+          el.style.backgroundImage = `url("${FsApi.getAvatarStreamUrl(form.username)}?${getTimestampParam()}")`
+        })
+      }
     }
-  }, [onRefresh, createUser, updateUser, setFormMode, form, MODE])
+  }, [form, MODE.isCreate, createUser, updateUser, setFormMode, onRefresh, isCurrentUser])
 
   useEffect(() => {
     if (openEvent?.transaction === EventTransaction.settings_accessible_paths) {
@@ -286,23 +295,7 @@ export default function UserFormModal(props: UserFormModalProps) {
               label={t`label.accessiblePaths`}
               style={{ display: isAdminister ? 'none' : undefined }}
             >
-              <div className="py-1">
-                <Button
-                  size="small"
-                  icon={<SvgIcon.Add />}
-                  onClick={() => {
-                    setEntrySelectorEvent({
-                      transaction: EventTransaction.settings_accessible_paths,
-                      mode: 'open',
-                      appId: AppId.settings,
-                      type: EntryType.directory,
-                    })
-                  }}
-                >
-                  {t`action.add`}
-                </Button>
-              </div>
-              <div className="py-1">
+              <div className={`py-1 ${form.assignedRootPathList?.length ? 'block' : 'hidden'}`}>
                 {form.assignedRootPathList?.map((path) => (
                   <div
                     key={path}
@@ -326,6 +319,22 @@ export default function UserFormModal(props: UserFormModalProps) {
                     />
                   </div>
                 ))}
+              </div>
+              <div className="py-1">
+                <Button
+                  size="small"
+                  icon={<SvgIcon.Add />}
+                  onClick={() => {
+                    setEntrySelectorEvent({
+                      transaction: EventTransaction.settings_accessible_paths,
+                      mode: 'open',
+                      appId: AppId.settings,
+                      type: EntryType.directory,
+                    })
+                  }}
+                >
+                  {t`action.add`}
+                </Button>
               </div>
               {(!isAdminister && !isAssigned) && (
                 <p className="mt-1 text-xs text-gray-500 flex items-center dark:text-zinc-400">

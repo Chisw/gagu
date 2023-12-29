@@ -7,11 +7,6 @@ export class AuthApi {
     return data
   }
 
-  static pulse = async () => {
-    const { data } = await service.get<IResponse<IUserInfo>>('/api/auth/pulse')
-    return data
-  }
-
   static logout = async () => {
     const { data } = await service.post<IResponse>('/api/auth/logout')
     return data

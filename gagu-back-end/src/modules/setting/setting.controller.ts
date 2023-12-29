@@ -2,7 +2,7 @@ import { ISetting } from './../../types/setting.type'
 import { SettingService } from './setting.service'
 import { Body, Controller, Get, Post, Put } from '@nestjs/common'
 import { UserPermission } from '../../types'
-import { Permission } from '../../common/decorators/permission.decorator'
+import { Permission } from '../../common/decorators'
 import { respond } from '../../utils'
 
 @Controller('setting')

@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { AuthApi, FsApi } from '../api'
 import { SvgIcon } from './common'
 import { useRequest, useUserConfig } from '../hooks'
-import { DOCUMENT_TITLE, EntryPathCacheStore, getDefaultUserConfig, line, PULSE_INTERVAL, UserInfoStore } from '../utils'
+import { DOCUMENT_TITLE, EntryPathCacheStore, getDefaultUserConfig, line, UserInfoStore } from '../utils'
 import QrCode from 'qrcode.react'
 import { useTranslation } from 'react-i18next'
 import { Page } from '../types'
@@ -39,10 +39,17 @@ export function MenuBar() {
   const [sharingPanelShow, setSharingPanelShow] = useState(false)
   const [changePasswordModalShow, setChangePasswordModalShow] = useState(false)
 
-  const { request: pulse } = useRequest(AuthApi.pulse)
   const { request: logout } = useRequest(AuthApi.logout)
   const { request: queryBaseData, loading } = useRequest(FsApi.queryBaseData)
   const { request: shutdown } = useRequest(AuthApi.shutdown)
+
+  const avatarStyle = useMemo(() => {
+    return userInfo
+      ? {
+        backgroundImage: `url("${FsApi.getAvatarStreamUrl(userInfo.username || '')}")`
+      }
+      : undefined
+  }, [userInfo])
 
   const localAddress = useMemo(() => {
     const { protocol, port } = window.location
@@ -80,17 +87,6 @@ export function MenuBar() {
       }
     }
   }, [userInfo, setUserInfo, navigate])
-
-  useEffect(() => {
-    const timer = setInterval(async () => {
-      const { success, data: userInfo } = await pulse()
-      if (success) {
-        setUserInfo(userInfo)
-        UserInfoStore.set(userInfo)
-      }
-    }, PULSE_INTERVAL)
-    return () => clearInterval(timer)
-  }, [pulse, setUserInfo])
 
   useEffect(() => {
     document.title = `${baseData ? `${baseData.deviceName} - ` : ''}${DOCUMENT_TITLE}`
@@ -279,8 +275,8 @@ export function MenuBar() {
                 <div className="mb-[2px] px-2 pt-1 pb-2 border-b dark:border-black dark:border-opacity-20">
                   <div className="flex items-center">
                     <div
-                      className="w-10 h-10 rounded-full border-2 border-white shadow bg-center bg-cover dark:border-zinc-400"
-                      style={{ backgroundImage: `url("${FsApi.getAvatarStreamUrl(userInfo?.username || '')}")` }}
+                      className="gagu-user-avatar w-10 h-10 rounded-full border-2 border-white shadow bg-center bg-cover dark:border-zinc-400"
+                      style={avatarStyle}
                     />
                     <div className="ml-2 text-sm leading-none flex-grow">
                       <p className="font-bold dark:text-zinc-100">{userInfo?.nickname}</p>
@@ -292,7 +288,7 @@ export function MenuBar() {
                       <span
                         key={p}
                         className={line(`
-                          inline-block mr-[2px] mb-[2px] px-1 py-0
+                          inline-block mr-[1px] px-1 py-0
                           text-xs text-blue-600 bg-blue-100 rounded select-none capitalize
                           dark:text-blue-200 dark:bg-blue-600
                         `)}
@@ -336,8 +332,8 @@ export function MenuBar() {
               {userInfo ? (
                 <>
                   <div
-                    className="w-4 h-4 md:w-3 md:h-3 md:box-content rounded-full filter opacity-80 bg-center bg-cover bg-black bg-opacity-20 border border-white dark:border-zinc-200"
-                    style={{ backgroundImage: `url("${FsApi.getAvatarStreamUrl(userInfo?.username || '')}")` }}
+                    className="gagu-user-avatar w-4 h-4 md:w-3 md:h-3 md:box-content rounded-full filter opacity-80 bg-center bg-cover bg-black bg-opacity-20 border border-white dark:border-zinc-200"
+                    style={avatarStyle}
                   />
                   <span className="hidden md:inline ml-2 font-din text-gray-700 dark:text-zinc-200">{userInfo.nickname}</span>
                 </>
