@@ -126,12 +126,12 @@ export const getAbsolutePath = (currentPath: string, relativePath: string) => {
   return nameList.join('/')
 }
 
+export const safeQuotes = (path: string) =>
+  path.replace(/"/g, '\\"').replace(/`/g, '\\`')
+
 // Sync following code to BE & FE
 export const getEntryPath = (entry: IEntry | null | undefined) => {
   if (!entry) return ''
   const { name, parentPath } = entry
   return `${parentPath ? `${parentPath}/` : ''}${name}`
 }
-
-export const safeQuotes = (path: string) =>
-  path.replace(/"/g, '\\"').replace(/`/g, '\\`')

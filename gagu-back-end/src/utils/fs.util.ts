@@ -1,14 +1,12 @@
-import { exec } from 'child_process'
 import {
   accessSync,
   appendFile,
   constants,
   mkdirSync,
   statSync,
-  unlinkSync,
+  promises,
 } from 'fs'
 import { GAGU_PATH, ServerOS } from './constant.util'
-import { safeQuotes } from './entry.util'
 import { catchError } from 'rxjs'
 
 export const getExtension = (name: string) => {
@@ -29,13 +27,14 @@ export const getExists = (path: string) => {
 }
 
 export const deleteEntry = async (path: string) => {
-  return new Promise((resolve) => {
+  return new Promise(async (resolve) => {
     try {
       const stat = statSync(path)
       if (stat.isDirectory()) {
-        exec(`rm -rf "${safeQuotes(path)}"`, (error) => resolve(!error))
+        await promises.rmdir(path)
+        resolve(true)
       } else {
-        unlinkSync(path)
+        await promises.rm(path)
         resolve(true)
       }
     } catch (error) {

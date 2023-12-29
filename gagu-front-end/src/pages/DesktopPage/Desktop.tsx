@@ -29,7 +29,7 @@ export default function Desktop() {
   const handleOpenDesktopDirectory = useCallback((entry: IEntry) => {
       setTopWindowIndex(topWindowIndex + 1)
       const app = APP_LIST.find(app => app.id === AppId.fileExplorer)!
-      const list: IApp[] = [...runningAppList, { ...app, runningId: Date.now(), addtionalEntryList: [entry] }]
+      const list: IApp[] = [...runningAppList, { ...app, runningId: Date.now(), additionalEntryList: [entry] }]
       setRunningAppList(list)
   }, [runningAppList, setRunningAppList, setTopWindowIndex, topWindowIndex])
 

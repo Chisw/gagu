@@ -13,7 +13,7 @@ export default function WindowContainer() {
           <Window
             key={app.runningId}
             app={app}
-            addtionalEntryList={app.addtionalEntryList}
+            additionalEntryList={app.additionalEntryList}
           />
         ))}
       </div>

@@ -19,7 +19,7 @@ const getMenuBarHeight = () => document.querySelector('.gagu-menu-bar')?.scrollH
 
 interface WindowProps {
   app: IApp
-  addtionalEntryList?: IEntry[]
+  additionalEntryList?: IEntry[]
 }
 
 export default function Window(props: WindowProps) {
@@ -34,7 +34,7 @@ export default function Window(props: WindowProps) {
       headerClassName,
       AppComponent,
     },
-    addtionalEntryList,
+    additionalEntryList,
   } = props
 
   const { t } = useTranslation()
@@ -81,7 +81,7 @@ export default function Window(props: WindowProps) {
     return { x, y, width, height }
   }, [windowInfoMap, appId, sameAppCount, width, height])
 
-  // for app
+  // for inner app
   const [windowSize, setWindowSize] = useState({ width: defaultInfo.width, height: defaultInfo.height })
   // for restore: no change when window fulling screen
   const [defaultInfoCache, setDefaultInfoCache] = useState<IWindowInfo>(defaultInfo)
@@ -306,7 +306,7 @@ export default function Window(props: WindowProps) {
               windowSize={windowSize}
               setWindowTitle={setWindowTitle}
               closeWindow={handleClose}
-              addtionalEntryList={addtionalEntryList}
+              additionalEntryList={additionalEntryList}
             />
           </div>
         </div>

@@ -5,7 +5,7 @@ export interface AppComponentProps {
   windowSize: { width: number, height: number }
   setWindowTitle: (title: string) => void
   closeWindow: () => void
-  addtionalEntryList?: IEntry[]
+  additionalEntryList?: IEntry[]
 }
 
 export interface ExplorerSelectorProps {
@@ -49,7 +49,7 @@ export interface IApp {
   headerClassName?: string
   multiple?: boolean
   touchModeShow?: boolean
-  addtionalEntryList?: IEntry[]
+  additionalEntryList?: IEntry[]
 }
 
 export enum EventTransaction {

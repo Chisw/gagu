@@ -145,7 +145,7 @@ export default function SharePage() {
 
   return (
     <>
-      <div className="absolute z-0 inset-0 bg-gradient-to-b from-black to-slate-600 flex justify-center items-center overflow-hidden">
+      <div className="absolute z-0 inset-0 bg-gradient-to-b from-black to-zinc-600 flex justify-center items-center overflow-hidden">
         <div
           className={line(`
             absolute z-0 inset-0 bg-cover bg-center
