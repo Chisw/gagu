@@ -28,6 +28,7 @@ Currently available hotkeys, more are being added gradually
 | Download | ⌘ + D | Ctrl + D |
 | Upload | ⌘ + U | Ctrl + U |
 | Filter | ⌘ + F | Ctrl + F |
+| Exit (Filter) | Esc | Esc |
 | List view | ⌘ + L | Ctrl + L |
 | Grid view | ⌘ + G | Ctrl + G |
 | Switch hidden entries | ⌘ + H | Ctrl + H |
@@ -44,8 +45,8 @@ Currently available hotkeys, more are being added gradually
 | -- | -- | -- |
 | Save | ⌘ + S | Ctrl + S |
 | Reset | ⌘ + R | Ctrl + R |
-| Reduce font size | ⌘ + [ | Ctrl + [ |
-| Enlarge font size | ⌘ + ] | Ctrl + ] |
+| Reduce font size | ⌘ + - | Ctrl + - |
+| Enlarge font size | ⌘ + + | Ctrl + + |
 | Switch monospace | ⌘ + / | Ctrl + / |
 | Markdown full view | ⌘ + M | Ctrl + M |
 | Markdown half view | ⌘ + ⌥ + M | Ctrl + Alt + M |

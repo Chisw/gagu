@@ -28,10 +28,13 @@ export class AuthService {
     return record?.username
   }
 
-  create(user: IUser, ip: string, ua: string) {
+  create(user: IUser, request: any) {
     const token = generateRandomToken()
     const accessToken = generateRandomToken()
     const timestamp = Date.now()
+    const { ip: IP = '', headers = {} } = request
+    const ip = IP.replace('::ffff:', '')
+    const { 'user-agent': ua = '' } = headers
 
     this.authRecordList.push({
       token,

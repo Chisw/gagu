@@ -143,8 +143,8 @@ export default function TextEditor(props: AppComponentProps) {
     fnMap: {
       'Meta+KeyS, Ctrl+KeyS': handleSaveClick,
       'Meta+KeyR, Ctrl+KeyR': handleResetClick,
-      'Meta+BracketLeft, Ctrl+BracketLeft': () => handleFontSizeChange(-1),
-      'Meta+BracketRight, Ctrl+BracketRight': () => handleFontSizeChange(1),
+      'Meta+Minus, Ctrl+Minus': () => handleFontSizeChange(-1),
+      'Meta+Equal, Ctrl+Equal': () => handleFontSizeChange(1),
       'Meta+Slash, Ctrl+Slash': () => setMonoMode(!monoMode),
       'Meta+KeyM, Ctrl+KeyM': () => handleMarkdownViewChange('FULL'),
       'Meta+Alt+KeyM, Ctrl+Alt+KeyM': () => handleMarkdownViewChange('HALF'),

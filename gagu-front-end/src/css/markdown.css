@@ -247,6 +247,7 @@
   max-width: 100%;
   box-sizing: content-box;
   background-color: var(--color-canvas-default);
+  cursor: zoom-in;
 }
 
 .markdown-body code,

@@ -206,6 +206,19 @@ body {
   width: 100%;
 }
 
+.gagu-text-editor-photo-slider .PhotoView-Slider__Backdrop {
+  @apply bg-black bg-opacity-30 backdrop-blur-sm dark:bg-opacity-70 !important;
+}
+
+.gagu-text-editor-photo-slider .PhotoView-Slider__BannerWrap {
+  @apply bg-black bg-opacity-30 backdrop-blur;
+}
+
+.gagu-text-editor-photo-slider .PhotoView-Slider__ArrowLeft,
+.gagu-text-editor-photo-slider .PhotoView-Slider__ArrowRight {
+  @apply rounded-full;
+}
+
 /* animate */
 @keyframes shake-x {
   from,

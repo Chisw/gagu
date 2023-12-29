@@ -1,5 +1,5 @@
 import { IApp, IWindowInfo, IEntry, WindowStatus } from '../../types'
-import { Rnd } from 'react-rnd'
+import { Rnd, ResizableDelta, Position } from 'react-rnd'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { runningAppListState, topWindowIndexState } from '../../states'
@@ -166,11 +166,12 @@ export default function Window(props: WindowProps) {
     setIsDraggingOrResizing(false)
   }, [defaultInfoCache, handleStoreWindowInfo])
 
-  const handleResizeStop = useCallback((delta: { w: number, h: number }) => {
-    const { w: deltaWidth, h: deltaHeight } = delta
+  const handleResizeStop = useCallback((delta: ResizableDelta, position: Position) => {
+    const { width: deltaWidth, height: deltaHeight } = delta
+    const { x, y } = position
     const width = defaultInfoCache.width + deltaWidth
     const height = defaultInfoCache.height + deltaHeight
-    const info = { ...defaultInfoCache, width, height }
+    const info = { x, y, width, height }
     setWindowSize({ width, height })
     setDefaultInfoCache(info)
     handleStoreWindowInfo(info)
@@ -209,7 +210,7 @@ export default function Window(props: WindowProps) {
         onDragStart={() => setIsDraggingOrResizing(true)}
         onResizeStart={() => setIsDraggingOrResizing(true)}
         onDragStop={(e, { x, y }) => handleDragStop({ x, y })}
-        onResizeStop={(e, d, el, { width: w, height: h }) => handleResizeStop({ w, h })}
+        onResizeStop={(e, d, el, delta, position) => handleResizeStop(delta, position)}
       >
         <div
           className={line(`

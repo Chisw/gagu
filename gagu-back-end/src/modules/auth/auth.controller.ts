@@ -34,9 +34,7 @@ export class AuthController {
           if (getIsExpired(user.expiredAt)) {
             return respond(null, ServerMessage.ERROR_USER_EXPIRED)
           } else {
-            const { ip = '', headers = {} } = request
-            const { 'user-agent': ua = '' } = headers
-            const userInfo = this.authService.create(user, ip, ua)
+            const userInfo = this.authService.create(user, request)
             return respond(userInfo)
           }
         }

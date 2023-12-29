@@ -28,6 +28,7 @@ layout: ../../../layouts/DocLayout.astro
 | 下载 | ⌘ + D | Ctrl + D |
 | 上传 | ⌘ + U | Ctrl + U |
 | 筛选 | ⌘ + F | Ctrl + F |
+| 退出（筛选） | Esc | Esc |
 | 列表视图 | ⌘ + L | Ctrl + L |
 | 宫格视图 | ⌘ + G | Ctrl + G |
 | 切换显示隐藏项 | ⌘ + H | Ctrl + H |
@@ -44,8 +45,8 @@ layout: ../../../layouts/DocLayout.astro
 | -- | -- | -- |
 | 保存 | ⌘ + S | Ctrl + S |
 | 重置 | ⌘ + R | Ctrl + R |
-| 调小字号 | ⌘ + [ | Ctrl + [ |
-| 调大字号 | ⌘ + ] | Ctrl + ] |
+| 调小字号 | ⌘ + - | Ctrl + - |
+| 调大字号 | ⌘ + + | Ctrl + + |
 | 切换等宽显示 | ⌘ + / | Ctrl + / |
 | Markdown 全宽视图 | ⌘ + M | Ctrl + M |
 | Markdown 半宽视图 | ⌘ + ⌥ + M | Ctrl + Alt + M |
