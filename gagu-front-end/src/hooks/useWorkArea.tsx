@@ -333,7 +333,7 @@ export function useWorkArea(props: useWorkAreaProps) {
         icon: isFavorited ? <SvgIcon.Star /> : <SvgIcon.StarSolid />,
         name: isFavorited ? t`action.unfavorite` : t`action.favorite`,
         isShow: isOnDirectory && isSingle,
-        onClick: () => handleFavoriteClick(activeEntry, isFavorited),
+        onClick: () => handleFavoriteClick(activeEntry),
       },
       {
         icon: <SvgIcon.Upload />,

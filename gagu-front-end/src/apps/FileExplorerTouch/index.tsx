@@ -237,7 +237,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
           setSideShow(false)
           handleDirectoryOpen(rootEntry, true)
         }}
-        onFavoriteCancel={(entry) => handleFavoriteClick(entry, true)}
+        onFavoriteCancel={handleFavoriteClick}
       />
     
       <div

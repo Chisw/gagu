@@ -351,7 +351,10 @@ export function useFileExplorer(props: Props) {
     }
   }, [queryDirectorySize, entryPathCache, setEntryPathCache])
 
-  const handleFavoriteClick = useCallback((entry: IEntry, isFavorited: boolean) => {
+  const handleFavoriteClick = useCallback((entry: IEntry) => {
+    const isFavorited = !!baseData.rootEntryList
+      .find(e => e.group === RootEntryGroup.favorite && getIsSameEntry(e, entry))
+
     Confirmor({
       type: isFavorited ? 'unfavorite' : 'favorite',
       content: t(isFavorited ? 'tip.unfavoriteItem' : 'tip.favoriteItem', { name: entry.name }),
