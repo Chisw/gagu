@@ -13,6 +13,7 @@ export const UserInfoStore = {
         username: storeUserInfo.username || 'UNKNOWN',
         expiredAt: storeUserInfo.expiredAt,
         permissions: storeUserInfo.permissions || [],
+        userPath: storeUserInfo.userPath || '',
       }
       return userInfo
     } else {

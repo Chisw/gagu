@@ -43,6 +43,7 @@ export const readAuthData = () => {
 
 export const generateUserInfo = (user: IUser, token: User.Token) => {
   const { nickname, username, expiredAt, passwordLocked, permissions } = user
+  const userPath = `${GAGU_PATH.USERS}/${username}`
 
   const userInfo: IUserInfo = {
     token,
@@ -51,6 +52,7 @@ export const generateUserInfo = (user: IUser, token: User.Token) => {
     expiredAt,
     passwordLocked,
     permissions,
+    userPath,
   }
   return userInfo
 }

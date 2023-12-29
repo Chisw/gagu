@@ -84,4 +84,5 @@ export interface IUserInfo {
   expiredAt?: number
   passwordLocked?: boolean
   permissions: UserPermissionType[]
+  userPath: string
 }

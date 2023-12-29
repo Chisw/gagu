@@ -43,7 +43,6 @@ export interface IBaseData {
   serverOS: IServerOS
   deviceName: string
   rootEntryList: IRootEntry[]
-  userPath: string
 }
 
 export enum Sort {

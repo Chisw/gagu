@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { getIsSameEntry, line } from '../../utils'
-import { activePageState, baseDataState, runningAppListState, topWindowIndexState } from '../../states'
+import { activePageState, userInfoState, runningAppListState, topWindowIndexState } from '../../states'
 import EntryNode from '../../apps/FileExplorer/EntryNode'
 import { AppId, CreationType, EditMode, IApp, IEntry, Page } from '../../types'
 import { useWorkArea } from '../../hooks'
@@ -11,7 +11,7 @@ import { APP_LIST } from '../../apps'
 export default function Desktop() {
 
   const [activePage] = useRecoilState(activePageState)
-  const [baseData] = useRecoilState(baseDataState)
+  const [userInfo] = useRecoilState(userInfoState)
   const [topWindowIndex, setTopWindowIndex] = useRecoilState(topWindowIndexState)
   const [runningAppList, setRunningAppList] = useRecoilState(runningAppListState)
 
@@ -50,7 +50,7 @@ export default function Desktop() {
     isUserDesktop: true,
     isTopWindow,
     asSelector: false,
-    specifiedPath: `${baseData.userPath}/desktop`,
+    specifiedPath: userInfo?.userPath ? `${userInfo?.userPath}/desktop` : '',
     onCurrentPathChange: () => {},
     onSelect: () => {},
     onSelectDoubleConfirm: () => {},

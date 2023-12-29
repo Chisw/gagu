@@ -63,10 +63,9 @@ export class FsController {
     } = user
 
     const isAdmin = permissions.includes(UserPermission.administer)
-    const userPath = `${GAGU_PATH.USERS}/${username}`
 
     const rootEntryList = [
-      path2RootEntry(userPath, RootEntryGroup.user),
+      path2RootEntry(`${GAGU_PATH.USERS}/${username}`, RootEntryGroup.user),
       ...(isAdmin ? this.fsService.getRootEntryList() : []),
       ...assignedRootPathList.map((path) =>
         path2RootEntry(path, RootEntryGroup.system),
@@ -81,7 +80,6 @@ export class FsController {
       serverOS: ServerOS,
       deviceName: deviceName || ServerOS.hostname,
       rootEntryList,
-      userPath,
     }
 
     return respond(baseData)

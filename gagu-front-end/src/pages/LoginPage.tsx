@@ -17,10 +17,13 @@ export default function LoginPage() {
   const { t } = useTranslation()
 
   const [activePage, setActivePage] = useRecoilState(activePageState)
+  const [, setUserInfo] = useRecoilState(userInfoState)
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [classNames, setClassNames] = useState<string[]>([])
+
+  const { request: login, loading } = useRequest(AuthApi.login)
 
   const handleNavigate = useCallback(() => {
     const { innerWidth } = window
@@ -30,20 +33,6 @@ export default function LoginPage() {
       navigate(`/${Page.touch}`)
     }
   }, [navigate])
-
-  useEffect(() => {
-    setTimeout(() => setActivePage(Page.login))
-  }, [setActivePage])
-
-  useEffect(() => {
-    if (UserInfoStore.get()) {
-      handleNavigate()
-    }
-  }, [handleNavigate])
-
-  const [, setUserInfo] = useRecoilState(userInfoState)
-
-  const { request: login, loading } = useRequest(AuthApi.login)
 
   const handleLogin = useCallback(async () => {
     const formData = {
@@ -66,6 +55,16 @@ export default function LoginPage() {
       setTimeout(() => setClassNames([]), 500)
     }
   }, [username, password, login, setUserInfo, handleNavigate, setActivePage])
+
+  useEffect(() => {
+    setTimeout(() => setActivePage(Page.login))
+  }, [setActivePage])
+
+  useEffect(() => {
+    if (UserInfoStore.get()) {
+      handleNavigate()
+    }
+  }, [handleNavigate])
   
   return (
     <>
