@@ -162,7 +162,6 @@ export default function EntryName(props: EntryNameProps) {
               if (input && entry) {
                 const { name, extension } = entry
                 const end = extension ? name.lastIndexOf(`.${extension}`) : name.length
-                  console.log('end', end)
                 setInputSelection(input, 0, end)
               }
             }}

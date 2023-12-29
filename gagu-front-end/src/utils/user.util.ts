@@ -1,4 +1,4 @@
-import { UserPermission, UserPermissionType } from '../types'
+import { ColorScheme, HotkeyStyle, IUserConfig, UserPermission, UserPermissionType } from '../types'
 
 const permissionSortMap = {
   [UserPermission.administer]: 0,
@@ -9,4 +9,19 @@ const permissionSortMap = {
 
 export const permissionSorter = (prev: UserPermissionType, next: UserPermissionType) => {
   return permissionSortMap[prev] > permissionSortMap[next] ? 1 : -1
+}
+
+export const getDefaultUserConfig = () => {
+  const config: IUserConfig = {
+    hotkeyStyle: HotkeyStyle.mac,
+    kiloSize: 1000,
+    colorScheme: ColorScheme.auto,
+    fileExplorerAutoOpen: false,
+    fileExplorerDefaultPath: '',
+    textEditorFontSize: 14,
+    musicPlayerVolume: 0.5,
+    videoPlayerVolume: 0.5,
+    windowInfoMap: {},
+  }
+  return config
 }

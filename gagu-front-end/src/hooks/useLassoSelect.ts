@@ -20,6 +20,15 @@ export function useLassoSelect(props: useDragSelectProps) {
   } = props
 
   useEffect(() => {
+    const listener = () => {
+      document.querySelectorAll('.gagu-work-area-lasso')
+        .forEach((lassoEl: any) => lassoEl.style.display = 'none')
+    }
+    document.addEventListener('mouseup', listener)
+    return () => document.removeEventListener('mouseup', listener)
+  }, [])
+
+  useEffect(() => {
 
     const lasso: any = lassoRef.current
     const container: any = containerRef.current

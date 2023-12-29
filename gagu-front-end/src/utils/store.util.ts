@@ -1,6 +1,7 @@
-import { ColorScheme, HotkeyStyle, IEntryPathCache } from './../types/index';
+import { IEntryPathCache } from './../types/index';
 import { IUserConfig, IUserInfo } from '../types'
 import { GAGU_ENTRY_PATH_CACHE_KEY, GAGU_USER_CONFIG_KEY, GAGU_USER_INFO_KEY } from './constant.util'
+import { getDefaultUserConfig } from './user.util';
 
 export const UserInfoStore = {
   get() {
@@ -40,17 +41,7 @@ export const UserInfoStore = {
 
 export const UserConfigStore = {
   get() {
-    const userConfig: IUserConfig = {
-      hotkeyStyle: HotkeyStyle.mac,
-      kiloSize: 1000,
-      colorScheme: ColorScheme.auto,
-      fileExplorerAutoOpen: false,
-      fileExplorerDefaultPath: '',
-      textEditorFontSize: 14,
-      musicPlayerVolume: 0.5,
-      videoPlayerVolume: 0.5,
-      windowInfoMap: {},
-    }
+    const userConfig = getDefaultUserConfig()
     const userConfigValue = localStorage.getItem(GAGU_USER_CONFIG_KEY) || ''
     if (userConfigValue) {
       const config = JSON.parse(userConfigValue)
@@ -63,9 +54,9 @@ export const UserConfigStore = {
     localStorage.setItem(GAGU_USER_CONFIG_KEY, JSON.stringify(userConfig))
   },
 
-  remove() {
-    localStorage.removeItem(GAGU_USER_CONFIG_KEY)
-  },
+  // remove() {
+  //   localStorage.removeItem(GAGU_USER_CONFIG_KEY)
+  // },
 }
 
 export const EntryPathCacheStore = {

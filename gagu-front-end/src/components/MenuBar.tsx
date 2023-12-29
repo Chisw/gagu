@@ -5,8 +5,8 @@ import { DateTime } from 'luxon'
 import { useNavigate } from 'react-router-dom'
 import { AuthApi, FsApi } from '../api'
 import { SvgIcon } from './common'
-import { useRequest } from '../hooks'
-import { DOCUMENT_TITLE, line, PULSE_INTERVAL, UserInfoStore } from '../utils'
+import { useRequest, useUserConfig } from '../hooks'
+import { DOCUMENT_TITLE, EntryPathCacheStore, getDefaultUserConfig, line, PULSE_INTERVAL, UserInfoStore } from '../utils'
 import QrCode from 'qrcode.react'
 import { useTranslation } from 'react-i18next'
 import { Page } from '../types'
@@ -30,6 +30,8 @@ export function MenuBar() {
   const [, setRunningAppList] = useRecoilState(runningAppListState)
   const [, setContextMenuData] = useRecoilState(contextMenuDataState)
 
+  const { setUserConfig } = useUserConfig()
+
   const [clockTime, setClockTime] = useState('--:--')
   const [systemPopoverShow, setSystemPopoverShow] = useState(false)
   const [userPopoverShow, setUserPopoverShow] = useState(false)
@@ -44,7 +46,7 @@ export function MenuBar() {
 
   const localAddress = useMemo(() => {
     const { protocol, port } = window.location
-    return `${protocol}//${baseData.serverOS.host}:${port}/touch`
+    return `${protocol}//${baseData.serverOS.host}:${port}/login`
   }, [baseData])
 
   const handleLogout = useCallback(async () => {
@@ -52,15 +54,19 @@ export function MenuBar() {
     const { success } = await logout()
     if (success) {
       UserInfoStore.remove()
+      EntryPathCacheStore.remove()
+      setUserConfig(getDefaultUserConfig())
+      setRunningAppList([])
+      setContextMenuData(null)
       setActivePage(Page.PENDING)
       setTimeout(() => navigate('/login'), 500)
     }
-  }, [logout, navigate, setActivePage])
+  }, [logout, navigate, setActivePage, setContextMenuData, setRunningAppList, setUserConfig])
 
   const handleSwitchMode = useCallback((key: string) => {
-    setActivePage(Page.PENDING)
     setRunningAppList([])
     setContextMenuData(null)
+    setActivePage(Page.PENDING)
     setTimeout(() => navigate(`/${key}`), 500)
   }, [navigate, setActivePage, setContextMenuData, setRunningAppList])
 
