@@ -1,6 +1,6 @@
 import { useRef } from 'react'
-import { useClickAway } from '../../../hooks'
-import { line } from '../../../utils'
+import { useClickAway } from '../../hooks'
+import { line } from '../../utils'
 
 interface VolumeSliderProps {
   show: boolean
@@ -11,7 +11,7 @@ interface VolumeSliderProps {
   onVolumeChange: (vol: number) => void
 }
 
-export default function VolumeSlider(props: VolumeSliderProps) {
+export function VolumeSlider(props: VolumeSliderProps) {
 
   const {
     show,
@@ -37,6 +37,9 @@ export default function VolumeSlider(props: VolumeSliderProps) {
         `)}
         style={{ right, bottom }}
       >
+        <div className="absolute top-[2px] w-full text-center text-white text-xs font-din scale-90">
+          {(volume * 100).toFixed(0)}%
+        </div>
         <input
           type="range"
           className="gagu-volume-slider"
@@ -46,9 +49,6 @@ export default function VolumeSlider(props: VolumeSliderProps) {
           value={volume}
           onChange={(e: any) => onVolumeChange(+e.target.value)}
         />
-        <div className="absolute bottom-0 mb-1 w-full text-center text-white text-xs font-din scale-90">
-          {(volume * 100).toFixed(0)}%
-        </div>
       </div>
     </>
   )

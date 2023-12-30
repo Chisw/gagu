@@ -4,7 +4,7 @@ import { line } from '../../utils'
 interface IconButtonProps {
   icon: ReactNode
   onClick: () => void
-  size?: 'xs' | 'sm' | 'lg'
+  size?: 'xs' | 'sm' | 'lg' | 'xl'
   className?: string
   title?: string
   disabled?: boolean
@@ -25,6 +25,7 @@ export function IconButton(props: IconButtonProps) {
     sm: 'w-6 h-6',
     base: 'w-8 h-8',
     lg: 'w-10 h-10',
+    xl: 'w-12 h-12',
   }[size]
 
   return (
@@ -39,7 +40,7 @@ export function IconButton(props: IconButtonProps) {
           transition-bg duration-100
           ${disabled
             ? 'cursor-not-allowed opacity-50'
-            : 'cursor-pointer hover:bg-white hover:bg-opacity-20 active:bg-opacity-10'
+            : 'cursor-pointer md:hover:bg-white md:hover:bg-opacity-20 active:bg-white active:bg-opacity-10'
           }
         `)}
         onClick={() => !disabled && onClick()}

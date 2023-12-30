@@ -1,7 +1,7 @@
 import { Duration } from 'luxon'
 import { useEffect, useMemo, useState } from 'react'
 
-interface IPlayInfo {
+export interface IPlayInfo {
   currentTimeLabel: string
   durationLabel: string
   playPercent: number

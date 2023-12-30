@@ -65,7 +65,6 @@ Many unrealized ideas will be recorded here, waiting for development
 ### Music Player
 
 - Playlist favorites
-- Style on fullscreen
 - DnD of progress bar
 - Horizontal volume slider
 

@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
-import { line } from '../../../utils'
-import VolumeIcon from './VolumeIcon'
+import { line } from '../../utils'
+import { VolumeIcon } from './VolumeIcon'
 
 interface VolumeIndicatorProps {
   volume: number
   time: number
 }
 
-export default function VolumeIndicator({ volume, time }: VolumeIndicatorProps) {
+export function VolumeIndicator({ volume, time }: VolumeIndicatorProps) {
 
   const [show, setShow] = useState(false)
   const [opacityShow, setOpacityShow] = useState(false)

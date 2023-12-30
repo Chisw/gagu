@@ -1,7 +1,8 @@
 import { useEffect } from 'react'
+// import { analyserNode } from '../../MusicPlayer/audio'
 
 interface SpectrumCanvasProps {
-  audioEl: HTMLAudioElement | null
+  analyserNode: AnalyserNode | null
   color?: string
   opacity?: number
 }
@@ -9,22 +10,17 @@ interface SpectrumCanvasProps {
 export default function SpectrumCanvas(props: SpectrumCanvasProps) {
 
   const {
-    audioEl,
+    analyserNode,
     color = 'black',
     opacity = .2,
   } = props
 
   useEffect(() => {
-    if (!audioEl) return
+    if (!analyserNode) return
     const canvas: any = document.getElementById('canvas')
     const context = canvas!.getContext('2d')
-    const audioContext = new AudioContext()
-    const analyser = audioContext.createAnalyser()
-    const source = audioContext.createMediaElementSource(audioEl)
-    source.connect(analyser)
-    analyser.connect(audioContext.destination)
 
-    const arrData = new Uint8Array(analyser.frequencyBinCount)
+    const arrData = new Uint8Array(analyserNode.frequencyBinCount)
     const count = Math.min(300, arrData.length)
     const step = Math.round(arrData.length * 0.6 / count)
     const height = canvas.height = window.innerHeight
@@ -34,7 +30,7 @@ export default function SpectrumCanvas(props: SpectrumCanvasProps) {
 
     const render = () => {
       context.clearRect(0, 0, width, height)
-      analyser.getByteFrequencyData(arrData)
+      analyserNode.getByteFrequencyData(arrData)
       for (var i = 0; i < count; i++) {
         const value = arrData[i * step + step]
         const drawX = i * lineWidth + offset
@@ -49,7 +45,7 @@ export default function SpectrumCanvas(props: SpectrumCanvasProps) {
       requestAnimationFrame(render)
     }
     render()
-  }, [color, audioEl])
+  }, [color, analyserNode])
 
   return (
     <canvas

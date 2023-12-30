@@ -65,7 +65,6 @@ layout: ../../../layouts/DocLayout.astro
 ### 音乐播放器
 
 - 播放列表
-- 全屏播放样式
 - 进度条拖拽
 - 水平音量滑块
 

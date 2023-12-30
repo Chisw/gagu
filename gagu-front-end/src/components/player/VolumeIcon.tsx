@@ -1,11 +1,11 @@
-import { SvgIcon } from '../../../components/common'
+import { SvgIcon } from '../common'
 
 interface VolumeIconProps {
   volume: number
   size: number
 }
 
-export default function VolumeIcon({ volume, size }: VolumeIconProps) {
+export function VolumeIcon({ volume, size }: VolumeIconProps) {
     if (volume > .5) {
       return <SvgIcon.VolumeUp size={size} />
     } else if (volume === 0) {

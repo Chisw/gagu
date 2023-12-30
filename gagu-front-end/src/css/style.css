@@ -126,9 +126,9 @@ body {
 /* volume-slider */
 .gagu-volume-slider {
   appearance: none;
-  width: 100px;
+  width: 95px;
   height: 2px;
-  transform: rotate(270deg) translateX(-90px) translateY(16px);
+  transform: rotate(270deg) translateX(-100px) translateY(16px);
   @apply bg-white bg-opacity-50 origin-left cursor-pointer;
 }
 
@@ -217,6 +217,10 @@ body {
 .gagu-text-editor-photo-slider .PhotoView-Slider__ArrowLeft,
 .gagu-text-editor-photo-slider .PhotoView-Slider__ArrowRight {
   @apply rounded-full;
+}
+
+.gagu-app-music-player-immersive-theatre .semi-modal-content {
+  @apply p-0;
 }
 
 /* animate */

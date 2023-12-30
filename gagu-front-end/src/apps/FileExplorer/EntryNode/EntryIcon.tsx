@@ -126,7 +126,7 @@ function ThumbnailWrapper(props: { type: ThumbnailType, loading: boolean, childr
     return (
       <div
         className={line(`
-          relative w-4/5 aspect-square flex justify-center items-center shadow-lg overflow-hidden rounded-sm
+          relative w-4/5 aspect-square flex justify-center items-center shadow-lg overflow-hidden
           after:content-[''] after:block after:absolute after:z-[0] after:left-0
           after:-ml-[60%] after:-mt-[70%] after:w-full after:h-[300%] after:bg-white after:bg-opacity-30
           ${loading ? 'bg-loading' : 'bg-white'}

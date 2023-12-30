@@ -26,9 +26,9 @@ export default function BottomBar(props: BottomBarProps) {
     <div
       className={line(`
         relative z-10
-        px-2 h-5 text-xs bg-gray-100 text-gray-500
+        px-2 h-5 text-xs bg-gray-100 text-gray-500 border-t
         justify-between items-center
-        dark:bg-zinc-700 dark:text-zinc-400
+        dark:bg-zinc-700 dark:text-zinc-400 dark:border-zinc-600
         ${activeEntry ? 'flex' : 'hidden'}
       `)}
     >
