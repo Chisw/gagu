@@ -65,15 +65,14 @@ Many unrealized ideas will be recorded here, waiting for development
 ### Music Player
 
 - Playlist favorites
-- DnD of progress bar
 - Horizontal volume slider
+- Music library data generation
 
 ### Video Player
 
 - Playlist favorites
 - Play continuously
 - Generate content screenshots
-- DnD of progress bar
 - Thumbnails on progress bar
 - Horizontal volume slider
 

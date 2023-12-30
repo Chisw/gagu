@@ -100,7 +100,6 @@ export default function LoginPage() {
           >
             <Input
               autoFocus
-              showClear
               size="large"
               placeholder={t`label.username`}
               className={`hover:border-white focus-within:border-white ${classNames[0] || ''}`}
@@ -109,7 +108,6 @@ export default function LoginPage() {
               onChange={(value) => setUsername(value.trim())}
             />
             <Input
-              showClear
               size="large"
               type="password"
               placeholder={t`label.password`}
@@ -121,7 +119,12 @@ export default function LoginPage() {
               suffix={(
                 <button
                   disabled={!username || !password}
-                  className="mr-[2px] w-8 h-8 rounded hover:bg-black hover:bg-opacity-20 active:bg-opacity-30 text-white flex justify-center items-center"
+                  className={line(`
+                    mr-[2px] w-8 h-8 rounded cursor-pointer
+                    flex justify-center items-center
+                  hover:bg-black hover:bg-opacity-20 active:bg-opacity-30 text-white
+                    ${!username || !password ? 'hidden' : ''}
+                  `)}
                   onClick={handleLogin}
                 >
                   {loading

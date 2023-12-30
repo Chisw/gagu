@@ -51,6 +51,7 @@ Currently available hotkeys, more are being added gradually
 | Markdown full view | ⌘ + M | Ctrl + M |
 | Markdown half view | ⌘ + ⌥ + M | Ctrl + Alt + M |
 | Text editor view | ⌘ + ⌥ + N | Ctrl + Alt + N |
+| Exit (image view) | Esc | Esc |
 
 </div>
 
@@ -98,6 +99,8 @@ Currently available hotkeys, more are being added gradually
 | Order play mode | O | O |
 | Random play mode | R | R |
 | Single play mode | S | S |
+| Immersive play | Enter | Enter |
+| Exit (Immersive play) | Esc | Esc |
 
 </div>
 

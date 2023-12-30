@@ -19,6 +19,25 @@ Clear data directory means that all users, download tunnels and other data will 
 
 ## v0.0.*
 
+- v0.0.53 (2023-12-30)
+  - This update **may** require executing `gagu --reset` to reset the data
+  - After updated, users need to log in again
+  - feat: memorize TextEditor font size (related hotkeys changed)
+  - feat: support rendering GFM, HTML tags, relative path image in TextEditor Markdown
+  - feat: click on the picture to preview in TextEditor Markdown 
+  - feat: memorize the size and position of different app windows opened
+  - feat: sidebar grouping in FileExplorer
+  - feat: Input timestamp when creating new files or folders
+  - feat: Add immersive play mode in MusicPlayer (click the cover or press Enter key)
+  - fix: failed to move files (cross-device)
+  - fix: merge the timer for opening folders on hover to avoid accidental problems
+  - fix: secondary menu click insensitivity problem
+  - fix: clear user info and config in the browser after the user logs out
+  - fix: use middleware to replace the pulse api to record user active time
+  - fix: folder deletion fails in Windows environment (C: drive is still restricted) and lib detection syntax error
+  - fix: dark mode style optimization
+  - fix: code optimization and dependency upgrade
+
 - v0.0.52 (2023-12-24)
   - feat: Desktop file management is available (adjust the user's default access path to personal folders)
   - feat: hotkeys divided by system style
@@ -64,7 +83,7 @@ Clear data directory means that all users, download tunnels and other data will 
 
 - v0.0.48 (2023-11-27)
   - feat: Settings/Advanced/Service host name
-  - fix: Sharing page missing
+  - fix: sharing page missing
 
 - v0.0.47 (2023-11-26)
   - feat: finish Explorer mode

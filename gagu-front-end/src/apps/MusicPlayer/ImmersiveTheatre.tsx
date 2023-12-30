@@ -1,7 +1,7 @@
 import { Modal } from '@douyinfe/semi-ui'
-import { CSSProperties, ReactNode, useState } from 'react'
+import { CSSProperties, ReactNode } from 'react'
 import { IconButton, SvgIcon } from '../../components/common'
-import { IPlayInfo } from '../../hooks'
+import { IPlayInfo, useUserConfig } from '../../hooks'
 import SpectrumCanvas from './SpectrumCanvas'
 import { line } from '../../utils'
 import { ProgressSlider, VolumeIndicator, VolumeSlider } from '../../components/player'
@@ -53,7 +53,13 @@ export default function ImmersiveTheatre(props: ImmersiveTheatreProps) {
     onVolumeChange,
   } = props
 
-  const [isDiscStyle, setIsDiskStyle] = useState(false)
+  const {
+    userConfig,
+    setUserConfig,
+    userConfig: {
+      musicPlayerCoverDisk,
+    },
+  } = useUserConfig()
 
   return (
     <>
@@ -89,18 +95,18 @@ export default function ImmersiveTheatre(props: ImmersiveTheatreProps) {
                   w-full max-w-[60%] lg:max-w-[75%] aspect-square cursor-pointer
                   bg-center bg-cover bg-no-repeat
                   flex justify-center items-center
-                  ${isDiscStyle
+                  ${musicPlayerCoverDisk
                     ? `rounded-full ${isPlaying ? 'animate-[spin_12s_linear_infinite]' : ''}`
                     : 'border-4 border-white bg-white bg-opacity-10'
                   }
                 `)}
-                style={isDiscStyle
+                style={musicPlayerCoverDisk
                   ? { background: 'repeating-radial-gradient(#222 0%, #000 1%)' }
                   : coverStyle
                 }
-                onClick={() => setIsDiskStyle(!isDiscStyle)}
+                onClick={() => setUserConfig({ ...userConfig, musicPlayerCoverDisk: !musicPlayerCoverDisk })}
               >
-                {isDiscStyle && (
+                {musicPlayerCoverDisk && (
                   <div
                     className="w-3/5 h-3/5 rounded-full bg-center bg-no-repeat bg-cover"
                     style={coverStyle}
@@ -111,8 +117,8 @@ export default function ImmersiveTheatre(props: ImmersiveTheatreProps) {
 
             <div className="flex-shrink-0 w-full h-1/2 lg:w-1/2 lg:h-full flex justify-center items-center">
               <div className="relative w-full max-w-[75%] max-h-[75%] aspect-square text-white text-center">
-                <div className="text-3xl md:text-4xl lg:text-5xl opacity-90">{title}</div>
-                <div className="mt-2 md:mt-4 lg:mt-6 text-lg md:text-xl lg:text-2xl opacity-60">{album} - {artist}</div>
+                <div className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl opacity-90">{title}</div>
+                <div className="mt-2 md:mt-4 lg:mt-6 text-lg md:text-xl lg:text-2xl xl:text-3xl opacity-60">{album} - {artist}</div>
 
                 <div className="absolute right-0 bottom-0 left-0 select-none">
                   <div className="py-4 md:py-6 lg:py-8">

@@ -51,6 +51,7 @@ layout: ../../../layouts/DocLayout.astro
 | Markdown 全宽视图 | ⌘ + M | Ctrl + M |
 | Markdown 半宽视图 | ⌘ + ⌥ + M | Ctrl + Alt + M |
 | 编辑器视图 | ⌘ + ⌥ + N | Ctrl + Alt + N |
+| 退出（图片浏览） | Esc | Esc |
 
 </div>
 
@@ -98,6 +99,8 @@ layout: ../../../layouts/DocLayout.astro
 | 顺序播放 | O | O |
 | 随机播放 | R | R |
 | 单曲循环 | S | S |
+| 沉浸式播放 | Enter | Enter |
+| 退出（沉浸式播放） | Esc | Esc |
 
 </div>
 

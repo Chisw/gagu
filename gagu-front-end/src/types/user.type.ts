@@ -19,6 +19,7 @@ export interface IUserConfig {
   fileExplorerDefaultPath: string
   textEditorFontSize: number
   musicPlayerVolume: number
+  musicPlayerCoverDisk: boolean
   videoPlayerVolume: number
   windowInfoMap: IWindowInfoMap
 }

@@ -20,6 +20,7 @@ export const getDefaultUserConfig = () => {
     fileExplorerDefaultPath: '',
     textEditorFontSize: 14,
     musicPlayerVolume: 0.5,
+    musicPlayerCoverDisk: false,
     videoPlayerVolume: 0.5,
     windowInfoMap: {},
   }
