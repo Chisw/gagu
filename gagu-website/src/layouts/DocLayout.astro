@@ -50,18 +50,22 @@ import { DOWNLOAD_LIST } from '../utils'
 
 document.querySelectorAll('.download-list')
   .forEach(div => {
-    div.innerHTML = DOWNLOAD_LIST
-      .map(({ title, url }) => `
-        <a
-          title="${url}"
-          href="${url}"
-          target="_blank"
-          class="download-list-item"
-        >
-          ${title}
-        </a>
-      `)
-      .join('')
+    const html = `
+      <div class="my-4 py-2 bg-zinc-600 rounded-md">
+        ${DOWNLOAD_LIST
+          .map(({ svg, title, size, url }) => `
+            <a
+              class="no-customized relative mb-2 px-4 py-2 flex justify-between text-sm items-center hover:bg-zinc-700 active:bg-zinc-800"
+              href="${url}"
+            >
+              <span class="text-white">${svg}&nbsp;&nbsp;${title}</span>
+              <span class="text-white">${size}</span>
+            </a>
+          `)
+          .join('')}
+      </div>
+    `
+    div.innerHTML = html
   })
 </script>
 

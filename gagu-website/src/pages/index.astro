@@ -132,7 +132,7 @@ const commandList = [
           >
             {commandList.map(({ id, title, code }) => (
               <div class="mb-4 text-sm">
-                <p class="text-zinc-400 text-xs">{title}</p>
+                <p class="text-zinc-400 text-xs select-none">{title}</p>
                 <code class="relative block mt-2 px-4 py-2 text-left rounded-md bg-black bg-opacity-40 text-zint-200 before:content-['$'] before:opacity-40 group">
                   {code}
                   <div
@@ -151,16 +151,20 @@ const commandList = [
             id="getting-download"
             class="getting-panel hidden mt-6 md:mt-8 lg:mt-12 pb-2 w-[480px] max-w-full"
           >
-            <p class="text-zinc-400 text-xs">Releases</p>
-            <div class="mt-2 px-4 py-2 text-left rounded-md bg-black bg-opacity-40">
-              {DOWNLOAD_LIST.map(({ title, url }) => (
+            <p class="text-zinc-400 text-xs select-none">Releases</p>
+            <div class="mt-2 py-2 text-left rounded-md bg-black bg-opacity-40">
+              {DOWNLOAD_LIST.map(({ svg, title, size, url }) => (
                 <a
-                  class="relative block my-2 text-left text-sm rounded-md text-zint-200 hover:underline tracking-widers"
+                  class="relative flex justify-between px-4 py-2
+                    text-left text-sm text-zinc-400 tracking-widers cursor-pointer
+                    hover:text-zinc-200 hover:bg-white hover:bg-opacity-10 active:bg-opacity-5
+                    transition-all duration-100"
                   href={url}
-                  target="_blank"
-                  title={url}
                 >
-                  {title}
+                  <span>
+                    <span set:html={svg}></span>&nbsp;&nbsp;{title}
+                  </span>
+                  <span>{size}</span>
                 </a>
               ))}
             </div>
@@ -291,7 +295,7 @@ const copy = (str, id) => {
 }
 
 const switchTo = (id) => {
-  document.getElementById('getting-panel-container').style.maxHeight = '300px'
+  document.getElementById('getting-panel-container').style.maxHeight = '500px'
   document.querySelectorAll('.getting-panel').forEach(div => div.style.display = 'none')
   document.getElementById(`getting-${id}`).style.display = 'block'
 }
