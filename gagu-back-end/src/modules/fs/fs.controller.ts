@@ -2,7 +2,7 @@ import { SettingService } from './../setting/setting.service'
 import { Response } from 'express'
 import { FileInterceptor } from '@nestjs/platform-express'
 import {
-  deleteEntry,
+  removeEntry,
   ServerOS,
   getExists,
   GAGU_VERSION,
@@ -152,7 +152,7 @@ export class FsController {
     if (!isExisted) {
       return respond()
     }
-    await deleteEntry(path)
+    await removeEntry(path)
     const deleted = !getExists(path)
     if (deleted) {
       this.userService.removeFavoriteOfAllUsers(path)

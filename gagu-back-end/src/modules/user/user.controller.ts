@@ -18,7 +18,7 @@ import {
   UserPasswordForm,
 } from '../../types'
 import {
-  deleteEntry,
+  removeEntry,
   GAGU_PATH,
   getIsExpired,
   initUserPaths,
@@ -88,11 +88,11 @@ export class UserController {
 
   @Delete(':username')
   @Permission(UserPermission.administer)
-  remove(@Param('username') username: User.Username) {
+  async remove(@Param('username') username: User.Username) {
     this.userService.remove(username)
     this.authService.removeUserAllRecords(username)
-    deleteEntry(`${GAGU_PATH.PUBLIC_AVATAR}/${username}`)
-    deleteEntry(`${GAGU_PATH.USERS}/${username}`)
+    await removeEntry(`${GAGU_PATH.PUBLIC_AVATAR}/${username}`)
+    await removeEntry(`${GAGU_PATH.USERS}/${username}`)
     return respond()
   }
 

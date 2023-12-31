@@ -19,6 +19,9 @@ Clear data directory means that all users, download tunnels and other data will 
 
 ## v0.0.*
 
+- v0.0.54 (2023-12-31)
+  - Hotfix: Deletion of non-empty folder failed
+
 - v0.0.53 (2023-12-30)
   - This update **may** require executing `gagu --reset` to reset the data
   - After updated, users need to log in again

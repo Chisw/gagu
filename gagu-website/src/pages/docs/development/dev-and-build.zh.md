@@ -67,7 +67,7 @@ $ yarn start
 
 2. 同步 `./gagu-back-end/package.json` 中的生产环境依赖项到 `./package.json` 中
 
-3. 执行构建脚本 `npm run build:npm`，参考 [build.sh](https://github.com/Chisw/gagu/blob/main/build.sh)
+3. 执行构建脚本 `npm run build:npm`，参考 [build:npm.sh](https://github.com/Chisw/gagu/blob/main/build:npm.sh)
 
 4. 预发布检查，更新包体积信息，发布到 NPM
 
@@ -77,7 +77,7 @@ $ yarn start
 
 2. 然后安装好 `./package.json` 中的依赖，是的，这有点冗余，这是最初决定将三部分放至同一仓库造成的，好在问题不大
 
-3. 在 `gagu` 目录下执行 `npm run build:pkg`，实际上执行的是 `pkg . --out-path=pkg`，你需要事先全局安装好 Vercel/pkg `npm i -g pkg`
+3. 在 `gagu` 目录下执行 `npm run build:pkg`，你需要事先全局安装好 Vercel/pkg `npm i -g pkg`
 
 4. 构建后的内容会出现在 `./pkg` 中
 

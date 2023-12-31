@@ -1,11 +1,4 @@
-import {
-  accessSync,
-  appendFile,
-  constants,
-  mkdirSync,
-  statSync,
-  promises,
-} from 'fs'
+import { accessSync, appendFile, constants, mkdirSync, promises } from 'fs'
 import { GAGU_PATH, ServerOS } from './constant.util'
 import { catchError } from 'rxjs'
 
@@ -26,17 +19,11 @@ export const getExists = (path: string) => {
   return exists
 }
 
-export const deleteEntry = async (path: string) => {
+export const removeEntry = async (path: string) => {
   return new Promise(async (resolve) => {
     try {
-      const stat = statSync(path)
-      if (stat.isDirectory()) {
-        await promises.rmdir(path)
-        resolve(true)
-      } else {
-        await promises.rm(path)
-        resolve(true)
-      }
+      await promises.rm(path, { recursive: true })
+      resolve(true)
     } catch (error) {
       catchError(error)
     }

@@ -7,7 +7,7 @@ import {
   GAGU_VERSION,
   openInBrowser,
   GAGU_PATH,
-  deleteEntry,
+  removeEntry,
 } from './utils'
 import * as minimist from 'minimist'
 import * as chalk from 'chalk'
@@ -36,7 +36,7 @@ async function bootstrap() {
   }
 
   if (argv.reset) {
-    deleteEntry(GAGU_PATH.DATA)
+    await removeEntry(GAGU_PATH.DATA)
     console.log(
       '\n🔔 GAGU_PATH.DATA',
       GAGU_PATH.DATA,
@@ -46,7 +46,7 @@ async function bootstrap() {
   }
 
   if (argv['reset-all']) {
-    deleteEntry(GAGU_PATH.ROOT)
+    await removeEntry(GAGU_PATH.ROOT)
     console.log(
       '\n🔔 GAGU_PATH.ROOT',
       GAGU_PATH.ROOT,

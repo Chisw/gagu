@@ -67,7 +67,7 @@ $ yarn start
 
 2. Sync production dependencies in `./gagu-back-end/package.json` to `./package.json`
 
-3. Run build script `npm run build:npm`, refer to [./build.sh](https://github.com/Chisw/gagu/blob/main/build.sh)
+3. Run build script `npm run build:npm`, refer to [./build:npm.sh](https://github.com/Chisw/gagu/blob/main/build:npm.sh)
 
 4. Dry run publish, update package size info, publish to NPM
 
@@ -77,7 +77,7 @@ $ yarn start
 
 2. Install the dependencies in `./package.json`, yes, this is a bit redundant, this is caused by the original decision to put the three parts in the same repository, fortunately, it is not a big problem
 
-3. Execute `npm run build:pkg` in the `gagu` directory, actually execute `pkg . --out-path=pkg`, you need to install Vercel/pkg globally in advance `npm i -g pkg`
+3. Execute `npm run build:pkg` in the `gagu` directory, you need to install Vercel/pkg globally in advance `npm i -g pkg`
 
 4. The built content will appear in `./pkg`
 
