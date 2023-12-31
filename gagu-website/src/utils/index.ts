@@ -1,4 +1,4 @@
-const list = [
+const DOC_LIST = [
   { group: 'Introduction', groupZh: '介绍', title: 'What is GAGU?', titleZh: 'GAGU 是？', key: 'what-is-gagu' },
   { group: 'Introduction', groupZh: '介绍', title: 'Project Origin', titleZh: '项目起源', key: 'project-origin' },
   { group: 'Getting Started', groupZh: '起步', title: 'Usage', titleZh: '使用', key: 'usage' },
@@ -14,7 +14,7 @@ const list = [
 
 export const getDocList = (pathname) => {
   const isZh = pathname.replace(/\/*$/, '').endsWith('.zh')
-  return list.map(({ group, groupZh, title, titleZh, key }) => ({
+  return DOC_LIST.map(({ group, groupZh, title, titleZh, key }) => ({
     group: isZh ? groupZh : group,
     title: isZh ? titleZh : title,
     path: `/docs/${group.toLocaleLowerCase().replaceAll(' ', '-')}/${key}${isZh ? '.zh' : ''}`,
@@ -25,3 +25,11 @@ export const getIsActive = (path, pathname) => {
   return path === pathname.replace(/\/*$/, '')
 }
 
+export const DOWNLOAD_LIST = [
+  { platform: 'linux', title: 'gagu@0.0.54.linux.arm.sh.zip', url: 'https://github.com/Chisw/gagu/releases/download/v0.0.54/gagu@0.0.54.linux.arm.sh.zip' },
+  { platform: 'linux', title: 'gagu@0.0.54.linux.x64.sh.zip', url: 'https://github.com/Chisw/gagu/releases/download/v0.0.54/gagu@0.0.54.linux.x64.sh.zip' },
+  { platform: 'macos', title: 'gagu@0.0.54.macos.arm.sh.zip', url: 'https://github.com/Chisw/gagu/releases/download/v0.0.54/gagu@0.0.54.macos.arm.sh.zip' },
+  { platform: 'macos', title: 'gagu@0.0.54.macos.x64.sh.zip', url: 'https://github.com/Chisw/gagu/releases/download/v0.0.54/gagu@0.0.54.macos.x64.sh.zip' },
+  { platform: 'win', title: 'gagu@0.0.54.win.arm.exe.zip', url: 'https://github.com/Chisw/gagu/releases/download/v0.0.54/gagu@0.0.54.win.arm.exe.zip' },
+  { platform: 'win', title: 'gagu@0.0.54.win.x64.exe.zip', url: 'https://github.com/Chisw/gagu/releases/download/v0.0.54/gagu@0.0.54.win.x64.exe.zip' },
+]

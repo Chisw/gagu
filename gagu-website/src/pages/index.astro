@@ -24,6 +24,7 @@ import iconAppTerminal from '/assets/icons/app-terminal.svg'
 import iconAppReader from '/assets/icons/app-reader.svg'
 import iconAppVsCoder from '/assets/icons/app-vs-coder.svg'
 import iconAppGameEmulator from '/assets/icons/app-game-emulator.svg'
+import { DOWNLOAD_LIST } from '../utils'
 import '../css/home.css'
 
 const featureList = [
@@ -55,8 +56,9 @@ const planningAppList = [
 ]
 
 const commandList = [
-  { id: 'command-1', title: 'Install with NPM', code: 'npm i -g gagu' },
+  { id: 'command-1', title: 'Install', code: 'npm i -g gagu' },
   { id: 'command-2', title: 'Show help info', code: 'gagu -h' },
+  { id: 'command-3', title: 'Start service', code: 'gagu -o' },
 ]
 ---
 
@@ -92,16 +94,16 @@ const commandList = [
         <p class="relative z-10 mt-8 pb-3 md:mt-12 text-3xl md:text-6xl lg:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-white via-gray-200 to-gray-600">
           A web-based<br/>file management system
         </p>
-        <p class="relative z-10 mt-6 md:mt-12 text-xs md:text-lg lg:text-xl text-gray-400 font-thin">
+        <p class="relative z-10 mt-6 md:mt-12 text-xs md:text-lg lg:text-xl text-zinc-400 font-thin">
           Manage files on your different devices in the browser
         </p>
-        <p class="relative z-10 text-xs md:text-lg lg:text-xl text-gray-400 font-thin">
+        <p class="relative z-10 text-xs md:text-lg lg:text-xl text-zinc-400 font-thin">
           Works on Windows, macOS, Linux and Android/Termux
         </p>
         <div class="relative z-10 mt-12 flex justify-center">
           <a
-            onclick="jumpTo('npm')"
-            class="mx-2 w-32 md:w-40 h-10 text-xs md:text-sm text-gray-600
+            onclick="switchTo('npm')"
+            class="mx-2 w-32 md:w-40 h-10 text-xs md:text-sm text-zinc-600
               flex justify-center items-center rounded-full cursor-pointer shadow-lg select-none
               hover:opacity-80 transition-opacity duration-200
               bg-gradient-to-b from-white to-gray-300"
@@ -110,8 +112,8 @@ const commandList = [
             <span class="ml-1 md:ml-2">NPM Install</span>
           </a>
           <a
-            onclick="jumpTo('download')"
-            class="mx-2 w-32 md:w-40 h-10 text-xs md:text-sm text-gray-600
+            onclick="switchTo('download')"
+            class="mx-2 w-32 md:w-40 h-10 text-xs md:text-sm text-zinc-600
               flex justify-center items-center rounded-full cursor-pointer shadow-lg select-none
               hover:opacity-80 transition-opacity duration-200
               bg-gradient-to-b from-white to-gray-300"
@@ -120,7 +122,51 @@ const commandList = [
             <span class="ml-1 md:ml-2">Download</span>
           </a>
         </div>
-        <p class="relative z-10 mt-4 text-xs text-gray-400">
+        <div
+          id="getting-panel-container"
+          class="max-h-0 flex justify-center transition-all duration-300 overflow-hidden"
+        >
+          <div
+            id="getting-npm"
+            class="getting-panel hidden mt-6 md:mt-8 lg:mt-12 pb-2 w-[480px] max-w-full"
+          >
+            {commandList.map(({ id, title, code }) => (
+              <div class="mb-4 text-sm">
+                <p class="text-zinc-400 text-xs">{title}</p>
+                <code class="relative block mt-2 px-4 py-2 text-left rounded-md bg-black bg-opacity-40 text-zint-200 before:content-['$'] before:opacity-40 group">
+                  {code}
+                  <div
+                    id={id}
+                    data-clicked="false"
+                    class="copy-button md:opacity-0 group-hover:opacity-100 select-none
+                      absolute top-0 right-0 bottom-0 w-12 cursor-pointer
+                      bg-center bg-no-repeat"
+                    onclick={`copy('${code}', '${id}')`}
+                  />
+                </code>
+              </div>
+            ))}
+          </div>
+          <div
+            id="getting-download"
+            class="getting-panel hidden mt-6 md:mt-8 lg:mt-12 pb-2 w-[480px] max-w-full"
+          >
+            <p class="text-zinc-400 text-xs">Releases</p>
+            <div class="mt-2 px-4 py-2 text-left rounded-md bg-black bg-opacity-40">
+              {DOWNLOAD_LIST.map(({ title, url }) => (
+                <a
+                  class="relative block my-2 text-left text-sm rounded-md text-zint-200 hover:underline tracking-widers"
+                  href={url}
+                  target="_blank"
+                  title={url}
+                >
+                  {title}
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+        <p class="relative z-10 mt-4 text-xs text-zinc-400">
           <span>v{import.meta.env.PUBLIC_VERSION} (Alpha)</span>
           <a class="ml-2 underline" href="/docs/others/changelog">Changelog</a>
         </p>
@@ -129,7 +175,7 @@ const commandList = [
     <div class="h-24 md:h-48 lg:h-64"></div>
   </Block>
 
-  <Block className="">
+  <Block className="bg-gradient-to-b from-zinc-500 via-white to-white">
     <div class="-translate-y-24 md:-translate-y-48 lg:-translate-y-64 rounded md:rounded-xl shadow-xl overflow-hidden select-none">
       <div class="px-1 md:px-3 w-full h-3 md:h-6 bg-white flex items-center">
         <div class="mr-1 w-1 h-1 md:w-3 md:h-3 rounded-full bg-gray-300"></div>
@@ -156,8 +202,8 @@ const commandList = [
       </div>
     </div>
     <div class="-translate-y-10 md:-translate-y-20 lg:-translate-y-28">
-      <h2 class="text-2xl md:text-4xl text-center font-bold text-gray-900">Features</h2>
-      <p class="mt-4 text-sm md:text-base lg:text-lg text-center text-gray-600">
+      <h2 class="text-2xl md:text-4xl text-center font-bold text-zinc-900">Features</h2>
+      <p class="mt-4 text-sm md:text-base lg:text-lg text-center text-zinc-600">
         Mainly for individuals,<br class="md:hidden" /> families or small teams to use in LAN
       </p>
       <div class="mt-12 flex flex-wrap justify-center">
@@ -177,8 +223,8 @@ const commandList = [
                 src={icon}
               />
             </div>
-            <p class="mt-6 text-sm md:text-base text-gray-900">{title}</p>  
-            <p class="mt-1 px-2 text-xs text-gray-500">{desc}</p>  
+            <p class="mt-6 text-sm md:text-base text-zinc-900">{title}</p>  
+            <p class="mt-1 px-2 text-xs text-zinc-500">{desc}</p>  
           </div>
         ))}
       </div>
@@ -187,8 +233,8 @@ const commandList = [
 
   <Block className="bg-gradient-to-b from-zinc-900 to-zinc-600">
     <div class="py-16 md:py-32">
-      <h2 class="text-2xl md:text-4xl text-center font-bold text-gray-100">Apps</h2>
-      <p class="mt-4 text-sm md:text-base lg:text-lg text-center text-gray-300">
+      <h2 class="text-2xl md:text-4xl text-center font-bold text-zinc-100">Apps</h2>
+      <p class="mt-4 text-sm md:text-base lg:text-lg text-center text-zinc-300">
         GAGU provides some basic applications
       </p>
       <div class="mt-12 flex flex-wrap select-none">
@@ -200,13 +246,13 @@ const commandList = [
             >
             </div>
             <div class="ml-4">
-              <p class="text-base md:text-lg font-bold text-gray-100">{title}</p>  
-              <p class="mt-1 text-xs md:text-sm text-gray-400">{desc}</p>  
+              <p class="text-base md:text-lg font-bold text-zinc-100">{title}</p>  
+              <p class="mt-1 text-xs md:text-sm text-zinc-400">{desc}</p>  
             </div>
           </div>
         ))}
       </div>
-      <p class="mt-12 text-sm md:text-base lg:text-lg text-center text-gray-300">
+      <p class="mt-12 text-sm md:text-base lg:text-lg text-center text-zinc-300">
         Apps in planning,<br/>
         implemented using third-party libraries
       </p>
@@ -219,56 +265,11 @@ const commandList = [
             >
             </div>
             <div class="ml-4">
-              <p class="text-base md:text-lg font-bold text-gray-100">{title}</p>  
-              <p class="mt-1 text-xs md:text-sm text-gray-400">{desc}</p>  
+              <p class="text-base md:text-lg font-bold text-zinc-100">{title}</p>  
+              <p class="mt-1 text-xs md:text-sm text-zinc-400">{desc}</p>  
             </div>
           </div>
         ))}
-      </div>
-    </div>
-  </Block>
-
-  <Block className="bg-gradient-to-b from-zinc-600 to-zinc-500">
-    <div class="py-16 md:py-32 flex flex-wrap justify-center bg-gray-100 rounded-t-2xl">
-      <div id="npm" class="w-full lg:w-1/2 px-0 md:px-12 lg:px-24">
-        <h2 class="text-2xl md:text-4xl text-center font-bold">NPM Install</h2>
-        <p class="mt-4 text-sm md:text-base lg:text-lg text-center text-gray-500">
-          Windows · macOS · Linux · Termux
-        </p>
-        <div class="mt-12 px-4 md:px-0">
-          {commandList.map(({ id, title, code }) => (
-            <div class="mb-4">
-              <p class="text-gray-500 text-sm">{title}:</p>
-              <code class="relative block mt-2 px-4 py-2 rounded-md bg-gray-200 text-gray-700 before:content-['$'] group">
-                {code}
-                <div
-                  id={id}
-                  data-clicked="false"
-                  class="copy-button md:opacity-0 group-hover:opacity-100 select-none
-                    absolute top-0 right-0 bottom-0 w-12 cursor-pointer
-                    bg-center bg-no-repeat"
-                  onclick={`copy('${code}', '${id}')`}
-                />
-              </code>
-            </div>
-          ))}
-        </div>
-        <div class="pt-4 text-center text-gray-400 text-sm">
-          More info refer to <a href="/docs/getting-started/usage" class="text-blue-500">here</a>
-        </div>
-      </div>
-      <div id="download" class="mt-24 lg:mt-0 w-full lg:w-1/2">
-        <h2 class="text-2xl md:text-4xl text-center font-bold">Download</h2>
-        <p class="mt-4 text-sm md:text-base lg:text-lg text-center text-gray-500">
-          Windows · macOS · Linux
-        </p>
-        <div class="mt-16 text-center">
-          <p>Binary version built via Vercel/pkg</p>
-          <p>will be available after v1.0.0 is released.</p>
-          <p class="block mt-8 text-sm text-gray-500">Build binary version by yourself with</p>
-          <code class="block mt-1 text-sm text-gray-500">`npm run build:npm && npm run build:pkg`</code>
-          <p class="block mt-1 text-sm text-gray-500">in local development.</p>
-        </div>
       </div>
     </div>
   </Block>
@@ -289,8 +290,9 @@ const copy = (str, id) => {
   }, 2000)
 }
 
-const jumpTo = (id) => {
-  const top = document.getElementById(id).getBoundingClientRect().top - 40
-  window.scrollTo({ top, behavior: 'smooth' })
+const switchTo = (id) => {
+  document.getElementById('getting-panel-container').style.maxHeight = '300px'
+  document.querySelectorAll('.getting-panel').forEach(div => div.style.display = 'none')
+  document.getElementById(`getting-${id}`).style.display = 'block'
 }
 </script>

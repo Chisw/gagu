@@ -33,9 +33,9 @@ $ sudo npm i -g gagu
 
 ### Download
 
-<div class="apply-tip">
-Stable binary package built via Vercel/pkg will be available after v1.0.0 is released.
-</div>
+<div class="download-list"></div>
+
+[All releases](https://github.com/Chisw/gagu/releases)
 
 ## Available Parameters
 

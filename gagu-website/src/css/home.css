@@ -81,18 +81,19 @@
 
 .copy-button {
   background-size: 40%;
-  background-image: url("../../public/assets/icons/copy.svg");
+  background-image: url("/assets/icons/copy.svg");
 }
 
-/* fake load */
+/* fake node to preload svg */
 .copy-button::after {
-  background-image: url("../../public/assets/icons/check.svg");
+  content: "";
+  background-image: url("/assets/icons/check.svg");
 }
 
 .copy-button[data-clicked="true"] {
   display: block;
   opacity: 1 !important;
-  background-image: url("../../public/assets/icons/check.svg");
+  background-image: url("/assets/icons/check.svg");
 }
 
 #header-i18n {

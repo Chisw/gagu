@@ -1051,11 +1051,21 @@
   background-image: url("data: image/svg+xml, %3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' %3E%3Cpath d='M6.535 3h14.464a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H6.535a1 1 0 0 1-.833-.445l-5.333-8a1 1 0 0 1 0-1.11l5.333-8A1 1 0 0 1 6.535 3zm.535 2l-4.667 7 4.667 7H20V5H7.07zM13 10.586l2.828-2.829 1.414 1.415L14.413 12l2.829 2.828-1.414 1.415-2.829-2.829-2.828 2.829-1.414-1.415L11.585 12 8.757 9.172l1.414-1.415 2.828 2.829z' fill='currentColor' /%3E%3C/svg%3E");
 }
 
+.markdown-body .download-list .download-list-item {
+  @apply relative mb-2 px-3 py-2 text-blue-500 flex justify-between text-sm items-center bg-blue-100 rounded-md no-underline border border-blue-300 hover:bg-blue-200;
+}
+
+.markdown-body .download-list .download-list-item::after {
+  @apply w-4 h-4 bg-contain text-blue-500 translate-y-[1px];
+  content: "";
+  background-image: url("/assets/icons/download-link.svg");
+}
+
 /* apply class */
 
 .apply-tip {
   @apply px-4 py-3 pl-8 rounded-lg  text-yellow-600 bg-yellow-100 text-sm bg-no-repeat;
-  background-image: url("../../public/assets/icons/warning.svg");
+  background-image: url("/assets/icons/warning.svg");
   background-size: 14px;
   background-position: 14px 15px;
 }

@@ -44,10 +44,33 @@ const nextDoc = docList[activeIndex + 1]
   </div>
   <DocTOC />
 </Page>
+
+<script>
+import { DOWNLOAD_LIST } from '../utils'
+
+document.querySelectorAll('.download-list')
+  .forEach(div => {
+    div.innerHTML = DOWNLOAD_LIST
+      .map(({ title, url }) => `
+        <a
+          title="${url}"
+          href="${url}"
+          target="_blank"
+          class="download-list-item"
+        >
+          ${title}
+        </a>
+      `)
+      .join('')
+  })
+</script>
+
 <script is:inline>
+// blank anchor target
 document.querySelectorAll('.markdown-body a[href^=http]')
   .forEach(a => a.setAttribute('target', '_blank'));
 
+// hotkeys table
 document.querySelectorAll(`
   .hotkeys-table-container tr td:nth-child(2),
   .hotkeys-table-container tr td:nth-child(3)

@@ -33,9 +33,9 @@ $ sudo npm i -g gagu
 
 ### 下载
 
-<div class="apply-tip">
-使用 Vercel/pkg 打包的稳定版二进制程序会在 v1.0.0 发布后提供。
-</div>
+<div class="download-list"></div>
+
+[所有发布](https://github.com/Chisw/gagu/releases)
 
 ## 可用参数
 
