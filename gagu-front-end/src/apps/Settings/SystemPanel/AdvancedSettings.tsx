@@ -130,11 +130,11 @@ export default function AdvancedSettings() {
                   <SvgIcon.Feedback />
                 </Button>
                 <Button
-                  loading={getting}
+                  disabled={getting}
                   className="ml-1 flex-shrink-0"
                   onClick={handleVersionCheck}
                 >
-                  <SvgIcon.Refresh className="text-blue-500" />
+                  <SvgIcon.Refresh className={`text-blue-500 ${getting ? 'animate-spin' : ''}`} />
                 </Button>
               </div>
             </Form.Slot>

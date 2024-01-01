@@ -55,7 +55,7 @@ export default function Window(props: WindowProps) {
       <div
         className={line(`
           gagu-app-window absolute z-10 inset-0 top-8 md:top-6 bottom-10 bg-white bg-opacity-80 backdrop-blur-sm overflow-hidden
-          transition-box-shadow duration-200 flex flex-col
+          ease-in-out flex flex-col
           dark:bg-black dark:bg-opacity-80
           ${isTopWindow ? '' : 'hidden'}
         `)}

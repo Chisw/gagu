@@ -41,9 +41,9 @@ export default function UserPanel() {
           <div className="flex items-center">
             <IconButton
               title={t`action.refresh`}
-              icon={<SvgIcon.Refresh className="text-gray-500" />}
+              disabled={loading}
+              icon={<SvgIcon.Refresh className={`text-blue-500 ${loading ? 'animate-spin' : ''}`} />}
               onClick={handleRefreshList}
-              className={loading ? 'bg-loading' : ''}
             />
             <IconButton
               title={t`action.newUser`}

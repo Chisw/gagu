@@ -69,7 +69,7 @@ export default function Window(props: WindowProps) {
         id={`gagu-app-window-${runningId}`}
         className={line(`
           gagu-app-window absolute z-30 inset-0 bg-white bg-opacity-80 backdrop-blur-sm overflow-hidden
-          transition-box-shadow duration-200 flex flex-col
+          ease-in-out flex flex-col
           dark:bg-black dark:bg-opacity-80
           ${isTopWindow ? 'gagu-is-top-window' : 'hidden'}
         `)}

@@ -216,7 +216,7 @@ export default function Window(props: WindowProps) {
           className={line(`
             gagu-move-to-front-trigger
             absolute inset-0 bg-white bg-opacity-80 backdrop-blur-sm overflow-hidden
-            transition-box-shadow duration-200 flex flex-col
+            ease-in-out flex flex-col
             dark:bg-black dark:bg-opacity-80
             ${isTopWindow ? 'shadow-xl' : 'shadow'}
             ${isFullScreen
