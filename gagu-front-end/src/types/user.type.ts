@@ -1,4 +1,4 @@
-import { IWindowInfoMap } from '.'
+import { IWindowInfoMap, PlayModeType } from '.'
 
 export enum HotkeyStyle {
   mac = 'mac',
@@ -20,6 +20,7 @@ export interface IUserConfig {
   textEditorFontSize: number
   musicPlayerVolume: number
   musicPlayerCoverDisk: boolean
+  musicPlayerPlayMode: PlayModeType
   videoPlayerVolume: number
   windowInfoMap: IWindowInfoMap
 }

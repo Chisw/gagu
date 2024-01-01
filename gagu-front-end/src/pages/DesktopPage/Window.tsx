@@ -200,7 +200,7 @@ export default function Window(props: WindowProps) {
         id={`gagu-app-window-${runningId}`}
         dragHandleClassName="gagu-window-drag-handler"
         data-hidden={hidden}
-        className="gagu-app-window"
+        className={`gagu-app-window ${isTopWindow ? 'is-top-window' : ''}`}
         default={defaultInfo}
         style={{
           zIndex: initIndex,

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { AppComponentProps, AppId } from '../../types'
+import { AppComponentProps, AppId, PlayMode, PlayModeType } from '../../types'
 import { useRequest, useRunAppEvent, usePlayInfo, useUserConfig, useHotKey } from '../../hooks'
 import { FsApi } from '../../api'
 import { defaultMusicCoverSvg, getEntryPath, getIndexLabel, getReadableSize, line } from '../../utils'
@@ -11,12 +11,10 @@ import ImmersiveTheatre from './ImmersiveTheatre'
 
 const appId = AppId.musicPlayer
 
-type PlayModeType = 'ORDER' | 'SINGLE' | 'RANDOM'
-
 const playModeIconMap: any = {
-  ORDER: <SvgIcon.PlayOrder size={14} />,
-  SINGLE: <SvgIcon.PlayRepeat size={14} />,
-  RANDOM: <SvgIcon.PlayRandom size={14} />,
+  [PlayMode.order]: <SvgIcon.PlayOrder size={14} />,
+  [PlayMode.single]: <SvgIcon.PlayRepeat size={14} />,
+  [PlayMode.random]: <SvgIcon.PlayRandom size={14} />,
 }
 
 export default function MusicPlayer(props: AppComponentProps) {
@@ -41,12 +39,12 @@ export default function MusicPlayer(props: AppComponentProps) {
     userConfig: {
       kiloSize,
       musicPlayerVolume,
+      musicPlayerPlayMode,
     },
     setUserConfig,
 } = useUserConfig()
 
   const [isPlaying, setIsPlaying] = useState(false)
-  const [playMode, setPlayMode] = useState<PlayModeType>('ORDER')
   const [volumeSliderShow, setVolumeSliderShow] = useState(false)
   const [volumeChangedTime, setVolumeChangedTime] = useState(0)
   const [theatreShow, setTheatreShow] = useState(false)
@@ -92,7 +90,7 @@ export default function MusicPlayer(props: AppComponentProps) {
   const handlePrevOrNext = useCallback((offset: number) => {
     const max = matchedEntryList.length - 1
     let targetIndex = 0
-    if (playMode === 'RANDOM') {
+    if (musicPlayerPlayMode === PlayMode.random) {
       targetIndex = Math.round(Math.random() * max)
     } else {
       targetIndex = activeIndex + offset
@@ -100,7 +98,7 @@ export default function MusicPlayer(props: AppComponentProps) {
       if (targetIndex < 0) targetIndex = max
     }
     setActiveIndex(targetIndex)
-  }, [playMode, matchedEntryList, activeIndex, setActiveIndex])
+  }, [musicPlayerPlayMode, matchedEntryList, activeIndex, setActiveIndex])
 
   const handleProgressChange = useCallback((ratio: number, offsetSeconds?: number) => {
     if (!audioNode) return
@@ -114,13 +112,13 @@ export default function MusicPlayer(props: AppComponentProps) {
 
   const handlePlayModeChange = useCallback((mode?: PlayModeType) => {
     const targetMode = mode || {
-      ORDER: 'SINGLE',
-      SINGLE: 'RANDOM',
-      RANDOM: 'ORDER',
-    }[playMode] as PlayModeType
+      [PlayMode.order]: PlayMode.single,
+      [PlayMode.single]: PlayMode.random,
+      [PlayMode.random]: PlayMode.order,
+    }[musicPlayerPlayMode] as PlayModeType
 
-    setPlayMode(targetMode)
-  }, [playMode])
+    setUserConfig({ ...userConfig, musicPlayerPlayMode: targetMode })
+  }, [musicPlayerPlayMode, setUserConfig, userConfig])
 
   const handleVolumeChange = useCallback((vol: number, offset?: number) => {
     let targetVolume: number
@@ -136,13 +134,13 @@ export default function MusicPlayer(props: AppComponentProps) {
 
   const handleEnded = useCallback(() => {
     if (!audioNode) return
-    if (playMode === 'SINGLE') {
+    if (musicPlayerPlayMode === PlayMode.single) {
       audioNode.currentTime = 0
       audioNode.play()
     } else {
       handlePrevOrNext(1)
     }
-  }, [audioNode, playMode, handlePrevOrNext])
+  }, [audioNode, musicPlayerPlayMode, handlePrevOrNext])
 
   useEffect(() => {
     if (activeEntry) {
@@ -200,7 +198,7 @@ export default function MusicPlayer(props: AppComponentProps) {
     return [
       {
         title: t`action.playMode`,
-        icon: playModeIconMap[playMode],
+        icon: playModeIconMap[musicPlayerPlayMode],
         onClick: () => handlePlayModeChange(),
       },
       {
@@ -224,7 +222,7 @@ export default function MusicPlayer(props: AppComponentProps) {
         onClick: () => setVolumeSliderShow(true),
       },
     ]
-  }, [musicPlayerVolume, t, playMode, handlePlayModeChange, isPlaying, handlePlayOrPause, handlePrevOrNext])
+  }, [musicPlayerVolume, t, musicPlayerPlayMode, handlePlayModeChange, isPlaying, handlePlayOrPause, handlePrevOrNext])
 
   useHotKey({
     binding: isTopWindow,
@@ -240,9 +238,9 @@ export default function MusicPlayer(props: AppComponentProps) {
       'ArrowLeft, ArrowLeft': () => handleProgressChange(0, -1),
       'Shift+ArrowRight, Shift+ArrowRight': () => handleProgressChange(0, 5),
       'Shift+ArrowLeft, Shift+ArrowLeft': () => handleProgressChange(0, -5),
-      'KeyO, KeyO': () => handlePlayModeChange('ORDER'),
-      'KeyR, KeyR': () => handlePlayModeChange('RANDOM'),
-      'KeyS, KeyS': () => handlePlayModeChange('SINGLE'),
+      'KeyO, KeyO': () => handlePlayModeChange(PlayMode.order),
+      'KeyR, KeyR': () => handlePlayModeChange(PlayMode.random),
+      'KeyS, KeyS': () => handlePlayModeChange(PlayMode.single),
       'Enter, Enter': () => setTheatreShow(true),
     },
   })

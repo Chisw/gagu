@@ -69,7 +69,12 @@ export default function Desktop() {
     <>
       <div
         ref={containerRef}
-        className="gagu-desktop gagu-entry-list-container absolute z-0 inset-0 top-8 md:top-6 bottom-[56px] select-none"
+        className={line(`
+          gagu-user-desktop
+          gagu-entry-list-container
+          absolute z-0 inset-0 top-8 md:top-6 bottom-[56px] select-none
+          ${isTopWindow ? 'is-top-window' : ''}
+        `)}
         onMouseDownCapture={handleSelectCancel}
       >
         <div

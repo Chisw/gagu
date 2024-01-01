@@ -75,3 +75,11 @@ export interface IEntrySelectorEvent {
   type?: EntryType.directory | EntryType.file
   multiple?: boolean
 }
+
+export enum PlayMode {
+  order = 'order',
+  single = 'single',
+  random = 'random',
+}
+
+export type PlayModeType = keyof typeof PlayMode

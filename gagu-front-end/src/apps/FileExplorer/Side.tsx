@@ -24,7 +24,7 @@ export default function Side(props: SideProps) {
     >
       <div
         className={line(`
-          w-56 h-full border-r border-gray-100
+          pb-4 w-56 h-full border-r border-gray-100
           overflow-x-hidden overflow-y-auto
           dark:border-zinc-700
         `)}

@@ -1,4 +1,4 @@
-import { ColorScheme, HotkeyStyle, IUserConfig, UserPermission, UserPermissionType } from '../types'
+import { ColorScheme, HotkeyStyle, IUserConfig, PlayMode, UserPermission, UserPermissionType } from '../types'
 
 const permissionSortMap = {
   [UserPermission.administer]: 0,
@@ -21,6 +21,7 @@ export const getDefaultUserConfig = () => {
     textEditorFontSize: 14,
     musicPlayerVolume: 0.5,
     musicPlayerCoverDisk: false,
+    musicPlayerPlayMode: PlayMode.order,
     videoPlayerVolume: 0.5,
     windowInfoMap: {},
   }

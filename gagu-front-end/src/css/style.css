@@ -43,14 +43,20 @@ body {
 }
 
 /* window and entry */
-.gagu-desktop .gagu-entry-node:not(.is-selected) .gagu-entry-node-name {
+.gagu-user-desktop .gagu-entry-node:not(.is-selected) .gagu-entry-node-name {
   text-shadow: 0 0 4px rgba(0, 0, 0, .9);
   color: rgba(255, 255, 255, .95);
 }
 
-.gagu-desktop .gagu-entry-node .gagu-entry-node-size {
+.gagu-user-desktop .gagu-entry-node .gagu-entry-node-size {
   text-shadow: 0 0 4px rgba(0, 0, 0, .9);
   color: rgba(255, 255, 255, .6);
+}
+
+.gagu-user-desktop:not(.is-top-window) .gagu-entry-node[data-selected="true"] .gagu-entry-node-name,
+.gagu-app-window:not(.is-top-window) .gagu-entry-node.is-list-mode[data-selected="true"],
+.gagu-app-window:not(.is-top-window) .gagu-entry-node.is-grid-mode[data-selected="true"] .gagu-entry-node-name {
+  @apply bg-zinc-400 dark:bg-zinc-600;
 }
 
 .gagu-app-window[data-hidden="true"] {
