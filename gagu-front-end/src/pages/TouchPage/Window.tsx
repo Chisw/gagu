@@ -96,7 +96,7 @@ export default function Window(props: WindowProps) {
             </span>
           </div>
           <div className="flex items-center flex-shrink-0">
-            <span
+            <div
               title={t`action.minimize`}
               prevent-move-to-front="true"
               className={line(`
@@ -108,8 +108,8 @@ export default function Window(props: WindowProps) {
               onClick={handleHide}
             >
               <SvgIcon.Subtract size={12} />
-            </span>
-            <span
+            </div>
+            <div
               title={t`action.close`}
               prevent-move-to-front="true"
               className={line(`
@@ -120,7 +120,7 @@ export default function Window(props: WindowProps) {
               onClick={handleClose}
             >
               <SvgIcon.Close />
-            </span>
+            </div>
           </div>
         </div>
         {/* main */}

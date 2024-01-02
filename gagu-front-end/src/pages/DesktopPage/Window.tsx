@@ -1,4 +1,4 @@
-import { IApp, IWindowInfo, IEntry, WindowStatus } from '../../types'
+import { IApp, IWindowInfo, IEntry, WindowStatus, IWindowRatio } from '../../types'
 import { Rnd, ResizableDelta, Position } from 'react-rnd'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRecoilState } from 'recoil'
@@ -14,7 +14,10 @@ import { SvgIcon } from '../../components/common'
 import { useTranslation } from 'react-i18next'
 import { throttle } from 'lodash-es'
 import { useUserConfig } from '../../hooks'
+import { Dropdown } from '@douyinfe/semi-ui'
+import RatioList from './RatioList'
 
+const DOCK_HEIGHT_AND_MARGIN =  48 + 4
 const getMenuBarHeight = () => document.querySelector('.gagu-menu-bar')?.scrollHeight || 24
 
 interface WindowProps {
@@ -116,21 +119,23 @@ export default function Window(props: WindowProps) {
   const handleFullScreen = useCallback((force?: boolean) => {
     const full = () => {
       const menuBarHeight = getMenuBarHeight()
-      const dockHeightAndMargin =  48 + 4
+      const { innerWidth, innerHeight } = window
+      const width = innerWidth
+      const height = innerHeight - menuBarHeight - DOCK_HEIGHT_AND_MARGIN
+
       rndInstance.updatePosition({ x: 0, y: menuBarHeight })
-      const width = window.innerWidth
-      const height = window.innerHeight - menuBarHeight - dockHeightAndMargin
-      rndInstance.updateSize({ width, height })  
-      setIsFullScreen(true)
+      rndInstance.updateSize({ width, height })
+
       setWindowSize({ width, height })
+      setIsFullScreen(true)
     }
 
     const restore = () => {
       const { x, y, width, height } = defaultInfoCache
       rndInstance.updatePosition({ x, y })
       rndInstance.updateSize({ width, height })
-      setIsFullScreen(false)
       setWindowSize({ width, height })
+      setIsFullScreen(false)
     }
 
     if (force) {
@@ -139,6 +144,23 @@ export default function Window(props: WindowProps) {
       isFullScreen ? restore() : full()
     }
   }, [defaultInfoCache, isFullScreen, rndInstance])
+
+  const handleRatioClick = useCallback((ratio: IWindowRatio) => {
+    const { xRatio, yRatio, widthRatio, heightRatio } = ratio
+    const menuBarHeight = getMenuBarHeight()
+    const { innerWidth, innerHeight } = window
+    const x = innerWidth * xRatio
+    const y = innerHeight * yRatio + menuBarHeight
+    const width = innerWidth * widthRatio
+    const height = innerHeight * heightRatio - menuBarHeight - DOCK_HEIGHT_AND_MARGIN
+
+    rndInstance.updatePosition({ x, y })
+    rndInstance.updateSize({ width, height })
+
+    setWindowSize({ width, height })
+    setDefaultInfoCache({ x, y, width, height })
+    setIsFullScreen(false)
+  }, [rndInstance])
 
   const handleClose = useCallback(() => {
     setWindowStatus('closing')
@@ -262,7 +284,7 @@ export default function Window(props: WindowProps) {
               `)}
             />
             <div className="flex items-center flex-shrink-0 opacity-30 group-hover:opacity-100 transition-opacity duration-100">
-              <span
+              <div
                 title={t`action.minimize`}
                 prevent-move-to-front="true"
                 className={line(`
@@ -274,19 +296,25 @@ export default function Window(props: WindowProps) {
                 onClick={handleHide}
               >
                 <SvgIcon.Subtract size={12} />
-              </span>
-              <span
-                title={isFullScreen ? t`action.fullScreenExit` : t`action.fullScreenEnter`}
-                className={line(`
-                hover:bg-gray-200 hover:text-black active:bg-gray-400
-                  w-8 h-8 flex justify-center items-center cursor-pointer transition-all duration-200
-                  ${headerClassName ? 'text-gray-200' : 'text-gray-400'}
-                `)}
-                onClick={() => handleFullScreen()}
+              </div>
+              <Dropdown
+                trigger="hover"
+                position="bottomRight"
+                content={<RatioList onClick={handleRatioClick} />}
               >
-                {isFullScreen ? <SvgIcon.FullscreenExit size={12} /> : <SvgIcon.Fullscreen size={12} />}
-              </span>
-              <span
+                <div
+                  title={isFullScreen ? t`action.fullScreenExit` : t`action.fullScreenEnter`}
+                  className={line(`
+                  hover:bg-gray-200 hover:text-black active:bg-gray-400
+                    w-8 h-8 flex justify-center items-center cursor-pointer transition-all duration-200
+                    ${headerClassName ? 'text-gray-200' : 'text-gray-400'}
+                  `)}
+                  onClick={() => handleFullScreen()}
+                >
+                  {isFullScreen ? <SvgIcon.FullscreenExit size={12} /> : <SvgIcon.Fullscreen size={12} />}
+                </div>
+              </Dropdown>
+              <div
                 title={t`action.close`}
                 prevent-move-to-front="true"
                 className={line(`
@@ -297,7 +325,7 @@ export default function Window(props: WindowProps) {
                 onClick={handleClose}
               >
                 <SvgIcon.Close />
-              </span>
+              </div>
             </div>
           </div>
           {/* main */}

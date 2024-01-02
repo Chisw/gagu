@@ -80,8 +80,8 @@ export default function Window(props: WindowProps) {
               {windowTitle || t(`app.${appId}`)}
             </span>
           </div>
-          <div className="flex items-center flex-shrink-0">
-            <span
+          <div className="flex-shrink-0">
+            <div
               title={t`action.close`}
               prevent-move-to-front="true"
               className={line(`
@@ -92,7 +92,7 @@ export default function Window(props: WindowProps) {
               onClick={handleClose}
             >
               <SvgIcon.Close />
-            </span>
+            </div>
           </div>
         </div>
         {/* main */}

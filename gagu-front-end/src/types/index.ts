@@ -110,3 +110,10 @@ export interface IWindowInfo {
 }
 
 export interface IWindowInfoMap { [APP_ID: string]: IWindowInfo }
+
+export interface IWindowRatio {
+  xRatio: number
+  yRatio: number
+  widthRatio: number
+  heightRatio: number
+}

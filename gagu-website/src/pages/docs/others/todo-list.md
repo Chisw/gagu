@@ -9,7 +9,6 @@ Many unrealized ideas will be recorded here, waiting for development
 
 ## Global
 
-- Window layout assignment
 - favicon shows file transfer percentage
 - Sound Recorder, Calendar, Calculator, Relative calculator and other gadgets
 - When running on Termux, add user login vibration reminder and pop-up notification, SMS list
