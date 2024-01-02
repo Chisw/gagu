@@ -3,15 +3,18 @@ import { line } from '../../utils'
 
 const ratioListList: IWindowRatio[][] = [
   [
-    { xRatio: 0, yRatio: 0, widthRatio: 0.5, heightRatio: 1 },
-    { xRatio: 0.5, yRatio: 0, widthRatio: 0.5, heightRatio: 1 },
+    { xRatio: 0, yRatio: 0, widthRatio: 0.5, heightRatio: 0.5 },
     { xRatio: 0, yRatio: 0, widthRatio: 1, heightRatio: 0.5 },
-    { xRatio: 0, yRatio: 0.5, widthRatio: 1, heightRatio: 0.5 },
+    { xRatio: 0.5, yRatio: 0, widthRatio: 0.5, heightRatio: 0.5 },
   ],
   [
-    { xRatio: 0, yRatio: 0, widthRatio: 0.5, heightRatio: 0.5 },
-    { xRatio: 0.5, yRatio: 0, widthRatio: 0.5, heightRatio: 0.5 },
+    { xRatio: 0, yRatio: 0, widthRatio: 0.5, heightRatio: 1 },
+    { xRatio: 0.1, yRatio: 0.1, widthRatio: 0.8, heightRatio: 0.8 },
+    { xRatio: 0.5, yRatio: 0, widthRatio: 0.5, heightRatio: 1 },
+  ],
+  [
     { xRatio: 0, yRatio: 0.5, widthRatio: 0.5, heightRatio: 0.5 },
+    { xRatio: 0, yRatio: 0.5, widthRatio: 1, heightRatio: 0.5 },
     { xRatio: 0.5, yRatio: 0.5, widthRatio: 0.5, heightRatio: 0.5 },
   ],
   [
@@ -21,6 +24,7 @@ const ratioListList: IWindowRatio[][] = [
   ],
   [
     { xRatio: 0, yRatio: 0, widthRatio: 0.6666, heightRatio: 1 },
+    { xRatio: 0, yRatio: 0, widthRatio: 1, heightRatio: 1 },
     { xRatio: 0.3333, yRatio: 0, widthRatio: 0.6666, heightRatio: 1 },
   ],
 ]
@@ -35,13 +39,14 @@ export default function RatioList({ onClick }: RatioListProps) {
       {ratioListList.map((ratioList, listIndex) => (
         <div
           key={listIndex}
-          className="flex"
+          className={`flex ${listIndex > 2 ? 'mt-1 pt-1 border-t border-gray-100 dark:border-zinc-600' : ''}`}
         >
           {ratioList.map((ratio, ratioIndex) => {
             const { xRatio, yRatio, widthRatio, heightRatio } = ratio
+
             return (
               <div
-                key={ratioIndex}
+                key={`${listIndex}-${ratioIndex}`}
                 className={line(`
                   relative m-1 w-10 aspect-video group
                 bg-gray-100 rounded-sm cursor-pointer overflow-hidden hover:bg-blue-100

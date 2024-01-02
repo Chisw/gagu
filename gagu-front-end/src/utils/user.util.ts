@@ -18,6 +18,7 @@ export const getDefaultUserConfig = () => {
     colorScheme: ColorScheme.auto,
     fileExplorerAutoOpen: false,
     fileExplorerDefaultPath: '',
+    fileExplorerSideCollapse: false,
     textEditorFontSize: 14,
     musicPlayerVolume: 0.5,
     musicPlayerCoverDisk: false,

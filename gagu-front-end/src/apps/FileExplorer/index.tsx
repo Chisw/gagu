@@ -32,9 +32,9 @@ export default function FileExplorer(props: FileExplorerProps) {
     isEntryListEmpty, disabledMap,
     folderCount, fileCount,
     querying, sizeQuerying, deleting,
-    sideCollapse, setSideCollapse,
     filterMode, setFilterMode,
     filterText, setFilterText,
+    sideCollapse, handleSideCollapseChange,
     hiddenShow, handleHiddenShowChange,
     gridMode, handleGridModeChange,
     sortType, handleSortChange,
@@ -85,7 +85,7 @@ export default function FileExplorer(props: FileExplorerProps) {
             onHiddenShowChange={handleHiddenShowChange}
             onGridModeChange={handleGridModeChange}
             onSortTypeChange={handleSortChange}
-            onSideBarClick={() => setSideCollapse(!sideCollapse)}
+            onSideBarClick={handleSideCollapseChange}
             onNavBack={handleNavBack}
             onNavForward={handleNavForward}
             onNavRefresh={handleNavRefresh}

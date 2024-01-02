@@ -16,8 +16,8 @@ export const APP_LIST: IApp[] = [
     width: 980,
     height: 540,
     resizeRange: {
-      minWidth: 640,
-      minHeight: 480,
+      minWidth: 580,
+      minHeight: 300,
     },
     multiple: true,
   },
@@ -43,8 +43,8 @@ export const APP_LIST: IApp[] = [
     width: 800,
     height: 400,
     resizeRange: {
-      minWidth: 480,
-      minHeight: 480,
+      minWidth: 400,
+      minHeight: 360,
     },
     matchList: ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'ico'],
     headerClassName: 'bg-gray-800 text-gray-100',
@@ -58,7 +58,7 @@ export const APP_LIST: IApp[] = [
     width: 480,
     height: 520,
     resizeRange: {
-      minWidth: 480,
+      minWidth: 440,
       minHeight: 240,
     },
     matchList: ['mp3', 'flac', 'wav', 'aac', 'ogg'],
@@ -72,8 +72,8 @@ export const APP_LIST: IApp[] = [
     width: 720,
     height: 450,
     resizeRange: {
-      minWidth: 640,
-      minHeight: 400,
+      minWidth: 500,
+      minHeight: 300,
     },
     matchList: ['mp4', 'mkv', 'webm'],
     headerClassName: 'bg-gray-800 text-gray-100',
@@ -87,7 +87,7 @@ export const APP_LIST: IApp[] = [
     width: 800,
     height: 600,
     resizeRange: {
-      minWidth: 600,
+      minWidth: 640,
       minHeight: 300,
     },
     headerClassName: 'bg-zinc-700 text-zinc-100',
@@ -111,8 +111,8 @@ export const APP_LIST: IApp[] = [
     width: 800,
     height: 600,
     resizeRange: {
-      minWidth: 800,
-      minHeight: 600,
+      minWidth: 480,
+      minHeight: 320,
     },
     touchModeShow: true,
   },

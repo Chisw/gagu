@@ -83,7 +83,14 @@ export function useFileExplorer(props: Props) {
   const [lastChangedDirectory, setLastChangedDirectory] = useRecoilState(lastChangedDirectoryState)
 
   const touchMode = useTouchMode()
-  const { userConfig: { kiloSize } } = useUserConfig()
+  const {
+    userConfig,
+    setUserConfig,
+    userConfig: {
+      kiloSize,
+      fileExplorerSideCollapse: sideCollapse,
+    },
+  } = useUserConfig()
 
   const [currentPath, setCurrentPath] = useState('')
   const [lastVisitedPath, setLastVisitedPath] = useState('')
@@ -430,6 +437,10 @@ export function useFileExplorer(props: Props) {
     })
   }, [deleteEntry, selectedEntryList, handleNavRefresh, t, setBaseData, baseData, containerRef])
 
+  const handleSideCollapseChange = useCallback(() => {
+    setUserConfig({ ...userConfig, fileExplorerSideCollapse: !sideCollapse })
+  }, [setUserConfig, sideCollapse, userConfig])
+
   const handleHiddenShowChange = useCallback((show: boolean) => {
     const res = {
       ...(entryPathCache[currentPath] || {}),
@@ -541,6 +552,7 @@ export function useFileExplorer(props: Props) {
     editMode, setEditMode,
     filterMode, setFilterMode,
     filterText, setFilterText,
+    sideCollapse, handleSideCollapseChange,
     hiddenShow, handleHiddenShowChange,
     gridMode, handleGridModeChange,
     sortType, handleSortChange,

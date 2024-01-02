@@ -17,6 +17,7 @@ export interface IUserConfig {
   colorScheme: keyof typeof ColorScheme
   fileExplorerAutoOpen: boolean
   fileExplorerDefaultPath: string
+  fileExplorerSideCollapse: boolean
   textEditorFontSize: number
   musicPlayerVolume: number
   musicPlayerCoverDisk: boolean

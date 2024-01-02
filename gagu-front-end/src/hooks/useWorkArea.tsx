@@ -38,7 +38,6 @@ export function useWorkArea(props: useWorkAreaProps) {
   const [, setOpenEvent] = useRecoilState(openEventState)
   const [, setContextMenuData] = useRecoilState(contextMenuDataState)
 
-  const [sideCollapse, setSideCollapse] = useState(false)
   const [locationScrollWatcher, setLocationScrollWatcher] = useState<{ wait: boolean, smooth?: boolean }>({ wait: false })
   const [shiftFromIndex, setShiftFromIndex] = useState<number>(0)
 
@@ -57,6 +56,7 @@ export function useWorkArea(props: useWorkAreaProps) {
     editMode, setEditMode,
     filterMode, setFilterMode,
     filterText, setFilterText,
+    sideCollapse, handleSideCollapseChange,
     hiddenShow, handleHiddenShowChange,
     gridMode, handleGridModeChange,
     sortType, handleSortChange,
@@ -200,7 +200,7 @@ export function useWorkArea(props: useWorkAreaProps) {
       'Meta+Backspace, Shift+Delete': disabledMap.delete ? null : handleDeleteClick,
       'Escape, Escape': () => setSelectedEntryList([]),
       'Meta+KeyA, Ctrl+KeyA': disabledMap.selectAll ? null : () => handleSelectAll(true),
-      'Meta+KeyB, Ctrl+KeyB': () => setSideCollapse(!sideCollapse),
+      'Meta+KeyB, Ctrl+KeyB': handleSideCollapseChange,
       'Meta+KeyD, Ctrl+KeyD': disabledMap.download ? null : handleDownloadClick,
       'Enter, F2': disabledMap.rename ? null : () => handleEdit(EditMode.rename),
       'Meta+KeyF, Ctrl+KeyF': disabledMap.filter ? null : () => setFilterMode(true),
@@ -428,9 +428,9 @@ export function useWorkArea(props: useWorkAreaProps) {
     isEntryListEmpty, disabledMap,
     folderCount, fileCount,
     querying, sizeQuerying, deleting,
-    sideCollapse, setSideCollapse,
     filterMode, setFilterMode,
     filterText, setFilterText,
+    sideCollapse, handleSideCollapseChange,
     hiddenShow, handleHiddenShowChange,
     gridMode, handleGridModeChange,
     sortType, handleSortChange,

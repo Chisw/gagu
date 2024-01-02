@@ -18,7 +18,15 @@ import { Dropdown } from '@douyinfe/semi-ui'
 import RatioList from './RatioList'
 
 const DOCK_HEIGHT_AND_MARGIN =  48 + 4
+
 const getMenuBarHeight = () => document.querySelector('.gagu-menu-bar')?.scrollHeight || 24
+
+const getAppWindowMaxSize = () => {
+  const { innerWidth, innerHeight } = window
+  const menuBarHeight = getMenuBarHeight()
+  const maxHeight = innerHeight - menuBarHeight - DOCK_HEIGHT_AND_MARGIN
+  return { maxWidth: innerWidth, maxHeight, menuBarHeight }
+}
 
 interface WindowProps {
   app: IApp
@@ -77,11 +85,11 @@ export default function Window(props: WindowProps) {
         width,
         height,
       }
+    } else {
+      const x = Math.max((window.innerWidth - width) / 2, WINDOW_OPEN_MIN_MARGIN) + offset
+      const y = Math.max((window.innerHeight - height - 50) / 2, WINDOW_OPEN_MIN_MARGIN) + offset
+      return { x, y, width, height }
     }
-
-    const x = Math.max((window.innerWidth - width) / 2, WINDOW_OPEN_MIN_MARGIN) + offset
-    const y = Math.max((window.innerHeight - height - 50) / 2, WINDOW_OPEN_MIN_MARGIN) + offset
-    return { x, y, width, height }
   }, [windowInfoMap, appId, sameAppCount, width, height])
 
   // for inner app
@@ -118,10 +126,7 @@ export default function Window(props: WindowProps) {
 
   const handleFullScreen = useCallback((force?: boolean) => {
     const full = () => {
-      const menuBarHeight = getMenuBarHeight()
-      const { innerWidth, innerHeight } = window
-      const width = innerWidth
-      const height = innerHeight - menuBarHeight - DOCK_HEIGHT_AND_MARGIN
+      const { maxWidth: width, maxHeight: height, menuBarHeight } = getAppWindowMaxSize()
 
       rndInstance.updatePosition({ x: 0, y: menuBarHeight })
       rndInstance.updateSize({ width, height })
@@ -147,20 +152,21 @@ export default function Window(props: WindowProps) {
 
   const handleRatioClick = useCallback((ratio: IWindowRatio) => {
     const { xRatio, yRatio, widthRatio, heightRatio } = ratio
-    const menuBarHeight = getMenuBarHeight()
-    const { innerWidth, innerHeight } = window
-    const x = innerWidth * xRatio
-    const y = innerHeight * yRatio + menuBarHeight
-    const width = innerWidth * widthRatio
-    const height = innerHeight * heightRatio - menuBarHeight - DOCK_HEIGHT_AND_MARGIN
+    const { maxWidth, maxHeight, menuBarHeight } = getAppWindowMaxSize()
+    const x = Math.ceil(maxWidth * xRatio)
+    const y = Math.ceil(maxHeight * yRatio) + menuBarHeight
+    const width = Math.ceil(maxWidth * widthRatio)
+    const height = Math.ceil(maxHeight * heightRatio)
+    const info = { x, y, width, height }
 
     rndInstance.updatePosition({ x, y })
     rndInstance.updateSize({ width, height })
 
     setWindowSize({ width, height })
-    setDefaultInfoCache({ x, y, width, height })
+    setDefaultInfoCache(info)
+    handleStoreWindowInfo(info)
     setIsFullScreen(false)
-  }, [rndInstance])
+  }, [handleStoreWindowInfo, rndInstance])
 
   const handleClose = useCallback(() => {
     setWindowStatus('closing')
