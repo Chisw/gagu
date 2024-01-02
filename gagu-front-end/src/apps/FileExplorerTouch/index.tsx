@@ -55,7 +55,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
   const {
     kiloSize,
     disabledMap, supportThumbnail, thumbScrollWatcher,
-    currentPath, activeRootEntry,
+    currentPath, currentRootEntry,
     querying, sizeQuerying, deleting,
     entryList, rootEntryList, favoriteRootEntryList, sharingEntryList,
     isEntryListEmpty, visitHistory,
@@ -285,10 +285,10 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
               folderCount,
               fileCount,
               currentPath,
+              currentRootEntry,
               selectedEntryList,
             }}
             loading={querying}
-            rootEntry={activeRootEntry}
             onDirClick={handleGoFullPath}
             onRootEntryClick={(entry) => handleDirectoryOpen(entry, true)}
           />

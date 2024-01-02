@@ -135,6 +135,20 @@ export class FsService {
         isDisk: false,
       }
 
+      const systemDiskEntry: IRootEntry = {
+        name: 'Macintosh HD',
+        type: EntryType.directory,
+        hidden: false,
+        lastModified: 0,
+        extension: '_dir',
+        parentPath: '/Volumes',
+        hasChildren: true,
+        group: RootEntryGroup.system,
+        isDisk: true,
+        spaceFree: 0,
+        spaceTotal: 0,
+      }
+
       const diskList: IDisk[] = driveList.map((drive) => ({
         name: drive.mounted.replace('/Volumes/', ''),
         type: EntryType.directory,
@@ -150,7 +164,7 @@ export class FsService {
         spaceTotal: drive.blocks * 512,
       }))
 
-      rootEntryList.push(homeEntry, ...diskList)
+      rootEntryList.push(homeEntry, systemDiskEntry, ...diskList)
     } else if (ServerOS.isWindows) {
       const driveList = nodeDiskInfo.getDiskInfoSync()
       const diskList: IDisk[] = driveList.map((drive) => ({

@@ -338,7 +338,7 @@ export function MenuBar() {
                   <span className="hidden md:inline ml-2 font-din text-gray-700 dark:text-zinc-200">{userInfo.nickname}</span>
                 </>
               ) : (
-                <SvgIcon.User />
+                <SvgIcon.Users />
               )}
             </div>
           </Dropdown>

@@ -49,7 +49,7 @@ export function useWorkArea(props: useWorkAreaProps) {
   const {
     kiloSize,
     disabledMap, supportThumbnail, thumbScrollWatcher,
-    currentPath, activeRootEntry,
+    currentPath, currentRootEntry,
     querying, sizeQuerying, deleting,
     entryList, rootEntryList, favoriteRootEntryList, sharingEntryList,
     isEntryListEmpty,
@@ -422,7 +422,7 @@ export function useWorkArea(props: useWorkAreaProps) {
     kiloSize,
     lassoRef, containerRef, containerInnerRef,
     supportThumbnail, thumbScrollWatcher,
-    currentPath, activeRootEntry,
+    currentPath, currentRootEntry,
     entryList, selectedEntryList,
     favoriteRootEntryList, rootEntryList, sharingEntryList,
     isEntryListEmpty, disabledMap,

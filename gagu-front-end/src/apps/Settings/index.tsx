@@ -10,7 +10,7 @@ import { TabPane, Tabs } from '@douyinfe/semi-ui'
 
 const tabList = [
   { key: 'system', icon: <SvgIcon.Settings size={14} />, Panel: SystemPanel },
-  { key: 'users', icon: <SvgIcon.User size={14} />, Panel: UserPanel},
+  { key: 'users', icon: <SvgIcon.Users size={14} />, Panel: UserPanel},
   { key: 'log', icon: <SvgIcon.Booklet size={14} />, Panel: LogPanel},
 ]
 

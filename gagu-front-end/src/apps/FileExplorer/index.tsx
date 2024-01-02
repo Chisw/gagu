@@ -26,7 +26,7 @@ export default function FileExplorer(props: FileExplorerProps) {
     kiloSize,
     lassoRef, containerRef, containerInnerRef,
     supportThumbnail, thumbScrollWatcher,
-    currentPath, activeRootEntry,
+    currentPath, currentRootEntry,
     entryList, selectedEntryList,
     favoriteRootEntryList, rootEntryList, sharingEntryList,
     isEntryListEmpty, disabledMap,
@@ -173,10 +173,10 @@ export default function FileExplorer(props: FileExplorerProps) {
               folderCount,
               fileCount,
               currentPath,
+              currentRootEntry,
               selectedEntryList,
             }}
             loading={querying}
-            rootEntry={activeRootEntry}
             onDirClick={handleGoFullPath}
             onRootEntryClick={(entry) => handleDirectoryOpen(entry, true)}
           />

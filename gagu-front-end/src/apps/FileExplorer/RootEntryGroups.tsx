@@ -1,10 +1,21 @@
-import { useMemo } from 'react'
+import { ReactNode, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { groupBy } from 'lodash-es'
 import { IRootEntry, RootEntryGroup } from '../../types'
 import { useDragDrop, useUserConfig } from '../../hooks'
 import { getReadableSize, getEntryPath, line } from '../../utils'
 import { IconButton, SvgIcon } from '../../components/common'
+import { useRecoilState } from 'recoil'
+import { baseDataState } from '../../states'
+
+const iconMap: { [KEY: string]: ReactNode } = {
+  'system.win32': <SvgIcon.Windows size={12} />,
+  'system.darwin': <SvgIcon.Apple size={12} />,
+  'system.linux': <SvgIcon.Linux size={12} />,
+  'system.android': <SvgIcon.Android size={12} />,
+  user: <SvgIcon.User size={12} />,
+  favorite: <SvgIcon.StarSolid size={12} />,
+}
 
 export interface RootEntryGroupsProps {
   currentPath: string
@@ -24,6 +35,8 @@ export default function RootEntryGroups(props: RootEntryGroupsProps) {
 
   const { t } = useTranslation()
 
+  const [baseData] = useRecoilState(baseDataState)
+
   const { userConfig: { kiloSize } } = useUserConfig()
 
   const dragDropProps = useDragDrop({
@@ -35,8 +48,8 @@ export default function RootEntryGroups(props: RootEntryGroupsProps) {
 
   const groupMap = useMemo(() => {
     return groupBy(rootEntryList, 'group') as {
-      [RootEntryGroup.user]: IRootEntry[] | undefined,
       [RootEntryGroup.system]: IRootEntry[] | undefined,
+      [RootEntryGroup.user]: IRootEntry[] | undefined,
       [RootEntryGroup.favorite]: IRootEntry[] | undefined,
     }
   }, [rootEntryList])
@@ -44,8 +57,8 @@ export default function RootEntryGroups(props: RootEntryGroupsProps) {
   return (
     <>
       {[
-        { key: 'user', list: groupMap.user },
         { key: 'system', list: groupMap.system },
+        { key: 'user', list: groupMap.user },
         { key: 'favorite', list: groupMap.favorite },
       ].map(({ key, list }) => (
         <div
@@ -55,14 +68,18 @@ export default function RootEntryGroups(props: RootEntryGroupsProps) {
             ${list?.length ? '' : 'hidden'}
           `)}
         >
-          <div className="px-4 py-1 text-xs font-bold text-gray-400 dark:text-zinc-400">
-            {t(`title.rootEntryGroup_${key}`)}
+          <div className="px-4 py-1 text-xs font-bold text-gray-400 dark:text-zinc-400 flex items-center">
+            <span className="-translate-y-[1px]">
+              {iconMap[`${key}${key === 'system' ? `.${baseData.serverOS.platform}` : ''}`]}
+            </span>
+            <span className="ml-1">{t(`title.rootEntryGroup_${key}`)}</span>
           </div>
           {(list || []).map((rootEntry) => {
             const { spaceFree, spaceTotal, name, group, isDisk = false } = rootEntry
             const rootEntryPath = getEntryPath(rootEntry)
             const isActive = rootEntryPath === currentPath
             const canRootEntryClick = currentPath !== rootEntryPath
+            const showDiskInfo = !!(isDisk && spaceTotal)
             const spaceUsed = isDisk ? spaceTotal! - spaceFree! : 0
 
             return (
@@ -73,7 +90,7 @@ export default function RootEntryGroups(props: RootEntryGroupsProps) {
                 data-entry-path={rootEntryPath}
                 className={line(`
                   gagu-file-explorer-side-entry
-                  relative px-3 py-3 md:py-2 text-sm border-l-4
+                  relative px-3 py-3 md:py-2 text-sm border-l-4 group
                   transition-all duration-200
                   ${isActive
                     ? 'border-blue-500 bg-white text-black dark:bg-zinc-800 dark:text-zinc-200'
@@ -88,11 +105,9 @@ export default function RootEntryGroups(props: RootEntryGroupsProps) {
               >
                 <div className="flex justify-between items-center">
                   <div className="flex-shrink-0">
-                    {rootEntry.group === RootEntryGroup.user
-                      ? <SvgIcon.FolderUser />
-                      : isDisk
-                        ? <SvgIcon.HardDrive />
-                        : <SvgIcon.Folder />
+                    {isDisk
+                      ? <SvgIcon.HardDrive />
+                      : <SvgIcon.Folder />
                     }
                   </div>
                   <div
@@ -101,13 +116,16 @@ export default function RootEntryGroups(props: RootEntryGroupsProps) {
                   >
                     {name}
                   </div>
-                  {isDisk && (
+                  {showDiskInfo && (
                     <div className="flex-shrink-0 font-din scale-75 origin-right opacity-60">
                       {`${getReadableSize(spaceUsed!, kiloSize)} / ${getReadableSize(spaceTotal!, kiloSize)}`}
                     </div>
                   )}
                   {group === RootEntryGroup.favorite && (
-                    <div onClick={(e) => e.stopPropagation()}>
+                    <div
+                      className="md:opacity-0 group-hover:opacity-100"
+                      onClick={(e) => e.stopPropagation()}
+                    >
                       <IconButton
                         size="xs"
                         className="hover:outline-2 hover:outline-dashed hover:outline-yellow-400"
@@ -117,7 +135,7 @@ export default function RootEntryGroups(props: RootEntryGroupsProps) {
                     </div>
                   )}
                 </div>
-                {isDisk && (
+                {showDiskInfo && (
                   <div className="mt-[2px] text-xs relative z-0 h-[2px] font-din bg-blue-100 rounded-sm overflow-hidden">
                     <div
                       className="h-full bg-blue-500"

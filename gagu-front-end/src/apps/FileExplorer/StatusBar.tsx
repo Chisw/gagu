@@ -11,7 +11,7 @@ interface StatusBarProps {
   folderCount: number
   fileCount: number
   currentPath: string
-  rootEntry: IRootEntry | null
+  currentRootEntry: IRootEntry | null
   selectedEntryList: IEntry[]
   onDirClick: (dir: string) => void
   onRootEntryClick: (rootEntry: IRootEntry) => void
@@ -24,7 +24,7 @@ export default function StatusBar(props: StatusBarProps) {
     folderCount,
     fileCount,
     currentPath,
-    rootEntry,
+    currentRootEntry,
     selectedEntryList,
     onDirClick,
     onRootEntryClick,
@@ -35,29 +35,35 @@ export default function StatusBar(props: StatusBarProps) {
   const touchMode = useTouchMode()
 
   const {
-    selectedLen,
+    selectedCount,
+    selectedSingle,
     rootEntryPath,
     centerPathList,
     isRootEntryDisabled,
   } = useMemo(() => {
-    const selectedLen = selectedEntryList.length
-    const rootEntryPath = getEntryPath(rootEntry)
+    const selectedCount = selectedEntryList.length
+    const selectedSingle = selectedCount === 1
+    const rootEntryPath = getEntryPath(currentRootEntry)
     const centerPathList = currentPath.replace(rootEntryPath, '').split('/').filter(Boolean)
-    if (selectedLen === 1) {
+
+    if (selectedCount === 1) {
       centerPathList.push(selectedEntryList[0].name)
     }
+
     const isRootEntryDisabled = currentPath === rootEntryPath || !centerPathList.length
+
     return {
-      selectedLen,
+      selectedCount,
+      selectedSingle,
       rootEntryPath,
       centerPathList,
       isRootEntryDisabled,
     }
-  }, [currentPath, rootEntry, selectedEntryList])
+  }, [currentPath, currentRootEntry, selectedEntryList])
 
   const dragDropProps = useDragDrop({ onOpen: onDirClick })
 
-  if (!rootEntry) return <div />
+  if (!currentRootEntry) return <div />
 
   return (
     <div
@@ -80,23 +86,26 @@ export default function StatusBar(props: StatusBarProps) {
               gagu-file-explorer-status-bar-folder relative
               ${isRootEntryDisabled ? '' : 'cursor-pointer hover:text-black dark:hover:text-zinc-200'}
             `)}
-            onClick={() => !isRootEntryDisabled && rootEntry && onRootEntryClick(rootEntry)}
+            onClick={() => {
+              if (!isRootEntryDisabled && currentRootEntry) {
+                onRootEntryClick(currentRootEntry)
+              }
+            }}
           >
             <span className="pointer-events-none">
-              {rootEntry.isDisk
+              {currentRootEntry.isDisk
                 ? <SvgIcon.HardDrive className="-mt-[2px] mr-1 inline-block" size={12} />
                 : <SvgIcon.Folder className="-mt-[2px] mr-1 inline-block" size={12} />
               }
-              {rootEntry.name}
+              {currentRootEntry.name}
             </span>
           </span>
           {centerPathList.map((path, pathIndex) => {
             const prefix = centerPathList.filter((p, pIndex) => pIndex < pathIndex).join('/')
             const fullPath = `${rootEntryPath}/${prefix ? `${prefix}/` : ''}${path}`
-            const oneSelected = selectedLen === 1
             const isLast = pathIndex === centerPathList.length - 1
-            const showFileIcon = oneSelected && isLast && !selectedEntryList[0].extension.startsWith('_dir')
-            const disabled = pathIndex > centerPathList.length - 2 - (oneSelected ? 1 : 0)
+            const showFileIcon = selectedSingle && isLast && !selectedEntryList[0].extension.startsWith('_dir')
+            const disabled = pathIndex > centerPathList.length - 2 - (selectedSingle ? 1 : 0)
 
             return (
               <span key={encodeURIComponent(fullPath)}>
@@ -131,8 +140,7 @@ export default function StatusBar(props: StatusBarProps) {
               dark:hover:text-zinc-200
             `)}
             onClick={() => {
-              const value = `${rootEntryPath}/${centerPathList.join('/')}`
-              copy(value)
+              copy(`${rootEntryPath}${centerPathList.length ? `/${centerPathList.join('/')}` : ''}`)
               toast.success(t`tip.copied`)
             }}
           >
@@ -141,9 +149,9 @@ export default function StatusBar(props: StatusBarProps) {
         </div>
       </div>
       <div className="flex-shrink-0 flex items-center pl-4 pr-1 font-din text-gray-400">
-        {!!selectedLen && (
+        {!!selectedCount && (
           <>
-            <SvgIcon.Check size={14} />&nbsp;<span>{loading ? '-' : selectedLen}</span>
+            <SvgIcon.Check size={14} />&nbsp;<span>{loading ? '-' : selectedCount}</span>
             &emsp;
           </>
         )}

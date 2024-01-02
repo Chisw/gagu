@@ -63,11 +63,11 @@ export class FsController {
     const isAdmin = permissions.includes(UserPermission.administer)
 
     const rootEntryList = [
-      path2RootEntry(`${GAGU_PATH.USERS}/${username}`, RootEntryGroup.user),
       ...(isAdmin ? this.fsService.getRootEntryList() : []),
       ...assignedRootPathList.map((path) =>
         path2RootEntry(path, RootEntryGroup.system),
       ),
+      path2RootEntry(`${GAGU_PATH.USERS}/${username}`, RootEntryGroup.user),
       ...favoritePathList.map((path) =>
         path2RootEntry(path, RootEntryGroup.favorite),
       ),

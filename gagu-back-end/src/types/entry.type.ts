@@ -18,8 +18,8 @@ export interface IEntry {
 }
 
 export enum RootEntryGroup {
-  user = 'user',
   system = 'system',
+  user = 'user',
   favorite = 'favorite',
 }
 

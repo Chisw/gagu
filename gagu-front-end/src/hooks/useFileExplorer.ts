@@ -87,7 +87,7 @@ export function useFileExplorer(props: Props) {
 
   const [currentPath, setCurrentPath] = useState('')
   const [lastVisitedPath, setLastVisitedPath] = useState('')
-  const [activeRootEntry, setActiveRootEntry] = useState<IRootEntry | null>(null)
+  const [currentRootEntry, setCurrentRootEntry] = useState<IRootEntry | null>(null)
   const [visitHistory, setVisitHistory] = useState<IVisitHistory>({ position: -1, list: [] })
   const [abortController, setAbortController] = useState<AbortController | null>(null)
   const [selectedEntryList, setSelectedEntryList] = useState<IEntry[]>([])
@@ -107,15 +107,23 @@ export function useFileExplorer(props: Props) {
 
   const { handleUploadTaskAdd } = useAddUploadingTask()
 
-  const { rootEntryList, rootEntryPathList, favoriteRootEntryList, supportThumbnail } = useMemo(() => {
+  const { rootEntryList, favoriteRootEntryList, canNotBackToParentPathList, supportThumbnail } = useMemo(() => {
     const { rootEntryList, serverOS } = baseData
     const { supportThumbnail } = serverOS
-    const rootEntryPathList = rootEntryList.map(getEntryPath)
-    const favoriteRootEntryList = rootEntryList.filter(entry => entry.group === RootEntryGroup.favorite)
-    return { rootEntryList, rootEntryPathList, favoriteRootEntryList, supportThumbnail }
+
+    const favoriteRootEntryList = rootEntryList
+      .filter(entry => entry.group === RootEntryGroup.favorite)
+
+    const canNotBackToParentPathList = rootEntryList
+      .filter(entry => entry.group !== RootEntryGroup.favorite)
+      .map(getEntryPath)
+
+    return { rootEntryList, favoriteRootEntryList, canNotBackToParentPathList, supportThumbnail }
   }, [baseData])
 
-  const isInRoot = useMemo(() => rootEntryPathList.includes(currentPath), [rootEntryPathList, currentPath])
+  const canNotBackToParent = useMemo(() => {
+    return canNotBackToParentPathList.includes(currentPath)
+  }, [canNotBackToParentPathList, currentPath])
 
   const { entryList, isEntryListEmpty, folderCount, fileCount, hiddenShow, gridMode, sortType } = useMemo(() => {
     const {
@@ -174,7 +182,7 @@ export function useFileExplorer(props: Props) {
       navBack: position <= 0 || isUserDesktop,
       navForward: list.length === position + 1 || isUserDesktop,
       navRefresh: querying || !currentPath,
-      navToParent: !currentPath || isInRoot || isUserDesktop,
+      navToParent: !currentPath || canNotBackToParent || isUserDesktop,
       createFolder: touchMode ? false : !!editMode,
       createText: touchMode ? false : !!editMode,
       rename: !isSingle,
@@ -188,7 +196,17 @@ export function useFileExplorer(props: Props) {
       openFolder: !isSingle,
     }
     return disabledMap
-  }, [visitHistory, querying, currentPath, isInRoot, isUserDesktop, touchMode, editMode, selectedEntryList, isEntryListEmpty])
+  }, [
+    visitHistory,
+    querying,
+    currentPath,
+    canNotBackToParent,
+    isUserDesktop,
+    touchMode,
+    editMode,
+    selectedEntryList,
+    isEntryListEmpty,
+  ])
 
   const updateHistory = useCallback((direction: 'forward' | 'backward', path?: string) => {
     const map = { forward: 1, backward: -1 }
@@ -225,43 +243,48 @@ export function useFileExplorer(props: Props) {
     path: string
     direction: 'forward' | 'backward'
     pushPath?: boolean
-    updateActiveRootEntry?: boolean
+    updateCurrentRootEntry?: boolean
   }) => {
-    const { path, direction, pushPath, updateActiveRootEntry } = props
+    abortController?.abort()
+
+    const { path, direction, pushPath, updateCurrentRootEntry } = props
+
     setLastVisitedPath(currentPath)
     setCurrentPath(path)
-    abortController?.abort()
     handleQueryEntryList(path)
     updateHistory(direction, pushPath ? path : undefined)
-    if (updateActiveRootEntry) {
-      const activeRootEntry = rootEntryList
+
+    if (updateCurrentRootEntry) {
+      const currentRootEntry = rootEntryList
+        .filter(entry => entry.group !== RootEntryGroup.favorite)
         .map(entry => ({ path: getEntryPath(entry), entry }))
         .filter(o => path.startsWith(o.path))
         .sort((a, b) => a.path.length > b.path.length ? -1 : 1)[0]?.entry
-      setActiveRootEntry(activeRootEntry)
+
+      setCurrentRootEntry(currentRootEntry)
     }
   }, [abortController, currentPath, handleQueryEntryList, rootEntryList, updateHistory])
 
-  const handleDirectoryOpen = useCallback((entry: IEntry, updateActiveRootEntry?: boolean) => {
+  const handleDirectoryOpen = useCallback((entry: IEntry, updateCurrentRootEntry?: boolean) => {
     const path = getEntryPath(entry)
-    handlePathChange({ path, direction: 'forward', pushPath: true, updateActiveRootEntry })
+    handlePathChange({ path, direction: 'forward', pushPath: true, updateCurrentRootEntry })
   }, [handlePathChange])
 
-  const handleGoFullPath = useCallback((path: string, updateActiveRootEntry?: boolean) => {
-    handlePathChange({ path, direction: 'forward', pushPath: true, updateActiveRootEntry })
+  const handleGoFullPath = useCallback((path: string, updateCurrentRootEntry?: boolean) => {
+    handlePathChange({ path, direction: 'forward', pushPath: true, updateCurrentRootEntry })
   }, [handlePathChange])
 
   // nav callback
   const handleNavBack = useCallback(() => {
     const { position, list } = visitHistory
     const path = list[position - 1]
-    handlePathChange({ path, direction: 'backward', updateActiveRootEntry: true })
+    handlePathChange({ path, direction: 'backward', updateCurrentRootEntry: true })
   }, [visitHistory, handlePathChange])
 
   const handleNavForward = useCallback(() => {
     const { position, list } = visitHistory
     const path = list[position + 1]
-    handlePathChange({ path, direction: 'forward', updateActiveRootEntry: true })
+    handlePathChange({ path, direction: 'forward', updateCurrentRootEntry: true })
   }, [visitHistory, handlePathChange])
 
   const handleNavRefresh = useCallback(async (option?: {
@@ -392,7 +415,8 @@ export function useFileExplorer(props: Props) {
           const path = getEntryPath(entry)
           const { success } = await deleteEntry(path)
           if (success) {
-            containerRef?.current?.querySelector(`.gagu-entry-node[data-entry-name="${safeQuotes(name)}"]`)
+            containerRef?.current
+              ?.querySelector(`.gagu-entry-node[data-entry-name="${safeQuotes(name)}"]`)
               ?.setAttribute('style', 'opacity:0;')
             deletedPaths.push(path)
           }
@@ -477,7 +501,9 @@ export function useFileExplorer(props: Props) {
       if (specifiedPath || storedPath) {
         handleGoFullPath(specifiedPath || storedPath, true)
       } else {
-        handleDirectoryOpen(rootEntryList[0], true)
+        const defaultRootEntry = rootEntryList
+          .find(entry => entry.group === RootEntryGroup.user) || rootEntryList[0]
+        handleDirectoryOpen(defaultRootEntry, true)
       }
     }
   }, [specifiedPath, currentPath, rootEntryList, handleDirectoryOpen, handleGoFullPath])
@@ -507,7 +533,7 @@ export function useFileExplorer(props: Props) {
   return {
     kiloSize,
     disabledMap, supportThumbnail, thumbScrollWatcher,
-    currentPath, activeRootEntry,
+    currentPath, currentRootEntry,
     querying, sizeQuerying, deleting,
     entryList, rootEntryList, favoriteRootEntryList, sharingEntryList,
     isEntryListEmpty, visitHistory,
