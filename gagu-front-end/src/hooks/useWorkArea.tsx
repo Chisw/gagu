@@ -1,8 +1,8 @@
 import { useRecoilState } from 'recoil'
-import { contextMenuDataState, openEventState } from '../states'
+import { contextMenuDataState, entrySelectorEventState, openEventState } from '../states'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useDragTransfer, useFileExplorer, useHotKey, useLassoSelect } from '.'
-import { EditMode, EditModeType, EntryType, EventTransaction, IContextMenuItem, IEntry, ILassoInfo, NameFailType } from '../types'
+import { useDragTransfer, useFileExplorer, useHotKey, useLassoSelect, useMoveEntries } from '.'
+import { AppId, EditMode, EditModeType, EntryType, EventTransaction, IContextMenuItem, IEntry, ILassoInfo, NameFailType } from '../types'
 import { GEN_THUMBNAIL_IMAGE_LIST, getEntryPath, getIsCovered, getMatchedApp, getIsSameEntry, openInIINA } from '../utils'
 import { pick, throttle } from 'lodash-es'
 import { SvgIcon } from '../components/common'
@@ -34,12 +34,15 @@ export function useWorkArea(props: useWorkAreaProps) {
   } = props
 
   const { t } = useTranslation()
+  const { handleMove } = useMoveEntries()
 
-  const [, setOpenEvent] = useRecoilState(openEventState)
+  const [openEvent, setOpenEvent] = useRecoilState(openEventState)
   const [, setContextMenuData] = useRecoilState(contextMenuDataState)
+  const [, setEntrySelectorEvent] = useRecoilState(entrySelectorEventState)
 
   const [locationScrollWatcher, setLocationScrollWatcher] = useState<{ wait: boolean, smooth?: boolean }>({ wait: false })
-  const [shiftFromIndex, setShiftFromIndex] = useState<number>(0)
+  const [shiftFromIndex, setShiftFromIndex] = useState(0)
+  const [activeTransaction, setActiveTransaction] = useState(0)
 
   const lassoRef = useRef(null)
   const containerRef = useRef(null)      // container of containerInner, overflow-y-auto
@@ -184,6 +187,7 @@ export function useWorkArea(props: useWorkAreaProps) {
     entryList,
     selectedEntryList,
     onDrop: handleUploadTaskAdd,
+    onMove: handleMove,
     onOpen: path => {
       if (isUserDesktop) {
         const entry = entryList.find(entry => getEntryPath(entry) === path)!
@@ -330,6 +334,21 @@ export function useWorkArea(props: useWorkAreaProps) {
         onClick: () => handleDirectorySizeUpdate(activeEntry),
       },
       {
+        icon: <SvgIcon.MoveTo />,
+        name: t`action.moveTo`,
+        isShow: !isOnBlank,
+        onClick: () => {
+          const transaction = Date.now()
+          setActiveTransaction(transaction)
+          setEntrySelectorEvent({
+            transaction,
+            mode: 'open',
+            appId: AppId.fileExplorer,
+            type: EntryType.directory,
+          })
+        },
+      },
+      {
         icon: isFavorited ? <SvgIcon.Star /> : <SvgIcon.StarSolid />,
         name: isFavorited ? t`action.unfavorite` : t`action.favorite`,
         isShow: isOnDirectory && isSingle,
@@ -371,6 +390,7 @@ export function useWorkArea(props: useWorkAreaProps) {
     handleEdit,
     setContextMenuData,
     setSelectedEntryList,
+    setEntrySelectorEvent,
     setOpenEvent,
     handleNavRefresh,
     handleUploadClick,
@@ -417,6 +437,15 @@ export function useWorkArea(props: useWorkAreaProps) {
   useEffect(() => {
     onCurrentPathChange(currentPath)
   }, [onCurrentPathChange, currentPath])
+
+  useEffect(() => {
+    if (activeTransaction && openEvent?.transaction === activeTransaction) {
+      const selectedPath: string = openEvent.extraData?.selectedPath
+      handleMove(selectedEntryList, selectedPath)
+      setActiveTransaction(0)
+      setOpenEvent(null)
+    }
+  }, [activeTransaction, handleMove, openEvent, selectedEntryList, setOpenEvent])
 
   return {
     kiloSize,

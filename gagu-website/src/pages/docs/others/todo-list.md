@@ -16,8 +16,7 @@ Many unrealized ideas will be recorded here, waiting for development
 - Thumbnail of PDF/APK
 - Separate login tokens and access tokens
 - Permission-related access and button controls
-- Use virtual scrolling for all long lists
-  - remove thumbScrollWatcher
+- Use virtual scrolling for all long lists (remove thumbScrollWatcher)
 
 ## User
 
@@ -30,14 +29,13 @@ Many unrealized ideas will be recorded here, waiting for development
 ### File Explorer
 
 - Path access restriction check
-- Copy, Cut(Move)
+- Copy, Duplicate, Cut (Clipboard)
 - Perform a second confirmation when overwriting the file on the front-end, includes moves and uploads
 - Moving files on the back-end requires verifying the required permissions
 - Path jumper
 - Slice upload
 - Tree structure display and resizeable width on side
 - Scan and connect multiple devices in LAN
-- Drag tray (file clipboard)
 - File compression, decompression
 - Batch renaming
 - Global search

@@ -260,8 +260,7 @@ export function MenuBar() {
               <SvgIcon.G size={12} className="hidden md:block" />
               <SvgIcon.G size={14} className="block md:hidden" />
               <span className="hidden md:inline ml-2 text-gray-700 font-din dark:text-zinc-200">
-                {/* TODO: i18n */}
-                {loading ? 'Loading..' : `${baseData.deviceName}`}
+                {loading ? t`tip.loading` : `${baseData.deviceName}`}
               </span>
             </div>
           </Dropdown>

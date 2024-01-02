@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { getIsSameEntry, line } from '../../utils'
-import { EditMode, EditModeType, EventTransaction, IEntry } from '../../types'
+import { AppId, EditMode, EditModeType, EntryType, EventTransaction, IEntry } from '../../types'
 import { useTranslation } from 'react-i18next'
 import { SvgIcon } from '../../components/common'
 import { CALLABLE_APP_LIST } from '../../apps'
 import { Modal } from '@douyinfe/semi-ui'
 import { useRecoilState } from 'recoil'
-import { openEventState } from '../../states'
+import { entrySelectorEventState, openEventState } from '../../states'
+import { useMoveEntries } from '../../hooks'
 
 interface SelectionMenuProps {
   show: boolean
@@ -42,10 +43,13 @@ export default function SelectionMenu(props: SelectionMenuProps) {
   } = props
 
   const { t } = useTranslation()
+  const { handleMove } = useMoveEntries()
 
-  const [, setOpenEvent] = useRecoilState(openEventState)
+  const [openEvent, setOpenEvent] = useRecoilState(openEventState)
+  const [, setEntrySelectorEvent] = useRecoilState(entrySelectorEventState)
 
   const [appsModalShow, setAppsModalShow] = useState(false)
+  const [activeTransaction, setActiveTransaction] = useState(0)
 
   const menuItemList = useMemo(() => {
     const confirmedCount = selectedEntryList.length
@@ -92,6 +96,22 @@ export default function SelectionMenu(props: SelectionMenuProps) {
         isShow: true,
         noCancel: true,
         onClick: () => onSelectAll(),
+      },
+      {
+        icon: <SvgIcon.MoveTo />,
+        name: t`action.moveTo`,
+        isShow: !isOnBlank,
+        noCancel: true,
+        onClick: () => {
+          const transaction = Date.now()
+          setActiveTransaction(transaction)
+          setEntrySelectorEvent({
+            transaction,
+            mode: 'open',
+            appId: AppId.fileExplorer,
+            type: EntryType.directory,
+          })
+        },
       },
       {
         icon: <SvgIcon.Rename />,
@@ -150,6 +170,7 @@ export default function SelectionMenu(props: SelectionMenuProps) {
     onDownloadClick,
     onShareClick,
     onDeleteClick,
+    setEntrySelectorEvent,
   ])
 
   const handleOpenEntry = useCallback((appId: string) => {
@@ -164,6 +185,16 @@ export default function SelectionMenu(props: SelectionMenuProps) {
   useEffect(() => {
     !show && setAppsModalShow(false)
   }, [show])
+
+  useEffect(() => {
+    if (activeTransaction && openEvent?.transaction === activeTransaction) {
+      const selectedPath: string = openEvent.extraData?.selectedPath
+      handleMove(selectedEntryList, selectedPath)
+      setActiveTransaction(0)
+      setOpenEvent(null)
+      onCancel()
+    }
+  }, [activeTransaction, handleMove, onCancel, openEvent, selectedEntryList, setOpenEvent])
 
   return (
     <>

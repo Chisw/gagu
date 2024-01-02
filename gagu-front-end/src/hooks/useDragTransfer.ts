@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 import { EntryType, IEntry, INestedFile } from '../types'
 import { HOVER_OPEN_TIMER, dragFileSvg, dragFolderSvg, getDataTransferNestedFileList, safeQuotes } from '../utils'
-import { useMoveEntries } from './useMoveEntries'
 
 const canvas: any = document.getElementById('gagu-drag-img-canvas')
 const ctx = canvas.getContext('2d')
@@ -17,6 +16,7 @@ interface useDragTransferProps {
   entryList: IEntry[]
   selectedEntryList: IEntry[]
   onDrop: (files: INestedFile[], basePath: string, targetDirName?: string) => void
+  onMove: (entryList: IEntry[], path: string) => void
   onOpen: (path: string) => void
 }
 
@@ -28,10 +28,9 @@ export function useDragTransfer(props: useDragTransferProps) {
     entryList,
     selectedEntryList,
     onDrop,
+    onMove,
     onOpen,
   } = props
-
-  const { handleMove } = useMoveEntries()
 
   useEffect(() => {
     const containerInner: any = containerInnerRef.current
@@ -149,9 +148,9 @@ export function useDragTransfer(props: useDragTransferProps) {
         const transferEntryList: IEntry[] = JSON.parse(transferData || '[]')
         if (closestEntryType === EntryType.directory) {
           const targetDirectoryPath = `${currentPath}/${closestEntryName}`
-          handleMove(transferEntryList, targetDirectoryPath)
+          onMove(transferEntryList, targetDirectoryPath)
         } else if (!isDragFromCurrentPath) {
-          handleMove(transferEntryList, currentPath)
+          onMove(transferEntryList, currentPath)
         }
       // from browser outer
       } else {
@@ -192,7 +191,7 @@ export function useDragTransfer(props: useDragTransferProps) {
     entryList,
     selectedEntryList,
     onDrop,
+    onMove,
     onOpen,
-    handleMove,
   ])
 }

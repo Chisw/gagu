@@ -61,7 +61,7 @@ export enum EventTransaction {
 export type EventTransactionType = keyof typeof EventTransaction
 
 export interface IOpenEvent {
-  transaction: EventTransactionType
+  transaction: EventTransactionType | number
   appId: string
   entryList: IEntry[]
   forceOpen?: boolean
@@ -69,7 +69,7 @@ export interface IOpenEvent {
 }
 
 export interface IEntrySelectorEvent {
-  transaction: EventTransactionType
+  transaction: EventTransactionType | number
   mode: 'open' | 'save'
   appId: string
   type?: EntryType.directory | EntryType.file

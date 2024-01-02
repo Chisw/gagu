@@ -88,7 +88,7 @@ export function useFileExplorer(props: Props) {
     setUserConfig,
     userConfig: {
       kiloSize,
-      fileExplorerSideCollapse: sideCollapse,
+      fileExplorerSideCollapse,
     },
   } = useUserConfig()
 
@@ -99,6 +99,7 @@ export function useFileExplorer(props: Props) {
   const [abortController, setAbortController] = useState<AbortController | null>(null)
   const [selectedEntryList, setSelectedEntryList] = useState<IEntry[]>([])
   const [sharingModalShow, setSharingModalShow] = useState(false)
+  const [sideCollapse, setSideCollapse] = useState(fileExplorerSideCollapse)
   const [editMode, setEditMode] = useState<EditModeType | null>(null)
   const [filterMode, setFilterMode] = useState(false)
   const [filterText, setFilterText] = useState('')
@@ -438,7 +439,9 @@ export function useFileExplorer(props: Props) {
   }, [deleteEntry, selectedEntryList, handleNavRefresh, t, setBaseData, baseData, containerRef])
 
   const handleSideCollapseChange = useCallback(() => {
-    setUserConfig({ ...userConfig, fileExplorerSideCollapse: !sideCollapse })
+    const isCollapsed = !sideCollapse
+    setSideCollapse(isCollapsed)
+    setUserConfig({ ...userConfig, fileExplorerSideCollapse: isCollapsed })
   }, [setUserConfig, sideCollapse, userConfig])
 
   const handleHiddenShowChange = useCallback((show: boolean) => {
