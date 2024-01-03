@@ -1,5 +1,9 @@
-import { IWindowRatio } from '../../types'
+import { useEffect } from 'react'
+import { IWindowInfo, IWindowRatio } from '../../types'
 import { line } from '../../utils'
+import { getAppWindowSize } from './Window'
+import { useRecoilState } from 'recoil'
+import { demoWindowInfoState } from '../../states'
 
 const ratioListList: IWindowRatio[][] = [
   [
@@ -29,11 +33,29 @@ const ratioListList: IWindowRatio[][] = [
   ],
 ]
 
+const getComputedWindowInfo = (ratio: IWindowRatio) => {
+  const { xRatio, yRatio, widthRatio, heightRatio } = ratio
+  const { maxWidth, maxHeight, menuBarHeight } = getAppWindowSize()
+  const x = Math.ceil(maxWidth * xRatio)
+  const y = Math.ceil(maxHeight * yRatio) + menuBarHeight
+  const width = Math.ceil(maxWidth * widthRatio)
+  const height = Math.ceil(maxHeight * heightRatio)
+  const info: IWindowInfo = { x, y, width, height }
+  return info
+}
+
 interface RatioListProps {
-  onClick: (ratio: IWindowRatio) => void
+  onClick: (info: IWindowInfo) => void
 }
 
 export default function RatioList({ onClick }: RatioListProps) {
+
+  const [, setDemoWindowInfo] = useRecoilState(demoWindowInfoState)
+
+  useEffect(() => {
+    return () => setDemoWindowInfo(null)
+  }, [setDemoWindowInfo])
+
   return (
     <div className="p-1">
       {ratioListList.map((ratioList, listIndex) => (
@@ -52,7 +74,9 @@ export default function RatioList({ onClick }: RatioListProps) {
                 bg-gray-100 rounded-sm cursor-pointer overflow-hidden hover:bg-blue-100
                   dark:bg-zinc-500  dark:hover:bg-blue-900
                 `)}
-                onClick={() => onClick(ratio)}
+                onClick={() => onClick(getComputedWindowInfo(ratio))}
+                onMouseEnter={() => setDemoWindowInfo(getComputedWindowInfo(ratio))}
+                onMouseLeave={() => setDemoWindowInfo(null)}
               >
                 <div
                   className="absolute bg-gray-300 rounded-sm group-hover:bg-blue-500 dark:bg-zinc-400 dark:group-hover:bg-blue-600"

@@ -1,3 +1,4 @@
+import { IWindowInfo } from './../types/index';
 import { atom } from 'recoil'
 import {
   IApp,
@@ -96,4 +97,9 @@ export const lastChangedDirectoryState = atom<{ path: string, timestamp: number,
     path: '',
     timestamp: 0,
   },
+})
+
+export const demoWindowInfoState = atom<IWindowInfo | null>({
+  key: 'demoWindowInfoState',
+  default: null,
 })

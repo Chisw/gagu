@@ -8,6 +8,8 @@ import { SvgIcon } from '../../components/common'
 import toast from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
 
+export const DOCK_HEIGHT_AND_MARGIN =  48 + 4
+
 export default function Dock() {
 
   const { t } = useTranslation()

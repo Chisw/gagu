@@ -19,6 +19,8 @@ const pageList = [
   { key: Page.touch, icon: <SvgIcon.Phone /> },
 ]
 
+export const getMenuBarHeight = () => document.querySelector('.gagu-menu-bar')?.scrollHeight || 24
+
 export function MenuBar() {
 
   const navigate = useNavigate()

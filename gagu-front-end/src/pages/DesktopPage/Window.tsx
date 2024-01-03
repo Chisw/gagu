@@ -1,4 +1,4 @@
-import { IApp, IWindowInfo, IEntry, WindowStatus, IWindowRatio } from '../../types'
+import { IApp, IWindowInfo, IEntry, WindowStatus } from '../../types'
 import { Rnd, ResizableDelta, Position } from 'react-rnd'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRecoilState } from 'recoil'
@@ -16,12 +16,10 @@ import { throttle } from 'lodash-es'
 import { useUserConfig } from '../../hooks'
 import { Dropdown } from '@douyinfe/semi-ui'
 import RatioList from './RatioList'
+import { getMenuBarHeight } from '../../components'
+import { DOCK_HEIGHT_AND_MARGIN } from './Dock'
 
-const DOCK_HEIGHT_AND_MARGIN =  48 + 4
-
-const getMenuBarHeight = () => document.querySelector('.gagu-menu-bar')?.scrollHeight || 24
-
-const getAppWindowMaxSize = () => {
+export const getAppWindowSize = () => {
   const { innerWidth, innerHeight } = window
   const menuBarHeight = getMenuBarHeight()
   const maxHeight = innerHeight - menuBarHeight - DOCK_HEIGHT_AND_MARGIN
@@ -126,7 +124,7 @@ export default function Window(props: WindowProps) {
 
   const handleFullScreen = useCallback((force?: boolean) => {
     const full = () => {
-      const { maxWidth: width, maxHeight: height, menuBarHeight } = getAppWindowMaxSize()
+      const { maxWidth: width, maxHeight: height, menuBarHeight } = getAppWindowSize()
 
       rndInstance.updatePosition({ x: 0, y: menuBarHeight })
       rndInstance.updateSize({ width, height })
@@ -150,14 +148,8 @@ export default function Window(props: WindowProps) {
     }
   }, [defaultInfoCache, isFullScreen, rndInstance])
 
-  const handleRatioClick = useCallback((ratio: IWindowRatio) => {
-    const { xRatio, yRatio, widthRatio, heightRatio } = ratio
-    const { maxWidth, maxHeight, menuBarHeight } = getAppWindowMaxSize()
-    const x = Math.ceil(maxWidth * xRatio)
-    const y = Math.ceil(maxHeight * yRatio) + menuBarHeight
-    const width = Math.ceil(maxWidth * widthRatio)
-    const height = Math.ceil(maxHeight * heightRatio)
-    const info = { x, y, width, height }
+  const handleRatioClick = useCallback((info: IWindowInfo) => {
+    const { x, y, width, height } = info
 
     rndInstance.updatePosition({ x, y })
     rndInstance.updateSize({ width, height })
@@ -306,6 +298,7 @@ export default function Window(props: WindowProps) {
               <Dropdown
                 trigger="hover"
                 position="bottomRight"
+                mouseEnterDelay={500}
                 content={<RatioList onClick={handleRatioClick} />}
               >
                 <div
