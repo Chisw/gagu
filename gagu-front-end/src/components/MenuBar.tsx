@@ -227,8 +227,8 @@ export function MenuBar() {
                             <span className="capitalize">{key}</span>&nbsp;{t`label.mode`}
                             <div
                               className="absolute inset-0"
-                              onMouseDown={() => handleSwitchMode(key)}
-                              onTouchStart={() => handleSwitchMode(key)}
+                              onMouseDown={() => !isActive && handleSwitchMode(key)}
+                              onTouchStart={() => !isActive && handleSwitchMode(key)}
                             />
                           </Dropdown.Item>
                         )

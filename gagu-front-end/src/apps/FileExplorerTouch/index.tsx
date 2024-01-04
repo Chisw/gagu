@@ -11,7 +11,7 @@ import { useFileExplorer } from '../../hooks'
 import { SharingModal } from '../../components'
 import { entrySelectorEventState, openEventState } from '../../states'
 import { useRecoilState } from 'recoil'
-import { AppId, EventTransaction, ExplorerSelectorProps, IEntry } from '../../types'
+import { AppId, EntryType, EventTransaction, ExplorerSelectorProps, IEntry } from '../../types'
 import EntryNameDialog from './EntryNameDialog'
 import { useNavigate } from 'react-router'
 import toast from 'react-hot-toast'
@@ -87,8 +87,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
       return
     }
 
-    const { type } = entry
-    if (type === 'directory') {
+    if (entry.type === EntryType.directory) {
       handleDirectoryOpen(entry)
     } else {
       if (asSelector) {

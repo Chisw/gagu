@@ -54,8 +54,6 @@ export interface IApp {
 
 export enum EventTransaction {
   run_app = 'run_app',
-  settings_accessible_paths = 'settings_accessible_paths',
-  settings_default_path = 'settings_default_path',
 }
 
 export type EventTransactionType = keyof typeof EventTransaction

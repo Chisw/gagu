@@ -3,10 +3,8 @@ import { languageList, setLanguage } from '../../../i18n'
 import { Button, Divider, Form, Input, Radio, RadioGroup } from '@douyinfe/semi-ui'
 import { SvgIcon } from '../../../components/common'
 import { useTouchMode, useUserConfig } from '../../../hooks'
-import { AppId, ColorScheme, EntryType, EventTransaction, HotkeyStyle } from '../../../types'
-import { entrySelectorEventState, openEventState } from '../../../states'
-import { useRecoilState } from 'recoil'
-import { useCallback, useEffect } from 'react'
+import { AppId, ColorScheme, EntryType, HotkeyStyle } from '../../../types'
+import { EntryPicker, EntryPickerMode } from '../../../components'
 
 export default function GeneralSettings() {
   const { t, i18n: { language } } = useTranslation()
@@ -14,26 +12,6 @@ export default function GeneralSettings() {
   const touchMode = useTouchMode()
 
   const { userConfig, setUserConfig } = useUserConfig()
-
-  const [openEvent, setOpenEvent] = useRecoilState(openEventState)
-  const [, setEntrySelectorEvent] = useRecoilState(entrySelectorEventState)
-
-  const handleSelectClick = useCallback(() => {
-    setEntrySelectorEvent({
-      transaction: EventTransaction.settings_default_path,
-      mode: 'open',
-      appId: AppId.settings,
-      type: EntryType.directory,
-    })
-  }, [setEntrySelectorEvent])
-
-  useEffect(() => {
-    if (openEvent?.transaction === EventTransaction.settings_default_path) {
-      const fileExplorerDefaultPath: string = openEvent.extraData?.selectedPath
-      setUserConfig({ ...userConfig, fileExplorerDefaultPath })
-      setOpenEvent(null)
-    }
-  }, [openEvent, userConfig, setOpenEvent, setUserConfig])
 
   return (
     <>
@@ -129,12 +107,20 @@ export default function GeneralSettings() {
                 autoComplete="off"
                 value={userConfig.fileExplorerDefaultPath}
               />
-              <Button
-                className="ml-1 flex-shrink-0"
-                onClick={handleSelectClick}
+              <EntryPicker
+                {...{
+                  appId: AppId.settings,
+                  mode: EntryPickerMode.open,
+                  type: EntryType.directory,
+                }}
+                onConfirm={({ selectedPath }) => {
+                  setUserConfig({ ...userConfig, fileExplorerDefaultPath: selectedPath })
+                }}
               >
-                <SvgIcon.FolderOpen />
-              </Button>
+                <Button className="ml-1 flex-shrink-0">
+                  <SvgIcon.FolderOpen />
+                </Button>
+              </EntryPicker>
             </div>
           </Form.Slot>
         </Form>

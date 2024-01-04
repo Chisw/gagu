@@ -1,17 +1,18 @@
 import md5 from 'md5'
-import { useCallback, useEffect, useMemo, useRef } from 'react'
+import { useCallback, useMemo, useRef } from 'react'
 import toast from 'react-hot-toast'
 import { FormModeType } from '.'
 import { FsApi, UserApi } from '../../../api'
 import { SvgIcon, IconButton } from '../../../components/common'
 import { useRequest, useTouchMode } from '../../../hooks'
-import { AppId, EntryType, EventTransaction, IUserForm, UserPermission } from '../../../types'
+import { AppId, EntryType, IUserForm, UserPermission } from '../../../types'
 import { getImageTypeBase64ByURL, getTimestampParam, line, permissionSorter } from '../../../utils'
 import { Button, Form, SideSheet } from '@douyinfe/semi-ui'
 import { useTranslation } from 'react-i18next'
-import { entrySelectorEventState, openEventState, userInfoState } from '../../../states'
+import { userInfoState } from '../../../states'
 import { useRecoilState } from 'recoil'
 import { semiLocaleMap } from '../../../i18n'
+import { EntryPicker, EntryPickerMode } from '../../../components'
 
 const handleScrollToError = () => {
   const top = document.querySelector('.gagu-app-settings-user-form .semi-form-field-error-message')?.closest('.semi-form-field')?.getBoundingClientRect()?.top
@@ -42,8 +43,6 @@ export default function UserFormModal(props: UserFormModalProps) {
   const touchMode = useTouchMode()
 
   const [userInfo] = useRecoilState(userInfoState)
-  const [, setEntrySelectorEvent] = useRecoilState(entrySelectorEventState)
-  const [openEvent, setOpenEvent] = useRecoilState(openEventState)
 
   const { request: createUser, loading: creating } = useRequest(UserApi.createUser)
   const { request: updateUser, loading: updating } = useRequest(UserApi.updateUser)
@@ -108,15 +107,6 @@ export default function UserFormModal(props: UserFormModalProps) {
       }
     }
   }, [form, MODE.isCreate, createUser, updateUser, setFormMode, onRefresh, isCurrentUser])
-
-  useEffect(() => {
-    if (openEvent?.transaction === EventTransaction.settings_accessible_paths) {
-      const selectedPath: string = openEvent.extraData?.selectedPath
-      const assignedRootPathList = Array.from(new Set([...form.assignedRootPathList, selectedPath]))
-      setForm({ ...form, assignedRootPathList })
-      setOpenEvent(null)
-    }
-  }, [openEvent, form, setForm, setOpenEvent])
 
   return (
     <>
@@ -321,20 +311,24 @@ export default function UserFormModal(props: UserFormModalProps) {
                 ))}
               </div>
               <div className="py-1">
-                <Button
-                  size="small"
-                  icon={<SvgIcon.Add />}
-                  onClick={() => {
-                    setEntrySelectorEvent({
-                      transaction: EventTransaction.settings_accessible_paths,
-                      mode: 'open',
-                      appId: AppId.settings,
-                      type: EntryType.directory,
-                    })
+                <EntryPicker
+                  {...{
+                    appId: AppId.settings,
+                    mode: EntryPickerMode.open,
+                    type: EntryType.directory,
+                  }}
+                  onConfirm={({ selectedPath }) => {
+                    const assignedRootPathList = Array.from(new Set([...form.assignedRootPathList, selectedPath]))
+                    setForm({ ...form, assignedRootPathList })
                   }}
                 >
-                  {t`action.add`}
-                </Button>
+                  <Button
+                    size="small"
+                    icon={<SvgIcon.Add />}
+                  >
+                    {t`action.add`}
+                  </Button>
+                </EntryPicker>
               </div>
               {(!isAdminister && !isAssigned) && (
                 <p className="mt-1 text-xs text-gray-500 flex items-center dark:text-zinc-400">

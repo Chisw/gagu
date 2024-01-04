@@ -74,9 +74,12 @@ export default function RatioList({ onClick }: RatioListProps) {
                 bg-gray-100 rounded-sm cursor-pointer overflow-hidden hover:bg-blue-100
                   dark:bg-zinc-500  dark:hover:bg-blue-900
                 `)}
-                onClick={() => onClick(getComputedWindowInfo(ratio))}
                 onMouseEnter={() => setDemoWindowInfo(getComputedWindowInfo(ratio))}
                 onMouseLeave={() => setDemoWindowInfo(null)}
+                onClick={() => {
+                  onClick(getComputedWindowInfo(ratio))
+                  setDemoWindowInfo(null)
+                }}
               >
                 <div
                   className="absolute bg-gray-300 rounded-sm group-hover:bg-blue-500 dark:bg-zinc-400 dark:group-hover:bg-blue-600"
