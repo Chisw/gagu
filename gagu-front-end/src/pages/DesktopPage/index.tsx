@@ -1,4 +1,4 @@
-import { ContextMenu, EntrySelector, MenuBar } from '../../components'
+import { ContextMenu, MenuBar } from '../../components'
 import WindowContainer from './WindowContainer'
 import Desktop from './Desktop'
 import Dock from './Dock'
@@ -36,7 +36,6 @@ export default function DesktopPage() {
         `)}
         style={{ backgroundImage: `url("${FsApi.getImageStreamUrl('bg-desktop')}")` }}
       />
-      <EntrySelector />
       <ContextMenu />     {/* z-30 */}
       <MenuBar />         {/* z-20 */}
       <Dock />            {/* z-20 */}

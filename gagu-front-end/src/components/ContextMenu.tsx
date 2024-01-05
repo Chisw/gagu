@@ -91,31 +91,35 @@ export function ContextMenu() {
           render={
             <Dropdown.Menu className={isDock ? 'w-56' : 'w-44'}>
               {menuItemList?.map(({ icon, name, children, onClick }) => {
-                return children ? (
-                  <Dropdown
-                    key={name}
-                    position="rightTop"
-                    className={line(`
-                      gagu-context-menu-sub-menu
-                      bg-white bg-opacity-80 backdrop-blur min-w-[160px]
-                      dark:bg-zinc-700 dark:bg-opacity-80
-                    `)}
-                    menu={
-                      children.map(m => ({
-                        ...m,
-                        node: 'item',
-                        onClick: closeAfterClick(m.onClick),
-                      }))
-                    }
-                  >
-                    <Dropdown.Item icon={icon} >
-                      <div className="w-full flex justify-between items-center">
-                        <span>{name}</span>
-                        <SvgIcon.ChevronRight className="text-gray-400"/>
-                      </div>
-                    </Dropdown.Item>
-                  </Dropdown>
-                ) : (
+                if (children) {
+                  return (
+                    <Dropdown
+                      key={name}
+                      position="rightTop"
+                      className={line(`
+                        gagu-context-menu-sub-menu
+                        bg-white bg-opacity-80 backdrop-blur min-w-[160px]
+                        dark:bg-zinc-700 dark:bg-opacity-80
+                      `)}
+                      menu={
+                        children.map(m => ({
+                          ...m,
+                          node: 'item',
+                          onClick: closeAfterClick(m.onClick),
+                        }))
+                      }
+                    >
+                      <Dropdown.Item icon={icon} >
+                        <div className="w-full flex justify-between items-center">
+                          <span>{name}</span>
+                          <SvgIcon.ChevronRight className="text-gray-400"/>
+                        </div>
+                      </Dropdown.Item>
+                    </Dropdown>
+                  )
+                }
+
+                return (
                   <Dropdown.Item
                     key={name}
                     icon={icon}

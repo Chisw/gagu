@@ -6,14 +6,16 @@ import { SvgIcon } from '../../components/common'
 import { CALLABLE_APP_LIST } from '../../apps'
 import { Modal } from '@douyinfe/semi-ui'
 import { useRecoilState } from 'recoil'
-import { entrySelectorEventState, openEventState } from '../../states'
+import { openEventState } from '../../states'
 import { useMoveEntries } from '../../hooks'
+import { EntryPickerMode, EntryPickerProps } from '../../components'
 
 interface SelectionMenuProps {
   show: boolean
-  asSelector?: boolean
+  asEntryPicker?: boolean
   favoriteRootEntryList: IEntry[]
   selectedEntryList: IEntry[]
+  setActiveEntryPickerProps: (props: EntryPickerProps | null) => void
   onEdit: (mode: EditModeType, entry?: IEntry) => void
   onDirectorySizeUpdate: (entry: IEntry) => void
   onFavoriteClick: (entry: IEntry, isFavorited: boolean) => void
@@ -28,9 +30,10 @@ interface SelectionMenuProps {
 export default function SelectionMenu(props: SelectionMenuProps) {
   const {
     show,
-    asSelector = false,
+    asEntryPicker = false,
     favoriteRootEntryList,
     selectedEntryList,
+    setActiveEntryPickerProps,
     onEdit,
     onDirectorySizeUpdate,
     onFavoriteClick,
@@ -45,11 +48,9 @@ export default function SelectionMenu(props: SelectionMenuProps) {
   const { t } = useTranslation()
   const { handleMove } = useMoveEntries()
 
-  const [openEvent, setOpenEvent] = useRecoilState(openEventState)
-  const [, setEntrySelectorEvent] = useRecoilState(entrySelectorEventState)
+  const [, setOpenEvent] = useRecoilState(openEventState)
 
   const [appsModalShow, setAppsModalShow] = useState(false)
-  const [activeTransaction, setActiveTransaction] = useState(0)
 
   const menuItemList = useMemo(() => {
     const confirmedCount = selectedEntryList.length
@@ -103,13 +104,20 @@ export default function SelectionMenu(props: SelectionMenuProps) {
         isShow: !isOnBlank,
         noCancel: true,
         onClick: () => {
-          const transaction = Date.now()
-          setActiveTransaction(transaction)
-          setEntrySelectorEvent({
-            transaction,
-            mode: 'open',
+          setActiveEntryPickerProps({
             appId: AppId.fileExplorer,
+            mode: EntryPickerMode.open,
             type: EntryType.directory,
+            children: null,
+            onConfirm: ({ pickedPath }) => {
+              handleMove(selectedEntryList, pickedPath)
+              setActiveEntryPickerProps(null)
+              onCancel()
+            },
+            onCancel: () => {
+              setActiveEntryPickerProps(null)
+              onCancel()
+            },
           })
         },
       },
@@ -122,7 +130,7 @@ export default function SelectionMenu(props: SelectionMenuProps) {
       {
         icon: <SvgIcon.Apps />,
         name: t`action.openWith`,
-        isShow: !isOnDirectory && isSingle && !asSelector,
+        isShow: !isOnDirectory && isSingle && !asEntryPicker,
         noCancel: true,
         onClick: () => setAppsModalShow(true),
       },
@@ -141,7 +149,7 @@ export default function SelectionMenu(props: SelectionMenuProps) {
       {
         icon: <SvgIcon.Share />,
         name: t`action.newSharing`,
-        isShow: !isOnBlank && !asSelector,
+        isShow: !isOnBlank && !asEntryPicker,
         onClick: () => onShareClick(selectedEntryList),
       },
       {
@@ -159,10 +167,12 @@ export default function SelectionMenu(props: SelectionMenuProps) {
     ].filter(item => item.isShow)
   }, [
     t,
-    asSelector,
+    asEntryPicker,
     selectedEntryList,
     onSelectAll,
     favoriteRootEntryList,
+    handleMove,
+    setActiveEntryPickerProps,
     onEdit,
     onDirectorySizeUpdate,
     onFavoriteClick,
@@ -170,7 +180,7 @@ export default function SelectionMenu(props: SelectionMenuProps) {
     onDownloadClick,
     onShareClick,
     onDeleteClick,
-    setEntrySelectorEvent,
+    onCancel,
   ])
 
   const handleOpenEntry = useCallback((appId: string) => {
@@ -185,16 +195,6 @@ export default function SelectionMenu(props: SelectionMenuProps) {
   useEffect(() => {
     !show && setAppsModalShow(false)
   }, [show])
-
-  useEffect(() => {
-    if (activeTransaction && openEvent?.transaction === activeTransaction) {
-      const selectedPath: string = openEvent.extraData?.selectedPath
-      handleMove(selectedEntryList, selectedPath)
-      setActiveTransaction(0)
-      setOpenEvent(null)
-      onCancel()
-    }
-  }, [activeTransaction, handleMove, onCancel, openEvent, selectedEntryList, setOpenEvent])
 
   return (
     <>

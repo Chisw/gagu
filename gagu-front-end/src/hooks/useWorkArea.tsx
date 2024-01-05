@@ -1,5 +1,5 @@
 import { useRecoilState } from 'recoil'
-import { contextMenuDataState, entrySelectorEventState, openEventState } from '../states'
+import { contextMenuDataState, openEventState } from '../states'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useDragTransfer, useFileExplorer, useHotKey, useLassoSelect, useMoveEntries } from '.'
 import { AppId, EditMode, EditModeType, EntryType, EventTransaction, IContextMenuItem, IEntry, ILassoInfo, NameFailType } from '../types'
@@ -9,15 +9,16 @@ import { SvgIcon } from '../components/common'
 import { useTranslation } from 'react-i18next'
 import { CALLABLE_APP_LIST } from '../apps'
 import toast from 'react-hot-toast'
+import { EntryPickerMode } from '../components'
 
 interface useWorkAreaProps {
   isUserDesktop: boolean
   isTopWindow: boolean
-  asSelector: boolean
+  asEntryPicker: boolean
   specifiedPath: string
   onCurrentPathChange: (path: string) => void
-  onSelect: (entryList: IEntry[]) => void
-  onSelectDoubleConfirm: () => void
+  onPick: (entryList: IEntry[]) => void
+  onPickDoubleConfirm: () => void
   onOpenDesktopDirectory: (entry: IEntry) => void
 }
 
@@ -25,24 +26,22 @@ export function useWorkArea(props: useWorkAreaProps) {
   const {
     isUserDesktop,
     isTopWindow,
-    asSelector,
+    asEntryPicker,
     specifiedPath,
     onCurrentPathChange,
-    onSelect,
-    onSelectDoubleConfirm,
+    onPick,
+    onPickDoubleConfirm,
     onOpenDesktopDirectory,
   } = props
 
   const { t } = useTranslation()
   const { handleMove } = useMoveEntries()
 
-  const [openEvent, setOpenEvent] = useRecoilState(openEventState)
+  const [, setOpenEvent] = useRecoilState(openEventState)
   const [, setContextMenuData] = useRecoilState(contextMenuDataState)
-  const [, setEntrySelectorEvent] = useRecoilState(entrySelectorEventState)
 
   const [locationScrollWatcher, setLocationScrollWatcher] = useState<{ wait: boolean, smooth?: boolean }>({ wait: false })
   const [shiftFromIndex, setShiftFromIndex] = useState(0)
-  const [activeTransaction, setActiveTransaction] = useState(0)
 
   const lassoRef = useRef(null)
   const containerRef = useRef(null)      // container of containerInner, overflow-y-auto
@@ -66,6 +65,7 @@ export function useWorkArea(props: useWorkAreaProps) {
     lastVisitedPath, setLastVisitedPath,
     selectedEntryList, setSelectedEntryList,
     sharingModalShow, setSharingModalShow,
+    activeEntryPickerProps, setActiveEntryPickerProps,
     handleSelectAll, handleDirectorySizeUpdate, handleUploadTaskAdd, 
     handleDirectoryOpen, handleGoFullPath,
     handleNavBack, handleNavForward, handleNavRefresh, handleNavAbort, handleNavToParent,
@@ -139,8 +139,8 @@ export function useWorkArea(props: useWorkAreaProps) {
         handleDirectoryOpen(entry)
       }
     } else {
-      if (asSelector) {
-        onSelectDoubleConfirm()
+      if (asEntryPicker) {
+        onPickDoubleConfirm()
         return
       }
       const app = getMatchedApp(entry)
@@ -154,7 +154,7 @@ export function useWorkArea(props: useWorkAreaProps) {
         handleDownloadClick()
       }
     }
-  }, [editMode, isUserDesktop, onOpenDesktopDirectory, handleDirectoryOpen, asSelector, onSelectDoubleConfirm, setOpenEvent, handleDownloadClick])
+  }, [editMode, isUserDesktop, onOpenDesktopDirectory, handleDirectoryOpen, asEntryPicker, onPickDoubleConfirm, setOpenEvent, handleDownloadClick])
 
   const handleLassoSelect = useCallback((info: ILassoInfo) => {
     const entryElements: Element[] = (containerInnerRef.current as any)?.querySelectorAll('.gagu-entry-node')
@@ -174,7 +174,7 @@ export function useWorkArea(props: useWorkAreaProps) {
   const throttledLassoSelectHandler = useMemo(() => throttle(handleLassoSelect, 100), [handleLassoSelect])
 
   useLassoSelect({
-    binding: !asSelector,
+    binding: !asEntryPicker,
     lassoRef,
     containerRef,
     containerInnerRef,
@@ -225,7 +225,7 @@ export function useWorkArea(props: useWorkAreaProps) {
   })
 
   const handleContextMenu = useCallback((event: any) => {
-    if (asSelector) return
+    if (asEntryPicker) return
 
     let isOnBlank = true
     let isOnDirectory = false
@@ -338,13 +338,16 @@ export function useWorkArea(props: useWorkAreaProps) {
         name: t`action.moveTo`,
         isShow: !isOnBlank,
         onClick: () => {
-          const transaction = Date.now()
-          setActiveTransaction(transaction)
-          setEntrySelectorEvent({
-            transaction,
-            mode: 'open',
+          setActiveEntryPickerProps({
             appId: AppId.fileExplorer,
+            mode: EntryPickerMode.open,
             type: EntryType.directory,
+            children: null,
+            onConfirm: ({ pickedPath }) => {
+              handleMove(contextEntryList, pickedPath)
+              setActiveEntryPickerProps(null)
+            },
+            onCancel: () => setActiveEntryPickerProps(null),
           })
         },
       },
@@ -383,18 +386,19 @@ export function useWorkArea(props: useWorkAreaProps) {
     setContextMenuData({ eventData, menuItemList })
   }, [
     t,
-    asSelector,
+    asEntryPicker,
     entryList,
     selectedEntryList,
     favoriteRootEntryList,
     handleEdit,
     setContextMenuData,
     setSelectedEntryList,
-    setEntrySelectorEvent,
     setOpenEvent,
+    setActiveEntryPickerProps,
     handleNavRefresh,
     handleUploadClick,
     handleDirectorySizeUpdate,
+    handleMove,
     handleFavoriteClick,
     handleDownloadClick,
     handleShareClick,
@@ -428,24 +432,15 @@ export function useWorkArea(props: useWorkAreaProps) {
   }, [entryList, lastVisitedPath, setSelectedEntryList])
 
   useEffect(() => {
-    onSelect(selectedEntryList)
+    onPick(selectedEntryList)
     if (selectedEntryList.length === 0) {
       setShiftFromIndex(0)
     }
-  }, [onSelect, selectedEntryList])
+  }, [onPick, selectedEntryList])
 
   useEffect(() => {
     onCurrentPathChange(currentPath)
   }, [onCurrentPathChange, currentPath])
-
-  useEffect(() => {
-    if (activeTransaction && openEvent?.transaction === activeTransaction) {
-      const selectedPath: string = openEvent.extraData?.selectedPath
-      handleMove(selectedEntryList, selectedPath)
-      setActiveTransaction(0)
-      setOpenEvent(null)
-    }
-  }, [activeTransaction, handleMove, openEvent, selectedEntryList, setOpenEvent])
 
   return {
     kiloSize,
@@ -464,6 +459,7 @@ export function useWorkArea(props: useWorkAreaProps) {
     gridMode, handleGridModeChange,
     sortType, handleSortChange,
     sharingModalShow, setSharingModalShow,
+    activeEntryPickerProps, setActiveEntryPickerProps,
     editMode, handleEdit, handleNameSuccess, handleNameFail,
     handleEntryClick, handleEntryDoubleClick,
     handleDirectoryOpen, handleGoFullPath,

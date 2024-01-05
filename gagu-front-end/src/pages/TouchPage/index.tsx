@@ -1,4 +1,4 @@
-import { EntrySelector, MenuBar } from '../../components'
+import { MenuBar } from '../../components'
 import { useRecoilState } from 'recoil'
 import { activePageState, runningAppListState } from '../../states'
 import { useEffect, useState } from 'react'
@@ -50,8 +50,6 @@ export default function TouchPage() {
         data-touch-mode="true"
         onContextMenuCapture={e => e.preventDefault()}
       >
-        <EntrySelector />
-
         {/* z-30 */}
         {runningAppList.map(app => (
           <Window

@@ -8,7 +8,6 @@ import {
   IUserInfo,
   Page,
   IEntryPathCache,
-  IEntrySelectorEvent,
   ITransferTask,
   IUserConfig,
 } from '../types'
@@ -73,11 +72,6 @@ export const entryPathCacheState = atom<IEntryPathCache>({
 
 export const openEventState = atom<IOpenEvent | null>({
   key: 'openEventState',
-  default: null,
-})
-
-export const entrySelectorEventState = atom<IEntrySelectorEvent | null>({
-  key: 'entrySelectorEventState',
   default: null,
 })
 

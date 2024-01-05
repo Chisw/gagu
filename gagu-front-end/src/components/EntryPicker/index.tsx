@@ -14,11 +14,12 @@ export enum EntryPickerMode {
 }
 
 interface EntryPickerResult {
-  selectedEntryList: IEntry[]
-  selectedPath: string
+  pickedEntryList: IEntry[]
+  pickedPath: string
 }
 
-interface EntryPickerProps {
+export interface EntryPickerProps {
+  forceShow?: boolean
   children: ReactNode
   childrenWrapperClassName?: string
   appId: string
@@ -26,11 +27,13 @@ interface EntryPickerProps {
   type: EntryType.directory | EntryType.file
   multiple?: boolean
   onConfirm: (result: EntryPickerResult) => void
+  onCancel?: () => void
 }
 
 export function EntryPicker(props: EntryPickerProps) {
 
   const {
+    forceShow = false,
     children,
     childrenWrapperClassName = '',
     mode,
@@ -38,93 +41,104 @@ export function EntryPicker(props: EntryPickerProps) {
     type,
     multiple = false,
     onConfirm,
+    onCancel,
   } = props
 
   const { t } = useTranslation()
 
   const touchMode = useTouchMode()
 
-  const [pickerShow, setPickerShow] = useState(false)
+  const [pickerShow, setPickerShow] = useState(forceShow)
   const [currentPath, setCurrentPath] = useState('')
-  const [selectedEntryList, setSelectedEntryList] = useState<IEntry[]>([])
+  const [pickedEntryList, setPickedEntryList] = useState<IEntry[]>([])
   const [sideShow, setSideShow] = useState(false)
   const [isSelectionMode, setIsSelectionMode] = useState(false)
 
-  const selectedPath = useMemo(() => {
-    const selectedEntryPath = selectedEntryList.length === 1 ? `/${selectedEntryList[0].name}` : ''
+  const pickedPath = useMemo(() => {
+    const selectedEntryPath = pickedEntryList.length === 1 ? `/${pickedEntryList[0].name}` : ''
     return `${currentPath}${selectedEntryPath}`
-  }, [currentPath, selectedEntryList])
+  }, [currentPath, pickedEntryList])
 
-  const { selectorState, matchList } = useMemo(() => {
-    const selectorState = {
+  const { pickerState, matchList } = useMemo(() => {
+    const pickerState = {
       isOpenMode: mode === EntryPickerMode.open,
       isSaveMode: mode === EntryPickerMode.save,
       isMultiple: multiple,
       isSingle: !multiple,
-      isSelectFile: type === EntryType.file,
-      isSelectDirectory: type === EntryType.directory,
-      isSelectBoth: !type,
+      isPickingFile: type === EntryType.file,
+      isPickingDirectory: type === EntryType.directory,
+      isPickingBoth: !type,
     }
     const matchList = APP_LIST.find(app => app.id === appId)?.matchList || []
-    return { selectorState, matchList }
+    return { pickerState, matchList }
   }, [appId, mode, multiple, type])
 
   const { disabled, isExtensionMatched } = useMemo(() => {
-    const selectedCount = selectedEntryList.length
-    const { isMultiple, isSelectDirectory } = selectorState
+    const pickedCount = pickedEntryList.length
+    const { isMultiple, isPickingDirectory } = pickerState
 
     const isEnough = type
-      ? isSelectDirectory
+      ? isPickingDirectory
         ? true
-        : isMultiple ? selectedCount > 1 : selectedCount === 1
+        : isMultiple ? pickedCount > 1 : pickedCount === 1
       : true
 
     const isTypeMatched = type
-      ? selectedEntryList.every((entry) => entry.type === type)
+      ? pickedEntryList.every((entry) => entry.type === type)
       : true
 
     const isExtensionMatched = type
-      ? isSelectDirectory
-        ? selectedEntryList.every(({ extension }) => ['_dir', '_dir_empty'].includes(extension))
-        : selectedEntryList.every(({ extension }) => matchList.includes(extension))
+      ? isPickingDirectory
+        ? pickedEntryList.every(({ extension }) => ['_dir', '_dir_empty'].includes(extension))
+        : pickedEntryList.every(({ extension }) => matchList.includes(extension))
       : true
 
     const disabled = !isEnough || !isTypeMatched
 
     return { disabled, isExtensionMatched }
-  }, [selectorState, type, selectedEntryList, matchList])
+  }, [pickerState, type, pickedEntryList, matchList])
 
   const handleConfirm = useCallback(() => {
     if (disabled) return // avoid double-click call
     onConfirm({
-      selectedEntryList,
-      selectedPath,
+      pickedEntryList: pickedEntryList,
+      pickedPath,
     })
-    setPickerShow(false)
-  }, [disabled, selectedEntryList, onConfirm, selectedPath])
+    !forceShow && setPickerShow(false)
+  }, [disabled, onConfirm, pickedEntryList, pickedPath, forceShow])
+
+  const handleCancel = useCallback(() => {
+    if (onCancel) {
+      onCancel()
+    } else {
+      setPickerShow(false)
+    }
+  }, [onCancel])
 
   const formProps: FormProps = useMemo(() => {
-    const { isSaveMode, isSelectDirectory, isSingle } = selectorState
+    const { isSaveMode, isPickingDirectory, isSingle } = pickerState
     return {
       touchMode: touchMode,
       disabled: disabled,
-      isSelectingPath: (isSaveMode || (isSelectDirectory && isSingle)),
-      selectedPath: selectedPath,
+      isPickingPath: (isSaveMode || (isPickingDirectory && isSingle)),
+      pickedPath,
       warningShow: !disabled && !isExtensionMatched,
-      onCancel: () => setPickerShow(false),
       onConfirm: handleConfirm,
+      onCancel: handleCancel,
     }
-  }, [disabled, handleConfirm, isExtensionMatched, selectedPath, selectorState, setPickerShow, touchMode])
+  }, [pickerState, touchMode, disabled, pickedPath, isExtensionMatched, handleConfirm, handleCancel])
 
   if (touchMode) {
     return (
       <>
-        <div
-          className={childrenWrapperClassName}
-          onClick={() => setPickerShow(true)}
-        >
-          {children}
-        </div>
+        {children && (
+          <div
+            className={childrenWrapperClassName}
+            onClick={() => setPickerShow(true)}
+          >
+            {children}
+          </div>
+        )}
         <SideSheet
           placement="bottom"
           closable={false}
@@ -132,14 +146,14 @@ export function EntryPicker(props: EntryPickerProps) {
           bodyStyle={{ position: 'relative', padding: 0 }}
           visible={pickerShow}
           height="calc(100% - 3rem)"
-          className="gagu-entry-selector-touch"
+          className="gagu-entry-selector-touch gagu-sync-popstate-overlay"
           style={{ borderTopRightRadius: 10, borderTopLeftRadius: 10 }}
-          onCancel={() => setPickerShow(false)}
+          onCancel={handleCancel}
           title={<Form {...formProps} />}
         >
           <div className="absolute inset-0 border-t overflow-hidden">
             <FileExplorerTouch
-              asSelector
+              asEntryPicker
               {...{
                 show: true,
                 sideShow,
@@ -148,7 +162,7 @@ export function EntryPicker(props: EntryPickerProps) {
                 setIsSelectionMode,
               }}
               onCurrentPathChange={setCurrentPath}
-              onSelect={setSelectedEntryList}
+              onPick={setPickedEntryList}
             />
           </div>
         </SideSheet>
@@ -158,12 +172,14 @@ export function EntryPicker(props: EntryPickerProps) {
 
   return (
     <>
-      <div
-        className={childrenWrapperClassName}
-        onClick={() => setPickerShow(true)}
-      >
-        {children}
-      </div>
+      {children && (
+        <div
+          className={childrenWrapperClassName}
+          onClick={() => setPickerShow(true)}
+        >
+          {children}
+        </div>
+      )}
       <Modal
         centered
         closable={false}
@@ -191,14 +207,14 @@ export function EntryPicker(props: EntryPickerProps) {
           </div>
           <div className="mt-3 relative h-[540px] overflow-y-auto border bg-gray-100 bg-opacity-50 dark:bg-black dark:border-zinc-600">
             <FileExplorer
-              asSelector
+              asEntryPicker
               isTopWindow={pickerShow}
               windowSize={{ width: 1020, height: 540 }}
               setWindowTitle={() => {}}
               closeWindow={() => {}}
               onCurrentPathChange={setCurrentPath}
-              onSelect={setSelectedEntryList}
-              onSelectDoubleConfirm={handleConfirm}
+              onPick={setPickedEntryList}
+              onPickDoubleConfirm={handleConfirm}
             />
           </div>
         </div>

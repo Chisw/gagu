@@ -8,15 +8,6 @@ import { IconButton, SvgIcon } from '../../components/common'
 import { useRecoilState } from 'recoil'
 import { baseDataState } from '../../states'
 
-const iconMap: { [KEY: string]: ReactNode } = {
-  'system.win32': <SvgIcon.Windows size={12} />,
-  'system.darwin': <SvgIcon.Apple size={12} />,
-  'system.linux': <SvgIcon.Linux size={12} />,
-  'system.android': <SvgIcon.Android size={12} />,
-  user: <SvgIcon.User size={12} />,
-  favorite: <SvgIcon.StarSolid size={12} />,
-}
-
 export interface RootEntryGroupsProps {
   currentPath: string
   rootEntryList: IRootEntry[]
@@ -45,6 +36,18 @@ export default function RootEntryGroups(props: RootEntryGroupsProps) {
       rootEntry && onRootEntryClick(rootEntry)
     }
   })
+
+  const iconMap = useMemo(() => {
+    const iconMap: { [KEY: string]: ReactNode } = {
+      'system.win32': <SvgIcon.Windows size={12} />,
+      'system.darwin': <SvgIcon.Apple size={12} />,
+      'system.linux': <SvgIcon.Linux size={12} />,
+      'system.android': <SvgIcon.Android size={12} />,
+      user: <SvgIcon.User size={12} />,
+      favorite: <SvgIcon.StarSolid size={12} />,
+    }
+    return iconMap
+  }, [])
 
   const groupMap = useMemo(() => {
     return groupBy(rootEntryList, 'group') as {

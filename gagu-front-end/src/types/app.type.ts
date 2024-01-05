@@ -1,4 +1,4 @@
-import { EntryType, IEntry } from './entry.type'
+import { IEntry } from './entry.type'
 
 export interface AppComponentProps {
   isTopWindow: boolean
@@ -8,14 +8,14 @@ export interface AppComponentProps {
   additionalEntryList?: IEntry[]
 }
 
-export interface ExplorerSelectorProps {
-  asSelector?: boolean
+export interface ExplorerPickProps {
+  asEntryPicker?: boolean
   onCurrentPathChange?: (path: string) => void
-  onSelect?: (entryList: IEntry[]) => void
-  onSelectDoubleConfirm?: () => void
+  onPick?: (entryList: IEntry[]) => void
+  onPickDoubleConfirm?: () => void
 }
 
-export interface FileExplorerProps extends AppComponentProps, ExplorerSelectorProps {}
+export interface FileExplorerProps extends AppComponentProps, ExplorerPickProps {}
 
 export interface IAppComponent {
   (props: AppComponentProps | FileExplorerProps): JSX.Element
@@ -64,14 +64,6 @@ export interface IOpenEvent {
   entryList: IEntry[]
   forceOpen?: boolean
   extraData?: { [KEY: string]: any }
-}
-
-export interface IEntrySelectorEvent {
-  transaction: EventTransactionType | number
-  mode: 'open' | 'save'
-  appId: string
-  type?: EntryType.directory | EntryType.file
-  multiple?: boolean
 }
 
 export enum PlayMode {

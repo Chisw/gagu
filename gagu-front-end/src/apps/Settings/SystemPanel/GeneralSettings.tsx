@@ -113,8 +113,8 @@ export default function GeneralSettings() {
                   mode: EntryPickerMode.open,
                   type: EntryType.directory,
                 }}
-                onConfirm={({ selectedPath }) => {
-                  setUserConfig({ ...userConfig, fileExplorerDefaultPath: selectedPath })
+                onConfirm={({ pickedPath }) => {
+                  setUserConfig({ ...userConfig, fileExplorerDefaultPath: pickedPath })
                 }}
               >
                 <Button className="ml-1 flex-shrink-0">

@@ -8,16 +8,16 @@ import EntryNode from './EntryNode'
 import SelectionMenu from './SelectionMenu'
 import Side from './Side'
 import { useFileExplorer } from '../../hooks'
-import { SharingModal } from '../../components'
-import { entrySelectorEventState, openEventState } from '../../states'
+import { EntryPicker, SharingModal } from '../../components'
+import { openEventState } from '../../states'
 import { useRecoilState } from 'recoil'
-import { AppId, EntryType, EventTransaction, ExplorerSelectorProps, IEntry } from '../../types'
+import { AppId, EntryType, EventTransaction, ExplorerPickProps, IEntry } from '../../types'
 import EntryNameDialog from './EntryNameDialog'
 import { useNavigate } from 'react-router'
 import toast from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
 
-interface FileExplorerTouchProps extends ExplorerSelectorProps {
+interface FileExplorerTouchProps extends ExplorerPickProps {
   show: boolean
   sideShow: boolean
   setSideShow: (show: boolean) => void
@@ -35,9 +35,9 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
     setSideShow,
     isSelectionMode,
     setIsSelectionMode,
-    asSelector = false,
+    asEntryPicker = false,
     onCurrentPathChange = () => {},
-    onSelect = () => {},
+    onPick = () => {},
     activeAppId = '',
     setDockExpanded = () => {},
   } = props
@@ -46,7 +46,6 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
   const { t } = useTranslation()
 
   const [, setOpenEvent] = useRecoilState(openEventState)
-  const [entrySelectorEvent, setEntrySelectorEvent] = useRecoilState(entrySelectorEventState)
 
   const [activeEntry, setActiveEntry] = useState<IEntry | null>(null)
 
@@ -68,6 +67,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
     sortType, handleSortChange,
     selectedEntryList, setSelectedEntryList,
     sharingModalShow, setSharingModalShow,
+    activeEntryPickerProps, setActiveEntryPickerProps,
     handleSelectAll, handleDirectorySizeUpdate,
     handleDirectoryOpen, handleGoFullPath,
     handleNavBack, handleNavForward, handleNavRefresh, handleNavAbort, handleNavToParent,
@@ -90,7 +90,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
     if (entry.type === EntryType.directory) {
       handleDirectoryOpen(entry)
     } else {
-      if (asSelector) {
+      if (asEntryPicker) {
         setIsSelectionMode(true)
         setSelectedEntryList([entry])
         return
@@ -111,7 +111,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
     selectedEntryList,
     setSelectedEntryList,
     handleDirectoryOpen,
-    asSelector,
+    asEntryPicker,
     setIsSelectionMode,
     setOpenEvent,
     handleDownloadClick,
@@ -147,15 +147,12 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
     if (sideShow) {
       keepPath()
       setSideShow(false)
-    } else if (isSelectionMode) {
-      keepPath()
-      setIsSelectionMode(false)
-    } else if (entrySelectorEvent) {
-      keepPath()
-      setEntrySelectorEvent(null)
     } else if (document.querySelector('.gagu-sync-popstate-overlay')) {
       keepPath()
       ;(document.querySelector('.gagu-sync-popstate-overlay-close-button') as any)?.click()
+    } else if (isSelectionMode) {
+      keepPath()
+      setIsSelectionMode(false)
     } else if (activeAppId !== AppId.fileExplorer) {
       keepPath()
       ;(document.querySelector('.gagu-is-top-window .gagu-hidden-switch-trigger') as any)?.click()
@@ -181,13 +178,11 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
     editMode,
     setEditMode,
     activeAppId,
-    entrySelectorEvent,
     handleNavBack,
     setDockExpanded,
     sharingModalShow,
     setSharingModalShow,
     isSelectionMode,
-    setEntrySelectorEvent,
     setIsSelectionMode,
     setSideShow,
     sideShow,
@@ -210,8 +205,8 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
   }, [onCurrentPathChange, currentPath])
 
   useEffect(() => {
-    onSelect(selectedEntryList)
-  }, [onSelect, selectedEntryList])
+    onPick(selectedEntryList)
+  }, [onPick, selectedEntryList])
 
   useEffect(() => {
     window.addEventListener('popstate', handleStatePop)
@@ -219,8 +214,8 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
   }, [handleStatePop])
 
   useEffect(() => {
-    !asSelector && navigate(`/touch?path=${currentPath}`)
-  }, [asSelector, currentPath, navigate])
+    !asEntryPicker && navigate(`/touch?path=${currentPath}`)
+  }, [asEntryPicker, currentPath, navigate])
 
   return (
     <>
@@ -230,7 +225,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
           setSideShow,
           currentPath,
           rootEntryList,
-          asSelector,
+          asEntryPicker,
         }}
         onRootEntryClick={(rootEntry) => {
           setSideShow(false)
@@ -247,7 +242,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
           dark:bg-zinc-800
           ${show ? 'opacity-100' : 'opacity-0'}
           ${sideShow ? 'ease-in-out translate-x-64 opacity-20 overflow-y-hidden pointer-events-none' : 'overflow-y-auto'}
-          ${asSelector ? 'top-0' : 'top-8 md:top-6'}
+          ${asEntryPicker ? 'top-0' : 'top-8 md:top-6'}
         `)}
         onContextMenu={handleContextMenu}
       >
@@ -326,9 +321,10 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
       <SelectionMenu
         show={isSelectionMode}
         {...{
-          asSelector,
+          asEntryPicker,
           favoriteRootEntryList,
           selectedEntryList,
+          setActiveEntryPickerProps,
         }}
         onEdit={(mode, entry) => {
           setEditMode(mode)
@@ -352,6 +348,8 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
         entryList={sharingEntryList}
         onClose={() => setSharingModalShow(false)}
       />
+
+      {activeEntryPickerProps && <EntryPicker forceShow {...activeEntryPickerProps} />}
 
       <EntryNameDialog
         {...{

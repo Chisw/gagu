@@ -1,4 +1,4 @@
-import { ContextMenu, EntrySelector, MenuBar } from '../../components'
+import { ContextMenu, MenuBar } from '../../components'
 import { useRecoilState } from 'recoil'
 import FileExplorer from '../../apps/FileExplorer'
 import { activePageState, runningAppListState } from '../../states'
@@ -35,7 +35,6 @@ export default function ExplorePage() {
         className="fixed z-0 inset-0 overflow-hidden"
         onContextMenuCapture={e => e.preventDefault()}
       >
-        <EntrySelector />
         <ContextMenu /> {/* z-30 */}
         <MenuBar />     {/* z-20 */}
 

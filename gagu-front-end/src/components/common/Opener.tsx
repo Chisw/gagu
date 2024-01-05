@@ -1,10 +1,11 @@
-import { useRecoilState } from 'recoil'
-import { entrySelectorEventState } from '../../states'
 import { EntryType, EventTransaction } from '../../types'
 import { useTranslation } from 'react-i18next'
 import { SvgIcon } from './SvgIcon'
 import { line } from '../../utils'
 import { useEffect, useState } from 'react'
+import { EntryPicker, EntryPickerMode } from '../EntryPicker'
+import { openEventState } from '../../states'
+import { useRecoilState } from 'recoil'
 
 interface OpenerProps {
   show: boolean
@@ -19,7 +20,7 @@ export function Opener(props: OpenerProps) {
 
   const { t } = useTranslation()
 
-  const [, setEntrySelectorEvent] = useRecoilState(entrySelectorEventState)
+  const [, setOpenEvent] = useRecoilState(openEventState)
 
   const [mounted, setMounted] = useState(false)
 
@@ -45,7 +46,21 @@ export function Opener(props: OpenerProps) {
               ${mounted ? '-rotate-3' : 'rotate-6 translate-y-10 opacity-0 scale-50'}
             `)}
           />
-          <div>
+          <EntryPicker
+            {...{
+              appId,
+              mode: EntryPickerMode.open,
+              type: EntryType.file,
+            }}
+            onConfirm={({ pickedEntryList, pickedPath }) => {
+              setOpenEvent({
+                transaction: EventTransaction.run_app,
+                appId,
+                entryList: pickedEntryList,
+                extraData: { selectedPath: pickedPath },
+              })
+            }}
+          >
             <div
               className={line(`
                 flex justify-center items-center
@@ -56,19 +71,11 @@ export function Opener(props: OpenerProps) {
                 dark:bg-zinc dark:bg-opacity-20 dark:border-zinc-400 dark:border-opacity-20 dark:text-zinc-200
                 ${mounted ? 'duration-200' : 'duration-700 opacity-0'}
               `)}
-              onClick={() => {
-                setEntrySelectorEvent({
-                  transaction: EventTransaction.run_app,
-                  mode: 'open',
-                  appId,
-                  type: EntryType.file,
-                })
-              }}
             >
               <SvgIcon.FolderOpen size={14} />
               <span className="ml-2">{t`action.openFile`}</span>
             </div>
-          </div>
+          </EntryPicker>
         </div>
       </div>
     </>

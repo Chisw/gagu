@@ -37,6 +37,7 @@ import { throttle } from 'lodash-es'
 import { useTouchMode } from './useTouchMode'
 import { useAddUploadingTask } from './useAddUploadingTask'
 import { useUserConfig } from './useUserConfig'
+import { EntryPickerProps } from '../components'
 
 const RefreshTimerCache: {
   [PATH: string]: {
@@ -104,6 +105,7 @@ export function useFileExplorer(props: Props) {
   const [filterMode, setFilterMode] = useState(false)
   const [filterText, setFilterText] = useState('')
   const [sharingEntryList, setSharingEntryList] = useState<IEntry[]>([])
+  const [activeEntryPickerProps, setActiveEntryPickerProps] = useState<EntryPickerProps | null>(null)
   const [thumbScrollWatcher, setThumbScrollWatcher] = useState<IScrollerWatcher>({ top: 0, height: 0 })
 
   const { request: queryEntryList, loading: querying } = useRequest(FsApi.queryEntryList)
@@ -562,6 +564,7 @@ export function useFileExplorer(props: Props) {
     lastVisitedPath, setLastVisitedPath,
     selectedEntryList, setSelectedEntryList,
     sharingModalShow, setSharingModalShow,
+    activeEntryPickerProps, setActiveEntryPickerProps,
     handleSelectAll, handleDirectorySizeUpdate, handleUploadTaskAdd, 
     handleDirectoryOpen, handleGoFullPath,
     handleNavBack, handleNavForward, handleNavRefresh, handleNavAbort, handleNavToParent,

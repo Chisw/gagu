@@ -4,7 +4,7 @@ import { line } from '../../utils'
 interface SideProps extends RootEntryGroupsProps {
   sideShow: boolean
   setSideShow: (show: boolean) => void
-  asSelector?: boolean
+  asEntryPicker?: boolean
 }
 
 export default function Side(props: SideProps) {
@@ -16,7 +16,7 @@ export default function Side(props: SideProps) {
     rootEntryList,
     onRootEntryClick,
     onFavoriteCancel,
-    asSelector = false,
+    asEntryPicker = false,
   } = props
 
   return (
@@ -29,7 +29,7 @@ export default function Side(props: SideProps) {
           duration-transform duration-300 ease-in-out
           dark:bg-black dark:border-zinc-600
           ${sideShow ? 'translate-x-0' : '-translate-x-64'}
-          ${asSelector ? 'top-0' : 'top-8 md:top-6'}
+          ${asEntryPicker ? 'top-0' : 'top-8 md:top-6'}
         `)}
       >
         <RootEntryGroups

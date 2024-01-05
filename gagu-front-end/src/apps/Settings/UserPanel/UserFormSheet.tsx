@@ -317,8 +317,8 @@ export default function UserFormModal(props: UserFormModalProps) {
                     mode: EntryPickerMode.open,
                     type: EntryType.directory,
                   }}
-                  onConfirm={({ selectedPath }) => {
-                    const assignedRootPathList = Array.from(new Set([...form.assignedRootPathList, selectedPath]))
+                  onConfirm={({ pickedPath }) => {
+                    const assignedRootPathList = Array.from(new Set([...form.assignedRootPathList, pickedPath]))
                     setForm({ ...form, assignedRootPathList })
                   }}
                 >

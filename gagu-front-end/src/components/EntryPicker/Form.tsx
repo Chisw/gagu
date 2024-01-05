@@ -6,8 +6,8 @@ import { Button } from '@douyinfe/semi-ui'
 export interface FormProps {
   touchMode: boolean
   disabled: boolean
-  isSelectingPath: boolean
-  selectedPath: string
+  isPickingPath: boolean
+  pickedPath: string
   warningShow: boolean
   onCancel: () => void
   onConfirm: () => void
@@ -17,8 +17,8 @@ export default function Form(props: FormProps) {
   const {
     touchMode,
     disabled,
-    isSelectingPath,
-    selectedPath,
+    isPickingPath,
+    pickedPath,
     warningShow,
     onCancel,
     onConfirm,
@@ -28,7 +28,7 @@ export default function Form(props: FormProps) {
 
   return (
     <div>
-      {isSelectingPath && (
+      {isPickingPath && (
         <div
           className={line(`
             p-2 bg-gray-100 rounded flex items-center border border-gray-200
@@ -37,7 +37,7 @@ export default function Form(props: FormProps) {
           `)}
         >
           <SvgIcon.Folder className="flex-shrink-0" />
-          <div className="flex-grow ml-1 break-all text-left">{selectedPath}</div>
+          <div className="flex-grow ml-1 break-all text-left">{pickedPath}</div>
         </div>
       )}
       <div className="flex justify-between items-center">
@@ -46,6 +46,7 @@ export default function Form(props: FormProps) {
         </div>
         <div className="flex-shrink-0">
           <Button
+            className="gagu-sync-popstate-overlay-close-button"
             style={{ margin: 0 }}
             onClick={() => onCancel()}
           >

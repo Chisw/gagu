@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { SharingModal } from '../../components'
+import { EntryPicker, SharingModal } from '../../components'
 import { useWorkArea } from '../../hooks'
 import StatusBar from './StatusBar'
 import ControlBar from './ControlBar'
@@ -16,10 +16,10 @@ export default function FileExplorer(props: FileExplorerProps) {
     windowSize: { width: windowWidth },
     setWindowTitle,
     additionalEntryList,
-    asSelector = false,
+    asEntryPicker = false,
     onCurrentPathChange = () => {},
-    onSelect = () => {},
-    onSelectDoubleConfirm = () => {},
+    onPick = () => {},
+    onPickDoubleConfirm = () => {},
   } = props
 
   const {
@@ -39,6 +39,7 @@ export default function FileExplorer(props: FileExplorerProps) {
     gridMode, handleGridModeChange,
     sortType, handleSortChange,
     sharingModalShow, setSharingModalShow,
+    activeEntryPickerProps,
     editMode, handleEdit, handleNameSuccess, handleNameFail,
     handleEntryClick, handleEntryDoubleClick,
     handleDirectoryOpen, handleGoFullPath,
@@ -49,11 +50,11 @@ export default function FileExplorer(props: FileExplorerProps) {
   } = useWorkArea({
     isUserDesktop: false,
     isTopWindow,
-    asSelector,
+    asEntryPicker,
     specifiedPath: additionalEntryList?.length ? getEntryPath(additionalEntryList[0]) : '',
     onCurrentPathChange,
-    onSelect,
-    onSelectDoubleConfirm,
+    onPick,
+    onPickDoubleConfirm,
     onOpenDesktopDirectory: () => {},
   })
 
@@ -63,7 +64,7 @@ export default function FileExplorer(props: FileExplorerProps) {
 
   return (
     <>
-      <div className={`absolute inset-0 flex ${asSelector ? '' : 'border-t border-gray-100 dark:border-zinc-700'}`}>
+      <div className={`absolute inset-0 flex ${asEntryPicker ? '' : 'border-t border-gray-100 dark:border-zinc-700'}`}>
         <Side
           {...{ sideCollapse, currentPath, rootEntryList }}
           onRootEntryClick={(entry) => handleDirectoryOpen(entry, true)}
@@ -157,7 +158,7 @@ export default function FileExplorer(props: FileExplorerProps) {
                       supportThumbnail,
                       thumbScrollWatcher,
                     }}
-                    draggable={!inputMode && !asSelector}
+                    draggable={!inputMode && !asEntryPicker}
                     requestState={{ deleting, sizeQuerying }}
                     onClick={handleEntryClick}
                     onDoubleClick={handleEntryDoubleClick}
@@ -189,6 +190,7 @@ export default function FileExplorer(props: FileExplorerProps) {
         onClose={() => setSharingModalShow(false)}
       />
 
+      {activeEntryPickerProps && <EntryPicker forceShow {...activeEntryPickerProps} />}
     </>
   )
 }

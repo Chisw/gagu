@@ -5,7 +5,7 @@ import { activePageState, userInfoState, runningAppListState, topWindowIndexStat
 import EntryNode from '../../apps/FileExplorer/EntryNode'
 import { AppId, CreationType, EditMode, IApp, IEntry, Page } from '../../types'
 import { useWorkArea } from '../../hooks'
-import { SharingModal } from '../../components'
+import { EntryPicker, SharingModal } from '../../components'
 import { APP_LIST } from '../../apps'
 
 export default function Desktop() {
@@ -42,6 +42,7 @@ export default function Desktop() {
     favoriteRootEntryList, sharingEntryList,
     querying, sizeQuerying, deleting,
     sharingModalShow, setSharingModalShow,
+    activeEntryPickerProps,
     editMode, handleNameSuccess, handleNameFail,
     handleEntryClick, handleEntryDoubleClick,
     handleSelectCancel,
@@ -49,11 +50,11 @@ export default function Desktop() {
   } = useWorkArea({
     isUserDesktop: true,
     isTopWindow,
-    asSelector: false,
+    asEntryPicker: false,
     specifiedPath: userInfo?.userPath ? `${userInfo?.userPath}/desktop` : '',
     onCurrentPathChange: () => {},
-    onSelect: () => {},
-    onSelectDoubleConfirm: () => {},
+    onPick: () => {},
+    onPickDoubleConfirm: () => {},
     onOpenDesktopDirectory: handleOpenDesktopDirectory,
   })
 
@@ -149,6 +150,9 @@ export default function Desktop() {
         entryList={sharingEntryList}
         onClose={() => setSharingModalShow(false)}
       />
+
+      {activeEntryPickerProps && <EntryPicker forceShow {...activeEntryPickerProps} />}
+
     </>
   )
 }
