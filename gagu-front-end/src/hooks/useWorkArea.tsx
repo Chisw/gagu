@@ -1,15 +1,14 @@
 import { useRecoilState } from 'recoil'
 import { contextMenuDataState, openEventState } from '../states'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useDragTransfer, useFileExplorer, useHotKey, useLassoSelect, useMoveEntries } from '.'
-import { AppId, EditMode, EditModeType, EntryType, EventTransaction, IContextMenuItem, IEntry, ILassoInfo, NameFailType } from '../types'
+import { useDragTransfer, useFileExplorer, useHotKey, useLassoSelect } from '.'
+import { EditMode, EditModeType, EntryType, EventTransaction, IContextMenuItem, IEntry, ILassoInfo, NameFailType } from '../types'
 import { GEN_THUMBNAIL_IMAGE_LIST, getEntryPath, getIsCovered, getMatchedApp, getIsSameEntry, openInIINA } from '../utils'
 import { pick, throttle } from 'lodash-es'
 import { SvgIcon } from '../components/common'
 import { useTranslation } from 'react-i18next'
 import { CALLABLE_APP_LIST } from '../apps'
 import toast from 'react-hot-toast'
-import { EntryPickerMode } from '../components'
 
 interface useWorkAreaProps {
   isUserDesktop: boolean
@@ -35,7 +34,6 @@ export function useWorkArea(props: useWorkAreaProps) {
   } = props
 
   const { t } = useTranslation()
-  const { handleMove } = useMoveEntries()
 
   const [, setOpenEvent] = useRecoilState(openEventState)
   const [, setContextMenuData] = useRecoilState(contextMenuDataState)
@@ -65,12 +63,12 @@ export function useWorkArea(props: useWorkAreaProps) {
     lastVisitedPath, setLastVisitedPath,
     selectedEntryList, setSelectedEntryList,
     sharingModalShow, setSharingModalShow,
-    activeEntryPickerProps, setActiveEntryPickerProps,
+    movementEntryPickerShow, setMovementEntryPickerShow,
     handleSelectAll, handleDirectorySizeUpdate, handleUploadTaskAdd, 
     handleDirectoryOpen, handleGoFullPath,
     handleNavBack, handleNavForward, handleNavRefresh, handleNavAbort, handleNavToParent,
     handleUploadClick, handleDownloadClick,
-    handleShareClick, handleFavoriteClick, handleDeleteClick,
+    handleShareClick, handleFavoriteClick, handleMove, handleDeleteClick,
   } = useFileExplorer({ containerRef, specifiedPath, isUserDesktop })
 
   const handleEdit = useCallback((editModeType: EditModeType) => {
@@ -337,19 +335,7 @@ export function useWorkArea(props: useWorkAreaProps) {
         icon: <SvgIcon.MoveTo />,
         name: t`action.moveTo`,
         isShow: !isOnBlank,
-        onClick: () => {
-          setActiveEntryPickerProps({
-            appId: AppId.fileExplorer,
-            mode: EntryPickerMode.open,
-            type: EntryType.directory,
-            children: null,
-            onConfirm: ({ pickedPath }) => {
-              handleMove(contextEntryList, pickedPath)
-              setActiveEntryPickerProps(null)
-            },
-            onCancel: () => setActiveEntryPickerProps(null),
-          })
-        },
+        onClick: () => setMovementEntryPickerShow(true),
       },
       {
         icon: isFavorited ? <SvgIcon.Star /> : <SvgIcon.StarSolid />,
@@ -394,11 +380,10 @@ export function useWorkArea(props: useWorkAreaProps) {
     setContextMenuData,
     setSelectedEntryList,
     setOpenEvent,
-    setActiveEntryPickerProps,
+    setMovementEntryPickerShow,
     handleNavRefresh,
     handleUploadClick,
     handleDirectorySizeUpdate,
-    handleMove,
     handleFavoriteClick,
     handleDownloadClick,
     handleShareClick,
@@ -459,11 +444,11 @@ export function useWorkArea(props: useWorkAreaProps) {
     gridMode, handleGridModeChange,
     sortType, handleSortChange,
     sharingModalShow, setSharingModalShow,
-    activeEntryPickerProps, setActiveEntryPickerProps,
+    movementEntryPickerShow, setMovementEntryPickerShow,
     editMode, handleEdit, handleNameSuccess, handleNameFail,
     handleEntryClick, handleEntryDoubleClick,
     handleDirectoryOpen, handleGoFullPath,
-    handleFavoriteClick, handleDeleteClick,
+    handleFavoriteClick, handleMove, handleDeleteClick,
     handleSelectAll, handleSelectCancel,
     handleNavBack, handleNavForward, handleNavRefresh, handleNavAbort, handleNavToParent,
     handleUploadClick, handleDownloadClick, handleContextMenu,

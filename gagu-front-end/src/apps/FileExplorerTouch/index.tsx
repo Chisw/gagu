@@ -8,7 +8,7 @@ import EntryNode from './EntryNode'
 import SelectionMenu from './SelectionMenu'
 import Side from './Side'
 import { useFileExplorer } from '../../hooks'
-import { EntryPicker, SharingModal } from '../../components'
+import { EntryPicker, EntryPickerMode, SharingModal } from '../../components'
 import { openEventState } from '../../states'
 import { useRecoilState } from 'recoil'
 import { AppId, EntryType, EventTransaction, ExplorerPickProps, IEntry } from '../../types'
@@ -67,12 +67,12 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
     sortType, handleSortChange,
     selectedEntryList, setSelectedEntryList,
     sharingModalShow, setSharingModalShow,
-    activeEntryPickerProps, setActiveEntryPickerProps,
+    movementEntryPickerShow, setMovementEntryPickerShow,
     handleSelectAll, handleDirectorySizeUpdate,
     handleDirectoryOpen, handleGoFullPath,
     handleNavBack, handleNavForward, handleNavRefresh, handleNavAbort, handleNavToParent,
     handleUploadClick, handleDownloadClick,
-    handleShareClick, handleFavoriteClick, handleDeleteClick,
+    handleShareClick, handleFavoriteClick, handleMove, handleDeleteClick,
   } = useFileExplorer({ containerRef })
 
   const handleEntryClick = useCallback((entry: IEntry) => {
@@ -139,6 +139,10 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
 
   }, [sideShow, selectedEntryList, entryList, setSelectedEntryList, setIsSelectionMode])
 
+  const handleSelectionCancel = useCallback(() => {
+    setIsSelectionMode(false)
+    setSelectedEntryList([])
+  }, [setIsSelectionMode, setSelectedEntryList])
 
   const handleStatePop = useCallback(() => {
     const keepPath = () => navigate(`/touch?path=${currentPath}`)
@@ -324,7 +328,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
           asEntryPicker,
           favoriteRootEntryList,
           selectedEntryList,
-          setActiveEntryPickerProps,
+          setMovementEntryPickerShow,
         }}
         onEdit={(mode, entry) => {
           setEditMode(mode)
@@ -337,10 +341,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
         onShareClick={handleShareClick}
         onDeleteClick={handleDeleteClick}
         onSelectAll={handleSelectAll}
-        onCancel={() => {
-          setIsSelectionMode(false)
-          setSelectedEntryList([])
-        }}
+        onCancel={handleSelectionCancel}
       />
 
       <SharingModal
@@ -349,7 +350,21 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
         onClose={() => setSharingModalShow(false)}
       />
 
-      {activeEntryPickerProps && <EntryPicker forceShow {...activeEntryPickerProps} />}
+      <EntryPicker
+        show={movementEntryPickerShow}
+        appId={AppId.fileExplorer}
+        mode={EntryPickerMode.open}
+        type={EntryType.directory}
+        onConfirm={({ pickedPath }) => {
+          handleMove(selectedEntryList, pickedPath)
+          handleSelectionCancel()
+          setMovementEntryPickerShow(false)
+        }}
+        onCancel={() => {
+          handleSelectionCancel()
+          setMovementEntryPickerShow(false)
+        }}
+      />
 
       <EntryNameDialog
         {...{

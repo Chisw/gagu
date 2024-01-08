@@ -5,6 +5,7 @@ import { SvgIcon } from '../../../components/common'
 import { useTouchMode, useUserConfig } from '../../../hooks'
 import { AppId, ColorScheme, EntryType, HotkeyStyle } from '../../../types'
 import { EntryPicker, EntryPickerMode } from '../../../components'
+import { useState } from 'react'
 
 export default function GeneralSettings() {
   const { t, i18n: { language } } = useTranslation()
@@ -12,6 +13,8 @@ export default function GeneralSettings() {
   const touchMode = useTouchMode()
 
   const { userConfig, setUserConfig } = useUserConfig()
+
+  const [defaultPathEntryPickerShow, setDefaultPathEnteryPickerShow] = useState(false)
 
   return (
     <>
@@ -107,24 +110,28 @@ export default function GeneralSettings() {
                 autoComplete="off"
                 value={userConfig.fileExplorerDefaultPath}
               />
-              <EntryPicker
-                {...{
-                  appId: AppId.settings,
-                  mode: EntryPickerMode.open,
-                  type: EntryType.directory,
-                }}
-                onConfirm={({ pickedPath }) => {
-                  setUserConfig({ ...userConfig, fileExplorerDefaultPath: pickedPath })
-                }}
+              <Button
+                className="ml-1 flex-shrink-0"
+                onClick={() => setDefaultPathEnteryPickerShow(true)}
               >
-                <Button className="ml-1 flex-shrink-0">
-                  <SvgIcon.FolderOpen />
-                </Button>
-              </EntryPicker>
+                <SvgIcon.FolderOpen />
+              </Button>
             </div>
           </Form.Slot>
         </Form>
       </div>
+
+      <EntryPicker
+        show={defaultPathEntryPickerShow}
+        appId={AppId.settings}
+        mode={EntryPickerMode.open}
+        type={EntryType.directory}
+        onConfirm={({ pickedPath }) => {
+          setUserConfig({ ...userConfig, fileExplorerDefaultPath: pickedPath })
+          setDefaultPathEnteryPickerShow(false)
+        }}
+        onCancel={() => setDefaultPathEnteryPickerShow(false)}
+      />
     </>
   )
 }

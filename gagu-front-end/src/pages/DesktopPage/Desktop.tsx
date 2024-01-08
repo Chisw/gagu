@@ -3,9 +3,9 @@ import { useRecoilState } from 'recoil'
 import { getIsSameEntry, line } from '../../utils'
 import { activePageState, userInfoState, runningAppListState, topWindowIndexState } from '../../states'
 import EntryNode from '../../apps/FileExplorer/EntryNode'
-import { AppId, CreationType, EditMode, IApp, IEntry, Page } from '../../types'
+import { AppId, CreationType, EditMode, EntryType, IApp, IEntry, Page } from '../../types'
 import { useWorkArea } from '../../hooks'
-import { EntryPicker, SharingModal } from '../../components'
+import { EntryPicker, EntryPickerMode, SharingModal } from '../../components'
 import { APP_LIST } from '../../apps'
 
 export default function Desktop() {
@@ -42,9 +42,10 @@ export default function Desktop() {
     favoriteRootEntryList, sharingEntryList,
     querying, sizeQuerying, deleting,
     sharingModalShow, setSharingModalShow,
-    activeEntryPickerProps,
+    movementEntryPickerShow, setMovementEntryPickerShow,
     editMode, handleNameSuccess, handleNameFail,
     handleEntryClick, handleEntryDoubleClick,
+    handleMove,
     handleSelectCancel,
     handleContextMenu,
   } = useWorkArea({
@@ -151,7 +152,17 @@ export default function Desktop() {
         onClose={() => setSharingModalShow(false)}
       />
 
-      {activeEntryPickerProps && <EntryPicker forceShow {...activeEntryPickerProps} />}
+      <EntryPicker
+        show={movementEntryPickerShow}
+        appId={AppId.fileExplorer}
+        mode={EntryPickerMode.open}
+        type={EntryType.directory}
+        onConfirm={({ pickedPath }) => {
+          handleMove(selectedEntryList, pickedPath)
+          setMovementEntryPickerShow(false)
+        }}
+        onCancel={() => setMovementEntryPickerShow(false)}
+      />
 
     </>
   )

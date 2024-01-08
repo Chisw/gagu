@@ -1,5 +1,5 @@
 import md5 from 'md5'
-import { useCallback, useMemo, useRef } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 import { FormModeType } from '.'
 import { FsApi, UserApi } from '../../../api'
@@ -43,6 +43,8 @@ export default function UserFormModal(props: UserFormModalProps) {
   const touchMode = useTouchMode()
 
   const [userInfo] = useRecoilState(userInfoState)
+
+  const [assignedPathEntryPickerShow, setAssignedPathEnteryPickerShow] = useState(false)
 
   const { request: createUser, loading: creating } = useRequest(UserApi.createUser)
   const { request: updateUser, loading: updating } = useRequest(UserApi.updateUser)
@@ -311,24 +313,13 @@ export default function UserFormModal(props: UserFormModalProps) {
                 ))}
               </div>
               <div className="py-1">
-                <EntryPicker
-                  {...{
-                    appId: AppId.settings,
-                    mode: EntryPickerMode.open,
-                    type: EntryType.directory,
-                  }}
-                  onConfirm={({ pickedPath }) => {
-                    const assignedRootPathList = Array.from(new Set([...form.assignedRootPathList, pickedPath]))
-                    setForm({ ...form, assignedRootPathList })
-                  }}
+                <Button
+                  size="small"
+                  icon={<SvgIcon.Add />}
+                  onClick={() => setAssignedPathEnteryPickerShow(true)}
                 >
-                  <Button
-                    size="small"
-                    icon={<SvgIcon.Add />}
-                  >
-                    {t`action.add`}
-                  </Button>
-                </EntryPicker>
+                  {t`action.add`}
+                </Button>
               </div>
               {(!isAdminister && !isAssigned) && (
                 <p className="mt-1 text-xs text-gray-500 flex items-center dark:text-zinc-400">
@@ -357,6 +348,19 @@ export default function UserFormModal(props: UserFormModalProps) {
           </Form>
         </div>
       </SideSheet>
+
+      <EntryPicker
+        show={assignedPathEntryPickerShow}
+        appId={AppId.settings}
+        mode={EntryPickerMode.open}
+        type={EntryType.directory}
+        onConfirm={({ pickedPath }) => {
+          const assignedRootPathList = Array.from(new Set([...form.assignedRootPathList, pickedPath]))
+          setForm({ ...form, assignedRootPathList })
+          setAssignedPathEnteryPickerShow(false)
+        }}
+        onCancel={() => setAssignedPathEnteryPickerShow(false)}
+      />
     </>
   )
 }

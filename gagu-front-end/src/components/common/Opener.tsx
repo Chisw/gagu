@@ -23,6 +23,7 @@ export function Opener(props: OpenerProps) {
   const [, setOpenEvent] = useRecoilState(openEventState)
 
   const [mounted, setMounted] = useState(false)
+  const [openerEntryPickerShow, setOpenerEnteryPickerShow] = useState(false)
 
   useEffect(() => {
     setTimeout(() => setMounted(true), 400)
@@ -46,38 +47,39 @@ export function Opener(props: OpenerProps) {
               ${mounted ? '-rotate-3' : 'rotate-6 translate-y-10 opacity-0 scale-50'}
             `)}
           />
-          <EntryPicker
-            {...{
-              appId,
-              mode: EntryPickerMode.open,
-              type: EntryType.file,
-            }}
-            onConfirm={({ pickedEntryList, pickedPath }) => {
-              setOpenEvent({
-                transaction: EventTransaction.run_app,
-                appId,
-                entryList: pickedEntryList,
-                extraData: { selectedPath: pickedPath },
-              })
-            }}
+          <div
+            className={line(`
+              flex justify-center items-center
+              mt-12 p-2 w-36 border select-none
+              cursor-pointer rounded bg-white bg-opacity-90
+              text-xs text-gray-600 hover:text-gray-900 hover:opacity-80
+              transition-all
+              dark:bg-zinc dark:bg-opacity-20 dark:border-zinc-400 dark:border-opacity-20 dark:text-zinc-200
+              ${mounted ? 'duration-200' : 'duration-700 opacity-0'}
+            `)}
+            onClick={() => setOpenerEnteryPickerShow(true)}
           >
-            <div
-              className={line(`
-                flex justify-center items-center
-                mt-12 p-2 w-36 border
-                cursor-pointer rounded bg-white bg-opacity-90
-                text-xs text-gray-600 hover:text-gray-900 hover:opacity-80
-                transition-all
-                dark:bg-zinc dark:bg-opacity-20 dark:border-zinc-400 dark:border-opacity-20 dark:text-zinc-200
-                ${mounted ? 'duration-200' : 'duration-700 opacity-0'}
-              `)}
-            >
-              <SvgIcon.FolderOpen size={14} />
-              <span className="ml-2">{t`action.openFile`}</span>
-            </div>
-          </EntryPicker>
+            <SvgIcon.FolderOpen size={14} />
+            <span className="ml-2">{t`action.openFile`}</span>
+          </div>
         </div>
       </div>
+
+      <EntryPicker
+        show={openerEntryPickerShow}
+        appId={appId}
+        mode={EntryPickerMode.open}
+        type={EntryType.file}
+        onConfirm={({ pickedEntryList }) => {
+          setOpenEvent({
+            transaction: EventTransaction.run_app,
+            appId,
+            entryList: pickedEntryList,
+          })
+          setOpenerEnteryPickerShow(false)
+        }}
+        onCancel={() => setOpenerEnteryPickerShow(false)}
+      />
     </>
   )
 }

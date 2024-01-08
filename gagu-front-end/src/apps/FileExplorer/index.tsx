@@ -1,12 +1,12 @@
 import { useEffect } from 'react'
-import { EntryPicker, SharingModal } from '../../components'
+import { EntryPicker, EntryPickerMode, SharingModal } from '../../components'
 import { useWorkArea } from '../../hooks'
 import StatusBar from './StatusBar'
 import ControlBar from './ControlBar'
 import Side from './Side'
 import { EmptyPanel } from '../../components/common'
 import { getEntryPath, getIsSameEntry, line } from '../../utils'
-import { FileExplorerProps, EditMode, CreationType } from '../../types'
+import { FileExplorerProps, EditMode, CreationType, AppId, EntryType } from '../../types'
 import EntryNode from './EntryNode'
 
 export default function FileExplorer(props: FileExplorerProps) {
@@ -39,11 +39,11 @@ export default function FileExplorer(props: FileExplorerProps) {
     gridMode, handleGridModeChange,
     sortType, handleSortChange,
     sharingModalShow, setSharingModalShow,
-    activeEntryPickerProps,
+    movementEntryPickerShow, setMovementEntryPickerShow,
     editMode, handleEdit, handleNameSuccess, handleNameFail,
     handleEntryClick, handleEntryDoubleClick,
     handleDirectoryOpen, handleGoFullPath,
-    handleFavoriteClick, handleDeleteClick,
+    handleFavoriteClick, handleMove, handleDeleteClick,
     handleSelectAll, handleSelectCancel,
     handleNavBack, handleNavForward, handleNavRefresh, handleNavAbort, handleNavToParent,
     handleUploadClick, handleDownloadClick, handleContextMenu,
@@ -190,7 +190,17 @@ export default function FileExplorer(props: FileExplorerProps) {
         onClose={() => setSharingModalShow(false)}
       />
 
-      {activeEntryPickerProps && <EntryPicker forceShow {...activeEntryPickerProps} />}
+      <EntryPicker
+        show={movementEntryPickerShow}
+        appId={AppId.fileExplorer}
+        mode={EntryPickerMode.open}
+        type={EntryType.directory}
+        onConfirm={({ pickedPath }) => {
+          handleMove(selectedEntryList, pickedPath)
+          setMovementEntryPickerShow(false)
+        }}
+        onCancel={() => setMovementEntryPickerShow(false)}
+      />
     </>
   )
 }

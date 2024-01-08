@@ -33,6 +33,7 @@ export default function StatusBar(props: StatusBarProps) {
   const { t } = useTranslation()
 
   const touchMode = useTouchMode()
+  const dragDropProps = useDragDrop({ onOpen: onDirClick })
 
   const {
     selectedCount,
@@ -60,8 +61,6 @@ export default function StatusBar(props: StatusBarProps) {
       isRootEntryDisabled,
     }
   }, [currentPath, currentRootEntry, selectedEntryList])
-
-  const dragDropProps = useDragDrop({ onOpen: onDirClick })
 
   if (!currentRootEntry) return <div />
 

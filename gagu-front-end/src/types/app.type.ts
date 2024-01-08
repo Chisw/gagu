@@ -63,7 +63,6 @@ export interface IOpenEvent {
   appId: string
   entryList: IEntry[]
   forceOpen?: boolean
-  extraData?: { [KEY: string]: any }
 }
 
 export enum PlayMode {

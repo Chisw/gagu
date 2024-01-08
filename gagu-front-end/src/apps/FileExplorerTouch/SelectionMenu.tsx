@@ -1,21 +1,19 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { getIsSameEntry, line } from '../../utils'
-import { AppId, EditMode, EditModeType, EntryType, EventTransaction, IEntry } from '../../types'
+import { EditMode, EditModeType, EventTransaction, IEntry } from '../../types'
 import { useTranslation } from 'react-i18next'
 import { SvgIcon } from '../../components/common'
 import { CALLABLE_APP_LIST } from '../../apps'
 import { Modal } from '@douyinfe/semi-ui'
 import { useRecoilState } from 'recoil'
 import { openEventState } from '../../states'
-import { useMoveEntries } from '../../hooks'
-import { EntryPickerMode, EntryPickerProps } from '../../components'
 
 interface SelectionMenuProps {
   show: boolean
   asEntryPicker?: boolean
   favoriteRootEntryList: IEntry[]
   selectedEntryList: IEntry[]
-  setActiveEntryPickerProps: (props: EntryPickerProps | null) => void
+  setMovementEntryPickerShow: (show: boolean) => void
   onEdit: (mode: EditModeType, entry?: IEntry) => void
   onDirectorySizeUpdate: (entry: IEntry) => void
   onFavoriteClick: (entry: IEntry, isFavorited: boolean) => void
@@ -33,7 +31,7 @@ export default function SelectionMenu(props: SelectionMenuProps) {
     asEntryPicker = false,
     favoriteRootEntryList,
     selectedEntryList,
-    setActiveEntryPickerProps,
+    setMovementEntryPickerShow,
     onEdit,
     onDirectorySizeUpdate,
     onFavoriteClick,
@@ -46,7 +44,6 @@ export default function SelectionMenu(props: SelectionMenuProps) {
   } = props
 
   const { t } = useTranslation()
-  const { handleMove } = useMoveEntries()
 
   const [, setOpenEvent] = useRecoilState(openEventState)
 
@@ -103,23 +100,7 @@ export default function SelectionMenu(props: SelectionMenuProps) {
         name: t`action.moveTo`,
         isShow: !isOnBlank,
         noCancel: true,
-        onClick: () => {
-          setActiveEntryPickerProps({
-            appId: AppId.fileExplorer,
-            mode: EntryPickerMode.open,
-            type: EntryType.directory,
-            children: null,
-            onConfirm: ({ pickedPath }) => {
-              handleMove(selectedEntryList, pickedPath)
-              setActiveEntryPickerProps(null)
-              onCancel()
-            },
-            onCancel: () => {
-              setActiveEntryPickerProps(null)
-              onCancel()
-            },
-          })
-        },
+        onClick: () => setMovementEntryPickerShow(true),
       },
       {
         icon: <SvgIcon.Rename />,
@@ -169,10 +150,9 @@ export default function SelectionMenu(props: SelectionMenuProps) {
     t,
     asEntryPicker,
     selectedEntryList,
-    onSelectAll,
     favoriteRootEntryList,
-    handleMove,
-    setActiveEntryPickerProps,
+    setMovementEntryPickerShow,
+    onSelectAll,
     onEdit,
     onDirectorySizeUpdate,
     onFavoriteClick,
@@ -180,7 +160,6 @@ export default function SelectionMenu(props: SelectionMenuProps) {
     onDownloadClick,
     onShareClick,
     onDeleteClick,
-    onCancel,
   ])
 
   const handleOpenEntry = useCallback((appId: string) => {

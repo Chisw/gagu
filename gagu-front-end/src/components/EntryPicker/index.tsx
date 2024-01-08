@@ -1,5 +1,5 @@
 import { Modal, SideSheet } from '@douyinfe/semi-ui'
-import { ReactNode, useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { EntryType, IEntry } from '../../types'
 import { useTranslation } from 'react-i18next'
 import FileExplorer from '../../apps/FileExplorer'
@@ -18,24 +18,20 @@ interface EntryPickerResult {
   pickedPath: string
 }
 
-export interface EntryPickerProps {
-  forceShow?: boolean
-  children: ReactNode
-  childrenWrapperClassName?: string
+interface EntryPickerProps {
+  show: boolean
   appId: string
   mode: EntryPickerMode.open | EntryPickerMode.save
   type: EntryType.directory | EntryType.file
   multiple?: boolean
   onConfirm: (result: EntryPickerResult) => void
-  onCancel?: () => void
+  onCancel: () => void
 }
 
 export function EntryPicker(props: EntryPickerProps) {
 
   const {
-    forceShow = false,
-    children,
-    childrenWrapperClassName = '',
+    show,
     mode,
     appId,
     type,
@@ -48,7 +44,6 @@ export function EntryPicker(props: EntryPickerProps) {
 
   const touchMode = useTouchMode()
 
-  const [pickerShow, setPickerShow] = useState(forceShow)
   const [currentPath, setCurrentPath] = useState('')
   const [pickedEntryList, setPickedEntryList] = useState<IEntry[]>([])
   const [sideShow, setSideShow] = useState(false)
@@ -104,16 +99,7 @@ export function EntryPicker(props: EntryPickerProps) {
       pickedEntryList: pickedEntryList,
       pickedPath,
     })
-    !forceShow && setPickerShow(false)
-  }, [disabled, onConfirm, pickedEntryList, pickedPath, forceShow])
-
-  const handleCancel = useCallback(() => {
-    if (onCancel) {
-      onCancel()
-    } else {
-      setPickerShow(false)
-    }
-  }, [onCancel])
+  }, [disabled, onConfirm, pickedEntryList, pickedPath])
 
   const formProps: FormProps = useMemo(() => {
     const { isSaveMode, isPickingDirectory, isSingle } = pickerState
@@ -124,32 +110,24 @@ export function EntryPicker(props: EntryPickerProps) {
       pickedPath,
       warningShow: !disabled && !isExtensionMatched,
       onConfirm: handleConfirm,
-      onCancel: handleCancel,
+      onCancel,
     }
-  }, [pickerState, touchMode, disabled, pickedPath, isExtensionMatched, handleConfirm, handleCancel])
+  }, [pickerState, touchMode, disabled, pickedPath, isExtensionMatched, handleConfirm, onCancel])
 
   if (touchMode) {
     return (
       <>
-        {children && (
-          <div
-            className={childrenWrapperClassName}
-            onClick={() => setPickerShow(true)}
-          >
-            {children}
-          </div>
-        )}
         <SideSheet
           placement="bottom"
           closable={false}
           headerStyle={{ padding: '4px 6px' }}
           bodyStyle={{ position: 'relative', padding: 0 }}
-          visible={pickerShow}
+          visible={show}
           height="calc(100% - 3rem)"
           className="gagu-entry-selector-touch gagu-sync-popstate-overlay"
           style={{ borderTopRightRadius: 10, borderTopLeftRadius: 10 }}
-          onCancel={handleCancel}
-          title={<Form {...formProps} />}
+          onCancel={onCancel}
+          title={<div className="py-1"><Form {...formProps} /></div>}
         >
           <div className="absolute inset-0 border-t overflow-hidden">
             <FileExplorerTouch
@@ -172,19 +150,11 @@ export function EntryPicker(props: EntryPickerProps) {
 
   return (
     <>
-      {children && (
-        <div
-          className={childrenWrapperClassName}
-          onClick={() => setPickerShow(true)}
-        >
-          {children}
-        </div>
-      )}
       <Modal
         centered
         closable={false}
         width={1020}
-        visible={pickerShow}
+        visible={show}
         className="gagu-entry-selector"
         footer={<Form {...formProps} />}
       >
@@ -208,7 +178,7 @@ export function EntryPicker(props: EntryPickerProps) {
           <div className="mt-3 relative h-[540px] overflow-y-auto border bg-gray-100 bg-opacity-50 dark:bg-black dark:border-zinc-600">
             <FileExplorer
               asEntryPicker
-              isTopWindow={pickerShow}
+              isTopWindow={show}
               windowSize={{ width: 1020, height: 540 }}
               setWindowTitle={() => {}}
               closeWindow={() => {}}
