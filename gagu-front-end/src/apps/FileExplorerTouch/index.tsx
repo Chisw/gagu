@@ -19,27 +19,21 @@ import { useTranslation } from 'react-i18next'
 
 interface FileExplorerTouchProps extends ExplorerPickProps {
   show: boolean
-  sideShow: boolean
-  setSideShow: (show: boolean) => void
-  isSelectionMode: boolean
-  setIsSelectionMode: (show: boolean) => void
   activeAppId?: string
-  setDockExpanded?: (expanded: boolean) => void
+  setIsSideOrSelectionMenuShow?: (show: boolean) => void
+  onPopState?: () => void
 }
 
 export default function FileExplorerTouch(props: FileExplorerTouchProps) {
 
   const {
     show,
-    sideShow,
-    setSideShow,
-    isSelectionMode,
-    setIsSelectionMode,
     asEntryPicker = false,
     onCurrentPathChange = () => {},
     onPick = () => {},
     activeAppId = '',
-    setDockExpanded = () => {},
+    setIsSideOrSelectionMenuShow = () => {},
+    onPopState = () => {},
   } = props
 
   const navigate = useNavigate()
@@ -47,6 +41,8 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
 
   const [, setOpenEvent] = useRecoilState(openEventState)
 
+  const [sideShow, setSideShow] = useState(false)
+  const [isSelectionMode, setIsSelectionMode] = useState(false)
   const [activeEntry, setActiveEntry] = useState<IEntry | null>(null)
 
   const containerRef = useRef(null)
@@ -144,9 +140,9 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
     setSelectedEntryList([])
   }, [setIsSelectionMode, setSelectedEntryList])
 
-  const handleStatePop = useCallback(() => {
+  const handlePopState = useCallback(() => {
     const keepPath = () => navigate(`/touch?path=${currentPath}`)
-    setDockExpanded(false)
+    onPopState()
 
     if (sideShow) {
       keepPath()
@@ -183,7 +179,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
     setEditMode,
     activeAppId,
     handleNavBack,
-    setDockExpanded,
+    onPopState,
     sharingModalShow,
     setSharingModalShow,
     isSelectionMode,
@@ -205,6 +201,10 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
   }, [setIsSelectionMode, sideShow])
 
   useEffect(() => {
+    setIsSideOrSelectionMenuShow(sideShow || isSelectionMode)
+  }, [sideShow, isSelectionMode, setIsSideOrSelectionMenuShow])
+
+  useEffect(() => {
     onCurrentPathChange(currentPath)
   }, [onCurrentPathChange, currentPath])
 
@@ -213,9 +213,9 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
   }, [onPick, selectedEntryList])
 
   useEffect(() => {
-    window.addEventListener('popstate', handleStatePop)
-    return () => window.removeEventListener('popstate', handleStatePop)
-  }, [handleStatePop])
+    window.addEventListener('popstate', handlePopState)
+    return () => window.removeEventListener('popstate', handlePopState)
+  }, [handlePopState])
 
   useEffect(() => {
     !asEntryPicker && navigate(`/touch?path=${currentPath}`)

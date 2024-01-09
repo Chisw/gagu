@@ -1,4 +1,4 @@
-import { IEntry } from '../../types'
+import { EntryType, IEntry } from '../../types'
 import { getEntryLabels, line } from '../../utils'
 import EntryIcon from '../../apps/FileExplorer/EntryNode/EntryIcon'
 import { useEffect, useRef, useState } from 'react'
@@ -133,7 +133,7 @@ export default function EntryNode(props: EntryNodeProps) {
         </>
       )}
 
-      {type === 'directory' && !isSelectionMode && !gridMode && (
+      {type === EntryType.directory && !isSelectionMode && !gridMode && (
         <div
           className={line(`
             absolute z-10 pointer-events-none

@@ -92,11 +92,11 @@ export default function PhotoViewer(props: AppComponentProps) {
         const { success } = await deleteEntry(getEntryPath(activeEntry))
         if (success) {
           setLastChangedDirectory({ path: activeEntry!.parentPath, timestamp: Date.now() })
-          const len = matchedEntryList.length
-          if (len === 1) {
+          const count = matchedEntryList.length
+          if (count === 1) {
             closeWindow()
           } else {
-            const newActiveIndex = activeIndex === matchedEntryList.length - 1
+            const newActiveIndex = activeIndex === count - 1
               ? activeIndex - 1
               : activeIndex
             setActiveIndex(newActiveIndex)

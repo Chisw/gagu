@@ -46,8 +46,6 @@ export function EntryPicker(props: EntryPickerProps) {
 
   const [currentPath, setCurrentPath] = useState('')
   const [pickedEntryList, setPickedEntryList] = useState<IEntry[]>([])
-  const [sideShow, setSideShow] = useState(false)
-  const [isSelectionMode, setIsSelectionMode] = useState(false)
 
   const pickedPath = useMemo(() => {
     const selectedEntryPath = pickedEntryList.length === 1 ? `/${pickedEntryList[0].name}` : ''
@@ -131,14 +129,8 @@ export function EntryPicker(props: EntryPickerProps) {
         >
           <div className="absolute inset-0 border-t overflow-hidden">
             <FileExplorerTouch
+              show
               asEntryPicker
-              {...{
-                show: true,
-                sideShow,
-                setSideShow,
-                isSelectionMode,
-                setIsSelectionMode,
-              }}
               onCurrentPathChange={setCurrentPath}
               onPick={setPickedEntryList}
             />
