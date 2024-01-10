@@ -4,6 +4,7 @@ import { ServeStaticModule } from '@nestjs/serve-static'
 import { join } from 'path'
 import { ApiGuard } from './common/guards/api.guard'
 import { LoggerMiddleware } from './common/middlewares/logger.middleware'
+import { AndroidModule } from './modules/android/android.module'
 import { AuthModule } from './modules/auth/auth.module'
 import { DownloadModule } from './modules/download/download.module'
 import { FsModule } from './modules/fs/fs.module'
@@ -33,6 +34,7 @@ const rootPath = IS_DEV ? devRootPath : prodRootPath
     FsModule,
     TunnelModule,
     DownloadModule,
+    AndroidModule,
     SettingModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: ApiGuard }],

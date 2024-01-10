@@ -243,6 +243,7 @@
       "settings_system_images": "画像",
       "settings_system_general": "ユニバーサル",
       "settings_users": "ユーザー",
+      "settings_android": "Android コントロール",
       "settings_users_editUser": "ユーザーの編集：",
       "settings_users_newUser": "新しいユーザー"
     }
