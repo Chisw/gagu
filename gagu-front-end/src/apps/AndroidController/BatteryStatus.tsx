@@ -1,12 +1,12 @@
 import { useEffect, useMemo } from 'react'
 import { Button, Descriptions } from '@douyinfe/semi-ui'
-import { SvgIcon } from '../../../components/common'
-import { useRequest } from '../../../hooks'
-import { AndroidApi } from '../../../api'
+import { SvgIcon } from '../../components/common'
+import { useRequest } from '../../hooks'
+import { AndroidApi } from '../../api'
 
 export default function BatteryStatus() {
 
-  const { request: queryBatteryStatus, loading: queryingBatteryStatus, data: batteryStatusData } = useRequest(AndroidApi.queryBatteryStatus)
+  const { request: queryBatteryStatus, loading, data: batteryStatusData } = useRequest(AndroidApi.queryBatteryStatus)
 
   const data = useMemo(() => {
     const {
@@ -32,17 +32,19 @@ export default function BatteryStatus() {
   }, [queryBatteryStatus])
 
   return (
-    <div className="relative">
-      <Button
-        icon={<SvgIcon.Refresh />}
-        className="absolute top-0 right-0"
-        loading={queryingBatteryStatus}
-        onClick={queryBatteryStatus}
-      />
-      <Descriptions
-        align="left"
-        data={data}
-      />
-    </div>
+    <>
+      <div className="relative">
+        <Button
+          icon={<SvgIcon.Refresh />}
+          className="absolute top-0 right-0"
+          loading={loading}
+          onClick={queryBatteryStatus}
+        />
+        <Descriptions
+          align="left"
+          data={data}
+        />
+      </div>
+    </>
   )
 }

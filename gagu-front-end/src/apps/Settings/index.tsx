@@ -3,7 +3,6 @@ import { SvgIcon } from '../../components/common'
 import { AppComponentProps } from '../../types'
 import { line } from '../../utils'
 import SystemPanel from './SystemPanel'
-import AndroidControlPanel from './AndroidControlPanel'
 import UserPanel from './UserPanel'
 import LogPanel from './LogPanel'
 import { useTranslation } from 'react-i18next'
@@ -11,7 +10,6 @@ import { TabPane, Tabs } from '@douyinfe/semi-ui'
 
 const tabList = [
   { key: 'system', icon: <SvgIcon.Settings size={14} />, Panel: SystemPanel },
-  { key: 'android', icon: <SvgIcon.AndroidControl size={14} />, Panel: AndroidControlPanel },
   { key: 'users', icon: <SvgIcon.Users size={14} />, Panel: UserPanel },
   { key: 'log', icon: <SvgIcon.Booklet size={14} />, Panel: LogPanel},
 ]

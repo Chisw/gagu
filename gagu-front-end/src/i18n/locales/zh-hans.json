@@ -91,6 +91,7 @@
       "volume": "音量"
     },
     "app": {
+      "android-controller": "安卓控制器",
       "baidu-map": "百度地图",
       "file-explorer": "文件管理器",
       "music-player": "音乐播放器",
@@ -242,7 +243,6 @@
       "settings_system_advanced": "高级",
       "settings_system_images": "图片",
       "settings_system_general": "通用",
-      "settings_android": "安卓控制",
       "settings_users": "用户",
       "settings_users_editUser": "编辑用户：",
       "settings_users_newUser": "新建用户"

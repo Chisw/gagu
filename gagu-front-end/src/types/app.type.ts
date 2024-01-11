@@ -28,6 +28,7 @@ export enum AppId {
   photoViewer = 'photo-viewer',
   musicPlayer = 'music-player',
   videoPlayer = 'video-player',
+  androidController = 'android-controller',
   settings = 'settings',
   baiduMap = 'baidu-map',
   pqina = 'pqina',

@@ -91,6 +91,7 @@
       "volume": "音量"
     },
     "app": {
+      "android-controller": "アンドロイドコントローラー",
       "baidu-map": "百度地図",
       "file-explorer": "ファイルマネージャー",
       "music-player": "音楽プレーヤー",
@@ -243,7 +244,6 @@
       "settings_system_images": "画像",
       "settings_system_general": "ユニバーサル",
       "settings_users": "ユーザー",
-      "settings_android": "Android コントロール",
       "settings_users_editUser": "ユーザーの編集：",
       "settings_users_newUser": "新しいユーザー"
     }

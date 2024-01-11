@@ -9,8 +9,8 @@ export class TunnelApi {
     return data
   }
 
-  static createTunnel = async (tunnelForm: TunnelForm) => {
-    const { data } = await service.post<IResponse<string>>('/api/tunnel', tunnelForm)
+  static createTunnel = async (formData: TunnelForm) => {
+    const { data } = await service.post<IResponse<string>>('/api/tunnel', formData)
     return data
   }
 

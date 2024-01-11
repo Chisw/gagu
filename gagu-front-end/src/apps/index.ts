@@ -4,6 +4,7 @@ import TextEditor from './TextEditor'
 import PhotoViewer from './PhotoViewer'
 import MusicPlayer from './MusicPlayer'
 import VideoPlayer from './VideoPlayer'
+import AndroidController from './AndroidController'
 import Settings from './Settings'
 import BaiduMap from './web/BaiduMap'
 import PQINA from './web/PQINA'
@@ -78,6 +79,19 @@ export const APP_LIST: IApp[] = [
     matchList: ['mp4', 'mkv', 'webm'],
     headerClassName: 'bg-gray-800 text-gray-100',
     multiple: true,
+    touchModeShow: true,
+  },
+  {
+    id: AppId.androidController,
+    runningId: 0,
+    AppComponent: AndroidController,
+    width: 400,
+    height: 600,
+    resizeRange: {
+      minWidth: 200,
+      minHeight: 300,
+    },
+    headerClassName: 'bg-emerald-800 text-emerald-100',
     touchModeShow: true,
   },
   {
