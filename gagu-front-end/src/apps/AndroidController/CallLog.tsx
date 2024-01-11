@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { AndroidApi } from '../../api'
 import { useRequest } from '../../hooks'
 import { Button } from '@douyinfe/semi-ui'
@@ -7,9 +6,9 @@ import { SvgIcon } from '../../components/common'
 export default function CallLog() {
   const { request: queryCallLog, loading, data: callLogData } = useRequest(AndroidApi.queryCallLog)
 
-  useEffect(() => {
-    queryCallLog()
-  }, [queryCallLog])
+  // useEffect(() => {
+  //   queryCallLog()
+  // }, [queryCallLog])
 
   return (
     <>

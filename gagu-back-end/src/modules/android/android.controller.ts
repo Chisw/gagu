@@ -62,4 +62,16 @@ export class AndroidController {
       return respond(null, ServerMessage.ERROR_NO_RESPONSE)
     }
   }
+
+  @Get('clipboard')
+  @Permission(UserPermission.administer)
+  async getClipboard() {
+    try {
+      const value = await this.androidService.getClipboard()
+      return respond({ value })
+    } catch (error) {
+      catchError(error)
+      return respond(null, ServerMessage.ERROR_NO_RESPONSE)
+    }
+  }
 }

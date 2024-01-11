@@ -51,4 +51,15 @@ export class AndroidService {
     })
     return out
   }
+
+  async getClipboard() {
+    const out = await new Promise((resolve, reject) => {
+      const stream = spawn('termux-clipboard-get')
+      stream.stdout.on('data', (buffer) => {
+        resolve(buffer.toString('utf8'))
+      })
+      stream.stderr.on('error', reject)
+    })
+    return out
+  }
 }

@@ -5,6 +5,7 @@ import BatteryStatus from './BatteryStatus'
 import Brightness from './Brightness'
 import CallLog from './CallLog'
 import CameraControl from './CameraControl'
+import ClipboardControl from './ClipboardControl'
 
 export default function AndroidController() {
 
@@ -14,15 +15,13 @@ export default function AndroidController() {
       { key: 'brightness', title: 'Brightness', icon: <SvgIcon.Bulb />, component: <Brightness /> },
       { key: 'call-log', title: 'Call log', icon: <SvgIcon.Call />, component: <CallLog /> },
       { key: 'camera-control', title: 'Camera', icon: <SvgIcon.Camera />, component: <CameraControl /> },
+      { key: 'clipboard-control', title: 'Clipboard', icon: <SvgIcon.Clipboard />, component: <ClipboardControl /> },
     ]
   }, [])
 
   return (
     <>
-      <div className="absolute z-0 inset-0 px-3 md:px-4 py-2 overflow-x-hidden overflow-y-auto">
-        <div className="mb-2 p-2 text-center text-xs bg-yellow-100 font-din rounded">
-          ⏳ Developing
-        </div>
+      <div className="absolute z-0 inset-0 p-2 overflow-x-hidden overflow-y-auto">
         <Collapse accordion>
           {panelList.map(({ key, title, icon, component }) => (
             <Collapse.Panel

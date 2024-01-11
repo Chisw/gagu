@@ -1,11 +1,13 @@
-import { useCallback, useEffect, useMemo } from 'react'
-import { AndroidApi } from '../../api'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { AndroidApi, FsApi } from '../../api'
 import { useRequest } from '../../hooks'
 import { Button, Descriptions } from '@douyinfe/semi-ui'
 import { SvgIcon } from '../../components/common'
-import toast from 'react-hot-toast'
 
 export default function CameraControl() {
+
+  const [activePhotoUrl, setActivePhotoUrl] = useState('')
+
   const { request: queryCameraInfo, loading, data: cameraInfoData } = useRequest(AndroidApi.queryCameraInfo)
   const { request: createCameraPhoto, loading: creating } = useRequest(AndroidApi.createCameraPhoto)
 
@@ -36,7 +38,7 @@ export default function CameraControl() {
   const handleCreateCameraPhoto = useCallback(async (cameraId: string) => {
     const { success, data: { path } } = await createCameraPhoto(cameraId)
     if (success) {
-      toast.success(path)
+      setActivePhotoUrl(FsApi.getPathStreamUrl(path))
     }
   }, [createCameraPhoto])
 
@@ -53,6 +55,9 @@ export default function CameraControl() {
           loading={loading}
           onClick={queryCameraInfo}
         />
+        <div>
+          {activePhotoUrl && <img className="max-w-full max-h-[200px]" src={activePhotoUrl} alt="camera" />}
+        </div>
         {cameraDataList.map((data, dataIndex) => (
           <div
             key={dataIndex}

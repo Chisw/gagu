@@ -31,4 +31,9 @@ export class AndroidApi {
     const { data } = await service.post<IResponse<{ path: string }>>(`/api/android/camera-photo/${cameraId}`)
     return data
   }
+
+  static queryClipboard = async () => {
+    const { data } = await service.get<IResponse<{ value: string }>>('/api/android/clipboard')
+    return data
+  }
 }
