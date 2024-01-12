@@ -3,9 +3,13 @@ import { Collapse } from '@douyinfe/semi-ui'
 import { SvgIcon } from '../../components/common'
 import BatteryStatus from './BatteryStatus'
 import Brightness from './Brightness'
-import CallLog from './CallLog'
+import PhoneControl from './PhoneControl'
 import CameraControl from './CameraControl'
 import ClipboardControl from './ClipboardControl'
+import Download from './Download'
+import Fingerprint from './Fingerprint'
+import InfraredControl from './InfraredControl'
+import NotificationControl from './NotificationControl'
 
 export default function AndroidController() {
 
@@ -13,9 +17,13 @@ export default function AndroidController() {
     return [
       { key: 'battery-status', title: 'Battery status', icon: <SvgIcon.Battery />, component: <BatteryStatus /> },
       { key: 'brightness', title: 'Brightness', icon: <SvgIcon.Bulb />, component: <Brightness /> },
-      { key: 'call-log', title: 'Call log', icon: <SvgIcon.Call />, component: <CallLog /> },
+      { key: 'phone-control', title: 'Phone', icon: <SvgIcon.Call />, component: <PhoneControl /> },
       { key: 'camera-control', title: 'Camera', icon: <SvgIcon.Camera />, component: <CameraControl /> },
       { key: 'clipboard-control', title: 'Clipboard', icon: <SvgIcon.Clipboard />, component: <ClipboardControl /> },
+      { key: 'download', title: 'Download', icon: <SvgIcon.Download />, component: <Download /> },
+      { key: 'fingerprint', title: 'Fingerprint', icon: <SvgIcon.Fingerprint />, component: <Fingerprint /> },
+      { key: 'infrared-control', title: 'Infrared', icon: <SvgIcon.RemoteControl />, component: <InfraredControl /> },
+      { key: 'notification-control', title: 'Notification', icon: <SvgIcon.Notification />, component: <NotificationControl /> },
     ]
   }, [])
 

@@ -2,11 +2,11 @@ import { useEffect, useMemo } from 'react'
 import { Button, Descriptions } from '@douyinfe/semi-ui'
 import { SvgIcon } from '../../components/common'
 import { useRequest } from '../../hooks'
-import { AndroidApi } from '../../api'
+import { TermuxApi } from '../../api'
 
 export default function BatteryStatus() {
 
-  const { request: queryBatteryStatus, loading, data: batteryStatusData } = useRequest(AndroidApi.queryBatteryStatus)
+  const { request: queryBatteryStatus, loading, data: batteryStatusData } = useRequest(TermuxApi.queryBatteryStatus)
 
   const data = useMemo(() => {
     const {

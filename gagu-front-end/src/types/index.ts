@@ -2,7 +2,7 @@ import { ServerMessage } from './common.type'
 import { IEntry, SortType } from './entry.type'
 
 export * from './common.type'
-export * from './android.type'
+export * from './termux.type'
 export * from './app.type'
 export * from './entry.type'
 export * from './transfer.type'

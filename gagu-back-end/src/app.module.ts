@@ -4,11 +4,11 @@ import { ServeStaticModule } from '@nestjs/serve-static'
 import { join } from 'path'
 import { ApiGuard } from './common/guards/api.guard'
 import { LoggerMiddleware } from './common/middlewares/logger.middleware'
-import { AndroidModule } from './modules/android/android.module'
 import { AuthModule } from './modules/auth/auth.module'
 import { DownloadModule } from './modules/download/download.module'
 import { FsModule } from './modules/fs/fs.module'
 import { TunnelModule } from './modules/tunnel/tunnel.module'
+import { TermuxModule } from './modules/termux/termux.module'
 import { SettingModule } from './modules/setting/setting.module'
 import { UserModule } from './modules/user/user.module'
 import { IS_DEV } from './utils'
@@ -34,7 +34,7 @@ const rootPath = IS_DEV ? devRootPath : prodRootPath
     FsModule,
     TunnelModule,
     DownloadModule,
-    AndroidModule,
+    TermuxModule,
     SettingModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: ApiGuard }],

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { AndroidApi, FsApi } from '../../api'
+import { TermuxApi, FsApi } from '../../api'
 import { useRequest } from '../../hooks'
 import { Button, Descriptions } from '@douyinfe/semi-ui'
 import { SvgIcon } from '../../components/common'
@@ -8,8 +8,8 @@ export default function CameraControl() {
 
   const [activePhotoUrl, setActivePhotoUrl] = useState('')
 
-  const { request: queryCameraInfo, loading, data: cameraInfoData } = useRequest(AndroidApi.queryCameraInfo)
-  const { request: createCameraPhoto, loading: creating } = useRequest(AndroidApi.createCameraPhoto)
+  const { request: queryCameraInfo, loading, data: cameraInfoData } = useRequest(TermuxApi.queryCameraInfo)
+  const { request: createCameraPhoto, loading: creating } = useRequest(TermuxApi.createCameraPhoto)
 
   const cameraDataList = useMemo(() => {
     return (cameraInfoData?.data || []).map((cameraInfo) => {

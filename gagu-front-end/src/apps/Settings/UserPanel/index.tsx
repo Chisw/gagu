@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { UserApi } from '../../../api'
-import { IconButton, SvgIcon } from '../../../components/common'
+import { SvgIcon } from '../../../components/common'
 import { useRequest } from '../../../hooks'
 import { IUserForm, UserForm } from '../../../types'
 import UserFormSheet from './UserFormSheet'
 import UserList from './UserList'
+import { Button } from '@douyinfe/semi-ui'
 
 export type FormModeType = 'CLOSE' | 'CREATE' | 'EDIT'
 
@@ -39,15 +40,16 @@ export default function UserPanel() {
         <div className="text-sm flex justify-between items-center dark:text-zinc-200">
           <div>{t('tip.totalUsers', { count: userList.length })}</div>
           <div className="flex items-center">
-            <IconButton
+            <Button
               title={t`action.refresh`}
-              disabled={loading}
-              icon={<SvgIcon.Refresh className={`text-blue-500 ${loading ? 'animate-spin' : ''}`} />}
+              className="mr-1"
+              loading={loading}
+              icon={<SvgIcon.Refresh />}
               onClick={handleRefreshList}
             />
-            <IconButton
+            <Button
               title={t`action.newUser`}
-              icon={<SvgIcon.Add className="text-blue-500" />}
+              icon={<SvgIcon.Add />}
               onClick={() => {
                 setForm(new UserForm())
                 setFormMode('CREATE')

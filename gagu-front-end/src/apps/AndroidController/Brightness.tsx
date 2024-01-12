@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 import { useRequest } from '../../hooks'
-import { AndroidApi } from '../../api'
+import { TermuxApi } from '../../api'
 import { Slider, Switch } from '@douyinfe/semi-ui'
 import { BrightnessType } from '../../types'
 
@@ -11,7 +11,7 @@ export default function Brightness() {
   const [brightness, setBrightness] = useState<BrightnessType>(DEFAULT_VALUE)
   const [isAuto, setIsAuto] = useState(false)
 
-  const { request: updateBrightness, loading } = useRequest(AndroidApi.updateBrightness)
+  const { request: updateBrightness, loading } = useRequest(TermuxApi.updateBrightness)
 
   const handleUpdateBrightness = useCallback((brightness: BrightnessType) => {
     setBrightness(brightness)
