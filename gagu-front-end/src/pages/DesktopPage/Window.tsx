@@ -76,10 +76,16 @@ export default function Window(props: WindowProps) {
     const storedWindowInfo: IWindowInfo | undefined = windowInfoMap[appId]
 
     if (storedWindowInfo) {
+      const { innerWidth, innerHeight } = window
       const { x, y, width, height } = storedWindowInfo
+      const computedX = Math.max(x, 0) + offset
+      const computedY = Math.max(y, getMenuBarHeight()) + offset
+      const maxX = computedX > innerWidth ? innerWidth - 40 : computedX
+      const maxY = computedY > innerHeight ? innerHeight - 40 : computedY
+
       return {
-        x: Math.max(x, 0) + offset,
-        y: Math.max(y, getMenuBarHeight()) + offset,
+        x: maxX,
+        y: maxY,
         width,
         height,
       }
