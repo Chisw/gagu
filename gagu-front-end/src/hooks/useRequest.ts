@@ -2,25 +2,32 @@ import { useCallback, useState } from 'react'
 
 type RequestFn<A extends any[], T> = (...args: A) => Promise<T>
 
-export function useRequest<A extends any[], D>(requestFn: RequestFn<A, D>, initialData?: D) {
+export function useRequest<A extends any[], D>(requestFn: RequestFn<A, D>, initialResponse?: D) {
 
-  const [data, setData] = useState<D | undefined | null>(initialData)
   const [loading, setLoading] = useState(false)
+  const [response, setResponse] = useState<D | undefined | null>(initialResponse)
 
   const request = useCallback(async (...args: A) => {
     try {
       setLoading(true)
-      const data = await requestFn(...args)
+
+      const res = await requestFn(...args)
+
       setLoading(false)
-      setData(data)
-      return data as D
+      setResponse(res)
+
+      return res as D
     } catch (error) {
       setLoading(false)
-      const fallbackData = { success: false, message: `${error}`} as D
-      setData(fallbackData)
+      const fallbackData = {
+        success: false,
+        message: `${error}`,
+      } as D
+
+      setResponse(fallbackData)
       return fallbackData
     }
   }, [requestFn])
 
-  return { request, loading, data, setData }
+  return { request, loading, response, setResponse }
 }

@@ -19,10 +19,10 @@ export function MySharingPanel(props: MySharingPanelProps) {
 
   const { t } = useTranslation()
 
-  const { request: queryTunnels, data } = useRequest(TunnelApi.queryTunnels)
+  const { request: queryTunnels, response } = useRequest(TunnelApi.queryTunnels)
   const { request: deleteTunnel } = useRequest(TunnelApi.deleteTunnel)
 
-  const tunnels = useMemo(() => data?.data || [], [data])
+  const tunnels = useMemo(() => response?.data || [], [response])
 
   useEffect(() => {
     if (show) {

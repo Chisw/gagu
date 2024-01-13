@@ -50,7 +50,7 @@ export default function MusicPlayer(props: AppComponentProps) {
   const [theatreShow, setTheatreShow] = useState(false)
   const [analyserNode, setAnalyserNode] = useState<AnalyserNode | null>(null)
 
-  const { request: queryAudioTags, data } = useRequest(FsApi.queryAudioTags)
+  const { request: queryAudioTags, response } = useRequest(FsApi.queryAudioTags)
 
   const audioRef = useRef<HTMLAudioElement>(null)
   const audioNode = useMemo(() => {
@@ -68,11 +68,11 @@ export default function MusicPlayer(props: AppComponentProps) {
       artist = t`text.unknownArtist`,
       album = t`text.unknownAlbum`,
       coverBase64 = defaultMusicCoverSvg,
-    } = data?.data || {}
+    } = response?.data || {}
 
     const coverStyle = coverBase64 ? { backgroundImage: `url("${coverBase64}")` } : undefined
     return { title, artist, album, coverStyle }
-  }, [data, activeEntry, t])
+  }, [response, activeEntry, t])
 
   const playInfo = usePlayInfo({ el: audioNode, isPlaying })
 

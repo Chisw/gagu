@@ -13,11 +13,11 @@ interface ToolbarProps {
   isLight: boolean
   thumbnailListShow: boolean
   mapPinUrl: string
-  exifData: any
+  exifResponse: any
   queryingExifData: boolean
   setIsLight: (is: boolean) => void
   setThumbnailListShow: (is: boolean) => void
-  setExifData: (data: any) => void
+  setExifResponse: (response: any) => void
   onDownloadClick: () => void
   onGetExifData: () => void
   onDeleteClick: () => void
@@ -33,11 +33,11 @@ export default function Toolbar(props: ToolbarProps) {
     isLight,
     thumbnailListShow,
     mapPinUrl,
-    exifData,
+    exifResponse,
     queryingExifData,
     setIsLight,
     setThumbnailListShow,
-    setExifData,
+    setExifResponse,
     onDownloadClick,
     onGetExifData,
     onDeleteClick,
@@ -59,8 +59,8 @@ export default function Toolbar(props: ToolbarProps) {
   }, [imgEl, activeEntry])
 
   useEffect(() => {
-    setExifData(null)
-  }, [activeIndex, setExifData])
+    setExifResponse(null)
+  }, [activeIndex, setExifResponse])
 
   const buttonList = useMemo(() => {
     return [
@@ -151,7 +151,7 @@ export default function Toolbar(props: ToolbarProps) {
           text-xs text-white break-words cursor-default
           bg-gray-700 bg-opacity-70 backdrop-blur
           transition-transform duration-200
-          ${exifData ? 'scale-100' : 'scale-0'}
+          ${exifResponse ? 'scale-100' : 'scale-0'}
         `)}
         onClick={e => e.stopPropagation()}
       >
@@ -163,16 +163,16 @@ export default function Toolbar(props: ToolbarProps) {
             className="absolute z-10 top-1 right-8"
           />
         )}
-        {exifData && (
+        {exifResponse && (
           <IconButton
             icon={<SvgIcon.Close size={12} />}
             size="sm"
-            onClick={() => setExifData(null)}
+            onClick={() => setExifResponse(null)}
             className="absolute z-10 top-1 right-1"
           />
         )}
         <div className="absolute z-0 inset-0 pb-4 overflow-y-auto text-xs select-text">
-          {Object.entries(exifData?.data || {}).map(([key, value]) => (
+          {Object.entries(exifResponse?.data || {}).map(([key, value]) => (
             <div
               key={key}
               className="mb-3"

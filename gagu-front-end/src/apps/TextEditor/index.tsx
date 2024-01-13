@@ -43,7 +43,7 @@ export default function TextEditor(props: AppComponentProps) {
   const [monoMode, setMonoMode] = useState(false)
   const [markdownView, setMarkdownView] = useState<MarkdownViewType>('NONE')
 
-  const { request: queryTextContent, data, setData } = useRequest(FsApi.queryTextContent, {
+  const { request: queryTextContent, response, setResponse } = useRequest(FsApi.queryTextContent, {
     success: true,
     message: 'OK',
     data: '',
@@ -52,7 +52,7 @@ export default function TextEditor(props: AppComponentProps) {
   const { request: uploadFile, loading: saving } = useRequest(FsApi.uploadFile)
 
   const isMarkdown = useMemo(() => activeEntry?.extension === 'md', [activeEntry])
-  const textContentCache = useMemo(() => data?.data || '', [data])
+  const textContentCache = useMemo(() => response?.data || '', [response])
 
   const isSaveDisabled = useMemo(() => {
     return (textContent === textContentCache && !saving ) || !activeEntry
@@ -77,10 +77,10 @@ export default function TextEditor(props: AppComponentProps) {
     const { success } = await uploadFile(getEntryPath(activeEntry), file)
     if (success) {
       toast.success('OK')
-      setData({ success: true, message: 'OK', data: textContent })
+      setResponse({ success: true, message: 'OK', data: textContent })
       setLastChangedDirectory({ path: activeEntry.parentPath, timestamp: Date.now() })
     }
-  }, [activeEntry, isSaveDisabled, textContent, uploadFile, setData, setLastChangedDirectory])
+  }, [activeEntry, isSaveDisabled, textContent, uploadFile, setResponse, setLastChangedDirectory])
 
   const handleResetClick = useCallback(() => {
     setTextContent(textContentCache)

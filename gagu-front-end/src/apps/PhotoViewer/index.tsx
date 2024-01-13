@@ -49,7 +49,7 @@ export default function PhotoViewer(props: AppComponentProps) {
   }, [imgRef.current])
 
   const { request: createTunnel } = useRequest(TunnelApi.createTunnel)
-  const { request: queryExif, data: exifData, setData: setExifData, loading: queryingExifData } = useRequest(FsApi.queryExif)
+  const { request: queryExif, response: exifResponse, setResponse: setExifResponse, loading: queryingExifData } = useRequest(FsApi.queryExif)
   const { request: deleteEntry } = useRequest(FsApi.deleteEntry)
 
   const handlePrevOrNext = useCallback((offset: number) => {
@@ -126,7 +126,7 @@ export default function PhotoViewer(props: AppComponentProps) {
       'Space, Space': () => setThumbnailListShow(!thumbnailListShow),
       'Meta+KeyD, Ctrl+KeyD': handleDownloadClick,
       'Meta+KeyI, Ctrl+KeyI': handleGetExifData,
-      'Escape, Escape': () => setExifData(null),
+      'Escape, Escape': () => setExifResponse(null),
       'Meta+Backspace, Shift+Delete': handleDeleteClick,
       'ArrowUp, ArrowUp': () => (document.querySelector('.gagu-photo-viewer-scale-large') as any)?.click(),
       'ArrowDown, ArrowDown': () => (document.querySelector('.gagu-photo-viewer-scale-small') as any)?.click(),
@@ -207,8 +207,8 @@ export default function PhotoViewer(props: AppComponentProps) {
               setIsLight,
               setThumbnailListShow,
               mapPinUrl,
-              exifData,
-              setExifData,
+              exifResponse,
+              setExifResponse,
               queryingExifData,
             }}
             onDownloadClick={handleDownloadClick}

@@ -29,7 +29,7 @@ export default function SharePage() {
     setTimeout(() => setActivePage(Page.sharing))
   }, [setActivePage])
 
-  const { request: queryTunnel, loading, data } = useRequest(TunnelApi.queryTunnel)
+  const { request: queryTunnel, loading, response } = useRequest(TunnelApi.queryTunnel)
   const { request: queryTunnelCheck, loading: calling } = useRequest(TunnelApi.queryTunnelCheck)
 
   const updateTunnelData = useCallback(() => {
@@ -61,7 +61,7 @@ export default function SharePage() {
     leftTimes,
     downloadName,
   } = useMemo(() => {
-    const { success, message } = data || {}
+    const { success, message } = response || {}
 
     const {
       entryList,
@@ -71,9 +71,9 @@ export default function SharePage() {
       expiredAt,
       leftTimes,
       downloadName,
-    } = data?.data?.tunnel || {}
+    } = response?.data?.tunnel || {}
 
-    const flattenList = data?.data?.flattenList || []
+    const flattenList = response?.data?.flattenList || []
     const isSuccess = success
     const isShowInput = success && message === ServerMessage.ERROR_TUNNEL_PASSWORD_NEEDED
     const isShowError = !success
@@ -92,7 +92,7 @@ export default function SharePage() {
       leftTimes,
       downloadName,
     }
-  }, [data])
+  }, [response])
 
   useEffect(() => {
     const tick = () => {

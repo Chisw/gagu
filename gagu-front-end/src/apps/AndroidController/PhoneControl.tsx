@@ -6,8 +6,8 @@ import { copy } from '../../utils'
 import toast from 'react-hot-toast'
 
 export default function PhoneControl() {
-  const { request: queryCallLog, loading: queryingCallLog, data: callLogData } = useRequest(TermuxApi.queryCallLog)
-  const { request: queryContactList, loading: queryingContactList, data: contactListData } = useRequest(TermuxApi.queryContactList)
+  const { request: queryCallLog, loading: queryingCallLog, response: callLogResponse } = useRequest(TermuxApi.queryCallLog)
+  const { request: queryContactList, loading: queryingContactList, response: contactListResponse } = useRequest(TermuxApi.queryContactList)
 
   // useEffect(() => {
   //   queryCallLog()
@@ -29,10 +29,10 @@ export default function PhoneControl() {
           onClick={queryContactList}
         />
         <div>
-          {JSON.stringify(callLogData?.data)}
+          {JSON.stringify(callLogResponse?.data)}
         </div>
         <div>
-          {(contactListData?.data || []).map(({ name, number }, contactIndex) => (
+          {(contactListResponse?.data || []).map(({ name, number }, contactIndex) => (
             <div
               key={contactIndex}
               className="mb-3 flex items-center"

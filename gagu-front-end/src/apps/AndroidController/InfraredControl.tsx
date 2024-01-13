@@ -13,7 +13,7 @@ export default function InfraredControl() {
     pattern: '',
   })
 
-  const { request: queryInfraredFrequencies, loading, data: infraredFrequenciesData } = useRequest(TermuxApi.queryInfraredFrequencies)
+  const { request: queryInfraredFrequencies, loading, response: infraredFrequenciesResponse } = useRequest(TermuxApi.queryInfraredFrequencies)
   const { request: createInfraredTransmit, loading: creating } = useRequest(TermuxApi.createInfraredTransmit)
 
   const handleQueryInfraredFrequencies = useCallback(async () => {
@@ -41,7 +41,7 @@ export default function InfraredControl() {
             value={form.frequency}
             onChange={(e) => setForm({ ...form, frequency: e.target.value })}
           >
-            {(infraredFrequenciesData?.data || []).map(({ min, max }, index) => (
+            {(infraredFrequenciesResponse?.data || []).map(({ min, max }, index) => (
               <Radio
                 key={index}
                 value={min}

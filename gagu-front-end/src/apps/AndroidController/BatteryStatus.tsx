@@ -6,7 +6,7 @@ import { TermuxApi } from '../../api'
 
 export default function BatteryStatus() {
 
-  const { request: queryBatteryStatus, loading, data: batteryStatusData } = useRequest(TermuxApi.queryBatteryStatus)
+  const { request: queryBatteryStatus, loading, response: batteryStatusResponse } = useRequest(TermuxApi.queryBatteryStatus)
 
   const data = useMemo(() => {
     const {
@@ -15,7 +15,7 @@ export default function BatteryStatus() {
       plugged,
       status,
       temperature,
-    } = batteryStatusData?.data || {}
+    } = batteryStatusResponse?.data || {}
 
     return [
       { key: 'health', value: health || '--' },
@@ -25,7 +25,7 @@ export default function BatteryStatus() {
       { key: 'temperature', value: temperature ? temperature.toFixed(1) + '℃' : '--' },
     ]
 
-  }, [batteryStatusData?.data])
+  }, [batteryStatusResponse?.data])
 
   useEffect(() => {
     queryBatteryStatus()

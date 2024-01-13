@@ -8,11 +8,11 @@ export default function CameraControl() {
 
   const [activePhotoUrl, setActivePhotoUrl] = useState('')
 
-  const { request: queryCameraInfo, loading, data: cameraInfoData } = useRequest(TermuxApi.queryCameraInfo)
+  const { request: queryCameraInfo, loading, response: cameraInfoResponse } = useRequest(TermuxApi.queryCameraInfo)
   const { request: createCameraPhoto, loading: creating } = useRequest(TermuxApi.createCameraPhoto)
 
   const cameraDataList = useMemo(() => {
-    return (cameraInfoData?.data || []).map((cameraInfo) => {
+    return (cameraInfoResponse?.data || []).map((cameraInfo) => {
       const {
         id,
         auto_exposure_modes,
@@ -33,7 +33,7 @@ export default function CameraControl() {
         { key: 'physical_size', value: `${physical_size?.width.toFixed(2)}×${physical_size?.height.toFixed(2)}` },
       ]
     })
-  }, [cameraInfoData?.data])
+  }, [cameraInfoResponse?.data])
 
   const handleCreateCameraPhoto = useCallback(async (cameraId: string) => {
     const { success, data: { path } } = await createCameraPhoto(cameraId)

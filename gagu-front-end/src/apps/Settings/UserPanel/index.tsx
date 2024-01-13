@@ -18,7 +18,7 @@ export default function UserPanel() {
   const [form, setForm] = useState<IUserForm>(new UserForm())
   const [refreshedTimestap, setRefreshedTimestamp] = useState(Date.now())
 
-  const { request: queryUserList, data, loading } = useRequest(UserApi.queryUserList)
+  const { request: queryUserList, loading, response } = useRequest(UserApi.queryUserList)
 
   const handleRefreshList = useCallback(() => {
     queryUserList()
@@ -30,8 +30,8 @@ export default function UserPanel() {
   }, [handleRefreshList])
 
   const userList = useMemo(() => {
-    return data?.data || []
-  }, [data])
+    return response?.data || []
+  }, [response])
 
   return (
     <>
