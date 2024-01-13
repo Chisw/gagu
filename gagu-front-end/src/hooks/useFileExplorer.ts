@@ -29,7 +29,7 @@ import {
   baseDataState,
 } from '../states'
 import { useRequest } from './useRequest'
-import { DownloadApi, FsApi, TunnelApi } from '../api'
+import { FsApi, TunnelApi } from '../api'
 import { useTranslation } from 'react-i18next'
 import { Confirmor } from '../components/common'
 import toast from 'react-hot-toast'
@@ -354,7 +354,7 @@ export function useFileExplorer(props: Props) {
           downloadName,
         })
         if (success && code) {
-          DownloadApi.download(code)
+          FsApi.download(code)
         } else {
           toast.error(message)
         }

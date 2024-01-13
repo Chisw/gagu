@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { AppComponentProps, AppId, PlayMode, PlayModeType } from '../../types'
+import { AppComponentProps, AppId, IEntry, PlayMode, PlayModeType, TunnelType } from '../../types'
 import { useRequest, useRunAppEvent, usePlayInfo, useUserConfig, useHotKey } from '../../hooks'
-import { FsApi } from '../../api'
+import { FsApi, TunnelApi } from '../../api'
 import { defaultMusicCoverSvg, getEntryPath, getIndexLabel, getReadableSize, line } from '../../utils'
 import SpectrumCanvas from './SpectrumCanvas'
 import { IconButton, Opener, SvgIcon } from '../../components/common'
@@ -51,6 +51,7 @@ export default function MusicPlayer(props: AppComponentProps) {
   const [analyserNode, setAnalyserNode] = useState<AnalyserNode | null>(null)
 
   const { request: queryAudioTags, response } = useRequest(FsApi.queryAudioTags)
+  const { request: createTunnel } = useRequest(TunnelApi.createTunnel)
 
   const audioRef = useRef<HTMLAudioElement>(null)
   const audioNode = useMemo(() => {
@@ -141,6 +142,18 @@ export default function MusicPlayer(props: AppComponentProps) {
       handlePrevOrNext(1)
     }
   }, [audioNode, musicPlayerPlayMode, handlePrevOrNext])
+
+  const handleDownload = useCallback(async (entry: IEntry) => {
+    const { name: downloadName } = entry
+    const { success, data: code } = await createTunnel({
+      type: TunnelType.download,
+      entryList: [entry],
+      downloadName,
+    })
+    if (success) {
+      FsApi.download(code)
+    }
+  }, [createTunnel])
 
   useEffect(() => {
     if (activeEntry) {
@@ -279,7 +292,15 @@ export default function MusicPlayer(props: AppComponentProps) {
                     <span className="font-din opacity-60">{indexNo}. </span>{name}
                   </div>
                   <div>
-                    <span className="opacity-50 font-din">{getReadableSize(size!, kiloSize)}</span>
+                    <span
+                      className="inline-flex items-center text-white text-opacity-50 hover:text-opacity-80 active:text-opacity-60 cursor-pointer"
+                      onClick={() => handleDownload(entry)}
+                    >
+                      <span className="mr-1">
+                        <SvgIcon.Download size={12} />
+                      </span>
+                      <span className="font-din">{getReadableSize(size!, kiloSize)}</span>
+                    </span>
                   </div>
                 </div>
                 <div

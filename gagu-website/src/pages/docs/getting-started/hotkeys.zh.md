@@ -47,6 +47,7 @@ layout: ../../../layouts/DocLayout.astro
 | 重置 | ⌘ + R | Ctrl + R |
 | 调小字号 | ⌘ + - | Ctrl + - |
 | 调大字号 | ⌘ + + | Ctrl + + |
+| 下载 | ⌘ + D | Ctrl + D |
 | 切换等宽显示 | ⌘ + / | Ctrl + / |
 | Markdown 全宽视图 | ⌘ + M | Ctrl + M |
 | Markdown 半宽视图 | ⌘ + ⌥ + M | Ctrl + Alt + M |

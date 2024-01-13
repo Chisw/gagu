@@ -18,6 +18,7 @@ interface ToolbarProps {
   onSave: () => void
   onReset: () => void
   onFontSizeChange: (step: number) => void
+  onDownlaod: () => void
   onMarkdownViewChange: () => void
 }
 
@@ -36,6 +37,7 @@ export default function Toolbar(props: ToolbarProps) {
     onSave,
     onReset,
     onFontSizeChange,
+    onDownlaod,
     onMarkdownViewChange,
   } = props
 
@@ -83,6 +85,12 @@ export default function Toolbar(props: ToolbarProps) {
         icon={<SvgIcon.FontLarge />}
         disabled={textEditorFontSize >= 36}
         onClick={() => onFontSizeChange(1)}
+      />
+      <ToolButton
+        title={t`action.download`}
+        icon={<SvgIcon.Download />}
+        disabled={!textContent}
+        onClick={onDownlaod}
       />
       <div className="flex-grow" />
       <ToolButton

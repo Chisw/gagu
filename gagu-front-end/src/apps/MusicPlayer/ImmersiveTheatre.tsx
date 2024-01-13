@@ -108,7 +108,7 @@ export default function ImmersiveTheatre(props: ImmersiveTheatreProps) {
               >
                 {musicPlayerCoverDisk && (
                   <div
-                    className="w-3/5 h-3/5 rounded-full bg-center bg-no-repeat bg-cover"
+                    className="w-3/5 h-3/5 rounded-full bg-center bg-no-repeat bg-cover border-4 border-black"
                     style={coverStyle}
                   />
                 )}

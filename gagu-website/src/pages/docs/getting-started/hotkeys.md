@@ -48,6 +48,7 @@ Currently available hotkeys, more are being added gradually
 | Reduce font size | ⌘ + - | Ctrl + - |
 | Enlarge font size | ⌘ + + | Ctrl + + |
 | Switch monospace | ⌘ + / | Ctrl + / |
+| Download | ⌘ + D | Ctrl + D |
 | Markdown full view | ⌘ + M | Ctrl + M |
 | Markdown half view | ⌘ + ⌥ + M | Ctrl + Alt + M |
 | Text editor view | ⌘ + ⌥ + N | Ctrl + Alt + N |

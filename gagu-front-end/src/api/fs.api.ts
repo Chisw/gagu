@@ -1,5 +1,5 @@
 import { AxiosRequestConfig } from 'axios'
-import { BASE_URL, QUERY_TOKEN_KEY, UserInfoStore, getEntryPath, getPathParam } from '../utils'
+import { BASE_URL, QUERY_TOKEN_KEY, UserInfoStore, getEntryPath, getPasswordParam, getPathParam } from '../utils'
 import { IEntry, IResponse, IBaseData, IRootEntry, IExif, IAudioTag } from '../types'
 import service from './service'
 
@@ -112,5 +112,9 @@ export class FsApi {
   static getImageStreamUrl = (name: string) => {
     if (!name) return ''
     return `${BASE_URL}/api/fs/image/${name}`
+  }
+
+  static download = (code: string, password?: string) => {
+    window.open(`${BASE_URL}/api/download/${code}?${getPasswordParam(password)}`, '_self')
   }
 }

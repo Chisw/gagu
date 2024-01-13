@@ -94,6 +94,14 @@ export default function TextEditor(props: AppComponentProps) {
     setUserConfig({ ...userConfig, textEditorFontSize: fontSize })
   }, [setUserConfig, textEditorFontSize, userConfig])
 
+  const handleDownload = useCallback(() => {
+    const blob = new Blob([textContent])
+    const a = document.createElement('a')
+    a.href = URL.createObjectURL(blob)
+    a.download = activeEntry?.name
+    a.click()
+  }, [activeEntry, textContent])
+
   const handleMarkdownViewChange = useCallback((view?: MarkdownViewType) => {
     const targetView = view || {
       NONE: 'HALF',
@@ -145,6 +153,7 @@ export default function TextEditor(props: AppComponentProps) {
       'Meta+KeyR, Ctrl+KeyR': handleResetClick,
       'Meta+Minus, Ctrl+Minus': () => handleFontSizeChange(-1),
       'Meta+Equal, Ctrl+Equal': () => handleFontSizeChange(1),
+      'Meta+KeyD, Ctrl+KeyD': () => handleDownload(),
       'Meta+Slash, Ctrl+Slash': () => setMonoMode(!monoMode),
       'Meta+KeyM, Ctrl+KeyM': () => handleMarkdownViewChange('FULL'),
       'Meta+Alt+KeyM, Ctrl+Alt+KeyM': () => handleMarkdownViewChange('HALF'),
@@ -166,6 +175,7 @@ export default function TextEditor(props: AppComponentProps) {
           onSave={handleSaveClick}
           onReset={handleResetClick}
           onFontSizeChange={handleFontSizeChange}
+          onDownlaod={handleDownload}
           onMarkdownViewChange={handleMarkdownViewChange}
         />
         <div className="flex-grow relative">

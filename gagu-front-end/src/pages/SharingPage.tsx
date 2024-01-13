@@ -5,7 +5,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
-import { DownloadApi, FsApi, TunnelApi } from '../api'
+import { FsApi, TunnelApi } from '../api'
 import { EntryListPanel, PublicFooter, Spinner, SvgIcon } from '../components/common'
 import { useRequest } from '../hooks'
 import { copy, getDateTime, line } from '../utils'
@@ -133,7 +133,7 @@ export default function SharePage() {
     if (code) {
       const { success, message } = await queryTunnelCheck(code, passwordVal)
       if (success) {
-        DownloadApi.download(code, passwordVal)
+        FsApi.download(code, passwordVal)
         setTimeout(() => {
           queryTunnel(code, passwordVal)
         }, 50)

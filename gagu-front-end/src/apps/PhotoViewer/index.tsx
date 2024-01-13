@@ -6,7 +6,7 @@ import ThumbnailList from './ThumbnailList'
 import Toolbar from './Toolbar'
 import Viewer from './Viewer'
 import { getBaiduMapPinUrl, getEntryPath, line } from '../../utils'
-import { DownloadApi, FsApi, TunnelApi } from '../../api'
+import { FsApi, TunnelApi } from '../../api'
 import { useTranslation } from 'react-i18next'
 import { useRecoilState } from 'recoil'
 import { lastChangedDirectoryState } from '../../states'
@@ -70,7 +70,7 @@ export default function PhotoViewer(props: AppComponentProps) {
         downloadName,
       })
       if (success) {
-        DownloadApi.download(code)
+        FsApi.download(code)
       }
     }
   }, [activeEntry, createTunnel])
