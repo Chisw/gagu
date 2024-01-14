@@ -1,12 +1,12 @@
 cd gagu-back-end
 
-echo '\n🔨  Building gagu-back-end..\n'
+echo '\n  🔨  Building gagu-back-end..\n'
 
 npm run build
 
 cd ../gagu-front-end
 
-echo '\n🔨  Building gagu-front-end..\n'
+echo '\n  🔨  Building gagu-front-end..\n'
 
 npm run build
 
@@ -32,4 +32,4 @@ rm bin/main.js
 
 rm bin/public/static/js/*.LICENSE.txt
 
-echo '\n✨  Build GAGU npm package successfully.'
+echo '\n  ✨  Build GAGU npm package successfully.'

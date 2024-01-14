@@ -31,10 +31,10 @@ const svgWin = `<svg xmlns="http://www.w3.org/2000/svg" style="display: inline; 
 
 
 export const DOWNLOAD_LIST = [
-  { svg: svgLinux, title: 'gagu@0.0.54.linux.arm.sh.zip', size: '21.4 MB', url: 'https://github.com/Chisw/gagu/releases/download/v0.0.54/gagu@0.0.54.linux.arm.sh.zip' },
-  { svg: svgLinux, title: 'gagu@0.0.54.linux.x64.sh.zip', size: '21.5 MB', url: 'https://github.com/Chisw/gagu/releases/download/v0.0.54/gagu@0.0.54.linux.x64.sh.zip' },
-  { svg: svgMacos, title: 'gagu@0.0.54.macos.arm.sh.zip', size: '20.7 MB', url: 'https://github.com/Chisw/gagu/releases/download/v0.0.54/gagu@0.0.54.macos.arm.sh.zip' },
-  { svg: svgMacos, title: 'gagu@0.0.54.macos.x64.sh.zip', size: '22.2 MB', url: 'https://github.com/Chisw/gagu/releases/download/v0.0.54/gagu@0.0.54.macos.x64.sh.zip' },
-  { svg: svgWin, title: 'gagu@0.0.54.win.arm.exe.zip', size: '14.1 MB', url: 'https://github.com/Chisw/gagu/releases/download/v0.0.54/gagu@0.0.54.win.arm.exe.zip' },
-  { svg: svgWin, title: 'gagu@0.0.54.win.x64.exe.zip', size: '18.6 MB', url: 'https://github.com/Chisw/gagu/releases/download/v0.0.54/gagu@0.0.54.win.x64.exe.zip' },
+  { svg: svgLinux, title: 'gagu@0.0.55.linux.arm.sh.zip', size: '21.4 MB', url: 'https://github.com/Chisw/gagu/releases/download/v0.0.55/gagu@0.0.55.linux.arm.sh.zip' },
+  { svg: svgLinux, title: 'gagu@0.0.55.linux.x64.sh.zip', size: '21.5 MB', url: 'https://github.com/Chisw/gagu/releases/download/v0.0.55/gagu@0.0.55.linux.x64.sh.zip' },
+  { svg: svgMacos, title: 'gagu@0.0.55.macos.arm.sh.zip', size: '20.7 MB', url: 'https://github.com/Chisw/gagu/releases/download/v0.0.55/gagu@0.0.55.macos.arm.sh.zip' },
+  { svg: svgMacos, title: 'gagu@0.0.55.macos.x64.sh.zip', size: '22.2 MB', url: 'https://github.com/Chisw/gagu/releases/download/v0.0.55/gagu@0.0.55.macos.x64.sh.zip' },
+  { svg: svgWin, title: 'gagu@0.0.55.win.arm.exe.zip', size: '14.1 MB', url: 'https://github.com/Chisw/gagu/releases/download/v0.0.55/gagu@0.0.55.win.arm.exe.zip' },
+  { svg: svgWin, title: 'gagu@0.0.55.win.x64.exe.zip', size: '18.6 MB', url: 'https://github.com/Chisw/gagu/releases/download/v0.0.55/gagu@0.0.55.win.x64.exe.zip' },
 ]

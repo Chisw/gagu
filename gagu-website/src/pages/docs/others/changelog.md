@@ -19,6 +19,17 @@ Clear data directory means that all users, download tunnels and other data will 
 
 ## v0.0.*
 
+- v0.0.55 (2024-01-14)
+  - feat: supports proportional resizing of the window when the cursor hovers over the application window full-screen button
+  - feat: file movement in menu
+  - feat: memorize whether the sidebar of FileExplorer is collapsed
+  - feat: memorize the play mode of MusicPlayer
+  - feat: download button in TextEditor and MusicPlayer
+  - feat: AndroidController (beta)
+  - fix: favorite folders should be able to return to the parent folder
+  - fix: the newly opened application window must appear within the visible area
+  - fix: optimized EntryPicker (EntrySelector)
+
 - v0.0.54 (2023-12-31)
   - Hotfix: Deletion of non-empty folder failed
 

@@ -30,6 +30,12 @@ export default function AndroidController() {
   return (
     <>
       <div className="absolute z-0 inset-0 p-2 overflow-x-hidden overflow-y-auto">
+        <div className="p-2 font-din bg-yellow-300 text-yellow-700 flex">
+          <SvgIcon.Warning size={32} className="flex-shrink-0" />
+          <div className="ml-2">
+            This application is only available when GAGU is running on Termux and Termux:API has been installed, otherwise it will cause a crash.
+          </div>
+        </div>
         <Collapse accordion>
           {panelList.map(({ key, title, icon, component }) => (
             <Collapse.Panel
