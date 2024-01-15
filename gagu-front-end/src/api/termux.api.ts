@@ -8,8 +8,12 @@ import {
   IDialogForm,
   IDownloadForm,
   IInfraredFrequency,
-  IInfraredTransmit,
+  IInfraredTransmitForm,
+  ILocation,
+  ILocationForm,
+  MediaPlayerStateType,
 } from '../types/termux.type'
+import { getPathParam } from '../utils'
 
 export class TermuxApi {
   static queryBatteryStatus = async () => {
@@ -72,8 +76,28 @@ export class TermuxApi {
     return data
   }
 
-  static createInfraredTransmit = async (formData: IInfraredTransmit) => {
+  static createInfraredTransmit = async (formData: IInfraredTransmitForm) => {
     const { data } = await service.post<IResponse>('/api/termux/infrared-transmit', formData, { timeout: 0 })
+    return data
+  }
+
+  static queryLocation = async (params: ILocationForm) => {
+    const { data } = await service.get<IResponse<ILocation>>('/api/termux/location', { params })
+    return data
+  }
+
+  static queryMediaPlayerInfo = async () => {
+    const { data } = await service.get<IResponse>('/api/termux/media-player')
+    return data
+  }
+
+  static createMediaPlayerPlay = async (path: string) => {
+    const { data } = await service.post<IResponse>(`/api/termux/media-player?${getPathParam(path)}`)
+    return data
+  }
+
+  static updateMediaPlayerState = async (state: MediaPlayerStateType) => {
+    const { data } = await service.put<IResponse>(`/api/termux/media-player/${state}`)
     return data
   }
 }

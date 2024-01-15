@@ -64,7 +64,29 @@ export interface IInfraredFrequency {
   max: number
 }
 
-export interface IInfraredTransmit {
+export interface IInfraredTransmitForm {
   frequency: number
   pattern: string
 }
+
+export type LocationProviderType = 'gps' | 'network' | 'passive'
+export type LocationRequestType = 'once' | 'last' | 'updates'
+
+export interface ILocationForm {
+  provider: LocationProviderType
+  request: LocationRequestType
+}
+
+export interface ILocation {
+  longitude: number
+  latitude: number
+  altitude: number
+  accuracy: number
+  vertical_accuracy: number
+  bearing: number
+  speed: number
+  elapsedMs: number
+  provider: LocationProviderType
+}
+
+export type MediaPlayerStateType = 'play' | 'pause' | 'stop'

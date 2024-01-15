@@ -1,7 +1,13 @@
 import { Injectable } from '@nestjs/common'
 import { spawn } from 'child_process'
 import { DateTime } from 'luxon'
-import { IDialogForm, IDownloadForm, IInfraredTransmit } from 'src/types'
+import {
+  IDialogForm,
+  IDownloadForm,
+  IInfraredTransmitForm,
+  ILocationForm,
+  MediaPlayerStateType,
+} from 'src/types'
 
 @Injectable()
 export class TermuxService {
@@ -172,7 +178,7 @@ export class TermuxService {
     return out ? JSON.parse(out as string) : out
   }
 
-  async createInfraredTransmit(form: IInfraredTransmit) {
+  async createInfraredTransmit(form: IInfraredTransmitForm) {
     const { frequency, pattern } = form
 
     const params = ['-f', String(frequency), pattern]
@@ -180,6 +186,52 @@ export class TermuxService {
     const out = await new Promise((resolve, reject) => {
       const stream = spawn('termux-download', params)
       stream.on('exit', () => resolve(true))
+      stream.stderr.on('error', reject)
+    })
+    return out
+  }
+
+  async getLocation(form: ILocationForm) {
+    const { provider, request } = form
+    const params = ['-p', provider, '-r', request]
+    const out = await new Promise((resolve, reject) => {
+      const stream = spawn('termux-location', params)
+      stream.stdout.on('data', (buffer) => {
+        resolve(buffer.toString('utf8'))
+      })
+      stream.stderr.on('error', reject)
+    })
+    return out ? JSON.parse(out as string) : out
+  }
+
+  async getMediaPlayerInfo() {
+    const out: string = await new Promise((resolve, reject) => {
+      const stream = spawn('termux-media-player', ['info'])
+      stream.stdout.on('data', (buffer) => {
+        resolve(buffer.toString('utf8'))
+      })
+      stream.stderr.on('error', reject)
+    })
+    return out
+  }
+
+  async createMediaPlayerPlay(path: string) {
+    const out = await new Promise((resolve, reject) => {
+      const stream = spawn('termux-media-player', ['play', path])
+      stream.stdout.on('data', (buffer) => {
+        resolve(buffer.toString('utf8'))
+      })
+      stream.stderr.on('error', reject)
+    })
+    return out
+  }
+
+  async setMediaPlayerState(state: MediaPlayerStateType) {
+    const out = await new Promise((resolve, reject) => {
+      const stream = spawn('termux-media-player', [state])
+      stream.stdout.on('data', (buffer) => {
+        resolve(buffer.toString('utf8'))
+      })
       stream.stderr.on('error', reject)
     })
     return out

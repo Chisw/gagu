@@ -18,7 +18,7 @@ const widgetList = [
   'time',
 ]
 
-export default function NotificationControl() {
+export default function Dialog() {
 
   const [form, setForm] = useState<IDialogForm>({
     widget: 'confirm',

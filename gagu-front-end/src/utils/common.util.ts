@@ -159,6 +159,22 @@ export const getBaiduMapPinUrl = (exifData: any, content?: string) => {
   }
 }
 
+export const getBaiduMapLocationUrl = (longitude: number, latitude: number) => {
+  if (latitude && longitude) {
+    const query = new URLSearchParams({
+      location: `${latitude},${longitude}`,
+      title: 'Location',
+      output: 'html',
+      coord_type: 'wgs84',
+    } as any)
+
+    return `https://api.map.baidu.com/marker?${query.toString()}`
+    // return `https://www.google.com/maps/search/?api=1&query=${lat},${lon}`
+  } else {
+    return ''
+  }
+}
+
 export const refreshImage = (name: PublicImageName) => {
   document.querySelectorAll(`.gagu-public-image-${name}`).forEach((el) => {
     el.removeAttribute('style')

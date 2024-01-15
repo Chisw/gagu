@@ -1,10 +1,13 @@
 import { Permission } from '../../common/decorators'
 import { TermuxService } from './termux.service'
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common'
+import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common'
 import {
   IDialogForm,
   IDownloadForm,
-  IInfraredTransmit,
+  IInfraredTransmitForm,
+  LocationProviderType,
+  LocationRequestType,
+  MediaPlayerStateType,
   ServerMessage,
   UserPermission,
 } from '../../types'
@@ -155,10 +158,61 @@ export class TermuxController {
 
   @Post('infrared-transmit')
   @Permission(UserPermission.administer)
-  async createInfraredTransmit(@Body() form: IInfraredTransmit) {
+  async createInfraredTransmit(@Body() form: IInfraredTransmitForm) {
     try {
       const list = await this.termuxService.createInfraredTransmit(form)
       return respond(list)
+    } catch (error) {
+      catchError(error)
+      return respond(null, ServerMessage.ERROR_NO_RESPONSE)
+    }
+  }
+
+  @Get('location')
+  @Permission(UserPermission.administer)
+  async getLocation(
+    @Query('provider') provider: LocationProviderType,
+    @Query('request') request: LocationRequestType,
+  ) {
+    try {
+      const data = await this.termuxService.getLocation({ provider, request })
+      return respond(data)
+    } catch (error) {
+      catchError(error)
+      return respond(null, ServerMessage.ERROR_NO_RESPONSE)
+    }
+  }
+
+  @Get('media-player')
+  @Permission(UserPermission.administer)
+  async getMediaPlayerInfo() {
+    try {
+      const data = await this.termuxService.getMediaPlayerInfo()
+      return respond(data)
+    } catch (error) {
+      catchError(error)
+      return respond(null, ServerMessage.ERROR_NO_RESPONSE)
+    }
+  }
+
+  @Post('media-player')
+  @Permission(UserPermission.administer)
+  async createMediaPlayerPlay(@Query('path') path: string) {
+    try {
+      const data = await this.termuxService.createMediaPlayerPlay(path)
+      return respond(data)
+    } catch (error) {
+      catchError(error)
+      return respond(null, ServerMessage.ERROR_NO_RESPONSE)
+    }
+  }
+
+  @Put('media-player/:state')
+  @Permission(UserPermission.administer)
+  async setMediaPlayerState(@Param('state') state: MediaPlayerStateType) {
+    try {
+      const data = await this.termuxService.setMediaPlayerState(state)
+      return respond(data)
     } catch (error) {
       catchError(error)
       return respond(null, ServerMessage.ERROR_NO_RESPONSE)

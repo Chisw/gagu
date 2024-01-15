@@ -11,7 +11,7 @@ Many unrealized ideas will be recorded here, waiting for development
 
 - favicon shows file transfer percentage
 - Sound Recorder, Calendar, Calculator, Relative calculator and other gadgets
-- When running on Termux, add user login vibration reminder and pop-up notification, SMS list
+- When running on Termux, add user login vibration reminder and pop-up notification
 - HTTPS certificate
 - Thumbnail of PDF/APK
 - Separate login tokens and access tokens

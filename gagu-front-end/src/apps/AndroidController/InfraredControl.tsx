@@ -4,11 +4,11 @@ import { useRequest } from '../../hooks'
 import { TermuxApi } from '../../api'
 import toast from 'react-hot-toast'
 import { SvgIcon } from '../../components/common'
-import { IInfraredTransmit } from '../../types'
+import { IInfraredTransmitForm } from '../../types'
 
 export default function InfraredControl() {
 
-  const [form, setForm] = useState<IInfraredTransmit>({
+  const [form, setForm] = useState<IInfraredTransmitForm>({
     frequency: 0,
     pattern: '',
   })
