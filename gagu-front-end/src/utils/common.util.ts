@@ -18,6 +18,10 @@ export const line = (str: string) => str
   .replace(/\s+/g, ' ')
   .trim()
 
+export const sleep = async (duration: number) => {
+  await new Promise((resolve) => setTimeout(resolve, duration))
+}
+
 export const getDateTime = (millis: number) => {
   if (!millis) return ''
   return DateTime.fromMillis(millis).toFormat('yyyy-MM-dd HH:mm:ss')

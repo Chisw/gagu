@@ -23,6 +23,7 @@ interface EntryPickerProps {
   appId: string
   mode: EntryPickerMode.open | EntryPickerMode.save
   type: EntryType.directory | EntryType.file
+  title?: string
   multiple?: boolean
   onConfirm: (result: EntryPickerResult) => void
   onCancel: () => void
@@ -35,6 +36,7 @@ export function EntryPicker(props: EntryPickerProps) {
     mode,
     appId,
     type,
+    title,
     multiple = false,
     onConfirm,
     onCancel,
@@ -121,11 +123,19 @@ export function EntryPicker(props: EntryPickerProps) {
           headerStyle={{ padding: '4px 6px' }}
           bodyStyle={{ position: 'relative', padding: 0 }}
           visible={show}
-          height="calc(100% - 3rem)"
+          height="calc(100% - 1rem)"
           className="gagu-entry-selector-touch gagu-sync-popstate-overlay"
           style={{ borderTopRightRadius: 10, borderTopLeftRadius: 10 }}
           onCancel={onCancel}
-          title={<div className="py-1"><Form {...formProps} /></div>}
+          title={(
+            <div className="py-1">
+              <div className="mb-2 flex items-center flex-shrink-0">
+                <div className="gagu-app-icon w-4 h-4" data-app-id={appId} />
+                <span className="ml-1 text-xs">{title || t(`app.${appId}`)}</span>
+              </div>
+              <Form {...formProps} />
+            </div>
+          )}
         >
           <div className="absolute inset-0 border-t overflow-hidden">
             <FileExplorerTouch
@@ -154,7 +164,7 @@ export function EntryPicker(props: EntryPickerProps) {
           <div className="flex items-center justify-between select-none">
             <div className="flex items-center flex-shrink-0">
               <div className="gagu-app-icon w-4 h-4" data-app-id={appId} />
-              <span className="ml-1">{t(`app.${appId}`)}</span>
+              <span className="ml-1">{title || t(`app.${appId}`)}</span>
             </div>
             <div className="ml-3 flex">
               {matchList.map((extension) => (

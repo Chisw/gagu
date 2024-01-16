@@ -7,12 +7,16 @@ import {
 import { Reflector } from '@nestjs/core'
 import { Observable } from 'rxjs'
 import { Request } from 'express'
-import { PUBLIC_DECORATOR_KEY } from '../decorators/public.decorator'
 import { AuthService } from '../../modules/auth/auth.service'
-import { PERMISSION_DECORATOR_KEY } from '../decorators/permission.decorator'
 import { UserService } from '../../modules/user/user.service'
-import { IUser, UserPermissionType } from '../../types'
-import { getRequestToken } from '../../utils'
+import { IUser, UserPermission, UserPermissionType } from '../../types'
+import { GAGU_PATH, getRequestToken } from '../../utils'
+import {
+  IPathValidation,
+  PUBLIC_DECORATOR_KEY,
+  PERMISSION_DECORATOR_KEY,
+  PATH_VALIDATION_DECORATOR_KEY,
+} from '../decorators'
 
 @Injectable()
 export class ApiGuard implements CanActivate {
@@ -27,10 +31,6 @@ export class ApiGuard implements CanActivate {
   ): boolean | Promise<boolean> | Observable<boolean> {
     const handler = context.getHandler()
     const isPublic = this.reflector.get(PUBLIC_DECORATOR_KEY, handler)
-    const requiredPermissions:
-      | UserPermissionType
-      | UserPermissionType[]
-      | undefined = this.reflector.get(PERMISSION_DECORATOR_KEY, handler)
 
     if (isPublic) {
       return true
@@ -43,23 +43,90 @@ export class ApiGuard implements CanActivate {
       const username = token ? this.authService.getUsername(token) : undefined
       const isLoggedIn = !!username
 
-      if (isLoggedIn) {
-        if (requiredPermissions) {
-          const user = this.userService.findOne(username)
-          request.user = user
-          if (Array.isArray(requiredPermissions)) {
-            return requiredPermissions.every((permission) => {
-              return user?.permissions.includes(permission)
-            })
-          } else {
-            return !!user?.permissions.includes(requiredPermissions)
-          }
-        } else {
-          return true
-        }
-      } else {
+      if (!isLoggedIn) {
         throw new UnauthorizedException()
       }
+
+      const user = this.userService.findOne(username)
+
+      if (!user) {
+        return false
+      }
+
+      request.user = user
+
+      const requiredPermissions:
+        | UserPermissionType
+        | UserPermissionType[]
+        | undefined = this.reflector.get(PERMISSION_DECORATOR_KEY, handler)
+
+      const pathValidation: IPathValidation | undefined = this.reflector.get(
+        PATH_VALIDATION_DECORATOR_KEY,
+        handler,
+      )
+
+      let isPermissionPassed = true
+      let isPathValidationPassed = true
+
+      if (requiredPermissions) {
+        if (Array.isArray(requiredPermissions)) {
+          isPermissionPassed = requiredPermissions.every((permission) => {
+            return user?.permissions.includes(permission)
+          })
+        } else {
+          isPermissionPassed = !!user?.permissions.includes(requiredPermissions)
+        }
+      }
+
+      if (pathValidation) {
+        const valueList: any[] = []
+        const { queryFields, bodyFields } = pathValidation
+
+        if (queryFields?.length) {
+          queryFields.forEach((field) => {
+            valueList.push(request.query[field])
+          })
+        }
+
+        if (bodyFields?.length) {
+          bodyFields.forEach((field) => {
+            valueList.push(request.body[field])
+          })
+        }
+
+        const validatingPathList: string[] = valueList.filter((val) => {
+          return typeof val === 'string' && !!val
+        })
+
+        const { assignedRootPathList = [], permissions } = user
+        const isAdmin = permissions.includes(UserPermission.administer)
+        const userPath = `${GAGU_PATH.ROOT}/users/${username}`
+        const validPath = [userPath, ...assignedRootPathList]
+
+        console.log('validPath', validPath)
+        console.log('validatingPathList', validatingPathList)
+
+        validatingPathList.forEach((path) => {
+          const isRelativePath = path.includes('..')
+
+          const isInRoot =
+            path.startsWith(GAGU_PATH.ROOT) && !path.startsWith(userPath)
+
+          const isNotAssigned = isAdmin
+            ? false
+            : validPath.some((assignedPath) => {
+                return !path.startsWith(assignedPath)
+              })
+
+          console.log({ isRelativePath, isInRoot, isNotAssigned })
+
+          if (isRelativePath || isInRoot || isNotAssigned) {
+            isPathValidationPassed = false
+          }
+        })
+      }
+
+      return isPermissionPassed && isPathValidationPassed
     }
   }
 }

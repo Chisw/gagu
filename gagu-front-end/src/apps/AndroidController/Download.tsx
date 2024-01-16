@@ -77,6 +77,7 @@ export default function Download() {
         appId={AppId.androidController}
         mode={EntryPickerMode.open}
         type={EntryType.directory}
+        title={t`action.open`}
         onConfirm={({ pickedPath }) => {
           setForm({ ...form, path: pickedPath })
           setPickerShow(false)

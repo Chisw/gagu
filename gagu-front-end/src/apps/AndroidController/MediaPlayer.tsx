@@ -5,8 +5,11 @@ import { useCallback, useState } from 'react'
 import { SvgIcon } from '../../components/common'
 import { EntryPicker, EntryPickerMode } from '../../components'
 import { AppId, EntryType, MediaPlayerStateType } from '../../types'
+import { useTranslation } from 'react-i18next'
 
 export default function MediaPlayer() {
+
+  const { t } = useTranslation()
 
   const [pickerShow, setPickerShow] = useState(false)
   const [pickedPath, setPickedPath] = useState('')
@@ -75,6 +78,7 @@ export default function MediaPlayer() {
         appId={AppId.androidController}
         mode={EntryPickerMode.open}
         type={EntryType.file}
+        title={t`action.open`}
         onConfirm={({ pickedPath }) => {
           setPickedPath(pickedPath)
           setPickerShow(false)

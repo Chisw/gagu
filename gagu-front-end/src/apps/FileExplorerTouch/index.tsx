@@ -373,6 +373,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
         appId={AppId.fileExplorer}
         mode={EntryPickerMode.open}
         type={EntryType.directory}
+        title={t`action.moveTo`}
         onConfirm={({ pickedPath }) => {
           handleMove(selectedEntryList, pickedPath)
           handleSelectionCancel()

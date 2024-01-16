@@ -100,6 +100,7 @@ export default function UserFormModal(props: UserFormModalProps) {
     })
 
     if (success) {
+      toast.success('OK')
       setFormMode('CLOSE')
       onRefresh()
       if (isCurrentUser) {
@@ -354,6 +355,7 @@ export default function UserFormModal(props: UserFormModalProps) {
         appId={AppId.settings}
         mode={EntryPickerMode.open}
         type={EntryType.directory}
+        title={t`action.open`}
         onConfirm={({ pickedPath }) => {
           const assignedRootPathList = Array.from(new Set([...form.assignedRootPathList, pickedPath]))
           setForm({ ...form, assignedRootPathList })

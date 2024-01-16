@@ -70,6 +70,7 @@ export function Opener(props: OpenerProps) {
         appId={appId}
         mode={EntryPickerMode.open}
         type={EntryType.file}
+        title={t`action.open`}
         onConfirm={({ pickedEntryList }) => {
           setOpenEvent({
             transaction: EventTransaction.run_app,

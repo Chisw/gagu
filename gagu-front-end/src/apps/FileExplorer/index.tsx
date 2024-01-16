@@ -9,6 +9,7 @@ import { getEntryPath, getIsSameEntry, line } from '../../utils'
 import { FileExplorerProps, EditMode, CreationType, AppId, EntryType } from '../../types'
 import EntryNode from './EntryNode'
 import GoToPathDialog from './GoToPathDialog'
+import { useTranslation } from 'react-i18next'
 
 export default function FileExplorer(props: FileExplorerProps) {
 
@@ -22,6 +23,8 @@ export default function FileExplorer(props: FileExplorerProps) {
     onPick = () => {},
     onPickDoubleConfirm = () => {},
   } = props
+
+  const { t } = useTranslation()
 
   const {
     kiloSize,
@@ -207,6 +210,7 @@ export default function FileExplorer(props: FileExplorerProps) {
         appId={AppId.fileExplorer}
         mode={EntryPickerMode.open}
         type={EntryType.directory}
+        title={t`action.moveTo`}
         onConfirm={({ pickedPath }) => {
           handleMove(selectedEntryList, pickedPath)
           setMovementEntryPickerShow(false)

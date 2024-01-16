@@ -7,8 +7,11 @@ import { AppId, CreationType, EditMode, EntryType, IApp, IEntry, Page } from '..
 import { useWorkArea } from '../../hooks'
 import { EntryPicker, EntryPickerMode, SharingModal } from '../../components'
 import { APP_LIST } from '../../apps'
+import { useTranslation } from 'react-i18next'
 
 export default function Desktop() {
+
+  const { t } = useTranslation()
 
   const [activePage] = useRecoilState(activePageState)
   const [userInfo] = useRecoilState(userInfoState)
@@ -157,6 +160,7 @@ export default function Desktop() {
         appId={AppId.fileExplorer}
         mode={EntryPickerMode.open}
         type={EntryType.directory}
+        title={t`action.moveTo`}
         onConfirm={({ pickedPath }) => {
           handleMove(selectedEntryList, pickedPath)
           setMovementEntryPickerShow(false)

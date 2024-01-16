@@ -126,6 +126,7 @@ export default function GeneralSettings() {
         appId={AppId.settings}
         mode={EntryPickerMode.open}
         type={EntryType.directory}
+        title={t`action.open`}
         onConfirm={({ pickedPath }) => {
           setUserConfig({ ...userConfig, fileExplorerDefaultPath: pickedPath })
           setDefaultPathEnteryPickerShow(false)

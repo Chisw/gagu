@@ -9,8 +9,8 @@ Many unrealized ideas will be recorded here, waiting for development
 
 ## Global
 
-- favicon shows file transfer percentage
-- Sound Recorder, Calendar, Calculator, Relative calculator and other gadgets
+- favicon shows transfer percentage
+- Sound Recorder, Calendar, Calculator, Weather, Relative calculator and other gadgets
 - When running on Termux, add user login vibration reminder and pop-up notification
 - HTTPS certificate
 - Thumbnail of PDF/APK
@@ -28,10 +28,8 @@ Many unrealized ideas will be recorded here, waiting for development
 
 ### File Explorer
 
-- Path access restriction check
 - Copy, Duplicate, Cut (Clipboard)
 - Perform a second confirmation when overwriting the file on the front-end, includes moves and uploads
-- Moving files on the back-end requires verifying the required permissions
 - Slice upload
 - Tree structure display and resizeable width on side
 - Scan and connect multiple devices in LAN
