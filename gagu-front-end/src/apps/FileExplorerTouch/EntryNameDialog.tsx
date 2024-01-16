@@ -106,7 +106,7 @@ export default function EntryNameDialog(props: EntryNameDialogProps) {
         maskClosable={false}
         bodyStyle={{ position: 'relative', padding: 0 }}
         visible={!!editMode}
-        className="gagu-entry-name-editor"
+        className="gagu-use-form-dialog"
         style={{ borderRadius: 10, maxWidth: '90vw' }}
         onCancel={() => setEditMode(null)}
         title={undefined}

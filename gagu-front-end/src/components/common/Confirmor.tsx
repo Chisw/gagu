@@ -2,6 +2,7 @@ import { Button, Modal } from '@douyinfe/semi-ui'
 import { ReactNode } from 'react'
 import { SvgIcon } from './SvgIcon'
 import { t } from 'i18next'
+import { getPopupContainer } from '../../utils'
 
 interface ConfirmorProps {
   type: 'download' | 'delete' | 'tip' | 'favorite' | 'unfavorite' | 'upgrade' | 'ok' | 'move'
@@ -35,8 +36,10 @@ export function Confirmor(props: ConfirmorProps) {
     centered: true,
     maskClosable: true,
     width: 300,
+    maskStyle: { borderRadius: 4 },
     className: 'gagu-confirmor gagu-sync-popstate-overlay gagu-prevent-hotkeys-overlay',
     icon: undefined,
+    getPopupContainer,
     content: (
       <>
         <div className="p-4 flex justify-center">

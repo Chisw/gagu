@@ -16,6 +16,7 @@ import EntryNameDialog from './EntryNameDialog'
 import { useNavigate } from 'react-router'
 import toast from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
+import GoToPathDialog from '../FileExplorer/GoToPathDialog'
 
 interface FileExplorerTouchProps extends ExplorerPickProps {
   show: boolean
@@ -64,6 +65,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
     selectedEntryList, setSelectedEntryList,
     sharingModalShow, setSharingModalShow,
     movementEntryPickerShow, setMovementEntryPickerShow,
+    goToPathDialogShow, setGoToPathDialogShow,
     handleSelectAll, handleDirectorySizeUpdate,
     handleDirectoryOpen, handleGoFullPath,
     handleNavBack, handleNavForward, handleNavRefresh, handleNavAbort, handleNavToParent,
@@ -162,6 +164,9 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
     } else if (editMode) {
       keepPath()
       setEditMode(null)
+    } else if (goToPathDialogShow) {
+      keepPath()
+      setGoToPathDialogShow(false)
     } else {
       const { position } = visitHistory
       if (position >= 1) {
@@ -187,6 +192,8 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
     setSideShow,
     sideShow,
     visitHistory,
+    goToPathDialogShow,
+    setGoToPathDialogShow,
   ])
 
   useEffect(() => {
@@ -329,6 +336,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
           favoriteRootEntryList,
           selectedEntryList,
           setMovementEntryPickerShow,
+          setGoToPathDialogShow,
         }}
         onEdit={(mode, entry) => {
           setEditMode(mode)
@@ -348,6 +356,16 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
         show={sharingModalShow}
         entryList={sharingEntryList}
         onClose={() => setSharingModalShow(false)}
+      />
+
+      <GoToPathDialog
+        show={goToPathDialogShow}
+        currentPath={currentPath}
+        onGo={(path) => {
+          handleGoFullPath(path, true)
+          setGoToPathDialogShow(false)
+        }}
+        onCancel={() => setGoToPathDialogShow(false)}
       />
 
       <EntryPicker

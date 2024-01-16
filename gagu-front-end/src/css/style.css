@@ -166,9 +166,13 @@ body {
   @apply bg-gray-100 cursor-not-allowed dark:bg-zinc-700;
 }
 
-.gagu-entry-name-editor .semi-modal-mask,
+.gagu-use-form-dialog .semi-modal-mask,
 .gagu-confirmor .semi-modal-mask {
   @apply bg-black bg-opacity-10 !important;
+}
+
+.gagu-use-form-dialog .semi-modal-content {
+  @apply border-none;
 }
 
 .gagu-side-drawer .semi-sidesheet-inner {

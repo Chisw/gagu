@@ -32,7 +32,6 @@ Many unrealized ideas will be recorded here, waiting for development
 - Copy, Duplicate, Cut (Clipboard)
 - Perform a second confirmation when overwriting the file on the front-end, includes moves and uploads
 - Moving files on the back-end requires verifying the required permissions
-- Path jumper
 - Slice upload
 - Tree structure display and resizeable width on side
 - Scan and connect multiple devices in LAN

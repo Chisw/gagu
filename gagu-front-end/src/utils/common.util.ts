@@ -23,6 +23,10 @@ export const getDateTime = (millis: number) => {
   return DateTime.fromMillis(millis).toFormat('yyyy-MM-dd HH:mm:ss')
 }
 
+export const getPopupContainer: () => HTMLElement = () => {
+  return document.querySelector('.gagu-app-window.is-top-window') || document.body
+}
+
 interface getReadableSizeOption {
   keepFloat?: boolean
   separator?: string

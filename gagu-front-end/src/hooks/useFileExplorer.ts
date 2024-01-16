@@ -51,6 +51,7 @@ export interface IFileExplorerDisabledMap {
   navForward: boolean
   navRefresh: boolean
   navToParent: boolean
+  goTo: boolean
   createFolder: boolean
   createText: boolean
   rename: boolean
@@ -108,6 +109,7 @@ export function useFileExplorer(props: Props) {
   const [filterText, setFilterText] = useState('')
   const [sharingEntryList, setSharingEntryList] = useState<IEntry[]>([])
   const [movementEntryPickerShow, setMovementEntryPickerShow] = useState(false)
+  const [goToPathDialogShow, setGoToPathDialogShow] = useState(false)
   const [thumbScrollWatcher, setThumbScrollWatcher] = useState<IScrollerWatcher>({ top: 0, height: 0 })
 
   const { request: queryEntryList, loading: querying } = useRequest(FsApi.queryEntryList)
@@ -195,6 +197,7 @@ export function useFileExplorer(props: Props) {
       navForward: list.length === position + 1 || isUserDesktop,
       navRefresh: querying || !currentPath,
       navToParent: !currentPath || canNotBackToParent || isUserDesktop,
+      goTo: isUserDesktop,
       createFolder: touchMode ? false : !!editMode,
       createText: touchMode ? false : !!editMode,
       rename: !isSingle,
@@ -567,6 +570,7 @@ export function useFileExplorer(props: Props) {
     selectedEntryList, setSelectedEntryList,
     sharingModalShow, setSharingModalShow,
     movementEntryPickerShow, setMovementEntryPickerShow,
+    goToPathDialogShow, setGoToPathDialogShow,
     handleSelectAll, handleDirectorySizeUpdate, handleUploadTaskAdd, 
     handleDirectoryOpen, handleGoFullPath,
     handleNavBack, handleNavForward, handleNavRefresh, handleNavAbort, handleNavToParent,

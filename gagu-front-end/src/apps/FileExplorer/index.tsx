@@ -8,6 +8,7 @@ import { EmptyPanel } from '../../components/common'
 import { getEntryPath, getIsSameEntry, line } from '../../utils'
 import { FileExplorerProps, EditMode, CreationType, AppId, EntryType } from '../../types'
 import EntryNode from './EntryNode'
+import GoToPathDialog from './GoToPathDialog'
 
 export default function FileExplorer(props: FileExplorerProps) {
 
@@ -40,6 +41,7 @@ export default function FileExplorer(props: FileExplorerProps) {
     sortType, handleSortChange,
     sharingModalShow, setSharingModalShow,
     movementEntryPickerShow, setMovementEntryPickerShow,
+    goToPathDialogShow, setGoToPathDialogShow,
     editMode, handleEdit, handleNameSuccess, handleNameFail,
     handleEntryClick, handleEntryDoubleClick,
     handleDirectoryOpen, handleGoFullPath,
@@ -188,6 +190,16 @@ export default function FileExplorer(props: FileExplorerProps) {
         show={sharingModalShow}
         entryList={sharingEntryList}
         onClose={() => setSharingModalShow(false)}
+      />
+
+      <GoToPathDialog
+        show={goToPathDialogShow}
+        currentPath={currentPath}
+        onGo={(path) => {
+          handleGoFullPath(path, true)
+          setGoToPathDialogShow(false)
+        }}
+        onCancel={() => setGoToPathDialogShow(false)}
       />
 
       <EntryPicker

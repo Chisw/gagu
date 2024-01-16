@@ -14,6 +14,7 @@ interface SelectionMenuProps {
   favoriteRootEntryList: IEntry[]
   selectedEntryList: IEntry[]
   setMovementEntryPickerShow: (show: boolean) => void
+  setGoToPathDialogShow: (show: boolean) => void
   onEdit: (mode: EditModeType, entry?: IEntry) => void
   onDirectorySizeUpdate: (entry: IEntry) => void
   onFavoriteClick: (entry: IEntry, isFavorited: boolean) => void
@@ -32,6 +33,7 @@ export default function SelectionMenu(props: SelectionMenuProps) {
     favoriteRootEntryList,
     selectedEntryList,
     setMovementEntryPickerShow,
+    setGoToPathDialogShow,
     onEdit,
     onDirectorySizeUpdate,
     onFavoriteClick,
@@ -140,6 +142,12 @@ export default function SelectionMenu(props: SelectionMenuProps) {
         onClick: () => onDeleteClick(selectedEntryList),
       },
       {
+        icon: <SvgIcon.Run />,
+        name: t`action.goTo`,
+        isShow: isOnBlank,
+        onClick: () => setGoToPathDialogShow(true),
+      },
+      {
         icon: <SvgIcon.CloseCircle />,
         name: t`action.cancel`,
         isShow: true,
@@ -152,6 +160,7 @@ export default function SelectionMenu(props: SelectionMenuProps) {
     selectedEntryList,
     favoriteRootEntryList,
     setMovementEntryPickerShow,
+    setGoToPathDialogShow,
     onSelectAll,
     onEdit,
     onDirectorySizeUpdate,
