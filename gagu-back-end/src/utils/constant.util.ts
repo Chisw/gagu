@@ -45,8 +45,12 @@ const PATH_MAP: { [PLATFORM: string]: string } = {
 
 const ROOT_PATH = `${PATH_MAP[ServerOS.platform] || ''}${IS_DEV ? '.dev' : ''}`
 
-// TODO: use path check
-export const FORBIDDEN_ENTRY_NAME_LIST = ['.io.gagu', '.io.gagu.dev']
+export const MAC_HIDDEN_ENTRIES = [
+  '.Trash',
+  '.Trashes',
+  '.Spotlight-V100',
+  '.VolumeIcon.icns',
+]
 
 export const GAGU_PATH = {
   ROOT: ROOT_PATH,

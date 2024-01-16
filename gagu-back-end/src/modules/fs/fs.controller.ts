@@ -37,7 +37,12 @@ import {
   RootEntryGroup,
 } from '../../types'
 import { mkdirSync, renameSync } from 'fs'
-import { Permission, Public, UserGetter } from '../../common/decorators'
+import {
+  PathValidation,
+  Permission,
+  Public,
+  UserGetter,
+} from '../../common/decorators'
 import { UserService } from '../user/user.service'
 import 'express-zip'
 
@@ -85,6 +90,7 @@ export class FsController {
 
   @Get('list')
   @Permission(UserPermission.read)
+  @PathValidation({ queryFields: ['path'] })
   findAll(@Query('path') path: string) {
     const entryList = this.fsService.getEntryList(path)
     return respond(entryList)

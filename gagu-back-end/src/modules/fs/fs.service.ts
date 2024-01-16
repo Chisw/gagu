@@ -28,10 +28,10 @@ import {
   completeNestedPath,
   dataURLtoBuffer,
   getEntryPath,
-  FORBIDDEN_ENTRY_NAME_LIST,
   GEN_THUMBNAIL_AUDIO_LIST,
   catchError,
   GEN_THUMBNAIL_IMAGE_LIST,
+  MAC_HIDDEN_ENTRIES,
 } from '../../utils'
 import * as nodeDiskInfo from 'node-disk-info'
 import * as md5 from 'md5'
@@ -63,11 +63,11 @@ export class FsService {
     }
     const entryList = entryNameList
       .filter((entryName: string) => {
-        const isForbidden = FORBIDDEN_ENTRY_NAME_LIST.includes(entryName)
-        const isMacHiddenEntries =
-          ServerOS.isMacOS &&
-          ['.Trash', '.Trashes', '.Spotlight-V100'].includes(entryName)
-        return !isForbidden && !isMacHiddenEntries
+        const isFiltered = `${path}/${entryName}` === GAGU_PATH.ROOT
+        const isMacHidden =
+          ServerOS.isMacOS && MAC_HIDDEN_ENTRIES.includes(entryName)
+
+        return !isFiltered && !isMacHidden
       })
       .map((entryName: string) => {
         try {
