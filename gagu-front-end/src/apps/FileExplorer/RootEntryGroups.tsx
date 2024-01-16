@@ -126,7 +126,7 @@ export default function RootEntryGroups(props: RootEntryGroupsProps) {
                   )}
                   {group === RootEntryGroup.favorite && (
                     <div
-                      className="md:opacity-0 group-hover:opacity-100"
+                      className="md:opacity-0 group-hover:opacity-100 transition-opacity duration-200"
                       onClick={(e) => e.stopPropagation()}
                     >
                       <IconButton

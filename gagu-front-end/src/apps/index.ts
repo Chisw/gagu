@@ -82,19 +82,6 @@ export const APP_LIST: IApp[] = [
     touchModeShow: true,
   },
   {
-    id: AppId.androidController,
-    runningId: 0,
-    AppComponent: AndroidController,
-    width: 400,
-    height: 600,
-    resizeRange: {
-      minWidth: 200,
-      minHeight: 300,
-    },
-    headerClassName: 'bg-emerald-800 text-emerald-100',
-    touchModeShow: true,
-  },
-  {
     id: AppId.settings,
     runningId: 0,
     AppComponent: Settings,
@@ -105,6 +92,19 @@ export const APP_LIST: IApp[] = [
       minHeight: 300,
     },
     headerClassName: 'bg-zinc-700 text-zinc-100',
+    touchModeShow: true,
+  },
+  {
+    id: AppId.androidController,
+    runningId: 0,
+    AppComponent: AndroidController,
+    width: 400,
+    height: 600,
+    resizeRange: {
+      minWidth: 200,
+      minHeight: 300,
+    },
+    headerClassName: 'bg-emerald-800 text-emerald-100',
     touchModeShow: true,
   },
   {

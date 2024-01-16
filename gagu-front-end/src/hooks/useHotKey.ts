@@ -40,7 +40,7 @@ export function useHotKey(props: useHotKeyProps) {
 
       if (fnKey) {
         e.preventDefault()
-        fnMap[fnKey]()
+        fnMap[fnKey] && fnMap[fnKey]()
       }
     }
 
