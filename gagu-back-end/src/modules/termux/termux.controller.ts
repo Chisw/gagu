@@ -1,4 +1,4 @@
-import { Permission } from '../../common/decorators'
+import { PathValidation, Permission } from '../../common/decorators'
 import { TermuxService } from './termux.service'
 import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common'
 import {
@@ -122,6 +122,7 @@ export class TermuxController {
 
   @Post('download')
   @Permission(UserPermission.administer)
+  @PathValidation({ bodyFields: ['path'] })
   async createDownload(@Body() form: IDownloadForm) {
     try {
       await this.termuxService.createDownload(form)
@@ -197,6 +198,7 @@ export class TermuxController {
 
   @Post('media-player')
   @Permission(UserPermission.administer)
+  @PathValidation({ queryFields: ['path'] })
   async createMediaPlayerPlay(@Query('path') path: string) {
     try {
       const data = await this.termuxService.createMediaPlayerPlay(path)

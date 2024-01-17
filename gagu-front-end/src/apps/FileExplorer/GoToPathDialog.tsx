@@ -33,7 +33,7 @@ export default function GoToPathDialog(props: GoToPathDialogProps) {
     const { data } = await queryExists(path)
     if (data === true) {
       onGo(path)
-    } else {
+    } else if (data === false) {
       toast.error(t`tip.pathNotExists`)
     }
   }, [onGo, path, queryExists, t])

@@ -15,7 +15,7 @@ export class FsApi {
   }
 
   static queryFlattenEntryList = async (entryList: IEntry[], config?: AxiosRequestConfig) => {
-    const { data } = await service.post<IResponse<IEntry[]>>(`/api/fs/list/flatten`, { entryList }, config)
+    const { data } = await service.post<IResponse<IEntry[]>>(`/api/fs/list/flat`, { entryList }, config)
     return data
   }
 
@@ -62,13 +62,6 @@ export class FsApi {
     return data
   }
 
-  static uploadImage = async (name: string, file: File, config?: AxiosRequestConfig) => {
-    let formData = new FormData()
-    formData.append('file', file)
-    const { data } = await service.post<IResponse>(`/api/fs/upload/image/${name}`, formData, { ...config, timeout: 0 })
-    return data
-  }
-
   static queryExif = async (path: string, config?: AxiosRequestConfig) => {
     const { data } = await service.get<IResponse<IExif>>(`/api/fs/exif?${getPathParam(path)}`, config)
     return data
@@ -89,6 +82,13 @@ export class FsApi {
     return data
   }
 
+  static uploadPublicImage = async (name: string, file: File, config?: AxiosRequestConfig) => {
+    let formData = new FormData()
+    formData.append('file', file)
+    const { data } = await service.post<IResponse>(`/api/fs/public/image/${name}`, formData, { ...config, timeout: 0 })
+    return data
+  }
+
   static getPathStreamUrl = (path: string) => {
     return `${BASE_URL}/api/fs/stream?${getPathParam(path)}&${QUERY_TOKEN_KEY}=${UserInfoStore.getToken()}`
   }
@@ -106,12 +106,12 @@ export class FsApi {
 
   static getAvatarStreamUrl = (username: string) => {
     if (!username) return ''
-    return `${BASE_URL}/api/fs/avatar/${username}`
+    return `${BASE_URL}/api/fs/public/avatar/${username}`
   }
 
   static getImageStreamUrl = (name: string) => {
     if (!name) return ''
-    return `${BASE_URL}/api/fs/image/${name}`
+    return `${BASE_URL}/api/fs/public/image/${name}`
   }
 
   static download = (code: string, password?: string) => {

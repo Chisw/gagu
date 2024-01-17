@@ -297,18 +297,6 @@ export class FsService {
     })
   }
 
-  uploadImage(name: string, buffer: Buffer) {
-    writeFileSync(`${GAGU_PATH.PUBLIC_IMAGE}/${name}`, buffer)
-  }
-
-  uploadAvatar(username: User.Username, avatar: string) {
-    if (avatar) {
-      const avatarBuffer = dataURLtoBuffer(avatar)
-      const avatarPath = `${GAGU_PATH.PUBLIC_AVATAR}/${username}`
-      avatarBuffer && this.uploadFile(avatarPath, avatarBuffer)
-    }
-  }
-
   async moveEntry(oldPath: string, newPath: string) {
     try {
       await promises.cp(oldPath, newPath, { recursive: true })
@@ -433,6 +421,18 @@ export class FsService {
     }
 
     return thumbnailFilePath
+  }
+
+  uploadAvatar(username: User.Username, avatar: string) {
+    if (avatar) {
+      const avatarBuffer = dataURLtoBuffer(avatar)
+      const avatarPath = `${GAGU_PATH.PUBLIC_AVATAR}/${username}`
+      avatarBuffer && this.uploadFile(avatarPath, avatarBuffer)
+    }
+  }
+
+  uploadPublicImage(name: string, buffer: Buffer) {
+    writeFileSync(`${GAGU_PATH.PUBLIC_IMAGE}/${name}`, buffer)
   }
 
   getAvatarPath(username: User.Username) {

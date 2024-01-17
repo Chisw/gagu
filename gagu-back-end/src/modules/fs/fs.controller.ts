@@ -96,14 +96,16 @@ export class FsController {
     return respond(entryList)
   }
 
-  @Post('list/flatten')
+  @Post('list/flat')
   @Permission(UserPermission.read)
+  @PathValidation({ bodyEntryListField: 'entryList' })
   findFlattenAll(@Body('entryList') entryList: IEntry[]) {
     const flattenList = this.fsService.getRecursiveFlattenEntryList(entryList)
     return respond(flattenList)
   }
 
   @Get('exists')
+  @PathValidation({ queryFields: ['path'] })
   readExists(@Query('path') path: string) {
     const exists = getExists(path)
     return respond(exists)
@@ -111,6 +113,7 @@ export class FsController {
 
   @Get('size')
   @Permission(UserPermission.read)
+  @PathValidation({ queryFields: ['path'] })
   readSize(@Query('path') path: string) {
     const size = this.fsService.getDirectorySize(path)
     return respond(size)
@@ -118,6 +121,7 @@ export class FsController {
 
   @Get('text')
   @Permission(UserPermission.read)
+  @PathValidation({ queryFields: ['path'] })
   readTextContent(@Query('path') path: string) {
     const text = this.fsService.getTextContent(path)
     return respond(text)
@@ -125,6 +129,7 @@ export class FsController {
 
   @Put('rename')
   @Permission(UserPermission.write)
+  @PathValidation({ bodyFields: ['oldPath', 'newPath'] })
   updateName(
     @Body('oldPath') oldPath: string,
     @Body('newPath') newPath: string,
@@ -136,6 +141,7 @@ export class FsController {
 
   @Put('move')
   @Permission([UserPermission.write, UserPermission.delete])
+  @PathValidation({ bodyFields: ['oldPath', 'newPath'] })
   async updatePath(
     @Body('oldPath') oldPath: string,
     @Body('newPath') newPath: string,
@@ -146,6 +152,7 @@ export class FsController {
 
   @Post('mkdir')
   @Permission(UserPermission.write)
+  @PathValidation({ bodyFields: ['path'] })
   create(@Body('path') path: string) {
     mkdirSync(path)
     return respond()
@@ -153,6 +160,7 @@ export class FsController {
 
   @Delete('delete')
   @Permission(UserPermission.delete)
+  @PathValidation({ queryFields: ['path'] })
   async remove(@Query('path') path: string) {
     const isExisted = getExists(path)
     if (!isExisted) {
@@ -171,6 +179,7 @@ export class FsController {
   @Get('thumbnail')
   @Permission(UserPermission.read)
   @Header('Content-Type', 'image/jpg')
+  @PathValidation({ queryFields: ['path'] })
   async readThumbnail(@Query('path') path: string, @Res() response: Response) {
     if (ServerOS.supportThumbnail) {
       try {
@@ -197,39 +206,9 @@ export class FsController {
     }
   }
 
-  @Public()
-  @Get('avatar/:username')
-  @Header('Content-Type', 'image/jpg')
-  readAvatar(
-    @Param('username') username: User.Username,
-    @Res() response: Response,
-  ) {
-    const avatarPath = this.fsService.getAvatarPath(username)
-    if (getExists(avatarPath)) {
-      response.sendFile(avatarPath)
-    } else {
-      response.end(
-        JSON.stringify(respond(null, ServerMessage.ERROR_FILE_NOT_EXISTED)),
-      )
-    }
-  }
-
-  @Public()
-  @Get('image/:name')
-  @Header('Content-Type', 'image/jpg')
-  readImage(@Param('name') name: User.Username, @Res() response: Response) {
-    const path = this.fsService.getImagePath(name)
-    if (getExists(path)) {
-      response.sendFile(path)
-    } else {
-      response.end(
-        JSON.stringify(respond(null, ServerMessage.ERROR_FILE_NOT_EXISTED)),
-      )
-    }
-  }
-
   @Get('exif')
   @Permission(UserPermission.read)
+  @PathValidation({ queryFields: ['path'] })
   async getExif(@Query('path') path: string) {
     try {
       const data = await this.fsService.getExif(path)
@@ -242,6 +221,7 @@ export class FsController {
 
   @Get('audio-tags')
   @Permission(UserPermission.read)
+  @PathValidation({ queryFields: ['path'] })
   async getAudioTags(@Query('path') path: string) {
     try {
       const data = await this.fsService.getAudioTags(path)
@@ -254,12 +234,14 @@ export class FsController {
 
   @Get('stream')
   @Permission(UserPermission.read)
+  @PathValidation({ queryFields: ['path'] })
   readStream(@Query('path') path: string, @Res() response: Response) {
     response.sendFile(path)
   }
 
   @Post('upload')
   @Permission(UserPermission.write)
+  @PathValidation({ queryFields: ['path'] })
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(
     @Query('path') path: string,
@@ -278,24 +260,9 @@ export class FsController {
     }
   }
 
-  @Post('upload/image/:name')
-  @Permission(UserPermission.administer)
-  @UseInterceptors(FileInterceptor('file'))
-  uploadImage(
-    @Param('name') name: string,
-    @UploadedFile() file: Express.Multer.File,
-  ) {
-    try {
-      this.fsService.uploadImage(name, file.buffer)
-      return respond()
-    } catch (error) {
-      catchError(error)
-      return respond(null, ServerMessage.ERROR_CATCHER_CAUGHT)
-    }
-  }
-
   @Post('favorite')
   @Permission(UserPermission.read)
+  @PathValidation({ queryFields: ['path'] })
   updateFavorite(@Query('path') path: string, @UserGetter() user: IUser) {
     const pathList = this.userService.createFavorite(user.username, path)
     return respond(
@@ -305,10 +272,58 @@ export class FsController {
 
   @Delete('favorite')
   @Permission(UserPermission.read)
+  @PathValidation({ queryFields: ['path'] })
   removeFavorite(@Query('path') path: string, @UserGetter() user: IUser) {
     const pathList = this.userService.removeFavorite(user.username, path)
     return respond(
       pathList.map((path) => path2RootEntry(path, RootEntryGroup.favorite)),
     )
+  }
+
+  @Public()
+  @Get('public/avatar/:username')
+  @Header('Content-Type', 'image/jpg')
+  readAvatar(
+    @Param('username') username: User.Username,
+    @Res() response: Response,
+  ) {
+    const avatarPath = this.fsService.getAvatarPath(username)
+    if (getExists(avatarPath)) {
+      response.sendFile(avatarPath)
+    } else {
+      response.end(
+        JSON.stringify(respond(null, ServerMessage.ERROR_FILE_NOT_EXISTED)),
+      )
+    }
+  }
+
+  @Public()
+  @Get('public/image/:name')
+  @Header('Content-Type', 'image/jpg')
+  readImage(@Param('name') name: User.Username, @Res() response: Response) {
+    const path = this.fsService.getImagePath(name)
+    if (getExists(path)) {
+      response.sendFile(path)
+    } else {
+      response.end(
+        JSON.stringify(respond(null, ServerMessage.ERROR_FILE_NOT_EXISTED)),
+      )
+    }
+  }
+
+  @Post('public/image/:name')
+  @Permission(UserPermission.administer)
+  @UseInterceptors(FileInterceptor('file'))
+  uploadPublicImage(
+    @Param('name') name: string,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    try {
+      this.fsService.uploadPublicImage(name, file.buffer)
+      return respond()
+    } catch (error) {
+      catchError(error)
+      return respond(null, ServerMessage.ERROR_CATCHER_CAUGHT)
+    }
   }
 }

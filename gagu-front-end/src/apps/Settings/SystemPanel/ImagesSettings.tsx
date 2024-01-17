@@ -15,26 +15,26 @@ export default function ImageSettings() {
   const desktopWallpaperFileInputRef = useRef<any>(null)
   const sharingWallpaperFileInputRef = useRef<any>(null)
 
-  const { request: uploadImage } = useRequest(FsApi.uploadImage)
+  const { request: uploadPublicImage } = useRequest(FsApi.uploadPublicImage)
 
   const handleFaviconChange = useCallback(async () => {
     const file = faviconFileInputRef?.current?.files[0]
-    await uploadImage('favicon', file)
+    await uploadPublicImage('favicon', file)
     refreshImage('favicon')
     setFavicon(FsApi.getImageStreamUrl('favicon'))
-  }, [uploadImage])
+  }, [uploadPublicImage])
 
   const handleDesktopWallpaperChange = useCallback(async () => {
     const file = desktopWallpaperFileInputRef?.current?.files[0]
-    await uploadImage('bg-desktop', file)
+    await uploadPublicImage('bg-desktop', file)
     refreshImage('bg-desktop')
-  }, [uploadImage])
+  }, [uploadPublicImage])
 
   const handleSharingWallpaperChange = useCallback(async () => {
     const file = sharingWallpaperFileInputRef?.current?.files[0]
-    await uploadImage('bg-sharing', file)
+    await uploadPublicImage('bg-sharing', file)
     refreshImage('bg-sharing')
-  }, [uploadImage])
+  }, [uploadPublicImage])
 
   return (
     <>
