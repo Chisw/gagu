@@ -65,7 +65,7 @@ export default function Toolbar(props: ToolbarProps) {
   const buttonList = useMemo(() => {
     return [
       {
-        icon: <SvgIcon.LayoutBottom size={14} />,
+        icon: <SvgIcon.BottomSlider size={14} />,
         title: t`action.more`,
         disabled: !matchedEntryList.length,
         onClick: () => setThumbnailListShow(!thumbnailListShow),

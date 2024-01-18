@@ -78,6 +78,7 @@ export function ContextMenu() {
           trigger="custom"
           position="bottomLeft"
           className={line(`
+            gagu-contextmenu-dropdown
             select-none bg-white
             ${isDock
               ? 'dark:bg-black dark:text-zinc-300'

@@ -199,19 +199,19 @@ body {
   @apply m-0;
 }
 
-.gagu-entry-selector .semi-modal-content {
+.gagu-entry-picker .semi-modal-content {
   padding: 0 16px;
 }
 
-.gagu-entry-selector .semi-modal-body-wrapper {
+.gagu-entry-picker .semi-modal-body-wrapper {
   margin: 16px 0 0 0;
 }
 
-.gagu-entry-selector .semi-modal-footer {
+.gagu-entry-picker .semi-modal-footer {
   margin: 16px 0 20px 0;
 }
 
-.gagu-entry-selector-touch .semi-sidesheet-title {
+.gagu-entry-picker-touch .semi-sidesheet-title {
   flex: unset;
   width: 100%;
 }

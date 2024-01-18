@@ -10,6 +10,7 @@ import {
   SortType,
   TunnelType,
   RootEntryGroup,
+  IClipboardItem,
 } from '../types'
 import {
   EntryPathCacheStore,
@@ -27,6 +28,7 @@ import {
   entryPathCacheState,
   lastChangedDirectoryState,
   baseDataState,
+  clipboardDataState,
 } from '../states'
 import { useRequest } from './useRequest'
 import { FsApi, TunnelApi } from '../api'
@@ -82,6 +84,7 @@ export function useFileExplorer(props: Props) {
 
   const [baseData, setBaseData] = useRecoilState(baseDataState)
   const [entryPathCache, setEntryPathCache] = useRecoilState(entryPathCacheState)
+  const [clipboardData, setClipboardData] = useRecoilState(clipboardDataState)
   const [lastChangedDirectory, setLastChangedDirectory] = useRecoilState(lastChangedDirectoryState)
 
   const touchMode = useTouchMode()
@@ -253,7 +256,6 @@ export function useFileExplorer(props: Props) {
     }
   }, [queryEntryList, entryPathCache, setEntryPathCache])
 
-  // path callback
   const handlePathChange = useCallback((props: {
     path: string
     direction: 'forward' | 'backward'
@@ -289,7 +291,6 @@ export function useFileExplorer(props: Props) {
     handlePathChange({ path, direction: 'forward', pushPath: true, updateCurrentRootEntry })
   }, [handlePathChange])
 
-  // nav callback
   const handleNavBack = useCallback(() => {
     const { position, list } = visitHistory
     const path = list[position - 1]
@@ -329,7 +330,6 @@ export function useFileExplorer(props: Props) {
     handlePathChange({ path, direction: 'forward', pushPath: true })
   }, [currentPath, handlePathChange])
 
-  // entry callback
   const handleSelectAll = useCallback((force?: boolean) => {
     const isSelectAll = force || (selectedEntryList.length < entryList.length)
     setSelectedEntryList(isSelectAll ? entryList : [])
@@ -388,6 +388,10 @@ export function useFileExplorer(props: Props) {
       })
     }
   }, [queryDirectorySize, entryPathCache, setEntryPathCache])
+
+  const hanldeClipboardAdd = useCallback((item: IClipboardItem) => {
+    setClipboardData([item, ...clipboardData])
+  }, [clipboardData, setClipboardData])
 
   const handleFavoriteClick = useCallback((entry: IEntry) => {
     const isFavorited = !!baseData.rootEntryList
@@ -571,6 +575,7 @@ export function useFileExplorer(props: Props) {
     sharingModalShow, setSharingModalShow,
     movementEntryPickerShow, setMovementEntryPickerShow,
     goToPathDialogShow, setGoToPathDialogShow,
+    clipboardData, hanldeClipboardAdd,
     handleSelectAll, handleDirectorySizeUpdate, handleUploadTaskAdd, 
     handleDirectoryOpen, handleGoFullPath,
     handleNavBack, handleNavForward, handleNavRefresh, handleNavAbort, handleNavToParent,

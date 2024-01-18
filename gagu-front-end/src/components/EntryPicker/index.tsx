@@ -124,7 +124,7 @@ export function EntryPicker(props: EntryPickerProps) {
           bodyStyle={{ position: 'relative', padding: 0 }}
           visible={show}
           height="calc(100% - 1rem)"
-          className="gagu-entry-selector-touch gagu-sync-popstate-overlay"
+          className="gagu-entry-picker-touch gagu-sync-popstate-overlay"
           style={{ borderTopRightRadius: 10, borderTopLeftRadius: 10 }}
           onCancel={onCancel}
           title={(
@@ -157,7 +157,7 @@ export function EntryPicker(props: EntryPickerProps) {
         closable={false}
         width={1020}
         visible={show}
-        className="gagu-entry-selector"
+        className="gagu-entry-picker"
         footer={<Form {...formProps} />}
       >
         <div data-customized-scrollbar>

@@ -21,6 +21,18 @@ export enum Page {
 
 export type PageType = keyof typeof Page
 
+export enum ClipboardType {
+  copy = 'copy',
+  cut = 'cut',
+}
+
+export type ClipboardTypeType = keyof typeof ClipboardType
+
+export interface IClipboardItem {
+  type: ClipboardTypeType
+  entryList: IEntry[]
+}
+
 export enum EditMode {
   createFolder = 'createFolder',
   createText = 'createText',

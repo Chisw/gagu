@@ -2,7 +2,7 @@ import { useRecoilState } from 'recoil'
 import { contextMenuDataState, openEventState } from '../states'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useDragTransfer, useFileExplorer, useHotKey, useLassoSelect } from '.'
-import { EditMode, EditModeType, EntryType, EventTransaction, IContextMenuItem, IEntry, ILassoInfo, NameFailType } from '../types'
+import { ClipboardType, EditMode, EditModeType, EntryType, EventTransaction, IContextMenuItem, IEntry, ILassoInfo, NameFailType } from '../types'
 import { GEN_THUMBNAIL_IMAGE_LIST, getEntryPath, getIsCovered, getMatchedApp, getIsSameEntry, openInIINA } from '../utils'
 import { pick, throttle } from 'lodash-es'
 import { SvgIcon } from '../components/common'
@@ -65,6 +65,7 @@ export function useWorkArea(props: useWorkAreaProps) {
     sharingModalShow, setSharingModalShow,
     movementEntryPickerShow, setMovementEntryPickerShow,
     goToPathDialogShow, setGoToPathDialogShow,
+    clipboardData, hanldeClipboardAdd,
     handleSelectAll, handleDirectorySizeUpdate, handleUploadTaskAdd, 
     handleDirectoryOpen, handleGoFullPath,
     handleNavBack, handleNavForward, handleNavRefresh, handleNavAbort, handleNavToParent,
@@ -170,7 +171,7 @@ export function useWorkArea(props: useWorkAreaProps) {
     setSelectedEntryList(entries)
   }, [setSelectedEntryList, entryList])
 
-  const throttledLassoSelectHandler = useMemo(() => throttle(handleLassoSelect, 100), [handleLassoSelect])
+  const throttledLassoSelectHandler = useMemo(() => throttle(handleLassoSelect, 60), [handleLassoSelect])
 
   useLassoSelect({
     binding: !asEntryPicker,
@@ -334,6 +335,30 @@ export function useWorkArea(props: useWorkAreaProps) {
         onClick: () => handleDirectorySizeUpdate(activeEntry),
       },
       {
+        icon: <SvgIcon.Paste />,
+        name: t`action.paste` + ` (${clipboardData[0]?.entryList.length})`,
+        isShow: isOnBlank && !!clipboardData.length,
+        onClick: () => {},
+      },
+      {
+        icon: <SvgIcon.Copy />,
+        name: t`action.copy`,
+        isShow: !!contextEntryList.length,
+        onClick: () => hanldeClipboardAdd({
+          type: ClipboardType.copy,
+          entryList: contextEntryList,
+        }),
+      },
+      {
+        icon: <SvgIcon.Cut />,
+        name: t`action.cut`,
+        isShow: !!contextEntryList.length,
+        onClick: () => hanldeClipboardAdd({
+          type: ClipboardType.cut,
+          entryList: contextEntryList,
+        }),
+      },
+      {
         icon: <SvgIcon.MoveTo />,
         name: t`action.moveTo`,
         isShow: !isOnBlank,
@@ -385,6 +410,7 @@ export function useWorkArea(props: useWorkAreaProps) {
     entryList,
     selectedEntryList,
     favoriteRootEntryList,
+    clipboardData,
     handleEdit,
     setContextMenuData,
     setSelectedEntryList,
@@ -394,6 +420,7 @@ export function useWorkArea(props: useWorkAreaProps) {
     handleNavRefresh,
     handleUploadClick,
     handleDirectorySizeUpdate,
+    hanldeClipboardAdd,
     handleFavoriteClick,
     handleDownloadClick,
     handleShareClick,

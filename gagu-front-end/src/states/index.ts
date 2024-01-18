@@ -1,4 +1,3 @@
-import { IWindowInfo } from './../types/index';
 import { atom } from 'recoil'
 import {
   IApp,
@@ -10,6 +9,8 @@ import {
   IEntryPathCache,
   ITransferTask,
   IUserConfig,
+  IClipboardItem,
+  IWindowInfo,
 } from '../types'
 import { EntryPathCacheStore, UserConfigStore } from '../utils/store.util'
 
@@ -68,6 +69,11 @@ export const contextMenuDataState = atom<IContextMenuState | null>({
 export const entryPathCacheState = atom<IEntryPathCache>({
   key: 'entryPathCacheState',
   default: EntryPathCacheStore.get(),
+})
+
+export const clipboardDataState = atom<IClipboardItem[]>({
+  key: 'clipboardDataState',
+  default: [],
 })
 
 export const openEventState = atom<IOpenEvent | null>({
