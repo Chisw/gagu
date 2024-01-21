@@ -111,7 +111,7 @@ export class ApiGuard implements CanActivate {
       })
 
       validatingPathList.forEach((validatingPath) => {
-        const isRelativePath = validatingPath.includes('..')
+        const isRelativePath = validatingPath.includes('/../')
 
         const isInRoot =
           validatingPath.startsWith(GAGU_PATH.ROOT) &&

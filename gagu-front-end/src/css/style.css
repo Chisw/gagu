@@ -122,7 +122,8 @@ body {
 }
 
 [data-customized-scrollbar] ::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, .3);
+  border-radius: 2px;
+  background-color: rgba(0, 0, 0, .2);
 }
 
 .scrollbar-hidden::-webkit-scrollbar {

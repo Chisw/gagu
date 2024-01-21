@@ -50,6 +50,7 @@ export const MAC_HIDDEN_ENTRIES = [
   '.Trashes',
   '.Spotlight-V100',
   '.VolumeIcon.icns',
+  '.TemporaryItems',
 ]
 
 export const GAGU_PATH = {
