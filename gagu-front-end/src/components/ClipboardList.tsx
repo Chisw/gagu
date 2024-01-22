@@ -1,3 +1,4 @@
+import { useCallback, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { clipboardDataState } from '../states'
 import { line } from '../utils'
@@ -5,14 +6,17 @@ import { ClipboardType, EntryType, IEntry } from '../types'
 import { SvgIcon } from './common'
 import EntryNode from '../apps/FileExplorer/EntryNode'
 import { useUserConfig } from '../hooks'
-import { useState } from 'react'
 
-export default function Clipboard() {
+export function ClipboardList() {
   const { userConfig: { kiloSize } } = useUserConfig()
 
-  const [clipboardData] = useRecoilState(clipboardDataState)
+  const [clipboardData, setClipboardData] = useRecoilState(clipboardDataState)
 
-  const [activeIndex, setActiveIndex] = useState(0)
+  const handleRemove = useCallback((index: number) => {
+    const list = [...clipboardData]
+    list.splice(index, 1)
+    setClipboardData(list)
+  }, [clipboardData, setClipboardData])
 
   return (
     <>
@@ -25,17 +29,18 @@ export default function Clipboard() {
           return (
             <div
               key={itemIndex}
-              className="mb-3 rounded bg-white overflow-hidden"
+              className="mb-3 rounded bg-white bg-opacity-80 overflow-hidden"
             >
-              <div className="flex items-center">
+              <div className="h-8 flex items-center">
                 <div
                   className={line(`
-                    p-2 w-8 h-full border-r flex justify-center items-center text-zinc-500
+                    w-8 h-full border-r text-zinc-500
+                    flex justify-center items-center
                   `)}
                 >
                   {isCopy ? <SvgIcon.Copy /> : <SvgIcon.Cut />}
                 </div>
-                <div className="p-2 flex-grow flex items-center text-zinc-400 text-xs">
+                <div className="px-2 flex-grow flex items-center text-zinc-500 text-xs">
                   {!!folderCount && (
                     <div className="mr-2 flex items-center">
                       <SvgIcon.Folder />
@@ -51,17 +56,31 @@ export default function Clipboard() {
                   )}
                 </div>
                 <div
-                  className="p-2 w-8 h-full cursor-pointer hover:bg-gray-100 flex justify-center"
-                  onClick={() => setActiveIndex(itemIndex)}
+                  className={line(`
+                    flex justify-center
+                    p-2 w-8 h-full cursor-pointer
+                    bg-opacity-5 hover:bg-white active:bg-black active:bg-opacity-5
+                  `)}
+                  onClick={() => handleRemove(itemIndex)}
                 >
-                  <SvgIcon.Add />
+                  <SvgIcon.Remove className="text-red-500" />
                 </div>
+                {/* <div
+                  className={line(`
+                    flex justify-center
+                    p-2 w-8 h-full cursor-pointer
+                    bg-opacity-5 hover:bg-white active:bg-black active:bg-opacity-5
+                  `)}
+                  onClick={() => setActiveIndex(isActive ? -1 : itemIndex)}
+                >
+                  {isActive ? <SvgIcon.ChevronTop /> : <SvgIcon.ChevronBottom />}
+                </div> */}
               </div>
               <div
                 className={line(`
                   overflow-y-auto
                   transition-all duration-200
-                  ${itemIndex === activeIndex ? 'max-h-64 border-t' : 'max-h-0' }
+                  ${true ? 'max-h-64 border-t' : 'max-h-0' }
                 `)}
               >
                 <div className="py-2">

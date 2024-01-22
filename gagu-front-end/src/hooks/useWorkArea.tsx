@@ -222,6 +222,18 @@ export function useWorkArea(props: useWorkAreaProps) {
       'Meta+ArrowDown, Enter': disabledMap.openFolder
         ? null
         : () => handleEntryDoubleClick(selectedEntryList[0]),
+      'Meta+KeyC, Ctrl+KeyC': disabledMap.copy
+        ? null
+        : () => hanldeClipboardAdd({
+          type: ClipboardType.copy,
+          entryList: selectedEntryList,
+        }),
+      'Meta+KeyX, Ctrl+KeyX': disabledMap.cut
+        ? null
+        : () => hanldeClipboardAdd({
+          type: ClipboardType.cut,
+          entryList: selectedEntryList,
+        }),
     },
   })
 

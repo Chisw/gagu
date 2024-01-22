@@ -30,7 +30,7 @@ export function TransferPanel() {
 
   const { userConfig: { kiloSize } } = useUserConfig()
 
-  const [visible, setVisible] = useState(false)
+  const [show, setShow] = useState(false)
   const [uploadInfo, setUploadInfo] = useState({ ratio: 0, speed: '' })
   const [transferSignalCache, setTransferSignalCache] = useState(0)
   const [activeId, setActiveId] = useState('')
@@ -86,24 +86,24 @@ export function TransferPanel() {
   return (
     <>
       <div
-        className={`
-          relative px-2 h-full
+        className={line(`
+          relative px-1 h-full
           text-xs select-none
           transition-width duration-200
           flex items-center cursor-pointer
           hover:bg-white hover:bg-opacity-30 active:bg-black active:bg-opacity-10
           ${uploading ? 'w-28 bg-white bg-opacity-40' : ''}
-        `}
-        onClick={() => setVisible(true)}
+        `)}
+        onClick={() => setShow(true)}
       >
         <div
-          className={`
+          className={line(`
             absolute left-0 bottom-0 right-0
             h-[2px] bg-green-400
             transition-width
             ${uploadInfo.ratio === 0 ? '' : 'duration-200'}
             ${uploading ? 'block' : 'hidden'}
-          `}
+          `)}
           style={{ width: `${uploadInfo.ratio * 100}%` }}
         />
         <SvgIcon.Transfer className="hidden md:block" />
@@ -111,7 +111,7 @@ export function TransferPanel() {
         <span className="font-din text-center flex-grow">
           {uploading && uploadInfo.speed}
         </span>
-        <span className={`ml-2 font-din ${transferTaskList.length ? '' : 'hidden'}`}>
+        <span className={`ml-1 font-din ${transferTaskList.length ? '' : 'hidden'}`}>
           {transferTaskList.filter(t => t.status === 'success').length}
           &nbsp;/&nbsp;
           {transferTaskList.length}
@@ -131,7 +131,7 @@ export function TransferPanel() {
                   icon={<SvgIcon.Brush />}
                   onClick={() => {
                     setTransferTaskList([])
-                    setTimeout(() => setVisible(false), 300)
+                    setTimeout(() => setShow(false), 300)
                   }}
                 >
                   {t`action.clear`}
@@ -143,7 +143,7 @@ export function TransferPanel() {
                 size="small"
                 icon={<SvgIcon.Close />}
                 className="gagu-sync-popstate-overlay-close-button"
-                onClick={() => setVisible(false)}
+                onClick={() => setShow(false)}
               />
             </div>
           </div>
@@ -153,8 +153,8 @@ export function TransferPanel() {
         bodyStyle={{ padding: 0 }}
         maskStyle={{ background: 'rgba(0, 0, 0, .1)' }}
         width={400}
-        visible={visible}
-        onCancel={() => setVisible(false)}
+        visible={show}
+        onCancel={() => setShow(false)}
       >
         <div className="relative w-full h-full overflow-auto">
           <EmptyPanel dark show={!transferTaskList.length} />

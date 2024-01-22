@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { TransferPanel, MySharingPanel, ChangePasswordModal } from '.'
+import { TransferPanel, MySharingPanel, ChangePasswordModal, ClipboardPanel } from '.'
 import { Dropdown } from '@douyinfe/semi-ui'
 import { DateTime } from 'luxon'
 import { useNavigate } from 'react-router-dom'
@@ -348,6 +348,7 @@ export function MenuBar() {
           {clockTime}
         </div>
         <div className="w-1/3 h-full flex justify-end">
+          <ClipboardPanel />
           <TransferPanel />
         </div>
       </div>

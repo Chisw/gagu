@@ -1,4 +1,6 @@
 export * from './ChangePasswordModal'
+export * from './ClipboardList'
+export * from './ClipboardPanel'
 export * from './ContextMenu'
 export * from './EntryPicker'
 export * from './MenuBar'

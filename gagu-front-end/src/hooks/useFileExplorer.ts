@@ -65,6 +65,9 @@ export interface IFileExplorerDisabledMap {
   gridView: boolean
   listView: boolean
   openFolder: boolean
+  copy: boolean
+  cut: boolean
+  paste: boolean
 }
 
 interface Props {
@@ -212,6 +215,9 @@ export function useFileExplorer(props: Props) {
       gridView: isUserDesktop,
       listView: isUserDesktop,
       openFolder: !isSingle,
+      copy: !selectedCount,
+      cut: !selectedCount,
+      paste: !clipboardData.length,
     }
     return disabledMap
   }, [
@@ -224,6 +230,7 @@ export function useFileExplorer(props: Props) {
     editMode,
     selectedEntryList,
     isEntryListEmpty,
+    clipboardData,
   ])
 
   const updateHistory = useCallback((direction: 'forward' | 'backward', path?: string) => {
