@@ -323,13 +323,14 @@ export function useFileExplorer(props: Props) {
     setSelectedEntryList([])
     let newEntryPathCache = await handleQueryEntryList(targetPath)
     const restPaths = [...otherPaths]
-    if (refreshParent) {
+    const isPathPermitted = canNotBackToParentPathList.every(path => path !== targetPath)
+    if (refreshParent && isPathPermitted) {
       restPaths.push(getParentPath(targetPath))
     }
     for (const path of Array.from(new Set(restPaths))) {
       newEntryPathCache = await handleQueryEntryList(path, newEntryPathCache)
     }
-  }, [handleQueryEntryList, currentPath])
+  }, [handleQueryEntryList, currentPath, canNotBackToParentPathList])
 
   const handleNavAbort = useCallback(() => {
     abortController?.abort()
