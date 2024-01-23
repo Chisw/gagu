@@ -20,14 +20,14 @@ export function useAddUploadingTask () {
       const { name, fullPath } = nestedFile
       const file = nestedFile as File
       const id = generateRandomCode()
-      const newPath = `${basePath}${targetDirName ? `/${targetDirName}` : ''}${fullPath || `/${name}`}`
+      const toPath = `${basePath}${targetDirName ? `/${targetDirName}` : ''}${fullPath || `/${name}`}`
 
       return {
         id,
         type: TransferTaskType.upload,
         status: TransferTaskStatus.waiting,
         file,
-        newPath,
+        toPath,
       }
     })
     setTransferTaskList([...transferTaskList, ...newTaskList])

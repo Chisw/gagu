@@ -66,6 +66,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
     sharingModalShow, setSharingModalShow,
     movementEntryPickerShow, setMovementEntryPickerShow,
     goToPathDialogShow, setGoToPathDialogShow,
+    clipboardData, handleClipboardAdd, handleClipboardPaste,
     handleSelectAll, handleDirectorySizeUpdate,
     handleDirectoryOpen, handleGoFullPath,
     handleNavBack, handleNavForward, handleNavRefresh, handleNavAbort, handleNavToParent,
@@ -337,7 +338,10 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
           selectedEntryList,
           setMovementEntryPickerShow,
           setGoToPathDialogShow,
+          clipboardData,
         }}
+        onClipboardAdd={handleClipboardAdd}
+        onClipboardPaste={handleClipboardPaste}
         onEdit={(mode, entry) => {
           setEditMode(mode)
           setActiveEntry(entry || null)

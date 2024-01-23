@@ -129,24 +129,35 @@ export class FsController {
 
   @Put('rename')
   @Permission(UserPermission.write)
-  @PathValidation({ bodyFields: ['oldPath', 'newPath'] })
+  @PathValidation({ bodyFields: ['fromPath', 'toPath'] })
   updateName(
-    @Body('oldPath') oldPath: string,
-    @Body('newPath') newPath: string,
+    @Body('fromPath') fromPath: string,
+    @Body('toPath') toPath: string,
   ) {
     // TODO:
-    renameSync(oldPath, newPath)
+    renameSync(fromPath, toPath)
     return respond()
   }
 
   @Put('move')
   @Permission([UserPermission.write, UserPermission.delete])
-  @PathValidation({ bodyFields: ['oldPath', 'newPath'] })
+  @PathValidation({ bodyFields: ['fromPath', 'toPath'] })
   async updatePath(
-    @Body('oldPath') oldPath: string,
-    @Body('newPath') newPath: string,
+    @Body('fromPath') fromPath: string,
+    @Body('toPath') toPath: string,
   ) {
-    await this.fsService.moveEntry(oldPath, newPath)
+    await this.fsService.moveEntry(fromPath, toPath)
+    return respond()
+  }
+
+  @Post('copy')
+  @Permission(UserPermission.write)
+  @PathValidation({ bodyFields: ['fromPath', 'toPath'] })
+  async copy(
+    @Body('fromPath') fromPath: string,
+    @Body('toPath') toPath: string,
+  ) {
+    await this.fsService.copyEntry(fromPath, toPath)
     return respond()
   }
 

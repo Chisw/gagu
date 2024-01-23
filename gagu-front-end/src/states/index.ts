@@ -9,7 +9,7 @@ import {
   IEntryPathCache,
   ITransferTask,
   IUserConfig,
-  IClipboardItem,
+  IClipboardData,
   IWindowInfo,
 } from '../types'
 import { EntryPathCacheStore, UserConfigStore } from '../utils/store.util'
@@ -71,9 +71,9 @@ export const entryPathCacheState = atom<IEntryPathCache>({
   default: EntryPathCacheStore.get(),
 })
 
-export const clipboardDataState = atom<IClipboardItem[]>({
+export const clipboardDataState = atom<IClipboardData | null>({
   key: 'clipboardDataState',
-  default: [],
+  default: null,
 })
 
 export const openEventState = atom<IOpenEvent | null>({

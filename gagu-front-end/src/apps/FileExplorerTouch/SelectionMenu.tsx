@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { getIsSameEntry, line } from '../../utils'
-import { EditMode, EditModeType, EventTransaction, IEntry } from '../../types'
+import { ClipboardType, EditMode, EditModeType, EventTransaction, IClipboardData, IEntry } from '../../types'
 import { useTranslation } from 'react-i18next'
 import { SvgIcon } from '../../components/common'
 import { CALLABLE_APP_LIST } from '../../apps'
@@ -13,8 +13,11 @@ interface SelectionMenuProps {
   asEntryPicker?: boolean
   favoriteRootEntryList: IEntry[]
   selectedEntryList: IEntry[]
+  clipboardData: IClipboardData | null
   setMovementEntryPickerShow: (show: boolean) => void
   setGoToPathDialogShow: (show: boolean) => void
+  onClipboardAdd: (data: IClipboardData) => void
+  onClipboardPaste: () => void
   onEdit: (mode: EditModeType, entry?: IEntry) => void
   onDirectorySizeUpdate: (entry: IEntry) => void
   onFavoriteClick: (entry: IEntry, isFavorited: boolean) => void
@@ -32,8 +35,11 @@ export default function SelectionMenu(props: SelectionMenuProps) {
     asEntryPicker = false,
     favoriteRootEntryList,
     selectedEntryList,
+    clipboardData,
     setMovementEntryPickerShow,
     setGoToPathDialogShow,
+    onClipboardAdd,
+    onClipboardPaste,
     onEdit,
     onDirectorySizeUpdate,
     onFavoriteClick,
@@ -98,6 +104,30 @@ export default function SelectionMenu(props: SelectionMenuProps) {
         onClick: () => onSelectAll(),
       },
       {
+        icon: <SvgIcon.Paste />,
+        name: t`action.paste` + ` (${clipboardData?.entryList.length})`,
+        isShow: !!clipboardData,
+        onClick: onClipboardPaste,
+      },
+      {
+        icon: <SvgIcon.Copy />,
+        name: t`action.copy`,
+        isShow: !!selectedEntryList.length,
+        onClick: () => onClipboardAdd({
+          type: ClipboardType.copy,
+          entryList: selectedEntryList,
+        }),
+      },
+      {
+        icon: <SvgIcon.Cut />,
+        name: t`action.cut`,
+        isShow: !!selectedEntryList.length,
+        onClick: () => onClipboardAdd({
+          type: ClipboardType.cut,
+          entryList: selectedEntryList,
+        }),
+      },
+      {
         icon: <SvgIcon.MoveTo />,
         name: t`action.moveTo`,
         isShow: !isOnBlank,
@@ -159,8 +189,11 @@ export default function SelectionMenu(props: SelectionMenuProps) {
     asEntryPicker,
     selectedEntryList,
     favoriteRootEntryList,
+    clipboardData,
     setMovementEntryPickerShow,
     setGoToPathDialogShow,
+    onClipboardAdd,
+    onClipboardPaste,
     onSelectAll,
     onEdit,
     onDirectorySizeUpdate,

@@ -45,7 +45,7 @@ export function TransferPanel() {
 
   const handleUploadStart = useCallback(async (uploadingTaskList: IUploadTransferTask[]) => {
     for (const task of uploadingTaskList) {
-      const { id, newPath, file } = task
+      const { id, toPath, file } = task
       setActiveId(id)
 
       let lastUpload = { time: Date.now(), size: 0 }
@@ -61,11 +61,11 @@ export function TransferPanel() {
         lastUpload = { time: now, size: loaded }
       }
 
-      const { success } = await uploadFile(newPath, file, { onUploadProgress })
+      const { success } = await uploadFile(toPath, file, { onUploadProgress })
       if (success) {
         setUploadInfo({ ratio: 0, speed: '' })
         const match = file.fullPath || `/${file.name}`
-        setLastChangedDirectory({ path: newPath.replace(match, ''), timestamp: Date.now() })
+        setLastChangedDirectory({ path: toPath.replace(match, ''), timestamp: Date.now() })
       }
     }
 
@@ -87,7 +87,7 @@ export function TransferPanel() {
     <>
       <div
         className={line(`
-          relative px-1 h-full
+          relative px-2 h-full
           text-xs select-none
           transition-width duration-200
           flex items-center cursor-pointer
@@ -119,6 +119,7 @@ export function TransferPanel() {
       </div>
 
       <SideSheet
+        data-customized-scrollbar
         className="gagu-side-drawer gagu-sync-popstate-overlay gagu-prevent-hotkeys-overlay"
         title={(
           <div className="flex items-center">
@@ -160,7 +161,7 @@ export function TransferPanel() {
           <EmptyPanel dark show={!transferTaskList.length} />
 
           {transferTaskList.map((task, taskIndex) => {
-            const { id, file, status, newPath } = task
+            const { id, file, status, toPath } = task
             const isActive = id === activeId
             const name = file ? file.name : ''
             const len = transferTaskList.length.toString().length
@@ -187,7 +188,7 @@ export function TransferPanel() {
                     {indexStr}. {name}
                   </p>
                   <p className="text-xs text-gray-500 break-all dark:text-zinc-300">
-                    {newPath}
+                    {toPath}
                   </p>
                 </div>
                 &nbsp;

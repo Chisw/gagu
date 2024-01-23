@@ -217,6 +217,8 @@
       "noTimeLimit": "无限期",
       "noTimesLimit": "无限次",
       "noUploadableFilesDetected": "没有检测到可以上传的文件",
+      "pasteEntries_one": "粘贴 {{count}} 个项目？",
+      "pasteEntries_other": "粘贴 {{count}} 个项目？",
       "pathNotExists": "路径不存在",
       "reachTheEndOfHistory": "已经走到历史的尽头了",
       "sharingWithPassword": "啊喔，分享者设置了访问密码",

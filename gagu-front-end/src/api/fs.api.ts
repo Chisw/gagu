@@ -35,13 +35,18 @@ export class FsApi {
   }
 
   // TODO: name limit
-  static updateEntryName = async (oldPath: string, newPath: string, config?: AxiosRequestConfig) => {
-    const { data } = await service.put<IResponse>(`/api/fs/rename`, { oldPath, newPath }, config)
+  static updateEntryName = async (fromPath: string, toPath: string, config?: AxiosRequestConfig) => {
+    const { data } = await service.put<IResponse>(`/api/fs/rename`, { fromPath, toPath }, config)
     return data
   }
 
-  static updateEntryPath = async (oldPath: string, newPath: string, config?: AxiosRequestConfig) => {
-    const { data } = await service.put<IResponse>(`/api/fs/move`, { oldPath, newPath }, config)
+  static updateEntryPath = async (fromPath: string, toPath: string, config?: AxiosRequestConfig) => {
+    const { data } = await service.put<IResponse>(`/api/fs/move`, { fromPath, toPath }, config)
+    return data
+  }
+
+  static copyEntry = async (fromPath: string, toPath: string, config?: AxiosRequestConfig) => {
+    const { data } = await service.post<IResponse>(`/api/fs/copy`, { fromPath, toPath }, config)
     return data
   }
 

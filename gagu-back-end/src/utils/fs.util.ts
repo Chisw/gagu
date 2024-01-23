@@ -1,4 +1,11 @@
-import { accessSync, appendFile, constants, mkdirSync, promises } from 'fs'
+import {
+  accessSync,
+  appendFile,
+  constants,
+  mkdirSync,
+  promises,
+  statSync,
+} from 'fs'
 import { GAGU_PATH, ServerOS } from './constant.util'
 import { catchError } from 'rxjs'
 
@@ -17,6 +24,27 @@ export const getExists = (path: string) => {
     exists = false
   }
   return exists
+}
+
+export const getCopiedPath: (path: string) => string = (path) => {
+  const isExisted = getExists(path)
+  if (isExisted) {
+    const state = statSync(path)
+    if (state.isDirectory()) {
+      return getCopiedPath(`${path} - copied`)
+    } else {
+      const name = path.split('/').reverse()[0]
+      const parentPath = path.split('/').slice(0, -1).join('/')
+      const extension = getExtension(name)
+      const pureName = name.slice(0, -(extension.length + 1))
+      const suffix = extension ? `.${extension}` : ''
+      const newPath = `${parentPath}/${pureName} - copied${suffix}`
+
+      return getCopiedPath(newPath)
+    }
+  } else {
+    return path
+  }
 }
 
 export const removeEntry = async (path: string) => {

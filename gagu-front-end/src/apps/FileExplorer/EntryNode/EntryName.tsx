@@ -36,14 +36,14 @@ export default function EntryName(props: EntryNameProps) {
 
   const [inputValue, setInputValue] = useState<string>(entryName || generateNewName())
 
-  const handleInputChange = useCallback((e: any) => {
-    setInputValue(e.target.value)
-  }, [])
-
   const { request: queryExists, loading: loadingExist } = useRequest(FsApi.queryExists)
   const { request: createDirectory, loading: loadingNewDir } = useRequest(FsApi.createDirectory)
   const { request: updateEntryName, loading: loadingRename } = useRequest(FsApi.updateEntryName)
   const { request: uploadFile } = useRequest(FsApi.uploadFile)
+
+  const handleInputChange = useCallback((e: any) => {
+    setInputValue(e.target.value)
+  }, [])
 
   const handleName = useCallback(async (e: any) => {
     const oldName = entry?.name
@@ -69,22 +69,22 @@ export default function EntryName(props: EntryNameProps) {
       ? newName
       : `${newName}.txt`
 
-    const newPath = `${parentPath}/${finalName}`
-    const { data: exists } = await queryExists(newPath)
+    const toPath = `${parentPath}/${finalName}`
+    const { data: exists } = await queryExists(toPath)
 
     if (exists) {
       onFail('existed')
       toast.error(t('tip.targetExists', { name: finalName }))
     } else {
       if (oldName) {  // rename
-        const oldPath = `${parentPath}/${oldName}`
-        const { success } = await updateEntryName(oldPath, newPath)
+        const fromPath = `${parentPath}/${oldName}`
+        const { success } = await updateEntryName(fromPath, toPath)
         if (success) {
           onSuccess({ ...entry!, name: finalName })
         }
       } else {
         if (creationType === EditMode.createFolder) {
-          const { success } = await createDirectory(newPath)
+          const { success } = await createDirectory(toPath)
           if (success) {
             onSuccess({
               name: finalName,
@@ -128,6 +128,25 @@ export default function EntryName(props: EntryNameProps) {
     onFail,
   ])
 
+  const handleFocus = useCallback(() => {
+    const input = document.getElementById('file-explorer-name-input') as HTMLInputElement | undefined
+    if (input && entry) {
+      const { name, extension } = entry
+      const end = extension ? name.lastIndexOf(`.${extension}`) : name.length
+      setInputSelection(input, 0, end)
+    }
+  }, [entry])
+
+  const handleKeyDown = useCallback((e: any) => {
+    const { key } = e
+    if (key === 'Enter') {
+      e.preventDefault()
+      handleName(e)
+    } else if (key === 'Escape') {
+      onFail('cancel')
+    }
+  }, [handleName, onFail])
+
   return (
     <div
       className={line(`
@@ -157,24 +176,9 @@ export default function EntryName(props: EntryNameProps) {
             `)}
             value={inputValue}
             onChange={handleInputChange}
-            onFocus={() => {
-              const input = document.getElementById('file-explorer-name-input') as HTMLInputElement | undefined
-              if (input && entry) {
-                const { name, extension } = entry
-                const end = extension ? name.lastIndexOf(`.${extension}`) : name.length
-                setInputSelection(input, 0, end)
-              }
-            }}
+            onFocus={handleFocus}
             onBlur={handleName}
-            onKeyDown={e => {
-              const { key } = e
-              if (key === 'Enter') {
-                e.preventDefault()
-                handleName(e)
-              } else if (key === 'Escape') {
-                onFail('cancel')
-              }
-            }}
+            onKeyDown={handleKeyDown}
           />
         </div>
       ) : (

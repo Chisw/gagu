@@ -6,7 +6,7 @@ import ControlBar from './ControlBar'
 import Side from './Side'
 import { EmptyPanel } from '../../components/common'
 import { getEntryPath, getIsSameEntry, line } from '../../utils'
-import { FileExplorerProps, EditMode, CreationType, AppId, EntryType } from '../../types'
+import { FileExplorerProps, EditMode, CreationType, AppId, EntryType, ClipboardState } from '../../types'
 import EntryNode from './EntryNode'
 import GoToPathDialog from './GoToPathDialog'
 import { useTranslation } from 'react-i18next'
@@ -27,7 +27,7 @@ export default function FileExplorer(props: FileExplorerProps) {
   const { t } = useTranslation()
 
   const {
-    kiloSize,
+    kiloSize, clipboardData,
     lassoRef, containerRef, containerInnerRef,
     supportThumbnail, thumbScrollWatcher,
     currentPath, currentRootEntry,
@@ -150,6 +150,14 @@ export default function FileExplorer(props: FileExplorerProps) {
                 const isSelected = selectedEntryList.some(o => getIsSameEntry(o, entry))
                 const isFavorited = favoriteRootEntryList.some(o => getIsSameEntry(o, entry))
                 const inputMode = editMode === EditMode.rename && isSelected
+
+                const isInClipboard = clipboardData?.entryList.length &&
+                  clipboardData.entryList.some((o) => getIsSameEntry(o, entry))
+
+                const clipboardState: ClipboardState = isInClipboard
+                  ? clipboardData.type
+                  : undefined
+
                 return (
                   <EntryNode
                     key={encodeURIComponent(`${entry.name}-${entry.type}`)}
@@ -162,6 +170,7 @@ export default function FileExplorer(props: FileExplorerProps) {
                       isFavorited,
                       supportThumbnail,
                       thumbScrollWatcher,
+                      clipboardState,
                     }}
                     draggable={!inputMode && !asEntryPicker}
                     requestState={{ deleting, sizeQuerying }}

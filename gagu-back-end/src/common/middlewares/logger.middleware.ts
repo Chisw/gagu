@@ -17,8 +17,8 @@ export class LoggerMiddleware implements NestMiddleware {
     this.authService.updatePulseTime(token)
 
     const skippableApiList = [
-      '/api/fs/avatar',
-      '/api/fs/image',
+      '/api/fs/public/avatar',
+      '/api/fs/public/image',
       '/api/fs/audio-tags',
       '/api/fs/thumbnail',
     ]

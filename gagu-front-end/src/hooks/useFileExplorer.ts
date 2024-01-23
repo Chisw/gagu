@@ -10,7 +10,8 @@ import {
   SortType,
   TunnelType,
   RootEntryGroup,
-  IClipboardItem,
+  IClipboardData,
+  ClipboardType,
 } from '../types'
 import {
   EntryPathCacheStore,
@@ -124,6 +125,8 @@ export function useFileExplorer(props: Props) {
   const { request: createTunnel } = useRequest(TunnelApi.createTunnel)
   const { request: createFavorite } = useRequest(FsApi.createFavorite)
   const { request: removeFavorite } = useRequest(FsApi.removeFavorite)
+  const { request: updateEntryPath } = useRequest(FsApi.updateEntryPath)
+  const { request: copyEntry } = useRequest(FsApi.copyEntry)
 
   const { handleUploadTaskAdd } = useAddUploadingTask()
 
@@ -217,7 +220,7 @@ export function useFileExplorer(props: Props) {
       openFolder: !isSingle,
       copy: !selectedCount,
       cut: !selectedCount,
-      paste: !clipboardData.length,
+      paste: !clipboardData,
     }
     return disabledMap
   }, [
@@ -396,9 +399,42 @@ export function useFileExplorer(props: Props) {
     }
   }, [queryDirectorySize, entryPathCache, setEntryPathCache])
 
-  const hanldeClipboardAdd = useCallback((item: IClipboardItem) => {
-    setClipboardData([item, ...clipboardData])
-  }, [clipboardData, setClipboardData])
+  const handleClipboardAdd = useCallback((data: IClipboardData) => {
+    setClipboardData(data)
+  }, [setClipboardData])
+
+  const handleClipboardPaste = useCallback(() => {
+    if (!clipboardData) return
+    const { type, entryList } = clipboardData
+    const isCopy = type === ClipboardType.copy
+    const isCut = type === ClipboardType.cut
+
+    Confirmor({
+      type: 'paste',
+      content: t('tip.pasteEntries', { count: entryList.length }),
+      onConfirm: async (close) => {
+        for (const entry of entryList) {
+          const fromPath = getEntryPath(entry)
+          const toPath = `${currentPath}/${entry.name}`
+
+          if (isCut && fromPath === toPath) continue
+
+          const fn = isCopy ? copyEntry : updateEntryPath
+          const { success } = await fn(fromPath, toPath)
+          if (success) {
+            setLastChangedDirectory({
+              path: currentPath,
+              timestamp: Date.now(),
+              otherPaths: [entry.parentPath],
+            })
+          }
+        }
+
+        isCut && setClipboardData(null)
+        close()
+      },
+    })
+  }, [clipboardData, t, currentPath, copyEntry, updateEntryPath, setLastChangedDirectory, setClipboardData])
 
   const handleFavoriteClick = useCallback((entry: IEntry) => {
     const isFavorited = !!baseData.rootEntryList
@@ -562,6 +598,23 @@ export function useFileExplorer(props: Props) {
     EntryPathCacheStore.set(cache)
   }, [entryPathCache, touchMode])
 
+  useEffect(() => {
+    if (!clipboardData?.entryList.length) return
+    const { entryList, entryList: [{ parentPath }] } = clipboardData
+    const { list = [] } = entryPathCache[parentPath] || {}
+    const isDisappeared = entryList.some(entry => list.every(o => !getIsSameEntry(o, entry)))
+    if (isDisappeared) {
+      const newEntryList = entryList.filter(entry => list.some(o => getIsSameEntry(o, entry)))
+      setClipboardData(newEntryList.length
+        ? {
+          type: clipboardData.type,
+          entryList: newEntryList,
+        }
+        : null
+      )
+    }
+  }, [clipboardData, entryPathCache, setClipboardData])
+
   return {
     kiloSize,
     disabledMap, supportThumbnail, thumbScrollWatcher,
@@ -582,7 +635,7 @@ export function useFileExplorer(props: Props) {
     sharingModalShow, setSharingModalShow,
     movementEntryPickerShow, setMovementEntryPickerShow,
     goToPathDialogShow, setGoToPathDialogShow,
-    clipboardData, hanldeClipboardAdd,
+    clipboardData, handleClipboardAdd, handleClipboardPaste,
     handleSelectAll, handleDirectorySizeUpdate, handleUploadTaskAdd, 
     handleDirectoryOpen, handleGoFullPath,
     handleNavBack, handleNavForward, handleNavRefresh, handleNavAbort, handleNavToParent,

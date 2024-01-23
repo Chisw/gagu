@@ -3,7 +3,7 @@ import { useRecoilState } from 'recoil'
 import { getIsSameEntry, line } from '../../utils'
 import { activePageState, userInfoState, runningAppListState, topWindowIndexState } from '../../states'
 import EntryNode from '../../apps/FileExplorer/EntryNode'
-import { AppId, CreationType, EditMode, EntryType, IApp, IEntry, Page } from '../../types'
+import { AppId, ClipboardState, CreationType, EditMode, EntryType, IApp, IEntry, Page } from '../../types'
 import { useWorkArea } from '../../hooks'
 import { EntryPicker, EntryPickerMode, SharingModal } from '../../components'
 import { APP_LIST } from '../../apps'
@@ -37,7 +37,7 @@ export default function Desktop() {
   }, [runningAppList, setRunningAppList, setTopWindowIndex, topWindowIndex])
 
   const {
-    kiloSize,
+    kiloSize, clipboardData,
     lassoRef, containerRef, containerInnerRef,
     supportThumbnail, thumbScrollWatcher,
     currentPath,
@@ -124,6 +124,14 @@ export default function Desktop() {
             const isSelected = selectedEntryList.some(o => getIsSameEntry(o, entry))
             const isFavorited = favoriteRootEntryList.some(o => getIsSameEntry(o, entry))
             const inputMode = editMode === EditMode.rename && isSelected
+
+            const isInClipboard = clipboardData?.entryList.length &&
+              clipboardData.entryList.some((o) => getIsSameEntry(o, entry))
+
+            const clipboardState: ClipboardState = isInClipboard
+              ? clipboardData.type
+              : undefined
+
             return (
               <EntryNode
                 key={encodeURIComponent(`${entry.name}-${entry.type}`)}
@@ -136,6 +144,7 @@ export default function Desktop() {
                   isFavorited,
                   supportThumbnail,
                   thumbScrollWatcher,
+                  clipboardState,
                 }}
                 draggable={!inputMode}
                 requestState={{ deleting, sizeQuerying }}

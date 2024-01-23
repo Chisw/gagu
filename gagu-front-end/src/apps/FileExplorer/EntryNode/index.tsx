@@ -1,4 +1,4 @@
-import { CreationType, IEntry, IScrollerWatcher, NameFailType } from '../../../types'
+import { ClipboardState, CreationType, IEntry, IScrollerWatcher, NameFailType } from '../../../types'
 import { getEntryLabels, line } from '../../../utils'
 import EntryIcon from './EntryIcon'
 import EntryName from './EntryName'
@@ -20,6 +20,7 @@ interface EntryNodeProps {
     sizeQuerying: boolean
     deleting: boolean
   }
+  clipboardState?: ClipboardState
   onClick?: (e: any, entry: IEntry) => void
   onDoubleClick?: (entry: IEntry) => void
   onNameSuccess?: (entry: IEntry) => void
@@ -40,6 +41,7 @@ export default function EntryNode(props: EntryNodeProps) {
     creationType,
     thumbScrollWatcher,
     requestState,
+    clipboardState,
     onClick = () => {},
     onDoubleClick = () => {},
     onNameSuccess = () => {},
@@ -76,6 +78,7 @@ export default function EntryNode(props: EntryNodeProps) {
         gagu-entry-node
         relative overflow-hidden group
         transition-opacity duration-300
+        clipboard-${clipboardState}
         ${hidden ? 'opacity-50' : ''}
         ${isSelected ? 'is-selected' : ''}
         ${gridMode ? 'is-grid-mode m-1 px-1 py-2 w-[112px] h-[116px] rounded-sm' : 'is-list-mode px-3 py-[3px] w-full flex items-center'}

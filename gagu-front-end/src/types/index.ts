@@ -28,10 +28,12 @@ export enum ClipboardType {
 
 export type ClipboardTypeType = keyof typeof ClipboardType
 
-export interface IClipboardItem {
+export interface IClipboardData {
   type: ClipboardTypeType
   entryList: IEntry[]
 }
+
+export type ClipboardState = ClipboardTypeType | undefined
 
 export enum EditMode {
   createFolder = 'createFolder',

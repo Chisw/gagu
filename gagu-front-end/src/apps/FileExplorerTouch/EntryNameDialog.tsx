@@ -56,19 +56,19 @@ export default function EntryNameDialog(props: EntryNameDialogProps) {
       ? `${newName}.txt`
       : newName
 
-    const newPath = `${currentPath}/${finalName}`
-    const { data: exists } = await queryExists(newPath)
+    const toPath = `${currentPath}/${finalName}`
+    const { data: exists } = await queryExists(toPath)
 
     if (exists) {
       toast.error(t('tip.targetExists', { name: finalName }))
     } else {
       if (oldName) {  // rename
-        const oldPath = `${currentPath}/${oldName}`
-        const { success } = await updateEntryName(oldPath, newPath)
+        const fromPath = `${currentPath}/${oldName}`
+        const { success } = await updateEntryName(fromPath, toPath)
         success && onSuccess()
       } else {
         if (editMode === EditMode.createFolder) {
-          const { success } = await createDirectory(newPath)
+          const { success } = await createDirectory(toPath)
           success && onSuccess()
         } else if (editMode === EditMode.createText) {
           const blob = new Blob([''], { type: 'text/plain;charset=utf-8' })

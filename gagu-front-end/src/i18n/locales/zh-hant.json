@@ -217,6 +217,8 @@
       "noTimeLimit": "無限期",
       "noTimesLimit": "無限次",
       "noUploadableFilesDetected": "沒有檢測到可以上傳的文件",
+      "pasteEntries_one": "粘貼 {{count}} 個項目？",
+      "pasteEntries_other": "粘貼 {{count}} 個項目？",
       "pathNotExists": "路徑不存在",
       "reachTheEndOfHistory": "已經走到歷史的盡頭了",
       "sharingWithPassword": "啊喔，分享者設置的訪問密碼",

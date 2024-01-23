@@ -217,6 +217,8 @@
       "noTimeLimit": "時間制限なし",
       "noTimesLimit": "制限なし",
       "noUploadableFilesDetected": "アップロード可能なファイルが検出されませんでした",
+      "pasteEntries_one": "{{count}} 個のアイテムを貼り付け？",
+      "pasteEntries_other": "{{count}} 個のアイテムを貼り付け？",
       "pathNotExists": "パスが存在しません",
       "reachTheEndOfHistory": "私たちは歴史の終わりに達しました",
       "sharingWithPassword": "共有者がアクセスパスワードを設定しました",

@@ -103,6 +103,25 @@ body {
   transition: width 1.5s linear;
 }
 
+.gagu-entry-node.clipboard-copy::after,
+.gagu-entry-node.clipboard-cut::after {
+  @apply absolute z-10 top-0 left-0 block m-1 w-3 h-3 bg-no-repeat bg-contain bg-center;
+  content: "";
+}
+
+.gagu-entry-node.is-list-mode.clipboard-copy::after,
+.gagu-entry-node.is-list-mode.clipboard-cut::after {
+  @apply m-0 w-2 h-2;
+}
+
+.gagu-entry-node.clipboard-copy::after {
+  background-image: url("data: image/svg+xml, %3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg' %3E%3Crect width='24' height='24' rx='4' fill='%233B82F6' /%3E%3Cpath d='M7.555 7.1h.5V3.9c0-.227.18-.4.39-.4H19.11c.21 0 .389.173.389.4v12.6c0 .227-.18.4-.389.4h-3.167v3.2c0 .224-.179.4-.395.4H4.896a.396.396 0 0 1-.395-.4l.002-12.6c0-.224.18-.4.395-.4h2.658zm-1.775.8h-.5v.5l-.002 10.8v.5h9.889V7.9H5.78zm3.053-1.3v.5h7.111v9h2.778V4.3H8.833v2.3z' fill='%23fff' stroke='%23fff' /%3E%3C/svg%3E");
+}
+
+.gagu-entry-node.clipboard-cut::after {
+  background-image: url("data: image/svg+xml, %3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg' %3E%3Crect width='24' height='24' rx='4' fill='%233B82F6' /%3E%3Cpath d='M9.446 8.029L12 10.582l6.728-6.727a2 2 0 0 1 2.828 0l-12.11 12.11a4 4 0 1 1-1.414-1.414l2.554-2.554-2.554-2.554a4 4 0 1 1 1.414-1.414zm5.38 5.379l6.73 6.73a2 2 0 0 1-2.828 0l-5.317-5.316 1.415-1.414zm-7.412 3.175a2 2 0 1 0-2.828 2.828 2 2 0 0 0 2.828-2.829zm0-9.172a2 2 0 1 0-2.828-2.828A2 2 0 0 0 7.414 7.41z' fill='%23fff' /%3E%3C/svg%3E");
+}
+
 /* customized-scrollbar */
 [data-customized-scrollbar] ::-webkit-scrollbar,
 [data-customized-scrollbar] ::-webkit-scrollbar-button,

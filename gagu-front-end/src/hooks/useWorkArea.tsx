@@ -65,7 +65,7 @@ export function useWorkArea(props: useWorkAreaProps) {
     sharingModalShow, setSharingModalShow,
     movementEntryPickerShow, setMovementEntryPickerShow,
     goToPathDialogShow, setGoToPathDialogShow,
-    clipboardData, hanldeClipboardAdd,
+    clipboardData, handleClipboardAdd, handleClipboardPaste,
     handleSelectAll, handleDirectorySizeUpdate, handleUploadTaskAdd, 
     handleDirectoryOpen, handleGoFullPath,
     handleNavBack, handleNavForward, handleNavRefresh, handleNavAbort, handleNavToParent,
@@ -224,16 +224,17 @@ export function useWorkArea(props: useWorkAreaProps) {
         : () => handleEntryDoubleClick(selectedEntryList[0]),
       'Meta+KeyC, Ctrl+KeyC': disabledMap.copy
         ? null
-        : () => hanldeClipboardAdd({
+        : () => handleClipboardAdd({
           type: ClipboardType.copy,
           entryList: selectedEntryList,
         }),
       'Meta+KeyX, Ctrl+KeyX': disabledMap.cut
         ? null
-        : () => hanldeClipboardAdd({
+        : () => handleClipboardAdd({
           type: ClipboardType.cut,
           entryList: selectedEntryList,
         }),
+      'Meta+KeyV, Ctrl+KeyV': disabledMap.paste ? null : handleClipboardPaste,
     },
   })
 
@@ -348,15 +349,15 @@ export function useWorkArea(props: useWorkAreaProps) {
       },
       {
         icon: <SvgIcon.Paste />,
-        name: t`action.paste` + ` (${clipboardData[0]?.entryList.length})`,
-        isShow: isOnBlank && !!clipboardData.length,
-        onClick: () => {},
+        name: t`action.paste` + ` (${clipboardData?.entryList.length})`,
+        isShow: isOnBlank && !!clipboardData,
+        onClick: handleClipboardPaste,
       },
       {
         icon: <SvgIcon.Copy />,
         name: t`action.copy`,
         isShow: !!contextEntryList.length,
-        onClick: () => hanldeClipboardAdd({
+        onClick: () => handleClipboardAdd({
           type: ClipboardType.copy,
           entryList: contextEntryList,
         }),
@@ -365,7 +366,7 @@ export function useWorkArea(props: useWorkAreaProps) {
         icon: <SvgIcon.Cut />,
         name: t`action.cut`,
         isShow: !!contextEntryList.length,
-        onClick: () => hanldeClipboardAdd({
+        onClick: () => handleClipboardAdd({
           type: ClipboardType.cut,
           entryList: contextEntryList,
         }),
@@ -432,7 +433,8 @@ export function useWorkArea(props: useWorkAreaProps) {
     handleNavRefresh,
     handleUploadClick,
     handleDirectorySizeUpdate,
-    hanldeClipboardAdd,
+    handleClipboardAdd,
+    handleClipboardPaste,
     handleFavoriteClick,
     handleDownloadClick,
     handleShareClick,
@@ -477,7 +479,7 @@ export function useWorkArea(props: useWorkAreaProps) {
   }, [onCurrentPathChange, currentPath])
 
   return {
-    kiloSize,
+    kiloSize, clipboardData,
     lassoRef, containerRef, containerInnerRef,
     supportThumbnail, thumbScrollWatcher,
     currentPath, currentRootEntry,

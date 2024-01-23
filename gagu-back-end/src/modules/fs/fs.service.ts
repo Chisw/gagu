@@ -32,6 +32,7 @@ import {
   catchError,
   GEN_THUMBNAIL_IMAGE_LIST,
   MAC_HIDDEN_ENTRIES,
+  getCopiedPath,
 } from '../../utils'
 import * as nodeDiskInfo from 'node-disk-info'
 import * as md5 from 'md5'
@@ -297,10 +298,20 @@ export class FsService {
     })
   }
 
-  async moveEntry(oldPath: string, newPath: string) {
+  async moveEntry(fromPath: string, toPath: string) {
     try {
-      await promises.cp(oldPath, newPath, { recursive: true })
-      await promises.rm(oldPath, { recursive: true })
+      await promises.cp(fromPath, toPath, { recursive: true })
+      await promises.rm(fromPath, { recursive: true })
+    } catch (error) {
+      catchError(error)
+    }
+  }
+
+  async copyEntry(fromPath: string, toPath: string) {
+    const copiedPath = getCopiedPath(toPath)
+
+    try {
+      await promises.cp(fromPath, copiedPath, { recursive: true })
     } catch (error) {
       catchError(error)
     }

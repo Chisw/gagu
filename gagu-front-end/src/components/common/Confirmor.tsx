@@ -5,7 +5,7 @@ import { t } from 'i18next'
 import { getPopupContainer } from '../../utils'
 
 interface ConfirmorProps {
-  type: 'download' | 'delete' | 'tip' | 'favorite' | 'unfavorite' | 'upgrade' | 'ok' | 'move'
+  type: 'download' | 'delete' | 'tip' | 'favorite' | 'unfavorite' | 'upgrade' | 'ok' | 'move' | 'paste'
   content: ReactNode
   onConfirm: (close: () => void) => void
   onCancel?: (close: () => void) => void
@@ -20,6 +20,7 @@ const iconMap = {
   upgrade: <SvgIcon.Upgrade size={36} className="text-blue-600" />,
   ok: <SvgIcon.CheckCircle size={36} className="text-green-600" />,
   move: <SvgIcon.MoveTo size={36} className="text-blue-600" />,
+  paste: <SvgIcon.Paste size={36} className="text-blue-600" />,
 }
 
 export function Confirmor(props: ConfirmorProps) {

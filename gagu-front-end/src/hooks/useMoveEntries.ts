@@ -27,9 +27,9 @@ export function useMoveEntries() {
       }),
       onConfirm: async (close) => {
         for (const transferEntry of transferEntryList) {
-          const oldPath = getEntryPath(transferEntry)
-          const newPath = `${targetDirectoryPath}/${transferEntry.name}`
-          const { success } = await updateEntryPath(oldPath, newPath)
+          const fromPath = getEntryPath(transferEntry)
+          const toPath = `${targetDirectoryPath}/${transferEntry.name}`
+          const { success } = await updateEntryPath(fromPath, toPath)
           if (success) {
             setLastChangedDirectory({
               path: transferEntry.parentPath,
