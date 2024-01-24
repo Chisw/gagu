@@ -84,7 +84,7 @@ export default function Desktop() {
       >
         <div
           ref={lassoRef}
-          className="gagu-work-area-lasso hidden absolute z-10 border box-content border-gray-400 bg-black bg-opacity-10 pointer-events-none"
+          className="gagu-work-area-lasso"
         />
         <div
           ref={containerInnerRef}

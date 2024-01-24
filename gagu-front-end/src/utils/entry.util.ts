@@ -110,8 +110,6 @@ export const getEntryLabels = (entry: IEntry, kiloSize: 1000 | 1024) => {
   return { sizeLabel, dateLabel }
 }
 
-export const getParentPath = (path: string) => path.split('/').slice(0, -1).join('/')
-
 export const getAbsolutePath = (currentPath: string, relativePath: string) => {
   const nameList = currentPath.split('/')
   relativePath.split('/').forEach((name) => {
@@ -130,6 +128,9 @@ export const safeQuotes = (path: string) =>
   path.replace(/"/g, '\\"').replace(/`/g, '\\`')
 
 // Sync following code to BE & FE
+export const getParentPath = (path: string) =>
+  path.split('/').slice(0, -1).join('/')
+
 export const getEntryPath = (entry: IEntry | null | undefined) => {
   if (!entry) return ''
   const { name, parentPath } = entry

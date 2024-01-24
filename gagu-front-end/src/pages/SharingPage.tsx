@@ -52,7 +52,7 @@ export default function SharePage() {
     isShowInput,
     isShowError,
     message,
-    flattenList,
+    flatList,
     entryList,
     username,
     nickname,
@@ -73,7 +73,7 @@ export default function SharePage() {
       downloadName,
     } = response?.data?.tunnel || {}
 
-    const flattenList = response?.data?.flattenList || []
+    const flatList = response?.data?.flatList || []
     const isSuccess = success
     const isShowInput = success && message === ServerMessage.ERROR_TUNNEL_PASSWORD_NEEDED
     const isShowError = !success
@@ -83,7 +83,7 @@ export default function SharePage() {
       isShowInput,
       isShowError,
       message,
-      flattenList: flattenList || [],
+      flatList: flatList || [],
       entryList: entryList || [],
       username: username || '',
       nickname,
@@ -152,7 +152,7 @@ export default function SharePage() {
             transition-all duration-1000 ease-out
             ${activePage === 'sharing' ? 'scale-100 bg-opacity-100' : 'scale-110 opacity-50'}
           `)}
-          style={{ backgroundImage: `url("${FsApi.getImageStreamUrl('bg-sharing')}")` }}
+          style={{ backgroundImage: `url("${FsApi.getPublicImageStreamUrl('bg-sharing')}")` }}
         />
         <div
           className={line(`
@@ -169,7 +169,7 @@ export default function SharePage() {
               <div className="flex items-center">
                 <div
                   className="w-10 h-10 rounded-full border-2 border-white shadow bg-center bg-cover flex-shrink-0 dark:border-zinc-400"
-                  style={{ backgroundImage: `url("${FsApi.getAvatarStreamUrl(username)}")` }}
+                  style={{ backgroundImage: `url("${FsApi.getPublicAvatarStreamUrl(username)}")` }}
                 />
                 <div className="ml-4 flex-grow">
                   <p className="text-sm md:text-base dark:text-zinc-200">
@@ -239,7 +239,7 @@ export default function SharePage() {
                 <EntryListPanel
                   downloadName={downloadName || ''}
                   entryList={entryList}
-                  flattenList={flattenList}
+                  flatList={flatList}
                 />
               )}
               {code && (

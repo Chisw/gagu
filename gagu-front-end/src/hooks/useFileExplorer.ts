@@ -125,7 +125,7 @@ export function useFileExplorer(props: Props) {
   const { request: createTunnel } = useRequest(TunnelApi.createTunnel)
   const { request: createFavorite } = useRequest(FsApi.createFavorite)
   const { request: removeFavorite } = useRequest(FsApi.removeFavorite)
-  const { request: updateEntryPath } = useRequest(FsApi.updateEntryPath)
+  const { request: moveEntry } = useRequest(FsApi.moveEntry)
   const { request: copyEntry } = useRequest(FsApi.copyEntry)
 
   const { handleUploadTaskAdd } = useAddUploadingTask()
@@ -420,7 +420,7 @@ export function useFileExplorer(props: Props) {
 
           if (isCut && fromPath === toPath) continue
 
-          const fn = isCopy ? copyEntry : updateEntryPath
+          const fn = isCopy ? copyEntry : moveEntry
           const { success } = await fn(fromPath, toPath)
           if (success) {
             setLastChangedDirectory({
@@ -435,7 +435,7 @@ export function useFileExplorer(props: Props) {
         close()
       },
     })
-  }, [clipboardData, t, currentPath, copyEntry, updateEntryPath, setLastChangedDirectory, setClipboardData])
+  }, [clipboardData, t, currentPath, copyEntry, moveEntry, setLastChangedDirectory, setClipboardData])
 
   const handleFavoriteClick = useCallback((entry: IEntry) => {
     const isFavorited = !!baseData.rootEntryList

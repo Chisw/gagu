@@ -35,7 +35,7 @@ export function TransferPanel() {
   const [transferSignalCache, setTransferSignalCache] = useState(0)
   const [activeId, setActiveId] = useState('')
 
-  const { request: uploadFile, loading: uploading } = useRequest(FsApi.uploadFile)
+  const { request: createFile, loading: uploading } = useRequest(FsApi.createFile)
 
   useEffect(() => {
     if (uploading) {
@@ -61,7 +61,7 @@ export function TransferPanel() {
         lastUpload = { time: now, size: loaded }
       }
 
-      const { success } = await uploadFile(toPath, file, { onUploadProgress })
+      const { success } = await createFile(toPath, file, { onUploadProgress })
       if (success) {
         setUploadInfo({ ratio: 0, speed: '' })
         const match = file.fullPath || `/${file.name}`
@@ -73,7 +73,7 @@ export function TransferPanel() {
     list.forEach(t => t.status = 'success')
     setTransferTaskList(list)
     setActiveId('')
-  }, [transferTaskList, setTransferTaskList, uploadFile, kiloSize, setLastChangedDirectory])
+  }, [transferTaskList, setTransferTaskList, createFile, kiloSize, setLastChangedDirectory])
 
   useEffect(() => {
     if (transferSignal !== transferSignalCache) {

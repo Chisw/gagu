@@ -4,7 +4,7 @@ import service from './service'
 
 
 export class TunnelApi {
-  static queryTunnels = async () => {
+  static queryTunnelList = async () => {
     const { data } = await service.get<IResponse<ITunnel[]>>(`/api/tunnel`)
     return data
   }
@@ -15,7 +15,7 @@ export class TunnelApi {
   }
 
   static queryTunnel = async (code: string, password?: string) => {
-    const { data } = await service.get<IResponse<{ tunnel: ITunnel, flattenList: IEntry[] }>>(`/api/tunnel/${code}?${getPasswordParam(password)}`)
+    const { data } = await service.get<IResponse<{ tunnel: ITunnel, flatList: IEntry[] }>>(`/api/tunnel/${code}?${getPasswordParam(password)}`)
     return data
   }
 

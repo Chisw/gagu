@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import { Confirmor, Opener } from '../../components/common'
-import { ENTRY_ICON_LIST, getEntryPath, line } from '../../utils'
+import { ENTRY_ICON_LIST, generateTextFile, getEntryPath, line } from '../../utils'
 import { FsApi } from '../../api'
 import { AppComponentProps, AppId, IEntry } from '../../types'
 import { useRunAppEvent, useRequest, useHotKey, useUserConfig } from '../../hooks'
@@ -49,7 +49,7 @@ export default function TextEditor(props: AppComponentProps) {
     data: '',
   })
 
-  const { request: uploadFile, loading: saving } = useRequest(FsApi.uploadFile)
+  const { request: createFile, loading: saving } = useRequest(FsApi.createFile)
 
   const isMarkdown = useMemo(() => activeEntry?.extension === 'md', [activeEntry])
   const textContentCache = useMemo(() => response?.data || '', [response])
@@ -71,16 +71,15 @@ export default function TextEditor(props: AppComponentProps) {
 
   const handleSaveClick = useCallback(async () => {
     if (!activeEntry || isSaveDisabled) return
-    const blob = new Blob([textContent], { type: 'text/plain;charset=utf-8' })
-    const file = new File([blob], activeEntry.name)
+    const file = generateTextFile(textContent, activeEntry.name)
     // TODO: use patch
-    const { success } = await uploadFile(getEntryPath(activeEntry), file)
+    const { success } = await createFile(getEntryPath(activeEntry), file)
     if (success) {
       toast.success('OK')
       setResponse({ success: true, message: 'OK', data: textContent })
       setLastChangedDirectory({ path: activeEntry.parentPath, timestamp: Date.now() })
     }
-  }, [activeEntry, isSaveDisabled, textContent, uploadFile, setResponse, setLastChangedDirectory])
+  }, [activeEntry, isSaveDisabled, textContent, createFile, setResponse, setLastChangedDirectory])
 
   const handleResetClick = useCallback(() => {
     setTextContent(textContentCache)

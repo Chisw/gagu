@@ -45,7 +45,7 @@ export function SharingModal(props: SharingModalProps) {
 
   const [tunnelLink, setTunnelLink] = useState('')
 
-  const { request: queryFlattenEntryList, loading, response } = useRequest(FsApi.queryFlattenEntryList)
+  const { request: queryFlatEntryList, loading, response } = useRequest(FsApi.queryFlatEntryList)
   const { request: createTunnel, loading: creating } = useRequest(TunnelApi.createTunnel)
 
   useEffect(() => {
@@ -57,9 +57,9 @@ export function SharingModal(props: SharingModalProps) {
 
   useEffect(() => {
     if (entryList.length) {
-      queryFlattenEntryList(entryList)
+      queryFlatEntryList(entryList)
     }
-  }, [entryList, queryFlattenEntryList])
+  }, [entryList, queryFlatEntryList])
 
   useEffect(() => {
     if (entryList.length) {
@@ -183,7 +183,7 @@ export function SharingModal(props: SharingModalProps) {
             <EntryListPanel
               downloadName={form.downloadName}
               entryList={entryList}
-              flattenList={response?.data || []}
+              flatList={response?.data || []}
             />
           </>
         ) : (

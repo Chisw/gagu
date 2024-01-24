@@ -16,7 +16,7 @@ export default function App() {
   useColorScheme()
 
   useEffect(() => {
-    setFavicon(FsApi.getImageStreamUrl('favicon'))
+    setFavicon(FsApi.getPublicImageStreamUrl('favicon'))
   }, [])
 
   return (

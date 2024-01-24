@@ -34,7 +34,7 @@ export default function DesktopPage() {
           transition-all duration-1000 ease-out
           ${activePage === Page.desktop ? 'scale-100 opacity-100' : 'scale-110 opacity-50'}
         `)}
-        style={{ backgroundImage: `url("${FsApi.getImageStreamUrl('bg-desktop')}")` }}
+        style={{ backgroundImage: `url("${FsApi.getPublicImageStreamUrl('bg-desktop')}")` }}
       />
       <ContextMenu />     {/* z-30 */}
       <MenuBar />         {/* z-20 */}

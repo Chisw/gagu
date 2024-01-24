@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useCallback, useEffect, useState } from 'react'
 import { useRequest } from '../../hooks'
 import { FsApi } from '../../api'
-import { INVALID_NAME_CHAR_LIST, generateNewName, setInputSelection } from '../../utils'
+import { INVALID_NAME_CHAR_LIST, generateNewName, generateTextFile, setInputSelection } from '../../utils'
 import toast from 'react-hot-toast'
 
 const titleMap = {
@@ -37,7 +37,7 @@ export default function EntryNameDialog(props: EntryNameDialogProps) {
   const { request: queryExists, loading: loadingExist } = useRequest(FsApi.queryExists)
   const { request: createDirectory, loading: loadingNewDir } = useRequest(FsApi.createDirectory)
   const { request: updateEntryName, loading: loadingRename } = useRequest(FsApi.updateEntryName)
-  const { request: uploadFile } = useRequest(FsApi.uploadFile)
+  const { request: createFile } = useRequest(FsApi.createFile)
 
   const handleName = useCallback(async () => {
     const oldName = activeEntry?.name
@@ -71,10 +71,9 @@ export default function EntryNameDialog(props: EntryNameDialogProps) {
           const { success } = await createDirectory(toPath)
           success && onSuccess()
         } else if (editMode === EditMode.createText) {
-          const blob = new Blob([''], { type: 'text/plain;charset=utf-8' })
-          const file = new File([blob], finalName)
+          const file = generateTextFile('', finalName)
           const fullPath = `${currentPath}/${finalName}`
-          const { success } = await uploadFile(fullPath, file)
+          const { success } = await createFile(fullPath, file)
           success && onSuccess()
         }
       }
@@ -88,7 +87,7 @@ export default function EntryNameDialog(props: EntryNameDialogProps) {
     queryExists,
     createDirectory,
     updateEntryName,
-    uploadFile,
+    createFile,
     onSuccess,
   ])
 

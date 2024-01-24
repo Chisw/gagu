@@ -46,7 +46,7 @@ export interface IVersion {
   version: string
 }
 
-export interface IExif {
+export interface IExifInfo {
   '0th': object
   '1st': object
   Exif: object
@@ -54,7 +54,7 @@ export interface IExif {
   Interop: object
 }
 
-export interface IAudioTag {
+export interface IAudioInfo {
   title?: string
   artist?: string
   album?: string

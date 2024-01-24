@@ -86,10 +86,11 @@ $ yarn start
 ### References
 
 1. SVG compression: [SVG在线压缩合并工具](https://www.zhangxinxu.com/sp/svgo/)
-2. Audio spectrum effects: [做一个酷酷的音乐频谱](https://juejin.cn/post/6844903478934896647)
-3. Call IINA: [Chrome_Open_In_IINA](https://github.com/iina/iina/blob/develop/browser/Chrome_Open_In_IINA/common.js#L59C18-L59C18)
-4. JSON format: [json-format](https://github.com/luizstacio/json-format/blob/master/index.js)
-5. Read 100+ files: [readEntries](https://developer.mozilla.org/en-US/docs/Web/API/DataTransferItem/webkitGetAsEntry#javascript)
+2. useClickAway: [useClickAway.ts](https://github.com/streamich/react-use/blob/master/src/useClickAway.ts)
+3. Audio spectrum effects: [做一个酷酷的音乐频谱](https://juejin.cn/post/6844903478934896647)
+4. Call IINA: [Chrome_Open_In_IINA](https://github.com/iina/iina/blob/develop/browser/Chrome_Open_In_IINA/common.js#L59C18-L59C18)
+5. JSON format: [json-format](https://github.com/luizstacio/json-format/blob/master/index.js)
+6. Read 100+ files: [readEntries](https://developer.mozilla.org/en-US/docs/Web/API/DataTransferItem/webkitGetAsEntry#javascript)
 
 ### Dependencies
 

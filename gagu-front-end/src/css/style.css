@@ -67,6 +67,10 @@ body {
   display: block;
 }
 
+.gagu-work-area-lasso {
+  @apply hidden absolute z-10 border box-content border-zinc-400 bg-black bg-opacity-10 dark:bg-white dark:bg-opacity-5 pointer-events-none;
+}
+
 .gagu-dragging-children-events-none .gagu-entry-node[data-entry-type="file"] {
   @apply pointer-events-none;
 }

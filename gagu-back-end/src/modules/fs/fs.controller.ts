@@ -68,11 +68,14 @@ export class FsController {
     const isAdmin = permissions.includes(UserPermission.administer)
 
     const rootEntryList = [
-      ...(isAdmin ? this.fsService.getRootEntryList() : []),
+      ...(isAdmin ? this.fsService.getSystemRootEntryList() : []),
+
       ...assignedRootPathList.map((path) =>
         path2RootEntry(path, RootEntryGroup.system),
       ),
+
       path2RootEntry(`${GAGU_PATH.USERS}/${username}`, RootEntryGroup.user),
+
       ...favoritePathList.map((path) =>
         path2RootEntry(path, RootEntryGroup.favorite),
       ),
@@ -100,8 +103,8 @@ export class FsController {
   @Permission(UserPermission.read)
   @PathValidation({ bodyEntryListField: 'entryList' })
   findFlattenAll(@Body('entryList') entryList: IEntry[]) {
-    const flattenList = this.fsService.getRecursiveFlattenEntryList(entryList)
-    return respond(flattenList)
+    const flatList = this.fsService.getRecursiveFlattenEntryList(entryList)
+    return respond(flatList)
   }
 
   @Get('exists')
@@ -125,6 +128,61 @@ export class FsController {
   readTextContent(@Query('path') path: string) {
     const text = this.fsService.getTextContent(path)
     return respond(text)
+  }
+
+  @Get('exif-info')
+  @Permission(UserPermission.read)
+  @PathValidation({ queryFields: ['path'] })
+  async getExifInfo(@Query('path') path: string) {
+    try {
+      const data = await this.fsService.getExifInfo(path)
+      return respond(data)
+    } catch (error) {
+      catchError(error)
+      return respond(null, ServerMessage.ERROR_EXIF)
+    }
+  }
+
+  @Get('audio-info')
+  @Permission(UserPermission.read)
+  @PathValidation({ queryFields: ['path'] })
+  async getAudioInfo(@Query('path') path: string) {
+    try {
+      const data = await this.fsService.getAudioInfo(path)
+      return respond(data)
+    } catch (error) {
+      catchError(error)
+      return respond(null, ServerMessage.ERROR_TAGS)
+    }
+  }
+
+  @Post('directory')
+  @Permission(UserPermission.write)
+  @PathValidation({ bodyFields: ['path'] })
+  create(@Body('path') path: string) {
+    mkdirSync(path)
+    return respond()
+  }
+
+  @Post('file')
+  @Permission(UserPermission.write)
+  @PathValidation({ queryFields: ['path'] })
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadFile(
+    @Query('path') path: string,
+    @UploadedFile() file: Express.Multer.File,
+    @UserGetter() user: IUser,
+  ) {
+    if (getExists(path) && !user.permissions.includes(UserPermission.delete)) {
+      return respond(null, ServerMessage.ERROR_403_PERMISSION_DELETE)
+    }
+    try {
+      await this.fsService.uploadFile(path, file.buffer)
+      return respond()
+    } catch (error) {
+      catchError(error)
+      return respond(null, ServerMessage.ERROR_CATCHER_CAUGHT)
+    }
   }
 
   @Put('rename')
@@ -161,14 +219,6 @@ export class FsController {
     return respond()
   }
 
-  @Post('mkdir')
-  @Permission(UserPermission.write)
-  @PathValidation({ bodyFields: ['path'] })
-  create(@Body('path') path: string) {
-    mkdirSync(path)
-    return respond()
-  }
-
   @Delete('delete')
   @Permission(UserPermission.delete)
   @PathValidation({ queryFields: ['path'] })
@@ -184,6 +234,42 @@ export class FsController {
       return respond()
     } else {
       return respond(null, ServerMessage.ERROR_FILE_DELETE_FAIL)
+    }
+  }
+
+  @Post('favorite')
+  @Permission(UserPermission.read)
+  @PathValidation({ queryFields: ['path'] })
+  updateFavorite(@Query('path') path: string, @UserGetter() user: IUser) {
+    const pathList = this.userService.createFavorite(user.username, path)
+    return respond(
+      pathList.map((path) => path2RootEntry(path, RootEntryGroup.favorite)),
+    )
+  }
+
+  @Delete('favorite')
+  @Permission(UserPermission.read)
+  @PathValidation({ queryFields: ['path'] })
+  removeFavorite(@Query('path') path: string, @UserGetter() user: IUser) {
+    const pathList = this.userService.removeFavorite(user.username, path)
+    return respond(
+      pathList.map((path) => path2RootEntry(path, RootEntryGroup.favorite)),
+    )
+  }
+
+  @Post('public/image/:name')
+  @Permission(UserPermission.administer)
+  @UseInterceptors(FileInterceptor('file'))
+  uploadPublicImage(
+    @Param('name') name: string,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    try {
+      this.fsService.uploadPublicImage(name, file.buffer)
+      return respond()
+    } catch (error) {
+      catchError(error)
+      return respond(null, ServerMessage.ERROR_CATCHER_CAUGHT)
     }
   }
 
@@ -217,78 +303,11 @@ export class FsController {
     }
   }
 
-  @Get('exif')
-  @Permission(UserPermission.read)
-  @PathValidation({ queryFields: ['path'] })
-  async getExif(@Query('path') path: string) {
-    try {
-      const data = await this.fsService.getExif(path)
-      return respond(data)
-    } catch (error) {
-      catchError(error)
-      return respond(null, ServerMessage.ERROR_EXIF)
-    }
-  }
-
-  @Get('audio-tags')
-  @Permission(UserPermission.read)
-  @PathValidation({ queryFields: ['path'] })
-  async getAudioTags(@Query('path') path: string) {
-    try {
-      const data = await this.fsService.getAudioTags(path)
-      return respond(data)
-    } catch (error) {
-      catchError(error)
-      return respond(null, ServerMessage.ERROR_TAGS)
-    }
-  }
-
   @Get('stream')
   @Permission(UserPermission.read)
   @PathValidation({ queryFields: ['path'] })
   readStream(@Query('path') path: string, @Res() response: Response) {
     response.sendFile(path)
-  }
-
-  @Post('upload')
-  @Permission(UserPermission.write)
-  @PathValidation({ queryFields: ['path'] })
-  @UseInterceptors(FileInterceptor('file'))
-  async uploadFile(
-    @Query('path') path: string,
-    @UploadedFile() file: Express.Multer.File,
-    @UserGetter() user: IUser,
-  ) {
-    if (getExists(path) && !user.permissions.includes(UserPermission.delete)) {
-      return respond(null, ServerMessage.ERROR_403_PERMISSION_DELETE)
-    }
-    try {
-      await this.fsService.uploadFile(path, file.buffer)
-      return respond()
-    } catch (error) {
-      catchError(error)
-      return respond(null, ServerMessage.ERROR_CATCHER_CAUGHT)
-    }
-  }
-
-  @Post('favorite')
-  @Permission(UserPermission.read)
-  @PathValidation({ queryFields: ['path'] })
-  updateFavorite(@Query('path') path: string, @UserGetter() user: IUser) {
-    const pathList = this.userService.createFavorite(user.username, path)
-    return respond(
-      pathList.map((path) => path2RootEntry(path, RootEntryGroup.favorite)),
-    )
-  }
-
-  @Delete('favorite')
-  @Permission(UserPermission.read)
-  @PathValidation({ queryFields: ['path'] })
-  removeFavorite(@Query('path') path: string, @UserGetter() user: IUser) {
-    const pathList = this.userService.removeFavorite(user.username, path)
-    return respond(
-      pathList.map((path) => path2RootEntry(path, RootEntryGroup.favorite)),
-    )
   }
 
   @Public()
@@ -319,22 +338,6 @@ export class FsController {
       response.end(
         JSON.stringify(respond(null, ServerMessage.ERROR_FILE_NOT_EXISTED)),
       )
-    }
-  }
-
-  @Post('public/image/:name')
-  @Permission(UserPermission.administer)
-  @UseInterceptors(FileInterceptor('file'))
-  uploadPublicImage(
-    @Param('name') name: string,
-    @UploadedFile() file: Express.Multer.File,
-  ) {
-    try {
-      this.fsService.uploadPublicImage(name, file.buffer)
-      return respond()
-    } catch (error) {
-      catchError(error)
-      return respond(null, ServerMessage.ERROR_CATCHER_CAUGHT)
     }
   }
 }

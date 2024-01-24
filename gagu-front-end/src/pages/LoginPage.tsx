@@ -75,7 +75,7 @@ export default function LoginPage() {
             transition-all duration-1000 blur-lg opacity-50
             ${activePage === 'login' ? 'scale-[120%]' : 'scale-110'}
           `)}
-          style={{ backgroundImage: `url("${FsApi.getImageStreamUrl('bg-desktop')}")` }}
+          style={{ backgroundImage: `url("${FsApi.getPublicImageStreamUrl('bg-desktop')}")` }}
         />
         <div className="semi-always-dark w-64">
           <div

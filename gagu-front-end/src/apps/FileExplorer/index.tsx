@@ -110,7 +110,7 @@ export default function FileExplorer(props: FileExplorerProps) {
           >
             <div
               ref={lassoRef}
-              className="gagu-work-area-lasso hidden absolute z-10 border box-content border-gray-400 bg-black bg-opacity-10 pointer-events-none"
+              className="gagu-work-area-lasso"
             />
 
             <EmptyPanel show={!querying && isEntryListEmpty} />

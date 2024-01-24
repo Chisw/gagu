@@ -1,8 +1,8 @@
 ---
-title: "Features ⏳"
+title: "Feature List ⏳"
 layout: ../../../layouts/DocLayout.astro
 ---
 
-# Features ⏳
+# Feature List ⏳
 
 This section will be available after v1.0.0 is released.

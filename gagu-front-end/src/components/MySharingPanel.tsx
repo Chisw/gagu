@@ -19,16 +19,14 @@ export function MySharingPanel(props: MySharingPanelProps) {
 
   const { t } = useTranslation()
 
-  const { request: queryTunnels, response } = useRequest(TunnelApi.queryTunnels)
+  const { request: queryTunnelList, response } = useRequest(TunnelApi.queryTunnelList)
   const { request: deleteTunnel } = useRequest(TunnelApi.deleteTunnel)
 
-  const tunnels = useMemo(() => response?.data || [], [response])
+  const tunnelList = useMemo(() => response?.data || [], [response])
 
   useEffect(() => {
-    if (show) {
-      queryTunnels()
-    }
-  }, [show, queryTunnels])
+    show && queryTunnelList()
+  }, [show, queryTunnelList])
 
   const handleDeleteClick = useCallback((code: string) => {
     Confirmor({
@@ -38,12 +36,12 @@ export function MySharingPanel(props: MySharingPanelProps) {
         const { success } = await deleteTunnel(code)
         if (success) {
           toast.success('OK')
-          queryTunnels()
+          queryTunnelList()
         }
         close()
       },
     })
-  }, [deleteTunnel, queryTunnels, t])
+  }, [deleteTunnel, queryTunnelList, t])
 
   return (
     <>
@@ -71,10 +69,10 @@ export function MySharingPanel(props: MySharingPanelProps) {
         onCancel={onClose}
       >
         <div className="relative w-full h-full overflow-y-auto">
-          <EmptyPanel dark show={!tunnels.length} />
+          <EmptyPanel dark show={!tunnelList.length} />
 
           <div>
-            {tunnels.map((tunnel: ITunnel) => {
+            {tunnelList.map((tunnel: ITunnel) => {
               const { code, createdAt, downloadName, expiredAt, leftTimes } = tunnel
               return (
                 <div

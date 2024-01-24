@@ -1,13 +1,7 @@
-import {
-  accessSync,
-  appendFile,
-  constants,
-  mkdirSync,
-  promises,
-  statSync,
-} from 'fs'
+import { accessSync, appendFile, constants, mkdirSync, promises } from 'fs'
 import { GAGU_PATH, ServerOS } from './constant.util'
 import { catchError } from 'rxjs'
+import { getParentPath } from './entry.util'
 
 export const getExtension = (name: string) => {
   if (!name || !name.includes('.') || name.startsWith('.')) return ''
@@ -26,22 +20,27 @@ export const getExists = (path: string) => {
   return exists
 }
 
-export const getCopiedPath: (path: string) => string = (path) => {
+export const getDuplicatedPath: (path: string) => string = (path) => {
   const isExisted = getExists(path)
   if (isExisted) {
-    const state = statSync(path)
-    if (state.isDirectory()) {
-      return getCopiedPath(`${path} - copied`)
-    } else {
-      const name = path.split('/').reverse()[0]
-      const parentPath = path.split('/').slice(0, -1).join('/')
-      const extension = getExtension(name)
-      const pureName = name.slice(0, -(extension.length + 1))
-      const suffix = extension ? `.${extension}` : ''
-      const newPath = `${parentPath}/${pureName} - copied${suffix}`
+    const name = path.split('/').reverse()[0]
+    const parentPath = getParentPath(path)
+    const extension = getExtension(name)
+    const suffix = extension ? `.${extension}` : ''
+    let pureName = extension ? name.slice(0, -(extension.length + 1)) : name
 
-      return getCopiedPath(newPath)
+    const matchRes = pureName.match(/\(\d\)$/)
+
+    if (matchRes) {
+      const [indexString] = matchRes
+      const newIndex = Number(indexString.replace(/\(|\)/g, '')) + 1
+      pureName = pureName.replace(/\(\d\)$/, `(${newIndex})`)
+    } else {
+      pureName += ' (1)'
     }
+
+    const newPath = `${parentPath}/${pureName}${suffix}`
+    return getDuplicatedPath(newPath)
   } else {
     return path
   }

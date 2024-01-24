@@ -50,7 +50,7 @@ export default function MusicPlayer(props: AppComponentProps) {
   const [theatreShow, setTheatreShow] = useState(false)
   const [analyserNode, setAnalyserNode] = useState<AnalyserNode | null>(null)
 
-  const { request: queryAudioTags, response } = useRequest(FsApi.queryAudioTags)
+  const { request: queryAudioInfo, response } = useRequest(FsApi.queryAudioInfo)
   const { request: createTunnel } = useRequest(TunnelApi.createTunnel)
 
   const audioRef = useRef<HTMLAudioElement>(null)
@@ -188,9 +188,9 @@ export default function MusicPlayer(props: AppComponentProps) {
 
   useEffect(() => {
     if (activeEntry) {
-      queryAudioTags(getEntryPath(activeEntry))
+      queryAudioInfo(getEntryPath(activeEntry))
     }
-  }, [activeEntry, queryAudioTags])
+  }, [activeEntry, queryAudioInfo])
 
   useEffect(() => {
     if (!audioNode) return

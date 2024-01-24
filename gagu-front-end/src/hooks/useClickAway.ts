@@ -1,4 +1,3 @@
-// github.com/streamich/react-use/blob/master/src/useClickAway.ts
 import { RefObject, useEffect, useRef } from 'react'
 
 const defaultEvents = ['mousedown', 'touchstart']

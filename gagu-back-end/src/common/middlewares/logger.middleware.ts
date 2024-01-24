@@ -19,7 +19,8 @@ export class LoggerMiddleware implements NestMiddleware {
     const skippableApiList = [
       '/api/fs/public/avatar',
       '/api/fs/public/image',
-      '/api/fs/audio-tags',
+      '/api/fs/audio-info',
+      '/api/fs/exif-info',
       '/api/fs/thumbnail',
     ]
 

@@ -13,7 +13,7 @@ export function useMoveEntries() {
 
   const [, setLastChangedDirectory] = useRecoilState(lastChangedDirectoryState)
 
-  const { request: updateEntryPath } = useRequest(FsApi.updateEntryPath)
+  const { request: moveEntry } = useRequest(FsApi.moveEntry)
 
   const handleMove = useCallback(async (transferEntryList: IEntry[], targetDirectoryPath: string) => {
     const isMovementNoChange = transferEntryList.some(({ parentPath }) => parentPath === targetDirectoryPath)
@@ -29,7 +29,7 @@ export function useMoveEntries() {
         for (const transferEntry of transferEntryList) {
           const fromPath = getEntryPath(transferEntry)
           const toPath = `${targetDirectoryPath}/${transferEntry.name}`
-          const { success } = await updateEntryPath(fromPath, toPath)
+          const { success } = await moveEntry(fromPath, toPath)
           if (success) {
             setLastChangedDirectory({
               path: transferEntry.parentPath,
@@ -41,7 +41,7 @@ export function useMoveEntries() {
         close()
       },
     })
-  }, [t, updateEntryPath, setLastChangedDirectory])
+  }, [t, moveEntry, setLastChangedDirectory])
 
   return { handleMove }
 }

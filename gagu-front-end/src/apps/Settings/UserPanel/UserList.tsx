@@ -53,7 +53,7 @@ export default function UserList(props: UserListProps) {
         icon: <SvgIcon.Edit className="text-gray-500 dark:text-zinc-300" />,
         show: true,
         onClick: () => {
-          const avatarPath = FsApi.getAvatarStreamUrl(user.username) + '?' + getTimestampParam()
+          const avatarPath = FsApi.getPublicAvatarStreamUrl(user.username) + '?' + getTimestampParam()
           setForm(new UserForm(user, avatarPath))
           setFormMode('EDIT')
         },
@@ -110,7 +110,7 @@ export default function UserList(props: UserListProps) {
           const isActive = pulsedAt && (Date.now() - pulsedAt < 5 * 60 * 1000)
           const showExpire = !!expiredAt
           const isExpired = getIsExpired(expiredAt)
-          const avatarStyle = { backgroundImage: `url("${FsApi.getAvatarStreamUrl(username)}?${getTimestampParam(refreshedTimestap)}")` }
+          const avatarStyle = { backgroundImage: `url("${FsApi.getPublicAvatarStreamUrl(username)}?${getTimestampParam(refreshedTimestap)}")` }
 
           return (
             <div

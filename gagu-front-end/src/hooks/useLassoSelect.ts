@@ -21,8 +21,10 @@ export function useLassoSelect(props: useDragSelectProps) {
 
   useEffect(() => {
     const listener = () => {
-      document.querySelectorAll('.gagu-work-area-lasso')
-        .forEach((lassoEl: any) => lassoEl.style.display = 'none')
+      setTimeout(() => {
+        document.querySelectorAll('.gagu-work-area-lasso')
+          .forEach((lassoEl: any) => lassoEl.style.display = 'none')
+      }, 300)
     }
     document.addEventListener('mouseup', listener)
     return () => document.removeEventListener('mouseup', listener)

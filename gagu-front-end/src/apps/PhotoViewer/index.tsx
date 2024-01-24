@@ -49,7 +49,7 @@ export default function PhotoViewer(props: AppComponentProps) {
   }, [imgRef.current])
 
   const { request: createTunnel } = useRequest(TunnelApi.createTunnel)
-  const { request: queryExif, response: exifResponse, setResponse: setExifResponse, loading: queryingExifData } = useRequest(FsApi.queryExif)
+  const { request: queryExifInfo, response: exifResponse, setResponse: setExifResponse, loading: queryingExifData } = useRequest(FsApi.queryExifInfo)
   const { request: deleteEntry } = useRequest(FsApi.deleteEntry)
 
   const handlePrevOrNext = useCallback((offset: number) => {
@@ -77,11 +77,11 @@ export default function PhotoViewer(props: AppComponentProps) {
 
   const handleGetExifData = useCallback(async () => {
     if (activeEntry && ['jpg', 'jpeg'].includes(activeEntry.extension)) {
-      const { data } = await queryExif(`${activeEntry.parentPath}/${activeEntry.name}`)
+      const { data } = await queryExifInfo(`${activeEntry.parentPath}/${activeEntry.name}`)
       const url = getBaiduMapPinUrl(data, activeEntry?.name)
       setMapPinUrl(url)
     }
-  }, [activeEntry, queryExif])
+  }, [activeEntry, queryExifInfo])
 
   const handleDeleteClick = useCallback(() => {
     const { name } = activeEntry!

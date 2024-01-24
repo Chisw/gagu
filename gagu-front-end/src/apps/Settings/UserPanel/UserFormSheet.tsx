@@ -105,7 +105,7 @@ export default function UserFormModal(props: UserFormModalProps) {
       onRefresh()
       if (isCurrentUser) {
         document.querySelectorAll('.gagu-user-avatar').forEach((el: any) => {
-          el.style.backgroundImage = `url("${FsApi.getAvatarStreamUrl(form.username)}?${getTimestampParam()}")`
+          el.style.backgroundImage = `url("${FsApi.getPublicAvatarStreamUrl(form.username)}?${getTimestampParam()}")`
         })
       }
     }

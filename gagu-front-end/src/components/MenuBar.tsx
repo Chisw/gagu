@@ -48,7 +48,7 @@ export function MenuBar() {
   const avatarStyle = useMemo(() => {
     return userInfo
       ? {
-        backgroundImage: `url("${FsApi.getAvatarStreamUrl(userInfo.username || '')}")`
+        backgroundImage: `url("${FsApi.getPublicAvatarStreamUrl(userInfo.username || '')}")`
       }
       : undefined
   }, [userInfo])

@@ -28,7 +28,6 @@ Many unrealized ideas will be recorded here, waiting for development
 
 ### File Explorer
 
-- Perform a second confirmation when overwriting the file on the front-end, includes moves and uploads
 - Slice upload
 - Tree structure display and resizeable width on side
 - Scan and connect multiple devices in LAN

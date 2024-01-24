@@ -21,7 +21,7 @@ export default function ImageSettings() {
     const file = faviconFileInputRef?.current?.files[0]
     await uploadPublicImage('favicon', file)
     refreshImage('favicon')
-    setFavicon(FsApi.getImageStreamUrl('favicon'))
+    setFavicon(FsApi.getPublicImageStreamUrl('favicon'))
   }, [uploadPublicImage])
 
   const handleDesktopWallpaperChange = useCallback(async () => {
@@ -58,7 +58,7 @@ export default function ImageSettings() {
               </div>
               <div
                 className="gagu-public-image-favicon absolute z-10 inset-0 m-1 bg-cover bg-no-repeat bg-top rounded-sm"
-                style={{ backgroundImage: `url("${FsApi.getImageStreamUrl('favicon')}")` }}
+                style={{ backgroundImage: `url("${FsApi.getPublicImageStreamUrl('favicon')}")` }}
               />
               <input
                 ref={faviconFileInputRef}
@@ -82,7 +82,7 @@ export default function ImageSettings() {
               </div>
               <div
                 className="gagu-public-image-bg-desktop absolute z-10 inset-0 m-1 bg-cover bg-no-repeat bg-center rounded-sm"
-                style={{ backgroundImage: `url("${FsApi.getImageStreamUrl('bg-desktop')}")` }}
+                style={{ backgroundImage: `url("${FsApi.getPublicImageStreamUrl('bg-desktop')}")` }}
               />
               <input
                 ref={desktopWallpaperFileInputRef}
@@ -106,7 +106,7 @@ export default function ImageSettings() {
               </div>
               <div
                 className="gagu-public-image-bg-sharing absolute z-10 inset-0 m-1 bg-cover bg-no-repeat bg-center rounded-sm"
-                style={{ backgroundImage: `url("${FsApi.getImageStreamUrl('bg-sharing')}")` }}
+                style={{ backgroundImage: `url("${FsApi.getPublicImageStreamUrl('bg-sharing')}")` }}
               />
               <input
                 ref={sharingWallpaperFileInputRef}

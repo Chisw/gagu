@@ -186,7 +186,7 @@ export const getBaiduMapLocationUrl = (longitude: number, latitude: number) => {
 export const refreshImage = (name: PublicImageName) => {
   document.querySelectorAll(`.gagu-public-image-${name}`).forEach((el) => {
     el.removeAttribute('style')
-    el.setAttribute('style', `background-image: url("${`${FsApi.getImageStreamUrl(name)}?temp=${Date.now()}`}")`)
+    el.setAttribute('style', `background-image: url("${`${FsApi.getPublicImageStreamUrl(name)}?temp=${Date.now()}`}")`)
   })
 }
 
@@ -228,6 +228,12 @@ export const vibrate = (p?: VibratePattern) => {
 
 export const generateNewName = () => {
   return DateTime.local().toFormat('yyyyMMdd-HHmmss')
+}
+
+export const generateTextFile = (text: string, name: string) => {
+  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' })
+  const file = new File([blob], name)
+  return file
 }
 
 // Sync following code to BE & FE

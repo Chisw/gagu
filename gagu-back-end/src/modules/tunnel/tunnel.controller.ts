@@ -56,7 +56,7 @@ export class TunnelController {
                 password: undefined,
                 entryList: [],
               },
-              flattenList: [],
+              flatList: [],
             },
             undefined,
             ServerMessage.ERROR_TUNNEL_PASSWORD_NEEDED,
@@ -65,13 +65,13 @@ export class TunnelController {
           return respond(null, ServerMessage.ERROR_TUNNEL_PASSWORD_WRONG)
         }
       }
-      const flattenList = this.fsService.getRecursiveFlattenEntryList(entryList)
+      const flatList = this.fsService.getRecursiveFlattenEntryList(entryList)
       return respond({
         tunnel: {
           ...tunnel,
           password: undefined,
         },
-        flattenList,
+        flatList,
       })
     } else {
       return respond(null, ServerMessage.ERROR_TUNNEL_NOT_EXISTED)

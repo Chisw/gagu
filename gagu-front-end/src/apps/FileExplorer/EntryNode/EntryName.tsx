@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useRequest } from '../../../hooks'
-import { generateNewName, line, setInputSelection } from '../../../utils'
+import { generateNewName, generateTextFile, line, setInputSelection } from '../../../utils'
 import { FsApi } from '../../../api'
 import { INVALID_NAME_CHAR_LIST } from '../../../utils'
 import { EditMode, CreationType, EntryType, IEntry, NameFailType } from '../../../types'
@@ -39,7 +39,7 @@ export default function EntryName(props: EntryNameProps) {
   const { request: queryExists, loading: loadingExist } = useRequest(FsApi.queryExists)
   const { request: createDirectory, loading: loadingNewDir } = useRequest(FsApi.createDirectory)
   const { request: updateEntryName, loading: loadingRename } = useRequest(FsApi.updateEntryName)
-  const { request: uploadFile } = useRequest(FsApi.uploadFile)
+  const { request: createFile } = useRequest(FsApi.createFile)
 
   const handleInputChange = useCallback((e: any) => {
     setInputValue(e.target.value)
@@ -97,10 +97,9 @@ export default function EntryName(props: EntryNameProps) {
             })
           }
         } else if (creationType === EditMode.createText) {
-          const blob = new Blob([''], { type: 'text/plain;charset=utf-8' })
-          const file = new File([blob], finalName)
+          const file = generateTextFile('', finalName)
           const fullPath = `${parentPath}/${finalName}`
-          const { success } = await uploadFile(fullPath, file)
+          const { success } = await createFile(fullPath, file)
           if (success) {
             onSuccess({
               name: finalName,
@@ -123,7 +122,7 @@ export default function EntryName(props: EntryNameProps) {
     queryExists,
     createDirectory,
     updateEntryName,
-    uploadFile,
+    createFile,
     onSuccess,
     onFail,
   ])

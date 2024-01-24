@@ -1,6 +1,6 @@
 import { AxiosRequestConfig } from 'axios'
 import { BASE_URL, QUERY_TOKEN_KEY, UserInfoStore, getEntryPath, getPasswordParam, getPathParam } from '../utils'
-import { IEntry, IResponse, IBaseData, IRootEntry, IExif, IAudioTag } from '../types'
+import { IEntry, IResponse, IBaseData, IRootEntry, IExifInfo, IAudioInfo } from '../types'
 import service from './service'
 
 export class FsApi {
@@ -14,8 +14,13 @@ export class FsApi {
     return data
   }
 
-  static queryFlattenEntryList = async (entryList: IEntry[], config?: AxiosRequestConfig) => {
+  static queryFlatEntryList = async (entryList: IEntry[], config?: AxiosRequestConfig) => {
     const { data } = await service.post<IResponse<IEntry[]>>(`/api/fs/list/flat`, { entryList }, config)
+    return data
+  }
+
+  static queryExists = async (path: string, config?: AxiosRequestConfig) => {
+    const { data } = await service.get<IResponse<boolean>>(`/api/fs/exists?${getPathParam(path)}`, config)
     return data
   }
 
@@ -29,8 +34,25 @@ export class FsApi {
     return data
   }
 
-  static queryExists = async (path: string, config?: AxiosRequestConfig) => {
-    const { data } = await service.get<IResponse<boolean>>(`/api/fs/exists?${getPathParam(path)}`, config)
+  static queryExifInfo = async (path: string, config?: AxiosRequestConfig) => {
+    const { data } = await service.get<IResponse<IExifInfo>>(`/api/fs/exif-info?${getPathParam(path)}`, config)
+    return data
+  }
+
+  static queryAudioInfo = async (path: string, config?: AxiosRequestConfig) => {
+    const { data } = await service.get<IResponse<IAudioInfo>>(`/api/fs/audio-info?${getPathParam(path)}`, config)
+    return data
+  }
+
+  static createDirectory = async (path: string, config?: AxiosRequestConfig) => {
+    const { data } = await service.post<IResponse>(`/api/fs/directory`, { path }, config)
+    return data
+  }
+
+  static createFile = async (path: string, file: File, config?: AxiosRequestConfig) => {
+    let formData = new FormData()
+    formData.append('file', file)
+    const { data } = await service.post<IResponse>(`/api/fs/file?${getPathParam(path)}`, formData, { ...config, timeout: 0 })
     return data
   }
 
@@ -40,7 +62,7 @@ export class FsApi {
     return data
   }
 
-  static updateEntryPath = async (fromPath: string, toPath: string, config?: AxiosRequestConfig) => {
+  static moveEntry = async (fromPath: string, toPath: string, config?: AxiosRequestConfig) => {
     const { data } = await service.put<IResponse>(`/api/fs/move`, { fromPath, toPath }, config)
     return data
   }
@@ -50,30 +72,8 @@ export class FsApi {
     return data
   }
 
-  static createDirectory = async (path: string, config?: AxiosRequestConfig) => {
-    const { data } = await service.post<IResponse>(`/api/fs/mkdir`, { path }, config)
-    return data
-  }
-
   static deleteEntry = async (path: string, config?: AxiosRequestConfig) => {
     const { data } = await service.delete<IResponse>(`/api/fs/delete?${getPathParam(path)}`, config)
-    return data
-  }
-
-  static uploadFile = async (path: string, file: File, config?: AxiosRequestConfig) => {
-    let formData = new FormData()
-    formData.append('file', file)
-    const { data } = await service.post<IResponse>(`/api/fs/upload?${getPathParam(path)}`, formData, { ...config, timeout: 0 })
-    return data
-  }
-
-  static queryExif = async (path: string, config?: AxiosRequestConfig) => {
-    const { data } = await service.get<IResponse<IExif>>(`/api/fs/exif?${getPathParam(path)}`, config)
-    return data
-  }
-
-  static queryAudioTags = async (path: string, config?: AxiosRequestConfig) => {
-    const { data } = await service.get<IResponse<IAudioTag>>(`/api/fs/audio-tags?${getPathParam(path)}`, config)
     return data
   }
 
@@ -94,6 +94,13 @@ export class FsApi {
     return data
   }
 
+  static getThumbnailStreamUrl = (entry: IEntry) => {
+    if (entry.extension === 'svg') {
+      return this.getEntryStreamUrl(entry)
+    }
+    return `${BASE_URL}/api/fs/thumbnail?${getPathParam(getEntryPath(entry))}&${QUERY_TOKEN_KEY}=${UserInfoStore.getToken()}`
+  }
+
   static getPathStreamUrl = (path: string) => {
     return `${BASE_URL}/api/fs/stream?${getPathParam(path)}&${QUERY_TOKEN_KEY}=${UserInfoStore.getToken()}`
   }
@@ -102,24 +109,22 @@ export class FsApi {
     return this.getPathStreamUrl(getEntryPath(entry))
   }
 
-  static getThumbnailStreamUrl = (entry: IEntry) => {
-    if (entry.extension === 'svg') {
-      return this.getEntryStreamUrl(entry)
-    }
-    return `${BASE_URL}/api/fs/thumbnail?${getPathParam(getEntryPath(entry))}&${QUERY_TOKEN_KEY}=${UserInfoStore.getToken()}`
-  }
-
-  static getAvatarStreamUrl = (username: string) => {
+  static getPublicAvatarStreamUrl = (username: string) => {
     if (!username) return ''
     return `${BASE_URL}/api/fs/public/avatar/${username}`
   }
 
-  static getImageStreamUrl = (name: string) => {
+  static getPublicImageStreamUrl = (name: string) => {
     if (!name) return ''
     return `${BASE_URL}/api/fs/public/image/${name}`
   }
 
+  static getDownloadUrl = (code: string, password?: string) => {
+    return `${BASE_URL}/api/download/${code}?${getPasswordParam(password)}`
+  }
+
   static download = (code: string, password?: string) => {
-    window.open(`${BASE_URL}/api/download/${code}?${getPasswordParam(password)}`, '_self')
+    const url = this.getDownloadUrl(code, password)
+    window.open(url, '_self')
   }
 }

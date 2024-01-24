@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common'
 import {
   EntryType,
-  IAudioTag,
+  IAudioInfo,
   IDisk,
   IEntry,
-  IExif,
+  IExifInfo,
   IRootEntry,
   RootEntryGroup,
   User,
@@ -32,7 +32,7 @@ import {
   catchError,
   GEN_THUMBNAIL_IMAGE_LIST,
   MAC_HIDDEN_ENTRIES,
-  getCopiedPath,
+  getDuplicatedPath,
 } from '../../utils'
 import * as nodeDiskInfo from 'node-disk-info'
 import * as md5 from 'md5'
@@ -117,7 +117,7 @@ export class FsService {
     return list
   }
 
-  getRootEntryList() {
+  getSystemRootEntryList() {
     const rootEntryList: IRootEntry[] = []
     if (ServerOS.isMacOS) {
       const driveList = nodeDiskInfo
@@ -308,7 +308,7 @@ export class FsService {
   }
 
   async copyEntry(fromPath: string, toPath: string) {
-    const copiedPath = getCopiedPath(toPath)
+    const copiedPath = getDuplicatedPath(toPath)
 
     try {
       await promises.cp(fromPath, copiedPath, { recursive: true })
@@ -317,26 +317,26 @@ export class FsService {
     }
   }
 
-  getExif(path: string) {
+  getExifInfo(path: string) {
     const base64 = readFileSync(path).toString('base64')
     const dataURL = `data:image/jpeg;base64,${base64}`
     const exifObj = piexifjs.load(dataURL)
-    const exifData: any = {}
+    const info: any = {}
     for (const ifd in exifObj) {
       if (ifd === 'thumbnail') {
         continue
       }
-      exifData[ifd] = {}
+      info[ifd] = {}
       for (const tag in exifObj[ifd]) {
         const key = (piexifjs as any).TAGS[ifd][tag].name
         const value = exifObj[ifd][tag]
-        exifData[ifd][key] = value
+        info[ifd][key] = value
       }
     }
-    return exifData as IExif
+    return info as IExifInfo
   }
 
-  async getAudioTags(path: string) {
+  async getAudioInfo(path: string) {
     return new Promise((resolve, reject) => {
       jsmediatags.read(path, {
         onSuccess: (tagInfo: any) => {
@@ -358,7 +358,7 @@ export class FsService {
             coverBase64 = `data:${format};base64,${btoa(base64String)}`
           }
 
-          const tagData: IAudioTag = {
+          const info: IAudioInfo = {
             title,
             artist,
             album,
@@ -368,7 +368,7 @@ export class FsService {
             releaseTime,
           }
 
-          resolve(tagData)
+          resolve(info)
         },
         onError: (error: any) => {
           reject(error)
@@ -402,8 +402,8 @@ export class FsService {
         })
         convertionTargetPath = screenshotPath
       } else if (isGenAudio) {
-        const tagData: IAudioTag | any = await this.getAudioTags(path)
-        const base64 = tagData?.coverBase64
+        const info: IAudioInfo | any = await this.getAudioInfo(path)
+        const base64 = info?.coverBase64
         if (base64) {
           const buffer = dataURLtoBuffer(base64)
           buffer && writeFileSync(thumbnailFilePath, buffer)
