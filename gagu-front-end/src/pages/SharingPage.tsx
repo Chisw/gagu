@@ -133,7 +133,7 @@ export default function SharePage() {
     if (code) {
       const { success, message } = await queryTunnelCheck(code, passwordVal)
       if (success) {
-        FsApi.download(code, passwordVal)
+        TunnelApi.download(code, passwordVal)
         setTimeout(() => {
           queryTunnel(code, passwordVal)
         }, 50)

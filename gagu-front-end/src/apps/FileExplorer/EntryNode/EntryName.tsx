@@ -38,7 +38,7 @@ export default function EntryName(props: EntryNameProps) {
 
   const { request: queryExists, loading: loadingExist } = useRequest(FsApi.queryExists)
   const { request: createDirectory, loading: loadingNewDir } = useRequest(FsApi.createDirectory)
-  const { request: updateEntryName, loading: loadingRename } = useRequest(FsApi.updateEntryName)
+  const { request: renameEntry, loading: loadingRename } = useRequest(FsApi.renameEntry)
   const { request: createFile } = useRequest(FsApi.createFile)
 
   const handleInputChange = useCallback((e: any) => {
@@ -76,9 +76,9 @@ export default function EntryName(props: EntryNameProps) {
       onFail('existed')
       toast.error(t('tip.targetExists', { name: finalName }))
     } else {
-      if (oldName) {  // rename
+      if (oldName) {
         const fromPath = `${parentPath}/${oldName}`
-        const { success } = await updateEntryName(fromPath, toPath)
+        const { success } = await renameEntry(fromPath, toPath)
         if (success) {
           onSuccess({ ...entry!, name: finalName })
         }
@@ -121,7 +121,7 @@ export default function EntryName(props: EntryNameProps) {
     creationType,
     queryExists,
     createDirectory,
-    updateEntryName,
+    renameEntry,
     createFile,
     onSuccess,
     onFail,

@@ -9,9 +9,18 @@ import {
   Param,
   Post,
   Query,
+  Res,
 } from '@nestjs/common'
-import { UserPermission, TunnelForm, IUser, ServerMessage } from '../../types'
-import { checkTunnel, respond } from '../../utils'
+import {
+  UserPermission,
+  TunnelForm,
+  IUser,
+  ServerMessage,
+  EntryType,
+  ZipResponse,
+  ZipResponseFile,
+} from '../../types'
+import { checkTunnel, getEntryPath, respond } from '../../utils'
 
 @Controller('tunnel')
 export class TunnelController {
@@ -22,14 +31,14 @@ export class TunnelController {
 
   @Get()
   @Permission(UserPermission.read)
-  findSelfTunnels(@UserGetter() user: IUser) {
+  queryTunnelList(@UserGetter() user: IUser) {
     const tunnels = this.tunnelService.findUserTunnels(user.username)
     return respond(tunnels)
   }
 
   @Post()
   @Permission(UserPermission.read)
-  create(@Body() tunnelForm: TunnelForm, @UserGetter() user: IUser) {
+  createTunnel(@Body() tunnelForm: TunnelForm, @UserGetter() user: IUser) {
     const code = this.tunnelService.create(
       user.username,
       user.nickname,
@@ -40,7 +49,7 @@ export class TunnelController {
 
   @Public()
   @Get(':code')
-  findOne(
+  queryTunnel(
     @Param('code') code: string,
     @Query('password') inputtedPassword?: string,
   ) {
@@ -65,7 +74,7 @@ export class TunnelController {
           return respond(null, ServerMessage.ERROR_TUNNEL_PASSWORD_WRONG)
         }
       }
-      const flatList = this.fsService.getRecursiveFlattenEntryList(entryList)
+      const flatList = this.fsService.getRecursiveFlatEntryList(entryList)
       return respond({
         tunnel: {
           ...tunnel,
@@ -80,7 +89,7 @@ export class TunnelController {
 
   @Delete(':code')
   @Permission(UserPermission.read)
-  delete(@Param('code') code: string, @UserGetter() user: IUser) {
+  deleteTunnel(@Param('code') code: string, @UserGetter() user: IUser) {
     const tunnel = this.tunnelService.findOne(code)
     if (tunnel?.username === user.username) {
       this.tunnelService.remove(code)
@@ -92,12 +101,48 @@ export class TunnelController {
 
   @Public()
   @Get(':code/check')
-  check(
+  queryTunnelCheck(
     @Param('code') code: string,
     @Query('password') inputtedPassword?: string,
   ) {
     const tunnel = this.tunnelService.findOne(code)
     const result = checkTunnel(tunnel, inputtedPassword)
     return result
+  }
+
+  @Public()
+  @Get(':code/download')
+  download(
+    @Param('code') code: string,
+    @Query('password') inputtedPassword: string,
+    @Res() response: ZipResponse,
+  ) {
+    const tunnel = this.tunnelService.findOne(code)
+    const result = checkTunnel(tunnel, inputtedPassword)
+
+    if (result.success && tunnel) {
+      const { entryList, downloadName } = tunnel
+      const firstEntry = entryList[0]
+      const isSingleFile =
+        entryList.length === 1 && firstEntry.type === EntryType.file
+
+      this.tunnelService.minusTimes(code)
+
+      if (isSingleFile) {
+        return response.download(getEntryPath(firstEntry))
+      }
+
+      const rootParentPath = firstEntry.parentPath
+      const list = this.fsService.getRecursiveFlatEntryList(entryList)
+      const files: ZipResponseFile[] = list.map((entry) => {
+        const path = getEntryPath(entry)
+        const name = path.replace(rootParentPath, '')
+        return { name, path }
+      })
+
+      response.zip(files, encodeURIComponent(downloadName))
+    } else {
+      response.end(JSON.stringify(result))
+    }
   }
 }

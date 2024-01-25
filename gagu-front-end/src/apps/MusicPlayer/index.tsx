@@ -151,7 +151,7 @@ export default function MusicPlayer(props: AppComponentProps) {
       downloadName,
     })
     if (success) {
-      FsApi.download(code)
+      TunnelApi.download(code)
     }
   }, [createTunnel])
 

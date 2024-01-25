@@ -70,7 +70,7 @@ export default function PhotoViewer(props: AppComponentProps) {
         downloadName,
       })
       if (success) {
-        FsApi.download(code)
+        TunnelApi.download(code)
       }
     }
   }, [activeEntry, createTunnel])

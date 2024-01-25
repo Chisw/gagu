@@ -1,6 +1,7 @@
 export * from './Confirmor'
 export * from './EmptyPanel'
 export * from './EntryListPanel'
+export * from './ExistingConfirmor'
 export * from './IconButton'
 export * from './Opener'
 export * from './PublicFooter'

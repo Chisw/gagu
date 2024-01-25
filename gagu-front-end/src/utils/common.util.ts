@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { IOffsetInfo, ILassoInfo, PublicImageName } from '../types'
+import { IOffsetInfo, ILassoInfo, PublicImageName, ExistingStrategyType } from '../types'
 import md5 from 'md5'
 import { FsApi } from '../api'
 import default_favicon from '../img/favicon.png'
@@ -143,6 +143,11 @@ export const getTimestampParam = (timestamp?: number) => {
   return `timestamp=${timestamp || Date.now()}`
 }
 
+export const getExistingStrategyParam = (strategy?: ExistingStrategyType) => {
+  return strategy ? `existingStrategy=${strategy}` : ''
+}
+
+// TODO:
 export const getBaiduMapPinUrl = (exifData: any, content?: string) => {
   const { GPS } = exifData || {}
   const { GPSLatitude, GPSLongitude } = GPS || {}
@@ -167,6 +172,7 @@ export const getBaiduMapPinUrl = (exifData: any, content?: string) => {
   }
 }
 
+// TODO:
 export const getBaiduMapLocationUrl = (longitude: number, latitude: number) => {
   if (latitude && longitude) {
     const query = new URLSearchParams({

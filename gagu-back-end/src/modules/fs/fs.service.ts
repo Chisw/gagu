@@ -32,7 +32,6 @@ import {
   catchError,
   GEN_THUMBNAIL_IMAGE_LIST,
   MAC_HIDDEN_ENTRIES,
-  getDuplicatedPath,
 } from '../../utils'
 import * as nodeDiskInfo from 'node-disk-info'
 import * as md5 from 'md5'
@@ -103,14 +102,14 @@ export class FsService {
     return entryList
   }
 
-  getRecursiveFlattenEntryList(entryList: IEntry[]) {
+  getRecursiveFlatEntryList(entryList: IEntry[]) {
     const list: IEntry[] = []
     entryList.forEach((entry) => {
       if (entry.type === EntryType.file) {
         list.push(entry)
       } else {
         const subEntryList = this.getEntryList(getEntryPath(entry))
-        const subList = this.getRecursiveFlattenEntryList(subEntryList)
+        const subList = this.getRecursiveFlatEntryList(subEntryList)
         list.push(...subList)
       }
     })
@@ -308,10 +307,8 @@ export class FsService {
   }
 
   async copyEntry(fromPath: string, toPath: string) {
-    const copiedPath = getDuplicatedPath(toPath)
-
     try {
-      await promises.cp(fromPath, copiedPath, { recursive: true })
+      await promises.cp(fromPath, toPath, { recursive: true })
     } catch (error) {
       catchError(error)
     }
@@ -363,9 +360,9 @@ export class FsService {
             artist,
             album,
             track,
-            coverBase64,
             recordingTime,
             releaseTime,
+            coverBase64,
           }
 
           resolve(info)
@@ -442,7 +439,7 @@ export class FsService {
     }
   }
 
-  uploadPublicImage(name: string, buffer: Buffer) {
+  createPublicImage(name: string, buffer: Buffer) {
     writeFileSync(`${GAGU_PATH.PUBLIC_IMAGE}/${name}`, buffer)
   }
 

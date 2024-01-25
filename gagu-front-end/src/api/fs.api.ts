@@ -1,11 +1,11 @@
 import { AxiosRequestConfig } from 'axios'
-import { BASE_URL, QUERY_TOKEN_KEY, UserInfoStore, getEntryPath, getPasswordParam, getPathParam } from '../utils'
-import { IEntry, IResponse, IBaseData, IRootEntry, IExifInfo, IAudioInfo } from '../types'
+import { BASE_URL, QUERY_TOKEN_KEY, UserInfoStore, getEntryPath, getExistingStrategyParam, getPathParam } from '../utils'
+import { IEntry, IResponse, IBaseData, IRootEntry, IExifInfo, IAudioInfo, ExistingStrategyType, TransferResultType } from '../types'
 import service from './service'
 
 export class FsApi {
-  static queryBaseData = async (config?: AxiosRequestConfig) => {
-    const { data } = await service.get<IResponse<IBaseData>>(`/api/fs/base-data`, config)
+  static queryBaseData = async () => {
+    const { data } = await service.get<IResponse<IBaseData>>(`/api/fs/base-data`)
     return data
   }
 
@@ -14,66 +14,76 @@ export class FsApi {
     return data
   }
 
-  static queryFlatEntryList = async (entryList: IEntry[], config?: AxiosRequestConfig) => {
-    const { data } = await service.post<IResponse<IEntry[]>>(`/api/fs/list/flat`, { entryList }, config)
+  static queryFlatEntryList = async (entryList: IEntry[]) => {
+    const { data } = await service.post<IResponse<IEntry[]>>(`/api/fs/list/flat`, { entryList })
     return data
   }
 
-  static queryExists = async (path: string, config?: AxiosRequestConfig) => {
-    const { data } = await service.get<IResponse<boolean>>(`/api/fs/exists?${getPathParam(path)}`, config)
+  static queryExists = async (path: string) => {
+    const { data } = await service.get<IResponse<boolean>>(`/api/fs/exists?${getPathParam(path)}`)
     return data
   }
 
-  static queryDirectorySize = async (path: string, config?: AxiosRequestConfig) => {
-    const { data } = await service.get<IResponse<number>>(`/api/fs/size?${getPathParam(path)}`, config)
+  static queryExistsCount = async (formData: { pathList: string[] }) => {
+    const { data } = await service.post<IResponse<number>>(`/api/fs/exists`, formData)
     return data
   }
 
-  static queryTextContent = async (path: string, config?: AxiosRequestConfig) => {
-    const { data } = await service.get<IResponse<string>>(`/api/fs/text?${getPathParam(path)}`, config)
+  static queryDirectorySize = async (path: string) => {
+    const { data } = await service.get<IResponse<number>>(`/api/fs/size?${getPathParam(path)}`)
     return data
   }
 
-  static queryExifInfo = async (path: string, config?: AxiosRequestConfig) => {
-    const { data } = await service.get<IResponse<IExifInfo>>(`/api/fs/exif-info?${getPathParam(path)}`, config)
+  static queryTextContent = async (path: string) => {
+    const { data } = await service.get<IResponse<string>>(`/api/fs/text?${getPathParam(path)}`)
     return data
   }
 
-  static queryAudioInfo = async (path: string, config?: AxiosRequestConfig) => {
-    const { data } = await service.get<IResponse<IAudioInfo>>(`/api/fs/audio-info?${getPathParam(path)}`, config)
+  static queryExifInfo = async (path: string) => {
+    const { data } = await service.get<IResponse<IExifInfo>>(`/api/fs/exif-info?${getPathParam(path)}`)
     return data
   }
 
-  static createDirectory = async (path: string, config?: AxiosRequestConfig) => {
-    const { data } = await service.post<IResponse>(`/api/fs/directory`, { path }, config)
+  static queryAudioInfo = async (path: string) => {
+    const { data } = await service.get<IResponse<IAudioInfo>>(`/api/fs/audio-info?${getPathParam(path)}`)
     return data
   }
 
-  static createFile = async (path: string, file: File, config?: AxiosRequestConfig) => {
+  static createDirectory = async (path: string) => {
+    const { data } = await service.post<IResponse<TransferResultType>>(`/api/fs/directory`, { path })
+    return data
+  }
+
+  static createFile = async (path: string, file: File, strategy?: ExistingStrategyType, config?: AxiosRequestConfig) => {
     let formData = new FormData()
     formData.append('file', file)
-    const { data } = await service.post<IResponse>(`/api/fs/file?${getPathParam(path)}`, formData, { ...config, timeout: 0 })
+
+    const params = [
+      getPathParam(path),
+      getExistingStrategyParam(strategy),
+    ].filter(Boolean).join('&')
+
+    const { data } = await service.post<IResponse<TransferResultType>>(`/api/fs/file?${params}`, formData, { ...config, timeout: 0 })
     return data
   }
 
-  // TODO: name limit
-  static updateEntryName = async (fromPath: string, toPath: string, config?: AxiosRequestConfig) => {
-    const { data } = await service.put<IResponse>(`/api/fs/rename`, { fromPath, toPath }, config)
+  static renameEntry = async (fromPath: string, toPath: string) => {
+    const { data } = await service.patch<IResponse>(`/api/fs/entry`, { fromPath, toPath })
     return data
   }
 
-  static moveEntry = async (fromPath: string, toPath: string, config?: AxiosRequestConfig) => {
-    const { data } = await service.put<IResponse>(`/api/fs/move`, { fromPath, toPath }, config)
+  static moveEntry = async (fromPath: string, toPath: string, strategy?: ExistingStrategyType) => {
+    const { data } = await service.put<IResponse>(`/api/fs/entry?${getExistingStrategyParam(strategy)}`, { fromPath, toPath })
     return data
   }
 
-  static copyEntry = async (fromPath: string, toPath: string, config?: AxiosRequestConfig) => {
-    const { data } = await service.post<IResponse>(`/api/fs/copy`, { fromPath, toPath }, config)
+  static copyEntry = async (fromPath: string, toPath: string, strategy?: ExistingStrategyType) => {
+    const { data } = await service.post<IResponse>(`/api/fs/entry?${getExistingStrategyParam(strategy)}`, { fromPath, toPath })
     return data
   }
 
-  static deleteEntry = async (path: string, config?: AxiosRequestConfig) => {
-    const { data } = await service.delete<IResponse>(`/api/fs/delete?${getPathParam(path)}`, config)
+  static deleteEntry = async (path: string) => {
+    const { data } = await service.delete<IResponse>(`/api/fs/entry?${getPathParam(path)}`)
     return data
   }
 
@@ -87,7 +97,7 @@ export class FsApi {
     return data
   }
 
-  static uploadPublicImage = async (name: string, file: File, config?: AxiosRequestConfig) => {
+  static createPublicImage = async (name: string, file: File, config?: AxiosRequestConfig) => {
     let formData = new FormData()
     formData.append('file', file)
     const { data } = await service.post<IResponse>(`/api/fs/public/image/${name}`, formData, { ...config, timeout: 0 })
@@ -117,14 +127,5 @@ export class FsApi {
   static getPublicImageStreamUrl = (name: string) => {
     if (!name) return ''
     return `${BASE_URL}/api/fs/public/image/${name}`
-  }
-
-  static getDownloadUrl = (code: string, password?: string) => {
-    return `${BASE_URL}/api/download/${code}?${getPasswordParam(password)}`
-  }
-
-  static download = (code: string, password?: string) => {
-    const url = this.getDownloadUrl(code, password)
-    window.open(url, '_self')
   }
 }

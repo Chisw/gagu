@@ -25,6 +25,26 @@ export enum ServerMessage {
   ERROR_403_PERMISSION_DELETE = 'ERROR_403_PERMISSION_DELETE',
 }
 
+export enum ExistingStrategy {
+  keepBoth = 'keepBoth',
+  replace = 'replace',
+  skip = 'skip',
+}
+
+export type ExistingStrategyType = keyof typeof ExistingStrategy
+
+export enum TransferResult {
+  created = 'created',
+  moved = 'moved',
+  copied = 'copied',
+  bothKept = 'bothKept',
+  replaced = 'replaced',
+  skipped = 'skipped',
+  canceled = 'canceled',
+}
+
+export type TransferResultType = keyof typeof TransferResult
+
 export interface IServerOS {
   username: string
   host: string

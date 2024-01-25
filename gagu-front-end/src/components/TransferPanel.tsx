@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { FsApi } from '../api'
-import { EmptyPanel, SvgIcon } from './common'
+import { EmptyPanel, ExistingConfirmor, SvgIcon } from './common'
 import { useRequest, useUserConfig } from '../hooks'
-import { IUploadTransferTask } from '../types'
+import { ExistingStrategyType, ITransferTask, TransferTaskStatusType } from '../types'
 import { getReadableSize, line } from '../utils'
 import { lastChangedDirectoryState, transferSignalState, transferTaskListState } from '../states'
 import { Button, SideSheet } from '@douyinfe/semi-ui'
@@ -13,11 +13,13 @@ import { cloneDeep } from 'lodash-es'
 const statusIconMap = {
   waiting: { icon: <SvgIcon.Time />, bg: 'bg-yellow-400' },
   uploading: { icon: <SvgIcon.Loader />, bg: 'bg-blue-500' },
-  moving: { icon: <SvgIcon.Loader />, bg: 'bg-blue-500' },
-  success: { icon: <SvgIcon.Check />, bg: 'bg-green-500' },
-  fail: { icon: <SvgIcon.Close />, bg: 'bg-red-500' },
-  cancel: { icon: <SvgIcon.Warning />, bg: 'bg-pink-500' },
-  exceed: { icon: <SvgIcon.Warning />, bg: 'bg-red-500' },
+  created: { icon: <SvgIcon.Check />, bg: 'bg-green-500' },
+  moved: { icon: <SvgIcon.Check />, bg: 'bg-green-500' },
+  copied: { icon: <SvgIcon.Check />, bg: 'bg-green-500' },
+  bothKept: { icon: <SvgIcon.Check />, bg: 'bg-green-500' },
+  replaced: { icon: <SvgIcon.Check />, bg: 'bg-green-500' },
+  skipped: { icon: <SvgIcon.Close />, bg: 'bg-red-500' },
+  canceled: { icon: <SvgIcon.Close />, bg: 'bg-red-500' },
 }
 
 export function TransferPanel() {
@@ -36,6 +38,7 @@ export function TransferPanel() {
   const [activeId, setActiveId] = useState('')
 
   const { request: createFile, loading: uploading } = useRequest(FsApi.createFile)
+  const { request: queryExistsCount } = useRequest(FsApi.queryExistsCount)
 
   useEffect(() => {
     if (uploading) {
@@ -43,9 +46,10 @@ export function TransferPanel() {
     }
   }, [uploading])
 
-  const handleUploadStart = useCallback(async (uploadingTaskList: IUploadTransferTask[]) => {
+  const handleUploadStart = useCallback(async (uploadingTaskList: ITransferTask[], strategy?: ExistingStrategyType) => {
+    const statusMap: { [PATH: string]: TransferTaskStatusType } = {}
     for (const task of uploadingTaskList) {
-      const { id, toPath, file } = task
+      const { id, path, file } = task
       setActiveId(id)
 
       let lastUpload = { time: Date.now(), size: 0 }
@@ -61,27 +65,57 @@ export function TransferPanel() {
         lastUpload = { time: now, size: loaded }
       }
 
-      const { success } = await createFile(toPath, file, { onUploadProgress })
+      const { success, data: status } = await createFile(path, file, strategy, { onUploadProgress })
       if (success) {
+        statusMap[path] = status
         setUploadInfo({ ratio: 0, speed: '' })
         const match = file.fullPath || `/${file.name}`
-        setLastChangedDirectory({ path: toPath.replace(match, ''), timestamp: Date.now() })
+        setLastChangedDirectory({ path: path.replace(match, ''), timestamp: Date.now() })
       }
     }
 
     const list = cloneDeep(transferTaskList)
-    list.forEach(t => t.status = 'success')
+    list.forEach(task => {
+      const status = statusMap[task.path]
+      if (status) {
+        task.status = status
+      }
+    })
     setTransferTaskList(list)
     setActiveId('')
   }, [transferTaskList, setTransferTaskList, createFile, kiloSize, setLastChangedDirectory])
 
+  const handleUploadCheck = useCallback(async (uploadingTaskList: ITransferTask[]) => {
+    const pathList = uploadingTaskList.map(t => t.path)
+    const { data: count } = await queryExistsCount({ pathList })
+    if (count) {
+      ExistingConfirmor({
+        count,
+        onConfirm: (strategy) => handleUploadStart(uploadingTaskList, strategy),
+        onCancel: () => {
+          const list = cloneDeep(transferTaskList)
+          list.forEach(task => {
+            if (pathList.includes(task.path)) {
+              task.status = 'canceled'
+            }
+          })
+          setTransferTaskList(list)
+        },
+      })
+    } else {
+      handleUploadStart(uploadingTaskList)
+    }
+  }, [handleUploadStart, queryExistsCount, setTransferTaskList, transferTaskList])
+
   useEffect(() => {
     if (transferSignal !== transferSignalCache) {
-      const uploadingTaskList = transferTaskList.filter(t => t.type === 'upload' && t.status === 'waiting') as IUploadTransferTask[]
-      uploadingTaskList.length && handleUploadStart(uploadingTaskList)
+      const uploadingTaskList = transferTaskList.filter(t => t.status === 'waiting') as ITransferTask[]
+      if (uploadingTaskList.length) {
+        handleUploadCheck(uploadingTaskList)
+      }
       setTransferSignalCache(transferSignal)
     }
-  }, [transferSignal, transferTaskList, handleUploadStart, transferSignalCache])
+  }, [transferSignal, transferTaskList, handleUploadCheck, transferSignalCache])
 
   return (
     <>
@@ -112,7 +146,7 @@ export function TransferPanel() {
           {uploading && uploadInfo.speed}
         </span>
         <span className={`ml-1 font-din ${transferTaskList.length ? '' : 'hidden'}`}>
-          {transferTaskList.filter(t => t.status === 'success').length}
+          {transferTaskList.filter(t => ['created', 'bothKept', 'replaced', 'canceled'].includes(t.status)).length}
           &nbsp;/&nbsp;
           {transferTaskList.length}
         </span>
@@ -161,7 +195,7 @@ export function TransferPanel() {
           <EmptyPanel dark show={!transferTaskList.length} />
 
           {transferTaskList.map((task, taskIndex) => {
-            const { id, file, status, toPath } = task
+            const { id, file, status, path } = task
             const isActive = id === activeId
             const name = file ? file.name : ''
             const len = transferTaskList.length.toString().length
@@ -188,13 +222,15 @@ export function TransferPanel() {
                     {indexStr}. {name}
                   </p>
                   <p className="text-xs text-gray-500 break-all dark:text-zinc-300">
-                    {toPath}
+                    {path}
                   </p>
                 </div>
-                &nbsp;
-                <span className={`inline-block ml-4 p-1 rounded-full text-white ${bg}`}>
-                  {icon}
-                </span>
+                <div>
+                  <div className={`inline-block ml-4 p-1 rounded-full text-white ${bg}`}>
+                    {icon}
+                  </div>
+                  <div className="text-xs">{status.toUpperCase()}</div>
+                </div>
                 {isActive && (
                   <div
                     className={`

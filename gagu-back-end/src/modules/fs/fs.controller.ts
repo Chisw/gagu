@@ -10,6 +10,7 @@ import {
   respond,
   catchError,
   GAGU_PATH,
+  getDuplicatedPath,
 } from '../../utils'
 import { FsService } from './fs.service'
 import {
@@ -19,6 +20,7 @@ import {
   Get,
   Header,
   Param,
+  Patch,
   Post,
   Put,
   Query,
@@ -35,6 +37,9 @@ import {
   UserPermission,
   ServerMessage,
   RootEntryGroup,
+  ExistingStrategyType,
+  ExistingStrategy,
+  TransferResult,
 } from '../../types'
 import { mkdirSync, renameSync } from 'fs'
 import {
@@ -56,7 +61,7 @@ export class FsController {
 
   @Get('base-data')
   @Permission(UserPermission.read)
-  getBaseData(@UserGetter() user: IUser) {
+  queryBaseData(@UserGetter() user: IUser) {
     const deviceName = this.settingService.findOne(SettingKey.deviceName)
     const {
       username,
@@ -94,7 +99,7 @@ export class FsController {
   @Get('list')
   @Permission(UserPermission.read)
   @PathValidation({ queryFields: ['path'] })
-  findAll(@Query('path') path: string) {
+  queryEntryList(@Query('path') path: string) {
     const entryList = this.fsService.getEntryList(path)
     return respond(entryList)
   }
@@ -102,22 +107,29 @@ export class FsController {
   @Post('list/flat')
   @Permission(UserPermission.read)
   @PathValidation({ bodyEntryListField: 'entryList' })
-  findFlattenAll(@Body('entryList') entryList: IEntry[]) {
-    const flatList = this.fsService.getRecursiveFlattenEntryList(entryList)
+  queryFlatEntryList(@Body('entryList') entryList: IEntry[]) {
+    const flatList = this.fsService.getRecursiveFlatEntryList(entryList)
     return respond(flatList)
   }
 
   @Get('exists')
   @PathValidation({ queryFields: ['path'] })
-  readExists(@Query('path') path: string) {
+  queryExists(@Query('path') path: string) {
     const exists = getExists(path)
     return respond(exists)
+  }
+
+  @Post('exists')
+  @PathValidation({ bodyFields: ['pathList'] })
+  queryExistsCount(@Body('pathList') pathList: string[]) {
+    const count = pathList.filter(getExists).length
+    return respond(count)
   }
 
   @Get('size')
   @Permission(UserPermission.read)
   @PathValidation({ queryFields: ['path'] })
-  readSize(@Query('path') path: string) {
+  queryDirectorySize(@Query('path') path: string) {
     const size = this.fsService.getDirectorySize(path)
     return respond(size)
   }
@@ -125,7 +137,7 @@ export class FsController {
   @Get('text')
   @Permission(UserPermission.read)
   @PathValidation({ queryFields: ['path'] })
-  readTextContent(@Query('path') path: string) {
+  queryTextContent(@Query('path') path: string) {
     const text = this.fsService.getTextContent(path)
     return respond(text)
   }
@@ -133,7 +145,7 @@ export class FsController {
   @Get('exif-info')
   @Permission(UserPermission.read)
   @PathValidation({ queryFields: ['path'] })
-  async getExifInfo(@Query('path') path: string) {
+  async queryExifInfo(@Query('path') path: string) {
     try {
       const data = await this.fsService.getExifInfo(path)
       return respond(data)
@@ -146,7 +158,7 @@ export class FsController {
   @Get('audio-info')
   @Permission(UserPermission.read)
   @PathValidation({ queryFields: ['path'] })
-  async getAudioInfo(@Query('path') path: string) {
+  async queryAudioInfo(@Query('path') path: string) {
     try {
       const data = await this.fsService.getAudioInfo(path)
       return respond(data)
@@ -159,70 +171,156 @@ export class FsController {
   @Post('directory')
   @Permission(UserPermission.write)
   @PathValidation({ bodyFields: ['path'] })
-  create(@Body('path') path: string) {
+  createDirectory(@Body('path') path: string) {
     mkdirSync(path)
-    return respond()
+    return respond(TransferResult.created)
   }
 
   @Post('file')
   @Permission(UserPermission.write)
   @PathValidation({ queryFields: ['path'] })
   @UseInterceptors(FileInterceptor('file'))
-  async uploadFile(
-    @Query('path') path: string,
-    @UploadedFile() file: Express.Multer.File,
+  async createFile(
     @UserGetter() user: IUser,
+    @UploadedFile() file: Express.Multer.File,
+    @Query('path') path: string,
+    @Query('existingStrategy') existingStrategy?: ExistingStrategyType,
   ) {
-    if (getExists(path) && !user.permissions.includes(UserPermission.delete)) {
-      return respond(null, ServerMessage.ERROR_403_PERMISSION_DELETE)
-    }
     try {
+      const isExisted = getExists(path)
+
+      if (isExisted) {
+        if (existingStrategy === ExistingStrategy.skip) {
+          return respond(TransferResult.skipped)
+        }
+
+        if (!user.permissions.includes(UserPermission.delete)) {
+          return respond(null, ServerMessage.ERROR_403_PERMISSION_DELETE)
+        }
+
+        if (existingStrategy === ExistingStrategy.replace) {
+          await this.fsService.uploadFile(path, file.buffer)
+          return respond(TransferResult.replaced)
+        }
+
+        if (existingStrategy === ExistingStrategy.keepBoth) {
+          const duplicatedPath = getDuplicatedPath(path)
+          await this.fsService.uploadFile(duplicatedPath, file.buffer)
+          return respond(TransferResult.bothKept)
+        }
+
+        return respond(TransferResult.canceled)
+      }
+
       await this.fsService.uploadFile(path, file.buffer)
-      return respond()
+      return respond(TransferResult.created)
     } catch (error) {
       catchError(error)
       return respond(null, ServerMessage.ERROR_CATCHER_CAUGHT)
     }
   }
 
-  @Put('rename')
-  @Permission(UserPermission.write)
+  @Patch('entry')
+  @Permission([UserPermission.write, UserPermission.delete])
   @PathValidation({ bodyFields: ['fromPath', 'toPath'] })
-  updateName(
+  renameEntry(
     @Body('fromPath') fromPath: string,
     @Body('toPath') toPath: string,
   ) {
-    // TODO:
     renameSync(fromPath, toPath)
     return respond()
   }
 
-  @Put('move')
+  @Put('entry')
   @Permission([UserPermission.write, UserPermission.delete])
   @PathValidation({ bodyFields: ['fromPath', 'toPath'] })
-  async updatePath(
+  async moveEntry(
+    @UserGetter() user: IUser,
     @Body('fromPath') fromPath: string,
     @Body('toPath') toPath: string,
+    @Query('existingStrategy') existingStrategy?: ExistingStrategyType,
   ) {
-    await this.fsService.moveEntry(fromPath, toPath)
-    return respond()
+    try {
+      const isExisted = getExists(toPath)
+
+      if (isExisted) {
+        if (existingStrategy === ExistingStrategy.skip) {
+          return respond(TransferResult.skipped)
+        }
+
+        if (!user.permissions.includes(UserPermission.delete)) {
+          return respond(null, ServerMessage.ERROR_403_PERMISSION_DELETE)
+        }
+
+        if (existingStrategy === ExistingStrategy.replace) {
+          await this.fsService.moveEntry(fromPath, toPath)
+          return respond(TransferResult.replaced)
+        }
+
+        if (existingStrategy === ExistingStrategy.keepBoth) {
+          const duplicatedPath = getDuplicatedPath(toPath)
+          await this.fsService.moveEntry(fromPath, duplicatedPath)
+          return respond(TransferResult.bothKept)
+        }
+
+        return respond(TransferResult.canceled)
+      }
+
+      await this.fsService.moveEntry(fromPath, toPath)
+      return respond(TransferResult.moved)
+    } catch (error) {
+      catchError(error)
+      return respond(null, ServerMessage.ERROR_CATCHER_CAUGHT)
+    }
   }
 
-  @Post('copy')
+  @Post('entry')
   @Permission(UserPermission.write)
   @PathValidation({ bodyFields: ['fromPath', 'toPath'] })
-  async copy(
+  async copyEntry(
+    @UserGetter() user: IUser,
     @Body('fromPath') fromPath: string,
     @Body('toPath') toPath: string,
+    @Query('existingStrategy') existingStrategy?: ExistingStrategyType,
   ) {
-    await this.fsService.copyEntry(fromPath, toPath)
-    return respond()
+    try {
+      const isExisted = getExists(toPath)
+
+      if (isExisted) {
+        if (existingStrategy === ExistingStrategy.skip) {
+          return respond(TransferResult.skipped)
+        }
+
+        if (!user.permissions.includes(UserPermission.delete)) {
+          return respond(null, ServerMessage.ERROR_403_PERMISSION_DELETE)
+        }
+
+        if (existingStrategy === ExistingStrategy.replace) {
+          await this.fsService.copyEntry(fromPath, toPath)
+          return respond(TransferResult.replaced)
+        }
+
+        if (existingStrategy === ExistingStrategy.keepBoth) {
+          const duplicatedPath = getDuplicatedPath(toPath)
+          await this.fsService.copyEntry(fromPath, duplicatedPath)
+          return respond(TransferResult.bothKept)
+        }
+
+        return respond(TransferResult.canceled)
+      }
+
+      await this.fsService.copyEntry(fromPath, toPath)
+      return respond(TransferResult.copied)
+    } catch (error) {
+      catchError(error)
+      return respond(null, ServerMessage.ERROR_CATCHER_CAUGHT)
+    }
   }
 
-  @Delete('delete')
+  @Delete('entry')
   @Permission(UserPermission.delete)
   @PathValidation({ queryFields: ['path'] })
-  async remove(@Query('path') path: string) {
+  async deleteEntry(@Query('path') path: string) {
     const isExisted = getExists(path)
     if (!isExisted) {
       return respond()
@@ -240,7 +338,7 @@ export class FsController {
   @Post('favorite')
   @Permission(UserPermission.read)
   @PathValidation({ queryFields: ['path'] })
-  updateFavorite(@Query('path') path: string, @UserGetter() user: IUser) {
+  createFavorite(@Query('path') path: string, @UserGetter() user: IUser) {
     const pathList = this.userService.createFavorite(user.username, path)
     return respond(
       pathList.map((path) => path2RootEntry(path, RootEntryGroup.favorite)),
@@ -260,12 +358,12 @@ export class FsController {
   @Post('public/image/:name')
   @Permission(UserPermission.administer)
   @UseInterceptors(FileInterceptor('file'))
-  uploadPublicImage(
+  createPublicImage(
     @Param('name') name: string,
     @UploadedFile() file: Express.Multer.File,
   ) {
     try {
-      this.fsService.uploadPublicImage(name, file.buffer)
+      this.fsService.createPublicImage(name, file.buffer)
       return respond()
     } catch (error) {
       catchError(error)
@@ -277,7 +375,10 @@ export class FsController {
   @Permission(UserPermission.read)
   @Header('Content-Type', 'image/jpg')
   @PathValidation({ queryFields: ['path'] })
-  async readThumbnail(@Query('path') path: string, @Res() response: Response) {
+  async getThumbnailStreamUrl(
+    @Query('path') path: string,
+    @Res() response: Response,
+  ) {
     if (ServerOS.supportThumbnail) {
       try {
         const filePath = await this.fsService.getThumbnailPath(path)
@@ -306,14 +407,14 @@ export class FsController {
   @Get('stream')
   @Permission(UserPermission.read)
   @PathValidation({ queryFields: ['path'] })
-  readStream(@Query('path') path: string, @Res() response: Response) {
+  getPathStreamUrl(@Query('path') path: string, @Res() response: Response) {
     response.sendFile(path)
   }
 
   @Public()
   @Get('public/avatar/:username')
   @Header('Content-Type', 'image/jpg')
-  readAvatar(
+  getPublicAvatarStreamUrl(
     @Param('username') username: User.Username,
     @Res() response: Response,
   ) {
@@ -330,7 +431,10 @@ export class FsController {
   @Public()
   @Get('public/image/:name')
   @Header('Content-Type', 'image/jpg')
-  readImage(@Param('name') name: User.Username, @Res() response: Response) {
+  getPublicImageStreamUrl(
+    @Param('name') name: User.Username,
+    @Res() response: Response,
+  ) {
     const path = this.fsService.getImagePath(name)
     if (getExists(path)) {
       response.sendFile(path)

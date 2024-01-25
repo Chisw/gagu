@@ -2,7 +2,7 @@ import { IResponse, ISetting, IVersion } from '../types'
 import service from './service'
 
 export class SettingApi {
-  static querySettingAll = async () => {
+  static querySettings = async () => {
     const { data } = await service.get<IResponse<ISetting>>('/api/setting')
     return data
   }
@@ -18,7 +18,7 @@ export class SettingApi {
   }
 
   static updateVersion = async () => {
-    const { data } = await service.post<IResponse>('/api/setting/version', undefined, { timeout: 0 })
+    const { data } = await service.put<IResponse>('/api/setting/version', undefined, { timeout: 0 })
     return data
   } 
 }

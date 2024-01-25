@@ -41,7 +41,7 @@ export class UserController {
 
   @Get()
   @Permission(UserPermission.administer)
-  query() {
+  queryUserList() {
     const userList = this.userService.findAll()
     const authRecordList = this.authService.findAll()
 
@@ -58,7 +58,7 @@ export class UserController {
 
   @Post()
   @Permission(UserPermission.administer)
-  create(@Body() userForm: IUserForm) {
+  createUser(@Body() userForm: IUserForm) {
     const { avatar, username } = userForm
     if (this.userService.findOne(username)) {
       return respond(null, ServerMessage.ERROR_USER_EXISTED)
@@ -72,7 +72,7 @@ export class UserController {
 
   @Patch()
   @Permission(UserPermission.administer)
-  update(@Body() userForm: IUserForm) {
+  updateUser(@Body() userForm: IUserForm) {
     const { avatar, username, password } = userForm
     if (this.userService.findOne(username)) {
       if (password || getIsExpired(userForm.expiredAt)) {
@@ -88,7 +88,7 @@ export class UserController {
 
   @Delete(':username')
   @Permission(UserPermission.administer)
-  async remove(@Param('username') username: User.Username) {
+  async deleteUser(@Param('username') username: User.Username) {
     this.userService.remove(username)
     this.authService.removeUserAllRecords(username)
     await removeEntry(`${GAGU_PATH.PUBLIC_AVATAR}/${username}`)
@@ -98,7 +98,7 @@ export class UserController {
 
   @Put(':username/password')
   @Permission(UserPermission.read)
-  updatePassword(
+  updateUserPassword(
     @Param('username') username: User.Username,
     @Body() userPasswordForm: UserPasswordForm,
   ) {
@@ -122,7 +122,7 @@ export class UserController {
 
   @Patch(':username/validity/:validity')
   @Permission(UserPermission.administer)
-  updateValidity(
+  updateUserValidity(
     @Param('username') username: User.Username,
     @Param('validity') validity: UserValidityType,
   ) {

@@ -26,7 +26,6 @@ export default function App() {
         toastOptions={{ className: 'dark:bg-zinc-700 dark:text-zinc-200' }}
       />
       <Routes>
-        {/* sync to roots in back-end */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/" element={<DesktopPage />} />
         <Route path="/desktop" element={<DesktopPage />} />

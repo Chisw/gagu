@@ -19,7 +19,7 @@ export class TermuxController {
 
   @Get('battery-status')
   @Permission(UserPermission.administer)
-  async getBatteryStatus() {
+  async queryBatteryStatus() {
     try {
       const data = await this.termuxService.getBatteryStatus()
       return respond(data)
@@ -31,14 +31,14 @@ export class TermuxController {
 
   @Post('brightness')
   @Permission(UserPermission.administer)
-  async setBrightness(@Body('brightness') brightness: number | 'auto') {
+  async updateBrightness(@Body('brightness') brightness: number | 'auto') {
     this.termuxService.setBrightness(brightness)
     return respond()
   }
 
   @Get('call-log')
   @Permission(UserPermission.administer)
-  async getCallLog() {
+  async queryCallLog() {
     try {
       const data = await this.termuxService.getCallLog()
       return respond(data)
@@ -50,7 +50,7 @@ export class TermuxController {
 
   @Get('camera-info')
   @Permission(UserPermission.administer)
-  async getCameraInfo() {
+  async queryCameraInfo() {
     try {
       const data = await this.termuxService.getCameraInfo()
       return respond(data)
@@ -74,7 +74,7 @@ export class TermuxController {
 
   @Get('clipboard')
   @Permission(UserPermission.administer)
-  async getClipboard() {
+  async queryClipboard() {
     try {
       const value = await this.termuxService.getClipboard()
       return respond({ value })
@@ -86,7 +86,7 @@ export class TermuxController {
 
   @Put('clipboard')
   @Permission(UserPermission.administer)
-  async setClipboard(@Body('value') value: string) {
+  async updateClipboard(@Body('value') value: string) {
     try {
       await this.termuxService.setClipboard(value)
       return respond()
@@ -98,7 +98,7 @@ export class TermuxController {
 
   @Get('contact-list')
   @Permission(UserPermission.administer)
-  async getContactList() {
+  async queryContactList() {
     try {
       const list = await this.termuxService.getContactList()
       return respond(list)
@@ -135,7 +135,7 @@ export class TermuxController {
 
   @Get('fingerprint')
   @Permission(UserPermission.administer)
-  async getFingerprint() {
+  async queryFingerprint() {
     try {
       const res = await this.termuxService.getFingerprint()
       return respond(res)
@@ -147,7 +147,7 @@ export class TermuxController {
 
   @Get('infrared-frequencies')
   @Permission(UserPermission.administer)
-  async getInfraredFrequencies() {
+  async queryInfraredFrequencies() {
     try {
       const list = await this.termuxService.getInfraredFrequencies()
       return respond(list)
@@ -171,7 +171,7 @@ export class TermuxController {
 
   @Get('location')
   @Permission(UserPermission.administer)
-  async getLocation(
+  async queryLocation(
     @Query('provider') provider: LocationProviderType,
     @Query('request') request: LocationRequestType,
   ) {
@@ -186,7 +186,7 @@ export class TermuxController {
 
   @Get('media-player')
   @Permission(UserPermission.administer)
-  async getMediaPlayerInfo() {
+  async queryMediaPlayerInfo() {
     try {
       const data = await this.termuxService.getMediaPlayerInfo()
       return respond(data)
@@ -211,7 +211,7 @@ export class TermuxController {
 
   @Put('media-player/:state')
   @Permission(UserPermission.administer)
-  async setMediaPlayerState(@Param('state') state: MediaPlayerStateType) {
+  async updateMediaPlayerState(@Param('state') state: MediaPlayerStateType) {
     try {
       const data = await this.termuxService.setMediaPlayerState(state)
       return respond(data)

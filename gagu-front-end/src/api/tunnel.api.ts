@@ -1,7 +1,6 @@
 import { IEntry, IResponse, ITunnel, TunnelForm } from '../types'
-import { getPasswordParam } from '../utils'
+import { BASE_URL, getPasswordParam } from '../utils'
 import service from './service'
-
 
 export class TunnelApi {
   static queryTunnelList = async () => {
@@ -27,5 +26,14 @@ export class TunnelApi {
   static queryTunnelCheck = async (code: string, password?: string) => {
     const { data } = await service.get<IResponse>(`/api/tunnel/${code}/check?${getPasswordParam(password)}`)
     return data
+  }
+
+  static getDownloadUrl = (code: string, password?: string) => {
+    return `${BASE_URL}/api/tunnel/${code}/download?${getPasswordParam(password)}`
+  }
+
+  static download = (code: string, password?: string) => {
+    const url = this.getDownloadUrl(code, password)
+    window.open(url, '_self')
   }
 }

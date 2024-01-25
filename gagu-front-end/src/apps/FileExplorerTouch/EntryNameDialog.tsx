@@ -36,7 +36,7 @@ export default function EntryNameDialog(props: EntryNameDialogProps) {
 
   const { request: queryExists, loading: loadingExist } = useRequest(FsApi.queryExists)
   const { request: createDirectory, loading: loadingNewDir } = useRequest(FsApi.createDirectory)
-  const { request: updateEntryName, loading: loadingRename } = useRequest(FsApi.updateEntryName)
+  const { request: renameEntry, loading: loadingRename } = useRequest(FsApi.renameEntry)
   const { request: createFile } = useRequest(FsApi.createFile)
 
   const handleName = useCallback(async () => {
@@ -62,9 +62,9 @@ export default function EntryNameDialog(props: EntryNameDialogProps) {
     if (exists) {
       toast.error(t('tip.targetExists', { name: finalName }))
     } else {
-      if (oldName) {  // rename
+      if (oldName) {
         const fromPath = `${currentPath}/${oldName}`
-        const { success } = await updateEntryName(fromPath, toPath)
+        const { success } = await renameEntry(fromPath, toPath)
         success && onSuccess()
       } else {
         if (editMode === EditMode.createFolder) {
@@ -86,7 +86,7 @@ export default function EntryNameDialog(props: EntryNameDialogProps) {
     editMode,
     queryExists,
     createDirectory,
-    updateEntryName,
+    renameEntry,
     createFile,
     onSuccess,
   ])

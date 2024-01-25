@@ -32,7 +32,7 @@ export function Confirmor(props: ConfirmorProps) {
     onCancel,
   } = props
 
-  const confirm = Modal.confirm({
+  const confirmor = Modal.confirm({
     closable: false,
     centered: true,
     maskClosable: true,
@@ -58,9 +58,9 @@ export function Confirmor(props: ConfirmorProps) {
           style={{ margin: 0 }}
           onClick={() => {
             if (onCancel) {
-              onCancel(confirm.destroy)
+              onCancel(confirmor.destroy)
             } else {
-              confirm.destroy()
+              confirmor.destroy()
             }
           }}
         >
@@ -69,7 +69,7 @@ export function Confirmor(props: ConfirmorProps) {
         <Button
           theme="solid"
           className="w-full"
-          onClick={() => onConfirm(confirm.destroy)}
+          onClick={() => onConfirm(confirmor.destroy)}
         >
           {t`action.confirm`}
         </Button>

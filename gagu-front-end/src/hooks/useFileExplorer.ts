@@ -12,6 +12,8 @@ import {
   RootEntryGroup,
   IClipboardData,
   ClipboardType,
+  ClipboardTypeType,
+  ExistingStrategyType,
 } from '../types'
 import {
   EntryPathCacheStore,
@@ -34,7 +36,7 @@ import {
 import { useRequest } from './useRequest'
 import { FsApi, TunnelApi } from '../api'
 import { useTranslation } from 'react-i18next'
-import { Confirmor } from '../components/common'
+import { Confirmor, ExistingConfirmor } from '../components/common'
 import toast from 'react-hot-toast'
 import { throttle } from 'lodash-es'
 import { useTouchMode } from './useTouchMode'
@@ -121,6 +123,7 @@ export function useFileExplorer(props: Props) {
 
   const { request: queryEntryList, loading: querying } = useRequest(FsApi.queryEntryList)
   const { request: queryDirectorySize, loading: sizeQuerying } = useRequest(FsApi.queryDirectorySize)
+  const { request: queryExistsCount } = useRequest(FsApi.queryExistsCount)
   const { request: deleteEntry, loading: deleting } = useRequest(FsApi.deleteEntry)
   const { request: createTunnel } = useRequest(TunnelApi.createTunnel)
   const { request: createFavorite } = useRequest(FsApi.createFavorite)
@@ -368,7 +371,7 @@ export function useFileExplorer(props: Props) {
           downloadName,
         })
         if (success && code) {
-          FsApi.download(code)
+          TunnelApi.download(code)
         } else {
           toast.error(message)
         }
@@ -404,38 +407,55 @@ export function useFileExplorer(props: Props) {
     setClipboardData(data)
   }, [setClipboardData])
 
-  const handleClipboardPaste = useCallback(() => {
-    if (!clipboardData) return
-    const { type, entryList } = clipboardData
+  const handlePasteStart = useCallback(async (type: ClipboardTypeType, entryList: IEntry[], strategy?: ExistingStrategyType) => {
     const isCopy = type === ClipboardType.copy
     const isCut = type === ClipboardType.cut
 
+    for (const entry of entryList) {
+      const fromPath = getEntryPath(entry)
+      const toPath = `${currentPath}/${entry.name}`
+
+      if (isCut && fromPath === toPath) continue
+
+      const fn = isCopy ? copyEntry : moveEntry
+      const { success } = await fn(fromPath, toPath, strategy)
+      if (success) {
+        setLastChangedDirectory({
+          path: currentPath,
+          timestamp: Date.now(),
+          otherPaths: [entry.parentPath],
+        })
+      }
+    }
+
+    isCut && setClipboardData(null)
+  }, [copyEntry, currentPath, moveEntry, setClipboardData, setLastChangedDirectory])
+
+  const handlePasteCheck = useCallback(async (type: ClipboardTypeType, entryList: IEntry[]) => {
+    const pathList = entryList.map(entry => `${currentPath}/${entry.name}`)
+    const { data: count } = await queryExistsCount({ pathList })
+    if (count) {
+      ExistingConfirmor({
+        count,
+        onConfirm: (strategy) => handlePasteStart(type, entryList, strategy),
+      })
+    } else {
+      handlePasteStart(type, entryList)
+    }
+  }, [currentPath, handlePasteStart, queryExistsCount])
+
+  const handleClipboardPaste = useCallback(() => {
+    if (!clipboardData) return
+    const { type, entryList } = clipboardData
     Confirmor({
       type: 'paste',
       content: t('tip.pasteEntries', { count: entryList.length }),
-      onConfirm: async (close) => {
-        for (const entry of entryList) {
-          const fromPath = getEntryPath(entry)
-          const toPath = `${currentPath}/${entry.name}`
-
-          if (isCut && fromPath === toPath) continue
-
-          const fn = isCopy ? copyEntry : moveEntry
-          const { success } = await fn(fromPath, toPath)
-          if (success) {
-            setLastChangedDirectory({
-              path: currentPath,
-              timestamp: Date.now(),
-              otherPaths: [entry.parentPath],
-            })
-          }
-        }
-
-        isCut && setClipboardData(null)
+      onConfirm: (close) => {
         close()
+        handlePasteCheck(type, entryList)
       },
     })
-  }, [clipboardData, t, currentPath, copyEntry, moveEntry, setLastChangedDirectory, setClipboardData])
+  }, [clipboardData, handlePasteCheck, t])
 
   const handleFavoriteClick = useCallback((entry: IEntry) => {
     const isFavorited = !!baseData.rootEntryList

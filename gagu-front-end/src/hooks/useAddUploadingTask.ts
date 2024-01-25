@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { INestedFile, IUploadTransferTask, TransferTaskStatus, TransferTaskType } from '../types'
+import { INestedFile, ITransferTask, TransferTaskStatus } from '../types'
 import toast from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
 import { generateRandomCode } from '../utils'
@@ -16,18 +16,17 @@ export function useAddUploadingTask () {
       toast.error(t`tip.noUploadableFilesDetected`)
       return
     }
-    const newTaskList: IUploadTransferTask[] = nestedFileList.map(nestedFile => {
+    const newTaskList: ITransferTask[] = nestedFileList.map(nestedFile => {
       const { name, fullPath } = nestedFile
       const file = nestedFile as File
       const id = generateRandomCode()
-      const toPath = `${basePath}${targetDirName ? `/${targetDirName}` : ''}${fullPath || `/${name}`}`
+      const path = `${basePath}${targetDirName ? `/${targetDirName}` : ''}${fullPath || `/${name}`}`
 
       return {
         id,
-        type: TransferTaskType.upload,
         status: TransferTaskStatus.waiting,
         file,
-        toPath,
+        path,
       }
     })
     setTransferTaskList([...transferTaskList, ...newTaskList])

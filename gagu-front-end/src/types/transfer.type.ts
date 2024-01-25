@@ -1,19 +1,16 @@
 export enum TransferTaskStatus {
   waiting = 'waiting',
   uploading = 'uploading',
-  moving = 'moving',
-  success = 'success',
-  fail = 'fail',
-  cancel = 'cancel',
-  exceed = 'exceed',
+  created = 'created',
+  moved = 'moved',
+  copied = 'copied',
+  bothKept = 'bothKept',
+  replaced = 'replaced',
+  skipped = 'skipped',
+  canceled = 'canceled',
 }
 
 export type TransferTaskStatusType = keyof typeof TransferTaskStatus
-
-export enum TransferTaskType {
-  upload = 'upload',
-  move = 'move',
-}
 
 export interface INestedFile extends File {
   fullPath: string
@@ -21,20 +18,8 @@ export interface INestedFile extends File {
 
 export interface ITransferTask {
   id: string
-  type: keyof typeof TransferTaskType
   status: keyof typeof TransferTaskStatus
-  file?: File & { fullPath?: string }
-  toPath: string
-  fromPath?: string
-  abortController?: AbortController
-}
-
-export interface IUploadTransferTask extends ITransferTask {
-  type: TransferTaskType.upload
   file: File & { fullPath?: string }
-}
-
-export interface IMoveTransferTask extends ITransferTask {
-  type: TransferTaskType.move
-  fromPath: string
+  path: string
+  abortController?: AbortController
 }

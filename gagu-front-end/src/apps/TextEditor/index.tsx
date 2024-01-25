@@ -3,7 +3,7 @@ import toast from 'react-hot-toast'
 import { Confirmor, Opener } from '../../components/common'
 import { ENTRY_ICON_LIST, generateTextFile, getEntryPath, line } from '../../utils'
 import { FsApi } from '../../api'
-import { AppComponentProps, AppId, IEntry } from '../../types'
+import { AppComponentProps, AppId, ExistingStrategy, IEntry } from '../../types'
 import { useRunAppEvent, useRequest, useHotKey, useUserConfig } from '../../hooks'
 import { useTranslation } from 'react-i18next'
 import { useRecoilState } from 'recoil'
@@ -72,8 +72,7 @@ export default function TextEditor(props: AppComponentProps) {
   const handleSaveClick = useCallback(async () => {
     if (!activeEntry || isSaveDisabled) return
     const file = generateTextFile(textContent, activeEntry.name)
-    // TODO: use patch
-    const { success } = await createFile(getEntryPath(activeEntry), file)
+    const { success } = await createFile(getEntryPath(activeEntry), file, ExistingStrategy.replace)
     if (success) {
       toast.success('OK')
       setResponse({ success: true, message: 'OK', data: textContent })

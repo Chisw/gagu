@@ -20,19 +20,19 @@ export default function AdvancedSettings() {
   const [form, setForm] = useState<SettingForm | null>(null)
   const [formCache, setFormCache] = useState<SettingForm | null>(null)
 
-  const { request: querySettingAll, loading } = useRequest(SettingApi.querySettingAll)
+  const { request: querySettings, loading } = useRequest(SettingApi.querySettings)
   const { request: updateSetting, loading: updating } = useRequest(SettingApi.updateSetting)
   const { request: queryLatestVersion, loading: getting } = useRequest(SettingApi.queryLatestVersion)
   const { request: updateVersion } = useRequest(SettingApi.updateVersion)
 
   const handleQuerySettingAll = useCallback(async () => {
-    const { success, data } = await querySettingAll()
+    const { success, data } = await querySettings()
     if (success) {
       const settingForm = new SettingForm(data)
       setForm(settingForm)
       setFormCache(settingForm)
     }
-  }, [querySettingAll])
+  }, [querySettings])
 
   useEffect(() => {
     handleQuerySettingAll()
