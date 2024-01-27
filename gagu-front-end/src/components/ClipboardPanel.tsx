@@ -32,8 +32,9 @@ export function ClipboardPanel() {
           relative px-2 h-full
           text-xs select-none
           transition-width duration-200
-          flex items-center cursor-pointer
+          items-center cursor-pointer
           hover:bg-white hover:bg-opacity-30 active:bg-black active:bg-opacity-10
+          ${count ? 'flex' : 'hidden'}
         `)}
         onClick={() => setShow(true)}
       >

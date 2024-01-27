@@ -7,7 +7,7 @@ import {
   IUserInfo,
   Page,
   IEntryPathCache,
-  ITransferTask,
+  IUploadTask,
   IUserConfig,
   IClipboardData,
   IWindowInfo,
@@ -81,13 +81,13 @@ export const openEventState = atom<IOpenEvent | null>({
   default: null,
 })
 
-export const transferSignalState = atom<number>({
-  key: 'transferSignalState',
+export const uploadSignalState = atom<number>({
+  key: 'uploadSignalState',
   default: 0
 })
 
-export const transferTaskListState = atom<ITransferTask[]>({
-  key: 'transferTaskListState',
+export const uploadTaskListState = atom<IUploadTask[]>({
+  key: 'uploadTaskListState',
   default: [],
 })
 

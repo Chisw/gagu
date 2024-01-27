@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { TransferPanel, MySharingPanel, ChangePasswordModal, ClipboardPanel } from '.'
+import { UploadPanel, MySharingPanel, ChangePasswordModal, ClipboardPanel } from '.'
 import { Dropdown } from '@douyinfe/semi-ui'
 import { DateTime } from 'luxon'
 import { useNavigate } from 'react-router-dom'
@@ -132,7 +132,7 @@ export function MenuBar() {
           ${[Page.desktop, Page.explore, Page.touch].includes(activePage) ? 'translate-y-0' : '-translate-y-20'}
         `)}
       >
-        <div className="w-1/3 h-full flex items-center text-xs">
+        <div className="h-full flex items-center text-xs">
           <Dropdown
             trigger="click"
             position="bottomLeft"
@@ -344,12 +344,12 @@ export function MenuBar() {
             </div>
           </Dropdown>
         </div>
-        <div className="w-1/3 flex-shrink-0 text-center text-xs leading-none font-din select-none">
-          {clockTime}
-        </div>
-        <div className="w-1/3 h-full flex justify-end">
+        <div className="h-full flex justify-end items-center">
           <ClipboardPanel />
-          <TransferPanel />
+          <UploadPanel />
+          <span className="px-2 flex-shrink-0 text-xs leading-none font-din select-none">
+            {clockTime}
+          </span>
         </div>
       </div>
 

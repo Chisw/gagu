@@ -23,7 +23,6 @@ export interface IAppComponent {
 
 export enum AppId {
   fileExplorer = 'file-explorer',
-  transfer = 'transfer',
   textEditor = 'text-editor',
   photoViewer = 'photo-viewer',
   musicPlayer = 'music-player',

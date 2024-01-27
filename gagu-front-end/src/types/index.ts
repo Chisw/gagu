@@ -1,14 +1,14 @@
 import { ServerMessage } from './common.type'
 import { IEntry, SortType } from './entry.type'
 
-export * from './common.type'
-export * from './termux.type'
 export * from './app.type'
+export * from './common.type'
 export * from './entry.type'
-export * from './transfer.type'
-export * from './user.type'
-export * from './tunnel.type'
 export * from './setting.type'
+export * from './termux.type'
+export * from './tunnel.type'
+export * from './upload.type'
+export * from './user.type'
 
 export enum Page {
   PENDING = 'PENDING',

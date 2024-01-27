@@ -1,11 +1,11 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { FsApi } from '../api'
 import { EmptyPanel, ExistingConfirmor, SvgIcon } from './common'
 import { useRequest, useUserConfig } from '../hooks'
-import { ExistingStrategyType, ITransferTask, TransferTaskStatusType } from '../types'
+import { ExistingStrategyType, IUploadTask, UploadTaskStatusType } from '../types'
 import { getReadableSize, line } from '../utils'
-import { lastChangedDirectoryState, transferSignalState, transferTaskListState } from '../states'
+import { lastChangedDirectoryState, uploadSignalState, uploadTaskListState } from '../states'
 import { Button, SideSheet } from '@douyinfe/semi-ui'
 import { useTranslation } from 'react-i18next'
 import { cloneDeep } from 'lodash-es'
@@ -22,23 +22,27 @@ const statusIconMap = {
   canceled: { icon: <SvgIcon.Close />, bg: 'bg-red-500' },
 }
 
-export function TransferPanel() {
+export function UploadPanel() {
 
   const { t } = useTranslation()
 
-  const [transferTaskList, setTransferTaskList] = useRecoilState(transferTaskListState)
-  const [transferSignal] = useRecoilState(transferSignalState)
+  const [uploadTaskList, setUploadTaskList] = useRecoilState(uploadTaskListState)
+  const [uploadSignal] = useRecoilState(uploadSignalState)
   const [, setLastChangedDirectory] = useRecoilState(lastChangedDirectoryState)
 
   const { userConfig: { kiloSize } } = useUserConfig()
 
   const [show, setShow] = useState(false)
   const [uploadInfo, setUploadInfo] = useState({ ratio: 0, speed: '' })
-  const [transferSignalCache, setTransferSignalCache] = useState(0)
+  const [uploadSignalCache, setTransferSignalCache] = useState(0)
   const [activeId, setActiveId] = useState('')
 
   const { request: createFile, loading: uploading } = useRequest(FsApi.createFile)
   const { request: queryExistsCount } = useRequest(FsApi.queryExistsCount)
+
+  const count = useMemo(() => {
+    return uploadTaskList.length
+  }, [uploadTaskList])
 
   useEffect(() => {
     if (uploading) {
@@ -46,8 +50,8 @@ export function TransferPanel() {
     }
   }, [uploading])
 
-  const handleUploadStart = useCallback(async (uploadingTaskList: ITransferTask[], strategy?: ExistingStrategyType) => {
-    const statusMap: { [PATH: string]: TransferTaskStatusType } = {}
+  const handleUploadStart = useCallback(async (uploadingTaskList: IUploadTask[], strategy?: ExistingStrategyType) => {
+    const statusMap: { [PATH: string]: UploadTaskStatusType } = {}
     for (const task of uploadingTaskList) {
       const { id, path, file } = task
       setActiveId(id)
@@ -74,18 +78,18 @@ export function TransferPanel() {
       }
     }
 
-    const list = cloneDeep(transferTaskList)
+    const list = cloneDeep(uploadTaskList)
     list.forEach(task => {
       const status = statusMap[task.path]
       if (status) {
         task.status = status
       }
     })
-    setTransferTaskList(list)
+    setUploadTaskList(list)
     setActiveId('')
-  }, [transferTaskList, setTransferTaskList, createFile, kiloSize, setLastChangedDirectory])
+  }, [uploadTaskList, setUploadTaskList, createFile, kiloSize, setLastChangedDirectory])
 
-  const handleUploadCheck = useCallback(async (uploadingTaskList: ITransferTask[]) => {
+  const handleUploadCheck = useCallback(async (uploadingTaskList: IUploadTask[]) => {
     const pathList = uploadingTaskList.map(t => t.path)
     const { data: count } = await queryExistsCount({ pathList })
     if (count) {
@@ -93,29 +97,29 @@ export function TransferPanel() {
         count,
         onConfirm: (strategy) => handleUploadStart(uploadingTaskList, strategy),
         onCancel: () => {
-          const list = cloneDeep(transferTaskList)
+          const list = cloneDeep(uploadTaskList)
           list.forEach(task => {
             if (pathList.includes(task.path)) {
               task.status = 'canceled'
             }
           })
-          setTransferTaskList(list)
+          setUploadTaskList(list)
         },
       })
     } else {
       handleUploadStart(uploadingTaskList)
     }
-  }, [handleUploadStart, queryExistsCount, setTransferTaskList, transferTaskList])
+  }, [handleUploadStart, queryExistsCount, setUploadTaskList, uploadTaskList])
 
   useEffect(() => {
-    if (transferSignal !== transferSignalCache) {
-      const uploadingTaskList = transferTaskList.filter(t => t.status === 'waiting') as ITransferTask[]
+    if (uploadSignal !== uploadSignalCache) {
+      const uploadingTaskList = uploadTaskList.filter(t => t.status === 'waiting') as IUploadTask[]
       if (uploadingTaskList.length) {
         handleUploadCheck(uploadingTaskList)
       }
-      setTransferSignalCache(transferSignal)
+      setTransferSignalCache(uploadSignal)
     }
-  }, [transferSignal, transferTaskList, handleUploadCheck, transferSignalCache])
+  }, [uploadSignal, uploadTaskList, handleUploadCheck, uploadSignalCache])
 
   return (
     <>
@@ -124,8 +128,9 @@ export function TransferPanel() {
           relative px-2 h-full
           text-xs select-none
           transition-width duration-200
-          flex items-center cursor-pointer
+          items-center cursor-pointer
           hover:bg-white hover:bg-opacity-30 active:bg-black active:bg-opacity-10
+          ${count ? 'flex' : 'hidden'}
           ${uploading ? 'w-28 bg-white bg-opacity-40' : ''}
         `)}
         onClick={() => setShow(true)}
@@ -140,15 +145,15 @@ export function TransferPanel() {
           `)}
           style={{ width: `${uploadInfo.ratio * 100}%` }}
         />
-        <SvgIcon.Transfer className="hidden md:block" />
-        <SvgIcon.Transfer size={18} className="block md:hidden" />
+        <SvgIcon.Upload className="hidden md:block" />
+        <SvgIcon.Upload size={18} className="block md:hidden" />
         <span className="font-din text-center flex-grow">
           {uploading && uploadInfo.speed}
         </span>
-        <span className={`ml-1 font-din ${transferTaskList.length ? '' : 'hidden'}`}>
-          {transferTaskList.filter(t => ['created', 'bothKept', 'replaced', 'canceled'].includes(t.status)).length}
+        <span className={`ml-1 font-din ${count ? '' : 'hidden'}`}>
+          {uploadTaskList.filter(t => ['created', 'bothKept', 'replaced', 'canceled', 'skipped'].includes(t.status)).length}
           &nbsp;/&nbsp;
-          {transferTaskList.length}
+          {count}
         </span>
       </div>
 
@@ -157,15 +162,15 @@ export function TransferPanel() {
         className="gagu-side-drawer gagu-sync-popstate-overlay gagu-prevent-hotkeys-overlay"
         title={(
           <div className="flex items-center">
-            <SvgIcon.Transfer size={24} />
-            <span className="ml-2 font-din text-base">{transferTaskList.length}</span>
+            <SvgIcon.Upload size={24} />
+            <span className="ml-2 font-din text-base">{count}</span>
             <div className="flex-grow flex justify-end">
-              {transferTaskList.length > 0 && (
+              {count > 0 && (
                 <Button
                   size="small"
                   icon={<SvgIcon.Brush />}
                   onClick={() => {
-                    setTransferTaskList([])
+                    setUploadTaskList([])
                     setTimeout(() => setShow(false), 300)
                   }}
                 >
@@ -192,13 +197,13 @@ export function TransferPanel() {
         onCancel={() => setShow(false)}
       >
         <div className="relative w-full h-full overflow-auto">
-          <EmptyPanel dark show={!transferTaskList.length} />
+          <EmptyPanel dark show={!count} />
 
-          {transferTaskList.map((task, taskIndex) => {
+          {uploadTaskList.map((task, taskIndex) => {
             const { id, file, status, path } = task
             const isActive = id === activeId
             const name = file ? file.name : ''
-            const len = transferTaskList.length.toString().length
+            const len = uploadTaskList.length.toString().length
             const indexStr = `${(taskIndex + 1).toString().padStart(len, '0')}`
             const { icon, bg } = statusIconMap[status]
             return (

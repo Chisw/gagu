@@ -1,4 +1,4 @@
-export enum TransferTaskStatus {
+export enum UploadTaskStatus {
   waiting = 'waiting',
   uploading = 'uploading',
   created = 'created',
@@ -10,15 +10,15 @@ export enum TransferTaskStatus {
   canceled = 'canceled',
 }
 
-export type TransferTaskStatusType = keyof typeof TransferTaskStatus
+export type UploadTaskStatusType = keyof typeof UploadTaskStatus
 
 export interface INestedFile extends File {
   fullPath: string
 }
 
-export interface ITransferTask {
+export interface IUploadTask {
   id: string
-  status: keyof typeof TransferTaskStatus
+  status: keyof typeof UploadTaskStatus
   file: File & { fullPath?: string }
   path: string
   abortController?: AbortController
