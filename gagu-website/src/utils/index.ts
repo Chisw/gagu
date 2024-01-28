@@ -31,9 +31,9 @@ const svgWin = `<svg xmlns="http://www.w3.org/2000/svg" style="display: inline; 
 
 export const DOWNLOAD_LIST = [
   { svg: svgLinux, title: 'gagu@0.0.56.linux.arm.sh.zip', size: '22.4 MB', url: 'https://github.com/Chisw/gagu/releases/download/v0.0.56/gagu@0.0.56.linux.arm.sh.zip' },
-  { svg: svgLinux, title: 'gagu@0.0.56.linux.x64.sh.zip', size: '21.5 MB', url: 'https://github.com/Chisw/gagu/releases/download/v0.0.56/gagu@0.0.56.linux.x64.sh.zip' },
+  { svg: svgLinux, title: 'gagu@0.0.56.linux.x64.sh.zip', size: '22.6 MB', url: 'https://github.com/Chisw/gagu/releases/download/v0.0.56/gagu@0.0.56.linux.x64.sh.zip' },
   { svg: svgMacos, title: 'gagu@0.0.56.macos.arm.sh.zip', size: '21.7 MB', url: 'https://github.com/Chisw/gagu/releases/download/v0.0.56/gagu@0.0.56.macos.arm.sh.zip' },
-  { svg: svgMacos, title: 'gagu@0.0.56.macos.x64.sh.zip', size: '22.2 MB', url: 'https://github.com/Chisw/gagu/releases/download/v0.0.56/gagu@0.0.56.macos.x64.sh.zip' },
+  { svg: svgMacos, title: 'gagu@0.0.56.macos.x64.sh.zip', size: '23.3 MB', url: 'https://github.com/Chisw/gagu/releases/download/v0.0.56/gagu@0.0.56.macos.x64.sh.zip' },
   { svg: svgWin, title: 'gagu@0.0.56.win.arm.exe.zip', size: '14.8 MB', url: 'https://github.com/Chisw/gagu/releases/download/v0.0.56/gagu@0.0.56.win.arm.exe.zip' },
-  { svg: svgWin, title: 'gagu@0.0.56.win.x64.exe.zip', size: '18.6 MB', url: 'https://github.com/Chisw/gagu/releases/download/v0.0.56/gagu@0.0.56.win.x64.exe.zip' },
+  { svg: svgWin, title: 'gagu@0.0.56.win.x64.exe.zip', size: '19.6 MB', url: 'https://github.com/Chisw/gagu/releases/download/v0.0.56/gagu@0.0.56.win.x64.exe.zip' },
 ]
