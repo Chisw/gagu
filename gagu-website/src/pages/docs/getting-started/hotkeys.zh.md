@@ -18,6 +18,7 @@ layout: ../../../layouts/DocLayout.astro
 | 前进 | ⌘ + → | Ctrl + → |
 | 刷新 | ⌘ + R | Ctrl + R |
 | 回到上级 | ⌘ + ↑ | Backspace |
+| 前往路径 | ⌘ + Shift + G | Ctrl + Shift + G |
 | 打开项目 | ⌘ + ↓ | Enter |
 | 全选 | ⌘ + A | Ctrl + A |
 | 多选 | ⌘ + Click | Ctrl + Click |
@@ -25,6 +26,9 @@ layout: ../../../layouts/DocLayout.astro
 | 取消选择 | Esc | Esc |
 | 新建文件夹 | ⌘ + ⌥ + N | Ctrl + Alt + N |
 | 新建文本文件 | ⌘ + ⌥ + T | Ctrl + Alt + T |
+| 复制 | ⌘ + C | Ctrl + C |
+| 剪切 | ⌘ + X | Ctrl + X |
+| 粘贴 | ⌘ + V | Ctrl + V |
 | 下载 | ⌘ + D | Ctrl + D |
 | 上传 | ⌘ + U | Ctrl + U |
 | 筛选 | ⌘ + F | Ctrl + F |

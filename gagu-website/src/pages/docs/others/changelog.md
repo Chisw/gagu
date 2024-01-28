@@ -19,6 +19,14 @@ Clear data directory means that all users, download tunnels and other data will 
 
 ## v0.0.*
 
+- v0.0.56 (2024-01-28)
+  - feat: go to specified path
+  - feat: verify path access permissions
+  - feat: clipboard (copy, cut, paste)
+  - feat: set transfering strategy for existing files
+  - fix: hotkey method checking
+  - fix: code optimization
+
 - v0.0.55 (2024-01-14)
   - feat: supports proportional resizing of the window when the cursor hovers over the application window full-screen button
   - feat: file movement in menu

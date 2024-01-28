@@ -18,6 +18,7 @@ Currently available hotkeys, more are being added gradually
 | Go forward | ⌘ + → | Ctrl + → |
 | Refresh | ⌘ + R | Ctrl + R |
 | Back to parent folder | ⌘ + ↑ | Backspace |
+| Go to path | ⌘ + Shift + G | Ctrl + Shift + G |
 | Open entry | ⌘ + ↓ | Enter |
 | Select all | ⌘ + A | Ctrl + A |
 | Multiple select | ⌘ + Click | Ctrl + Click |
@@ -25,6 +26,9 @@ Currently available hotkeys, more are being added gradually
 | Cancel selection | Esc | Esc |
 | Create folder | ⌘ + ⌥ + N | Ctrl + Alt + N |
 | Create text file | ⌘ + ⌥ + T | Ctrl + Alt + T |
+| Copy | ⌘ + C | Ctrl + C |
+| Cut | ⌘ + X | Ctrl + X |
+| Paste | ⌘ + V | Ctrl + V |
 | Download | ⌘ + D | Ctrl + D |
 | Upload | ⌘ + U | Ctrl + U |
 | Filter | ⌘ + F | Ctrl + F |

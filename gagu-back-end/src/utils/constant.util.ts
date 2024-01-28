@@ -5,7 +5,7 @@ import { IServerOS } from 'src/types'
 const platform = os.platform()
 const hostname = os.hostname()
 
-export const GAGU_VERSION = '0.0.55'
+export const GAGU_VERSION = '0.0.56'
 export const IS_DEV = process.env.NODE_ENV === 'development'
 
 export const HOST = (() => {
