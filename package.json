@@ -6,8 +6,8 @@
     "gagu": "./bin/gagu"
   },
   "scripts": {
-    "build:npm": "./build:npm.sh",
-    "build:pkg": "./build:pkg.sh"
+    "build:npm": "./build-npm.sh",
+    "build:pkg": "./build-pkg.sh"
   },
   "pkg": {
     "assets": ["bin/public/**/*"]

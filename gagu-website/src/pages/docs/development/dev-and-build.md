@@ -67,7 +67,7 @@ $ yarn start
 
 2. Sync production dependencies in `./gagu-back-end/package.json` to `./package.json`
 
-3. Run build script `npm run build:npm`, refer to [./build:npm.sh](https://github.com/Chisw/gagu/blob/main/build:npm.sh)
+3. Run build script `npm run build:npm`, refer to [./build-npm.sh](https://github.com/Chisw/gagu/blob/main/build-npm.sh)
 
 4. Dry run publish, update package size info, publish to NPM
 

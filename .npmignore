@@ -6,6 +6,6 @@ node_modules
 pkg
 .gitignore
 .npmignore
-build:npm.sh
-build:pkg.sh
+build-npm.sh
+build-pkg.sh
 yarn.lock
