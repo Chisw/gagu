@@ -65,6 +65,7 @@ export const GAGU_PATH = {
   PUBLIC_AVATAR: `${ROOT_PATH}/public/avatar`,
   PUBLIC_IMAGE: `${ROOT_PATH}/public/image`,
   PUBLIC_LIB: `${ROOT_PATH}/public/lib`,
+  SECRETS: `${ROOT_PATH}/secrets`,
   THUMBNAIL: `${ROOT_PATH}/thumbnail`,
   USERS: `${ROOT_PATH}/users`,
 }
@@ -74,6 +75,7 @@ export const HELP_INFO = `
 
     gagu              ${chalk.gray('# Start service')}
     gagu -o           ${chalk.gray('# Start and open in browser, or --open')}
+    gagu -s           ${chalk.gray('# Start with HTTPS, or --security')}
     gagu -H 0.0.0.0   ${chalk.gray('# Start with a customized host, or --Host')}
     gagu -p 80        ${chalk.gray('# Start with a customized port, or --port')}
     gagu -h           ${chalk.gray('# Show help info, or --help')}

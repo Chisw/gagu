@@ -19,10 +19,11 @@ const argv = minimist(process.argv.slice(2), {
     Host: 'H',
     open: 'o',
     port: 'p',
+    security: 's',
     version: 'v',
   },
   string: ['Host', 'port'],
-  boolean: ['help', 'open', 'reset', 'reset-all', 'version'],
+  boolean: ['help', 'open', 'reset', 'reset-all', 'security', 'version'],
   unknown() {
     console.log(HELP_INFO)
     process.exit(0)
@@ -60,14 +61,16 @@ async function bootstrap() {
     process.exit(0)
   }
 
-  await initialize()
+  const httpsOptions = await initialize(argv.security)
 
   const settings = readSettingsData()
+  const protocol = httpsOptions ? 'https' : 'http'
   const host = argv.Host || settings.host || undefined
   const port = argv.port || settings.port || 9293
-  const url = `http://${host || HOST}:${port}`
+  const url = `${protocol}://${host || HOST}:${port}`
 
   const app = await NestFactory.create(AppModule, {
+    httpsOptions,
     logger: IS_DEV
       ? ['log', 'error', 'warn', 'debug', 'verbose']
       : ['error', 'warn'],

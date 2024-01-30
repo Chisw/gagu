@@ -9,10 +9,9 @@ layout: ../../../layouts/DocLayout.astro
 
 ## 全局
 
-- favicon 显示传输百分比
+- Favicon 显示传输百分比
 - 录音机、日历、天气、计算器、亲戚计算器等小工具
 - Termux 上运行时，添加用户登录震动提醒和弹窗通知
-- HTTPS 证书
 - 划分登录令牌和接入令牌
 - 权限相关的入口和按钮控制
 - 所有的长列表使用虚拟滚动（移除 thumbScrollWatcher）

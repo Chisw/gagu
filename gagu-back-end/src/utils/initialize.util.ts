@@ -6,14 +6,17 @@ import { writeTunnelData } from './tunnel.util'
 import { writeSettingsData } from './setting.util'
 import * as md5 from 'md5'
 import { exec } from 'child_process'
+import { readFileSync } from 'fs'
+import { HttpsOptions } from '@nestjs/common/interfaces/external/https-options.interface'
 
-export const initialize = async () => {
+export const initialize = async (security: boolean) => {
   completeNestedPath(`${GAGU_PATH.ROOT}/data/_`)
   completeNestedPath(`${GAGU_PATH.ROOT}/log/_`)
   completeNestedPath(`${GAGU_PATH.ROOT}/public/_`)
   completeNestedPath(`${GAGU_PATH.ROOT}/public/avatar/_`)
   completeNestedPath(`${GAGU_PATH.ROOT}/public/image/_`)
   completeNestedPath(`${GAGU_PATH.ROOT}/public/lib/_`)
+  completeNestedPath(`${GAGU_PATH.ROOT}/secrets/_`)
   completeNestedPath(`${GAGU_PATH.ROOT}/thumbnail/_`)
   completeNestedPath(`${GAGU_PATH.ROOT}/users/_`)
 
@@ -77,4 +80,26 @@ export const initialize = async () => {
   ServerOS.supportThumbnail = libMap.ffmpeg && libMap.gm
   ServerOS.supportCompression = libMap.zip && libMap.unzip
   ServerOS.supportCurl = libMap.curl
+
+  if (security) {
+    const keyPath = `${GAGU_PATH.SECRETS}/private-key.pem`
+    const certPath = `${GAGU_PATH.SECRETS}/public-certificate.pem`
+    const keyExisted = getExists(keyPath)
+    const certExisted = getExists(certPath)
+
+    if (keyExisted && certExisted) {
+      const options: HttpsOptions = {
+        key: readFileSync(keyPath),
+        cert: readFileSync(certPath),
+      }
+      return options
+    } else {
+      console.log('\n⚠️  Check whether HTTPS PEM files exist:\n')
+      console.log(`   - KEY:  ${keyPath}`)
+      console.log(`   - CERT: ${certPath}\n`)
+      process.exit(0)
+    }
+  } else {
+    return undefined
+  }
 }

@@ -9,10 +9,9 @@ Many unrealized ideas will be recorded here, waiting for development
 
 ## Global
 
-- favicon shows transfer percentage
+- Show transfer percentage on Favicon
 - Sound Recorder, Calendar, Calculator, Weather, Relative calculator and other gadgets
 - When running on Termux, add user login vibration reminder and pop-up notification
-- HTTPS certificate
 - Thumbnail of PDF/APK
 - Separate login tokens and access tokens
 - Permission-related access and button controls
