@@ -27,6 +27,10 @@ export const UserInfoStore = {
     return this.get()?.token || ''
   },
 
+  getAccessToken() {
+    return this.get()?.accessToken || ''
+  },
+
   getUsername() {
     return this.get()?.username || ''
   },

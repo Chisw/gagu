@@ -76,8 +76,8 @@ export const HELP_INFO = `
     gagu              ${chalk.gray('# Start service')}
     gagu -o           ${chalk.gray('# Start and open in browser, or --open')}
     gagu -s           ${chalk.gray('# Start with HTTPS, or --security')}
-    gagu -H 0.0.0.0   ${chalk.gray('# Start with a customized host, or --Host')}
-    gagu -p 80        ${chalk.gray('# Start with a customized port, or --port')}
+    gagu -H 0.0.0.0   ${chalk.gray('# Start with a specified host, or --Host')}
+    gagu -p 80        ${chalk.gray('# Start with a specified port, or --port')}
     gagu -h           ${chalk.gray('# Show help info, or --help')}
     gagu -v           ${chalk.gray('# Show version, or --version')}
     gagu --reset      ${chalk.gray('# Remove GAGU data directory')}
@@ -92,9 +92,9 @@ export const LOGO_TEXT = `
 `
 
 // Sync following code to BE & FE
+export const ACCESS_TOKEN_KEY = 'accessToken'
 export const HEADERS_AUTH_KEY = 'Authorization'
 export const HEADERS_AUTH_PREFIX = 'Bearer '
-export const QUERY_TOKEN_KEY = 'access_token'
 
 export const GEN_THUMBNAIL_VIDEO_LIST = [
   'mp4',

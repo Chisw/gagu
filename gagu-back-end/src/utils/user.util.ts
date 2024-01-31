@@ -4,7 +4,7 @@ import {
   GAGU_PATH,
   HEADERS_AUTH_KEY,
   HEADERS_AUTH_PREFIX,
-  QUERY_TOKEN_KEY,
+  ACCESS_TOKEN_KEY,
 } from './constant.util'
 import { Request } from 'express'
 import { JSONFormat, completeNestedPath } from './fs.util'
@@ -13,12 +13,11 @@ export const getAuthorizationToken = (authorization: string) => {
   return (authorization || '').replace(HEADERS_AUTH_PREFIX, '')
 }
 
-export const getRequestToken = (request: Request) => {
+export const getRequestTokens = (request: Request) => {
   const authorization = request.header(HEADERS_AUTH_KEY) || ''
-  const authorizationToken = getAuthorizationToken(authorization)
-  const queryToken = request.query[QUERY_TOKEN_KEY] as string
-  const token = authorizationToken || queryToken
-  return token
+  const token = getAuthorizationToken(authorization)
+  const accessToken = (request.query[ACCESS_TOKEN_KEY] || '') as string
+  return [token, accessToken]
 }
 
 export const writeUsersData = (userList: IUser[]) => {

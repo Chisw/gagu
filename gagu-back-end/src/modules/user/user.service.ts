@@ -15,9 +15,9 @@ export class UserService {
   }
 
   findAll() {
-    const publicUserList: IUser[] = JSON.parse(JSON.stringify(this.userList))
-    publicUserList.forEach((user) => (user.password = ''))
-    return publicUserList
+    const list: IUser[] = JSON.parse(JSON.stringify(this.userList))
+    list.forEach((user) => (user.password = ''))
+    return list
   }
 
   findOne(username: User.Username) {

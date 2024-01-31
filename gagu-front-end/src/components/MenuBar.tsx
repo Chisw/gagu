@@ -3,7 +3,7 @@ import { UploadPanel, MySharingPanel, ChangePasswordModal, ClipboardPanel } from
 import { Dropdown } from '@douyinfe/semi-ui'
 import { DateTime } from 'luxon'
 import { useNavigate } from 'react-router-dom'
-import { AuthApi, FsApi } from '../api'
+import { AuthApi, FsApi, SettingApi } from '../api'
 import { SvgIcon } from './common'
 import { useRequest, useUserConfig } from '../hooks'
 import { DOCUMENT_TITLE, EntryPathCacheStore, getDefaultUserConfig, line, UserInfoStore } from '../utils'
@@ -43,7 +43,7 @@ export function MenuBar() {
 
   const { request: logout } = useRequest(AuthApi.logout)
   const { request: queryBaseData, loading } = useRequest(FsApi.queryBaseData)
-  const { request: shutdown } = useRequest(AuthApi.shutdown)
+  const { request: shutdown } = useRequest(SettingApi.shutdown)
 
   const avatarStyle = useMemo(() => {
     return userInfo

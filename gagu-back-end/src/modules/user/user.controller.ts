@@ -47,8 +47,10 @@ export class UserController {
 
     userList.forEach((user) => {
       const sortedList = authRecordList
-        .filter((record) => record.username === user.username)
-        .sort((a, b) => (a.pulsedAt > b.pulsedAt ? 1 : -1))
+        .filter(({ username, pulsedAt }) => {
+          return username === user.username && pulsedAt
+        })
+        .sort((a, b) => (a.pulsedAt > b.pulsedAt ? -1 : 1))
 
       user.pulsedAt = sortedList[0]?.pulsedAt
     })

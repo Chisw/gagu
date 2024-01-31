@@ -37,4 +37,11 @@ export class SettingController {
     setTimeout(() => process.exit(0), 1000)
     return respond()
   }
+
+  @Put('shutdown')
+  @Permission(UserPermission.administer)
+  shutdown() {
+    setTimeout(() => process.exit(0), 1000)
+    return respond()
+  }
 }

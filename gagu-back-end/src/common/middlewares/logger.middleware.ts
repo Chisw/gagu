@@ -2,8 +2,16 @@ import { Injectable, NestMiddleware } from '@nestjs/common'
 import { Request, Response, NextFunction } from 'express'
 import { DateTime } from 'luxon'
 import { AuthService } from '../../modules/auth/auth.service'
-import { getRequestToken, writeLog } from '../../utils'
+import { getRequestTokens, writeLog } from '../../utils'
 import * as chalk from 'chalk'
+
+const LOG_SKIPPABLE_API_LIST = [
+  '/api/fs/public/avatar',
+  '/api/fs/public/image',
+  '/api/fs/audio-info',
+  '/api/fs/exif-info',
+  '/api/fs/thumbnail',
+]
 
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
@@ -11,23 +19,18 @@ export class LoggerMiddleware implements NestMiddleware {
 
   use(request: Request, response: Response, next: NextFunction) {
     const { originalUrl } = request
-    const token = getRequestToken(request)
-    const username = this.authService.getUsername(token) || 'UNKNOWN'
 
-    this.authService.updatePulseTime(token)
-
-    const skippableApiList = [
-      '/api/fs/public/avatar',
-      '/api/fs/public/image',
-      '/api/fs/audio-info',
-      '/api/fs/exif-info',
-      '/api/fs/thumbnail',
-    ]
-
-    if (
+    const needToLog =
       originalUrl.startsWith('/api/') &&
-      skippableApiList.every((item) => !originalUrl.startsWith(item))
-    ) {
+      LOG_SKIPPABLE_API_LIST.every((api) => !originalUrl.startsWith(api))
+
+    if (needToLog) {
+      const [token, accessToken] = getRequestTokens(request)
+      const username =
+        this.authService.getUsername(token, accessToken) || 'UNKNOWN'
+
+      this.authService.updatePulseTime(token, accessToken)
+
       const { method, body, ip: IP } = request
       const { statusCode } = response
       const nowTime = DateTime.now()

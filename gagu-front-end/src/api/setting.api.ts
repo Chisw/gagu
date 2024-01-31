@@ -20,5 +20,10 @@ export class SettingApi {
   static updateVersion = async () => {
     const { data } = await service.put<IResponse>('/api/setting/version', undefined, { timeout: 0 })
     return data
-  } 
+  }
+
+  static shutdown = async () => {
+    const { data } = await service.put<IResponse>('/api/setting/shutdown')
+    return data
+  }
 }

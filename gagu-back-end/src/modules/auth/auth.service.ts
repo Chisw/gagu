@@ -23,8 +23,10 @@ export class AuthService {
     return this.authRecordList
   }
 
-  getUsername(token: User.Token) {
-    const record = this.authRecordList.find((record) => record.token === token)
+  getUsername(token: User.Token, accessToken: User.AccessToken) {
+    const record = this.authRecordList.find((record) => {
+      return record.token === token || record.accessToken === accessToken
+    })
     return record?.username
   }
 
@@ -51,8 +53,11 @@ export class AuthService {
     return generateUserInfo(user, token, accessToken)
   }
 
-  updatePulseTime(token: User.Token) {
-    const record = this.authRecordList.find((record) => record.token === token)
+  updatePulseTime(token: User.Token, accessToken: User.AccessToken) {
+    const record = this.authRecordList.find((record) => {
+      return record.token === token || record.accessToken === accessToken
+    })
+
     if (record) {
       record.pulsedAt = Date.now()
     }
@@ -76,5 +81,17 @@ export class AuthService {
   removeAll() {
     this.authRecordList = []
     this.sync()
+  }
+
+  updateAccessToken(token: User.Token) {
+    const newAccessToken = generateRandomToken()
+    const record = this.authRecordList.find((record) => record.token === token)
+
+    if (record) {
+      record.accessToken = newAccessToken
+      this.sync()
+    }
+
+    return newAccessToken
   }
 }

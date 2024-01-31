@@ -46,9 +46,9 @@ export const WINDOW_STATUS_MAP = {
 }
 
 // Sync following code to BE & FE
+export const ACCESS_TOKEN_KEY = 'accessToken'
 export const HEADERS_AUTH_KEY = 'Authorization'
 export const HEADERS_AUTH_PREFIX = 'Bearer '
-export const QUERY_TOKEN_KEY = 'access_token'
 
 export const GEN_THUMBNAIL_VIDEO_LIST = [
   'mp4',

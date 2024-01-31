@@ -3,6 +3,8 @@ import { IOffsetInfo, ILassoInfo, PublicImageName, ExistingStrategyType } from '
 import md5 from 'md5'
 import { FsApi } from '../api'
 import default_favicon from '../img/favicon.png'
+import { ACCESS_TOKEN_KEY } from './constant.util'
+import { UserInfoStore } from './store.util'
 
 export const copy = (str: string) => {
   const input = document.createElement('textarea')
@@ -129,6 +131,10 @@ export const getIndexLabel = (currentIndex: number, total: number, options?: { m
   const currentNo = String(i + 1).padStart(width, '0')
   const totalNo = total.toString().padStart(width, '0')
   return `${currentNo}${hideTotal ? '' : `/${totalNo}`}`
+}
+
+export const getAccessTokenParam = () => {
+  return `${ACCESS_TOKEN_KEY}=${UserInfoStore.getAccessToken()}`
 }
 
 export const getPasswordParam = (password?: string) => {

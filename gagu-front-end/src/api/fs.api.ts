@@ -1,5 +1,5 @@
 import { AxiosRequestConfig } from 'axios'
-import { BASE_URL, QUERY_TOKEN_KEY, UserInfoStore, getEntryPath, getExistingStrategyParam, getPathParam } from '../utils'
+import { BASE_URL, getEntryPath, getExistingStrategyParam, getPathParam, getAccessTokenParam } from '../utils'
 import { IEntry, IResponse, IBaseData, IRootEntry, IExifInfo, IAudioInfo, ExistingStrategyType, TransferResultType } from '../types'
 import service from './service'
 
@@ -108,11 +108,11 @@ export class FsApi {
     if (entry.extension === 'svg') {
       return this.getEntryStreamUrl(entry)
     }
-    return `${BASE_URL}/api/fs/thumbnail?${getPathParam(getEntryPath(entry))}&${QUERY_TOKEN_KEY}=${UserInfoStore.getToken()}`
+    return `${BASE_URL}/api/fs/thumbnail?${getPathParam(getEntryPath(entry))}&${getAccessTokenParam()}`
   }
 
   static getPathStreamUrl = (path: string) => {
-    return `${BASE_URL}/api/fs/stream?${getPathParam(path)}&${QUERY_TOKEN_KEY}=${UserInfoStore.getToken()}`
+    return `${BASE_URL}/api/fs/stream?${getPathParam(path)}&${getAccessTokenParam()}`
   }
 
   static getEntryStreamUrl = (entry: IEntry) => {

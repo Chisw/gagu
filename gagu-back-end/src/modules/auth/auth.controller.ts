@@ -1,7 +1,15 @@
-import { Controller, Post, Body, Headers, Request } from '@nestjs/common'
-import { Public, Permission } from '../../common/decorators'
+import {
+  Controller,
+  Delete,
+  Post,
+  Body,
+  Put,
+  Headers,
+  Request,
+} from '@nestjs/common'
+import { Public } from '../../common/decorators'
 import { AuthService } from './auth.service'
-import { ServerMessage, User, UserPermission } from '../../types'
+import { ServerMessage, User } from '../../types'
 import {
   HEADERS_AUTH_KEY,
   getIsExpired,
@@ -18,7 +26,7 @@ export class AuthController {
   ) {}
 
   @Public()
-  @Post('login')
+  @Post('token')
   login(
     @Body('username') username: User.Username,
     @Body('password') password: User.Password,
@@ -46,17 +54,17 @@ export class AuthController {
     }
   }
 
-  @Post('logout')
+  @Delete('token')
   logout(@Headers(HEADERS_AUTH_KEY) authorization: string) {
     const token = getAuthorizationToken(authorization)
     this.authService.remove(token)
     return respond()
   }
 
-  @Post('shutdown')
-  @Permission(UserPermission.administer)
-  shutdown() {
-    setTimeout(() => process.exit(0), 1000)
-    return respond()
+  @Put('access-token')
+  updateAccess(@Headers(HEADERS_AUTH_KEY) authorization: string) {
+    const token = getAuthorizationToken(authorization)
+    const accessToken = this.authService.updateAccessToken(token)
+    return respond(accessToken)
   }
 }

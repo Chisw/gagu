@@ -12,16 +12,13 @@ Many unrealized ideas will be recorded here, waiting for development
 - Show transfer percentage on Favicon
 - Sound Recorder, Calendar, Calculator, Weather, Relative calculator and other gadgets
 - When running on Termux, add user login vibration reminder and pop-up notification
-- Thumbnail of PDF/APK
-- Separate login tokens and access tokens
-- Permission-related access and button controls
 - Use virtual scrolling for all long lists (remove thumbScrollWatcher)
 
 ## User
 
 - Support personal modification of avatar, nickname
-- Sharing link can be edited
 - Manage login and access credentials
+- Sharing link can be edited
 
 ## Apps
 
@@ -36,6 +33,7 @@ Many unrealized ideas will be recorded here, waiting for development
 - Custom sharing link code
 - Custom folder icon extension CSS
 - Recycle Bin
+- Thumbnail of PDF/APK
 - File favorite
 - Directory link
 - Drag entries out of browser and download them directly
@@ -85,7 +83,6 @@ Many unrealized ideas will be recorded here, waiting for development
 ## Website
 
 - Demo of online interaction
-- Video introduction
 - Algolia search
 
 ## Buy me a cola

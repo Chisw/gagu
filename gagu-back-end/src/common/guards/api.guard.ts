@@ -10,7 +10,7 @@ import { Request } from 'express'
 import { AuthService } from '../../modules/auth/auth.service'
 import { UserService } from '../../modules/user/user.service'
 import { IEntry, IUser, UserPermission, UserPermissionType } from '../../types'
-import { GAGU_PATH, getEntryPath, getRequestToken } from '../../utils'
+import { GAGU_PATH, getEntryPath, getRequestTokens } from '../../utils'
 import {
   IPathValidation,
   PUBLIC_DECORATOR_KEY,
@@ -40,8 +40,8 @@ export class ApiGuard implements CanActivate {
       .switchToHttp()
       .getRequest<Request & { user: IUser | undefined }>()
 
-    const token = getRequestToken(request)
-    const username = token ? this.authService.getUsername(token) : undefined
+    const [token, accessToken] = getRequestTokens(request)
+    const username = this.authService.getUsername(token, accessToken)
     const isLoggedIn = !!username
 
     if (!isLoggedIn) {
@@ -54,6 +54,7 @@ export class ApiGuard implements CanActivate {
       return false
     }
 
+    // @UserGetter
     request.user = user
 
     const requiredPermissions:
