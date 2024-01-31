@@ -38,6 +38,8 @@ Many unrealized ideas will be recorded here, waiting for development
 - Directory link
 - Drag entries out of browser and download them directly
 - Slide to select multiple entries in Touch mode
+- Arrows operations
+- Thumbnail request queue
 
 ### Text Editor
 

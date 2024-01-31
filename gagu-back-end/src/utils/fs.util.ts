@@ -1,7 +1,7 @@
 import { accessSync, appendFile, constants, mkdirSync, promises } from 'fs'
 import { GAGU_PATH, ServerOS } from './constant.util'
-import { catchError } from 'rxjs'
 import { getParentPath } from './entry.util'
+import { catchError } from './common.util'
 
 export const getExtension = (name: string) => {
   if (!name || !name.includes('.') || name.startsWith('.')) return ''

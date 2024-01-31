@@ -5,7 +5,6 @@ import {
   UnauthorizedException,
 } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
-import { Observable } from 'rxjs'
 import { Request } from 'express'
 import { AuthService } from '../../modules/auth/auth.service'
 import { UserService } from '../../modules/user/user.service'
@@ -26,9 +25,7 @@ export class ApiGuard implements CanActivate {
     private readonly userService: UserService,
   ) {}
 
-  canActivate(
-    context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
+  canActivate(context: ExecutionContext): boolean {
     const handler = context.getHandler()
     const isPublic = this.reflector.get(PUBLIC_DECORATOR_KEY, handler)
 
