@@ -102,11 +102,11 @@ There are also many dependencies used throughout the project:
 [express-zip](https://npmjs.com/package/express-zip)&emsp;
 [github-markdown-css](https://npmjs.com/package/github-markdown-css)&emsp;
 [gm](https://npmjs.com/package/gm)&emsp;
-[jsmediatags](https://npmjs.com/package/jsmediatags)&emsp;
 [lodash](https://npmjs.com/package/lodash)&emsp;
 [luxon](https://npmjs.com/package/luxon)&emsp;
 [md5](https://npmjs.com/package/md5)&emsp;
 [minimist](https://npmjs.com/package/minimist)&emsp;
+[music-metadata](https://npmjs.com/package/music-metadata)&emsp;
 [node-disk-info](https://npmjs.com/package/node-disk-info)&emsp;
 [piexifjs](https://npmjs.com/package/piexifjs)&emsp;
 [qrcode.react](https://npmjs.com/package/qrcode.react)&emsp;

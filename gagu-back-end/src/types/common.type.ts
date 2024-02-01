@@ -80,6 +80,4 @@ export interface IAudioInfo {
   album?: string
   track?: string
   coverBase64?: string
-  recordingTime?: string
-  releaseTime?: string
 }

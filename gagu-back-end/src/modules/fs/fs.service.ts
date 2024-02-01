@@ -35,8 +35,8 @@ import {
 } from '../../utils'
 import * as nodeDiskInfo from 'node-disk-info'
 import * as md5 from 'md5'
-import * as jsmediatags from 'jsmediatags'
 import * as piexifjs from 'piexifjs'
+import { parseFile } from 'music-metadata'
 import * as gm from 'gm'
 import * as thumbsupply from 'thumbsupply'
 
@@ -334,44 +334,26 @@ export class FsService {
   }
 
   async getAudioInfo(path: string) {
-    return new Promise((resolve, reject) => {
-      jsmediatags.read(path, {
-        onSuccess: (tagInfo: any) => {
-          const {
-            tags: { title, artist, album, track, picture, TDRC, TDRL },
-          } = tagInfo
+    const {
+      common: { title, artist, album, track, picture },
+    } = await parseFile(path)
 
-          const { data: recordingTime } = TDRC || {}
-          const { data: releaseTime } = TDRL || {}
+    let coverBase64: string | undefined = undefined
 
-          let coverBase64: string | undefined = undefined
+    if (picture && picture[0]) {
+      const { format, data } = picture[0]
+      coverBase64 = `data:${format};base64,${data.toString('base64')}`
+    }
 
-          if (picture) {
-            const { data, format } = picture
-            let base64String = ''
-            for (let i = 0; i < data.length; i++) {
-              base64String += String.fromCharCode(data[i])
-            }
-            coverBase64 = `data:${format};base64,${btoa(base64String)}`
-          }
+    const info: IAudioInfo = {
+      title,
+      artist,
+      album,
+      track: `${track.no}/${track.of}`,
+      coverBase64,
+    }
 
-          const info: IAudioInfo = {
-            title,
-            artist,
-            album,
-            track,
-            recordingTime,
-            releaseTime,
-            coverBase64,
-          }
-
-          resolve(info)
-        },
-        onError: (error: any) => {
-          reject(error)
-        },
-      })
-    })
+    return info
   }
 
   async getThumbnailPath(path: string) {
