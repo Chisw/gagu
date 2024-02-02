@@ -83,7 +83,7 @@ export default function EntryNode(props: EntryNodeProps) {
               isViewable,
               entry,
               hideAppIcon,
-              supportThumbnail
+              supportThumbnail,
             }}
           />
           <div className="text-center text-xs max-w-full line-clamp-2 dark:text-zinc-200">

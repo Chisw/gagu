@@ -1,6 +1,6 @@
 import { ReactNode, useMemo, useState } from 'react'
-import { EntryType, IEntry, ThumbnailType } from '../../../types'
-import { ENTRY_ICON_LIST, GEN_THUMBNAIL_AUDIO_LIST, GEN_THUMBNAIL_LIST, GEN_THUMBNAIL_VIDEO_LIST, line } from '../../../utils'
+import { EntryType, IEntry, ThumbnailType, ThumbnailTypeType } from '../../../types'
+import { ENTRY_ICON_LIST, GEN_THUMBNAIL_LIST, GEN_THUMBNAIL_MAP, line } from '../../../utils'
 import { CALLABLE_APP_LIST } from '../..'
 import { FsApi } from '../../../api'
 
@@ -42,11 +42,7 @@ export default function EntryIcon(props: IconProps) {
       )
     const entryIconType = ENTRY_ICON_LIST.find(o => o.matchList.includes(extension))?.type
     const callableAppId = CALLABLE_APP_LIST.find(({ matchList }) => matchList!.includes(extension))?.id
-    const thumbnailType: ThumbnailType = GEN_THUMBNAIL_VIDEO_LIST.includes(extension)
-      ? 'video'
-      : GEN_THUMBNAIL_AUDIO_LIST.includes(extension)
-        ? 'audio'
-        : 'image'
+    const thumbnailType = GEN_THUMBNAIL_MAP[extension]
     return { extensionLabel, useThumbnail, thumbnailType, isFolder, entryIconType, callableAppId }
   }, [entry])
 
@@ -88,7 +84,11 @@ export default function EntryIcon(props: IconProps) {
             src={FsApi.getThumbnailStreamUrl(entry)}
             className={line(`
               max-w-full max-h-full bg-white
-              ${thumbnailType === 'image'
+              ${thumbnailType === ThumbnailType.document
+                ? 'border border-r-2 border-b-2 border-gray-200 dark:border-zinc-500'
+                : ''
+              }
+              ${thumbnailType === ThumbnailType.image
                 ? `
                   border-white shadow
                   dark:border-zinc-400
@@ -109,9 +109,9 @@ export default function EntryIcon(props: IconProps) {
   )
 }
 
-function ThumbnailWrapper(props: { type: ThumbnailType, loading: boolean, children: ReactNode }) {
+function ThumbnailWrapper(props: { type: ThumbnailTypeType, loading: boolean, children: ReactNode }) {
   const { type, loading, children } = props
-  if (type === 'video') {
+  if (type === ThumbnailType.video) {
     return (
       <div
         className={line(`
@@ -122,15 +122,15 @@ function ThumbnailWrapper(props: { type: ThumbnailType, loading: boolean, childr
         {children}
       </div>
     )
-  } else if (type === 'audio') {
+  } else if (type === ThumbnailType.audio) {
     return (
       <div
         className={line(`
           relative w-4/5 aspect-square flex justify-center items-center shadow-lg overflow-hidden
           after:content-[''] after:block after:absolute after:z-[0] after:left-0
-          after:-ml-[60%] after:-mt-[70%] after:w-full after:h-[300%] after:bg-white after:bg-opacity-30
+          after:-ml-[60%] after:-mt-[70%] after:w-full after:h-[300%]
+          after:bg-white after:bg-opacity-30 after:rotate-[60deg]
           ${loading ? 'bg-loading' : 'bg-white'}
-          after:rotate-[60deg]
         `)}
       >
         {children}

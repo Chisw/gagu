@@ -14,7 +14,6 @@ export const getExists = (path: string) => {
     accessSync(path, constants.F_OK)
     exists = true
   } catch (error) {
-    catchError(error)
     exists = false
   }
   return exists

@@ -33,7 +33,6 @@ layout: ../../../layouts/DocLayout.astro
 - 自定义分享链接码
 - 自定义文件夹图标扩展 CSS
 - 回收站
-- PDF/APK 缩略图
 - 文件收藏
 - 目录链接
 - 拖拽项目至浏览器外直接下载

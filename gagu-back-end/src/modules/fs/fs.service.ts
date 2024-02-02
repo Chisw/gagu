@@ -7,10 +7,10 @@ import {
   IExifInfo,
   IRootEntry,
   RootEntryGroup,
+  ThumbnailType,
   User,
 } from '../../types'
 import {
-  createReadStream,
   createWriteStream,
   promises,
   readdirSync,
@@ -23,15 +23,13 @@ import {
   GAGU_PATH,
   getExtension,
   ServerOS,
-  GEN_THUMBNAIL_VIDEO_LIST,
   getExists,
   completeNestedPath,
   dataURLtoBuffer,
   getEntryPath,
-  GEN_THUMBNAIL_AUDIO_LIST,
   catchError,
-  GEN_THUMBNAIL_IMAGE_LIST,
   MAC_HIDDEN_ENTRIES,
+  GEN_THUMBNAIL_MAP,
 } from '../../utils'
 import * as nodeDiskInfo from 'node-disk-info'
 import * as md5 from 'md5'
@@ -359,35 +357,39 @@ export class FsService {
   async getThumbnailPath(path: string) {
     const { mtimeMs } = statSync(path)
     const thumbnailId = md5(`${path}-${mtimeMs}`)
-    const thumbnailFolderPath = GAGU_PATH.THUMBNAIL
-    const thumbnailFilePath = `${thumbnailFolderPath}/${thumbnailId}`
+    const thumbnailParentPath = GAGU_PATH.THUMBNAIL
+    const thumbnailPath = `${thumbnailParentPath}/${thumbnailId}`
 
-    if (!getExists(thumbnailFilePath)) {
+    if (!getExists(thumbnailPath)) {
       let convertionTargetPath = ''
 
       const extension = getExtension(path)
-      const isGenImage = GEN_THUMBNAIL_IMAGE_LIST.includes(extension)
-      const isGenVideo = GEN_THUMBNAIL_VIDEO_LIST.includes(extension)
-      const isGenAudio = GEN_THUMBNAIL_AUDIO_LIST.includes(extension)
+      const thumbnailType = GEN_THUMBNAIL_MAP[extension]
+      const isDocument = thumbnailType === ThumbnailType.document
+      const isImage = thumbnailType === ThumbnailType.image
+      const isVideo = thumbnailType === ThumbnailType.audio
+      const isAudio = thumbnailType === ThumbnailType.video
 
-      if (isGenImage) {
+      if (isDocument) {
         convertionTargetPath = path
-      } else if (isGenVideo) {
-        const screenshotPath = await thumbsupply.generateThumbnail(path, {
-          size: thumbsupply.ThumbSize.MEDIUM,
-          timestamp: '10%',
-          mimetype: 'video/mp4',
-          cacheDir: thumbnailFolderPath,
-        })
-        convertionTargetPath = screenshotPath
-      } else if (isGenAudio) {
+      } else if (isImage) {
+        convertionTargetPath = path
+      } else if (isAudio) {
         const info: IAudioInfo | any = await this.getAudioInfo(path)
         const base64 = info?.coverBase64
         if (base64) {
           const buffer = dataURLtoBuffer(base64)
-          buffer && writeFileSync(thumbnailFilePath, buffer)
-          convertionTargetPath = thumbnailFilePath
+          buffer && writeFileSync(thumbnailPath, buffer)
+          convertionTargetPath = thumbnailPath
         }
+      } else if (isVideo) {
+        const screenshotPath = await thumbsupply.generateThumbnail(path, {
+          size: thumbsupply.ThumbSize.MEDIUM,
+          timestamp: '10%',
+          mimetype: 'video/mp4',
+          cacheDir: thumbnailParentPath,
+        })
+        convertionTargetPath = screenshotPath
       }
 
       if (!convertionTargetPath) {
@@ -395,22 +397,23 @@ export class FsService {
       }
 
       await new Promise(async (resolve, reject) => {
-        gm(createReadStream(convertionTargetPath))
-          .selectFrame(4)
+        gm(convertionTargetPath)
+          .selectFrame(extension === 'gif' ? 4 : 0)
+          .setFormat('jpg')
           .resize(100)
           .noProfile()
-          .write(thumbnailFilePath, (error) => {
+          .write(thumbnailPath, (error) => {
             if (error) {
               reject(error)
             } else {
-              resolve(thumbnailFilePath)
-              isGenVideo && unlinkSync(convertionTargetPath)
+              resolve(thumbnailPath)
+              isVideo && unlinkSync(convertionTargetPath)
             }
           })
       })
     }
 
-    return thumbnailFilePath
+    return thumbnailPath
   }
 
   uploadAvatar(username: User.Username, avatar: string) {

@@ -1,3 +1,5 @@
+import { ThumbnailType, ThumbnailTypeType } from './../types/index'
+
 const { protocol, host } = window.location
 
 export const BASE_URL = process.env.REACT_APP_BASE_URL || `${protocol}//${host}`
@@ -32,6 +34,8 @@ export const ENTRY_ICON_LIST = [
   { type: 'font', matchList: ['ttf', 'otf', 'woff', 'woff2'] },
 ]
 
+export const BG_EXTENSION_LIST = ['jpg', 'jpeg', 'png', 'gif', 'webp']
+
 export const WINDOW_DURATION = 200
 
 export const WINDOW_STATUS_MAP = {
@@ -50,31 +54,24 @@ export const ACCESS_TOKEN_KEY = 'accessToken'
 export const HEADERS_AUTH_KEY = 'Authorization'
 export const HEADERS_AUTH_PREFIX = 'Bearer '
 
-export const GEN_THUMBNAIL_VIDEO_LIST = [
-  'mp4',
-  'mkv',
-  'avi',
-  'rm',
-  'rmvb',
-  'webm',
-]
+export const GEN_THUMBNAIL_MAP: { [EXTENSION: string]: ThumbnailTypeType } = {
+  pdf: ThumbnailType.document,
+  jpg: ThumbnailType.image,
+  jpeg: ThumbnailType.image,
+  png: ThumbnailType.image,
+  gif: ThumbnailType.image,
+  bmp: ThumbnailType.image,
+  webp: ThumbnailType.image,
+  ico: ThumbnailType.image,
+  pbm: ThumbnailType.image,
+  svg: ThumbnailType.image,
+  mp3: ThumbnailType.audio,
+  mp4: ThumbnailType.video,
+  mkv: ThumbnailType.video,
+  avi: ThumbnailType.video,
+  rm: ThumbnailType.video,
+  rmvb: ThumbnailType.video,
+  webm: ThumbnailType.video,
+}
 
-export const GEN_THUMBNAIL_AUDIO_LIST = ['mp3']
-
-export const GEN_THUMBNAIL_IMAGE_LIST = [
-  'jpg',
-  'jpeg',
-  'png',
-  'gif',
-  'bmp',
-  'webp',
-  'ico',
-  'pbm',
-  'svg',
-]
-
-export const GEN_THUMBNAIL_LIST = [
-  ...GEN_THUMBNAIL_VIDEO_LIST,
-  ...GEN_THUMBNAIL_AUDIO_LIST,
-  ...GEN_THUMBNAIL_IMAGE_LIST,
-]
+export const GEN_THUMBNAIL_LIST = Object.keys(GEN_THUMBNAIL_MAP)

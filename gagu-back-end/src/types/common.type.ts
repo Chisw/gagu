@@ -81,3 +81,12 @@ export interface IAudioInfo {
   track?: string
   coverBase64?: string
 }
+
+export enum ThumbnailType {
+  document = 'document',
+  image = 'image',
+  audio = 'audio',
+  video = 'video',
+}
+
+export type ThumbnailTypeType = keyof typeof ThumbnailType

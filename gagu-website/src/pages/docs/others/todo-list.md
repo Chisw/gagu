@@ -33,7 +33,6 @@ Many unrealized ideas will be recorded here, waiting for development
 - Custom sharing link code
 - Custom folder icon extension CSS
 - Recycle Bin
-- Thumbnail of PDF/APK
 - File favorite
 - Directory link
 - Drag entries out of browser and download them directly

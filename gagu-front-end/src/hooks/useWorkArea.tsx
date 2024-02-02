@@ -3,7 +3,7 @@ import { contextMenuDataState, openEventState } from '../states'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useDragTransfer, useFileExplorer, useHotKey, useLassoSelect } from '.'
 import { ClipboardType, EditMode, EditModeType, EntryType, EventTransaction, IContextMenuItem, IEntry, ILassoInfo, NameFailType } from '../types'
-import { GEN_THUMBNAIL_IMAGE_LIST, getEntryPath, getIsCovered, getMatchedApp, getIsSameEntry, openInIINA } from '../utils'
+import { BG_EXTENSION_LIST, getEntryPath, getIsCovered, getMatchedApp, getIsSameEntry, openInIINA } from '../utils'
 import { pick, throttle } from 'lodash-es'
 import { SvgIcon } from '../components/common'
 import { useTranslation } from 'react-i18next'
@@ -262,7 +262,7 @@ export function useWorkArea(props: useWorkAreaProps) {
         isOnDirectory = true
       }
 
-      if (GEN_THUMBNAIL_IMAGE_LIST.includes(targetEntryEl.getAttribute('data-entry-extension'))) {
+      if (BG_EXTENSION_LIST.includes(targetEntryEl.getAttribute('data-entry-extension'))) {
         isOnImage = true
       }
 
