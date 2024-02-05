@@ -11,6 +11,7 @@ import {
   User,
 } from '../../types'
 import {
+  createReadStream,
   createWriteStream,
   promises,
   readdirSync,
@@ -367,8 +368,8 @@ export class FsService {
       const thumbnailType = GEN_THUMBNAIL_MAP[extension]
       const isDocument = thumbnailType === ThumbnailType.document
       const isImage = thumbnailType === ThumbnailType.image
-      const isVideo = thumbnailType === ThumbnailType.audio
-      const isAudio = thumbnailType === ThumbnailType.video
+      const isAudio = thumbnailType === ThumbnailType.audio
+      const isVideo = thumbnailType === ThumbnailType.video
 
       if (isDocument) {
         convertionTargetPath = path
@@ -397,7 +398,7 @@ export class FsService {
       }
 
       await new Promise(async (resolve, reject) => {
-        gm(convertionTargetPath)
+        gm(createReadStream(convertionTargetPath))
           .selectFrame(extension === 'gif' ? 4 : 0)
           .setFormat('jpg')
           .resize(100)

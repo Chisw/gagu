@@ -85,7 +85,10 @@ export default function EntryIcon(props: IconProps) {
             className={line(`
               max-w-full max-h-full bg-white
               ${thumbnailType === ThumbnailType.document
-                ? 'border border-r-2 border-b-2 border-gray-200 dark:border-zinc-500'
+                ? `
+                  border border-r-2 border-b-2 border-gray-200 dark:border-zinc-500
+                  ${thumbnailLoading ? 'h-full aspect-[3/4] bg-loading' : ''}
+                `
                 : ''
               }
               ${thumbnailType === ThumbnailType.image
