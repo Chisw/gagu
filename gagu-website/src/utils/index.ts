@@ -5,6 +5,7 @@ const DOC_LIST = [
   { key: 'feature-list', group: 'Getting Started', groupZh: '起步', title: 'Feature List ⏳', titleZh: '功能列表 ⏳' },
   { key: 'hotkeys', group: 'Getting Started', groupZh: '起步', title: 'Hotkeys', titleZh: '热键' },
   { key: 'scenarios', group: 'Getting Started', groupZh: '起步', title: 'Scenarios', titleZh: '场景' },
+  { key: 'faq', group: 'Getting Started', groupZh: '起步', title: 'FAQ', titleZh: 'FAQ' },
   { key: 'type-definition', group: 'Development', groupZh: '开发', title: 'Type Definition ⏳', titleZh: '类型定义 ⏳' },
   { key: 'api-list', group: 'Development', groupZh: '开发', title: 'API List ⏳', titleZh: 'API 列表 ⏳' },
   { key: 'dev-and-build', group: 'Development', groupZh: '开发', title: 'Dev & Build', titleZh: '开发与构建' },
