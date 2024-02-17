@@ -59,7 +59,14 @@ $ gagu -o
 $ gagu --open
 ```
 
-Start with a specified host:
+Start with HTTPS:
+
+```sh
+$ gagu -s
+$ gagu --security
+```
+
+Start with a specified Host:
 
 ```sh
 $ gagu -H 0.0.0.0
@@ -150,6 +157,7 @@ After the root directory is successfully created, the following subdirectories w
   |  |- avatar
   |  |- image
   |  |- lib
+  |- secrets
   |- thumbnail
   |- users
 ```
@@ -159,6 +167,7 @@ After the root directory is successfully created, the following subdirectories w
 - `public/avatar` is used to store the user's avatar, and the file name is the username
 - `public/image` is used to store some config images
 - `public/lib` is used to store third-party js libraries that may be used in the future
+- `secrets` is used to store HTTPS config files
 - `thumbnail` is used to store thumbnails generated in use
 - `users` is used to store user's personal files
 

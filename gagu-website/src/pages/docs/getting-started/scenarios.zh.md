@@ -38,4 +38,5 @@ layout: ../../../layouts/DocLayout.astro
 - os.js [https://www.os-js.org](https://www.os-js.org)
 - Snapdrop [https://snapdrop.net](https://snapdrop.net)
 - webd [https://webd.cf](https://webd.cf)
-- 微信传输助手网页版 [https://filehelper.weixin.qq.com](https://filehelper.weixin.qq.com)
+- Wechat 微信传输助手网页版 [https://filehelper.weixin.qq.com](https://filehelper.weixin.qq.com)
+- WindSend [https://github.com/doraemonkeys/WindSend](https://github.com/doraemonkeys/WindSend)

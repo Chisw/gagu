@@ -38,3 +38,4 @@ Similar applications are listed here, or there are more suitable ones for your r
 - Snapdrop [https://snapdrop.net](https://snapdrop.net)
 - webd [https://webd.cf](https://webd.cf)
 - Wechat File Helper [https://filehelper.weixin.qq.com](https://filehelper.weixin.qq.com)
+- WindSend [https://github.com/doraemonkeys/WindSend](https://github.com/doraemonkeys/WindSend)

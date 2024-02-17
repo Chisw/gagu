@@ -91,6 +91,8 @@ $ yarn start
 4. 调用 IINA：[Chrome_Open_In_IINA](https://github.com/iina/iina/blob/develop/browser/Chrome_Open_In_IINA/common.js#L59C18-L59C18)
 5. JSON 格式化：[json-format](https://github.com/luizstacio/json-format/blob/master/index.js)
 6. 扫描 100+ 文件：[readEntries](https://developer.mozilla.org/en-US/docs/Web/API/DataTransferItem/webkitGetAsEntry#javascript)
+7. 红外码格式：[「一块钢板的重生」——7年前的小米4还能干什么](https://blog.hans362.cn/post/rebirth-of-xiaomi-4)
+8. 小米红外码：[哪位大佬有小米电视的红外遥控码](https://bbs.hassbian.com/archiver/?tid-9045.html)
 
 ### 依赖项
 

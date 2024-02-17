@@ -19,6 +19,13 @@ Clear data directory means that all users, download tunnels and other data will 
 
 ## v0.0.*
 
+- v0.0.57 (2024-02-17)
+  - feat: support HTTPS
+  - feat: seperate token and accessToken
+  - feat: support PDF thumbnail
+  - feat: MI TV remote control and SMS list in AndroidController
+  - fix: replace dependency jsmediatags with music-metadata
+
 - v0.0.56 (2024-01-28)
   - feat: go to specified path
   - feat: verify path access permissions
