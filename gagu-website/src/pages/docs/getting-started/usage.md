@@ -167,7 +167,7 @@ After the root directory is successfully created, the following subdirectories w
 - `public/avatar` is used to store the user's avatar, and the file name is the username
 - `public/image` is used to store some config images
 - `public/lib` is used to store third-party js libraries that may be used in the future
-- `secrets` is used to store HTTPS config files
+- `secrets` is used to store HTTPS PEM files
 - `thumbnail` is used to store thumbnails generated in use
 - `users` is used to store user's personal files
 
