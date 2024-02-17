@@ -90,3 +90,18 @@ export interface ILocation {
 }
 
 export type MediaPlayerStateType = 'play' | 'pause' | 'stop'
+
+export interface ISMSQuery {
+  limit?: number
+  offset?: number
+}
+
+export interface ISMS {
+  _id: number
+  threadid: number
+  type: 'inbox' | 'outbox' | 'sent' | 'draft'
+  received: string
+  read: boolean
+  number: number
+  body: string
+}

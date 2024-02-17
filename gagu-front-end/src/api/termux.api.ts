@@ -11,6 +11,7 @@ import {
   IInfraredTransmitForm,
   ILocation,
   ILocationForm,
+  ISMS,
   MediaPlayerStateType,
 } from '../types/termux.type'
 import { getPathParam } from '../utils'
@@ -98,6 +99,11 @@ export class TermuxApi {
 
   static updateMediaPlayerState = async (state: MediaPlayerStateType) => {
     const { data } = await service.put<IResponse>(`/api/termux/media-player/${state}`)
+    return data
+  }
+
+  static querySMSList = async () => {
+    const { data } = await service.get<IResponse<ISMS[]>>('/api/termux/sms-list')
     return data
   }
 }

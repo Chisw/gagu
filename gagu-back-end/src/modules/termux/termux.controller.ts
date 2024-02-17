@@ -220,4 +220,16 @@ export class TermuxController {
       return respond(null, ServerMessage.ERROR_NO_RESPONSE)
     }
   }
+
+  @Get('sms-list')
+  @Permission(UserPermission.administer)
+  async querySMSList() {
+    try {
+      const data = await this.termuxService.getSMSList()
+      return respond(data)
+    } catch (error) {
+      catchError(error)
+      return respond(null, ServerMessage.ERROR_NO_RESPONSE)
+    }
+  }
 }

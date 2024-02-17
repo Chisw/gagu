@@ -6,6 +6,7 @@ import {
   IDownloadForm,
   IInfraredTransmitForm,
   ILocationForm,
+  ISMSQuery,
   MediaPlayerStateType,
 } from 'src/types'
 
@@ -235,5 +236,37 @@ export class TermuxService {
       stream.stderr.on('error', reject)
     })
     return out
+  }
+
+  async getSMSList(form?: ISMSQuery) {
+    const { limit = 200, offset = 0 } = form || {}
+    const params = [
+      '-l',
+      String(limit),
+      '-o',
+      String(offset),
+      '-t',
+      'all',
+      '-d',
+      '-n',
+    ]
+
+    const out = await new Promise((resolve, reject) => {
+      const stream = spawn('termux-sms-list', params)
+
+      let allData = ''
+
+      stream.stdout.on('data', (buffer) => {
+        allData += buffer.toString('utf8')
+      })
+
+      stream.stdout.on('close', () => {
+        resolve(allData)
+      })
+
+      stream.stderr.on('error', reject)
+    })
+
+    return out ? JSON.parse(out as string) : out
   }
 }

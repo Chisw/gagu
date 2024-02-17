@@ -14,6 +14,7 @@ import InfraredControl from './InfraredControl'
 import Dialog from './Dialog'
 import Location from './Location'
 import MediaPlayer from './MediaPlayer'
+import SMSList from './SMSList'
 
 export default function AndroidController() {
 
@@ -36,7 +37,7 @@ export default function AndroidController() {
       { key: 'notifiction', title: 'Notification', icon: <SvgIcon.Notification />, component: <></> },
       { key: 'sensor', title: 'Sensor', icon: <SvgIcon.Sensor />, component: <></> },
       { key: 'share', title: 'Share', icon: <SvgIcon.Share />, component: <></> },
-      { key: 'sms', title: 'SMS', icon: <SvgIcon.SMS />, component: <></> },
+      { key: 'sms', title: 'SMS', icon: <SvgIcon.SMS />, component: <SMSList /> },
       { key: 'toast', title: 'Toast', icon: <SvgIcon.Toast />, component: <></> },
       { key: 'torch', title: 'Torch', icon: <SvgIcon.BulbFlash />, component: <></> },
       { key: 'tts', title: 'TTS', icon: <SvgIcon.Speak />, component: <></> },
