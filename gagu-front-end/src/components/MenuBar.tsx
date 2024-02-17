@@ -244,7 +244,7 @@ export function MenuBar() {
                   </Dropdown.Item>
                 </Dropdown>
                 <Dropdown.Item
-                  icon={<SvgIcon.ShutDown className="text-red-500" />}
+                  icon={<SvgIcon.Power className="text-red-500" />}
                   onClick={() => {
                     shutdown()
                     window.open('', '_self')?.close()

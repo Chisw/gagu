@@ -184,7 +184,7 @@ export class TermuxService {
     const params = ['-f', String(frequency), pattern]
 
     const out = await new Promise((resolve, reject) => {
-      const stream = spawn('termux-download', params)
+      const stream = spawn('termux-infrared-transmit', params)
       stream.on('exit', () => resolve(true))
       stream.stderr.on('error', reject)
     })
