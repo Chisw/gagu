@@ -1,0 +1,45 @@
+{
+  "manifest_version": 3,
+  "name": "GAGU",
+  "version": "0.0.1",
+  "description": "GAGU chrome assistant",
+  "homepage_url": "https://gagu.io",
+  "omnibox": {
+    "keyword": "GAGU"
+  },
+  "default_locale": "zh_CN",
+  "icons": {
+    "16": "static/img/icon.png",
+    "48": "static/img/icon.png",
+    "128": "static/img/icon.png"
+  },
+  "background": {
+    "service_worker": "service_worker.js"
+  },
+  "action": {
+    "defalut_icon": "static/img/icon.png",
+    "default_title": "GAGU",
+    "default_popup": "popup/popup.html"
+  },
+  "permissions": [
+    "bookmarks",
+    "contextMenus",
+    "favicon",
+    "history",
+    "notifications",
+    "storage",
+    "tabs",
+    "webRequest"
+  ],
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["_favicon/*"],
+      "matches": ["<all_urls>"],
+      "extension_ids": ["*"]
+    }
+  ]
+}
