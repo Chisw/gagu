@@ -4,8 +4,10 @@ gagu-front-end
 gagu-website
 node_modules
 pkg
+
 .gitignore
 .npmignore
 build-npm.sh
 build-pkg.sh
 yarn.lock
+netlify.toml
