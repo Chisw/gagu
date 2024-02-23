@@ -252,7 +252,7 @@ export default function ControlBar(props: ControlBarProps) {
                       className={`flex items-center cursor-pointer ${isActive ? 'text-blue-600' : ''}`}
                       onClick={() => onSortTypeChange(targetType)}
                     >
-                      <span className="flex-grow">{t(`action.sort-${targetType}`)}</span>
+                      <span className="flex-grow">{t(`action.sort_${targetType}`)}</span>
                       {targetType !== Sort.default && (
                         <span className="flex-shrink-0 flex">
                           <SvgIcon.ArrowDown size={12} className={(!isCurrentDesc || !isActive) ? 'text-gray-300' : ''} />

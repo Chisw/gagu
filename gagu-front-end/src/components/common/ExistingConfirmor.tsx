@@ -48,7 +48,7 @@ export function ExistingConfirmor(props: ExistingConfirmorProps) {
             confirmor.destroy()
           }}
         >
-          {t`action.existingStrategy.keepBoth`}
+          {t`action.existingStrategy_keepBoth`}
         </Button>
         <Button
           className="w-full"
@@ -58,7 +58,7 @@ export function ExistingConfirmor(props: ExistingConfirmorProps) {
             confirmor.destroy()
           }}
         >
-          {t`action.existingStrategy.replace`}
+          {t`action.existingStrategy_replace`}
         </Button>
         <Button
           className="w-full"
@@ -68,7 +68,7 @@ export function ExistingConfirmor(props: ExistingConfirmorProps) {
             confirmor.destroy()
           }}
         >
-          {t`action.existingStrategy.skip`}
+          {t`action.existingStrategy_skip`}
         </Button>
         <Button
           className="gagu-sync-popstate-overlay-close-button w-full"
