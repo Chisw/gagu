@@ -39,6 +39,7 @@ Many unrealized ideas will be recorded here, waiting for development
 - Slide to select multiple entries in Touch mode
 - Arrows operations
 - Thumbnail request queue
+- Customized opening app (set as default)
 
 ### Text Editor
 
@@ -51,6 +52,7 @@ Many unrealized ideas will be recorded here, waiting for development
 
 - Support panorama pictures
 - Crop
+- Compress
 
 ### Music Player
 
@@ -81,10 +83,20 @@ Many unrealized ideas will be recorded here, waiting for development
 
 - Log Management
 
+### AndroidController
+
+- Xiaomi gesture infrared remote control
+
 ## Website
 
 - Demo of online interaction
 - Algolia search
+
+## Chrome extension
+
+- Save text/image/video/link in webpage
+- Backup bookmarks
+- Auto input validation code
 
 ## Buy me a cola
 
