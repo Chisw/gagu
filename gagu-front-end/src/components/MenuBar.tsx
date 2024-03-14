@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { UploadPanel, MySharingPanel, ChangePasswordModal, ClipboardPanel } from '.'
+import { UploadPanel, MySharingPanel, ChangePasswordModal, ClipboardPanel, LoginManagementPanel } from '.'
 import { Dropdown } from '@douyinfe/semi-ui'
 import { DateTime } from 'luxon'
 import { useNavigate } from 'react-router-dom'
@@ -39,6 +39,7 @@ export function MenuBar() {
   const [userPopoverShow, setUserPopoverShow] = useState(false)
   const [isFullScreen, setIsFullScreen] = useState(false)
   const [sharingPanelShow, setSharingPanelShow] = useState(false)
+  const [loginManagementPanelShow, setLoginManagementPanelShow] = useState(false)
   const [changePasswordModalShow, setChangePasswordModalShow] = useState(false)
 
   const { request: logout } = useRequest(AuthApi.logout)
@@ -309,6 +310,15 @@ export function MenuBar() {
                   {t`action.mySharing`}
                 </Dropdown.Item>
                 <Dropdown.Item
+                  icon={<SvgIcon.LoginManagement />}
+                  onClick={() => {
+                    setUserPopoverShow(false)
+                    setLoginManagementPanelShow(true)
+                  }}
+                >
+                  {t`action.loginManagement`}
+                </Dropdown.Item>
+                <Dropdown.Item
                   icon={<SvgIcon.Key />}
                   onClick={() => {
                     setUserPopoverShow(false)
@@ -356,6 +366,11 @@ export function MenuBar() {
       <MySharingPanel
         show={sharingPanelShow}
         onClose={() => setSharingPanelShow(false)}
+      />
+
+      <LoginManagementPanel
+        show={loginManagementPanelShow}
+        onClose={() => setLoginManagementPanelShow(false)}
       />
 
       <ChangePasswordModal

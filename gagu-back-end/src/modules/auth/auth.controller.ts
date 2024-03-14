@@ -6,10 +6,12 @@ import {
   Put,
   Headers,
   Request,
+  Get,
+  Query,
 } from '@nestjs/common'
-import { Public } from '../../common/decorators'
+import { Public, UserGetter } from '../../common/decorators'
 import { AuthService } from './auth.service'
-import { ServerMessage, User } from '../../types'
+import { IUser, ServerMessage, User } from '../../types'
 import {
   HEADERS_AUTH_KEY,
   getIsExpired,
@@ -57,6 +59,21 @@ export class AuthController {
   @Delete('token')
   logout(@Headers(HEADERS_AUTH_KEY) authorization: string) {
     const token = getAuthorizationToken(authorization)
+    this.authService.remove(token)
+    return respond()
+  }
+
+  @Get('record')
+  queryRecordList(@UserGetter() user: IUser) {
+    const list = this.authService
+      .findAll()
+      .filter((record) => record.username === user.username)
+      .sort((a, b) => (a.loginAt > b.loginAt ? -1 : 1))
+    return respond(list)
+  }
+
+  @Delete('record')
+  deleteRecord(@Query('token') token: string) {
     this.authService.remove(token)
     return respond()
   }
