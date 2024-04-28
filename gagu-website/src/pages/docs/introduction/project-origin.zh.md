@@ -13,7 +13,7 @@ layout: ../../../layouts/DocLayout.astro
 
 其中一款名为 X-plore 的应用有一个“无线文件共享”的功能，可以直接在浏览器里管理设备上的文件，十分方便：
 
-![screenshoot](/assets/x-plore-screenshoot.png)
+![screenshot](/assets/screenshots/x-plore-screenshot.png)
 
 这一下子就吸引了我的注意，因为我平时更偏向于在使用 Mac 的同时使用安卓手机，而在这两者之间传输文件一直是件尴尬的事情。
 
@@ -28,7 +28,7 @@ layout: ../../../layouts/DocLayout.astro
 
 直接通过现有的浏览器代码注入插件，对其进行了样式覆盖，设为全屏显示并替换了图标：
 
-![override](/assets/x-plore-style-override.png)
+![override](/assets/screenshots/x-plore-style-override.png)
 
 但第三方的插件只能绑定固定的域，一旦变更 IP 或切换端口号就无法生效，且不能在多台电脑上同步。
 
@@ -54,7 +54,7 @@ layout: ../../../layouts/DocLayout.astro
 
 可以说这是一个融合了 macOS 布局、Windows 壁纸和 MIUI V5 图标的“系统”：
 
-![wfms](/assets/x-plore-wfms.jpg)
+![wfms](/assets/screenshots/x-plore-wfms.jpg)
 
 ### 4. 完全独立阶段
 

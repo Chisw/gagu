@@ -13,7 +13,7 @@ When importing ROMs to RetroArch on Android GoogleTV, I downloaded some file man
 
 One of them called X-plore has a feature named "WIFI File sharing", which can directly manage files on the device in the browser, it is very convenient:
 
-![screenshoot](/assets/x-plore-screenshoot.png)
+![screenshot](/assets/screenshots/x-plore-screenshot.png)
 
 This immediately caught my attention because I usually prefer to use my Android phone alongside my Mac, and transferring files between them has always been awkward.
 
@@ -28,7 +28,7 @@ After a period of use, the idea of optimizing this interface came up.
 
 Use existing browser extension directly to override the style of it, set a full screen display and replace icons:
 
-![override](/assets/x-plore-style-override.png)
+![override](/assets/screenshots/x-plore-style-override.png)
 
 However, this third-party extension can only be bound to a fixed domain. Once the IP or port number is changed, it will not take effect, and it cannot be synchronized on multiple computers.
 
@@ -54,7 +54,7 @@ I built a new repository, simulates a desktop system design, named it WFMS (Web 
 
 It can be said that this is a ‘system’ that combines macOS layout, Windows wallpaper and MIUI V5 icons:
 
-![wfms](/assets/x-plore-wfms.jpg)
+![wfms](/assets/screenshots/x-plore-wfms.jpg)
 
 ### 4. Complete Independence Stage
 

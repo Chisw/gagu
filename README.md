@@ -16,7 +16,16 @@
 <br>
 </div>
 
-![screenshot](https://raw.githubusercontent.com/Chisw/gagu/main/gagu-website/public/assets/gagu.jpg)
+<div style="display: flex; font-size: 0;">
+  <div style="width: 50%;">
+    <img src="https://raw.githubusercontent.com/Chisw/gagu/main/gagu-website/public/assets/screenshots/screenshot-desktop-light.jpg" />
+    <img src="https://raw.githubusercontent.com/Chisw/gagu/main/gagu-website/public/assets/screenshots/screenshot-desktop-dark.jpg" />
+  </div>
+  <div style="width: 50%;">
+    <img style="max-width: 50%;" src="https://raw.githubusercontent.com/Chisw/gagu/main/gagu-website/public/assets/screenshots/screenshot-touch-light.jpg" />
+    <img style="max-width: 50%;" src="https://raw.githubusercontent.com/Chisw/gagu/main/gagu-website/public/assets/screenshots/screenshot-touch-dark.jpg" />
+  </div>
+</div>
 
 ## 📦 Getting started
 
