@@ -16,16 +16,18 @@
 <br>
 </div>
 
-<div style="display: flex; font-size: 0;">
-  <div style="width: 50%;">
-    <img src="https://raw.githubusercontent.com/Chisw/gagu/main/gagu-website/public/assets/screenshots/screenshot-desktop-light.jpg" />
-    <img src="https://raw.githubusercontent.com/Chisw/gagu/main/gagu-website/public/assets/screenshots/screenshot-desktop-dark.jpg" />
-  </div>
-  <div style="width: 50%;">
-    <img style="max-width: 50%;" src="https://raw.githubusercontent.com/Chisw/gagu/main/gagu-website/public/assets/screenshots/screenshot-touch-light.jpg" />
-    <img style="max-width: 50%;" src="https://raw.githubusercontent.com/Chisw/gagu/main/gagu-website/public/assets/screenshots/screenshot-touch-dark.jpg" />
-  </div>
-</div>
+<table>
+  <tr>
+    <td width="50%">
+      <img src="https://raw.githubusercontent.com/Chisw/gagu/main/gagu-website/public/assets/screenshots/screenshot-desktop-light.jpg" />
+      <img src="https://raw.githubusercontent.com/Chisw/gagu/main/gagu-website/public/assets/screenshots/screenshot-desktop-dark.jpg" />
+    </td>
+    <td width="50%">
+      <img style="width: 48%;" src="https://raw.githubusercontent.com/Chisw/gagu/main/gagu-website/public/assets/screenshots/screenshot-touch-light.jpg" />
+      <img style="width: 48%;" src="https://raw.githubusercontent.com/Chisw/gagu/main/gagu-website/public/assets/screenshots/screenshot-touch-dark.jpg" />
+    </td>
+  </tr>
+</table>
 
 ## 📦 Getting started
 
