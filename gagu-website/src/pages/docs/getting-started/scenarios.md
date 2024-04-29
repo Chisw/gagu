@@ -31,6 +31,7 @@ Similar applications are listed here, or there are more suitable ones for your r
 - daedalOS [https://github.com/DustinBrett/daedalOS](https://github.com/DustinBrett/daedalOS)
 - Dufs [https://github.com/sigoden/dufs](https://github.com/sigoden/dufs)
 - filebrowser [https://github.com/filebrowser/filebrowser](https://github.com/filebrowser/filebrowser)
+- FolderV [https://play.google.com/store/apps/details?id=com.folderv.file](https://play.google.com/store/apps/details?id=com.folderv.file)
 - hfs (HTTP File Server) [https://github.com/rejetto/hfs](https://github.com/rejetto/hfs)
 - LocalSend [https://localsend.org](https://localsend.org)
 - miniserve [https://github.com/svenstaro/miniserve](https://github.com/svenstaro/miniserve)
