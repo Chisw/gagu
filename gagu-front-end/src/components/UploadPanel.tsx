@@ -238,13 +238,13 @@ export function UploadPanel() {
                 </div>
                 {isActive && (
                   <div
-                    className={`
+                    className={line(`
                       absolute left-0 bottom-0 right-0
                       h-1 bg-green-400
                       transition-width
                       ${uploadInfo.ratio === 0 ? '' : 'duration-200'}
                       ${uploading ? 'block' : 'hidden'}
-                    `}
+                    `)}
                     style={{ width: `${uploadInfo.ratio * 100}%` }}
                   />
                 )}
