@@ -37,6 +37,7 @@ layout: ../../../layouts/DocLayout.astro
 - LocalSend [https://localsend.org](https://localsend.org)
 - miniserve [https://github.com/svenstaro/miniserve](https://github.com/svenstaro/miniserve)
 - os.js [https://www.os-js.org](https://www.os-js.org)
+- puter [https://github.com/HeyPuter/puter](https://github.com/HeyPuter/puter)
 - SFTPGo [https://sftpgo.com](https://sftpgo.com)
 - Swiftp [https://ppareit.github.io/swiftp](https://ppareit.github.io/swiftp)
 - Snapdrop [https://snapdrop.net](https://snapdrop.net)
