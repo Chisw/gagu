@@ -42,6 +42,7 @@ layout: ../../../layouts/DocLayout.astro
 - SFTPGo [https://sftpgo.com](https://sftpgo.com)
 - Swiftp [https://ppareit.github.io/swiftp](https://ppareit.github.io/swiftp)
 - Snapdrop [https://snapdrop.net](https://snapdrop.net)
+- Syncthing [https://syncthing.net/](https://syncthing.net/)
 - webd [https://webd.cf](https://webd.cf)
 - Wechat 微信传输助手网页版 [https://filehelper.weixin.qq.com](https://filehelper.weixin.qq.com)
 - WindSend [https://github.com/doraemonkeys/WindSend](https://github.com/doraemonkeys/WindSend)

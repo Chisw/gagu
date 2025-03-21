@@ -41,6 +41,7 @@ Similar applications are listed here, or there are more suitable ones for your r
 - SFTPGo [https://sftpgo.com](https://sftpgo.com)
 - Swiftp [https://ppareit.github.io/swiftp](https://ppareit.github.io/swiftp)
 - Snapdrop [https://snapdrop.net](https://snapdrop.net)
+- Syncthing [https://syncthing.net/](https://syncthing.net/)
 - webd [https://webd.cf](https://webd.cf)
 - Wechat File Helper [https://filehelper.weixin.qq.com](https://filehelper.weixin.qq.com)
 - WindSend [https://github.com/doraemonkeys/WindSend](https://github.com/doraemonkeys/WindSend)
