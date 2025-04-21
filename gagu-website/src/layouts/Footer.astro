@@ -1,16 +1,22 @@
 ---
-import Block from './Block.astro'
-import iconGAGU from '/assets/icons/gagu.svg'
+import Block from "./Block.astro";
+import iconGAGU from "/assets/icons/gagu.svg";
+import iconNetlify from "/assets/icons/netlify-light.svg";
 
-const year = new Date().getFullYear()
+const year = new Date().getFullYear();
 ---
 
 <Block className="bg-zinc-900">
-  <div class="py-8 text-zinc-400 text-xs flex justify-center md:justify-between items-center">
-    <img
-      src={iconGAGU}
-      class="hidden md:block h-3"
-    />
-    <span>©{year} GAGU.IO</span>
+  <div
+    class="py-5 text-zinc-400 text-xs flex justify-between items-center"
+  >
+    <div>
+      <img src={iconGAGU} class="hidden md:block h-3" />
+      <p class="mt-1">©{year} GAGU.IO</p>
+    </div>
+
+    <a target="_blank" href="https://www.netlify.com">
+      <img src={iconNetlify} class="h-8" />
+    </a>
   </div>
 </Block>
