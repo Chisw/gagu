@@ -14,7 +14,7 @@
     "128": "static/img/icon.png"
   },
   "background": {
-    "service_worker": "service_worker.js"
+    "service_worker": "background.js"
   },
   "action": {
     "defalut_icon": "static/img/icon.png",
@@ -34,6 +34,18 @@
   "host_permissions": [
     "http://*/*",
     "https://*/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "css": [
+        "content-script/saver/saver.css"
+      ],
+      "js": [
+        "content-script/saver/saver.js"
+      ],
+      "run_at": "document_end"
+    }
   ],
   "web_accessible_resources": [
     {

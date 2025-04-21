@@ -1,0 +1,69 @@
+.io-gagu-saver-container {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  z-index: 9999;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  width: 480px;
+  min-height: 240px;
+  background: #fff;
+  padding: 12px;
+  box-shadow: 0 10px 20px 10px rgba(0, 0, 0, .1);
+}
+
+.io-gagu-saver-container .container-header,
+.io-gagu-saver-container .container-body,
+.io-gagu-saver-container .container-footer {
+  flex-shrink: 0;
+}
+
+.io-gagu-saver-container .container-header label {
+  margin-right: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.io-gagu-saver-container .container-body {
+  flex-grow: 1;
+  border: 1px solid #efefef;
+  padding: 4px;
+}
+
+.io-gagu-saver-container .container-body input[type=radio],
+.io-gagu-saver-container .container-body input[type=radio] + div {
+  display: none;
+}
+
+.io-gagu-saver-container .container-body input[type=radio]:checked + div {
+  display: block;
+}
+
+.io-gagu-saver-container .container-body .saver-image img {
+  max-height: 200px;
+  max-width: 200px;
+}
+
+.io-gagu-saver-container .container-body .saver-link p {
+  color: skyblue;
+  font-size: 14px;
+  word-break: break-all;
+}
+
+.io-gagu-saver-container .container-body .saver-text textarea {
+  resize: none;
+  border: none;
+}
+
+.io-gagu-saver-container .container-footer {
+  display: flex;
+  justify-content: end;
+  height: 32px;
+}
+
+.io-gagu-saver-container .container-footer button {
+  margin-left: 8px;
+  cursor: pointer
+}
+
