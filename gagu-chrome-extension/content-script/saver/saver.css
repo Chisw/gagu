@@ -13,6 +13,10 @@
   box-shadow: 0 10px 20px 10px rgba(0, 0, 0, .1);
 }
 
+.io-gagu-saver-container * {
+  all: initial;
+}
+
 .io-gagu-saver-container .container-header,
 .io-gagu-saver-container .container-body,
 .io-gagu-saver-container .container-footer {
@@ -31,15 +35,6 @@
   padding: 4px;
 }
 
-.io-gagu-saver-container .container-body input[type=radio],
-.io-gagu-saver-container .container-body input[type=radio] + div {
-  display: none;
-}
-
-.io-gagu-saver-container .container-body input[type=radio]:checked + div {
-  display: block;
-}
-
 .io-gagu-saver-container .container-body .saver-image img {
   max-height: 200px;
   max-width: 200px;
@@ -54,6 +49,8 @@
 .io-gagu-saver-container .container-body .saver-text textarea {
   resize: none;
   border: none;
+  width: 100%;
+  height: 240px;
 }
 
 .io-gagu-saver-container .container-footer {

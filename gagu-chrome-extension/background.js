@@ -2,6 +2,12 @@ chrome.contextMenus.create({
   id: 'gagu-save',
   title: 'Save',
   contexts: ['image', 'link', 'selection']
+})
+
+chrome.contextMenus.create({
+  id: 'gagu-inject',
+  title: 'Inject',
+  contexts: ['editable']
 });
 
 // chrome.contextMenus.create({
@@ -18,7 +24,8 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
   console.log({ info, tab })
 
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    if (tabs[0].id) {
+    if (!tabs[0]?.id) return
+    if (menuItemId === 'gagu-save') {
       chrome.tabs.sendMessage(tabs[0].id, {
         action: 'showSaver',
         message: { menuItemId, linkUrl, mediaType, srcUrl, selectionText, title, url },
