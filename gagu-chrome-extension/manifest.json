@@ -45,6 +45,11 @@
         "content-script/saver/saver.js"
       ],
       "run_at": "document_end"
+    },
+    {
+      "matches": ["https://map.baidu.com/*"],
+      "js": ["content-script/panorama/panorama.js"],
+      "run_at": "document_end"
     }
   ],
   "web_accessible_resources": [
