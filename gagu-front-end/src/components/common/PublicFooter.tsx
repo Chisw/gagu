@@ -12,11 +12,11 @@ export function PublicFooter() {
       <div className="absolute bottom-0 py-4 w-full text-xs text-white flex justify-center items-center">
         <a
           rel="noreferrer"
-          href="https://gagu.io"
+          href="https://gagu.jsw.im"
           target="_blank"
           className="opacity-60 hover:opacity-80 font-g"
         >
-          GAGU.IO
+          GAGU
         </a>
         <span className="opacity-50">&emsp;|&emsp;</span>
         <Popover

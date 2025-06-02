@@ -44,7 +44,7 @@ export default function SharePage() {
   }, [])
 
   useEffect(() => {
-    document.title = `${t`title.page_sharing`} - GAGU.IO`
+    document.title = `${t`title.page_sharing`} - GAGU`
   }, [t])
 
   const {

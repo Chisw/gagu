@@ -1,9 +1,9 @@
 <div align="center">
-<img src="https://gagu.io/assets/logo.svg" style="height: 64px;" >
+<img src="https://gagu.jsw.im/assets/logo.svg" style="height: 64px;" >
 <br>
 <br>
 <h1>GAGU (Alpha)</h1>
-<p>Website: <a href="https://gagu.io" target="_blank">https://gagu.io</a></p>
+<p>Website: <a href="https://gagu.jsw.im" target="_blank">https://gagu.jsw.im</a></p>
 <p>A web-based file management system</p>
 <p>Manage files on your different devices in the browser</p>
 <p>Works on Windows, macOS, Linux and Android/Termux</p>
@@ -50,7 +50,7 @@ Username: gagu
 Password: 9293
 ```
 
-[Docs here](https://gagu.io/docs/getting-started/usage)
+[Docs here](https://gagu.jsw.im/docs/getting-started/usage)
 
 ## 🛠 Development
 

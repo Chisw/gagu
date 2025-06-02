@@ -21,7 +21,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     const size = await getImageSizeByDownload(srcUrl)
 
     const div = document.createElement('div')
-    div.setAttribute('class', 'io-gagu-saver-container')
+    div.setAttribute('class', 'gagu-saver-container')
     div.innerHTML = `
       <div class="container-header">
         Saver

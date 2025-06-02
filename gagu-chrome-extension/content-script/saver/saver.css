@@ -1,4 +1,4 @@
-.io-gagu-saver-container {
+.gagu-saver-container {
   display: flex;
   flex-direction: column;
   position: fixed;
@@ -13,53 +13,53 @@
   box-shadow: 0 10px 20px 10px rgba(0, 0, 0, .1);
 }
 
-.io-gagu-saver-container * {
+.gagu-saver-container * {
   all: initial;
 }
 
-.io-gagu-saver-container .container-header,
-.io-gagu-saver-container .container-body,
-.io-gagu-saver-container .container-footer {
+.gagu-saver-container .container-header,
+.gagu-saver-container .container-body,
+.gagu-saver-container .container-footer {
   flex-shrink: 0;
 }
 
-.io-gagu-saver-container .container-header label {
+.gagu-saver-container .container-header label {
   margin-right: 8px;
   cursor: pointer;
   user-select: none;
 }
 
-.io-gagu-saver-container .container-body {
+.gagu-saver-container .container-body {
   flex-grow: 1;
   border: 1px solid #efefef;
   padding: 4px;
 }
 
-.io-gagu-saver-container .container-body .saver-image img {
+.gagu-saver-container .container-body .saver-image img {
   max-height: 200px;
   max-width: 200px;
 }
 
-.io-gagu-saver-container .container-body .saver-link p {
+.gagu-saver-container .container-body .saver-link p {
   color: skyblue;
   font-size: 14px;
   word-break: break-all;
 }
 
-.io-gagu-saver-container .container-body .saver-text textarea {
+.gagu-saver-container .container-body .saver-text textarea {
   resize: none;
   border: none;
   width: 100%;
   height: 240px;
 }
 
-.io-gagu-saver-container .container-footer {
+.gagu-saver-container .container-footer {
   display: flex;
   justify-content: end;
   height: 32px;
 }
 
-.io-gagu-saver-container .container-footer button {
+.gagu-saver-container .container-footer button {
   margin-left: 8px;
   cursor: pointer
 }

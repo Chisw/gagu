@@ -3,7 +3,7 @@
   "name": "GAGU",
   "version": "0.0.1",
   "description": "GAGU chrome assistant",
-  "homepage_url": "https://gagu.io",
+  "homepage_url": "https://gagu.jsw.im",
   "omnibox": {
     "keyword": "GAGU"
   },

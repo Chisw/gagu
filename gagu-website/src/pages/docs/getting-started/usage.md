@@ -87,13 +87,13 @@ $ gagu -v
 $ gagu --version
 ```
 
-Remove GAGU data directory `WORKSPACE/.io.gagu/data`:
+Remove GAGU data directory `WORKSPACE/.gagu/data`:
 
 ```sh
 $ gagu --reset
 ```
 
-Remove GAGU root directory `WORKSPACE/.io.gagu`:
+Remove GAGU root directory `WORKSPACE/.gagu`:
 
 ```sh
 $ gagu --reset-all
@@ -111,32 +111,32 @@ Stop service：
 
 The running of GAGU needs to provide a local root directory of its own `GAGU_PATH.ROOT` to store some data.
 
-Every time the service is started, GAGU will detect whether the root directory exists, and if it does not exist, it will automatically create a root directory named `.io.gagu` in the workspace.
+Every time the service is started, GAGU will detect whether the root directory exists, and if it does not exist, it will automatically create a root directory named `.gagu` in the workspace.
 
 Different platforms will choose different workspaces to create. Here, it is assumed that the user name of the login device is `jay`:
 
 - Windows:
 
 ```
-C:/Users/jay/.io.gagu
+C:/Users/jay/.gagu
 ```
 
 - macOS:
 
 ```
-/Users/jay/.io.gagu
+/Users/jay/.gagu
 ```
 
 - Linux:
 
 ```
-/home/jay/.io.gagu
+/home/jay/.gagu
 ```
 
 - Android:
 
 ```
-/data/data/com.termux/files/home/.io.gagu
+/data/data/com.termux/files/home/.gagu
 ```
 
 `/data/data/com.termux/files/home/storage/shared` points to the internal storage mounted by the Android system, which needs to be obtained through `termux-setup-storage` in Termux.
@@ -145,12 +145,12 @@ For the use of Termux, please refer to [Termux Wiki](https://wiki.termux.com/) o
 
 ### Root Directory
 
-GAGU's root directory `.io.gagu` is a hidden folder named at the beginning of `.`, which can be displayed on the device through specific settings, but will be forcibly filtered in GAGU's API, even if it has Users with administrator rights cannot access it in GAGU's Web page.
+GAGU's root directory `.gagu` is a hidden folder named at the beginning of `.`, which can be displayed on the device through specific settings, but will be forcibly filtered in GAGU's API, even if it has Users with administrator rights cannot access it in GAGU's Web page.
 
 After the root directory is successfully created, the following subdirectories will continue to be created:
 
 ```
-.io.gagu
+.gagu
   |- data
   |- log
   |- public
@@ -172,12 +172,12 @@ After the root directory is successfully created, the following subdirectories w
 - `users` is used to store user's personal files
 
 <div class="apply-tip">
-The root directory will be created as `WORKSPACE/.io.gagu.dev` in local development.
+The root directory will be created as `WORKSPACE/.gagu.dev` in local development.
 </div>
 
 ### Thumbnail
 
-When accessing a file that can display thumbnails in GAGU's File Explorer, GAGU will use the "full path" of the file plus "modification time" to perform `md5` operations to obtain a 32-bit string, and then request the thumbnail file with the same name as the string under `.io.gagu/thumbnail`, if it does not exist, call the thumbnail interface to generate and return.
+When accessing a file that can display thumbnails in GAGU's File Explorer, GAGU will use the "full path" of the file plus "modification time" to perform `md5` operations to obtain a 32-bit string, and then request the thumbnail file with the same name as the string under `.gagu/thumbnail`, if it does not exist, call the thumbnail interface to generate and return.
 
 ```js
 const { mtimeMs } = statSync(path)

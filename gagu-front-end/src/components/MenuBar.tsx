@@ -151,7 +151,7 @@ export function MenuBar() {
                       target="_blank"
                       rel="noreferrer"
                       className="text-gray-300 hover:text-gray-500 dark:hover:text-zinc-100"
-                      href="https://gagu.io"
+                      href="https://gagu.jsw.im"
                     >
                       <SvgIcon.Earth />
                     </a>

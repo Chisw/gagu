@@ -15,7 +15,12 @@ const { title } = Astro.props as LayoutProps
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0" />
 		<link rel="icon" type="image/x-icon" href="/favicon.png" />
 		<meta name="generator" content={Astro.generator} />
-		<title>{title} - GAGU.IO</title>
+		<title>{title} - GAGU.JSW.IM</title>
+		<script>
+			if (['gagu.io', 'gagu-website.netlify.app'].includes(location.href)) {
+				location.href = location.href.replace(/(gagu.io)|(gagu-website.netlify.app)/, 'gagu.jsw.im')
+			}
+		</script>
 	</head>
 	<body>
 		<slot />

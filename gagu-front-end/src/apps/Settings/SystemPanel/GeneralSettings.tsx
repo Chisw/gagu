@@ -54,7 +54,7 @@ export default function GeneralSettings() {
               </div>
               <Button
                 type="tertiary"
-                onClick={() => window.open('https://gagu.io/docs/getting-started/hotkeys')}
+                onClick={() => window.open('https://gagu.jsw.im/docs/getting-started/hotkeys')}
               >
                 <SvgIcon.Keyboard />
               </Button>

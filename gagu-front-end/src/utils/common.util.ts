@@ -165,7 +165,7 @@ export const getBaiduMapPinUrl = (exifData: any, content?: string) => {
 
     const query = new URLSearchParams({
       location: `${lat},${lon}`,
-      title: '图片位置-GAGU.IO',
+      title: '图片位置-GAGU',
       content,
       output: 'html',
       coord_type: 'wgs84',

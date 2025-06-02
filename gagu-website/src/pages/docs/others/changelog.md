@@ -19,6 +19,13 @@ Clear data directory means that all users, download tunnels and other data will 
 
 ## v0.0.*
 
+- v0.0.58 (Coming soon)
+  - Due to the continued increase in the renewal price of the `io` domain name (I cannot tolerate this kind of price monopoly and wanton extortion), and its potential removal by IANA, after evaluation, the new domain name `gagu.jsw.im` has been activated, and `gagu.io` will be completely deactivated no later than **2026.5.18**
+  - The original `WORKSPACE/.io.gagu` will be created as `WORKSPACE/.gagu` (historical data needs to be migrated manually)
+  - feat: Login credentials management
+  - fix: The full screen preview of the image browser cannot be dragged
+  - fix: Default directory access error under Linux
+
 - v0.0.57 (2024-02-17)
   - feat: support HTTPS
   - feat: seperate token and accessToken

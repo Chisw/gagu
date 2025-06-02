@@ -37,10 +37,10 @@ export const ServerOS: IServerOS = {
 }
 
 const PATH_MAP: { [PLATFORM: string]: string } = {
-  android: `/data/data/com.termux/files/home/.io.gagu`,
-  darwin: `/Users/${ServerOS.username}/.io.gagu`,
-  linux: `/home/${ServerOS.username}/.io.gagu`,
-  win32: `C:/Users/${ServerOS.username}/.io.gagu`,
+  android: `/data/data/com.termux/files/home/.gagu`,
+  darwin: `/Users/${ServerOS.username}/.gagu`,
+  linux: `/home/${ServerOS.username}/.gagu`,
+  win32: `C:/Users/${ServerOS.username}/.gagu`,
 }
 
 const ROOT_PATH = `${PATH_MAP[ServerOS.platform] || ''}${IS_DEV ? '.dev' : ''}`
