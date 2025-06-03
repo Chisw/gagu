@@ -25,7 +25,7 @@ Many unrealized ideas will be recorded here, waiting for development
 ### File Explorer
 
 - Slice upload
-- Tree structure display and resizeable width on side
+- Tree structure display and resizable width on side
 - Scan and connect multiple devices in LAN
 - File compression, decompression
 - Batch renaming
