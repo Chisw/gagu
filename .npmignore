@@ -1,5 +1,7 @@
+.vscode
 docs
 gagu-back-end
+gagu-chrome-extension
 gagu-front-end
 gagu-website
 node_modules

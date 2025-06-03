@@ -30,6 +30,8 @@ chmod 777 bin/gagu
 
 rm bin/main.js
 
+rm bin/public/asset-manifest.json
+
 rm bin/public/static/js/*.LICENSE.txt
 
 echo '\n  ✨  Build GAGU npm package successfully.'
