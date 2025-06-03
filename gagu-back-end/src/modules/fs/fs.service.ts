@@ -156,7 +156,6 @@ export class FsService {
         parentPath: '/Volumes',
         hasChildren: true,
         extension: '_dir',
-        label: drive.mounted.replace('/Volumes/', ''),
         group: RootEntryGroup.system,
         isDisk: true,
         spaceFree: drive.available * 512,
@@ -174,7 +173,6 @@ export class FsService {
         parentPath: '',
         hasChildren: true,
         extension: '_dir',
-        label: drive.mounted,
         group: RootEntryGroup.system,
         isDisk: true,
         spaceFree: drive.available,
@@ -198,14 +196,13 @@ export class FsService {
       const driveList = nodeDiskInfo.getDiskInfoSync()
 
       const diskList: IDisk[] = driveList.map((drive) => ({
-        name: drive.mounted.replace('/Volumes/', ''),
+        name: drive.mounted,
         type: EntryType.directory,
         hidden: false,
         lastModified: 0,
-        parentPath: '/Volumes',
+        parentPath: '',
         hasChildren: true,
         extension: '_dir',
-        label: drive.mounted.replace('/Volumes/', ''),
         group: RootEntryGroup.system,
         isDisk: true,
         spaceFree: drive.available * 512,
@@ -362,7 +359,7 @@ export class FsService {
     const thumbnailPath = `${thumbnailParentPath}/${thumbnailId}`
 
     if (!getExists(thumbnailPath)) {
-      let convertionTargetPath = ''
+      let convertingTargetPath = ''
 
       const extension = getExtension(path)
       const thumbnailType = GEN_THUMBNAIL_MAP[extension]
@@ -372,16 +369,16 @@ export class FsService {
       const isVideo = thumbnailType === ThumbnailType.video
 
       if (isDocument) {
-        convertionTargetPath = path
+        convertingTargetPath = path
       } else if (isImage) {
-        convertionTargetPath = path
+        convertingTargetPath = path
       } else if (isAudio) {
         const info: IAudioInfo | any = await this.getAudioInfo(path)
         const base64 = info?.coverBase64
         if (base64) {
           const buffer = dataURLtoBuffer(base64)
           buffer && writeFileSync(thumbnailPath, buffer)
-          convertionTargetPath = thumbnailPath
+          convertingTargetPath = thumbnailPath
         }
       } else if (isVideo) {
         const screenshotPath = await thumbsupply.generateThumbnail(path, {
@@ -390,15 +387,15 @@ export class FsService {
           mimetype: 'video/mp4',
           cacheDir: thumbnailParentPath,
         })
-        convertionTargetPath = screenshotPath
+        convertingTargetPath = screenshotPath
       }
 
-      if (!convertionTargetPath) {
+      if (!convertingTargetPath) {
         return ''
       }
 
       await new Promise(async (resolve, reject) => {
-        gm(createReadStream(convertionTargetPath))
+        gm(createReadStream(convertingTargetPath))
           .selectFrame(extension === 'gif' ? 4 : 0)
           .setFormat('jpg')
           .resize(100)
@@ -408,7 +405,7 @@ export class FsService {
               reject(error)
             } else {
               resolve(thumbnailPath)
-              isVideo && unlinkSync(convertionTargetPath)
+              isVideo && unlinkSync(convertingTargetPath)
             }
           })
       })

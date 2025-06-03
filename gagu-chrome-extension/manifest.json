@@ -17,7 +17,7 @@
     "service_worker": "background.js"
   },
   "action": {
-    "defalut_icon": "static/img/icon.png",
+    "default_icon": "static/img/icon.png",
     "default_title": "GAGU",
     "default_popup": "popup/popup.html"
   },
