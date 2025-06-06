@@ -122,7 +122,7 @@ export class FsService {
         .getDiskInfoSync()
         .filter((d) => d.mounted.startsWith('/Volumes/'))
 
-      const homeEntry: IRootEntry = {
+      const userHomeEntry: IRootEntry = {
         name: ServerOS.username,
         type: EntryType.directory,
         hidden: false,
@@ -162,7 +162,7 @@ export class FsService {
         spaceTotal: drive.blocks * 512,
       }))
 
-      rootEntryList.push(homeEntry, systemDiskEntry, ...diskList)
+      rootEntryList.push(userHomeEntry, systemDiskEntry, ...diskList)
     } else if (ServerOS.isWindows) {
       const driveList = nodeDiskInfo.getDiskInfoSync()
       const diskList: IDisk[] = driveList.map((drive) => ({
@@ -181,7 +181,7 @@ export class FsService {
 
       rootEntryList.push(...diskList)
     } else if (ServerOS.isLinux) {
-      const homeEntry: IRootEntry = {
+      const userHomeEntry: IRootEntry = {
         name: ServerOS.username,
         type: EntryType.directory,
         hidden: false,
@@ -195,21 +195,25 @@ export class FsService {
 
       const driveList = nodeDiskInfo.getDiskInfoSync()
 
-      const diskList: IDisk[] = driveList.map((drive) => ({
-        name: drive.mounted,
-        type: EntryType.directory,
-        hidden: false,
-        lastModified: 0,
-        parentPath: '',
-        hasChildren: true,
-        extension: '_dir',
-        group: RootEntryGroup.system,
-        isDisk: true,
-        spaceFree: drive.available * 512,
-        spaceTotal: drive.blocks * 512,
-      }))
+      const diskList: IDisk[] = driveList
+        .filter(({ mounted: m }) => {
+          return m === '/' || m.startsWith('/media/') || m.startsWith('/mnt/')
+        })
+        .map((drive) => ({
+          name: drive.mounted,
+          type: EntryType.directory,
+          hidden: false,
+          lastModified: 0,
+          parentPath: '',
+          hasChildren: true,
+          extension: '_dir',
+          group: RootEntryGroup.system,
+          isDisk: true,
+          spaceFree: drive.available * 1024,
+          spaceTotal: drive.blocks * 1024,
+        }))
 
-      rootEntryList.push(homeEntry, ...diskList)
+      rootEntryList.push(userHomeEntry, ...diskList)
     } else if (ServerOS.isAndroid) {
       rootEntryList.push(
         {

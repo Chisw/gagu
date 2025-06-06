@@ -44,26 +44,15 @@ export const getReadableSize = (size: number, kiloSize: 1000 | 1024, options?: g
     separator = '',
   } = options || {}
 
-  const stepList = [kiloSize, Math.pow(kiloSize, 2), Math.pow(kiloSize, 3), Math.pow(kiloSize, 4)]
-
-  let unit = ''
-  if (!unit) {
-    if (0 <= size && size < stepList[0]) {
-      unit = 'B'
-    } else if (stepList[0] <= size && size < stepList[1]) {
-      unit = 'KB'
-    } else if (stepList[1] <= size && size < stepList[2]) {
-      unit = 'MB'
-    } else if (stepList[2] <= size && size < stepList[3]) {
-      unit = 'GB'
-    } else {
-      unit = 'TB'
-    }
+  if (!size) {
+    return `0${separator}B`
   }
-  const level = ['B', 'KB', 'MB', 'GB', 'TB'].indexOf(unit)
-  const divisor = [1, ...stepList][level]
-  const fixedSize = (size / divisor).toFixed(unit === 'B' ? 0 : 1)
-  const readableSize = keepFloat ? fixedSize : fixedSize.replace('.0', '')
+
+  const units = ['B', 'KB', 'MB', 'GB', 'TB']
+  const i = Math.floor(Math.log(size) / Math.log(kiloSize))
+  const unit = units[i]
+  const fixedSize = (size / Math.pow(kiloSize, i)).toFixed(unit === 'B' ? 0 : 2)
+  const readableSize = keepFloat ? fixedSize : fixedSize.replace('.00', '')
   return `${readableSize}${separator}${unit}`
 }
 
