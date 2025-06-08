@@ -18,7 +18,7 @@ export interface IEntry {
 }
 
 export enum RootEntryGroup {
-  system = 'system',
+  server = 'server',
   user = 'user',
   favorite = 'favorite',
 }

@@ -76,7 +76,7 @@ export class FsController {
       ...(isAdmin ? this.fsService.getSystemRootEntryList() : []),
 
       ...assignedRootPathList.map((path) =>
-        path2RootEntry(path, RootEntryGroup.system),
+        path2RootEntry(path, RootEntryGroup.server),
       ),
 
       path2RootEntry(`${GAGU_PATH.USERS}/${username}`, RootEntryGroup.user),

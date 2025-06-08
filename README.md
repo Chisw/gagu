@@ -43,7 +43,7 @@ $ npm i -g gagu
 $ gagu -h
 ```
 
-Default admin:
+Default admin account:
 
 ```
 Username: gagu

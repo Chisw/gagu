@@ -120,7 +120,7 @@ export class FsService {
     if (ServerOS.isMacOS) {
       const driveList = nodeDiskInfo
         .getDiskInfoSync()
-        .filter((d) => d.mounted.startsWith('/Volumes/'))
+        .filter((d) => d.mounted === '/' || d.mounted.startsWith('/Volumes/'))
 
       const userHomeEntry: IRootEntry = {
         name: ServerOS.username,
@@ -130,22 +130,8 @@ export class FsService {
         extension: '_dir',
         parentPath: '/Users',
         hasChildren: true,
-        group: RootEntryGroup.system,
+        group: RootEntryGroup.server,
         isDisk: false,
-      }
-
-      const systemDiskEntry: IRootEntry = {
-        name: 'Macintosh HD',
-        type: EntryType.directory,
-        hidden: false,
-        lastModified: 0,
-        extension: '_dir',
-        parentPath: '/Volumes',
-        hasChildren: true,
-        group: RootEntryGroup.system,
-        isDisk: true,
-        spaceFree: 0,
-        spaceTotal: 0,
       }
 
       const diskList: IDisk[] = driveList.map((drive) => ({
@@ -156,13 +142,13 @@ export class FsService {
         parentPath: '/Volumes',
         hasChildren: true,
         extension: '_dir',
-        group: RootEntryGroup.system,
+        group: RootEntryGroup.server,
         isDisk: true,
         spaceFree: drive.available * 512,
         spaceTotal: drive.blocks * 512,
       }))
 
-      rootEntryList.push(userHomeEntry, systemDiskEntry, ...diskList)
+      rootEntryList.push(userHomeEntry, ...diskList)
     } else if (ServerOS.isWindows) {
       const driveList = nodeDiskInfo.getDiskInfoSync()
       const diskList: IDisk[] = driveList.map((drive) => ({
@@ -173,7 +159,7 @@ export class FsService {
         parentPath: '',
         hasChildren: true,
         extension: '_dir',
-        group: RootEntryGroup.system,
+        group: RootEntryGroup.server,
         isDisk: true,
         spaceFree: drive.available,
         spaceTotal: drive.blocks,
@@ -189,7 +175,7 @@ export class FsService {
         extension: '_dir',
         parentPath: '/home',
         hasChildren: true,
-        group: RootEntryGroup.system,
+        group: RootEntryGroup.server,
         isDisk: false,
       }
 
@@ -207,7 +193,7 @@ export class FsService {
           parentPath: '',
           hasChildren: true,
           extension: '_dir',
-          group: RootEntryGroup.system,
+          group: RootEntryGroup.server,
           isDisk: true,
           spaceFree: drive.available * 1024,
           spaceTotal: drive.blocks * 1024,
@@ -224,7 +210,7 @@ export class FsService {
           extension: '_dir',
           parentPath: '/data/data/com.termux/files/home/storage',
           hasChildren: true,
-          group: RootEntryGroup.system,
+          group: RootEntryGroup.server,
           isDisk: false,
         },
         {
@@ -235,7 +221,7 @@ export class FsService {
           parentPath: '/data/data/com.termux/files',
           hasChildren: true,
           extension: '_dir',
-          group: RootEntryGroup.system,
+          group: RootEntryGroup.server,
           isDisk: false,
         },
         {
@@ -246,7 +232,7 @@ export class FsService {
           parentPath: '/data/data',
           hasChildren: true,
           extension: '_dir',
-          group: RootEntryGroup.system,
+          group: RootEntryGroup.server,
           isDisk: false,
         },
       )

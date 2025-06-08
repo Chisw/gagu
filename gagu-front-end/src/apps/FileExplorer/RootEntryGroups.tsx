@@ -39,10 +39,10 @@ export default function RootEntryGroups(props: RootEntryGroupsProps) {
 
   const iconMap = useMemo(() => {
     const iconMap: { [KEY: string]: ReactNode } = {
-      'system.win32': <SvgIcon.Windows size={12} />,
-      'system.darwin': <SvgIcon.Apple size={12} />,
-      'system.linux': <SvgIcon.Linux size={12} />,
-      'system.android': <SvgIcon.Android size={12} />,
+      'server.win32': <SvgIcon.Windows size={12} />,
+      'server.darwin': <SvgIcon.Apple size={12} />,
+      'server.linux': <SvgIcon.Linux size={12} />,
+      'server.android': <SvgIcon.Android size={12} />,
       user: <SvgIcon.User size={12} />,
       favorite: <SvgIcon.StarSolid size={12} />,
     }
@@ -51,7 +51,7 @@ export default function RootEntryGroups(props: RootEntryGroupsProps) {
 
   const groupMap = useMemo(() => {
     return groupBy(rootEntryList, 'group') as {
-      [RootEntryGroup.system]: IRootEntry[] | undefined,
+      [RootEntryGroup.server]: IRootEntry[] | undefined,
       [RootEntryGroup.user]: IRootEntry[] | undefined,
       [RootEntryGroup.favorite]: IRootEntry[] | undefined,
     }
@@ -60,7 +60,7 @@ export default function RootEntryGroups(props: RootEntryGroupsProps) {
   return (
     <>
       {[
-        { key: 'system', list: groupMap.system },
+        { key: 'server', list: groupMap.server },
         { key: 'user', list: groupMap.user },
         { key: 'favorite', list: groupMap.favorite },
       ].map(({ key, list }) => (
@@ -73,7 +73,7 @@ export default function RootEntryGroups(props: RootEntryGroupsProps) {
         >
           <div className="px-4 py-1 text-xs font-bold text-gray-400 dark:text-zinc-400 flex items-center">
             <span className="-translate-y-[1px]">
-              {iconMap[`${key}${key === 'system' ? `.${baseData.serverOS.platform}` : ''}`]}
+              {iconMap[`${key}${key === 'server' ? `.${baseData.serverOS.platform}` : ''}`]}
             </span>
             <span className="ml-1">{t(`title.rootEntryGroup_${key}`)}</span>
           </div>
