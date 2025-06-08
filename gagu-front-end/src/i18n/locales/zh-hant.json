@@ -200,7 +200,7 @@
       "copied": "已複製",
       "createdAt": "{{time}} 創建",
       "currentlyLatestVersion": "當前已是最新版本",
-      "currentlyNeedsUpdating": "GAGU 已於 {{date}} 發佈了新版本 v{{version}}，確定要更新嗎？",
+      "currentlyNeedsUpdating": "檢測到新版本 v{{version}}，確定要更新嗎？",
       "deleteItem": "刪除 “{{name}}” ？",
       "deleteItems": "刪除 {{count}} 個項目？",
       "deleteUser": "刪除用戶？",

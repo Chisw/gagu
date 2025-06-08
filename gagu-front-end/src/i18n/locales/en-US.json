@@ -200,7 +200,7 @@
       "copied": "Copied",
       "createdAt": "Created at {{time}}",
       "currentlyLatestVersion": "Currently the latest version",
-      "currentlyNeedsUpdating": "GAGU has released a new version v{{version}} on {{date}}. Are you sure you want to update?",
+      "currentlyNeedsUpdating": "New version v{{version}} detected, are you sure you want to update?",
       "deleteItem": "Delete \"{{name}}\" ?",
       "deleteItems": "Delete {{count}} items ?",
       "deleteUser": "Delete this user?",

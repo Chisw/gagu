@@ -200,7 +200,7 @@
       "copied": "コピーされました",
       "createdAt": "{{time}} 作成",
       "currentlyLatestVersion": "現在の最新バージョン",
-      "currentlyNeedsUpdating": "GAGU は {{date}} に新しいバージョン v{{version}} をリリースしました。更新してもよろしいですか？",
+      "currentlyNeedsUpdating": "新しいバージョン v{{version}} が検出されました。更新してもよろしいですか?",
       "deleteItem": "「{{name}}」 を削除しますか",
       "deleteItems": "{{count}} 件のアイテムを削除",
       "deleteUser": "このユーザーを削除しますか?",

@@ -43,11 +43,12 @@ export default function AdvancedSettings() {
   }, [form, formCache])
 
   const handleVersionCheck = useCallback(async () => {
-    const { data: { date, version } } = await queryLatestVersion()
+    const { data: version } = await queryLatestVersion()
+    debugger
     const isNewest = baseData.version === version
     const content = isNewest
       ? t`tip.currentlyLatestVersion`
-      : t('tip.currentlyNeedsUpdating', { date, version })
+      : t('tip.currentlyNeedsUpdating', { version })
 
     Confirmor({
       type: isNewest ? 'tip' : 'upgrade',

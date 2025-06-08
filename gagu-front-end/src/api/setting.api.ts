@@ -1,4 +1,4 @@
-import { IResponse, ISetting, IVersion } from '../types'
+import { IResponse, ISetting } from '../types'
 import service from './service'
 
 export class SettingApi {
@@ -13,7 +13,7 @@ export class SettingApi {
   }
 
   static queryLatestVersion = async () => {
-    const { data } = await service.get<IResponse<IVersion>>('/api/setting/version')
+    const { data } = await service.get<IResponse<string>>('/api/setting/version')
     return data
   }
 

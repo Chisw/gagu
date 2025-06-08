@@ -59,13 +59,6 @@ export interface IServerOS {
   supportCurl: boolean
 }
 
-export interface IVersion {
-  name: string
-  author: string
-  date: string
-  version: string
-}
-
 export interface IExifInfo {
   '0th': object
   '1st': object
