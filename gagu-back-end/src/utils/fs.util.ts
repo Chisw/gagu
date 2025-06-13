@@ -20,8 +20,7 @@ export const getExists = (path: string) => {
 }
 
 export const getDuplicatedPath: (path: string) => string = (path) => {
-  const isExisted = getExists(path)
-  if (isExisted) {
+  if (getExists(path)) {
     const name = path.split('/').reverse()[0]
     const parentPath = getParentPath(path)
     const extension = getExtension(name)
@@ -48,7 +47,9 @@ export const getDuplicatedPath: (path: string) => string = (path) => {
 export const removeEntry = async (path: string) => {
   return new Promise(async (resolve) => {
     try {
-      await promises.rm(path, { recursive: true })
+      if (getExists(path)) {
+        await promises.rm(path, { recursive: true })
+      }
       resolve(true)
     } catch (error) {
       catchError(error)
@@ -65,8 +66,7 @@ export const completeNestedPath = (path: string) => {
   })
   nestedPathList.forEach((path) => {
     const p = ServerOS.isWindows ? path.replace('/', '') : path
-    const exists = getExists(p)
-    !exists && mkdirSync(p)
+    !getExists(p) && mkdirSync(p)
   })
 }
 

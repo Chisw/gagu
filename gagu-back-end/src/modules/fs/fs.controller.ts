@@ -115,8 +115,7 @@ export class FsController {
   @Get('exists')
   @PathValidation({ queryFields: ['path'] })
   queryExists(@Query('path') path: string) {
-    const exists = getExists(path)
-    return respond(exists)
+    return respond(getExists(path))
   }
 
   @Post('exists')
@@ -187,9 +186,7 @@ export class FsController {
     @Query('existingStrategy') existingStrategy?: ExistingStrategyType,
   ) {
     try {
-      const isExisted = getExists(path)
-
-      if (isExisted) {
+      if (getExists(path)) {
         if (existingStrategy === ExistingStrategy.skip) {
           return respond(TransferResult.skipped)
         }
@@ -241,9 +238,7 @@ export class FsController {
     @Query('existingStrategy') existingStrategy?: ExistingStrategyType,
   ) {
     try {
-      const isExisted = getExists(toPath)
-
-      if (isExisted) {
+      if (getExists(toPath)) {
         if (existingStrategy === ExistingStrategy.skip) {
           return respond(TransferResult.skipped)
         }
@@ -284,9 +279,7 @@ export class FsController {
     @Query('existingStrategy') existingStrategy?: ExistingStrategyType,
   ) {
     try {
-      const isExisted = getExists(toPath)
-
-      if (isExisted) {
+      if (getExists(toPath)) {
         if (existingStrategy === ExistingStrategy.skip) {
           return respond(TransferResult.skipped)
         }
@@ -321,8 +314,7 @@ export class FsController {
   @Permission(UserPermission.delete)
   @PathValidation({ queryFields: ['path'] })
   async deleteEntry(@Query('path') path: string) {
-    const isExisted = getExists(path)
-    if (!isExisted) {
+    if (!getExists(path)) {
       return respond()
     }
     await removeEntry(path)
