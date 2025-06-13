@@ -37,6 +37,7 @@ Similar applications are listed here, or there are more suitable ones for your r
 - hfs (HTTP File Server) [https://github.com/rejetto/hfs](https://github.com/rejetto/hfs)
 - LocalSend [https://localsend.org](https://localsend.org)
 - miniserve [https://github.com/svenstaro/miniserve](https://github.com/svenstaro/miniserve)
+- Nimbus [https://github.com/nimbusdotstorage/Nimbus](https://github.com/nimbusdotstorage/Nimbus)
 - os.js [https://www.os-js.org](https://www.os-js.org)
 - Palmr [https://github.com/kyantech/Palmr](https://github.com/kyantech/Palmr)
 - puter [https://github.com/HeyPuter/puter](https://github.com/HeyPuter/puter)
