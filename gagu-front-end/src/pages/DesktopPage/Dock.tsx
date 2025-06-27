@@ -5,7 +5,6 @@ import { APP_LIST } from '../../apps'
 import { AppId, EventTransaction, IApp, IContextMenuItem, Page } from '../../types'
 import { UserConfigStore, WINDOW_DURATION, line } from '../../utils'
 import { SvgIcon } from '../../components/common'
-import toast from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
 
 export const DOCK_HEIGHT_AND_MARGIN =  48 + 4
@@ -73,12 +72,12 @@ export default function Dock() {
         isShow: !hasRunning || app.multiple,
         onClick: () => handleOpenApp(app, true),
       },
-      {
-        icon: <SvgIcon.Links />,
-        name: t`action.newConnection` + ' ⏳',
-        isShow: app.id === AppId.fileExplorer,
-        onClick: () => toast('⏳'),
-      },
+      // {
+      //   icon: <SvgIcon.Links />,
+      //   name: t`action.newConnection` + ' ⏳',
+      //   isShow: app.id === AppId.fileExplorer,
+      //   onClick: () => toast('⏳'),
+      // },
       {
         icon: <SvgIcon.Close />,
         name: t`action.closeAllOpenedWindows`,

@@ -222,6 +222,7 @@ export default function ControlBar(props: ControlBarProps) {
             onClick={() => setSortVisible(!sortVisible)}
           />
           <Dropdown
+            trigger="click"
             position="bottomRight"
             className="bg-white bg-opacity-80 backdrop-blur dark:bg-zinc-700 dark:bg-opacity-80"
             spacing={0}
