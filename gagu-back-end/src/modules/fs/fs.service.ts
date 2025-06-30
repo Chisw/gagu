@@ -16,6 +16,7 @@ import {
   promises,
   readdirSync,
   readFileSync,
+  renameSync,
   statSync,
   unlinkSync,
   writeFileSync,
@@ -31,6 +32,8 @@ import {
   catchError,
   MAC_HIDDEN_ENTRIES,
   GEN_THUMBNAIL_MAP,
+  getIsSamePartition,
+  getParentPath,
 } from '../../utils'
 import * as nodeDiskInfo from 'node-disk-info'
 import * as md5 from 'md5'
@@ -285,8 +288,14 @@ export class FsService {
 
   async moveEntry(fromPath: string, toPath: string) {
     try {
-      await promises.cp(fromPath, toPath, { recursive: true })
-      await promises.rm(fromPath, { recursive: true })
+      const isSame = getIsSamePartition(fromPath, getParentPath(toPath))
+
+      if (isSame) {
+        renameSync(fromPath, toPath)
+      } else {
+        await promises.cp(fromPath, toPath, { recursive: true })
+        await promises.rm(fromPath, { recursive: true })
+      }
     } catch (error) {
       catchError(error)
     }

@@ -1,4 +1,11 @@
-import { accessSync, appendFile, constants, mkdirSync, promises } from 'fs'
+import {
+  accessSync,
+  appendFile,
+  constants,
+  mkdirSync,
+  promises,
+  statSync,
+} from 'fs'
 import { GAGU_PATH, ServerOS } from './constant.util'
 import { getParentPath } from './entry.util'
 import { catchError } from './common.util'
@@ -17,6 +24,16 @@ export const getExists = (path: string) => {
     exists = false
   }
   return exists
+}
+
+export const getIsSamePartition = (from: string, to: string) => {
+  try {
+    const fromStats = statSync(from)
+    const toStats = statSync(to)
+    return fromStats.dev === toStats.dev
+  } catch (err) {
+    return false
+  }
 }
 
 export const getDuplicatedPath: (path: string) => string = (path) => {
