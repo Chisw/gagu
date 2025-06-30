@@ -9,6 +9,7 @@ import { SvgIcon } from '../components/common'
 import { useTranslation } from 'react-i18next'
 import { CALLABLE_APP_LIST } from '../apps'
 import toast from 'react-hot-toast'
+import { getContextMenuDelay } from '../components'
 
 interface useWorkAreaProps {
   isUserDesktop: boolean
@@ -415,7 +416,10 @@ export function useWorkArea(props: useWorkAreaProps) {
       },
     ]
 
-    setContextMenuData({ eventData, menuItemList })
+    setTimeout(() => {
+      setContextMenuData({ eventData, menuItemList })
+    }, getContextMenuDelay())
+
   }, [
     t,
     asEntryPicker,

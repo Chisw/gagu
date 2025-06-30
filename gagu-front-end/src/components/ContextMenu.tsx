@@ -6,6 +6,12 @@ import { contextMenuDataState } from '../states'
 import { Dropdown } from '@douyinfe/semi-ui'
 import { line } from '../utils'
 
+export const getContextMenuDelay = () => {
+  return document.querySelector('.gagu-contextmenu-dropdown')
+    ? 150
+    : 0
+}
+
 export function ContextMenu() {
 
   const { pathname } = useLocation()
@@ -81,7 +87,7 @@ export function ContextMenu() {
             gagu-contextmenu-dropdown
             select-none bg-white
             ${isDock
-              ? 'dark:bg-black dark:text-zinc-300'
+              ? 'dark:bg-black dark:text-zinc-300 overflow-hidden'
               : 'bg-opacity-80 backdrop-blur dark:bg-zinc-700 dark:bg-opacity-80'}
           `)}
           visible={menuShow}

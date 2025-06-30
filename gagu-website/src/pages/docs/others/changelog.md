@@ -23,6 +23,7 @@ Clear data directory means that all users, download tunnels and other data will 
   - fix: check for update failure
   - fix: deleting users who have not uploaded avatars reports an error
   - fix: sorting function cannot be clicked in FileExplorer
+  - fix: the repeated right-click menu fails to display
 
 - v0.0.58 (2025-06-03)
   - Due to the continued increase in the renewal price of the `io` domain name (I cannot tolerate this kind of price monopoly and wanton extortion), and its potential removal by IANA, after evaluation, the new domain name `gagu.jsw.im` has been activated, and `gagu.io` will be completely deactivated no later than **2026.5.18**

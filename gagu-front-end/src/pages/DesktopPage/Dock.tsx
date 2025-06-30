@@ -6,6 +6,7 @@ import { AppId, EventTransaction, IApp, IContextMenuItem, Page } from '../../typ
 import { UserConfigStore, WINDOW_DURATION, line } from '../../utils'
 import { SvgIcon } from '../../components/common'
 import { useTranslation } from 'react-i18next'
+import { getContextMenuDelay } from '../../components'
 
 export const DOCK_HEIGHT_AND_MARGIN =  48 + 4
 
@@ -89,7 +90,9 @@ export default function Dock() {
       },
     ]
 
-    setContextMenuData({ eventData, menuItemList, isDock: true })
+    setTimeout(() => {
+      setContextMenuData({ eventData, menuItemList, isDock: true })
+    }, getContextMenuDelay())
   }, [runningAppList, setRunningAppList, handleOpenApp, setContextMenuData, t])
 
   return (
