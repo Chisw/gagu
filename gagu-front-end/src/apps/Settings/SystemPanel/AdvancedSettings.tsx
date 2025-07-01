@@ -44,7 +44,6 @@ export default function AdvancedSettings() {
 
   const handleVersionCheck = useCallback(async () => {
     const { data: version } = await queryLatestVersion()
-    debugger
     const isNewest = baseData.version === version
     const content = isNewest
       ? t`tip.currentlyLatestVersion`

@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import toast from 'react-hot-toast'
 import { Confirmor, Opener } from '../../components/common'
 import { ENTRY_ICON_LIST, generateTextFile, getEntryPath, line } from '../../utils'
 import { FsApi } from '../../api'
@@ -74,7 +73,6 @@ export default function TextEditor(props: AppComponentProps) {
     const file = generateTextFile(textContent, activeEntry.name)
     const { success } = await createFile(getEntryPath(activeEntry), file, ExistingStrategy.replace)
     if (success) {
-      toast.success('OK')
       setResponse({ success: true, message: 'OK', data: textContent })
       setLastChangedDirectory({ path: activeEntry.parentPath, timestamp: Date.now() })
     }
@@ -121,6 +119,13 @@ export default function TextEditor(props: AppComponentProps) {
   useEffect(() => {
     setMarkdownView(isMarkdown ? 'HALF' : 'NONE')
   }, [isMarkdown])
+
+  useEffect(() => {
+    if (activeEntry) {
+      const title = `${activeEntry.name}${textContent === textContentCache ? '' : ` - ${t`status.edited`}`}`
+      setWindowTitle(title)
+    }
+  }, [activeEntry, setWindowTitle, textContent, textContentCache, t])
 
   useEffect(() => {
     if (activeEntry) {
@@ -173,7 +178,7 @@ export default function TextEditor(props: AppComponentProps) {
           onSave={handleSaveClick}
           onReset={handleResetClick}
           onFontSizeChange={handleFontSizeChange}
-          onDownlaod={handleDownload}
+          onDownload={handleDownload}
           onMarkdownViewChange={handleMarkdownViewChange}
         />
         <div className="flex-grow relative">

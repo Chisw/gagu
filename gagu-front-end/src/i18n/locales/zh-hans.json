@@ -191,6 +191,9 @@
       "ERROR_403_USER_NOT_MATCHED": "用户不匹配",
       "ERROR_403_PERMISSION_DELETE": "缺少“删除”权限"
     },
+    "status": {
+      "edited": "已编辑"
+    },
     "text": {
       "noTitle": "无标题",
       "unknownAlbum": "未知专辑",

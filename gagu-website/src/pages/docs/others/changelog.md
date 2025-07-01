@@ -20,6 +20,7 @@ Clear data directory means that all users, download tunnels and other data will 
 ## v0.0.*
 
 - v0.0.59 (Coming soon)
+  - feat: TextEditor change status is displayed in the title instead of toast prompt
   - fix: check for update failure
   - fix: deleting users who have not uploaded avatars reports an error
   - fix: sorting function cannot be clicked in FileExplorer

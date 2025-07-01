@@ -191,6 +191,9 @@
       "ERROR_403_USER_NOT_MATCHED": "User does not match",
       "ERROR_403_PERMISSION_DELETE": "Missing \"delete\" permission"
     },
+    "status": {
+      "edited": "Edited"
+    },
     "text": {
       "noTitle": "No title",
       "unknownAlbum": "Unknown album",

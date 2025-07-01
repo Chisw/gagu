@@ -18,7 +18,7 @@ interface ToolbarProps {
   onSave: () => void
   onReset: () => void
   onFontSizeChange: (step: number) => void
-  onDownlaod: () => void
+  onDownload: () => void
   onMarkdownViewChange: () => void
 }
 
@@ -37,7 +37,7 @@ export default function Toolbar(props: ToolbarProps) {
     onSave,
     onReset,
     onFontSizeChange,
-    onDownlaod,
+    onDownload,
     onMarkdownViewChange,
   } = props
 
@@ -90,7 +90,7 @@ export default function Toolbar(props: ToolbarProps) {
         title={t`action.download`}
         icon={<SvgIcon.Download />}
         disabled={!textContent}
-        onClick={onDownlaod}
+        onClick={onDownload}
       />
       <div className="flex-grow" />
       <ToolButton

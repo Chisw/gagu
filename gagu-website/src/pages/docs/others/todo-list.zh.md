@@ -92,7 +92,7 @@ layout: ../../../layouts/DocLayout.astro
 - 在线交互示例
 - Algolia 搜索
 
-## Chrome 拓展
+## Chrome 扩展
 
 - 保存网页中的 文本/图片/视频/链接
 - 书签备份

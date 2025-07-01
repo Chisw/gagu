@@ -191,6 +191,9 @@
       "ERROR_403_USER_NOT_MATCHED": "ユーザーが一致しません",
       "ERROR_403_PERMISSION_DELETE": "「削除」権限がありません"
     },
+    "status": {
+      "edited": "編集済み"
+    },
     "text": {
       "noTitle": "タイトルなし",
       "unknownAlbum": "未知のアルバム",
