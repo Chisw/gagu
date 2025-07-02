@@ -53,11 +53,12 @@ export const initialize = async (security: boolean) => {
   }
 
   const libMap: { [LIB_KEY: string]: boolean } = {
+    curl: false,
     ffmpeg: false,
     gm: false,
-    zip: false,
+    gs: false,
     unzip: false,
-    curl: false,
+    zip: false,
   }
 
   const cmd = ServerOS.isWindows ? 'where' : 'type'

@@ -186,7 +186,7 @@ const thumbnailId = md5(`${path}-${mtimeMs}`)
 
 所以，在文件没有发生变化（移动位置、修改）时，第一次获取缩略图需要一定的时间，你可以在“设置”中对包含需要展示缩略图文件的目录使用“缩略图主动生成”的功能，以提高浏览体验。
 
-GAGU 在生成缩略图时需要借助 [ffmpeg](https://ffmpeg.org/) 和 [GraphicsMagick](http://www.graphicsmagick.org/) 的接口，你可以选择性地安装它们，不安装并不会影响到 GAGU 主要功能的使用，所有的文件都有默认的类型图标展示。
+GAGU 在生成缩略图时需要借助 [ffmpeg](https://ffmpeg.org/) 和 [GraphicsMagick](http://www.graphicsmagick.org/) 的接口，如果是 PDF 文件，还需要安装 (Ghostscript)[https://ghostscript.readthedocs.io/en/latest/Install.html]。你可以选择性地安装它们，不安装并不会影响到 GAGU 主要功能的使用，所有的文件都有默认的类型图标展示。
 
 <div class="apply-tip">
 当你安装完 ffmpeg、GraphicsMagick 后，需要重启 GAGU 服务。
