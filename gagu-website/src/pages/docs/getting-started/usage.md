@@ -186,7 +186,7 @@ const thumbnailId = md5(`${path}-${mtimeMs}`)
 
 Therefore, when the file does not change (move location or modify), it will take a certain amount of time to obtain the thumbnail for the first time. You can use the "Thumbnail Actively Generating" feature in the "Settings" for the directory containing the thumbnail files that need to be displayed. features to enhance the browsing experience.
 
-GAGU will use [ffmpeg](https://ffmpeg.org/) and [GraphicsMagick](http://www.graphicsmagick.org/) interfaces when generating thumbnails, if it is a PDF file, you also need to install (Ghostscript)[https://ghostscript.readthedocs.io/en/latest/Install.html]. you can decide whether you need to install them, if not, it will not affect the use of GAGU's main functions, and all files will be displayed with default type icons.
+GAGU will use [ffmpeg](https://ffmpeg.org/) and [GraphicsMagick](http://www.graphicsmagick.org/) interfaces when generating thumbnails, if it is a PDF file, you also need to install [Ghostscript](https://ghostscript.readthedocs.io/en/latest/Install.html). you can decide whether you need to install them, if not, it will not affect the use of GAGU's main functions, and all files will be displayed with default type icons.
 
 <div class="apply-tip">
 You need to restart GAGU service after you have installed ffmpeg and GraphicsMagick.
