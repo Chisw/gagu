@@ -21,6 +21,7 @@ Clear data directory means that all users, download tunnels and other data will 
 
 - v0.0.59 (Coming soon)
   - feat: TextEditor change status is displayed in the title instead of toast prompt
+  - feat: PDF online preview (Doc Reader)
   - fix: check for update failure
   - fix: deleting users who have not uploaded avatars reports an error
   - fix: sorting function cannot be clicked in FileExplorer

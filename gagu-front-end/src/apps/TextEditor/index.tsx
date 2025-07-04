@@ -133,7 +133,7 @@ export default function TextEditor(props: AppComponentProps) {
       if (size && size > (500 * kiloSize)) {
           Confirmor({
             type: 'tip',
-            content: t('tip.sureToOpenTextFile', { size: '500KB' }),
+            content: t('tip.sureToOpenLargeFile', { size: '500KB' }),
             onConfirm: (close) => {
               handleOpen(activeEntry)
               close()

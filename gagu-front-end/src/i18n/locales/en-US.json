@@ -100,6 +100,7 @@
     "app": {
       "android-controller": "Android Controller ⏳",
       "baidu-map": "Baidu Map",
+      "doc-reader": "Doc Reader",
       "file-explorer": "File Explorer",
       "music-player": "Music Player",
       "photo-viewer": "Photo Viewer",
@@ -232,7 +233,7 @@
       "reachTheEndOfHistory": "We have reached the end of history",
       "sharingWithPassword": "Ops, the sharer has set an access password",
       "sureToDelete": "Sure to delete?",
-      "sureToOpenTextFile": "The file size has exceed {{size}}. Are you sure you want to open it?",
+      "sureToOpenLargeFile": "The file size has exceed {{size}}. Are you sure you want to open it?",
       "targetExists": "Target exists: {{name}}",
       "totalUsers_one": "{{count}} user in total",
       "totalUsers_other": "{{count}} users in total",

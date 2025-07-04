@@ -100,6 +100,7 @@
     "app": {
       "android-controller": "安卓控制器 ⏳",
       "baidu-map": "百度地图",
+      "doc-reader": "文档阅读器",
       "file-explorer": "文件管理器",
       "music-player": "音乐播放器",
       "photo-viewer": "图片浏览器",
@@ -232,7 +233,7 @@
       "reachTheEndOfHistory": "已经走到历史的尽头了",
       "sharingWithPassword": "啊喔，分享者设置了访问密码",
       "sureToDelete": "确定要删除吗？",
-      "sureToOpenTextFile": "该文件大小已经超过 {{size}}，确定要打开吗?",
+      "sureToOpenLargeFile": "该文件大小已经超过 {{size}}，确定要打开吗?",
       "targetExists": "目标已存在：{{name}}",
       "totalUsers_one": "共 {{count}} 位用户",
       "totalUsers_other": "共 {{count}} 位用户",

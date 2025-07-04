@@ -100,6 +100,7 @@
     "app": {
       "android-controller": "アンドロイドコントローラー ⏳",
       "baidu-map": "百度地図",
+      "doc-reader": "ドキュメントリーダー",
       "file-explorer": "ファイルマネージャー",
       "music-player": "音楽プレーヤー",
       "photo-viewer": "画像ブラウザ",
@@ -232,7 +233,7 @@
       "reachTheEndOfHistory": "私たちは歴史の終わりに達しました",
       "sharingWithPassword": "共有者がアクセスパスワードを設定しました",
       "sureToDelete": "削除しますか",
-      "sureToOpenTextFile": "ファイルサイズが {{size}} を超えています。開いてもよろしいですか?",
+      "sureToOpenLargeFile": "ファイルサイズが {{size}} を超えています。開いてもよろしいですか?",
       "targetExists": "ターゲットはすでに存在します：{{name}}",
       "totalUsers_one": "合計 {{count}} ユーザー",
       "totalUsers_other": "合計 {{count}} ユーザー",

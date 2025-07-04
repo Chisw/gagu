@@ -24,6 +24,7 @@ export interface IAppComponent {
 export enum AppId {
   fileExplorer = 'file-explorer',
   textEditor = 'text-editor',
+  docReader = 'doc-reader',
   photoViewer = 'photo-viewer',
   musicPlayer = 'music-player',
   videoPlayer = 'video-player',

@@ -1,6 +1,7 @@
 import { AppId, IApp } from '../types'
 import FileExplorer from './FileExplorer'
 import TextEditor from './TextEditor'
+import DocReader from './DocReader'
 import PhotoViewer from './PhotoViewer'
 import MusicPlayer from './MusicPlayer'
 import VideoPlayer from './VideoPlayer'
@@ -34,6 +35,21 @@ export const APP_LIST: IApp[] = [
     },
     matchList: ['txt', 'md', 'html', 'xml', 'css', 'js', 'json', 'php', 'java', 'sh', 'log', 'ts', 'tsx'],
     headerClassName: 'bg-yellow-500 dark:bg-yellow-700 text-white',
+    multiple: true,
+    touchModeShow: true,
+  },
+  {
+    id: AppId.docReader,
+    runningId: 0,
+    AppComponent: DocReader,
+    width: 960,
+    height: 720,
+    resizeRange: {
+      minWidth: 300,
+      minHeight: 300,
+    },
+    matchList: ['pdf'],
+    headerClassName: 'bg-orange-800 dark:bg-orange-900 text-white',
     multiple: true,
     touchModeShow: true,
   },
