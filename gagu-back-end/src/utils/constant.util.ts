@@ -5,7 +5,7 @@ import { IServerOS, ThumbnailType, ThumbnailTypeType } from 'src/types'
 const platform = os.platform()
 const hostname = os.hostname()
 
-export const GAGU_VERSION = '0.0.58'
+export const GAGU_VERSION = '0.0.59'
 export const IS_DEV = process.env.NODE_ENV === 'development'
 
 export const HOST = (() => {
