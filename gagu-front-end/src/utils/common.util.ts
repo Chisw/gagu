@@ -231,9 +231,13 @@ export const generateNewName = () => {
   return DateTime.local().toFormat('yyyyMMdd-HHmmss')
 }
 
-export const generateTextFile = (text: string, name: string) => {
+export const generateTextBlob = (text: string) => {
   const blob = new Blob([text], { type: 'text/plain;charset=utf-8' })
-  const file = new File([blob], name)
+  return blob
+}
+
+export const generateTextFile = (text: string, name: string) => {
+  const file = new File([generateTextBlob(text)], name)
   return file
 }
 

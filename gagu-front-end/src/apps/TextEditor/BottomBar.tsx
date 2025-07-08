@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { IEntry } from '../../types'
-import { getEntryPath, getReadableSize, line } from '../../utils'
+import { generateTextBlob, getEntryPath, getReadableSize, line } from '../../utils'
 
 interface BottomBarProps {
   content: string
@@ -18,7 +18,7 @@ export default function BottomBar(props: BottomBarProps) {
 
   const { filePath, fileSize } = useMemo(() => {
     const filePath = getEntryPath(activeEntry)
-    const fileSize = getReadableSize(new Blob([content]).size, kiloSize)
+    const fileSize = getReadableSize(generateTextBlob(content).size, kiloSize)
     return { filePath, fileSize }
   }, [activeEntry, kiloSize, content])
 

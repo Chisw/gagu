@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Confirmor, Opener } from '../../components/common'
-import { ENTRY_ICON_LIST, generateTextFile, getEntryPath, line } from '../../utils'
+import { ENTRY_ICON_LIST, generateTextBlob, generateTextFile, getEntryPath, line } from '../../utils'
 import { FsApi } from '../../api'
 import { AppComponentProps, AppId, ExistingStrategy, IEntry } from '../../types'
 import { useRunAppEvent, useRequest, useHotKey, useUserConfig } from '../../hooks'
@@ -91,11 +91,13 @@ export default function TextEditor(props: AppComponentProps) {
   }, [setUserConfig, textEditorFontSize, userConfig])
 
   const handleDownload = useCallback(() => {
-    const blob = new Blob([textContent])
+    const blob = generateTextBlob(textContent)
     const a = document.createElement('a')
-    a.href = URL.createObjectURL(blob)
+    const blobUrl = URL.createObjectURL(blob)
+    a.href = blobUrl
     a.download = activeEntry?.name
     a.click()
+    URL.revokeObjectURL(blobUrl)
   }, [activeEntry, textContent])
 
   const handleMarkdownViewChange = useCallback((view?: MarkdownViewType) => {
