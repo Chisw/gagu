@@ -30,7 +30,7 @@ layout: ../../../layouts/DocLayout.astro
 
 ![override](/assets/screenshots/x-plore-style-override.png)
 
-但第三方的插件只能绑定固定的域，一旦变更 IP 或切换端口号就无法生效，且不能在多台电脑上同步。
+但第三方的插件只能绑定固定的源，一旦变更 IP 或切换端口号就无法生效，且不能在多台电脑上同步。
 
 遂将代码迁移到自己的浏览器插件中，通过一定的规则来判断，在有 Git 的电脑上可以同步。
 

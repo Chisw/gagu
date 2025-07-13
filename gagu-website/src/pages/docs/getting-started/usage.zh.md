@@ -133,7 +133,7 @@ C:/Users/jay/.gagu
 /home/jay/.gagu
 ```
 
-- Android:
+- Android (Termux):
 
 ```
 /data/data/com.termux/files/home/.gagu

@@ -30,7 +30,7 @@ Use existing browser extension directly to override the style of it, set a full 
 
 ![override](/assets/screenshots/x-plore-style-override.png)
 
-However, this third-party extension can only be bound to a fixed domain. Once the IP or port number is changed, it will not take effect, and it cannot be synchronized on multiple computers.
+However, this third-party extension can only be bound to a fixed origin. Once the IP or port number is changed, it will not take effect, and it cannot be synchronized on multiple computers.
 
 So I migrated the code to my own browser extension, and distinguished by certain rules, it can be synchronized on other computers with Git.
 
