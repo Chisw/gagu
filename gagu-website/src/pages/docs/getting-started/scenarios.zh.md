@@ -28,6 +28,7 @@ layout: ../../../layouts/DocLayout.astro
 
 - AirDroid [http://web.airdroid.com](http://web.airdroid.com)
 - chfs (CuteHttpFileServer) [http://iscute.cn/chfs](http://iscute.cn/chfs)
+- copyparty [https://github.com/9001/copyparty](https://github.com/9001/copyparty)
 - croc [https://github.com/schollz/croc](https://github.com/schollz/croc)
 - daedalOS [https://github.com/DustinBrett/daedalOS](https://github.com/DustinBrett/daedalOS)
 - Dufs [https://github.com/sigoden/dufs](https://github.com/sigoden/dufs)
