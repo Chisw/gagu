@@ -44,6 +44,7 @@ layout: ../../../layouts/DocLayout.astro
 - os.js [https://www.os-js.org](https://www.os-js.org)
 - Palmr [https://github.com/kyantech/Palmr](https://github.com/kyantech/Palmr)
 - puter [https://github.com/HeyPuter/puter](https://github.com/HeyPuter/puter)
+- REM [https://github.com/liriliri/rem](https://github.com/liriliri/rem)
 - SFTPGo [https://sftpgo.com](https://sftpgo.com)
 - Swiftp [https://ppareit.github.io/swiftp](https://ppareit.github.io/swiftp)
 - Snapdrop [https://snapdrop.net](https://snapdrop.net)
