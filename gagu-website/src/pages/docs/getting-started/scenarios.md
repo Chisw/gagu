@@ -34,6 +34,7 @@ Similar applications are listed here, or there are more suitable ones for your r
 - filebrowser [https://github.com/filebrowser/filebrowser](https://github.com/filebrowser/filebrowser)
 - FilePizza [https://file.pizza](https://file.pizza/)
 - FilePulse [https://github.com/FilePulseSoft/FilePulse](https://github.com/FilePulseSoft/FilePulse)
+- filestash [https://github.com/mickael-kerjean/filestash](https://github.com/mickael-kerjean/filestash)
 - FolderV [https://play.google.com/store/apps/details?id=com.folderv.file](https://play.google.com/store/apps/details?id=com.folderv.file)
 - GoDrive [https://github.com/devld/go-drive](https://github.com/devld/go-drive)
 - hfs (HTTP File Server) [https://github.com/rejetto/hfs](https://github.com/rejetto/hfs)
