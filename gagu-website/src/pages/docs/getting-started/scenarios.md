@@ -26,6 +26,7 @@ Therefore, the usage of GAGU is mainly designed according to this pattern, GAGU 
 Similar applications are listed here, or there are more suitable ones for your reference:
 
 - AirDroid [http://web.airdroid.com](http://web.airdroid.com)
+- ArozOS [https://github.com/tobychui/arozos](https://github.com/tobychui/arozos)
 - chfs (CuteHttpFileServer) [http://iscute.cn/chfs](http://iscute.cn/chfs)
 - copyparty [https://github.com/9001/copyparty](https://github.com/9001/copyparty)
 - croc [https://github.com/schollz/croc](https://github.com/schollz/croc)

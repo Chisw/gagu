@@ -27,6 +27,7 @@ layout: ../../../layouts/DocLayout.astro
 特在此列出相似应用，或有更适合你的，以供参考：
 
 - AirDroid [http://web.airdroid.com](http://web.airdroid.com)
+- ArozOS [https://github.com/tobychui/arozos](https://github.com/tobychui/arozos)
 - chfs (CuteHttpFileServer) [http://iscute.cn/chfs](http://iscute.cn/chfs)
 - copyparty [https://github.com/9001/copyparty](https://github.com/9001/copyparty)
 - croc [https://github.com/schollz/croc](https://github.com/schollz/croc)
