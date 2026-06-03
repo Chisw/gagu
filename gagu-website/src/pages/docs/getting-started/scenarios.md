@@ -45,6 +45,7 @@ Similar applications are listed here, or there are more suitable ones for your r
 - Nimbus [https://github.com/nimbusdotstorage/Nimbus](https://github.com/nimbusdotstorage/Nimbus)
 - os.js [https://www.os-js.org](https://www.os-js.org)
 - Palmr [https://github.com/kyantech/Palmr](https://github.com/kyantech/Palmr)
+- PlainApp [https://github.com/plainhub/plain-app](https://github.com/plainhub/plain-app)
 - puter [https://github.com/HeyPuter/puter](https://github.com/HeyPuter/puter)
 - REM [https://github.com/liriliri/rem](https://github.com/liriliri/rem)
 - SFTPGo [https://sftpgo.com](https://sftpgo.com)
