@@ -46,7 +46,7 @@ export default function Dock(props: DockProps) {
           flex justify-center items-center
           transition-all duration-500 ease-out
           dark:border-zinc-600 dark:from-zinc-700 dark:to-zinc-900
-          ${activePage === Page.explore ? 'translate-y-0' : 'translate-y-20'}
+          ${activePage === Page.explorer ? 'translate-y-0' : 'translate-y-20'}
         `)}
       >
         {APP_LIST.map(app => {

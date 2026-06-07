@@ -136,6 +136,7 @@
 }
 
 .gagu-entry-icon.--folder[data-folder-name="mp3"]::before,
+.gagu-entry-icon.--folder[data-folder-name="m4a"]::before,
 .gagu-entry-icon.--folder[data-folder-name="music"]::before,
 .gagu-entry-icon.--folder[data-folder-name="musics"]::before {
   background-image: url("data: image/svg+xml, %3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' %3E%3Cpath fill='none' d='M0 0h24v24H0z' /%3E%3Cpath fill='%23d97706' d='M20 3v14a4 4 0 1 1-2-3.465V5H9v12a4 4 0 1 1-2-3.465V3h13zM5 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm11 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4z' /%3E%3C/svg%3E");

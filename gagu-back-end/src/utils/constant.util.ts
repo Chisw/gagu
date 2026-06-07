@@ -108,6 +108,7 @@ export const GEN_THUMBNAIL_MAP: { [EXTENSION: string]: ThumbnailTypeType } = {
   pbm: ThumbnailType.image,
   svg: ThumbnailType.image,
   mp3: ThumbnailType.audio,
+  m4a: ThumbnailType.audio,
   mp4: ThumbnailType.video,
   mkv: ThumbnailType.video,
   avi: ThumbnailType.video,

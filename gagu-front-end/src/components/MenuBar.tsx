@@ -15,7 +15,7 @@ import { activePageState, baseDataState, contextMenuDataState, runningAppListSta
 
 const pageList = [
   { key: Page.desktop, icon: <SvgIcon.Desktop /> },
-  { key: Page.explore, icon: <SvgIcon.Layout /> },
+  { key: Page.explorer, icon: <SvgIcon.Layout /> },
   { key: Page.touch, icon: <SvgIcon.Phone /> },
 ]
 
@@ -130,7 +130,7 @@ export function MenuBar() {
            bg-white bg-opacity-60
            dark:bg-zinc-700 dark:bg-opacity-80 dark:text-zinc-200
           transition-all duration-500 ease-out
-          ${[Page.desktop, Page.explore, Page.touch].includes(activePage) ? 'translate-y-0' : '-translate-y-20'}
+          ${[Page.desktop, Page.explorer, Page.touch].includes(activePage) ? 'translate-y-0' : '-translate-y-20'}
         `)}
       >
         <div className="h-full flex items-center text-xs">

@@ -14,7 +14,7 @@ export enum Page {
   PENDING = 'PENDING',
   login = 'login',
   desktop = 'desktop',
-  explore = 'explore',
+  explorer = 'explorer',
   touch = 'touch',
   sharing = 'sharing',
 }

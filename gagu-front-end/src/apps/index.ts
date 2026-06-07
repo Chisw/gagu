@@ -78,7 +78,7 @@ export const APP_LIST: IApp[] = [
       minWidth: 440,
       minHeight: 240,
     },
-    matchList: ['mp3', 'flac', 'wav', 'aac', 'ogg'],
+    matchList: ['mp3', 'm4a', 'flac', 'wav', 'aac', 'ogg'],
     headerClassName: 'bg-pink-900 text-pink-100',
     touchModeShow: true,
   },

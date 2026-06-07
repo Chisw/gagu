@@ -17,11 +17,11 @@ export default function ExplorePage() {
   const [activeAppId, setActiveAppId] = useState<string>(AppId.fileExplorer)
   
   useEffect(() => {
-    setTimeout(() => setActivePage(Page.explore))
+    setTimeout(() => setActivePage(Page.explorer))
   }, [setActivePage])
 
   useEffect(() => {
-    if (activePage === Page.explore) {
+    if (activePage === Page.explorer) {
       setTimeout(() => setShow(true), 300)
     } else {
       setShow(false)

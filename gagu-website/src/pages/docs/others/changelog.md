@@ -20,6 +20,7 @@ Clear data directory means that all users, download tunnels and other data will 
 ## v0.0.*
 
 - v0.0.60 (Coming soon)
+  - feat: MusicPlayer supports .m4a
 
 - v0.0.59 (2025-07-04)
   - feat: TextEditor change status is displayed in the title instead of toast prompt

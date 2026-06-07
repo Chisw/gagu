@@ -5,6 +5,22 @@ layout: ../../../layouts/DocLayout.astro
 
 # 使用
 
+## 功能演示
+
+### v0.0.59
+
+<iframe
+  src="//player.bilibili.com/player.html?bvid=BV1ghE46kECN"
+  scrolling="no"
+  border="0"
+  frameborder="no"
+  framespacing="0"
+  allowfullscreen="true"
+>
+</iframe>
+
+### v0.0.34
+
 <iframe
   src="//player.bilibili.com/player.html?bvid=BV1W84y1h71d"
   scrolling="no"
