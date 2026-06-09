@@ -4,17 +4,19 @@ import { IServerOS, ThumbnailType, ThumbnailTypeType } from 'src/types'
 
 const platform = os.platform()
 const hostname = os.hostname()
+const homeDir = os.homedir()
+const userInfo = os.userInfo()
 
 export const GAGU_VERSION = '0.0.59'
 export const IS_DEV = process.env.NODE_ENV === 'development'
 
 export const HOST = (() => {
-  const iFaces = os.networkInterfaces()
+  const interfaces = os.networkInterfaces()
   const ipList: string[] = []
-  for (const dev in iFaces) {
-    iFaces[dev]?.forEach(function (details) {
-      if (details.family === 'IPv4' && !details.internal) {
-        ipList.push(details.address)
+  for (const dev in interfaces) {
+    interfaces[dev]?.forEach((info) => {
+      if (info.family === 'IPv4' && !info.internal) {
+        ipList.push(info.address)
       }
     })
   }
@@ -23,7 +25,7 @@ export const HOST = (() => {
 })()
 
 export const ServerOS: IServerOS = {
-  username: process.env.USER || os.userInfo().username,
+  username: process.env.USER || userInfo.username,
   host: HOST,
   hostname,
   platform,
@@ -38,9 +40,9 @@ export const ServerOS: IServerOS = {
 
 const PATH_MAP: { [PLATFORM: string]: string } = {
   android: `/data/data/com.termux/files/home/.gagu`,
-  darwin: `/Users/${ServerOS.username}/.gagu`,
-  linux: `/home/${ServerOS.username}/.gagu`,
-  win32: `C:/Users/${ServerOS.username}/.gagu`,
+  darwin: `${homeDir}/.gagu`,
+  linux: `${homeDir}/.gagu`,
+  win32: `${homeDir}/.gagu`,
 }
 
 const ROOT_PATH = `${PATH_MAP[ServerOS.platform] || ''}${IS_DEV ? '.dev' : ''}`

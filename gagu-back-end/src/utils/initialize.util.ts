@@ -1,7 +1,7 @@
 import { IUser, UserPermission } from '../types'
 import { GAGU_PATH, ServerOS } from './constant.util'
 import { writeAuthData, writeUsersData } from './user.util'
-import { completeNestedPath, getExists } from './fs.util'
+import { makeNestedDirectory, exists } from './fs.util'
 import { writeTunnelData } from './tunnel.util'
 import { writeSettingsData } from './setting.util'
 import * as md5 from 'md5'
@@ -9,18 +9,20 @@ import { exec } from 'child_process'
 import { readFileSync } from 'fs'
 import { HttpsOptions } from '@nestjs/common/interfaces/external/https-options.interface'
 
-export const initialize = async (security: boolean) => {
-  completeNestedPath(`${GAGU_PATH.ROOT}/data/_`)
-  completeNestedPath(`${GAGU_PATH.ROOT}/log/_`)
-  completeNestedPath(`${GAGU_PATH.ROOT}/public/_`)
-  completeNestedPath(`${GAGU_PATH.ROOT}/public/avatar/_`)
-  completeNestedPath(`${GAGU_PATH.ROOT}/public/image/_`)
-  completeNestedPath(`${GAGU_PATH.ROOT}/public/lib/_`)
-  completeNestedPath(`${GAGU_PATH.ROOT}/secrets/_`)
-  completeNestedPath(`${GAGU_PATH.ROOT}/thumbnail/_`)
-  completeNestedPath(`${GAGU_PATH.ROOT}/users/_`)
+export const initialize = async (withSecurity: boolean) => {
+  makeNestedDirectory(
+    `${GAGU_PATH.ROOT}/data`,
+    `${GAGU_PATH.ROOT}/log`,
+    `${GAGU_PATH.ROOT}/public`,
+    `${GAGU_PATH.ROOT}/public/avatar`,
+    `${GAGU_PATH.ROOT}/public/image`,
+    `${GAGU_PATH.ROOT}/public/lib`,
+    `${GAGU_PATH.ROOT}/secrets`,
+    `${GAGU_PATH.ROOT}/thumbnail`,
+    `${GAGU_PATH.ROOT}/users`,
+  )
 
-  if (!getExists(GAGU_PATH.DATA_USERS)) {
+  if (!exists(GAGU_PATH.DATA_USERS)) {
     const administrator: IUser = {
       nickname: 'Admin',
       username: 'gagu',
@@ -40,15 +42,15 @@ export const initialize = async (security: boolean) => {
     writeUsersData([administrator])
   }
 
-  if (!getExists(GAGU_PATH.DATA_AUTH)) {
+  if (!exists(GAGU_PATH.DATA_AUTH)) {
     writeAuthData([])
   }
 
-  if (!getExists(GAGU_PATH.DATA_TUNNELS)) {
+  if (!exists(GAGU_PATH.DATA_TUNNELS)) {
     writeTunnelData([])
   }
 
-  if (!getExists(GAGU_PATH.DATA_SETTINGS)) {
+  if (!exists(GAGU_PATH.DATA_SETTINGS)) {
     writeSettingsData({})
   }
 
@@ -82,11 +84,11 @@ export const initialize = async (security: boolean) => {
   ServerOS.supportCompression = libMap.zip && libMap.unzip
   ServerOS.supportCurl = libMap.curl
 
-  if (security) {
+  if (withSecurity) {
     const keyPath = `${GAGU_PATH.SECRETS}/private-key.pem`
     const certPath = `${GAGU_PATH.SECRETS}/public-certificate.pem`
-    const keyExisted = getExists(keyPath)
-    const certExisted = getExists(certPath)
+    const keyExisted = exists(keyPath)
+    const certExisted = exists(certPath)
 
     if (keyExisted && certExisted) {
       const options: HttpsOptions = {

@@ -4,7 +4,7 @@ import { FileInterceptor } from '@nestjs/platform-express'
 import {
   removeEntry,
   ServerOS,
-  getExists,
+  exists,
   GAGU_VERSION,
   path2RootEntry,
   respond,
@@ -115,13 +115,13 @@ export class FsController {
   @Get('exists')
   @PathValidation({ queryFields: ['path'] })
   queryExists(@Query('path') path: string) {
-    return respond(getExists(path))
+    return respond(exists(path))
   }
 
   @Post('exists')
   @PathValidation({ bodyFields: ['pathList'] })
   queryExistsCount(@Body('pathList') pathList: string[]) {
-    const count = pathList.filter(getExists).length
+    const count = pathList.filter(exists).length
     return respond(count)
   }
 
@@ -186,7 +186,7 @@ export class FsController {
     @Query('existingStrategy') existingStrategy?: ExistingStrategyType,
   ) {
     try {
-      if (getExists(path)) {
+      if (exists(path)) {
         if (existingStrategy === ExistingStrategy.skip) {
           return respond(TransferResult.skipped)
         }
@@ -238,7 +238,7 @@ export class FsController {
     @Query('existingStrategy') existingStrategy?: ExistingStrategyType,
   ) {
     try {
-      if (getExists(toPath)) {
+      if (exists(toPath)) {
         if (existingStrategy === ExistingStrategy.skip) {
           return respond(TransferResult.skipped)
         }
@@ -279,7 +279,7 @@ export class FsController {
     @Query('existingStrategy') existingStrategy?: ExistingStrategyType,
   ) {
     try {
-      if (getExists(toPath)) {
+      if (exists(toPath)) {
         if (existingStrategy === ExistingStrategy.skip) {
           return respond(TransferResult.skipped)
         }
@@ -314,11 +314,11 @@ export class FsController {
   @Permission(UserPermission.delete)
   @PathValidation({ queryFields: ['path'] })
   async deleteEntry(@Query('path') path: string) {
-    if (!getExists(path)) {
+    if (!exists(path)) {
       return respond()
     }
     await removeEntry(path)
-    const deleted = !getExists(path)
+    const deleted = !exists(path)
     if (deleted) {
       this.userService.removeFavoriteOfAllUsers(path)
       return respond()
@@ -411,7 +411,7 @@ export class FsController {
     @Res() response: Response,
   ) {
     const avatarPath = this.fsService.getAvatarPath(username)
-    if (getExists(avatarPath)) {
+    if (exists(avatarPath)) {
       response.sendFile(avatarPath)
     } else {
       response.end(
@@ -428,7 +428,7 @@ export class FsController {
     @Res() response: Response,
   ) {
     const path = this.fsService.getImagePath(name)
-    if (getExists(path)) {
+    if (exists(path)) {
       response.sendFile(path)
     } else {
       response.end(

@@ -1,12 +1,6 @@
-import {
-  accessSync,
-  appendFile,
-  constants,
-  mkdirSync,
-  promises,
-  statSync,
-} from 'fs'
-import { GAGU_PATH, ServerOS } from './constant.util'
+import { accessSync, appendFile, constants, mkdirSync, statSync } from 'fs'
+import { rm } from 'fs/promises'
+import { GAGU_PATH } from './constant.util'
 import { getParentPath } from './entry.util'
 import { catchError } from './common.util'
 
@@ -15,7 +9,7 @@ export const getExtension = (name: string) => {
   return name.split('.').reverse()[0].toLowerCase()
 }
 
-export const getExists = (path: string) => {
+export const exists = (path: string) => {
   let exists = false
   try {
     accessSync(path, constants.F_OK)
@@ -37,7 +31,7 @@ export const getIsSamePartition = (from: string, to: string) => {
 }
 
 export const getDuplicatedPath: (path: string) => string = (path) => {
-  if (getExists(path)) {
+  if (exists(path)) {
     const name = path.split('/').reverse()[0]
     const parentPath = getParentPath(path)
     const extension = getExtension(name)
@@ -64,8 +58,8 @@ export const getDuplicatedPath: (path: string) => string = (path) => {
 export const removeEntry = async (path: string) => {
   return new Promise(async (resolve) => {
     try {
-      if (getExists(path)) {
-        await promises.rm(path, { recursive: true })
+      if (exists(path)) {
+        await rm(path, { recursive: true })
       }
       resolve(true)
     } catch (error) {
@@ -74,17 +68,11 @@ export const removeEntry = async (path: string) => {
   })
 }
 
-export const completeNestedPath = (path: string) => {
-  const list = path.split('/').filter(Boolean).slice(0, -1)
-  const nestedPathList = list.map((dirName, index) => {
-    const prefix =
-      index === 0 ? '' : '/' + list.filter((d, i) => i < index).join('/')
-    return `${prefix}/${dirName}`
-  })
-  nestedPathList.forEach((path) => {
-    const p = ServerOS.isWindows ? path.replace('/', '') : path
-    !getExists(p) && mkdirSync(p)
-  })
+export const makeNestedDirectory = (...paths: string[]) => {
+  for (const path of paths) {
+    if (exists(path)) continue
+    mkdirSync(path, { recursive: true })
+  }
 }
 
 export const dataURLtoBlob = (base64: string) => {

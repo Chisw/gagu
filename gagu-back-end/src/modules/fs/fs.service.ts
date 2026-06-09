@@ -13,7 +13,6 @@ import {
 import {
   createReadStream,
   createWriteStream,
-  promises,
   readdirSync,
   readFileSync,
   renameSync,
@@ -21,12 +20,13 @@ import {
   unlinkSync,
   writeFileSync,
 } from 'fs'
+import { cp, rm } from 'fs/promises'
 import {
   GAGU_PATH,
   getExtension,
   ServerOS,
-  getExists,
-  completeNestedPath,
+  exists,
+  makeNestedDirectory,
   dataURLtoBuffer,
   getEntryPath,
   catchError,
@@ -263,7 +263,8 @@ export class FsService {
   }
 
   uploadFile(path: string, buffer: Buffer) {
-    completeNestedPath(path)
+    const dir = getParentPath(path)
+    makeNestedDirectory(dir)
 
     return new Promise((resolve, reject) => {
       const stream = createWriteStream(path)
@@ -293,8 +294,8 @@ export class FsService {
       if (isSame) {
         renameSync(fromPath, toPath)
       } else {
-        await promises.cp(fromPath, toPath, { recursive: true })
-        await promises.rm(fromPath, { recursive: true })
+        await cp(fromPath, toPath, { recursive: true })
+        await rm(fromPath, { recursive: true })
       }
     } catch (error) {
       catchError(error)
@@ -303,7 +304,7 @@ export class FsService {
 
   async copyEntry(fromPath: string, toPath: string) {
     try {
-      await promises.cp(fromPath, toPath, { recursive: true })
+      await cp(fromPath, toPath, { recursive: true })
     } catch (error) {
       catchError(error)
     }
@@ -357,7 +358,7 @@ export class FsService {
     const thumbnailParentPath = GAGU_PATH.THUMBNAIL
     const thumbnailPath = `${thumbnailParentPath}/${thumbnailId}`
 
-    if (!getExists(thumbnailPath)) {
+    if (!exists(thumbnailPath)) {
       let convertingTargetPath = ''
 
       const extension = getExtension(path)
