@@ -5,7 +5,7 @@ import { TermuxApi } from '../../api'
 import toast from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
 import { AppId, EntryType, IDownloadForm } from '../../types'
-import { EntryPicker, EntryPickerMode } from '../../components'
+import { EntryPicker } from '../../components'
 import { SvgIcon } from '../../components/common'
 
 
@@ -75,7 +75,7 @@ export default function Download() {
       <EntryPicker
         show={pickerShow}
         appId={AppId.androidController}
-        mode={EntryPickerMode.open}
+        mode="open"
         type={EntryType.directory}
         title={t`action.open`}
         onConfirm={({ pickedPath }) => {

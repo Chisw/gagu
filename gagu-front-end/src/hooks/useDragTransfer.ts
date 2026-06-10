@@ -1,14 +1,14 @@
 import { useEffect } from 'react'
 import { EntryType, IEntry, INestedFile } from '../types'
-import { HOVER_OPEN_TIMER, dragFileSvg, dragFolderSvg, getDataTransferNestedFileList, safeQuotes } from '../utils'
+import { HOVER_OPEN_TIMER, SVG_DRAG_FILE, SVG_DRAG_FOLDER, getDataTransferNestedFileList, safeQuotes } from '../utils'
 
 const canvas: any = document.getElementById('gagu-drag-img-canvas')
 const ctx = canvas.getContext('2d')
 const dragBgFolder = new Image()
 const dragBgFile = new Image()
 
-dragBgFolder.src = dragFolderSvg
-dragBgFile.src = dragFileSvg
+dragBgFolder.src = SVG_DRAG_FOLDER
+dragBgFile.src = SVG_DRAG_FILE
 
 interface useDragTransferProps {
   containerInnerRef: any

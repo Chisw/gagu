@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { SvgIcon } from './SvgIcon'
 import { line } from '../../utils'
 import { useEffect, useState } from 'react'
-import { EntryPicker, EntryPickerMode } from '../EntryPicker'
+import { EntryPicker } from '../EntryPicker'
 import { openEventState } from '../../states'
 import { useRecoilState } from 'recoil'
 
@@ -68,7 +68,7 @@ export function Opener(props: OpenerProps) {
       <EntryPicker
         show={openerEntryPickerShow}
         appId={appId}
-        mode={EntryPickerMode.open}
+        mode="open"
         type={EntryType.file}
         title={t`action.open`}
         onConfirm={({ pickedEntryList }) => {

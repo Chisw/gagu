@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { AppComponentProps, AppId, IEntry, PlayMode, PlayModeType, TunnelType } from '../../types'
 import { useRequest, useRunAppEvent, usePlayInfo, useUserConfig, useHotKey } from '../../hooks'
 import { FsApi, TunnelApi } from '../../api'
-import { defaultMusicCoverSvg, getEntryPath, getIndexLabel, getReadableSize, line } from '../../utils'
+import { SVG_DEFAULT_ALBUM_COVER, getEntryPath, getIndexLabel, getReadableSize, line } from '../../utils'
 import SpectrumCanvas from './SpectrumCanvas'
 import { IconButton, Opener, SvgIcon } from '../../components/common'
 import { useTranslation } from 'react-i18next'
@@ -68,7 +68,7 @@ export default function MusicPlayer(props: AppComponentProps) {
       title = activeEntry?.name || t`text.noTitle`,
       artist = t`text.unknownArtist`,
       album = t`text.unknownAlbum`,
-      coverBase64 = defaultMusicCoverSvg,
+      coverBase64 = SVG_DEFAULT_ALBUM_COVER,
     } = response?.data || {}
 
     const coverStyle = coverBase64 ? { backgroundImage: `url("${coverBase64}")` } : undefined
@@ -280,7 +280,7 @@ export default function MusicPlayer(props: AppComponentProps) {
               >
                 <div
                   className="flex-shrink-0 mr-2 w-10 h-10 shadow-lg overflow-hidden bg-center bg-cover bg-no-repeat"
-                  style={{ backgroundImage: `url("${defaultMusicCoverSvg}")` }}
+                  style={{ backgroundImage: `url("${SVG_DEFAULT_ALBUM_COVER}")` }}
                 >
                   <div
                     className="w-full h-full bg-cover bg-center"                    

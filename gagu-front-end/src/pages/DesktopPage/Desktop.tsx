@@ -5,7 +5,7 @@ import { activePageState, userInfoState, runningAppListState, topWindowIndexStat
 import EntryNode from '../../apps/FileExplorer/EntryNode'
 import { AppId, ClipboardState, CreationType, EditMode, EntryType, IApp, IEntry, Page } from '../../types'
 import { useWorkArea } from '../../hooks'
-import { EntryPicker, EntryPickerMode, SharingModal } from '../../components'
+import { EntryPicker, SharingModal } from '../../components'
 import { APP_LIST } from '../../apps'
 import { useTranslation } from 'react-i18next'
 
@@ -167,7 +167,7 @@ export default function Desktop() {
       <EntryPicker
         show={movementEntryPickerShow}
         appId={AppId.fileExplorer}
-        mode={EntryPickerMode.open}
+        mode="open"
         type={EntryType.directory}
         title={t`action.moveTo`}
         onConfirm={({ pickedPath }) => {

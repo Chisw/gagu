@@ -131,3 +131,5 @@ export interface IWindowRatio {
   widthRatio: number
   heightRatio: number
 }
+
+export type EntryPickerMode = 'open' | 'save'

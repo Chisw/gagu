@@ -3,7 +3,7 @@ import { useRequest } from '../../hooks'
 import { TermuxApi } from '../../api'
 import { useCallback, useState } from 'react'
 import { SvgIcon } from '../../components/common'
-import { EntryPicker, EntryPickerMode } from '../../components'
+import { EntryPicker } from '../../components'
 import { AppId, EntryType, MediaPlayerStateType } from '../../types'
 import { useTranslation } from 'react-i18next'
 
@@ -76,7 +76,7 @@ export default function MediaPlayer() {
       <EntryPicker
         show={pickerShow}
         appId={AppId.androidController}
-        mode={EntryPickerMode.open}
+        mode="open"
         type={EntryType.file}
         title={t`action.open`}
         onConfirm={({ pickedPath }) => {

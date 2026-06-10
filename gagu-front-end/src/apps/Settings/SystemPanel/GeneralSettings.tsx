@@ -4,7 +4,7 @@ import { Button, Divider, Form, Input, Radio, RadioGroup } from '@douyinfe/semi-
 import { SvgIcon } from '../../../components/common'
 import { useTouchMode, useUserConfig } from '../../../hooks'
 import { AppId, ColorScheme, EntryType, HotkeyStyle } from '../../../types'
-import { EntryPicker, EntryPickerMode } from '../../../components'
+import { EntryPicker } from '../../../components'
 import { useState } from 'react'
 
 export default function GeneralSettings() {
@@ -124,7 +124,7 @@ export default function GeneralSettings() {
       <EntryPicker
         show={defaultPathEntryPickerShow}
         appId={AppId.settings}
-        mode={EntryPickerMode.open}
+        mode="open"
         type={EntryType.directory}
         title={t`action.open`}
         onConfirm={({ pickedPath }) => {

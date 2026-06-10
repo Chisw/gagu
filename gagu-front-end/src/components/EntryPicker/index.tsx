@@ -1,17 +1,12 @@
 import { Modal, SideSheet } from '@douyinfe/semi-ui'
 import { useCallback, useMemo, useState } from 'react'
-import { EntryType, IEntry } from '../../types'
+import { EntryPickerMode, EntryType, IEntry } from '../../types'
 import { useTranslation } from 'react-i18next'
 import FileExplorer from '../../apps/FileExplorer'
 import { APP_LIST } from '../../apps'
 import { useTouchMode } from '../../hooks'
 import FileExplorerTouch from '../../apps/FileExplorerTouch'
 import Form, { FormProps } from './Form'
-
-export enum EntryPickerMode {
-  open = 'open',
-  save = 'save',
-}
 
 interface EntryPickerResult {
   pickedEntryList: IEntry[]
@@ -21,7 +16,7 @@ interface EntryPickerResult {
 interface EntryPickerProps {
   show: boolean
   appId: string
-  mode: EntryPickerMode.open | EntryPickerMode.save
+  mode: EntryPickerMode
   type: EntryType.directory | EntryType.file
   title?: string
   multiple?: boolean
@@ -56,8 +51,8 @@ export function EntryPicker(props: EntryPickerProps) {
 
   const { pickerState, matchList } = useMemo(() => {
     const pickerState = {
-      isOpenMode: mode === EntryPickerMode.open,
-      isSaveMode: mode === EntryPickerMode.save,
+      isOpenMode: mode === 'open',
+      isSaveMode: mode === 'save',
       isMultiple: multiple,
       isSingle: !multiple,
       isPickingFile: type === EntryType.file,

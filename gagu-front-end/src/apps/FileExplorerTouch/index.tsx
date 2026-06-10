@@ -8,7 +8,7 @@ import EntryNode from './EntryNode'
 import SelectionMenu from './SelectionMenu'
 import Side from './Side'
 import { useFileExplorer } from '../../hooks'
-import { EntryPicker, EntryPickerMode, SharingModal } from '../../components'
+import { EntryPicker, SharingModal } from '../../components'
 import { openEventState } from '../../states'
 import { useRecoilState } from 'recoil'
 import { AppId, EntryType, EventTransaction, ExplorerPickProps, IEntry } from '../../types'
@@ -375,7 +375,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
       <EntryPicker
         show={movementEntryPickerShow}
         appId={AppId.fileExplorer}
-        mode={EntryPickerMode.open}
+        mode="open"
         type={EntryType.directory}
         title={t`action.moveTo`}
         onConfirm={({ pickedPath }) => {

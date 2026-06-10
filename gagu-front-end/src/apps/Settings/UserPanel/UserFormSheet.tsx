@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next'
 import { userInfoState } from '../../../states'
 import { useRecoilState } from 'recoil'
 import { semiLocaleMap } from '../../../i18n'
-import { EntryPicker, EntryPickerMode } from '../../../components'
+import { EntryPicker } from '../../../components'
 
 const handleScrollToError = () => {
   const top = document.querySelector('.gagu-app-settings-user-form .semi-form-field-error-message')?.closest('.semi-form-field')?.getBoundingClientRect()?.top
@@ -353,7 +353,7 @@ export default function UserFormModal(props: UserFormModalProps) {
       <EntryPicker
         show={assignedPathEntryPickerShow}
         appId={AppId.settings}
-        mode={EntryPickerMode.open}
+        mode="open"
         type={EntryType.directory}
         title={t`action.open`}
         onConfirm={({ pickedPath }) => {

@@ -2,9 +2,9 @@ import { DateTime } from 'luxon'
 import { IOffsetInfo, ILassoInfo, PublicImageName, ExistingStrategyType } from '../types'
 import md5 from 'md5'
 import { FsApi } from '../api'
-import default_favicon from '../img/favicon.png'
 import { ACCESS_TOKEN_KEY } from './constant.util'
 import { UserInfoStore } from './store.util'
+import { SVG_DEFAULT_FAVICON } from './svg.util'
 
 export const copy = (str: string) => {
   const input = document.createElement('textarea')
@@ -204,7 +204,7 @@ export const setFavicon = async (imgUrl: string) => {
     const base64 = await getImageTypeBase64ByURL(imgUrl, options)
     set(base64)
   } catch (error) {
-    set(default_favicon)
+    set(SVG_DEFAULT_FAVICON)
   }
 }
 

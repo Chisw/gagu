@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { EntryPicker, EntryPickerMode, SharingModal } from '../../components'
+import { EntryPicker, SharingModal } from '../../components'
 import { useWorkArea } from '../../hooks'
 import StatusBar from './StatusBar'
 import ControlBar from './ControlBar'
@@ -217,7 +217,7 @@ export default function FileExplorer(props: FileExplorerProps) {
       <EntryPicker
         show={movementEntryPickerShow}
         appId={AppId.fileExplorer}
-        mode={EntryPickerMode.open}
+        mode="open"
         type={EntryType.directory}
         title={t`action.moveTo`}
         onConfirm={({ pickedPath }) => {
