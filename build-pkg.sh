@@ -6,10 +6,6 @@ if [[ ! $1 || ! $2 ]]; then
 
     npm run build:pkg 1.0.0 arm
 
-  or:
-
-    yarn build:pkg 1.0.1 x64
-
 "
   exit
 fi

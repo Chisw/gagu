@@ -14,9 +14,14 @@ gagu
 |- gagu-website
 ```
 
-项目中只上传了 `yarn.lock` 文件，所以使用 `yarn` 而不是 `npm` 来安装依赖，可以确保我们在开发坏境的运行结果是一致的。
+项目中只上传了 `pnpm-lock.yaml` 文件，所以使用 `pnpm` 而不是 `npm` 来安装依赖，可以确保我们在开发坏境的运行结果是一致的。
 
 ## 构成
+
+```sh
+# 安装依赖
+pnpm i
+```
 
 ### 前端
 
@@ -29,8 +34,7 @@ gagu
 ```sh
 # dev
 $ cd gagu-front-end
-$ yarn
-$ yarn start
+$ pnpm start
 ```
 
 ### 后端
@@ -42,8 +46,7 @@ $ yarn start
 ```sh
 # dev
 $ cd gagu-back-end
-$ yarn
-$ yarn start:dev
+$ pnpm start:dev
 ```
 
 ### 网站
@@ -53,8 +56,7 @@ $ yarn start:dev
 ```sh
 # dev
 $ cd gagu-website
-$ yarn
-$ yarn start
+$ pnpm start
 ```
 
 ## 构建 NPM 包

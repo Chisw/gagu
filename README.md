@@ -54,28 +54,30 @@ Password: 9293
 
 ## 🛠 Development
 
-Only the `yarn.lock` file is uploaded in the project, so using `yarn` instead of `npm` to install dependencies can ensure that our running results in the development environment are consistent.
+Only the `pnpm-lock.yaml` file is uploaded in the project, so using `pnpm` instead of `npm` to install dependencies can ensure that our running results in the development environment are consistent.
+
+```sh
+# install dependencies
+pnpm i
+```
 
 GAGU app code consists of two parts: `./gagu-back-end` and `./gagu-front-end`.
 
 ```sh
 # Back-end
 $ cd gagu-back-end
-$ yarn
-$ yarn start:dev
+$ pnpm start:dev
 
 # Front-end
 $ cd gagu-front-end
-$ yarn
-$ yarn start
+$ pnpm start
 ```
 
 GAGU website code is in `./gagu-website`.
 
 ```sh
 $ cd gagu-website
-$ yarn
-$ yarn start
+$ pnpm start
 ```
 
 ## 🔨 Build NPM package
