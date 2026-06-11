@@ -1,8 +1,12 @@
-import { exec, spawn } from 'child_process'
+import { exec, spawn } from 'node:child_process'
 import { ServerOS } from './constant.util'
-import { ServerMessage } from 'src/types'
-import * as md5 from 'md5'
+import { ServerMessage } from '../types'
+import crypto from 'node:crypto'
 import * as chalk from 'chalk'
+
+export const md5 = (text: string) => {
+  return crypto.createHash('md5').update(text, 'utf8').digest('hex')
+}
 
 export const openInBrowser = (url: string) => {
   if (ServerOS.isMacOS) {

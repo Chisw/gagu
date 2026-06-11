@@ -1,16 +1,14 @@
-import { readFileSync, writeFileSync } from 'fs'
 import { ITunnel, ServerMessage } from '../types'
 import { GAGU_PATH } from './constant.util'
-import { JSONFormat } from './fs.util'
+import { readJSONData, writeJSONData } from './fs.util'
 import { respond } from './common.util'
 
 export const writeTunnelData = (tunnelList: ITunnel[]) => {
-  writeFileSync(GAGU_PATH.DATA_TUNNELS, JSONFormat(tunnelList))
+  writeJSONData(GAGU_PATH.DATA_TUNNELS, tunnelList)
 }
 
 export const readTunnelData = () => {
-  const dataStr = readFileSync(GAGU_PATH.DATA_TUNNELS).toString('utf-8')
-  const tunnelList: ITunnel[] = JSON.parse(dataStr)
+  const tunnelList = readJSONData<ITunnel[]>(GAGU_PATH.DATA_TUNNELS)
   return tunnelList
 }
 

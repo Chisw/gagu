@@ -19,8 +19,8 @@ import {
   statSync,
   unlinkSync,
   writeFileSync,
-} from 'fs'
-import { cp, rm } from 'fs/promises'
+} from 'node:fs'
+import { cp, rm } from 'node:fs/promises'
 import {
   GAGU_PATH,
   getExtension,
@@ -34,9 +34,9 @@ import {
   GEN_THUMBNAIL_MAP,
   getIsSamePartition,
   getParentPath,
+  md5,
 } from '../../utils'
 import * as nodeDiskInfo from 'node-disk-info'
-import * as md5 from 'md5'
 import * as piexifjs from 'piexifjs'
 import { parseFile } from 'music-metadata'
 import * as gm from 'gm'

@@ -1,7 +1,7 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common'
 import { APP_GUARD } from '@nestjs/core'
 import { ServeStaticModule } from '@nestjs/serve-static'
-import { join } from 'path'
+import { join } from 'node:path'
 import { ApiGuard } from './common/guards/api.guard'
 import { LoggerMiddleware } from './common/middlewares/logger.middleware'
 import { AuthModule } from './modules/auth/auth.module'
@@ -12,10 +12,10 @@ import { SettingModule } from './modules/setting/setting.module'
 import { UserModule } from './modules/user/user.module'
 import { IS_DEV } from './utils'
 
-// If only starting the backend service, build the frontend code first
-const devRootPath = join(__dirname, '..', '..', 'gagu-front-end', 'build')
-const prodRootPath = join(__dirname, 'public')
-const rootPath = IS_DEV ? devRootPath : prodRootPath
+// If only starting the backend service, build the front-end code first
+const devPath = join(__dirname, '..', '..', 'gagu-front-end', 'build')
+const prodPath = join(__dirname, 'web')
+const rootPath = IS_DEV ? devPath : prodPath
 
 @Module({
   imports: [

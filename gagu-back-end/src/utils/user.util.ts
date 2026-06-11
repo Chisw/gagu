@@ -1,4 +1,3 @@
-import { readFileSync, writeFileSync } from 'fs'
 import { IAuthRecord, IUser, IUserInfo, User } from '../types'
 import {
   GAGU_PATH,
@@ -7,7 +6,7 @@ import {
   ACCESS_TOKEN_KEY,
 } from './constant.util'
 import { Request } from 'express'
-import { JSONFormat, makeNestedDirectory } from './fs.util'
+import { makeNestedDirectory, readJSONData, writeJSONData } from './fs.util'
 
 export const getAuthorizationToken = (authorization: string) => {
   return (authorization || '').replace(HEADERS_AUTH_PREFIX, '')
@@ -21,22 +20,20 @@ export const getRequestTokens = (request: Request) => {
 }
 
 export const writeUsersData = (userList: IUser[]) => {
-  writeFileSync(GAGU_PATH.DATA_USERS, JSONFormat(userList))
+  writeJSONData(GAGU_PATH.DATA_USERS, userList)
 }
 
 export const readUsersData = () => {
-  const dataStr = readFileSync(GAGU_PATH.DATA_USERS).toString('utf-8')
-  const userList: IUser[] = JSON.parse(dataStr)
+  const userList = readJSONData<IUser[]>(GAGU_PATH.DATA_USERS)
   return userList
 }
 
 export const writeAuthData = (authRecordList: IAuthRecord[]) => {
-  writeFileSync(GAGU_PATH.DATA_AUTH, JSONFormat(authRecordList))
+  writeJSONData(GAGU_PATH.DATA_AUTH, authRecordList)
 }
 
 export const readAuthData = () => {
-  const dataStr = readFileSync(GAGU_PATH.DATA_AUTH).toString('utf-8')
-  const authRecordList: IAuthRecord[] = JSON.parse(dataStr)
+  const authRecordList = readJSONData<IAuthRecord[]>(GAGU_PATH.DATA_AUTH)
   return authRecordList
 }
 

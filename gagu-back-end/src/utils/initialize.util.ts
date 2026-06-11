@@ -4,10 +4,10 @@ import { writeAuthData, writeUsersData } from './user.util'
 import { makeNestedDirectory, exists } from './fs.util'
 import { writeTunnelData } from './tunnel.util'
 import { writeSettingsData } from './setting.util'
-import * as md5 from 'md5'
-import { exec } from 'child_process'
-import { readFileSync } from 'fs'
+import { exec } from 'node:child_process'
+import { readFileSync } from 'node:fs'
 import { HttpsOptions } from '@nestjs/common/interfaces/external/https-options.interface'
+import { md5 } from './common.util'
 
 export const initialize = async (withSecurity: boolean) => {
   makeNestedDirectory(

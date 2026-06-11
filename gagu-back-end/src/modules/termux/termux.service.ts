@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { spawn } from 'child_process'
+import { spawn } from 'node:child_process'
 import { DateTime } from 'luxon'
 import {
   IDialogForm,

@@ -41,7 +41,7 @@ import {
   ExistingStrategy,
   TransferResult,
 } from '../../types'
-import { mkdirSync, renameSync } from 'fs'
+import { mkdirSync, renameSync } from 'node:fs'
 import {
   PathValidation,
   Permission,

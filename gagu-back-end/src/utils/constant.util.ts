@@ -1,6 +1,6 @@
 import * as chalk from 'chalk'
-import * as os from 'os'
-import { IServerOS, ThumbnailType, ThumbnailTypeType } from 'src/types'
+import * as os from 'node:os'
+import { IServerOS, ThumbnailType, ThumbnailTypeType } from '../types'
 
 const platform = os.platform()
 const hostname = os.hostname()

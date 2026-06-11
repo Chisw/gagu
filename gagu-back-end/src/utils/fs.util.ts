@@ -1,5 +1,13 @@
-import { accessSync, appendFile, constants, mkdirSync, statSync } from 'fs'
-import { rm } from 'fs/promises'
+import {
+  accessSync,
+  appendFile,
+  constants,
+  mkdirSync,
+  statSync,
+  readFileSync,
+  writeFileSync,
+} from 'node:fs'
+import { rm } from 'node:fs/promises'
 import { GAGU_PATH } from './constant.util'
 import { getParentPath } from './entry.util'
 import { catchError } from './common.util'
@@ -167,4 +175,13 @@ export const JSONFormat = (data: any) => {
     .replace(/\\(\d+)\\/g, pop)
 
   return out
+}
+
+export const readJSONData = <T>(path: string) => {
+  const str = readFileSync(path).toString('utf-8')
+  return JSON.parse(str) as T
+}
+
+export const writeJSONData = (path: string, data: any) => {
+  writeFileSync(path, JSONFormat(data))
 }

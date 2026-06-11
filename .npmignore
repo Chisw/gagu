@@ -12,4 +12,6 @@ pkg
 build-npm.sh
 build-pkg.sh
 yarn.lock
+pnpm-lock.yaml
+pnpm-workspace.yaml
 netlify.toml

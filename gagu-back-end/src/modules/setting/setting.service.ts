@@ -1,7 +1,7 @@
 import { ISetting, SettingKeys } from '../../types'
 import { Injectable } from '@nestjs/common'
 import { readSettingsData, writeSettingsData } from '../../utils'
-import { exec } from 'child_process'
+import { exec } from 'node:child_process'
 
 @Injectable()
 export class SettingService {
