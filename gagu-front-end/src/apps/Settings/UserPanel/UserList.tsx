@@ -153,7 +153,7 @@ export default function UserList(props: UserListProps) {
               <div className="relative z-10 -mt-20">
                 <div className="flex justify-center items-center">
                   <div
-                    className="relative w-12 h-12 flex-shrink-0 rounded-full bg-cover bg-center bg-no-repeat bg-gray-300 border-2 border-white shadow dark:border-zinc-500"
+                    className="relative w-12 h-12 shrink-0 rounded-full bg-cover bg-center bg-no-repeat bg-gray-300 border-2 border-white shadow dark:border-zinc-500"
                     style={avatarStyle}
                   >
                     {isActive && (
@@ -179,14 +179,14 @@ export default function UserList(props: UserListProps) {
                     </span>
                   ))}
                 </div>
-                <div className="flex-shrink-0 min-h-[30px] text-xs leading-none font-din text-gray-400 text-center">
+                <div className="shrink-0 min-h-[30px] text-xs leading-none font-din text-gray-400 text-center">
                   <p>{t('tip.createdAt', { time: getDateTime(createdAt) })}</p>
                   {showExpire && (
                     <p className="mt-1">{t('tip.expiredAt', { time: getDateTime(expiredAt) })}</p>
                   )}
                 </div>
               </div>
-              <div className="py-1 flex flex-grow justify-center items-center">
+              <div className="py-1 flex grow justify-center items-center">
                 {getButtonList(user).map(({ icon, label, onClick }) => (
                   <div
                     key={label}

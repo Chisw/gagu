@@ -25,7 +25,7 @@ export default function WindowContainer() {
           className={line(`
             absolute z-[9999]
             border-2 border-zinc-500 border-opacity-40 rounded
-            bg-zinc-500 bg-opacity-30
+            bg-zinc-500/30
             transition-all duration-200 pointer-events-none
             dark:border-zinc-400
             ${demoWindowInfo ? 'opacity-100' : 'opacity-0'}

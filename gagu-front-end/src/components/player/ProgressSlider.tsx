@@ -51,7 +51,7 @@ export function ProgressSlider(props: ProgressSliderProps) {
 
   return (
     <>
-      <div className="hover-show-parent relative z-10 w-full h-[2px] flex-shrink-0">
+      <div className="hover-show-parent relative z-10 w-full h-[2px] shrink-0">
         <div
           className={line(`
             hover-show-child

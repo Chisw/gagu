@@ -44,7 +44,7 @@ export default function Viewer(props: ViewerProps) {
                 absolute z-10 top-0 right-0 left-0
                 pl-2 pr-1 h-10
                 flex justify-between items-center
-                bg-black bg-opacity-50
+                bg-black/50
               `)}
             >
               <div className="text-white font-din text-xs md:text-sm break-all truncate">

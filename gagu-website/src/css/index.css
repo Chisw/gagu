@@ -12,5 +12,5 @@ html, body {
 }
 
 *::selection {
-  @apply text-black bg-gray-300;
+  @apply text-[#f3e7ff] bg-[#9F00DE];
 }

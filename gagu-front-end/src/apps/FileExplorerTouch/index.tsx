@@ -254,7 +254,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
           dark:bg-zinc-800
           ${show ? 'opacity-100' : 'opacity-0'}
           ${sideShow ? 'ease-in-out translate-x-64 opacity-20 overflow-y-hidden pointer-events-none' : 'overflow-y-auto'}
-          ${asEntryPicker ? 'top-0' : 'top-8 md:top-6'}
+          ${asEntryPicker ? 'top-0' : 'top-8'}
         `)}
         onContextMenu={handleContextMenu}
       >

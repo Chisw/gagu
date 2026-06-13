@@ -47,7 +47,7 @@ export default function Toolbar(props: ToolbarProps) {
     <div
       className={line(`
         relative z-10 h-10 md:h-8 border-b bg-white select-none
-        flex-shrink-0 flex items-center
+        shrink-0 flex items-center
         dark:bg-zinc-800 dark:border-zinc-600
         ${activeEntry ? '' : 'hidden'}
       `)}
@@ -92,7 +92,7 @@ export default function Toolbar(props: ToolbarProps) {
         disabled={!textContent}
         onClick={onDownload}
       />
-      <div className="flex-grow" />
+      <div className="grow" />
       <ToolButton
         title={t`action.codeView`}
         icon={<SvgIcon.CodeView />}

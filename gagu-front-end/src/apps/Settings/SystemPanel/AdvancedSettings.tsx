@@ -118,13 +118,13 @@ export default function AdvancedSettings() {
           >
             <Form.Slot label={t`label.currentVersion`}>
               <div className="flex items-center">
-                <div className="flex-grow">
+                <div className="grow">
                   v{ baseData.version }
                 </div>
                 <Button
                   type="tertiary"
                   title={t`action.feedback`}
-                  className="flex-shrink-0"
+                  className="shrink-0"
                   onClick={() => window.open('https://github.com/Chisw/gagu/issues')}
                 >
                   <SvgIcon.Feedback />
@@ -132,7 +132,7 @@ export default function AdvancedSettings() {
                 <Button
                   icon={<SvgIcon.Refresh />}
                   loading={getting}
-                  className="ml-1 flex-shrink-0"
+                  className="ml-1 shrink-0"
                   onClick={handleVersionCheck}
                 />
               </div>

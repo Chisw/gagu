@@ -68,7 +68,7 @@ export default function StatusBar(props: StatusBarProps) {
     <div
       className={line(`
         px-2
-        flex-shrink-0 flex justify-between items-center
+        shrink-0 flex justify-between items-center
         text-xs text-gray-500 select-none bg-gray-100
         dark:text-zinc-400 dark:bg-zinc-700
         ${touchMode ? 'h-6' : 'py-1'}
@@ -147,7 +147,7 @@ export default function StatusBar(props: StatusBarProps) {
           </span>
         </div>
       </div>
-      <div className="flex-shrink-0 flex items-center pl-4 pr-1 font-din text-gray-400">
+      <div className="shrink-0 flex items-center pl-4 pr-1 font-din text-gray-400">
         {!!selectedCount && (
           <>
             <SvgIcon.Check size={14} />&nbsp;<span>{loading ? '-' : selectedCount}</span>

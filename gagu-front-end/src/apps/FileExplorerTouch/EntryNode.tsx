@@ -152,7 +152,7 @@ export default function EntryNode(props: EntryNodeProps) {
             absolute z-10 pointer-events-none
             rounded-full text-white
             flex justify-center items-center
-            ${isSelected ? 'bg-blue-500' : 'bg-black bg-opacity-20 border border-gray-200'}
+            ${isSelected ? 'bg-blue-500' : 'bg-black/20 border border-gray-200'}
             ${gridMode
                 ? 'top-0 left-1/2 w-4 h-4 translate-x-4 translate-y-2'
                 : 'right-0 w-5 h-5 -translate-x-4 top-1/2 -translate-y-1/2'

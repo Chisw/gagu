@@ -33,7 +33,7 @@ export function ClipboardPanel() {
           text-xs select-none
           transition-width duration-200
           items-center cursor-pointer
-          hover:bg-white hover:bg-opacity-30 active:bg-black active:bg-opacity-10
+          hover:bg-white/30 active:bg-black/10
           ${count ? 'flex' : 'hidden'}
         `)}
         onClick={() => setShow(true)}
@@ -63,7 +63,7 @@ export function ClipboardPanel() {
             {type === ClipboardType.copy && <SvgIcon.Copy size={20} />}
             {type === ClipboardType.cut && <SvgIcon.Cut size={20} />}
             <span className="ml-2 font-din text-base">{count}</span>
-            <div className="flex-grow flex justify-end">
+            <div className="grow flex justify-end">
               {count > 0 && (
                 <Button
                   size="small"
@@ -99,8 +99,8 @@ export function ClipboardPanel() {
           <EmptyPanel dark show={!clipboardData} />
           <div
             className={line(`
-              py-2 bg-white bg-opacity-70
-              dark:bg-black dark:bg-opacity-10
+              py-2 bg-white/70
+              dark:bg-black/10
               ${entryList.length ? '' : 'hidden'}
             `)}
           >

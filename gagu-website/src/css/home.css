@@ -56,7 +56,7 @@
 }
 
 .circle-animation div:nth-child(1) {
-  @apply bg-zinc-400;
+  @apply bg-purple-400;
   top: -60px;
   left: 40%;
   transform-origin: 35%;
@@ -64,7 +64,7 @@
 }
 
 .circle-animation div:nth-child(2) {
-  @apply bg-zinc-500;
+  @apply bg-purple-500;
   top: 0;
   left: 50%;
   transform-origin: 30%;
@@ -72,7 +72,7 @@
 }
 
 .circle-animation div:nth-child(3) {
-  @apply bg-zinc-800;
+  @apply bg-purple-600;
   top: 60px;
   left: 60%;
   transform-origin: 40%;

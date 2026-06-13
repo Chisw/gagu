@@ -150,7 +150,7 @@ export default function SharePage() {
           className={line(`
             absolute z-0 inset-0 bg-cover bg-center
             transition-all duration-1000 ease-out
-            ${activePage === 'sharing' ? 'scale-100 bg-opacity-100' : 'scale-110 opacity-50'}
+            ${activePage === 'sharing' ? 'scale-100/100' : 'scale-110 opacity-50'}
           `)}
           style={{ backgroundImage: `url("${FsApi.getPublicImageStreamUrl('bg-sharing')}")` }}
         />
@@ -168,10 +168,10 @@ export default function SharePage() {
             <div className="relative z-10">
               <div className="flex items-center">
                 <div
-                  className="w-10 h-10 rounded-full border-2 border-white shadow bg-center bg-cover flex-shrink-0 dark:border-zinc-400"
+                  className="w-10 h-10 rounded-full border-2 border-white shadow bg-center bg-cover shrink-0 dark:border-zinc-400"
                   style={{ backgroundImage: `url("${FsApi.getPublicAvatarStreamUrl(username)}")` }}
                 />
-                <div className="ml-4 flex-grow">
+                <div className="ml-4 grow">
                   <p className="text-sm md:text-base dark:text-zinc-200">
                     {t('title.page_shared_by', { name: nickname })}
                   </p>

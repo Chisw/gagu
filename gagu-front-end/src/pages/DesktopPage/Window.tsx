@@ -241,9 +241,9 @@ export default function Window(props: WindowProps) {
         <div
           className={line(`
             gagu-move-to-front-trigger
-            absolute inset-0 bg-white bg-opacity-80 backdrop-blur-sm overflow-hidden
+            absolute inset-0 overflow-hidden
             ease-in-out flex flex-col
-            dark:bg-black dark:bg-opacity-80
+            dark:bg-black/80
             ${isTopWindow ? 'shadow-xl' : 'shadow'}
             ${isFullScreen
               ? ''
@@ -266,13 +266,13 @@ export default function Window(props: WindowProps) {
           >
             <div
               className={line(`
-                flex items-center flex-grow px-2 h-full truncate
+                flex items-center grow px-2 h-full truncate
                 ${isFullScreen ? '' : 'gagu-window-drag-handler'}
               `)}
               onDoubleClick={() => handleFullScreen()}
             >
               <div
-                className="gagu-app-icon flex-shrink-0 w-4 h-4 bg-center bg-no-repeat bg-contain"
+                className="gagu-app-icon shrink-0 w-4 h-4 bg-center bg-no-repeat bg-contain"
                 data-app-id={appId}
               />
               <span className="ml-2 text-xs truncate">
@@ -287,7 +287,7 @@ export default function Window(props: WindowProps) {
                 ${isTopWindow ? 'hidden' : ''}
               `)}
             />
-            <div className="flex items-center flex-shrink-0 opacity-30 group-hover:opacity-100 transition-opacity duration-100">
+            <div className="flex items-center shrink-0 opacity-30 group-hover:opacity-100 transition-opacity duration-100">
               <div
                 title={t`action.minimize`}
                 prevent-move-to-front="true"
@@ -334,7 +334,7 @@ export default function Window(props: WindowProps) {
             </div>
           </div>
           {/* main */}
-          <div className="relative flex-grow overflow-hidden bg-white bg-opacity-30">
+          <div className="relative grow overflow-hidden">
             <AppComponent
               isTopWindow={isTopWindow}
               windowSize={windowSize}

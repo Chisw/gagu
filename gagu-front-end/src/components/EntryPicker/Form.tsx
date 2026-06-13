@@ -36,15 +36,15 @@ export default function Form(props: FormProps) {
             ${touchMode ? 'mb-1 text-xs' : 'mb-2'}
           `)}
         >
-          <SvgIcon.Folder className="flex-shrink-0" />
-          <div className="flex-grow ml-1 break-all text-left">{pickedPath}</div>
+          <SvgIcon.Folder className="shrink-0" />
+          <div className="grow ml-1 break-all text-left">{pickedPath}</div>
         </div>
       )}
       <div className="flex justify-between items-center">
         <div className="w-1/2">
 
         </div>
-        <div className="flex-shrink-0">
+        <div className="shrink-0">
           <Button
             className="gagu-sync-popstate-overlay-close-button"
             style={{ margin: 0 }}

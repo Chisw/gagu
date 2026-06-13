@@ -27,7 +27,7 @@ export default function Settings (props: AppComponentProps) {
   return (
     <>
       <div className="gagu-app-settings absolute inset-0 flex flex-col md:flex-row">
-        <div className="hidden md:block w-48 border-r h-full flex-shrink-0 select-none dark:border-zinc-700">
+        <div className="hidden md:block w-48 h-full bg-zinc-100 shrink-0 select-none">
           {tabList.map(({ key, icon }) => (
             <div
               key={key}
@@ -48,7 +48,7 @@ export default function Settings (props: AppComponentProps) {
             </div>
           ))}
         </div>
-        <div className="md:hidden pt-2 flex-shrink-0 select-none bg-white dark:bg-zinc-800">
+        <div className="md:hidden pt-2 shrink-0 select-none bg-white dark:bg-zinc-800">
           <Tabs
             collapsible
             type="card"

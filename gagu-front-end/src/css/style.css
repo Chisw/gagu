@@ -68,7 +68,7 @@ body {
 }
 
 .gagu-work-area-lasso {
-  @apply hidden absolute z-10 border box-content border-zinc-400 bg-black bg-opacity-10 dark:bg-white dark:bg-opacity-5 pointer-events-none;
+  @apply hidden absolute z-10 border box-content border-zinc-400 bg-black/10 dark:bg-white/5 pointer-events-none;
 }
 
 .gagu-dragging-children-events-none .gagu-entry-node[data-entry-type="file"] {
@@ -97,7 +97,7 @@ body {
 .gagu-entry-node[data-entry-type="directory"]::after,
 .gagu-file-explorer-side-entry::after,
 .gagu-file-explorer-status-bar-folder::after {
-  @apply content-[""] block absolute z-[-1] top-0 bottom-0 left-0 w-0 bg-blue-200 bg-opacity-40;
+  @apply content-[""] block absolute z-[-1] top-0 bottom-0 left-0 w-0 bg-blue-200/40;
 }
 
 .gagu-dragenter-outline.gagu-entry-node::after,
@@ -159,7 +159,7 @@ body {
   width: 95px;
   height: 2px;
   transform: rotate(270deg) translateX(-100px) translateY(16px);
-  @apply bg-white bg-opacity-50 origin-left cursor-pointer;
+  @apply bg-white/50 origin-left cursor-pointer;
 }
 
 .gagu-volume-slider::-webkit-slider-thumb {
@@ -192,7 +192,7 @@ body {
 
 .gagu-use-form-dialog .semi-modal-mask,
 .gagu-confirmor .semi-modal-mask {
-  @apply bg-black bg-opacity-10 !important;
+  @apply bg-black/10 !important;
 }
 
 .gagu-use-form-dialog .semi-modal-content {
@@ -200,15 +200,15 @@ body {
 }
 
 .gagu-side-drawer .semi-sidesheet-inner {
-  @apply bg-white bg-opacity-60 backdrop-blur-lg max-w-[90vw] dark:bg-zinc-700 dark:bg-opacity-40;
+  @apply bg-white/60 backdrop-blur-lg max-w-[90vw] dark:bg-zinc-700/40;
 }
 
 .gagu-confirmor .semi-modal-content {
-  @apply bg-white bg-opacity-90 backdrop-blur border-none dark:bg-zinc-700 dark:bg-opacity-80;
+  @apply bg-white/90 backdrop-blur border-none dark:bg-zinc-700/80;
 }
 
 .gagu-touch-open-with-apps .semi-modal-mask {
-  @apply bg-black bg-opacity-10 !important;
+  @apply bg-black/10 !important;
 }
 
 .gagu-touch-open-with-apps .semi-modal {
@@ -216,7 +216,7 @@ body {
 }
 
 .gagu-touch-open-with-apps .semi-modal-content {
-  @apply p-2 bg-white bg-opacity-90 backdrop-blur border-none dark:bg-zinc-700 dark:bg-opacity-90;
+  @apply p-2 bg-white/90 backdrop-blur border-none dark:bg-zinc-700/90;
 }
 
 .gagu-touch-open-with-apps .semi-modal-body-wrapper {
@@ -241,11 +241,11 @@ body {
 }
 
 .gagu-text-editor-photo-slider .PhotoView-Slider__Backdrop {
-  @apply bg-black bg-opacity-30 backdrop-blur-sm dark:bg-opacity-70 !important;
+  @apply bg-black/30 backdrop-blur-sm dark:bg-black/70 !important;
 }
 
 .gagu-text-editor-photo-slider .PhotoView-Slider__BannerWrap {
-  @apply bg-black bg-opacity-30 backdrop-blur;
+  @apply bg-black/30 backdrop-blur;
 }
 
 .gagu-text-editor-photo-slider .PhotoView-Slider__ArrowLeft,

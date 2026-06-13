@@ -70,7 +70,7 @@ const commandList = [
     <audio id="audio" preload="preload" src="/assets/gagu.mp3" />
   </div>
 
-  <Block className="bg-gradient-to-b from-zinc-900 to-zinc-500 overflow-hidden">
+  <Block className="bg-gradient-to-b from-[#2F0059] to-[#9F00DE] overflow-hidden">
     <div class="py-12 md:py-24 lg:py-32">
       <div class="text-center text-white">
         <div
@@ -85,7 +85,7 @@ const commandList = [
             />
           </span>
           <div class="py-4 flex justify-center">
-            <img src={iconGAGU} class="h-6 md:h-10" />
+            <img src={iconGAGU} class="h-6 md:h-8" />
           </div>
         </div>
         <div class="circle-animation relative z-0 blur">
@@ -93,32 +93,32 @@ const commandList = [
           <div class="mt-20 md:mt-0 absolute rounded-full opacity-80 blur-2xl"></div>
           <div class="mt-20 md:mt-0 absolute rounded-full opacity-80 blur-2xl"></div>
         </div>
-        <p class="relative z-10 mt-8 pb-3 md:mt-12 text-3xl md:text-6xl lg:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-white via-gray-200 to-gray-600">
+        <p class="relative z-10 mt-8 pb-3 md:mt-12 text-3xl md:text-6xl lg:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-white via-purple-100 to-purple-400">
           A web-based<br/>file management system
         </p>
-        <p class="relative z-10 mt-6 md:mt-12 text-xs md:text-lg lg:text-xl text-zinc-400 font-thin">
+        <p class="relative z-10 mt-6 md:mt-12 text-xs md:text-lg lg:text-xl text-purple-400 font-thin">
           Manage files on your different devices in the browser
         </p>
-        <p class="relative z-10 text-xs md:text-lg lg:text-xl text-zinc-400 font-thin">
+        <p class="relative z-10 text-xs md:text-lg lg:text-xl text-purple-400 font-thin">
           Works on Windows, macOS, Linux and Android/Termux
         </p>
         <div class="relative z-10 mt-12 flex justify-center">
           <a
             onclick="switchTo('npm')"
-            class="mx-2 w-32 md:w-40 h-10 text-xs md:text-sm text-zinc-600
+            class="mx-2 w-32 md:w-40 h-10 text-xs md:text-sm text-purple-600
               flex justify-center items-center rounded-full cursor-pointer shadow-lg select-none
               hover:opacity-80 transition-opacity duration-200
-              bg-gradient-to-b from-white to-gray-300"
+              bg-gradient-to-b from-white to-purple-300"
           >
             <img src={iconNPM} class="w-6 h-6" />
             <span class="ml-1 md:ml-2">NPM Install</span>
           </a>
           <a
             onclick="switchTo('download')"
-            class="mx-2 w-32 md:w-40 h-10 text-xs md:text-sm text-zinc-600
+            class="mx-2 w-32 md:w-40 h-10 text-xs md:text-sm text-purple-600
               flex justify-center items-center rounded-full cursor-pointer shadow-lg select-none
               hover:opacity-80 transition-opacity duration-200
-              bg-gradient-to-b from-white to-gray-300"
+              bg-gradient-to-b from-white to-purple-300"
           >
             <img src={iconDownload} class="w-6 h-6" />
             <span class="ml-1 md:ml-2">Download</span>
@@ -134,8 +134,8 @@ const commandList = [
           >
             {commandList.map(({ id, title, code }) => (
               <div class="mb-4 text-sm">
-                <p class="text-zinc-400 text-xs select-none">{title}</p>
-                <code class="relative block mt-2 px-4 py-2 text-left rounded-md bg-black bg-opacity-40 text-zint-200 before:content-['$'] before:opacity-40 group">
+                <p class="text-purple-400 text-xs select-none">{title}</p>
+                <code class="relative block mt-2 px-4 py-2 text-left rounded-md bg-black/40 text-zint-200 before:content-['$'] before:opacity-40 group">
                   {code}
                   <div
                     id={id}
@@ -153,13 +153,13 @@ const commandList = [
             id="getting-download"
             class="getting-panel hidden mt-6 md:mt-8 lg:mt-12 pb-2 w-[480px] max-w-full"
           >
-            <p class="text-zinc-400 text-xs select-none">Releases</p>
-            <div class="mt-2 py-2 text-left rounded-md bg-black bg-opacity-40">
+            <p class="text-purple-400 text-xs select-none">Releases</p>
+            <div class="mt-2 py-2 text-left rounded-md bg-black/40">
               {DOWNLOAD_LIST.map(({ svg, title, size, url }) => (
                 <a
                   class="relative flex justify-between px-4 py-2
-                    text-left text-sm text-zinc-400 tracking-widers cursor-pointer
-                    hover:text-zinc-200 hover:bg-white hover:bg-opacity-10 active:bg-opacity-5
+                    text-left text-sm text-purple-400 tracking-widers cursor-pointer
+                    hover:text-purple-200 hover:bg-white/10 active:bg-opacity-5
                     transition-all duration-100"
                   href={url}
                 >
@@ -172,7 +172,7 @@ const commandList = [
             </div>
           </div>
         </div>
-        <p class="relative z-10 mt-4 text-xs text-zinc-400">
+        <p class="relative z-10 mt-4 text-xs text-purple-400">
           <span>v{import.meta.env.PUBLIC_VERSION} (Alpha)</span>
           <a class="ml-2 underline" href="/docs/others/changelog">Changelog</a>
         </p>
@@ -181,7 +181,7 @@ const commandList = [
     <div class="h-24 md:h-48 lg:h-64"></div>
   </Block>
 
-  <Block className="bg-gradient-to-b from-zinc-500 via-white to-white">
+  <Block className="bg-gradient-to-b from-[#9F00DE] via-white to-white">
     <div class="-translate-y-24 md:-translate-y-48 lg:-translate-y-64 rounded md:rounded-xl shadow-xl overflow-hidden select-none">
       <div class="px-1 md:px-3 w-full h-3 md:h-6 bg-white flex items-center">
         <div class="mr-1 w-1 h-1 md:w-3 md:h-3 rounded-full bg-gray-300"></div>
@@ -197,9 +197,9 @@ const commandList = [
         <a
           href="https://www.bilibili.com/video/BV1W84y1h71d"
           target="_blank"
-          class="absolute inset-0 md:opacity-0 group-hover:opacity-100 bg-black bg-opacity-20 transition-opacity duration-300 flex justify-center items-center"
+          class="absolute inset-0 md:opacity-0 group-hover:opacity-100 bg-black/20 transition-opacity duration-300 flex justify-center items-center"
         >
-          <div class="w-16 h-16 rounded-full bg-black bg-opacity-70 flex justify-center items-center">
+          <div class="w-16 h-16 rounded-full bg-black/70 flex justify-center items-center">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
               <path fill="#fff" d="M19.376 12.416L8.777 19.482A.5.5 0 0 1 8 19.066V4.934a.5.5 0 0 1 .777-.416l10.599 7.066a.5.5 0 0 1 0 .832z"/>
             </svg>
@@ -237,28 +237,28 @@ const commandList = [
     </div>
   </Block>
 
-  <Block className="bg-gradient-to-b from-zinc-900 to-zinc-600">
+  <Block className="bg-gradient-to-b from-[#2F0059] to-[#9F00DE]">
     <div class="py-16 md:py-32">
-      <h2 class="text-2xl md:text-4xl text-center font-bold text-zinc-100">Apps</h2>
-      <p class="mt-4 text-sm md:text-base lg:text-lg text-center text-zinc-300">
+      <h2 class="text-2xl md:text-4xl text-center font-bold text-purple-100">Apps</h2>
+      <p class="mt-4 text-sm md:text-base lg:text-lg text-center text-purple-300">
         GAGU provides some basic applications
       </p>
       <div class="mt-12 flex flex-wrap select-none">
         {appList.map(({ icon, title, desc }) => (
-          <div class="px-8 md:px-12 py-4 md:py-8 lg:py-12 w-full md:w-1/2 lg:w-1/3 xl:w-1/4 rounded-2xl flex justify-start cursor-pointer hover:bg-zinc-600">
+          <div class="px-8 md:px-12 py-4 md:py-8 lg:py-12 w-full md:w-1/2 lg:w-1/3 xl:w-1/4 rounded-2xl flex justify-start cursor-pointer hover:bg-purple-600">
             <div
-              class="flex-shrink-0 w-12 md:w-20 h-12 md:h-20 rounded-lg md:rounded-2xl bg-center bg-no-repeat bg-cover shadow-lg"
+              class="shrink-0 w-12 md:w-20 h-12 md:h-20 rounded-lg md:rounded-2xl bg-center bg-no-repeat bg-cover shadow-lg"
               style={`background-image: url("${icon}");`}
             >
             </div>
             <div class="ml-4">
-              <p class="text-base md:text-lg font-bold text-zinc-100">{title}</p>  
-              <p class="mt-1 text-xs md:text-sm text-zinc-400">{desc}</p>  
+              <p class="text-base md:text-lg font-bold text-purple-100">{title}</p>  
+              <p class="mt-1 text-xs md:text-sm text-purple-400">{desc}</p>  
             </div>
           </div>
         ))}
       </div>
-      <p class="mt-12 text-sm md:text-base lg:text-lg text-center text-zinc-300">
+      <p class="mt-12 text-sm md:text-base lg:text-lg text-center text-purple-300">
         Apps in planning,<br/>
         implemented using third-party libraries
       </p>
@@ -266,13 +266,13 @@ const commandList = [
         {planningAppList.map(({ icon, title, desc }) => (
           <div class="px-8 md:px-12 py-4 md:py-8 lg:py-12 w-full md:w-1/2 lg:w-1/3 xl:w-1/4 rounded-2xl flex justify-start">
             <div
-              class="flex-shrink-0 w-12 md:w-20 h-12 md:h-20 rounded-lg md:rounded-2xl bg-center bg-no-repeat bg-cover shadow-lg"
+              class="shrink-0 w-12 md:w-20 h-12 md:h-20 rounded-lg md:rounded-2xl bg-center bg-no-repeat bg-cover shadow-lg"
               style={`background-image: url("${icon}");`}
             >
             </div>
             <div class="ml-4">
-              <p class="text-base md:text-lg font-bold text-zinc-100">{title}</p>  
-              <p class="mt-1 text-xs md:text-sm text-zinc-400">{desc}</p>  
+              <p class="text-base md:text-lg font-bold text-purple-100">{title}</p>  
+              <p class="mt-1 text-xs md:text-sm text-purple-400">{desc}</p>  
             </div>
           </div>
         ))}

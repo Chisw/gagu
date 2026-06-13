@@ -68,7 +68,7 @@ export default function LoginPage() {
   
   return (
     <>
-      <div className="fixed z-0 inset-0 py-20 overflow-hidden bg-gradient-to-b from-black to-zinc-600 flex justify-center md:items-center">
+      <div className="fixed z-0 inset-0 py-20 overflow-hidden bg-gradient-to-b from-[#2F0059] to-[#9F00DE] flex justify-center md:items-center">
         <div
           className={line(`
             absolute z-0 inset-0 bg-cover bg-center
@@ -85,11 +85,11 @@ export default function LoginPage() {
               ${activePage === 'login' ? '-translate-y-0 opacity-100' : '-translate-y-5 opacity-0'}
             `)}
           >
-            <svg height="24" viewBox="0 0 356 61" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M91.3846 0V60.6316H132V45.4737H152.308V25.2632H132V15.1579H152.308V45.4737V60.6316H172.615V0H91.3846Z" fill="white"/>
-              <path d="M81.2308 0H0V60.6316H81.2308V25.2632H60.9231V45.4737H40.6154V15.1579H81.2308V0Z" fill="white"/>
-              <path d="M264 0H182.769V60.6316H264V25.2632H243.692V45.4737H223.385V15.1579H264V0Z" fill="white"/>
-              <path d="M274.154 0H314.769V45.4737H335.077V0H355.385V60.6316H274.154V0Z" fill="white"/>
+            <svg height="24" viewBox="0 0 380 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M80 20H40V60H60V40H80V80H0V0H80V20Z" fill="white"/>
+              <path d="M280 20H240V60H260V40H280V80H200V0H280V20Z" fill="white"/>
+              <path d="M180 80H160V60H140V80H100V0H180V80ZM140 20V40H160V20H140Z" fill="white"/>
+              <path d="M380 80H300V0H340V60H360V0H380V80Z" fill="white"/>
             </svg>
           </div>
           <div
@@ -122,7 +122,7 @@ export default function LoginPage() {
                   className={line(`
                     mr-[2px] w-8 h-8 rounded cursor-pointer
                     flex justify-center items-center
-                  hover:bg-black hover:bg-opacity-20 active:bg-opacity-30 text-white
+                  hover:bg-black/20 active:bg-opacity-30 text-white
                     ${!username || !password ? 'hidden' : ''}
                   `)}
                   onClick={handleLogin}

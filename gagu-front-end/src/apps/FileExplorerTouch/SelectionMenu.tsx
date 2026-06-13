@@ -223,9 +223,9 @@ export default function SelectionMenu(props: SelectionMenuProps) {
         className={line(`
           fixed z-10 right-[8px] bottom-[8px] left-[8px]
           border rounded-xl shadow-lg overflow-hidden
-          bg-white bg-opacity-90 backdrop-blur select-none
+          bg-white/90 backdrop-blur select-none
           transition-all duration-300
-          dark:bg-zinc-700 dark:bg-opacity-90 dark:border-zinc-600
+          dark:bg-zinc-700/90 dark:border-zinc-600
           ${show ? 'h-28 scale-100' : 'h-0 scale-0'}
         `)}
       >

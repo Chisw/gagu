@@ -75,7 +75,7 @@ export default function FileExplorer(props: FileExplorerProps) {
           onRootEntryClick={(entry) => handleDirectoryOpen(entry, true)}
           onFavoriteCancel={handleFavoriteClick}
         />
-        <div className="relative flex-grow h-full bg-white dark:bg-zinc-800 flex flex-col">
+        <div className="relative grow h-full bg-white dark:bg-zinc-800 flex flex-col">
           <ControlBar
             {...{
               windowWidth,
@@ -105,7 +105,7 @@ export default function FileExplorer(props: FileExplorerProps) {
           />
           <div
             ref={containerRef}
-            className="gagu-entry-list-container relative flex-grow overflow-x-hidden overflow-y-auto select-none"
+            className="gagu-entry-list-container relative grow overflow-x-hidden overflow-y-auto select-none"
             onMouseDownCapture={handleSelectCancel}
           >
             <div

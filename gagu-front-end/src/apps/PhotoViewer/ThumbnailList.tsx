@@ -65,14 +65,14 @@ export default function ThumbnailList(props: ThumbnailListProps) {
   return (
     <div
       className={line(`
-        relative z-0 bg-gray-900 flex-shrink-0
+        relative z-0 bg-gray-900 shrink-0
         transition-height duration-200 overflow-hidden
         ${show ? 'h-12' : 'h-0'}
       `)}
       onWheel={handleMouseWheel}
     >
       <div
-        className="absolute h-full flex justify-center items-center transition-spacing duration-300 bg-white bg-opacity-10"
+        className="absolute h-full flex justify-center items-center transition-spacing duration-300 bg-white/10"
         style={{
           left,
           width: totalScrollWidth,
@@ -89,7 +89,7 @@ export default function ThumbnailList(props: ThumbnailListProps) {
                 className={line(`
                   absolute top-0
                   mx-1 mt-1 w-10 h-10 border-2 bg-clip-padding
-                  flex-shrink-0 cursor-pointer
+                  shrink-0 cursor-pointer
                   bg-center bg-no-repeat bg-cover
                   ${isActive ? 'border-orange-500' : 'border-transparent hover:border-orange-700'}
                 `)}

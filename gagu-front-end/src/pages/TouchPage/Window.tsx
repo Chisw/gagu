@@ -68,9 +68,9 @@ export default function Window(props: WindowProps) {
       <div
         id={`gagu-app-window-${runningId}`}
         className={line(`
-          gagu-app-window absolute z-30 inset-0 bg-white bg-opacity-80 backdrop-blur-sm overflow-hidden
+          gagu-app-window absolute z-30 inset-0 overflow-hidden
           ease-in-out flex flex-col
-          dark:bg-black dark:bg-opacity-80
+          dark:bg-black/80
           ${isTopWindow ? 'gagu-is-top-window' : 'hidden'}
         `)}
         data-hidden={hidden}
@@ -86,23 +86,23 @@ export default function Window(props: WindowProps) {
             }
           `)}
         >
-          <div className="flex items-center flex-grow px-2 h-full truncate">
+          <div className="flex items-center grow px-2 h-full truncate">
             <div
-              className="gagu-app-icon flex-shrink-0 w-4 h-4 bg-center bg-no-repeat bg-contain"
+              className="gagu-app-icon shrink-0 w-4 h-4 bg-center bg-no-repeat bg-contain"
               data-app-id={appId}
             />
             <span className="ml-2 text-xs truncate">
               {windowTitle || t(`app.${appId}`)}
             </span>
           </div>
-          <div className="flex items-center flex-shrink-0">
+          <div className="flex items-center shrink-0">
             <div
               title={t`action.minimize`}
               prevent-move-to-front="true"
               className={line(`
                 gagu-hidden-switch-trigger
                 w-8 h-8 flex justify-center items-center cursor-pointer transition-all duration-200
-                bg-black bg-opacity-20 active:bg-opacity-30
+                bg-black/20 active:bg-opacity-30
                 ${headerClassName ? 'text-gray-200' : 'text-gray-400'}
               `)}
               onClick={handleHide}
@@ -124,7 +124,7 @@ export default function Window(props: WindowProps) {
           </div>
         </div>
         {/* main */}
-        <div className="relative flex-grow overflow-hidden bg-black bg-opacity-5">
+        <div className="relative grow overflow-hidden bg-black/5">
           <AppComponent
             isTopWindow={isTopWindow}
             windowSize={windowSize}

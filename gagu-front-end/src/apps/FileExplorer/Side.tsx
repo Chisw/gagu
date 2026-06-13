@@ -18,15 +18,17 @@ export default function Side(props: SideProps) {
   return (
     <div
       className={line(`
-        relative flex-shrink-0 h-full transition-all duration-300 select-none overflow-hidden
+        relative shrink-0
+        h-full overflow-hidden select-none
+        bg-zinc-100
+        transition-all duration-300
         ${sideCollapse ? 'w-0' : 'w-56'}
       `)}
     >
       <div
         className={line(`
-          pb-4 w-56 h-full border-r border-gray-100
+          pb-4 w-56 h-full
           overflow-x-hidden overflow-y-auto
-          dark:border-zinc-700
         `)}
       >
         <RootEntryGroups

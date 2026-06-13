@@ -6,7 +6,7 @@ export default function PQINA() {
 
   return (
     <>
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 bg-white">
         {loading && (<div className="absolute z-10 right-0 top-0 left-0 h-1 bg-loading" />)}
         <iframe
           title="app"

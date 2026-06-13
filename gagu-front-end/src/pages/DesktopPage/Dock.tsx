@@ -103,11 +103,11 @@ export default function Dock() {
           absolute z-20 left-1/2 bottom-0 mb-1 px-1 h-12
           flex items-center
           border border-gray-500 border-opacity-20
-          bg-clip-padding bg-white bg-opacity-40 backdrop-blur
+          bg-clip-padding bg-white/40 backdrop-blur
           rounded-xl
           transition-all duration-500 ease-out
           -translate-x-1/2
-          dark:bg-black dark:bg-opacity-20
+          dark:bg-black/20
           ${activePage === Page.desktop ? 'translate-y-0' : 'translate-y-20'}
         `)}
       >
@@ -127,7 +127,7 @@ export default function Dock() {
               />
               <span
                 className={line(`
-                  absolute left-1/2 bottom-0 w-1 h-1 rounded-full bg-black bg-opacity-60
+                  absolute left-1/2 bottom-0 w-1 h-1 rounded-full bg-black/60
                   -translate-x-1/2 translate-y-[6px]
                   transition-all duration-300
                   ${isRunning ? 'opacity-100' : 'opacity-0'}

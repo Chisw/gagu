@@ -266,7 +266,7 @@ export default function MusicPlayer(props: AppComponentProps) {
         <VolumeIndicator volume={musicPlayerVolume} time={volumeChangedTime} />
 
         {/* list */}
-        <div className="relative z-0 flex-grow pb-3 overflow-y-auto">
+        <div className="relative z-0 grow pb-3 overflow-y-auto">
           {matchedEntryList.map((entry, entryIndex) => {
             const { name, size } = entry
             const isActive = entryIndex === activeIndex
@@ -275,11 +275,11 @@ export default function MusicPlayer(props: AppComponentProps) {
             return (
               <div
                 key={name}
-                className="relative p-2 text-xs text-white even:bg-black even:bg-opacity-5 hover:bg-black hover:bg-opacity-10 flex items-center group"
+                className="relative p-2 text-xs text-white even:bg-black/5 hover:bg-black/10 flex items-center group"
                 onDoubleClick={onClick}
               >
                 <div
-                  className="flex-shrink-0 mr-2 w-10 h-10 shadow-lg overflow-hidden bg-center bg-cover bg-no-repeat"
+                  className="shrink-0 mr-2 w-10 h-10 shadow-lg overflow-hidden bg-center bg-cover bg-no-repeat"
                   style={{ backgroundImage: `url("${SVG_DEFAULT_ALBUM_COVER}")` }}
                 >
                   <div
@@ -287,7 +287,7 @@ export default function MusicPlayer(props: AppComponentProps) {
                     style={{ backgroundImage: `url("${FsApi.getThumbnailStreamUrl(entry)}")` }}
                   />
                 </div>
-                <div className="flex-grow">
+                <div className="grow">
                   <div>
                     <span className="font-din opacity-60">{indexNo}. </span>{name}
                   </div>
@@ -307,7 +307,7 @@ export default function MusicPlayer(props: AppComponentProps) {
                   className={line(`
                     absolute top-0 right-0 bottom-0
                     px-4 cursor-pointer opacity-80
-                    hover:opacity-100 hover:bg-white hover:bg-opacity-10 active:opacity-70
+                    hover:opacity-100 hover:bg-white/10 active:opacity-70
                     backdrop-blur
                     flex justify-center items-center
                     ${isActive ? '' : 'hidden group-hover:flex'}
@@ -345,7 +345,7 @@ export default function MusicPlayer(props: AppComponentProps) {
         )}
 
         {/* bottom */}
-        <div className={`relative z-0 w-full h-16 bg-black bg-opacity-10 flex-shrink-0 ${activeEntry ? '' : 'hidden'}`}>
+        <div className={`relative z-0 w-full h-16 bg-black/10 shrink-0 ${activeEntry ? '' : 'hidden'}`}>
           {/* SpectrumCanvas */}
           <div className="absolute z-0 inset-0">
             {!theatreShow && <SpectrumCanvas analyserNode={analyserNode} />}

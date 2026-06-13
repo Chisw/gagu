@@ -33,7 +33,7 @@ export function VolumeIndicator({ volume, time }: VolumeIndicatorProps) {
       className={line(`
         absolute z-20 top-1/2 left-1/2
         -translate-x-1/2 -translate-y-1/2
-        w-24 h-24 bg-black bg-opacity-30 rounded-lg
+        w-24 h-24 bg-black/30 rounded-lg
         font-din text-base text-white backdrop-blur
         flex justify-center items-center
         transition-opacity duration-300

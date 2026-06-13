@@ -1,1 +1,6 @@
-<svg width="428" height="128" viewBox="0 0 428 128" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill="url(#paint0_linear_1671_2)" d="M0 0h428v128H0z"/><path d="M104 44H64v40h20V64h20v40H24V24h80v20zM304 44h-40v40h20V64h20v40h-80V24h80v20zM204 104h-20V84h-20v20h-40V24h80v80zm-40-60v20h20V44h-20zM404 104h-80V24h40v60h20V24h20v80z" fill="#fff"/><defs><linearGradient id="paint0_linear_1671_2" x1="214" y1="128" x2="214" gradientUnits="userSpaceOnUse"><stop stop-color="#9F00DE"/><stop offset="1" stop-color="#2F0059"/></linearGradient></defs></svg>
+<svg width="380" height="80" viewBox="0 0 380 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M80 20H40V60H60V40H80V80H0V0H80V20Z" fill="white"/>
+<path d="M280 20H240V60H260V40H280V80H200V0H280V20Z" fill="white"/>
+<path d="M180 80H160V60H140V80H100V0H180V80ZM140 20V40H160V20H140Z" fill="white"/>
+<path d="M380 80H300V0H340V60H360V0H380V80Z" fill="white"/>
+</svg>

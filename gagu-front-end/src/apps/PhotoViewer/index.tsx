@@ -140,7 +140,7 @@ export default function PhotoViewer(props: AppComponentProps) {
 
         <div
           className={line(`
-            relative flex-grow group
+            relative grow group
             ${isLight ? 'bg-grid-light' : 'bg-grid-dark bg-gray-900'}
             ${activeEntry ? 'cursor-zoom-in' : ''}
           `)}
@@ -171,7 +171,7 @@ export default function PhotoViewer(props: AppComponentProps) {
                 className={line(`
                   md:opacity-0 group-hover:opacity-100 flex justify-center items-center
                   absolute z-10 top-1/2 left-4 md:left-8 -translate-y-1/2
-                  w-12 h-12 rounded-full bg-black bg-opacity-40 backdrop-blur
+                  w-12 h-12 rounded-full bg-black/40 backdrop-blur
                   text-white md:text-opacity-60 hover:text-opacity-100 active:text-opacity-20
                   transition-all duration-200 cursor-pointer
                   active:scale-90
@@ -184,7 +184,7 @@ export default function PhotoViewer(props: AppComponentProps) {
                 className={line(`
                   md:opacity-0 group-hover:opacity-100 flex justify-center items-center
                   absolute z-10 top-1/2 right-4 md:right-8 -translate-y-1/2
-                  w-12 h-12 rounded-full bg-black bg-opacity-40 backdrop-blur
+                  w-12 h-12 rounded-full bg-black/40 backdrop-blur
                   text-white md:text-opacity-60 hover:text-opacity-100 active:text-opacity-20
                   transition-all duration-200 cursor-pointer
                   active:scale-90

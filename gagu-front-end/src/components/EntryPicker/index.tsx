@@ -124,7 +124,7 @@ export function EntryPicker(props: EntryPickerProps) {
           onCancel={onCancel}
           title={(
             <div className="py-1">
-              <div className="mb-2 flex items-center flex-shrink-0">
+              <div className="mb-2 flex items-center shrink-0">
                 <div className="gagu-app-icon w-4 h-4" data-app-id={appId} />
                 <span className="ml-1 text-xs">{title || t(`app.${appId}`)}</span>
               </div>
@@ -157,7 +157,7 @@ export function EntryPicker(props: EntryPickerProps) {
       >
         <div data-customized-scrollbar>
           <div className="flex items-center justify-between select-none">
-            <div className="flex items-center flex-shrink-0">
+            <div className="flex items-center shrink-0">
               <div className="gagu-app-icon w-4 h-4" data-app-id={appId} />
               <span className="ml-1">{title || t(`app.${appId}`)}</span>
             </div>
@@ -172,7 +172,7 @@ export function EntryPicker(props: EntryPickerProps) {
               ))}
             </div>
           </div>
-          <div className="mt-3 relative h-[540px] overflow-y-auto border bg-gray-100 bg-opacity-50 dark:bg-black dark:border-zinc-600">
+          <div className="mt-3 relative h-[540px] overflow-y-auto border bg-gray-100/50 dark:bg-black dark:border-zinc-600">
             <FileExplorer
               asEntryPicker
               isTopWindow={show}

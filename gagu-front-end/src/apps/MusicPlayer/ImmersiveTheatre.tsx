@@ -75,7 +75,7 @@ export default function ImmersiveTheatre(props: ImmersiveTheatreProps) {
           className="absolute z-0 inset-0 bg-cover bg-center bg-gradient-to-br from-pink-700 to-pink-900"
           style={coverStyle}
         />
-        <div className="absolute z-10 inset-0 bg-black bg-opacity-50 backdrop-blur-2xl flex">
+        <div className="absolute z-10 inset-0 bg-black/50 backdrop-blur-2xl flex">
 
           <VolumeIndicator volume={volume} time={volumeChangedTime} />
 
@@ -87,9 +87,9 @@ export default function ImmersiveTheatre(props: ImmersiveTheatreProps) {
             />
           </div>
 
-          <div className="p-4 md:p-12 lg:p-20 flex flex-grow flex-wrap lg:flex-nowrap">
+          <div className="p-4 md:p-12 lg:p-20 flex grow flex-wrap lg:flex-nowrap">
 
-            <div className="flex-shrink-0 w-full h-1/2 lg:w-1/2 lg:h-full flex justify-center items-center">
+            <div className="shrink-0 w-full h-1/2 lg:w-1/2 lg:h-full flex justify-center items-center">
               <div
                 className={line(`
                   w-full max-w-[60%] lg:max-w-[75%] aspect-square cursor-pointer
@@ -97,7 +97,7 @@ export default function ImmersiveTheatre(props: ImmersiveTheatreProps) {
                   flex justify-center items-center
                   ${musicPlayerCoverDisk
                     ? `rounded-full ${isPlaying ? 'animate-[spin_12s_linear_infinite]' : ''}`
-                    : 'border-4 border-white bg-white bg-opacity-10'
+                    : 'border-4 border-white bg-white/10'
                   }
                 `)}
                 style={musicPlayerCoverDisk
@@ -115,7 +115,7 @@ export default function ImmersiveTheatre(props: ImmersiveTheatreProps) {
               </div>
             </div>
 
-            <div className="flex-shrink-0 w-full h-1/2 lg:w-1/2 lg:h-full flex justify-center items-center">
+            <div className="shrink-0 w-full h-1/2 lg:w-1/2 lg:h-full flex justify-center items-center">
               <div className="relative w-full max-w-[75%] max-h-[75%] aspect-square text-white text-center">
                 <div className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl opacity-90">{title}</div>
                 <div className="mt-2 md:mt-4 lg:mt-6 text-lg md:text-xl lg:text-2xl xl:text-3xl opacity-60">{album} - {artist}</div>
@@ -132,7 +132,7 @@ export default function ImmersiveTheatre(props: ImmersiveTheatreProps) {
                     <ProgressSlider
                       duration={duration}
                       playPercent={playInfo.playPercent}
-                      frontAndBackColorClassNames={['bg-white bg-opacity-90', 'bg-white bg-opacity-50']}
+                      frontAndBackColorClassNames={['bg-white/90', 'bg-white/50']}
                       onProgressClick={onProgressChange}
                     />
                     <div className="mt-2 flex justify-between font-din opacity-40 text-xs md:text-base">

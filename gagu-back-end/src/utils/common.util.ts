@@ -1,7 +1,7 @@
 import { exec, spawn } from 'node:child_process'
 import { ServerOS } from './constant.util'
 import { ServerMessage } from '../types'
-import crypto from 'node:crypto'
+import * as crypto from 'node:crypto'
 import * as chalk from 'chalk'
 
 export const md5 = (text: string) => {

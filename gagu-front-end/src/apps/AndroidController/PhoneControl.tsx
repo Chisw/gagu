@@ -37,16 +37,16 @@ export default function PhoneControl() {
               key={contactIndex}
               className="mb-3 flex items-center"
             >
-              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-blue-500 text-white flex justify-center items-center text-lg">
+              <div className="shrink-0 w-10 h-10 rounded-full bg-blue-500 text-white flex justify-center items-center text-lg">
                 {name[0]}
               </div>
-              <div className="flex-grow ml-2">
+              <div className="grow ml-2">
                 <div className="text-base font-bold">{name}</div>
                 <div className="text-gray-500 text-xs">
                   {number.split('').map((s, i) => i > 2 && i < number.length - 4 ? '*' : s)}
                 </div>
               </div>
-              <div className="flex-shrink-0">
+              <div className="shrink-0">
                 <Button
                   size="small"
                   className="mx-1"

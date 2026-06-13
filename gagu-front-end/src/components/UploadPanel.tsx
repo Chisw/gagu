@@ -129,9 +129,9 @@ export function UploadPanel() {
           text-xs select-none
           transition-width duration-200
           items-center cursor-pointer
-          hover:bg-white hover:bg-opacity-30 active:bg-black active:bg-opacity-10
+          hover:bg-white/30 active:bg-black/10
           ${count ? 'flex' : 'hidden'}
-          ${uploading ? 'w-28 bg-white bg-opacity-40' : ''}
+          ${uploading ? 'w-28 bg-white/40' : ''}
         `)}
         onClick={() => setShow(true)}
       >
@@ -147,7 +147,7 @@ export function UploadPanel() {
         />
         <SvgIcon.Upload className="hidden md:block" />
         <SvgIcon.Upload size={18} className="block md:hidden" />
-        <span className="font-din text-center flex-grow">
+        <span className="font-din text-center grow">
           {uploading && uploadInfo.speed}
         </span>
         <span className={`ml-1 font-din ${count ? '' : 'hidden'}`}>
@@ -164,7 +164,7 @@ export function UploadPanel() {
           <div className="flex items-center">
             <SvgIcon.Upload size={24} />
             <span className="ml-2 font-din text-base">{count}</span>
-            <div className="flex-grow flex justify-end">
+            <div className="grow flex justify-end">
               {count > 0 && (
                 <Button
                   size="small"

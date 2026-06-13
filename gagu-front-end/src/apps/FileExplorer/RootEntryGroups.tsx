@@ -99,28 +99,28 @@ export default function RootEntryGroups(props: RootEntryGroupsProps) {
                     ? 'border-blue-500 bg-white text-black dark:bg-zinc-800 dark:text-zinc-200'
                     : `
                       border-transparent text-gray-600 cursor-pointer
-                    hover:text-black md:hover:bg-white md:hover:bg-opacity-60
-                    dark:text-zinc-200 dark:hover:text-white dark:md:hover:bg-black dark:md:hover:bg-opacity-20
+                    hover:text-black md:hover:bg-white/60
+                    dark:text-zinc-200 dark:hover:text-white dark:md:hover:bg-black/20
                     `
                   }
                 `)}
                 onClick={() => canRootEntryClick && onRootEntryClick(rootEntry)}
               >
                 <div className="flex justify-between items-center">
-                  <div className="flex-shrink-0">
+                  <div className="shrink-0">
                     {isDisk
                       ? <SvgIcon.HardDrive />
                       : <SvgIcon.Folder />
                     }
                   </div>
                   <div
-                    className="ml-1 truncate flex-grow"
+                    className="ml-1 truncate grow"
                     title={name}
                   >
                     {name}
                   </div>
                   {showDiskInfo && (
-                    <div className="flex-shrink-0 font-din scale-75 origin-right opacity-60">
+                    <div className="shrink-0 font-din scale-75 origin-right opacity-60">
                       {`${getReadableSize(spaceUsed!, kiloSize)} / ${getReadableSize(spaceTotal!, kiloSize)}`}
                     </div>
                   )}

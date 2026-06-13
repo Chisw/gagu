@@ -30,7 +30,7 @@ export default function Brightness() {
           <span className="ml-2">Auto</span>
         </div>
         <div className="my-4 flex items-center">
-          <div className="flex-grow">
+          <div className="grow">
             <Slider
               step={1}
               min={1}
@@ -40,7 +40,7 @@ export default function Brightness() {
               onAfterChange={(value) => handleUpdateBrightness(value as number)}
             />
           </div>
-          <div className="flex-shrink-0 w-8 text-right text-lg font-din">{brightness}</div>
+          <div className="shrink-0 w-8 text-right text-lg font-din">{brightness}</div>
         </div>
       </div>
     </>

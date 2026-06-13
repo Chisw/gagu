@@ -168,7 +168,7 @@ export default function TextEditor(props: AppComponentProps) {
 
   return (
     <>
-      <div className="absolute inset-0 flex flex-col">
+      <div className="absolute inset-0 flex flex-col bg-white">
         <Toolbar
           {...{
             activeEntry,
@@ -183,7 +183,7 @@ export default function TextEditor(props: AppComponentProps) {
           onDownload={handleDownload}
           onMarkdownViewChange={handleMarkdownViewChange}
         />
-        <div className="flex-grow relative">
+        <div className="grow relative">
           <Opener show={!activeEntry} appId={appId} />
 
           {activeEntry && (

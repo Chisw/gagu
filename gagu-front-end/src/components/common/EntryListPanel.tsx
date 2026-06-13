@@ -32,7 +32,7 @@ export function EntryListPanel(props: EntryListPanelProps) {
   return (
     <>
       <div className="my-6 backdrop-blur border border-gray-200 dark:border-zinc-600">
-        <div className="px-3 py-2 text-xs bg-white bg-opacity-50 border-b border-gray-200 font-din flex justify-between items-center dark:bg-black dark:bg-opacity-10 dark:border-zinc-600">
+        <div className="px-3 py-2 text-xs bg-white/50 border-b border-gray-200 font-din flex justify-between items-center dark:bg-black/10 dark:border-zinc-600">
           <span>
             <span className="text-gray-600 dark:text-zinc-200">{downloadName || 'Unknown'}</span>
             <span className="text-gray-400 dark:text-zinc-400">
@@ -56,7 +56,7 @@ export function EntryListPanel(props: EntryListPanelProps) {
           )}
         </div>
         <div className="max-h-[40vh] md:max-h-[50vh] overflow-x-hidden overflow-y-auto">
-          <div className="py-3 md:py-6 grid grid-cols-3 md:grid-cols-4 gap-1 md:gap-3 bg-opacity-40">
+          <div className="py-3 md:py-6 grid grid-cols-3 md:grid-cols-4 gap-1 md:gap-3">
             {(allMode ? flatList : entryList).map((entry: IEntry) => (
               <EntryNode
                 key={entry.parentPath + entry.name}

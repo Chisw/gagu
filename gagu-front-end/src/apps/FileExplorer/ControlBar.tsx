@@ -80,7 +80,7 @@ export default function ControlBar(props: ControlBarProps) {
 
   return (
     <>
-      <div className="h-10 md:h-8 flex-shrink-0 flex items-center border-b border-gray-100 dark:border-zinc-700">
+      <div className="h-10 md:h-8 shrink-0 flex items-center border-b border-gray-100 dark:border-zinc-700">
         <ToolButton
           title={t`action.location`}
           icon={<SvgIcon.SideBar />}
@@ -175,7 +175,7 @@ export default function ControlBar(props: ControlBarProps) {
           </>
         )}
 
-        <div className="flex-grow md:mx-[1px] h-3 border-r dark:border-zinc-700" />
+        <div className="grow md:mx-[1px] h-3 border-r dark:border-zinc-700" />
 
         <div className={`${filterMode ? 'w-40' : 'w-8'} h-full transition-all duration-200`}>
           {filterMode ? (
@@ -224,7 +224,7 @@ export default function ControlBar(props: ControlBarProps) {
           <Dropdown
             trigger="click"
             position="bottomRight"
-            className="bg-white bg-opacity-80 backdrop-blur dark:bg-zinc-700 dark:bg-opacity-80"
+            className="bg-white/80 backdrop-blur dark:bg-zinc-700/80"
             spacing={0}
             visible={sortVisible}
             onVisibleChange={setSortVisible}
@@ -253,9 +253,9 @@ export default function ControlBar(props: ControlBarProps) {
                       className={`flex items-center cursor-pointer ${isActive ? 'text-blue-600' : ''}`}
                       onClick={() => onSortTypeChange(targetType)}
                     >
-                      <span className="flex-grow">{t(`action.sort_${targetType}`)}</span>
+                      <span className="grow">{t(`action.sort_${targetType}`)}</span>
                       {targetType !== Sort.default && (
-                        <span className="flex-shrink-0 flex">
+                        <span className="shrink-0 flex">
                           <SvgIcon.ArrowDown size={12} className={(!isCurrentDesc || !isActive) ? 'text-gray-300' : ''} />
                           <SvgIcon.ArrowUp size={12} className={(isCurrentDesc || !isActive) ? 'text-gray-300' : ''} />
                         </span>

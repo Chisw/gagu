@@ -299,8 +299,8 @@ export default function UserFormModal(props: UserFormModalProps) {
                       dark:bg-zinc-600 dark:text-zinc-300 dark:border-zinc-500
                     `)}
                   >
-                    <SvgIcon.Folder className="mr-1 flex-shrink-0" />
-                    <div className="mr-2 flex-grow break-all">{path}</div>
+                    <SvgIcon.Folder className="mr-1 shrink-0" />
+                    <div className="mr-2 grow break-all">{path}</div>
                     <IconButton
                       size="xs"
                       icon={<SvgIcon.Close className="text-gray-400 hover:text-gray-900" />}

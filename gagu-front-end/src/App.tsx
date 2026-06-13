@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import LoginPage from './pages/LoginPage'
 import DesktopPage from './pages/DesktopPage'
-import ExplorePage from './pages/ExplorePage'
+import ExplorerPage from './pages/ExplorerPage'
 import TouchPage from './pages/TouchPage'
 import SharingPage from './pages/SharingPage'
 import { FsApi } from './api'
@@ -29,7 +29,7 @@ export default function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/" element={<DesktopPage />} />
         <Route path="/desktop" element={<DesktopPage />} />
-        <Route path="/explore" element={<ExplorePage />} />
+        <Route path="/explorer" element={<ExplorerPage />} />
         <Route path="/touch" element={<TouchPage />} />
         <Route path="/sharing" element={<DesktopPage />} />
         <Route path="/sharing/:code" element={<SharingPage />} />

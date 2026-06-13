@@ -40,7 +40,7 @@ export function IconButton(props: IconButtonProps) {
           transition-bg duration-100
           ${disabled
             ? 'cursor-not-allowed opacity-50'
-            : 'cursor-pointer md:hover:bg-white md:hover:bg-opacity-20 active:bg-white active:bg-opacity-10'
+            : 'cursor-pointer md:hover:bg-white/20 active:bg-white/10'
           }
         `)}
         onClick={() => !disabled && onClick()}

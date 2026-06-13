@@ -34,7 +34,7 @@ export default function GeneralSettings() {
           />
           <Form.Slot label={t`label.hotkeyStyle`}>
             <div className="flex">
-              <div className="flex-grow">
+              <div className="grow">
                 <RadioGroup
                   type="button"
                   value={userConfig.hotkeyStyle}
@@ -111,7 +111,7 @@ export default function GeneralSettings() {
                 value={userConfig.fileExplorerDefaultPath}
               />
               <Button
-                className="ml-1 flex-shrink-0"
+                className="ml-1 shrink-0"
                 onClick={() => setDefaultPathEnteryPickerShow(true)}
               >
                 <SvgIcon.FolderOpen />

@@ -58,7 +58,7 @@ export default function EntryIcon(props: IconProps) {
       className={line(`
         gagu-entry-icon
         relative mx-auto pointer-events-none
-        flex justify-center items-center flex-shrink-0
+        flex justify-center items-center shrink-0
         bg-no-repeat bg-contain bg-center
         ${isSmall ? 'w-6 h-6 --small-icon' : 'w-14 h-12'}
         ${isFolder ? '--folder' : '--file'}
@@ -132,7 +132,7 @@ function ThumbnailWrapper(props: { type: ThumbnailTypeType, loading: boolean, ch
           relative w-4/5 aspect-square flex justify-center items-center shadow-lg overflow-hidden
           after:content-[''] after:block after:absolute after:z-[0] after:left-0
           after:-ml-[60%] after:-mt-[70%] after:w-full after:h-[300%]
-          after:bg-white after:bg-opacity-30 after:rotate-[60deg]
+          after:bg-white/30 after:rotate-[60deg]
           ${loading ? 'bg-loading' : 'bg-white'}
         `)}
       >

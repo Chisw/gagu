@@ -114,7 +114,7 @@ export default function Toolbar(props: ToolbarProps) {
         className={line(`
           absolute z-10 bottom-0 right-0 left-0
           flex items-center
-          text-xs px-2 py-1 bg-black bg-opacity-50 text-white
+          text-xs px-2 py-1 bg-black/50 text-white
           transition-opacity duration-200
           md:opacity-0 group-hover:opacity-100
           cursor-default
@@ -127,7 +127,7 @@ export default function Toolbar(props: ToolbarProps) {
           {sizeInfo.width} &times; {sizeInfo.height}PX
         </div>
 
-        <div className="flex-grow flex justify-center">
+        <div className="grow flex justify-center">
           {buttonList.map(({ icon, title, onClick, disabled }) => (
             <IconButton
               key={title}
@@ -149,7 +149,7 @@ export default function Toolbar(props: ToolbarProps) {
         className={line(`
           absolute z-20 inset-0
           text-xs text-white break-words cursor-default
-          bg-gray-700 bg-opacity-70 backdrop-blur
+          bg-gray-700/70 backdrop-blur
           transition-transform duration-200
           ${exifResponse ? 'scale-100' : 'scale-0'}
         `)}
@@ -178,14 +178,14 @@ export default function Toolbar(props: ToolbarProps) {
               className="mb-3"
             >
               <div className="py-2 text-center text-base font-bold">-- {key} --</div>
-              <div className="ml-2 flex-grow flex flex-wrap">
+              <div className="ml-2 grow flex flex-wrap">
                 {Object.entries(value || {}).map(([_key, _value]) => (
                   <div
                     key={_key}
                     className="mt-2 w-full flex"
                   >
-                    <div className="flex-shrink-0 w-1/2 text-right">{_key}:</div>
-                    <div className="ml-2 flex-grow flex break-all max-h-10 overflow-y-auto">
+                    <div className="shrink-0 w-1/2 text-right">{_key}:</div>
+                    <div className="ml-2 grow flex break-all max-h-10 overflow-y-auto">
                       {_value as string}
                     </div>
                   </div>

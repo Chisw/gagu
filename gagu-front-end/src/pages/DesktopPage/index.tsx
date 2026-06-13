@@ -20,7 +20,7 @@ export default function DesktopPage() {
   return (
     <div
       data-customized-scrollbar
-      className="gagu-desktop-page fixed z-0 inset-0 overflow-hidden bg-gradient-to-b from-black to-zinc-600"
+      className="gagu-desktop-page fixed z-0 inset-0 overflow-hidden bg-gradient-to-b from-[#2F0059] to-[#9F00DE]"
       onContextMenuCapture={e => e.preventDefault()}
       onDragOver={e => e.preventDefault()}
       onDrop={e => {
