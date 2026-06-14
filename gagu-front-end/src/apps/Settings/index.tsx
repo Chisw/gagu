@@ -27,7 +27,7 @@ export default function Settings (props: AppComponentProps) {
   return (
     <>
       <div className="gagu-app-settings absolute inset-0 flex flex-col md:flex-row">
-        <div className="hidden md:block w-48 h-full bg-zinc-100 shrink-0 select-none">
+        <div className="hidden md:block w-48 h-full bg-zinc-100 dark:bg-zinc-900 shrink-0 select-none">
           {tabList.map(({ key, icon }) => (
             <div
               key={key}

@@ -317,7 +317,7 @@ export function MenuBar() {
               {userInfo ? (
                 <>
                   <div
-                    className="gagu-user-avatar w-4 h-4 md:box-content rounded-full filter opacity-80 bg-center bg-cover bg-zinc-500"
+                    className="gagu-user-avatar w-4 h-4 md:box-content rounded-full filter bg-center bg-cover bg-zinc-500"
                     style={avatarStyle}
                   />
                   <span className="hidden md:inline ml-2 font-din dark:text-zinc-200">

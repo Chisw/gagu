@@ -51,8 +51,9 @@ export function Opener(props: OpenerProps) {
             className={line(`
               flex justify-center items-center
               mt-12 p-2 w-36 border select-none
-              cursor-pointer rounded bg-white/90
-              text-xs text-gray-600 hover:text-gray-900 hover:opacity-80
+              cursor-pointer rounded bg-white/90 dark:bg-white/10
+              text-xs text-gray-600
+              hover:text-gray-900 hover:opacity-80
               transition-all
               dark:bg-zinc/20 dark:border-zinc-400 dark:border-opacity-20 dark:text-zinc-200
               ${mounted ? 'duration-200' : 'duration-700 opacity-0'}

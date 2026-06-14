@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { SvgIcon, ToolButton } from '../../components/common'
 import { Dropdown } from '@douyinfe/semi-ui'
 import { useCallback, useMemo, useState } from 'react'
-import { EditMode, Sort, SortType } from '../../types'
+import { Sort, SortType } from '../../types'
 import { IFileExplorerDisabledMap } from '../../hooks'
 
 interface ControlBarProps {
@@ -24,11 +24,6 @@ interface ControlBarProps {
   onNavRefresh: () => void
   onNavAbort: () => void
   onNavToParent: () => void
-  onEdit: (editMode: EditMode) => void
-  onUpload: () => void
-  onDownload: () => void
-  onDelete: () => void
-  onSelectAll: () => void
 }
 
 export default function ControlBar(props: ControlBarProps) {
@@ -54,11 +49,6 @@ export default function ControlBar(props: ControlBarProps) {
     onNavRefresh,
     onNavAbort,
     onNavToParent,
-    onEdit,
-    onUpload,
-    onDownload,
-    onDelete,
-    onSelectAll,
   } = props
 
   const [sortVisible, setSortVisible] = useState(false)
@@ -119,61 +109,6 @@ export default function ControlBar(props: ControlBarProps) {
           disabled={disabledMap.navToParent}
           onClick={onNavToParent}
         />
-
-        <div className="hidden md:block md:mx-[1px] h-3 border-l dark:border-zinc-700" />
-
-        {windowWidth > 800 && (
-          <>
-            <ToolButton
-              title={t`action.newFolder`}
-              className="hidden md:flex"
-              icon={<SvgIcon.FolderAdd />}
-              disabled={disabledMap.createFolder}
-              onClick={() => onEdit(EditMode.createFolder)}
-            />
-            <ToolButton
-              title={t`action.newTextFile`}
-              className="hidden md:flex"
-              icon={<SvgIcon.FileAdd />}
-              disabled={disabledMap.createText}
-              onClick={() => onEdit(EditMode.createText)}
-            />
-            <ToolButton
-              title={t`action.upload`}
-              className="hidden md:flex"
-              icon={<SvgIcon.Upload />}
-              onClick={onUpload}
-            />
-            <ToolButton
-              title={t`action.download`}
-              className="hidden md:flex"
-              icon={<SvgIcon.Download />}
-              disabled={disabledMap.download}
-              onClick={onDownload}
-            />
-            <ToolButton
-              title={t`action.selectAll`}
-              className="hidden md:flex"
-              icon={<SvgIcon.Check />}
-              disabled={disabledMap.selectAll}
-              onClick={onSelectAll}
-            />
-            <ToolButton
-              title={t`action.rename`}
-              className="hidden md:flex"
-              icon={<SvgIcon.Rename />}
-              disabled={disabledMap.rename}
-              onClick={() => onEdit(EditMode.rename)}
-            />
-            <ToolButton
-              title={t`action.delete`}
-              className="hidden md:flex"
-              icon={<SvgIcon.Delete />}
-              disabled={disabledMap.delete}
-              onClick={onDelete}
-            />
-          </>
-        )}
 
         <div className="grow md:mx-[1px] h-3 border-r dark:border-zinc-700" />
 

@@ -113,7 +113,7 @@ export default function Toolbar(props: ToolbarProps) {
       <div
         className={line(`
           absolute z-10 bottom-0 right-0 left-0
-          flex items-center
+          flex items-center backdrop-blur-sm
           text-xs px-2 py-1 bg-black/50 text-white
           transition-opacity duration-200
           md:opacity-0 group-hover:opacity-100

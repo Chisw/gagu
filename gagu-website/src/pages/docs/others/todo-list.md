@@ -13,6 +13,15 @@ Many unrealized ideas will be recorded here, waiting for development
 - Sound Recorder, Calendar, Calculator, Weather, Relative calculator and other gadgets
 - When running on Termux, add user login vibration reminder and pop-up notification
 - Use virtual scrolling for all long lists (remove thumbScrollWatcher)
+- Single-window mode for the App
+- External App (npm install/cdn)
+- Responsive container query style
+- Thumbnail functionality, front-end scheduling + back-end concurrency limiting
+- Support for custom GAGU.ROOT directory -c --current
+- Remove toast from message center
+- Personal homepage functionality (weather, calendar, navigation)
+- Specify multiple paths for public read/write
+- Static site zip deployment
 
 ## User
 
@@ -40,6 +49,10 @@ Many unrealized ideas will be recorded here, waiting for development
 - Arrows operations
 - Thumbnail request queue
 - Customized opening app (set as default)
+- WebSocket directory status, file occupancy markers
+- Rewrite Window (window function pass-through, sub-window, distinguish between maximized and full-screen)
+- Navigation + Address Bar merged
+- Advanced Filtering
 
 ### Text Editor
 
@@ -48,17 +61,23 @@ Many unrealized ideas will be recorded here, waiting for development
 - Code highlighting
 - Generate pictures for sharing
 
+### Document Reader
+
+- PDF Backend Slicing
+- EPUB
+
 ### Photo Viewer
 
 - Support panorama pictures
 - Crop
-- Compress
+- Compression: TinyPNG/Canvas/FFMPEG
 
 ### Music Player
 
 - Playlist favorites
 - Horizontal volume slider
 - Music library data generation
+- Display built-in lyrics
 
 ### Video Player
 
@@ -67,6 +86,17 @@ Many unrealized ideas will be recorded here, waiting for development
 - Generate content screenshots
 - Thumbnails on progress bar
 - Horizontal volume slider
+- Playback speed
+
+### Web Browser
+
+- Categories
+- Add Custom URLs
+
+### Android Controller
+
+- Xiaomi Gesture Infrared Remote Control + Single-Page Use
+- Mobile Version of Android Controller
 
 ### Settings
 
@@ -82,10 +112,6 @@ Many unrealized ideas will be recorded here, waiting for development
 - System space usage management
 
 - Log Management
-
-### AndroidController
-
-- Xiaomi gesture infrared remote control
 
 ## Website
 

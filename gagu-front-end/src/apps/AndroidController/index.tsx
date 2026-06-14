@@ -51,7 +51,7 @@ export default function AndroidController() {
 
   return (
     <>
-      <div className="absolute z-0 inset-0 p-2 bg-white overflow-x-hidden overflow-y-auto">
+      <div className="absolute z-0 inset-0 p-2 bg-white dark:bg-zinc-900 overflow-x-hidden overflow-y-auto">
         {!baseData.serverOS.isAndroid && (
           <div className="p-2 font-din bg-yellow-300 text-yellow-700 flex">
             <SvgIcon.Warning size={32} className="shrink-0" />

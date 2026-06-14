@@ -280,11 +280,6 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
             onNavRefresh={handleNavRefresh}
             onNavAbort={handleNavAbort}
             onNavToParent={handleNavToParent}
-            onEdit={() => {}}
-            onUpload={() => {}}
-            onDownload={() => {}}
-            onDelete={() => {}}
-            onSelectAll={() => {}}
           />
           <StatusBar
             {...{

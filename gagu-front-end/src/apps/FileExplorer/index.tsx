@@ -45,13 +45,13 @@ export default function FileExplorer(props: FileExplorerProps) {
     sharingModalShow, setSharingModalShow,
     movementEntryPickerShow, setMovementEntryPickerShow,
     goToPathDialogShow, setGoToPathDialogShow,
-    editMode, handleEdit, handleNameSuccess, handleNameFail,
+    editMode, handleNameSuccess, handleNameFail,
     handleEntryClick, handleEntryDoubleClick,
     handleDirectoryOpen, handleGoFullPath,
-    handleFavoriteClick, handleMove, handleDeleteClick,
-    handleSelectAll, handleSelectCancel,
+    handleFavoriteClick, handleMove,
+    handleSelectCancel,
     handleNavBack, handleNavForward, handleNavRefresh, handleNavAbort, handleNavToParent,
-    handleUploadClick, handleDownloadClick, handleContextMenu,
+    handleContextMenu,
   } = useWorkArea({
     isUserDesktop: false,
     isTopWindow,
@@ -97,11 +97,6 @@ export default function FileExplorer(props: FileExplorerProps) {
             onNavRefresh={handleNavRefresh}
             onNavAbort={handleNavAbort}
             onNavToParent={handleNavToParent}
-            onEdit={handleEdit}
-            onUpload={handleUploadClick}
-            onDownload={handleDownloadClick}
-            onDelete={handleDeleteClick}
-            onSelectAll={handleSelectAll}
           />
           <div
             ref={containerRef}

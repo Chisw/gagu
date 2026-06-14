@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { SvgIcon } from '../../components/common'
+import { SvgIcon, ToolButton } from '../../components/common'
 import { line } from '../../utils'
 import { Button, Input } from '@douyinfe/semi-ui'
 import { useHotKey } from '../../hooks'
@@ -8,6 +8,11 @@ const websiteList = [
   { group: '', url: 'https://edit.photo' },
   { group: '', url: 'https://webamp.org' },
   { group: '', url: 'https://jspaint.app' },
+  { group: '', url: 'https://os.ryo.lu' },
+  { group: '', url: 'https://98.js.org' },
+  { group: '', url: 'https://winxp.vercel.app' },
+  { group: '', url: 'https://desk.glitchy.website' },
+  { group: '', url: 'https://calque.io' },
   { group: '', url: 'https://rename.tools' },
   { group: '', url: 'https://map.baidu.com' },
   { group: '', url: 'https://chartogne-taillet.com' },
@@ -42,7 +47,7 @@ export default function WebBrowser() {
 
   return (
     <>
-      <div className="absolute inset-0 bg-zinc-100">
+      <div className="absolute inset-0">
 
         <div className="flex items-center p-4 pb-0">
           <Input
@@ -69,7 +74,7 @@ export default function WebBrowser() {
             return (
               <div
                 key={getDomain(url)}
-                className="px-4 py-6 cursor-pointer bg-white hover:bg-zinc-200 rounded"
+                className="px-4 py-6 cursor-pointer bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 rounded"
                 onClick={() => {
                   setActiveUrl(url)
                   setLoading(true)
@@ -91,28 +96,27 @@ export default function WebBrowser() {
         </div>
 
         {activeUrl && (
-          <div className="absolute z-0 inset-0 flex flex-col bg-white">
+          <div className="absolute z-0 inset-0 flex flex-col bg-zinc-100 dark:bg-zinc-900">
             <div
               className={line(`
                 flex items-center shrink-0 h-8 border-t border-b
+                dark:border-zinc-700
                 ${loading ? 'bg-loading' : ''}
               `)}
             >
-              <div
-                className="flex-center-center shrink-0 w-8 h-8 cursor-pointer hover:bg-zinc-100/50"
+              <ToolButton
+                title=""
+                icon={<SvgIcon.ArrowLeft />}
                 onClick={() => setActiveUrl('')}
-              >
-                <SvgIcon.ArrowLeft />
-              </div>
+              />
               <div className="grow ml-2 text-xs text-zinc-500 text-center">
                 {activeUrl}
               </div>
-              <div
-                className="flex-center-center shrink-0 w-8 h-8 cursor-pointer hover:bg-zinc-100/50"
+              <ToolButton
+                title=""
+                icon={<SvgIcon.ExternalLink />}
                 onClick={() => window.open(activeUrl)}
-              >
-                <SvgIcon.ExternalLink />
-              </div>
+              />
             </div>
             <div className="grow">
               <iframe

@@ -168,7 +168,7 @@ export default function TextEditor(props: AppComponentProps) {
 
   return (
     <>
-      <div className="absolute inset-0 flex flex-col bg-white">
+      <div className="absolute inset-0 flex flex-col bg-white dark:bg-zinc-900">
         <Toolbar
           {...{
             activeEntry,

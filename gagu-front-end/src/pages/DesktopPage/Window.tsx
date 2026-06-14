@@ -119,7 +119,7 @@ export default function Window(props: WindowProps) {
     document.getElementById(`gagu-app-window-${runningId}`)!.style.zIndex = String(newTopIndex)
   }, [isTopWindow, runningId, topWindowIndex, setTopWindowIndex])
 
-  const handleHide = useCallback(() => {
+  const handleMinimizeClick = useCallback(() => {
     setWindowStatus(hidden ? 'showing' : 'hiding')
     hidden && setHidden(!hidden)
     setTimeout(() => {
@@ -297,7 +297,7 @@ export default function Window(props: WindowProps) {
                 hover:bg-gray-200 hover:text-black active:bg-gray-400
                   ${headerClassName ? 'text-gray-200' : 'text-gray-400'}
                 `)}
-                onClick={handleHide}
+                onClick={handleMinimizeClick}
               >
                 <SvgIcon.Subtract size={12} />
               </div>

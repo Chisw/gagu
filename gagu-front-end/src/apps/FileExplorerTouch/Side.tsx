@@ -25,9 +25,10 @@ export default function Side(props: SideProps) {
         data-vibrate-disabled="true"
         className={line(`
           absolute z-0 bottom-0 left-0 pb-4 w-64
-          bg-zinc-100 overflow-x-hidden overflow-y-auto border-r
+          bg-zinc-100
+          overflow-x-hidden overflow-y-auto border-r
           duration-transform duration-300 ease-in-out
-          dark:bg-black dark:border-zinc-600
+          dark:bg-zinc-900 dark:border-zinc-600
           ${sideShow ? 'translate-x-0' : '-translate-x-64'}
           ${asEntryPicker ? 'top-0' : 'top-8'}
         `)}

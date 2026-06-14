@@ -20,7 +20,7 @@ export default function Side(props: SideProps) {
       className={line(`
         relative shrink-0
         h-full overflow-hidden select-none
-        bg-zinc-100
+        bg-zinc-100 dark:bg-zinc-900
         transition-all duration-300
         ${sideCollapse ? 'w-0' : 'w-56'}
       `)}
