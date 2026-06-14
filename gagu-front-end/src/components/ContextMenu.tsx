@@ -42,8 +42,7 @@ export function ContextMenu() {
 
     if (isDock) {
       const { top: targetTop, left: targetLeft } = (target as any).getBoundingClientRect()
-      const verticalOffset = filteredMenuItemList.length * 36 + 50
-      top = targetTop - verticalOffset
+      top = targetTop - 32
       left = targetLeft
     } else {
       top = clientY - 24
@@ -82,12 +81,12 @@ export function ContextMenu() {
       >
         <Dropdown
           trigger="custom"
-          position="bottomLeft"
+          position={isDock ? 'topLeft' : 'bottomLeft'}
           className={line(`
             gagu-contextmenu-dropdown
             select-none bg-white
             ${isDock
-              ? 'dark:bg-black dark:text-zinc-300 overflow-hidden'
+              ? 'is-dock dark:bg-black dark:text-zinc-300 overflow-hidden'
               : 'bg-opacity-80 backdrop-blur dark:bg-zinc-700/80'}
           `)}
           visible={menuShow}
@@ -136,9 +135,6 @@ export function ContextMenu() {
                   </Dropdown.Item>
                 )
               })}
-              {isDock && (
-                <div className="absolute z-[-1] left-0 bottom-0 -mb-1 ml-3 w-3 h-3 bg-white rotate-45 rounded-sm dark:bg-black" />
-              )}
             </Dropdown.Menu>
           }
         />

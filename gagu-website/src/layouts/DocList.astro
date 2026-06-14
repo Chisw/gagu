@@ -14,13 +14,13 @@ const groupedDocList = Array.from(new Set(docList.map(o => o.group))).map(group 
 <div>
   {groupedDocList.map(({ group, children }) => (
     <div class="mb-8">
-      <h2 class="mb-2 font-bold">{group}</h2>
+      <h2 class="mb-2 font-bold font-g-sans">{group}</h2>
       <div>
         {children.map(({ title, path }) => (
           <a
             class={`
-              mb-2 block text-sm text-gray-400 hover:text-blue-500
-              ${getIsActive(path, pathname) ? 'font-bold text-blue-700' : ''}
+              mb-2 block text-sm hover:text-purple-500
+              ${getIsActive(path, pathname) ? 'text-purple-600' : 'text-zinc-400'}
             `}
             href={path}
           >

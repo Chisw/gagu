@@ -7,10 +7,10 @@
   src: url("./g-sans.woff") format("woff");
 }
 
-html, body {
+.font-g-sans {
   font-family: "g-sans";
 }
 
 *::selection {
-  @apply text-[#f3e7ff] bg-[#9F00DE];
+  @apply text-purple-950 bg-purple-200;
 }

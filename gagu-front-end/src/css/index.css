@@ -1,8 +1,5 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 @import "react-photo-view/dist/react-photo-view.css";
+@import "./tailwind.css";
 @import "./fonts.css";
 @import "./icons.css";
 @import "./markdown.css";

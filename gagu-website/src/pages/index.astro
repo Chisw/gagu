@@ -18,8 +18,9 @@ import iconAppTextEditor from '/assets/icons/app-text-editor.svg'
 import iconAppPhotoViewer from '/assets/icons/app-photo-viewer.svg'
 import iconAppMusicPlayer from '/assets/icons/app-music-player.svg'
 import iconAppVideoPlayer from '/assets/icons/app-video-player.svg'
-import iconAppSettings from '/assets/icons/app-settings.svg'
+import iconAppWebBrowser from '/assets/icons/app-web-browser.svg'
 import iconAppAndroidController from '/assets/icons/app-android-controller.svg'
+import iconAppSettings from '/assets/icons/app-settings.svg'
 import iconAppMessager from '/assets/icons/app-messager.svg'
 import iconAppTerminal from '/assets/icons/app-terminal.svg'
 import iconAppDocReader from '/assets/icons/app-doc-reader.svg'
@@ -45,8 +46,9 @@ const appList = [
   { icon: iconAppPhotoViewer, title: 'Photo Viewer', desc: 'JPG / PNG / GIF / SVG' },
   { icon: iconAppMusicPlayer, title: 'Music Player', desc: 'MP3 / FLAC' },
   { icon: iconAppVideoPlayer, title: 'Video Player', desc: 'MP4 / MKV' },
-  { icon: iconAppSettings, title: 'Settings', desc: 'System / Users / Log' },
+  { icon: iconAppWebBrowser, title: 'Web Browser', desc: 'URL' },
   { icon: iconAppAndroidController, title: 'Android Controller', desc: 'SMS / Phone / Camera' },
+  { icon: iconAppSettings, title: 'Settings', desc: 'System / Users / Log' },
 ]
 
 const planningAppList = [
@@ -70,7 +72,7 @@ const commandList = [
     <audio id="audio" preload="preload" src="/assets/gagu.mp3" />
   </div>
 
-  <Block className="bg-gradient-to-b from-[#2F0059] to-[#9F00DE] overflow-hidden">
+  <Block className="bg-gradient-to-b from-[#2F0059] to-[#9F00DE] overflow-hidden font-g-sans">
     <div class="py-12 md:py-24 lg:py-32">
       <div class="text-center text-white">
         <div
@@ -181,7 +183,7 @@ const commandList = [
     <div class="h-24 md:h-48 lg:h-64"></div>
   </Block>
 
-  <Block className="bg-gradient-to-b from-[#9F00DE] via-white to-white">
+  <Block className="bg-gradient-to-b from-[#9F00DE] via-white to-white font-g-sans">
     <div class="-translate-y-24 md:-translate-y-48 lg:-translate-y-64 rounded md:rounded-xl shadow-xl overflow-hidden select-none">
       <div class="px-1 md:px-3 w-full h-3 md:h-6 bg-white flex items-center">
         <div class="mr-1 w-1 h-1 md:w-3 md:h-3 rounded-full bg-gray-300"></div>
@@ -219,7 +221,6 @@ const commandList = [
               class={`
                 mx-auto w-12 h-12 bg-center bg-no-repeat rounded-full shadow-xl
                 md:w-16 md:h-16
-                lg:w-20 lg:h-20
                 flex justify-center items-center
                 bg-gradient-to-br ${bg}
               `}
@@ -237,32 +238,32 @@ const commandList = [
     </div>
   </Block>
 
-  <Block className="bg-gradient-to-b from-[#2F0059] to-[#9F00DE]">
+  <Block className="font-g-sans">
     <div class="py-16 md:py-32">
-      <h2 class="text-2xl md:text-4xl text-center font-bold text-purple-100">Apps</h2>
-      <p class="mt-4 text-sm md:text-base lg:text-lg text-center text-purple-300">
+      <h2 class="text-2xl md:text-4xl text-center font-bold text-zinc-900">Apps</h2>
+      <p class="mt-4 text-sm md:text-base lg:text-lg text-center text-zinc-400">
         GAGU provides some basic applications
       </p>
-      <div class="mt-12 flex flex-wrap select-none">
+      <div class="mt-8 flex flex-wrap select-none">
         {appList.map(({ icon, title, desc }) => (
-          <div class="px-8 md:px-12 py-4 md:py-8 lg:py-12 w-full md:w-1/2 lg:w-1/3 xl:w-1/4 rounded-2xl flex justify-start cursor-pointer hover:bg-purple-600">
+          <div class="px-8 md:px-12 py-4 md:py-8 lg:py-12 w-full md:w-1/2 lg:w-1/3 xl:w-1/4 rounded-2xl flex justify-start cursor-pointer hover:bg-zinc-100">
             <div
               class="shrink-0 w-12 md:w-20 h-12 md:h-20 rounded-lg md:rounded-2xl bg-center bg-no-repeat bg-cover shadow-lg"
               style={`background-image: url("${icon}");`}
             >
             </div>
             <div class="ml-4">
-              <p class="text-base md:text-lg font-bold text-purple-100">{title}</p>  
-              <p class="mt-1 text-xs md:text-sm text-purple-400">{desc}</p>  
+              <p class="text-base md:text-lg font-bold text-zinc-900">{title}</p>  
+              <p class="mt-1 text-xs md:text-sm text-zinc-400">{desc}</p>  
             </div>
           </div>
         ))}
       </div>
-      <p class="mt-12 text-sm md:text-base lg:text-lg text-center text-purple-300">
+      <p class="mt-20 text-sm md:text-base lg:text-lg text-center text-zinc-400">
         Apps in planning,<br/>
         implemented using third-party libraries
       </p>
-      <div class="mt-12 flex flex-wrap select-none">
+      <div class="mt-8 flex flex-wrap select-none">
         {planningAppList.map(({ icon, title, desc }) => (
           <div class="px-8 md:px-12 py-4 md:py-8 lg:py-12 w-full md:w-1/2 lg:w-1/3 xl:w-1/4 rounded-2xl flex justify-start">
             <div
@@ -271,8 +272,8 @@ const commandList = [
             >
             </div>
             <div class="ml-4">
-              <p class="text-base md:text-lg font-bold text-purple-100">{title}</p>  
-              <p class="mt-1 text-xs md:text-sm text-purple-400">{desc}</p>  
+              <p class="text-base md:text-lg font-bold text-zinc-900">{title}</p>  
+              <p class="mt-1 text-xs md:text-sm text-zinc-400">{desc}</p>  
             </div>
           </div>
         ))}

@@ -98,15 +98,14 @@
     },
     "app": {
       "android-controller": "安卓控制器 ⏳",
-      "baidu-map": "百度地圖",
       "doc-reader": "文檔閱讀器",
       "file-explorer": "文件管理器",
       "music-player": "音樂播放器",
       "photo-viewer": "圖片瀏覽器",
-      "pqina": "pqina",
       "settings": "設置",
       "text-editor": "文本編輯器",
-      "video-player": "視頻播放器"
+      "video-player": "視頻播放器",
+      "web-browser": "網頁瀏覽器"
     },
     "hint": {
       "atLeastCharacters": "至少 {{count}} 個字符",

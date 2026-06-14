@@ -98,15 +98,14 @@
     },
     "app": {
       "android-controller": "アンドロイドコントローラー ⏳",
-      "baidu-map": "百度地図",
       "doc-reader": "ドキュメントリーダー",
       "file-explorer": "ファイルマネージャー",
       "music-player": "音楽プレーヤー",
       "photo-viewer": "画像ブラウザ",
-      "pqina": "pqina",
       "settings": "設定",
       "text-editor": "テキストエディタ",
-      "video-player": "ビデオプレーヤー"
+      "video-player": "ビデオプレーヤー",
+      "web-browser": "ウェブブラウザ"
     },
     "hint": {
       "atLeastCharacters": "少なくとも {{count}} 文字",

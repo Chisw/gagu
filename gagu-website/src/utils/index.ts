@@ -9,8 +9,8 @@ const DOC_LIST = [
   { key: 'type-definition', group: 'Development', groupZh: '开发', title: 'Type Definition ⏳', titleZh: '类型定义 ⏳' },
   { key: 'api-list', group: 'Development', groupZh: '开发', title: 'API List ⏳', titleZh: 'API 列表 ⏳' },
   { key: 'dev-and-build', group: 'Development', groupZh: '开发', title: 'Dev & Build', titleZh: '开发与构建' },
-  { key: 'changelog', group: 'Others', groupZh: '其它', title: 'Changelog', titleZh: '更新日志' },
   { key: 'todo-list', group: 'Others', groupZh: '其它', title: 'Todo List', titleZh: '待办项' },
+  { key: 'changelog', group: 'Others', groupZh: '其它', title: 'Changelog', titleZh: '更新日志' },
 ]
 
 export const getDocList = (pathname) => {

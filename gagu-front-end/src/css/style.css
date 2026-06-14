@@ -257,6 +257,16 @@ body {
   @apply p-0;
 }
 
+.gagu-contextmenu-dropdown.is-dock {
+  overflow: visible;
+}
+
+.gagu-contextmenu-dropdown.is-dock::after {
+  content: "";
+  display: block;
+  @apply absolute z-[-1] left-0 bottom-0 -mb-1 ml-[10px] w-3 h-3 bg-white rotate-45 rounded-sm dark:bg-black;
+}
+
 /* animate */
 @keyframes shake-x {
   from,

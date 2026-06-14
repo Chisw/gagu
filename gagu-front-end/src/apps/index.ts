@@ -5,10 +5,9 @@ import DocReader from './DocReader'
 import PhotoViewer from './PhotoViewer'
 import MusicPlayer from './MusicPlayer'
 import VideoPlayer from './VideoPlayer'
+import WebBrowser from './WebBrowser'
 import AndroidController from './AndroidController'
 import Settings from './Settings'
-import BaiduMap from './web/BaiduMap'
-import PQINA from './web/PQINA'
 
 export const APP_LIST: IApp[] = [
   {
@@ -98,16 +97,16 @@ export const APP_LIST: IApp[] = [
     touchModeShow: true,
   },
   {
-    id: AppId.settings,
+    id: AppId.webBrowser,
     runningId: 0,
-    AppComponent: Settings,
+    AppComponent: WebBrowser,
     width: 800,
     height: 600,
     resizeRange: {
-      minWidth: 640,
-      minHeight: 300,
+      minWidth: 480,
+      minHeight: 320,
     },
-    headerClassName: 'bg-zinc-700 text-zinc-100',
+    multiple: true,
     touchModeShow: true,
   },
   {
@@ -124,26 +123,16 @@ export const APP_LIST: IApp[] = [
     touchModeShow: true,
   },
   {
-    id: AppId.baiduMap,
+    id: AppId.settings,
     runningId: 0,
-    AppComponent: BaiduMap,
+    AppComponent: Settings,
     width: 800,
     height: 600,
     resizeRange: {
-      minWidth: 480,
-      minHeight: 320,
+      minWidth: 640,
+      minHeight: 300,
     },
-  },
-  {
-    id: AppId.pqina,
-    runningId: 0,
-    AppComponent: PQINA,
-    width: 800,
-    height: 600,
-    resizeRange: {
-      minWidth: 480,
-      minHeight: 320,
-    },
+    headerClassName: 'bg-zinc-700 text-zinc-100',
     touchModeShow: true,
   },
 ]

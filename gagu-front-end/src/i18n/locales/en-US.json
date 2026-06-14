@@ -98,15 +98,14 @@
     },
     "app": {
       "android-controller": "Android Controller ⏳",
-      "baidu-map": "Baidu Map",
       "doc-reader": "Doc Reader",
       "file-explorer": "File Explorer",
       "music-player": "Music Player",
       "photo-viewer": "Photo Viewer",
-      "pqina": "pqina",
       "settings": "Settings",
       "text-editor": "Text Editor",
-      "video-player": "Video Player"
+      "video-player": "Video Player",
+      "web-browser": "Web Browser"
     },
     "hint": {
       "atLeastCharacters": "At least {{count}} character(s)",
