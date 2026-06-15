@@ -4,6 +4,7 @@ import Window from './Window'
 import { line } from '../../utils'
 import { useEffect, useState } from 'react'
 import { IWindowInfo } from '../../types'
+import { AnimatePresence } from 'motion/react'
 
 export default function WindowContainer() {
 
@@ -37,14 +38,15 @@ export default function WindowContainer() {
             height: (demoWindowInfo || infoCache).height,
           }}
         />
-
-        {runningAppList.map(app => (
-          <Window
-            key={app.runningId}
-            app={app}
-            additionalEntryList={app.additionalEntryList}
-          />
-        ))}
+        <AnimatePresence>
+          {runningAppList.map(app => (
+            <Window
+              key={app.runningId}
+              app={app}
+              additionalEntryList={app.additionalEntryList}
+            />
+          ))}
+        </AnimatePresence>
       </div>
     </>
   )

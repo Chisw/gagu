@@ -5,6 +5,7 @@ import { APP_LIST } from '../../apps'
 import { AppId, EventTransaction, IApp, Page } from '../../types'
 import { line } from '../../utils'
 import { useTranslation } from 'react-i18next'
+import { genRunningApp } from '../../utils/app.util'
 
 interface DockProps {
   activeAppId: string
@@ -24,8 +25,7 @@ export default function Dock(props: DockProps) {
   const handleOpenApp = useCallback((app: IApp) => {
     const isRunning = !!runningAppList.find(a => a.id === app.id)
     if (isRunning) return
-    const list = [...runningAppList, { ...app, runningId: Date.now() }]
-    setRunningAppList(list)
+    setRunningAppList((list) => [...list, genRunningApp(app)])
   }, [runningAppList, setRunningAppList])
 
   useEffect(() => {

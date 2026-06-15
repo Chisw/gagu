@@ -7,6 +7,7 @@ import { vibrate } from '../../utils'
 import Dock from './Dock'
 import Window from './Window'
 import FileExplorerTouch from '../../apps/FileExplorerTouch'
+import { AnimatePresence } from 'motion/react'
 
 export default function TouchPage() {
 
@@ -50,15 +51,17 @@ export default function TouchPage() {
         onContextMenuCapture={e => e.preventDefault()}
       >
         {/* z-30 */}
-        {runningAppList.map(app => (
-          <Window
-            key={app.runningId}
-            app={app}
-            isTopWindow={app.id === activeAppId}
-            onHide={() => setActiveAppId(AppId.fileExplorer)}
-            onClose={() => setActiveAppId(AppId.fileExplorer)}
-          />
-        ))}
+        <AnimatePresence>
+          {runningAppList.map(app => (
+            <Window
+              key={app.runningId}
+              app={app}
+              isTopWindow={app.id === activeAppId}
+              onHide={() => setActiveAppId(AppId.fileExplorer)}
+              onClose={() => setActiveAppId(AppId.fileExplorer)}
+            />
+          ))}
+        </AnimatePresence>
 
         {/* z-20 */}
         <MenuBar />

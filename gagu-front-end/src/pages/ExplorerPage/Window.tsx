@@ -1,14 +1,14 @@
-import { IApp } from '../../types'
+import { IRunningApp } from '../../types'
 import { useCallback, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { runningAppListState } from '../../states'
-import { WINDOW_DURATION, line } from '../../utils'
+import { line } from '../../utils'
 import { SvgIcon } from '../../components/common'
 import { useTranslation } from 'react-i18next'
 import { useWindowSize } from '../../hooks'
 
 interface WindowProps {
-  app: IApp
+  app: IRunningApp
   isTopWindow: boolean
   onClose: () => void
 }
@@ -34,11 +34,9 @@ export default function Window(props: WindowProps) {
   const windowSize = useWindowSize(false)
 
   const handleClose = useCallback(() => {
-    setTimeout(() => {
-      const list = runningAppList.filter(a => a.runningId !== runningId)
-      setRunningAppList(list)
-      onClose()
-    }, WINDOW_DURATION)
+    const list = runningAppList.filter(a => a.runningId !== runningId)
+    setRunningAppList(list)
+    onClose()
   }, [runningAppList, setRunningAppList, runningId, onClose])
 
   return (

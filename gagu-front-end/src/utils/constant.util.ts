@@ -36,19 +36,6 @@ export const ENTRY_ICON_LIST = [
 
 export const BG_EXTENSION_LIST = ['jpg', 'jpeg', 'png', 'gif', 'webp']
 
-export const WINDOW_DURATION = 200
-
-export const WINDOW_STATUS_MAP = {
-  opening: { transition: 'none', transitionDuration: '0', transform: 'scale(.8)', opacity: 0 },
-  opened: { transition: 'all', transitionDuration: `${WINDOW_DURATION}ms`, transform: '', opacity: 1 },
-  hiding: { transition: 'all', transitionDuration: `${WINDOW_DURATION}ms`, transform: 'scale(1) translateY(10vh)', opacity: 0 },
-  hidden: { transition: 'all', transitionDuration: `${WINDOW_DURATION}ms`, transform: 'scale(1) translateY(10vh)', opacity: 0 },
-  showing: { transition: 'all', transitionDuration: '0', transform: 'scale(1) translateY(20vh)', opacity: 0 },
-  shown: { transition: 'all', transitionDuration: `${WINDOW_DURATION}ms`, transform: 'scale(1) translateY(0)', opacity: 1 },
-  closing: { transition: 'all', transitionDuration: `${WINDOW_DURATION}ms`, transform: 'scale(.8)', opacity: 0 },
-  closed: undefined,
-}
-
 // Sync following code to BE & FE
 export const ACCESS_TOKEN_KEY = 'accessToken'
 export const HEADERS_AUTH_KEY = 'Authorization'

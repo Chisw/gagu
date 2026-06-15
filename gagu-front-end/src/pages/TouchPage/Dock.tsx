@@ -7,6 +7,7 @@ import { openEventState, runningAppListState } from '../../states'
 import { APP_LIST } from '../../apps'
 import { AppId, EventTransaction, IApp } from '../../types'
 import { useClickAway } from '../../hooks'
+import { genRunningApp } from '../../utils/app.util'
 
 interface DockProps {
   show: boolean
@@ -50,8 +51,7 @@ export default function Dock(props: DockProps) {
         }
       })
     } else {
-      const list = [...runningAppList, { ...app, runningId: Date.now() }]
-      setRunningAppList(list)
+      setRunningAppList((list) => [...list, genRunningApp(app)])
     }
   }, [runningAppList, setRunningAppList, activeAppId])
 

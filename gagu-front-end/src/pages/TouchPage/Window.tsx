@@ -1,14 +1,15 @@
-import { IApp, WindowStatus } from '../../types'
-import { useCallback, useEffect, useState } from 'react'
+import { IRunningApp } from '../../types'
+import { useCallback, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { runningAppListState } from '../../states'
-import { WINDOW_DURATION, WINDOW_STATUS_MAP, line } from '../../utils'
+import { line } from '../../utils'
 import { SvgIcon } from '../../components/common'
 import { useTranslation } from 'react-i18next'
 import { useWindowSize } from '../../hooks'
+import { motion } from 'motion/react'
 
 interface WindowProps {
-  app: IApp
+  app: IRunningApp
   isTopWindow: boolean
   onHide: () => void
   onClose: () => void
@@ -30,42 +31,25 @@ export default function Window(props: WindowProps) {
 
   const { t } = useTranslation()
 
-  const [runningAppList, setRunningAppList] = useRecoilState(runningAppListState)
+  const [, setRunningAppList] = useRecoilState(runningAppListState)
   const [windowTitle, setWindowTitle] = useState('')
-  const [windowStatus, setWindowStatus] = useState<WindowStatus>('opening')
   const [hidden, setHidden] = useState(false)
 
   const windowSize = useWindowSize(true)
 
-  useEffect(() => {
-    setTimeout(() => {
-      setWindowStatus('opened')
-    }, WINDOW_DURATION)
-  }, [])
-
   const handleHide = useCallback(() => {
-    setWindowStatus(hidden ? 'showing' : 'hiding')
-    hidden && setHidden(!hidden)
-    setTimeout(() => {
-      !hidden && setHidden(!hidden)
-      setWindowStatus(hidden ? 'shown' : 'hidden')
-      !hidden && onHide()
-    }, WINDOW_DURATION)
+    setHidden(h => !h)
+    !hidden && onHide()
   }, [hidden, onHide])
 
   const handleClose = useCallback(() => {
-    setWindowStatus('closing')
-    setTimeout(() => {
-      const list = runningAppList.filter(a => a.runningId !== runningId)
-      setRunningAppList(list)
-      setWindowStatus('closed')
-      onClose()
-    }, WINDOW_DURATION)
-  }, [runningAppList, setRunningAppList, runningId, onClose])
+    setRunningAppList((list) => list.filter(a => a.runningId !== runningId))
+    onClose()
+  }, [setRunningAppList, runningId, onClose])
 
   return (
     <>
-      <div
+      <motion.div
         id={`gagu-app-window-${runningId}`}
         className={line(`
           gagu-app-window absolute z-30 inset-0 overflow-hidden
@@ -74,7 +58,9 @@ export default function Window(props: WindowProps) {
           ${isTopWindow ? 'gagu-is-top-window' : 'hidden'}
         `)}
         data-hidden={hidden}
-        style={WINDOW_STATUS_MAP[windowStatus]}
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={hidden ? { y: '20vh', scale: 1, opacity: 0, display: 'none', transition: { display: { delay: 0.2 } } } : { y: 0, scale: 1, opacity: 1 }}
+        exit={{ scale: 0.8, opacity: 0 }}
       >
         {/* header */}
         <div
@@ -132,7 +118,7 @@ export default function Window(props: WindowProps) {
             closeWindow={handleClose}
           />
         </div>
-      </div>
+      </motion.div>
     </>
   )
 }

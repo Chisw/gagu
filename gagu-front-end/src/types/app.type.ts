@@ -35,7 +35,6 @@ export enum AppId {
 
 export interface IApp {
   id: string
-  runningId: number
   AppComponent: IAppComponent
   width: number
   height: number
@@ -50,6 +49,11 @@ export interface IApp {
   multiple?: boolean
   touchModeShow?: boolean
   additionalEntryList?: IEntry[]
+}
+
+export interface IRunningApp extends IApp {
+  runningId: number
+  visible: boolean
 }
 
 export enum EventTransaction {

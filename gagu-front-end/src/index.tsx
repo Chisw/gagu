@@ -1,14 +1,11 @@
-// import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
 import { RecoilRoot } from 'recoil'
 import './i18n'
 
 ReactDOM.render(
-  // <React.StrictMode>
-    <RecoilRoot>
+  <RecoilRoot>
       <App />
-    </RecoilRoot>,
-  // </React.StrictMode>,
+  </RecoilRoot>,
   document.getElementById('root')
 )

@@ -3,10 +3,11 @@ import { useRecoilState } from 'recoil'
 import { openEventState, runningAppListState, topWindowIndexState, contextMenuDataState, activePageState } from '../../states'
 import { APP_LIST } from '../../apps'
 import { AppId, EventTransaction, IApp, IContextMenuItem, Page } from '../../types'
-import { UserConfigStore, WINDOW_DURATION, line } from '../../utils'
+import { UserConfigStore, line } from '../../utils'
 import { SvgIcon } from '../../components/common'
 import { useTranslation } from 'react-i18next'
 import { getContextMenuDelay } from '../../components'
+import { genRunningApp } from '../../utils/app.util'
 
 export const DOCK_HEIGHT_AND_MARGIN =  48 + 4
 
@@ -15,7 +16,7 @@ export default function Dock() {
   const { t } = useTranslation()
 
   const [loaded, setLoaded] = useState(false)
-  const [topWindowIndex, setTopWindowIndex] = useRecoilState(topWindowIndexState)
+  const [, setTopWindowIndex] = useRecoilState(topWindowIndexState)
   const [runningAppList, setRunningAppList] = useRecoilState(runningAppListState)
   const [openEvent] = useRecoilState(openEventState)
   const [, setContextMenuData] = useRecoilState(contextMenuDataState)
@@ -37,20 +38,19 @@ export default function Dock() {
         moveToFrontTrigger.dispatchEvent(mouseDownEvent)
       })
     } else {
-      setTopWindowIndex(topWindowIndex + 1)
-      const list = [...runningAppList, { ...app, runningId: Date.now() }]
-      setRunningAppList(list)
+      setTopWindowIndex(i => i + 1)
+      setRunningAppList((list) => [...list, genRunningApp(app)])
     }
-  }, [topWindowIndex, setTopWindowIndex, runningAppList, setRunningAppList])
+  }, [setTopWindowIndex, runningAppList, setRunningAppList])
 
   useEffect(() => {
     setTimeout(() => {
       if (!loaded && UserConfigStore.get().fileExplorerAutoOpen) {
         const app = APP_LIST.find(a => a.id === AppId.fileExplorer)!
-        setRunningAppList([app])
+        setRunningAppList([genRunningApp(app)])
         setLoaded(true)
       }
-    }, WINDOW_DURATION + 1)
+    }, 1000)
   }, [loaded, setRunningAppList])
 
   useEffect(() => {

@@ -12,7 +12,6 @@ import Settings from './Settings'
 export const APP_LIST: IApp[] = [
   {
     id: AppId.fileExplorer,
-    runningId: 0,
     AppComponent: FileExplorer,
     width: 980,
     height: 540,
@@ -24,7 +23,6 @@ export const APP_LIST: IApp[] = [
   },
   {
     id: AppId.textEditor,
-    runningId: 0,
     AppComponent: TextEditor,
     width: 600,
     height: 500,
@@ -39,7 +37,6 @@ export const APP_LIST: IApp[] = [
   },
   {
     id: AppId.docReader,
-    runningId: 0,
     AppComponent: DocReader,
     width: 960,
     height: 720,
@@ -54,7 +51,6 @@ export const APP_LIST: IApp[] = [
   },
   {
     id: AppId.photoViewer,
-    runningId: 0,
     AppComponent: PhotoViewer,
     width: 800,
     height: 400,
@@ -69,7 +65,6 @@ export const APP_LIST: IApp[] = [
   },
   {
     id: AppId.musicPlayer,
-    runningId: 0,
     AppComponent: MusicPlayer,
     width: 480,
     height: 520,
@@ -83,7 +78,6 @@ export const APP_LIST: IApp[] = [
   },
   {
     id: AppId.videoPlayer,
-    runningId: 0,
     AppComponent: VideoPlayer,
     width: 720,
     height: 450,
@@ -98,7 +92,6 @@ export const APP_LIST: IApp[] = [
   },
   {
     id: AppId.webBrowser,
-    runningId: 0,
     AppComponent: WebBrowser,
     width: 800,
     height: 600,
@@ -111,7 +104,6 @@ export const APP_LIST: IApp[] = [
   },
   {
     id: AppId.androidController,
-    runningId: 0,
     AppComponent: AndroidController,
     width: 400,
     height: 600,
@@ -124,7 +116,6 @@ export const APP_LIST: IApp[] = [
   },
   {
     id: AppId.settings,
-    runningId: 0,
     AppComponent: Settings,
     width: 800,
     height: 600,

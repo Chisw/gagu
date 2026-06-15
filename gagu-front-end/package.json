@@ -20,6 +20,7 @@
     "lodash-es": "^4.17.21",
     "luxon": "^2.0.2",
     "md5": "^2.3.0",
+    "motion": "^12.40.0",
     "qrcode.react": "^3.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -52,13 +53,12 @@
   },
   "browserslist": {
     "production": [
-      "last 2 chrome version"
+      "last 5 chrome version"
     ],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {}
+  }
 }

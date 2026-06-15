@@ -3,11 +3,12 @@ import { useRecoilState } from 'recoil'
 import { getIsSameEntry, line } from '../../utils'
 import { activePageState, userInfoState, runningAppListState, topWindowIndexState } from '../../states'
 import EntryNode from '../../apps/FileExplorer/EntryNode'
-import { AppId, ClipboardState, CreationType, EditMode, EntryType, IApp, IEntry, Page } from '../../types'
+import { AppId, ClipboardState, CreationType, EditMode, EntryType, IEntry, Page } from '../../types'
 import { useWorkArea } from '../../hooks'
 import { EntryPicker, SharingModal } from '../../components'
 import { APP_LIST } from '../../apps'
 import { useTranslation } from 'react-i18next'
+import { genRunningApp } from '../../utils/app.util'
 
 export default function Desktop() {
 
@@ -16,7 +17,7 @@ export default function Desktop() {
   const [activePage] = useRecoilState(activePageState)
   const [userInfo] = useRecoilState(userInfoState)
   const [topWindowIndex, setTopWindowIndex] = useRecoilState(topWindowIndexState)
-  const [runningAppList, setRunningAppList] = useRecoilState(runningAppListState)
+  const [, setRunningAppList] = useRecoilState(runningAppListState)
 
   const [show, setShow] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -32,9 +33,8 @@ export default function Desktop() {
   const handleOpenDesktopDirectory = useCallback((entry: IEntry) => {
       setTopWindowIndex(topWindowIndex + 1)
       const app = APP_LIST.find(app => app.id === AppId.fileExplorer)!
-      const list: IApp[] = [...runningAppList, { ...app, runningId: Date.now(), additionalEntryList: [entry] }]
-      setRunningAppList(list)
-  }, [runningAppList, setRunningAppList, setTopWindowIndex, topWindowIndex])
+      setRunningAppList((list) => [...list, {...genRunningApp(app), additionalEntryList: [entry] }])
+  }, [setRunningAppList, setTopWindowIndex, topWindowIndex])
 
   const {
     kiloSize, clipboardData,

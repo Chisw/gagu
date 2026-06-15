@@ -1,13 +1,11 @@
-import { IApp, IWindowInfo, IEntry, WindowStatus } from '../../types'
+import { IRunningApp, IWindowInfo, IEntry } from '../../types'
 import { Rnd, ResizableDelta, Position } from 'react-rnd'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { runningAppListState, topWindowIndexState } from '../../states'
 import {
   SAME_APP_WINDOW_OFFSET,
-  WINDOW_DURATION,
   WINDOW_OPEN_MIN_MARGIN,
-  WINDOW_STATUS_MAP,
   line,
 } from '../../utils'
 import { SvgIcon } from '../../components/common'
@@ -18,6 +16,7 @@ import { Dropdown } from '@douyinfe/semi-ui'
 import RatioList from './RatioList'
 import { getMenuBarHeight } from '../../components'
 import { DOCK_HEIGHT_AND_MARGIN } from './Dock'
+import { motion } from 'motion/react'
 
 export const getAppWindowSize = () => {
   const { innerWidth, innerHeight } = window
@@ -27,7 +26,7 @@ export const getAppWindowSize = () => {
 }
 
 interface WindowProps {
-  app: IApp
+  app: IRunningApp
   additionalEntryList?: IEntry[]
 }
 
@@ -65,7 +64,6 @@ export default function Window(props: WindowProps) {
   const [hidden, setHidden] = useState(false)
   const [isFullScreen, setIsFullScreen] = useState(false)
   const [rndInstance, setRndInstance] = useState<any>(null)
-  const [windowStatus, setWindowStatus] = useState<WindowStatus>('opening')
   const [isDraggingOrResizing, setIsDraggingOrResizing] = useState(false)
 
   const isTopWindow = useMemo(() => currentIndex === topWindowIndex, [currentIndex, topWindowIndex])
@@ -120,13 +118,8 @@ export default function Window(props: WindowProps) {
   }, [isTopWindow, runningId, topWindowIndex, setTopWindowIndex])
 
   const handleMinimizeClick = useCallback(() => {
-    setWindowStatus(hidden ? 'showing' : 'hiding')
-    hidden && setHidden(!hidden)
-    setTimeout(() => {
-      !hidden && setHidden(!hidden)
-      setWindowStatus(hidden ? 'shown' : 'hidden')
-    }, WINDOW_DURATION)
-  }, [hidden])
+    setHidden(h => !h)
+  }, [])
 
   const handleFullScreen = useCallback((force?: boolean) => {
     const full = () => {
@@ -167,18 +160,12 @@ export default function Window(props: WindowProps) {
   }, [handleStoreWindowInfo, rndInstance])
 
   const handleClose = useCallback(() => {
-    setWindowStatus('closing')
-    setTimeout(() => {
-      const list = runningAppList.filter(a => a.runningId !== runningId)
-      setRunningAppList(list)
-      setTopWindowIndex(currentIndex - 1)
-      setWindowStatus('closed')
-    }, WINDOW_DURATION)
+    setRunningAppList((list) => list.filter(a => a.runningId !== runningId))
+    setTopWindowIndex(currentIndex - 1)
     handleStoreWindowInfo(defaultInfoCache)
   }, [
     handleStoreWindowInfo,
     defaultInfoCache,
-    runningAppList,
     setRunningAppList,
     setTopWindowIndex,
     currentIndex,
@@ -203,12 +190,6 @@ export default function Window(props: WindowProps) {
     handleStoreWindowInfo(info)
     setIsDraggingOrResizing(false)
   }, [defaultInfoCache, handleStoreWindowInfo])
-
-  useEffect(() => {
-    setTimeout(() => {
-      setWindowStatus('opened')
-    }, WINDOW_DURATION)
-  }, [])
 
   useEffect(() => {
     const listener = throttle(() => {
@@ -238,7 +219,7 @@ export default function Window(props: WindowProps) {
         onDragStop={(e, { x, y }) => handleDragStop({ x, y })}
         onResizeStop={(e, d, el, delta, position) => handleResizeStop(delta, position)}
       >
-        <div
+        <motion.div
           className={line(`
             gagu-move-to-front-trigger
             absolute inset-0 overflow-hidden
@@ -247,10 +228,12 @@ export default function Window(props: WindowProps) {
             ${isTopWindow ? 'shadow-xl' : 'shadow'}
             ${isFullScreen
               ? ''
-              : 'rounded border border-black border-opacity-10 bg-clip-padding dark:border-white dark:border-opacity-5'
+              : 'rounded border border-black/10 bg-clip-padding dark:border-white/5'
             }
           `)}
-          style={WINDOW_STATUS_MAP[windowStatus]}
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={hidden ? { y: '20vh', scale: 1, opacity: 0, display: 'none', transition: { display: { delay: 0.2 } } } : { y: 0, scale: 1, opacity: 1 }}
+          exit={{ scale: 0.8, opacity: 0 }}
           onMouseDownCapture={handleMoveToFront}  // click is too late
           onDragEnterCapture={handleMoveToFront}
         >
@@ -343,7 +326,7 @@ export default function Window(props: WindowProps) {
               additionalEntryList={additionalEntryList}
             />
           </div>
-        </div>
+        </motion.div>
       </Rnd>
     </>
   )

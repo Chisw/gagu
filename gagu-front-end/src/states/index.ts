@@ -1,6 +1,5 @@
 import { atom } from 'recoil'
 import {
-  IApp,
   IBaseData,
   IOpenEvent,
   IContextMenuState,
@@ -11,6 +10,7 @@ import {
   IUserConfig,
   IClipboardData,
   IWindowInfo,
+  IRunningApp,
 } from '../types'
 import { EntryPathCacheStore, UserConfigStore } from '../utils/store.util'
 
@@ -51,7 +51,7 @@ export const activePageState = atom<Page>({
   default: Page.PENDING
 })
 
-export const runningAppListState = atom<IApp[]>({
+export const runningAppListState = atom<IRunningApp[]>({
   key: 'runningAppListState',
   default: [],
 })

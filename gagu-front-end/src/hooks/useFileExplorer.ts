@@ -18,7 +18,6 @@ import {
 import {
   EntryPathCacheStore,
   UserConfigStore,
-  WINDOW_DURATION,
   getDownloadInfo,
   getEntryPath,
   getParentPath,
@@ -550,7 +549,7 @@ export function useFileExplorer(props: Props) {
       const { top, height } = container.getBoundingClientRect()
       setThumbScrollWatcher({ top, height })
     }
-    setTimeout(listener, WINDOW_DURATION * 4)
+    setTimeout(listener)
     const throttleListener = throttle(listener, 500)
     container.addEventListener('scroll', throttleListener)
     return () => container.removeEventListener('scroll', throttleListener)

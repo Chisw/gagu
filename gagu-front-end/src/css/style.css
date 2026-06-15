@@ -59,10 +59,6 @@ body {
   @apply bg-zinc-400 dark:bg-zinc-600;
 }
 
-.gagu-app-window[data-hidden="true"] {
-  display: none !important;
-}
-
 .gagu-window-drag-handler:hover + .gagu-window-drag-handler-hover-mask {
   display: block;
 }

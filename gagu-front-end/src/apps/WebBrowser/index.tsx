@@ -47,7 +47,7 @@ export default function WebBrowser() {
 
   return (
     <>
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 bg-white dark:bg-zinc-900">
 
         <div className="flex items-center p-4 pb-0">
           <Input
