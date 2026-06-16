@@ -2,7 +2,7 @@ import { ThumbnailType, ThumbnailTypeType } from './../types/index'
 
 const { protocol, host } = window.location
 
-export const BASE_URL = process.env.REACT_APP_BASE_URL || `${protocol}//${host}`
+export const BASE_URL = import.meta.env.VITE_APP_BASE_URL || `${protocol}//${host}`
 
 export const GAGU_I18N_LANGUAGE_KEY = 'GAGU_I18N_LANGUAGE_KEY'
 export const GAGU_USER_INFO_KEY = 'GAGU_USER_INFO_KEY'
