@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import toast from 'react-hot-toast'
+import { Toast } from '@douyinfe/semi-ui'
 import { SvgIcon } from '../../components/common'
 import { copy, getEntryPath, line } from '../../utils'
 import { IEntry, IRootEntry } from '../../types'
@@ -140,7 +140,7 @@ export default function StatusBar(props: StatusBarProps) {
             `)}
             onClick={() => {
               copy(`${rootEntryPath}${centerPathList.length ? `/${centerPathList.join('/')}` : ''}`)
-              toast.success(t`tip.copied`)
+              Toast.success(t`tip.copied`)
             }}
           >
             <SvgIcon.Copy size={12} className="inline mt-[-2px]" />

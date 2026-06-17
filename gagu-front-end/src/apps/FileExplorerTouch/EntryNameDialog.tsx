@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useRequest } from '../../hooks'
 import { FsApi } from '../../api'
 import { INVALID_NAME_CHAR_LIST, generateNewName, generateTextFile, setInputSelection } from '../../utils'
-import toast from 'react-hot-toast'
+import { Toast } from '@douyinfe/semi-ui'
 
 const titleMap = {
   [EditMode.createFolder]: 'newFolder',
@@ -43,12 +43,12 @@ export default function EntryNameDialog(props: EntryNameDialogProps) {
     const oldName = activeEntry?.name
 
     if (INVALID_NAME_CHAR_LIST.some(char => newName.includes(char))) {
-      toast.error(t('tip.illegalCharacters', { characters: INVALID_NAME_CHAR_LIST.join(' ') }))
+      Toast.error(t('tip.illegalCharacters', { characters: INVALID_NAME_CHAR_LIST.join(' ') }))
       return
     }
 
     if (oldName && (newName === oldName)) {
-      toast.error(t('tip.targetExists', { name: newName }))
+      Toast.error(t('tip.targetExists', { name: newName }))
       return
     }
 
@@ -60,7 +60,7 @@ export default function EntryNameDialog(props: EntryNameDialogProps) {
     const { data: exists } = await queryExists(toPath)
 
     if (exists) {
-      toast.error(t('tip.targetExists', { name: finalName }))
+      Toast.error(t('tip.targetExists', { name: finalName }))
     } else {
       if (oldName) {
         const fromPath = `${currentPath}/${oldName}`

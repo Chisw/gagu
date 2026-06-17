@@ -138,7 +138,7 @@ export function UploadPanel() {
         <div
           className={line(`
             absolute left-0 bottom-0 right-0
-            h-[2px] bg-green-400
+            h-0.5 bg-green-400
             transition-width
             ${uploadInfo.ratio === 0 ? '' : 'duration-200'}
             ${uploading ? 'block' : 'hidden'}
@@ -213,7 +213,7 @@ export function UploadPanel() {
                   relative px-4 py-2
                   flex justify-between items-center
                   border-b border-gray-100
-                  dark:border-black dark:border-opacity-10
+                  dark:border-black/10
                 `)}
               >
                 <div>

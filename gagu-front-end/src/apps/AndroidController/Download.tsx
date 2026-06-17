@@ -2,7 +2,7 @@ import { Button, Input } from '@douyinfe/semi-ui'
 import { useCallback, useState } from 'react'
 import { useRequest } from '../../hooks'
 import { TermuxApi } from '../../api'
-import toast from 'react-hot-toast'
+import { Toast } from '@douyinfe/semi-ui'
 import { useTranslation } from 'react-i18next'
 import { AppId, EntryType, IDownloadForm } from '../../types'
 import { EntryPicker } from '../../components'
@@ -26,7 +26,7 @@ export default function Download() {
   const handleDownload = useCallback(async () => {
     const { success } = await createDownload(form)
     if (success) {
-      toast.success('OK')
+      Toast.success('OK')
     }
   }, [createDownload, form])
 

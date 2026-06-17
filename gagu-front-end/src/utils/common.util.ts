@@ -1,10 +1,10 @@
 import { DateTime } from 'luxon'
 import { IOffsetInfo, ILassoInfo, PublicImageName, ExistingStrategyType } from '../types'
-import md5 from 'md5'
 import { FsApi } from '../api'
 import { ACCESS_TOKEN_KEY } from './constant.util'
 import { UserInfoStore } from './store.util'
 import { SVG_DEFAULT_FAVICON } from './svg.util'
+import SHA256 from 'crypto-js/sha256'
 
 export const copy = (str: string) => {
   const input = document.createElement('textarea')
@@ -22,6 +22,10 @@ export const line = (str: string) => str
 
 export const sleep = async (duration: number) => {
   await new Promise((resolve) => setTimeout(resolve, duration))
+}
+
+export const sha256 = (str: string) => {
+  return SHA256(str).toString()
 }
 
 export const getDateTime = (millis: number) => {
@@ -127,7 +131,7 @@ export const getAccessTokenParam = () => {
 }
 
 export const getPasswordParam = (password?: string) => {
-  return password ? `password=${md5(password)}` : ''
+  return password ? `password=${sha256(password)}` : ''
 }
 
 export const getPathParam = (path: string) => {
@@ -242,11 +246,7 @@ export const generateTextFile = (text: string, name: string) => {
 }
 
 // Sync following code to BE & FE
-export const generateRandomCode = () => md5(Math.random().toString())
-
-export const generateRandomToken = () => {
-  return Buffer.from(generateRandomCode()).toString('base64')
-}
+export const generateRandomCode = () => sha256(Math.random().toString())
 
 export const getIsExpired = (expiredAt?: number) => {
   return expiredAt && expiredAt < Date.now()

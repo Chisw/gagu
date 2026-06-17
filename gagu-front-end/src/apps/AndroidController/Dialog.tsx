@@ -2,7 +2,7 @@ import { Button, Input, Radio, RadioGroup } from '@douyinfe/semi-ui'
 import { useCallback, useState } from 'react'
 import { useRequest } from '../../hooks'
 import { TermuxApi } from '../../api'
-import toast from 'react-hot-toast'
+import { Toast } from '@douyinfe/semi-ui'
 import { IDialogForm } from '../../types'
 
 const widgetList = [
@@ -36,7 +36,7 @@ export default function Dialog() {
   const handleDialog = useCallback(async () => {
     const { success } = await createDialog(form)
     if (success) {
-      toast.success('OK')
+      Toast.success('OK')
     }
   }, [createDialog, form])
 

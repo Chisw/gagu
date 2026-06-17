@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useCallback, useEffect, useState } from 'react'
 import { useRequest, useTouchMode } from '../../hooks'
 import { FsApi } from '../../api'
-import toast from 'react-hot-toast'
+import { Toast } from '@douyinfe/semi-ui'
 import { getPopupContainer } from '../../utils'
 
 interface GoToPathDialogProps {
@@ -34,7 +34,7 @@ export default function GoToPathDialog(props: GoToPathDialogProps) {
     if (data === true) {
       onGo(path)
     } else if (data === false) {
-      toast.error(t`tip.pathNotExists`)
+      Toast.error(t`tip.pathNotExists`)
     }
   }, [onGo, path, queryExists, t])
 

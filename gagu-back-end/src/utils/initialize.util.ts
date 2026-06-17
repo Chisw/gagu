@@ -7,7 +7,7 @@ import { writeSettingsData } from './setting.util'
 import { exec } from 'node:child_process'
 import { readFileSync } from 'node:fs'
 import { HttpsOptions } from '@nestjs/common/interfaces/external/https-options.interface'
-import { md5 } from './common.util'
+import { sha256 } from './common.util'
 
 export const initialize = async (withSecurity: boolean) => {
   makeNestedDirectory(
@@ -26,7 +26,7 @@ export const initialize = async (withSecurity: boolean) => {
     const administrator: IUser = {
       nickname: 'Admin',
       username: 'gagu',
-      password: md5('9293'),
+      password: sha256('9293'),
       invalid: false,
       createdAt: Date.now(),
       expiredAt: undefined,

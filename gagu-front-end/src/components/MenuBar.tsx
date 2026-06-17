@@ -6,8 +6,8 @@ import { useNavigate } from 'react-router-dom'
 import { AuthApi, FsApi, SettingApi } from '../api'
 import { SvgIcon } from './common'
 import { useRequest, useUserConfig } from '../hooks'
-import { DOCUMENT_TITLE, EntryPathCacheStore, getDefaultUserConfig, line, UserInfoStore } from '../utils'
-import QrCode from 'qrcode.react'
+import { DOCUMENT_TITLE, DURATION_PAGE, EntryPathCacheStore, getDefaultUserConfig, line, UserInfoStore } from '../utils'
+import { QRCodeCanvas } from 'qrcode.react'
 import { useTranslation } from 'react-i18next'
 import { Page } from '../types'
 import { useRecoilState } from 'recoil'
@@ -69,7 +69,7 @@ export function MenuBar() {
       setRunningAppList([])
       setContextMenuData(null)
       setActivePage(Page.PENDING)
-      setTimeout(() => navigate('/login'), 500)
+      setTimeout(() => navigate('/login'), DURATION_PAGE)
     }
   }, [logout, navigate, setActivePage, setContextMenuData, setRunningAppList, setUserConfig])
 
@@ -77,7 +77,7 @@ export function MenuBar() {
     setRunningAppList([])
     setContextMenuData(null)
     setActivePage(Page.PENDING)
-    setTimeout(() => navigate(`/${key}`), 500)
+    setTimeout(() => navigate(`/${key}`), DURATION_PAGE)
   }, [navigate, setActivePage, setContextMenuData, setRunningAppList])
 
   useEffect(() => {
@@ -168,7 +168,7 @@ export function MenuBar() {
                   render={(
                     <div className="px-4 py-8 w-48">
                       <div className="flex justify-center">
-                        <QrCode value={localAddress} className="border-2 border-white" />
+                        <QRCodeCanvas value={localAddress} className="border-2 border-white" />
                       </div>
                       <p className="mt-2 text-xs text-center font-din">{localAddress}</p>
                     </div>
@@ -248,7 +248,7 @@ export function MenuBar() {
             visible={userPopoverShow}
             render={(
               <Dropdown.Menu className="w-48">
-                <div className="mb-[2px] px-2 pt-1 pb-2 border-b border-gray-200 dark:border-black dark:border-opacity-20">
+                <div className="mb-0.5 px-2 pt-1 pb-2 border-b border-gray-200 dark:border-black/20">
                   <div className="flex items-center">
                     <div
                       className="gagu-user-avatar w-10 h-10 rounded-full border-2 border-white shadow-sm bg-center bg-cover dark:border-zinc-400"

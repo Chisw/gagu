@@ -193,11 +193,11 @@ The root directory will be created as `WORKSPACE/.gagu.dev` in local development
 
 ### Thumbnail
 
-When accessing a file that can display thumbnails in GAGU's File Explorer, GAGU will use the "full path" of the file plus "modification time" to perform `md5` operations to obtain a 32-bit string, and then request the thumbnail file with the same name as the string under `.gagu/thumbnail`, if it does not exist, call the thumbnail interface to generate and return.
+When accessing a file that can display thumbnails in GAGU's File Explorer, GAGU will use the "full path" of the file plus "modification time" to perform `SHA256` operations to obtain a 64-char string, and then request the thumbnail file with the same name as the string under `.gagu/thumbnail`, if it does not exist, call the thumbnail interface to generate and return.
 
 ```js
 const { mtimeMs } = statSync(path)
-const thumbnailId = md5(`${path}-${mtimeMs}`)
+const thumbnailId = SHA256(`${path}-${mtimeMs}`)
 ```
 
 Therefore, when the file does not change (move location or modify), it will take a certain amount of time to obtain the thumbnail for the first time. You can use the "Thumbnail Actively Generating" feature in the "Settings" for the directory containing the thumbnail files that need to be displayed. features to enhance the browsing experience.

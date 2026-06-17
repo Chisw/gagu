@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import toast from 'react-hot-toast'
+import { Toast } from '@douyinfe/semi-ui'
 import { useTranslation } from 'react-i18next'
 import { FormModeType } from '.'
 import { FsApi, UserApi } from '../../../api'
@@ -88,7 +88,7 @@ export default function UserList(props: UserListProps) {
               const isOnlyOneAdmin = userList.filter(u => u.permissions.includes(UserPermission.administer)).length === 1
 
               if (isCurrentAdmin && isOnlyOneAdmin) {
-                toast.error(t`tip.lastAdminCannotDelete`)
+                Toast.error(t`tip.lastAdminCannotDelete`)
                 return
               }
               await handleRemove(user.username)

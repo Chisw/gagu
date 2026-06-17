@@ -55,7 +55,7 @@ export function Opener(props: OpenerProps) {
               text-xs text-gray-600
               hover:text-gray-900 hover:opacity-80
               transition-all
-              dark:bg-zinc/20 dark:border-zinc-400 dark:border-opacity-20 dark:text-zinc-200
+              dark:bg-zinc/20 dark:border-zinc-400/20 dark:text-zinc-200
               ${mounted ? 'duration-200' : 'duration-700 opacity-0'}
             `)}
             onClick={() => setOpenerEnteryPickerShow(true)}

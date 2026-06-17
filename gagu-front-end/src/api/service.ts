@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { BASE_URL, ERROR_TIMEOUT, HEADERS_AUTH_KEY, HEADERS_AUTH_PREFIX, UserInfoStore } from '../utils'
-import toast from 'react-hot-toast'
+import { Toast } from '@douyinfe/semi-ui'
 import { t } from 'i18next'
 import { ServerMessage } from '../types'
 
@@ -25,18 +25,18 @@ service.interceptors.response.use(
   (response: any) => {
     const { success, message } = response?.data || {}
     if (!success) {
-      toast.error(t(`server.${message}`))
+      Toast.error(t(`server.${message}`) as string)
     }
     return response
   },
   (error: any) => {
     const { message, response } = error
     if (message === ERROR_TIMEOUT) {
-      toast.error(message)
+      Toast.error(message)
     }
 
     if (!response && message !== 'canceled') {
-      toast.error(t(`server.${ServerMessage.ERROR_NO_RESPONSE}`))
+      Toast.error(t(`server.${ServerMessage.ERROR_NO_RESPONSE}`) as string)
       return
     }
 
@@ -46,9 +46,9 @@ service.interceptors.response.use(
       UserInfoStore.remove()
       window.location.href = '/login'
     } else if (status === 403) {
-      toast.error(t(`server.${ServerMessage.ERROR_403}`))
+      Toast.error(t(`server.${ServerMessage.ERROR_403}`) as string)
     } else if (status >= 500) {
-      toast.error(`[ERROR ${status}] ${message}`)
+      Toast.error(`[ERROR ${status}] ${message}`)
     }
   }
 )

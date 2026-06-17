@@ -1,6 +1,6 @@
 import { Button, SideSheet } from '@douyinfe/semi-ui'
 import { useCallback, useEffect, useMemo } from 'react'
-import toast from 'react-hot-toast'
+import { Toast } from '@douyinfe/semi-ui'
 import { useTranslation } from 'react-i18next'
 import { TunnelApi } from '../api'
 import { useRequest } from '../hooks'
@@ -35,7 +35,7 @@ export function MySharingPanel(props: MySharingPanelProps) {
       onConfirm: async close => {
         const { success } = await deleteTunnel(code)
         if (success) {
-          toast.success('OK')
+          Toast.success('OK')
           queryTunnelList()
         }
         close()

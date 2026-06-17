@@ -3,7 +3,7 @@ import { useRequest } from '../../hooks'
 import { Button } from '@douyinfe/semi-ui'
 import { SvgIcon } from '../../components/common'
 import { copy } from '../../utils'
-import toast from 'react-hot-toast'
+import { Toast } from '@douyinfe/semi-ui'
 
 export default function PhoneControl() {
   const { request: queryCallLog, loading: queryingCallLog, response: callLogResponse } = useRequest(TermuxApi.queryCallLog)
@@ -58,7 +58,7 @@ export default function PhoneControl() {
                   icon={<SvgIcon.Copy />}
                   onClick={() => {
                     copy(`${name} - ${number}`)
-                    toast.success('OK')
+                    Toast.success('OK')
                   }}
                 />
               </div>

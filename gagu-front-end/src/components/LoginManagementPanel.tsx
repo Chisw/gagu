@@ -1,6 +1,6 @@
 import { Button, SideSheet } from '@douyinfe/semi-ui'
 import { useCallback, useEffect, useMemo } from 'react'
-import toast from 'react-hot-toast'
+import { Toast } from '@douyinfe/semi-ui'
 import { useTranslation } from 'react-i18next'
 import { AuthApi } from '../api'
 import { useRequest } from '../hooks'
@@ -39,7 +39,7 @@ export function LoginManagementPanel(props: LoginManagementPanelProps) {
       onConfirm: async close => {
         const { success } = await deleteRecord(token)
         if (success) {
-          toast.success('OK')
+          Toast.success('OK')
           queryRecordList()
         }
         close()

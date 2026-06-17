@@ -14,7 +14,7 @@ import { useRecoilState } from 'recoil'
 import { AppId, EntryType, EventTransaction, ExplorerPickProps, IEntry } from '../../types'
 import EntryNameDialog from './EntryNameDialog'
 import { useNavigate } from 'react-router'
-import toast from 'react-hot-toast'
+import { Toast } from '@douyinfe/semi-ui'
 import { useTranslation } from 'react-i18next'
 import GoToPathDialog from '../FileExplorer/GoToPathDialog'
 
@@ -174,7 +174,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
         handleNavBack()
       } else {
         keepPath()
-        toast.error(t`tip.reachTheEndOfHistory`, { icon: '⚠️' })
+        Toast.error(t`tip.reachTheEndOfHistory`, { icon: '⚠️' })
       }
     }
   }, [

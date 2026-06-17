@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { Toaster } from 'react-hot-toast'
 import LoginPage from './pages/LoginPage'
 import DesktopPage from './pages/DesktopPage'
 import ExplorerPage from './pages/ExplorerPage'
@@ -21,10 +20,6 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      <Toaster
-        containerClassName="break-all"
-        toastOptions={{ className: 'dark:bg-zinc-700 dark:text-zinc-200' }}
-      />
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/" element={<DesktopPage />} />

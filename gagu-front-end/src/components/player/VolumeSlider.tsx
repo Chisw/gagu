@@ -32,12 +32,12 @@ export function VolumeSlider(props: VolumeSliderProps) {
         ref={sliderRef}
         className={line(`
           absolute z-20
-          w-8 h-32 rounded bg-black shadow-lg border border-white border-opacity-20
+          w-8 h-32 rounded bg-black shadow-lg border border-white/20
           ${show ? 'block' : 'hidden'}
         `)}
         style={{ right, bottom }}
       >
-        <div className="absolute top-[2px] w-full text-center text-white text-xs font-din scale-90">
+        <div className="absolute top-0.5 w-full text-center text-white text-xs font-din scale-90">
           {(volume * 100).toFixed(0)}%
         </div>
         <input

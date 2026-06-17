@@ -25,7 +25,7 @@ export default function WindowContainer() {
         <div
           className={line(`
             absolute z-9999
-            border-2 border-zinc-500 border-opacity-40 rounded
+            border-2 border-zinc-500/40 rounded
             bg-zinc-500/30
             transition-all duration-200 pointer-events-none
             dark:border-zinc-400

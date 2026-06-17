@@ -1,12 +1,11 @@
-import md5 from 'md5'
 import { useCallback, useMemo, useRef, useState } from 'react'
-import toast from 'react-hot-toast'
+import { Toast } from '@douyinfe/semi-ui'
 import { FormModeType } from '.'
 import { FsApi, UserApi } from '../../../api'
 import { SvgIcon, IconButton } from '../../../components/common'
 import { useRequest, useTouchMode } from '../../../hooks'
 import { AppId, EntryType, IUserForm, UserPermission } from '../../../types'
-import { getImageTypeBase64ByURL, getTimestampParam, line, permissionSorter } from '../../../utils'
+import { getImageTypeBase64ByURL, getTimestampParam, line, permissionSorter, sha256 } from '../../../utils'
 import { Button, Form, SideSheet } from '@douyinfe/semi-ui'
 import { useTranslation } from 'react-i18next'
 import { userInfoState } from '../../../states'
@@ -73,7 +72,7 @@ export default function UserFormModal(props: UserFormModalProps) {
     const file = fileInputRef?.current?.files[0]
     if (file) {
       if (!/image\/\w+/.test(file.type)) {
-        toast.error(t`tip.notImage`)
+        Toast.error(t`tip.notImage`)
         return
       }
       const FR = new FileReader()
@@ -94,13 +93,13 @@ export default function UserFormModal(props: UserFormModalProps) {
 
     const { success } = await (MODE.isCreate ? createUser : updateUser)({
       ...form,
-      password: password ? md5(password) : '',
+      password: password ? sha256(password) : '',
       password2: '',
       permissions: permissions.sort(permissionSorter),
     })
 
     if (success) {
-      toast.success('OK')
+      Toast.success('OK')
       setFormMode('CLOSE')
       onRefresh()
       if (isCurrentUser) {

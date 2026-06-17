@@ -3,11 +3,10 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { FsApi, TunnelApi } from '../api'
 import { useRequest, useTouchMode } from '../hooks'
 import { IEntry, TunnelType } from '../types'
-import { copy, getDownloadInfo } from '../utils'
+import { copy, getDownloadInfo, sha256 } from '../utils'
 import { EntryListPanel, SvgIcon } from './common'
-import QrCode from 'qrcode.react'
-import toast from 'react-hot-toast'
-import md5 from 'md5'
+import { QRCodeCanvas } from 'qrcode.react'
+import { Toast } from '@douyinfe/semi-ui'
 import { useTranslation } from 'react-i18next'
 import { semiLocaleMap } from '../i18n'
 
@@ -74,7 +73,7 @@ export function SharingModal(props: SharingModalProps) {
     if (downloadName && entryList.length) {
       const { success, data: code } = await createTunnel({
         ...form,
-        password: password ? md5(password) : undefined,
+        password: password ? sha256(password) : undefined,
         type: TunnelType.share,
         entryList,
       })
@@ -188,7 +187,7 @@ export function SharingModal(props: SharingModalProps) {
           </>
         ) : (
           <div className={`relative z-10 pt-2 pb-8 flex ${touchMode ? 'flex-wrap justify-center' : 'justify-between'}`}>
-            <QrCode value={tunnelLink} className="ring-8 ring-white" />
+            <QRCodeCanvas value={tunnelLink} className="ring-8 ring-white" />
             <div className={`flex flex-col justify-between ${touchMode ? 'mt-4' : 'pl-8'}`}>
               <div className="font-din text-base text-gray-500 break-all">{tunnelLink}</div>
               <div className={`flex justify-end ${touchMode ? 'mt-8' : ''}`}>
@@ -205,7 +204,7 @@ export function SharingModal(props: SharingModalProps) {
                   icon={<SvgIcon.Copy />}
                   onClick={() => {
                     copy(tunnelLink)
-                    toast.success(t`tip.copied`)
+                    Toast.success(t`tip.copied`)
                     onClose()
                   }}
                 >

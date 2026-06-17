@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { INestedFile, IUploadTask, UploadTaskStatus } from '../types'
-import toast from 'react-hot-toast'
+import { Toast } from '@douyinfe/semi-ui'
 import { useTranslation } from 'react-i18next'
 import { generateRandomCode } from '../utils'
 import { useRecoilState } from 'recoil'
@@ -13,7 +13,7 @@ export function useAddUploadingTask () {
 
   const handleUploadTaskAdd = useCallback((nestedFileList: INestedFile[], basePath: string, targetDirName?: string) => {
     if (!nestedFileList.length) {
-      toast.error(t`tip.noUploadableFilesDetected`)
+      Toast.error(t`tip.noUploadableFilesDetected`)
       return
     }
     const newTaskList: IUploadTask[] = nestedFileList.map(nestedFile => {

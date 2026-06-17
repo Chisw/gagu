@@ -36,7 +36,7 @@ import { useRequest } from './useRequest'
 import { FsApi, TunnelApi } from '../api'
 import { useTranslation } from 'react-i18next'
 import { Confirmor, ExistingConfirmor } from '../components/common'
-import toast from 'react-hot-toast'
+import { Toast } from '@douyinfe/semi-ui'
 import { throttle } from 'lodash-es'
 import { useTouchMode } from './useTouchMode'
 import { useAddUploadingTask } from './useAddUploadingTask'
@@ -372,7 +372,7 @@ export function useFileExplorer(props: Props) {
         if (success && code) {
           TunnelApi.download(code)
         } else {
-          toast.error(message)
+          Toast.error(message)
         }
         close()
       },

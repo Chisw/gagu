@@ -240,7 +240,7 @@ export default function Window(props: WindowProps) {
           {/* header */}
           <div
             className={line(`
-              relative w-full h-8 flex items-center select-none group
+              relative w-full h-8 flex items-center select-none
               ${headerClassName
                 ? headerClassName
                 : 'bg-white text-gray-500 dark:bg-zinc-800 dark:text-zinc-200'
@@ -270,7 +270,7 @@ export default function Window(props: WindowProps) {
                 ${isTopWindow ? 'hidden' : ''}
               `)}
             />
-            <div className="flex items-center shrink-0 opacity-30 group-hover:opacity-100 transition-opacity duration-100">
+            <div className="flex items-center shrink-0">
               <div
                 title={t`action.minimize`}
                 prevent-move-to-front="true"

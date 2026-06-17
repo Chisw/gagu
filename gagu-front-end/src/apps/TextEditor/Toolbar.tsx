@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { SvgIcon, ToolButton } from '../../components/common'
 import { IEntry } from '../../types'
 import { copy, line } from '../../utils'
-import toast from 'react-hot-toast'
+import { Toast } from '@douyinfe/semi-ui'
 import { MarkdownViewType } from './MarkdownView'
 
 interface ToolbarProps {
@@ -46,7 +46,7 @@ export default function Toolbar(props: ToolbarProps) {
   return (
     <div
       className={line(`
-        relative z-10 h-10 md:h-8 border-b bg-white select-none
+        relative z-10 h-10 md:h-8 border-b border-gray-200 bg-white select-none
         shrink-0 flex items-center
         dark:bg-zinc-800 dark:border-zinc-600
         ${activeEntry ? '' : 'hidden'}
@@ -71,7 +71,7 @@ export default function Toolbar(props: ToolbarProps) {
         disabled={!activeEntry}
         onClick={() => {
           copy(textContent)
-          toast.success('OK')
+          Toast.success('OK')
         }}
       />
       <ToolButton

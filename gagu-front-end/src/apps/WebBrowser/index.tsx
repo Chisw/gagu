@@ -49,50 +49,52 @@ export default function WebBrowser() {
     <>
       <div className="absolute inset-0 bg-white dark:bg-zinc-900">
 
-        <div className="flex items-center p-4 pb-0">
-          <Input
-            showClear
-            size="large"
-            placeholder="URL"
-            value={inputUrl}
-            onChange={setInputUrl}
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
-          />
-          <Button
-            className="ml-2"
-            size="large"
-            theme="solid"
-            type="primary"
-            icon={<SvgIcon.ArrowRight />}
-            onClick={() => setActiveUrl(inputUrl)}
-          />
-        </div>
+        <div className="w-full h-full overflow-y-auto">
+          <div className="flex items-center p-4 pb-0">
+            <Input
+              showClear
+              size="large"
+              placeholder="URL"
+              value={inputUrl}
+              onChange={setInputUrl}
+              onFocus={() => setIsFocused(true)}
+              onBlur={() => setIsFocused(false)}
+            />
+            <Button
+              className="ml-2"
+              size="large"
+              theme="solid"
+              type="primary"
+              icon={<SvgIcon.ArrowRight />}
+              onClick={() => setActiveUrl(inputUrl)}
+            />
+          </div>
 
-        <div className="p-4 grid grid-cols-4 gap-3">
-          {websiteList.map(({ url }) => {
-            return (
-              <div
-                key={getDomain(url)}
-                className="px-4 py-6 cursor-pointer bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 rounded-sm"
-                onClick={() => {
-                  setActiveUrl(url)
-                  setLoading(true)
-                }}
-              >
-                <div className="flex justify-center">
-                  <img
-                    alt="favicon"
-                    className="w-12 h-12 pointer-events-none"
-                    src={getWebsiteFavicon(url)}
-                  />
+          <div className="p-4 grid grid-cols-4 gap-3">
+            {websiteList.map(({ url }) => {
+              return (
+                <div
+                  key={getDomain(url)}
+                  className="px-4 py-6 cursor-pointer bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 rounded-sm"
+                  onClick={() => {
+                    setActiveUrl(url)
+                    setLoading(true)
+                  }}
+                >
+                  <div className="flex justify-center">
+                    <img
+                      alt="favicon"
+                      className="w-12 h-12 pointer-events-none"
+                      src={getWebsiteFavicon(url)}
+                    />
+                  </div>
+                  <div className="mt-2 text-xs text-center text-zinc-400 truncate">
+                    {url}
+                  </div>
                 </div>
-                <div className="mt-2 text-xs text-center text-zinc-400 truncate">
-                  {url}
-                </div>
-              </div>
-            )
-          })}
+              )
+            })}
+          </div>
         </div>
 
         {activeUrl && (

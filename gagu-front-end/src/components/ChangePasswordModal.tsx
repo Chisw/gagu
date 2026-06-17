@@ -4,9 +4,8 @@ import { useRequest, useTouchMode } from '../hooks'
 import { useCallback, useEffect, useState } from 'react'
 import { UserApi } from '../api'
 import { Page, UserPasswordForm } from '../types'
-import md5 from 'md5'
-import { UserInfoStore } from '../utils'
-import toast from 'react-hot-toast'
+import { DURATION_PAGE, sha256, UserInfoStore } from '../utils'
+import { Toast } from '@douyinfe/semi-ui'
 import { useRecoilState } from 'recoil'
 import { activePageState } from '../states'
 import { useNavigate } from 'react-router'
@@ -34,19 +33,19 @@ export function ChangePasswordModal(props: ChangePasswordModalProps) {
     const { password, newPassword } = form
 
     const { success } = await updateUserPassword({
-      password: md5(password),
-      newPassword: md5(newPassword),
+      password: sha256(password),
+      newPassword: sha256(newPassword),
       newPassword2: '',
     })
 
     if (success) {
       UserInfoStore.remove()
-      toast.success('OK')
+      Toast.success('OK')
       onClose()
       setActivePage(Page.PENDING)
       setTimeout(() => {
         navigate('/login')
-      }, 500)
+      }, DURATION_PAGE)
     }
   }, [form, updateUserPassword, onClose, setActivePage, navigate])
 

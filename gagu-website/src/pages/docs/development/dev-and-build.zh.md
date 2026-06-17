@@ -102,6 +102,7 @@ $ pnpm start
 
 [axios](https://npmjs.com/package/axios)&emsp;
 [i18next](https://npmjs.com/package/i18next)&emsp;
+[crypto-js](https://npmjs.com/package/crypto-js)&emsp;
 [chalk](https://npmjs.com/package/chalk)&emsp;
 [express](https://npmjs.com/package/express)&emsp;
 [express-zip](https://npmjs.com/package/express-zip)&emsp;
@@ -109,7 +110,6 @@ $ pnpm start
 [gm](https://npmjs.com/package/gm)&emsp;
 [lodash-es](https://npmjs.com/package/lodash-es)&emsp;
 [luxon](https://npmjs.com/package/luxon)&emsp;
-[md5](https://npmjs.com/package/md5)&emsp;
 [motion](https://npmjs.com/package/motion)&emsp;
 [minimist](https://npmjs.com/package/minimist)&emsp;
 [music-metadata](https://npmjs.com/package/music-metadata)&emsp;
@@ -117,7 +117,6 @@ $ pnpm start
 [piexifjs](https://npmjs.com/package/piexifjs)&emsp;
 [prettier](https://npmjs.com/package/prettier)&emsp;
 [qrcode.react](https://npmjs.com/package/qrcode.react)&emsp;
-[react-hot-toast](https://npmjs.com/package/react-hot-toast)&emsp;
 [react-i18next](https://npmjs.com/package/react-i18next)&emsp;
 [react-markdown](https://npmjs.com/package/react-markdown)&emsp;
 [react-photo-view](https://npmjs.com/package/react-photo-view)&emsp;

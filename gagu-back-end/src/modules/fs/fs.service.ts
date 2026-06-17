@@ -34,7 +34,7 @@ import {
   GEN_THUMBNAIL_MAP,
   getIsSamePartition,
   getParentPath,
-  md5,
+  sha256,
 } from '../../utils'
 import * as nodeDiskInfo from 'node-disk-info'
 import * as piexifjs from 'piexifjs'
@@ -354,7 +354,7 @@ export class FsService {
 
   async getThumbnailPath(path: string) {
     const { mtimeMs } = statSync(path)
-    const thumbnailId = md5(`${path}-${mtimeMs}`)
+    const thumbnailId = sha256(`${path}-${mtimeMs}`)
     const thumbnailParentPath = GAGU_PATH.THUMBNAIL
     const thumbnailPath = `${thumbnailParentPath}/${thumbnailId}`
 

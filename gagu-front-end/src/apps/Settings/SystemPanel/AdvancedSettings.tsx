@@ -1,6 +1,6 @@
 import { Button, Form, Modal } from '@douyinfe/semi-ui'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import toast from 'react-hot-toast'
+import { Toast } from '@douyinfe/semi-ui'
 import { useTranslation } from 'react-i18next'
 import { SettingApi } from '../../../api'
 import { useRequest, useTouchMode } from '../../../hooks'
@@ -100,7 +100,7 @@ export default function AdvancedSettings() {
     if (!form) return
     const { success } = await updateSetting(form)
     if (success) {
-      toast.success('OK')
+      Toast.success('OK')
       handleQuerySettingAll()
     }
   }, [updateSetting, form, handleQuerySettingAll])

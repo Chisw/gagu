@@ -3,7 +3,7 @@ import { useCallback, useState } from 'react'
 import { useRequest } from '../../hooks'
 import { TermuxApi } from '../../api'
 import { copy } from '../../utils'
-import toast from 'react-hot-toast'
+import { Toast } from '@douyinfe/semi-ui'
 
 export default function ClipboardControl() {
 
@@ -16,7 +16,7 @@ export default function ClipboardControl() {
     if (value) {
       const { success } = await updateClipboard({ value })
       if (success) {
-        toast.success('OK')
+        Toast.success('OK')
         setValue('')
       }
     } else {
@@ -24,7 +24,7 @@ export default function ClipboardControl() {
       if (success) {
         const { value } = data
         copy(value)
-        toast.success(value)
+        Toast.success(value)
       }
     }
   }, [updateClipboard, queryClipboard, value])

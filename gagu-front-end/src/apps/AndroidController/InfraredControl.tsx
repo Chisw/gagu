@@ -2,7 +2,7 @@ import { Button, RadioGroup, Radio, Input, Tabs, TabPane } from '@douyinfe/semi-
 import { useCallback, useMemo, useState } from 'react'
 import { useRequest } from '../../hooks'
 import { TermuxApi } from '../../api'
-import toast from 'react-hot-toast'
+import { Toast } from '@douyinfe/semi-ui'
 import { SvgIcon } from '../../components/common'
 import { IInfraredTransmitForm } from '../../types'
 
@@ -75,7 +75,7 @@ export default function InfraredControl() {
       pattern: pattern || form.pattern,
     })
     if (success) {
-      toast.success('OK')
+      Toast.success('OK')
     }
   }, [createInfraredTransmit, form])
 

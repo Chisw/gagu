@@ -2,7 +2,7 @@ import { Button, Input, Popover, Tooltip } from '@douyinfe/semi-ui'
 import { Duration } from 'luxon'
 import { QRCodeCanvas } from 'qrcode.react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import toast from 'react-hot-toast'
+import { Toast } from '@douyinfe/semi-ui'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 import { FsApi, TunnelApi } from '../api'
@@ -138,7 +138,7 @@ export default function SharePage() {
           queryTunnel(code, passwordVal)
         }, 50)
       } else {
-        toast.error(message || 'ERROR')
+        Toast.error(message || 'ERROR')
       }
     }
   }, [code, passwordVal, queryTunnelCheck, queryTunnel])
@@ -203,7 +203,7 @@ export default function SharePage() {
                     className="ml-3 md:ml-2 cursor-pointer"
                     onClick={() => {
                       copy(sharingUrl)
-                      toast.success(t`tip.copied`)
+                      Toast.success(t`tip.copied`)
                     }}
                   >
                     <SvgIcon.Copy className="text-gray-400 dark:text-zinc-200" />
@@ -256,7 +256,7 @@ export default function SharePage() {
                           className="text-xs"
                           content={getDateTime(expiredAt).slice(0, -3)}
                         >
-                          <span><SvgIcon.Info className="mt-[-2px] inline text-gray-300" size={14} /></span>
+                          <span><SvgIcon.Info className="-mt-0.5 inline text-gray-300" size={14} /></span>
                         </Tooltip>
                       )}
                     </p>

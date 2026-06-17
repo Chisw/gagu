@@ -15,6 +15,8 @@ export const SAME_APP_WINDOW_OFFSET = 24
 export const WINDOW_OPEN_MIN_MARGIN = 10
 export const HOVER_OPEN_TIMER: { value: NodeJS.Timeout | undefined } = { value: undefined }
 
+export const DURATION_PAGE = 400
+
 export const ENTRY_ICON_LIST = [
   { type: 'folder', matchList: ['_dir'] },
   { type: 'folder-empty', matchList: ['_dir_new', '_dir_empty'] },

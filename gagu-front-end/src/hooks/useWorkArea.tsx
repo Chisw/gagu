@@ -8,7 +8,7 @@ import { pick, throttle } from 'lodash-es'
 import { SvgIcon } from '../components/common'
 import { useTranslation } from 'react-i18next'
 import { CALLABLE_APP_LIST } from '../apps'
-import toast from 'react-hot-toast'
+import { Toast } from '@douyinfe/semi-ui'
 import { getContextMenuDelay } from '../components'
 
 interface useWorkAreaProps {
@@ -339,7 +339,7 @@ export function useWorkArea(props: useWorkAreaProps) {
           icon: <div className="w-4 h-4">⏳</div>,
           // TODO: i18n
           name: t(`${o.title}`),
-          onClick: () => toast.error('⏳'),
+          onClick: () => Toast.error('⏳'),
         }))
       },
       {

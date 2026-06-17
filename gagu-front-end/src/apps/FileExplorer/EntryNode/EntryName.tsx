@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import toast from 'react-hot-toast'
+import { Toast } from '@douyinfe/semi-ui'
 import { useRequest } from '../../../hooks'
 import { generateNewName, generateTextFile, line, setInputSelection } from '../../../utils'
 import { FsApi } from '../../../api'
@@ -56,7 +56,7 @@ export default function EntryName(props: EntryNameProps) {
 
     if (INVALID_NAME_CHAR_LIST.some(char => newName.includes(char))) {
       onFail('invalid')
-      toast.error(t('tip.illegalCharacters', { characters: INVALID_NAME_CHAR_LIST.join(' ') }))
+      Toast.error(t('tip.illegalCharacters', { characters: INVALID_NAME_CHAR_LIST.join(' ') }))
       return
     }
 
@@ -74,7 +74,7 @@ export default function EntryName(props: EntryNameProps) {
 
     if (exists) {
       onFail('existed')
-      toast.error(t('tip.targetExists', { name: finalName }))
+      Toast.error(t('tip.targetExists', { name: finalName }))
     } else {
       if (oldName) {
         const fromPath = `${parentPath}/${oldName}`
