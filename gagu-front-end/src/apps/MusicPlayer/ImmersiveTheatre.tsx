@@ -72,7 +72,7 @@ export default function ImmersiveTheatre(props: ImmersiveTheatreProps) {
         onCancel={onClose}
       >
         <div
-          className="absolute z-0 inset-0 bg-cover bg-center bg-gradient-to-br from-pink-700 to-pink-900"
+          className="absolute z-0 inset-0 bg-cover bg-center bg-linear-to-br from-pink-700 to-pink-900"
           style={coverStyle}
         />
         <div className="absolute z-10 inset-0 bg-black/50 backdrop-blur-2xl flex">

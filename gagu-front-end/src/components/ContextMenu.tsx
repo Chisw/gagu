@@ -87,7 +87,7 @@ export function ContextMenu() {
             select-none bg-white
             ${isDock
               ? 'is-dock dark:bg-black dark:text-zinc-300 overflow-hidden'
-              : 'bg-opacity-80 backdrop-blur dark:bg-zinc-700/80'}
+              : 'bg-opacity-80 backdrop-blur-sm dark:bg-zinc-700/80'}
           `)}
           visible={menuShow}
           onClickOutSide={(e: any) => {
@@ -104,7 +104,7 @@ export function ContextMenu() {
                       position="rightTop"
                       className={line(`
                         gagu-context-menu-sub-menu
-                        bg-white/80 backdrop-blur min-w-[160px]
+                        bg-white/80 backdrop-blur-sm min-w-[160px]
                         dark:bg-zinc-700/80
                       `)}
                       menu={

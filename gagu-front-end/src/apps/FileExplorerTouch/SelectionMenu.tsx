@@ -222,8 +222,8 @@ export default function SelectionMenu(props: SelectionMenuProps) {
       <div
         className={line(`
           fixed z-10 right-[8px] bottom-[8px] left-[8px]
-          border rounded-xl shadow-lg overflow-hidden
-          bg-white/90 backdrop-blur select-none
+          border border-gray-200 rounded-xl shadow-lg overflow-hidden
+          bg-white/90 backdrop-blur-sm select-none
           transition-all duration-300
           dark:bg-zinc-700/90 dark:border-zinc-600
           ${show ? 'h-28 scale-100' : 'h-0 scale-0'}
@@ -250,8 +250,8 @@ export default function SelectionMenu(props: SelectionMenuProps) {
           ))}
         </div>
 
-        <div className="absolute z-10 top-0 left-0 w-full h-4 bg-gradient-to-b from-white to-transparent dark:from-zinc-700" />
-        <div className="absolute z-10 bottom-0 left-0 w-full h-4 bg-gradient-to-t from-white to-transparent dark:from-zinc-700" />
+        <div className="absolute z-10 top-0 left-0 w-full h-4 bg-linear-to-b from-white to-transparent dark:from-zinc-700" />
+        <div className="absolute z-10 bottom-0 left-0 w-full h-4 bg-linear-to-t from-white to-transparent dark:from-zinc-700" />
       </div>
 
       <Modal

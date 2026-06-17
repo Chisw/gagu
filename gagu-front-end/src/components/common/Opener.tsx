@@ -50,7 +50,7 @@ export function Opener(props: OpenerProps) {
           <div
             className={line(`
               flex justify-center items-center
-              mt-12 p-2 w-36 border select-none
+              mt-12 p-2 w-36 border border-gray-200 select-none
               cursor-pointer rounded bg-white/90 dark:bg-white/10
               text-xs text-gray-600
               hover:text-gray-900 hover:opacity-80

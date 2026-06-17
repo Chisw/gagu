@@ -38,7 +38,7 @@ export function ToolButton(props: ToolButtonProps) {
             dark:bg-transparent dark:text-zinc-300 dark:md:hover:text-zinc-100 dark:md:hover:bg-zinc-600
           `
         }
-        ${active ? 'outline-2 outline outline-gray-300 outline-offset-[-6px]' : ''}
+        ${active ? 'outline-2 outline-solid outline-gray-300 outline-offset-[-6px]' : ''}
         ${className}
       `)}
       onClick={() => !disabled && onClick()}

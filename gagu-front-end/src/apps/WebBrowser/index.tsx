@@ -74,7 +74,7 @@ export default function WebBrowser() {
             return (
               <div
                 key={getDomain(url)}
-                className="px-4 py-6 cursor-pointer bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 rounded"
+                className="px-4 py-6 cursor-pointer bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 rounded-sm"
                 onClick={() => {
                   setActiveUrl(url)
                   setLoading(true)
@@ -100,7 +100,7 @@ export default function WebBrowser() {
             <div
               className={line(`
                 flex items-center shrink-0 h-8 border-t border-b
-                dark:border-zinc-700
+                border-gray-200 dark:border-zinc-700
                 ${loading ? 'bg-loading' : ''}
               `)}
             >

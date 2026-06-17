@@ -145,7 +145,7 @@ export default function SharePage() {
 
   return (
     <>
-      <div className="absolute z-0 inset-0 bg-gradient-to-b from-black to-zinc-600 flex justify-center items-center overflow-hidden">
+      <div className="absolute z-0 inset-0 bg-linear-to-b from-black to-zinc-600 flex justify-center items-center overflow-hidden">
         <div
           className={line(`
             absolute z-0 inset-0 bg-cover bg-center
@@ -156,7 +156,7 @@ export default function SharePage() {
         />
         <div
           className={line(`
-            relative m-4 md:m-0 px-4 md:px-10 py-6 md:py-8 w-full md:w-[40rem]
+            relative m-4 md:m-0 px-4 md:px-10 py-6 md:py-8 w-full md:w-160
             bg-white rounded-2xl shadow-2xl overflow-hidden
             dark:bg-zinc-700
           `)}
@@ -168,7 +168,7 @@ export default function SharePage() {
             <div className="relative z-10">
               <div className="flex items-center">
                 <div
-                  className="w-10 h-10 rounded-full border-2 border-white shadow bg-center bg-cover shrink-0 dark:border-zinc-400"
+                  className="w-10 h-10 rounded-full border-2 border-white shadow-sm bg-center bg-cover shrink-0 dark:border-zinc-400"
                   style={{ backgroundImage: `url("${FsApi.getPublicAvatarStreamUrl(username)}")` }}
                 />
                 <div className="ml-4 grow">
@@ -211,7 +211,7 @@ export default function SharePage() {
                 </div>
               </div>
               {isShowInput ? (
-                <div className="my-6 px-8 py-16 border backdrop-blur">
+                <div className="my-6 px-8 py-16 border border-gray-200 backdrop-blur-sm">
                   <p className="text-sm text-gray-500 text-center">{t`tip.sharingWithPassword`}</p>
                   <div className="mt-4 flex justify-center">
                     <Input
@@ -256,7 +256,7 @@ export default function SharePage() {
                           className="text-xs"
                           content={getDateTime(expiredAt).slice(0, -3)}
                         >
-                          <span><SvgIcon.Info className="-mt-[2px] inline text-gray-300" size={14} /></span>
+                          <span><SvgIcon.Info className="mt-[-2px] inline text-gray-300" size={14} /></span>
                         </Tooltip>
                       )}
                     </p>

@@ -36,7 +36,7 @@ export function IconButton(props: IconButtonProps) {
           ${className}
           ${sizeClassName}
           inline-flex justify-center items-center
-          rounded-sm text-white
+          rounded-xs text-white
           transition-bg duration-100
           ${disabled
             ? 'cursor-not-allowed opacity-50'

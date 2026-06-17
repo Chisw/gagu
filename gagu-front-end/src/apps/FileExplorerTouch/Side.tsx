@@ -26,7 +26,7 @@ export default function Side(props: SideProps) {
         className={line(`
           absolute z-0 bottom-0 left-0 pb-4 w-64
           bg-zinc-100
-          overflow-x-hidden overflow-y-auto border-r
+          overflow-x-hidden overflow-y-auto border-r border-gray-200
           duration-transform duration-300 ease-in-out
           dark:bg-zinc-900 dark:border-zinc-600
           ${sideShow ? 'translate-x-0' : '-translate-x-64'}

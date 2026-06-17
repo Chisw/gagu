@@ -113,7 +113,7 @@ export default function Toolbar(props: ToolbarProps) {
       <div
         className={line(`
           absolute z-10 bottom-0 right-0 left-0
-          flex items-center backdrop-blur-sm
+          flex items-center backdrop-blur-xs
           text-xs px-2 py-1 bg-black/50 text-white
           transition-opacity duration-200
           md:opacity-0 group-hover:opacity-100
@@ -148,8 +148,8 @@ export default function Toolbar(props: ToolbarProps) {
       <div
         className={line(`
           absolute z-20 inset-0
-          text-xs text-white break-words cursor-default
-          bg-gray-700/70 backdrop-blur
+          text-xs text-white wrap-break-word cursor-default
+          bg-gray-700/70 backdrop-blur-sm
           transition-transform duration-200
           ${exifResponse ? 'scale-100' : 'scale-0'}
         `)}

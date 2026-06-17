@@ -70,7 +70,7 @@ export default function EntryIcon(props: IconProps) {
         <div
           data-app-id={callableAppId}
           className={line(`
-            gagu-app-icon absolute z-0 right-0 bottom-0 left-1/2 rounded-sm shadow-sm
+            gagu-app-icon absolute z-0 right-0 bottom-0 left-1/2 rounded-xs shadow-xs
             transition-opacity duration-200
             ${touchMode ? '' : 'opacity-0 group-hover:opacity-100'}
             ${isSmall ? 'ml-[4px] w-[8px] h-[8px]' : 'ml-4 w-[12px] h-[12px]'}
@@ -87,7 +87,7 @@ export default function EntryIcon(props: IconProps) {
               ${thumbnailType === ThumbnailType.document
                 ? `
                   border border-r-2 border-b-2 border-gray-200 dark:border-zinc-500
-                  ${thumbnailLoading ? 'h-full aspect-[3/4] bg-loading' : ''}
+                  ${thumbnailLoading ? 'h-full aspect-3/4 bg-loading' : ''}
                 `
                 : ''
               }
@@ -118,7 +118,7 @@ function ThumbnailWrapper(props: { type: ThumbnailTypeType, loading: boolean, ch
     return (
       <div
         className={line(`
-          px-[2px] w-full aspect-[16/9] flex justify-center items-center shadow-lg
+          px-[2px] w-full aspect-video flex justify-center items-center shadow-lg
           ${loading ? 'bg-loading' : 'bg-black'}
         `)}
       >
@@ -130,9 +130,9 @@ function ThumbnailWrapper(props: { type: ThumbnailTypeType, loading: boolean, ch
       <div
         className={line(`
           relative w-4/5 aspect-square flex justify-center items-center shadow-lg overflow-hidden
-          after:content-[''] after:block after:absolute after:z-[0] after:left-0
-          after:-ml-[60%] after:-mt-[70%] after:w-full after:h-[300%]
-          after:bg-white/30 after:rotate-[60deg]
+          after:content-[''] after:block after:absolute after:z-0 after:left-0
+          after:ml-[-60%] after:mt-[-70%] after:w-full after:h-[300%]
+          after:bg-white/30 after:rotate-60
           ${loading ? 'bg-loading' : 'bg-white'}
         `)}
       >

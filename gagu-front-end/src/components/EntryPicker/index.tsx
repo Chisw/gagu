@@ -132,7 +132,7 @@ export function EntryPicker(props: EntryPickerProps) {
             </div>
           )}
         >
-          <div className="absolute inset-0 border-t overflow-hidden">
+          <div className="absolute inset-0 border-t border-gray-200 overflow-hidden">
             <FileExplorerTouch
               show
               asEntryPicker
@@ -165,14 +165,14 @@ export function EntryPicker(props: EntryPickerProps) {
               {matchList.map((extension) => (
                 <div
                   key={extension}
-                  className="ml-1 px-1 text-xs text-gray-400 font-din bg-gray-100 rounded uppercase dark:bg-zinc-500 dark:text-zinc-300"
+                  className="ml-1 px-1 text-xs text-gray-400 font-din bg-gray-100 rounded-sm uppercase dark:bg-zinc-500 dark:text-zinc-300"
                 >
                   {extension}
                 </div>
               ))}
             </div>
           </div>
-          <div className="mt-3 relative h-[540px] overflow-y-auto border bg-gray-100/50 dark:bg-black dark:border-zinc-600">
+          <div className="mt-3 relative h-[540px] overflow-y-auto border border-gray-200 bg-gray-100/50 dark:bg-black dark:border-zinc-600">
             <FileExplorer
               asEntryPicker
               isTopWindow={show}

@@ -57,12 +57,12 @@ export function ProgressSlider(props: ProgressSliderProps) {
             hover-show-child
             opacity-0 md:opacity-100
             absolute top-0 -mt-5 px-1 h-4 bg-black
-            text-white font-din text-xs text-center rounded-sm
+            text-white font-din text-xs text-center rounded-xs
             scale-90 -translate-x-1/2
           `)}
           style={{ left: `${timeLabelData.distance}px` }}
         >
-          <div className="absolute z-0 left-1/2 bottom-0 -mb-[2px] w-2 h-2 bg-black -translate-x-1/2 rotate-45 rounded-sm" />
+          <div className="absolute z-0 left-1/2 bottom-0 mb-[-2px] w-2 h-2 bg-black -translate-x-1/2 rotate-45 rounded-xs" />
           <span className="relative ">{timeLabelData.label}</span>
         </div>
 
@@ -78,7 +78,7 @@ export function ProgressSlider(props: ProgressSliderProps) {
             style={{ width: `${playPercent}%` }}
           >
             <div
-              className="absolute -mt-[3px] -ml-1 w-2 h-2 rounded bg-white shadow"
+              className="absolute mt-[-3px] -ml-1 w-2 h-2 rounded-sm bg-white shadow-sm"
               style={{ left: `${playPercent}%` }}
             />
           </div>

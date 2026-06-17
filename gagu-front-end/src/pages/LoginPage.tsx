@@ -68,7 +68,7 @@ export default function LoginPage() {
   
   return (
     <>
-      <div className="fixed z-0 inset-0 py-20 overflow-hidden bg-gradient-to-b from-[#2F0059] to-[#9F00DE] flex justify-center md:items-center">
+      <div className="fixed z-0 inset-0 py-20 overflow-hidden bg-linear-to-b from-[#2F0059] to-[#9F00DE] flex justify-center md:items-center">
         <div
           className={line(`
             absolute z-0 inset-0 bg-cover bg-center
@@ -82,7 +82,7 @@ export default function LoginPage() {
             className={line(`
               text-white flex justify-center items-center
               transition-all duration-700
-              ${activePage === 'login' ? '-translate-y-0 opacity-100' : '-translate-y-5 opacity-0'}
+              ${activePage === 'login' ? 'translate-y-0 opacity-100' : '-translate-y-5 opacity-0'}
             `)}
           >
             <svg height="24" viewBox="0 0 380 80" fill="none" xmlns="http://www.w3.org/2000/svg">

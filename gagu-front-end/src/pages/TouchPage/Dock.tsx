@@ -69,13 +69,13 @@ export default function Dock(props: DockProps) {
         ref={dockRef}
         className={line(`
           fixed z-20 
-          border shadow-lg overflow-hidden
+          border border-gray-200 shadow-lg overflow-hidden
           transition-all duration-200 select-none
           dark:border-zinc-500
           ${show ? 'scale-100 origin-bottom-right' : 'scale-0 origin-center'}
           ${dockExpanded
-            ? 'right-[10px] bottom-[10px] w-48 h-48 rounded-xl bg-gradient-to-b from-gray-200 via-gray-100 to-gray-100 dark:from-zinc-800 dark:via-zinc-700 dark:to-zinc-700'
-            : 'right-[1rem] bottom-[1rem] w-12 h-12 rounded-3xl bg-white dark:bg-zinc-600'
+            ? 'right-[10px] bottom-[10px] w-48 h-48 rounded-xl bg-linear-to-b from-gray-200 via-gray-100 to-gray-100 dark:from-zinc-800 dark:via-zinc-700 dark:to-zinc-700'
+            : 'right-4 bottom-4 w-12 h-12 rounded-3xl bg-white dark:bg-zinc-600'
           }
         `)}
       >
@@ -106,13 +106,13 @@ export default function Dock(props: DockProps) {
                   className="gagu-app-icon w-full h-full"
                   data-app-id={app.id}
                 />
-                {isRunning && <div className="absolute bottom-1 right-1 w-1 h-1 rounded-full bg-green-400 shadow shadow-green-500 border border-green-700" />}
+                {isRunning && <div className="absolute bottom-1 right-1 w-1 h-1 rounded-full bg-green-400 shadow-sm shadow-green-500 border border-green-700" />}
               </div>
             )
           })}
           <div
             className={line(`
-              aspect-square border rounded-lg
+              aspect-square border border-gray-200 rounded-lg
               flex justify-center items-center
               transition-all duration-200 active:scale-90
               dark:border-zinc-600 dark:text-zinc-200
@@ -133,7 +133,7 @@ export default function Dock(props: DockProps) {
           onClick={() => setDockExpanded(true)}
         >
           <SvgIcon.Apps />
-          {(runningAppList.length > 0) && <div className="absolute bottom-2 right-2 w-1 h-1 rounded-full bg-green-400 shadow shadow-green-500 border border-green-700" />}
+          {(runningAppList.length > 0) && <div className="absolute bottom-2 right-2 w-1 h-1 rounded-full bg-green-400 shadow-sm shadow-green-500 border border-green-700" />}
         </div>
 
       </div>

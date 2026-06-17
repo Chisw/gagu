@@ -71,7 +71,7 @@ export default function RatioList({ onClick }: RatioListProps) {
                 key={`${listIndex}-${ratioIndex}`}
                 className={line(`
                   relative m-1 w-10 aspect-video group
-                bg-gray-100 rounded-sm cursor-pointer overflow-hidden hover:bg-blue-100
+                bg-gray-100 rounded-xs cursor-pointer overflow-hidden hover:bg-blue-100
                   dark:bg-zinc-500  dark:hover:bg-blue-900
                 `)}
                 onMouseEnter={() => setDemoWindowInfo(getComputedWindowInfo(ratio))}
@@ -82,7 +82,7 @@ export default function RatioList({ onClick }: RatioListProps) {
                 }}
               >
                 <div
-                  className="absolute bg-gray-300 rounded-sm group-hover:bg-blue-500 dark:bg-zinc-400 dark:group-hover:bg-blue-600"
+                  className="absolute bg-gray-300 rounded-xs group-hover:bg-blue-500 dark:bg-zinc-400 dark:group-hover:bg-blue-600"
                   style={{
                     top: `${yRatio * 100}%`,
                     left: `${xRatio * 100}%`,

@@ -136,7 +136,7 @@ export function MenuBar() {
           <Dropdown
             trigger="click"
             position="bottomLeft"
-            className="bg-white/80 backdrop-blur dark:bg-zinc-700/80"
+            className="bg-white/80 backdrop-blur-sm dark:bg-zinc-700/80"
             visible={systemPopoverShow}
             render={(
               <Dropdown.Menu className="w-48">
@@ -164,7 +164,7 @@ export function MenuBar() {
                 </Dropdown.Item>
                 <Dropdown
                   position="rightTop"
-                  className="bg-white/80 backdrop-blur dark:bg-zinc-700/80"
+                  className="bg-white/80 backdrop-blur-sm dark:bg-zinc-700/80"
                   render={(
                     <div className="px-4 py-8 w-48">
                       <div className="flex justify-center">
@@ -186,7 +186,7 @@ export function MenuBar() {
                 <Dropdown
                   showTick
                   position="rightTop"
-                  className="bg-white/80 backdrop-blur dark:bg-zinc-700/80"
+                  className="bg-white/80 backdrop-blur-sm dark:bg-zinc-700/80"
                   render={(
                     <Dropdown.Menu className="w-48">
                       {pageList.map(({ key, icon }) => {
@@ -244,14 +244,14 @@ export function MenuBar() {
           <Dropdown
             trigger="click"
             position="bottomLeft"
-            className="bg-white/80 backdrop-blur dark:bg-zinc-700/80"
+            className="bg-white/80 backdrop-blur-sm dark:bg-zinc-700/80"
             visible={userPopoverShow}
             render={(
               <Dropdown.Menu className="w-48">
-                <div className="mb-[2px] px-2 pt-1 pb-2 border-b dark:border-black dark:border-opacity-20">
+                <div className="mb-[2px] px-2 pt-1 pb-2 border-b border-gray-200 dark:border-black dark:border-opacity-20">
                   <div className="flex items-center">
                     <div
-                      className="gagu-user-avatar w-10 h-10 rounded-full border-2 border-white shadow bg-center bg-cover dark:border-zinc-400"
+                      className="gagu-user-avatar w-10 h-10 rounded-full border-2 border-white shadow-sm bg-center bg-cover dark:border-zinc-400"
                       style={avatarStyle}
                     />
                     <div className="ml-2 text-sm leading-none grow">
@@ -264,7 +264,7 @@ export function MenuBar() {
                       <span
                         key={p}
                         className={line(`
-                          inline-block mr-[1px] px-1 py-0
+                          inline-block mr-px px-1 py-0
                           text-xs text-blue-600 bg-blue-100 rounded select-none capitalize
                           dark:text-blue-200 dark:bg-blue-600
                         `)}

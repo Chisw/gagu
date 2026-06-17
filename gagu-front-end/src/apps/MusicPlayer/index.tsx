@@ -260,7 +260,7 @@ export default function MusicPlayer(props: AppComponentProps) {
 
   return (
     <>
-      <div className="absolute inset-0 flex flex-col bg-gradient-to-br from-pink-700 to-pink-900 select-none">
+      <div className="absolute inset-0 flex flex-col bg-linear-to-br from-pink-700 to-pink-900 select-none">
         <Opener show={!activeEntry} appId={appId} />
 
         <VolumeIndicator volume={musicPlayerVolume} time={volumeChangedTime} />
@@ -308,7 +308,7 @@ export default function MusicPlayer(props: AppComponentProps) {
                     absolute top-0 right-0 bottom-0
                     px-4 cursor-pointer opacity-80
                     hover:opacity-100 hover:bg-white/10 active:opacity-70
-                    backdrop-blur
+                    backdrop-blur-sm
                     flex justify-center items-center
                     ${isActive ? '' : 'hidden group-hover:flex'}
                   `)}

@@ -72,7 +72,7 @@ export default function AdvancedSettings() {
                 <p className="relative z-10 mt-4 text-center font-bold">
                   {t`tip.upgrading`}
                 </p>
-                <p className="relative z-10 mt-6 px-3 py-1 text-center text-gray-400 border-2 bg-gray-800 border-gray-900 rounded flex items-center">
+                <p className="relative z-10 mt-6 px-3 py-1 text-center text-gray-400 border-2 border-gray-900 rounded-sm flex items-center">
                   <code>npm i -g gagu</code>
                   <Spinner className="ml-12" />
                 </p>

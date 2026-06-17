@@ -18,7 +18,7 @@ mkdir bin bin/web
 
 mv gagu-back-end/dist/* bin
 
-mv gagu-front-end/build/* bin/web
+mv gagu-front-end/dist/* bin/web
 
 touch bin/gagu
 
@@ -29,9 +29,5 @@ cat bin/main.js >> bin/gagu
 chmod 777 bin/gagu
 
 rm bin/main.js
-
-rm bin/web/asset-manifest.json
-
-rm bin/web/*.LICENSE.txt
 
 echo '\n  ✨  Build GAGU npm package successfully.'

@@ -225,10 +225,10 @@ export default function Window(props: WindowProps) {
             absolute inset-0 overflow-hidden
             ease-in-out flex flex-col
             dark:bg-black/80
-            ${isTopWindow ? 'shadow-xl' : 'shadow'}
+            ${isTopWindow ? 'shadow-xl' : 'shadow-sm'}
             ${isFullScreen
               ? ''
-              : 'rounded border border-black/10 bg-clip-padding dark:border-white/5'
+              : 'rounded-sm border border-black/10 bg-clip-padding dark:border-white/5'
             }
           `)}
           initial={{ scale: 0.8, opacity: 0 }}

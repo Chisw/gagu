@@ -147,17 +147,17 @@ export default function UserList(props: UserListProps) {
                 )}
               </div>
               <div
-                className="w-full h-24 bg-center bg-cover filter blur-sm bg-gray-200 opacity-20"
+                className="w-full h-24 bg-center bg-cover filter blur-xs bg-gray-200 opacity-20"
                 style={avatarStyle}
               />
               <div className="relative z-10 -mt-20">
                 <div className="flex justify-center items-center">
                   <div
-                    className="relative w-12 h-12 shrink-0 rounded-full bg-cover bg-center bg-no-repeat bg-gray-300 border-2 border-white shadow dark:border-zinc-500"
+                    className="relative w-12 h-12 shrink-0 rounded-full bg-cover bg-center bg-no-repeat bg-gray-300 border-2 border-white shadow-sm dark:border-zinc-500"
                     style={avatarStyle}
                   >
                     {isActive && (
-                      <div className="absolute top-0 right-0 w-2 h-2 rounded bg-green-400 border border-white" />
+                      <div className="absolute top-0 right-0 w-2 h-2 rounded-sm bg-green-400 border border-white" />
                     )}
                   </div>
                 </div>
@@ -170,7 +170,7 @@ export default function UserList(props: UserListProps) {
                     <span
                       key={p}
                       className={line(`
-                        inline-block mx-[1px] px-1 py-0
+                        inline-block mx-px px-1 py-0
                         text-xs text-blue-600 bg-blue-100 rounded select-none capitalize
                         dark:text-blue-200 dark:bg-blue-600
                       `)}
@@ -191,7 +191,7 @@ export default function UserList(props: UserListProps) {
                   <div
                     key={label}
                     title={label}
-                    className="mx-1 w-6 h-6 cursor-pointer hover:opacity-70 flex justify-center items-center rounded"
+                    className="mx-1 w-6 h-6 cursor-pointer hover:opacity-70 flex justify-center items-center rounded-sm"
                     onClick={onClick}
                   >
                     {icon}

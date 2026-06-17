@@ -1,7 +1,7 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@custom-variant dark (&:is(.dark *));
 
 .flex-center-center {
-  @apply flex justify-center items-center;
+  @apply flex items-center justify-center;
 }

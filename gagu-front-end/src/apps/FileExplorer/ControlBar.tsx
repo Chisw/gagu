@@ -76,7 +76,7 @@ export default function ControlBar(props: ControlBarProps) {
           icon={<SvgIcon.SideBar />}
           onClick={onSideBarClick}
         />
-        <div className="md:mx-[1px] h-3 border-l dark:border-zinc-700" />
+        <div className="md:mx-px h-3 border-l border-gray-200 dark:border-zinc-700" />
         <ToolButton
           title={t`action.backward`}
           icon={<SvgIcon.ArrowLeft />}
@@ -110,7 +110,7 @@ export default function ControlBar(props: ControlBarProps) {
           onClick={onNavToParent}
         />
 
-        <div className="grow md:mx-[1px] h-3 border-r dark:border-zinc-700" />
+        <div className="grow md:mx-px h-3 border-r border-gray-200 dark:border-zinc-700" />
 
         <div className={`${filterMode ? 'w-40' : 'w-8'} h-full transition-all duration-200`}>
           {filterMode ? (
@@ -118,7 +118,7 @@ export default function ControlBar(props: ControlBarProps) {
               <input
                 autoFocus
                 placeholder={t`hint.filter`}
-                className="w-full px-2 py-1 text-xs outline-none bg-transparent dark:text-zinc-200"
+                className="w-full px-2 py-1 text-xs outline-hidden bg-transparent dark:text-zinc-200"
                 value={filterText}
                 onChange={e => setFilterText(e.target.value)}
                 onBlur={e => !e.target.value && setFilterMode(false)}
@@ -159,7 +159,7 @@ export default function ControlBar(props: ControlBarProps) {
           <Dropdown
             trigger="click"
             position="bottomRight"
-            className="bg-white/80 backdrop-blur dark:bg-zinc-700/80"
+            className="bg-white/80 backdrop-blur-sm dark:bg-zinc-700/80"
             spacing={0}
             visible={sortVisible}
             onVisibleChange={setSortVisible}

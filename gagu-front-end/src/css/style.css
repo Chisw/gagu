@@ -175,7 +175,7 @@ body {
 }
 
 .semi-form-field-extra {
-  @apply text-xs !important;
+  @apply text-xs!;
 }
 
 .semi-button {
@@ -188,7 +188,7 @@ body {
 
 .gagu-use-form-dialog .semi-modal-mask,
 .gagu-confirmor .semi-modal-mask {
-  @apply bg-black/10 !important;
+  @apply bg-black/10!;
 }
 
 .gagu-use-form-dialog .semi-modal-content {
@@ -204,7 +204,7 @@ body {
 }
 
 .gagu-touch-open-with-apps .semi-modal-mask {
-  @apply bg-black/10 !important;
+  @apply bg-black/10!;
 }
 
 .gagu-touch-open-with-apps .semi-modal {
@@ -237,7 +237,7 @@ body {
 }
 
 .gagu-text-editor-photo-slider .PhotoView-Slider__Backdrop {
-  @apply bg-black/30 backdrop-blur-sm dark:bg-black/70 !important;
+  @apply bg-black/30 backdrop-blur-sm dark:bg-black/70!;
 }
 
 .gagu-text-editor-photo-slider .PhotoView-Slider__BannerWrap {

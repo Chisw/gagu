@@ -157,12 +157,12 @@ export default function VideoPlayer(props: AppComponentProps) {
             md:opacity-0 group-hover:opacity-100
             transition-opacity duration-300
             flex justify-between items-center
-            backdrop-blur bg-black/50
+            backdrop-blur-sm bg-black/50
             text-xs text-white
             ${activeEntry ? '' : 'hidden'}
           `)}
         >
-          <div className="absolute top-0 right-0 left-0 -mt-[2px]">
+          <div className="absolute top-0 right-0 left-0 mt-[-2px]">
             <ProgressSlider
               duration={videoEl?.duration || 0}
               playPercent={playInfo.playPercent}
@@ -187,7 +187,7 @@ export default function VideoPlayer(props: AppComponentProps) {
               <div
                 key={title}
                 title={title}
-                className="w-8 h-8 text-white cursor-pointer hover:bg-white/20 active:bg-opacity-10 flex justify-center items-center rounded"
+                className="w-8 h-8 text-white cursor-pointer hover:bg-white/20 active:bg-opacity-10 flex justify-center items-center rounded-sm"
                 onClick={onClick}
               >
                 {icon}
@@ -197,13 +197,13 @@ export default function VideoPlayer(props: AppComponentProps) {
           <div className="w-24 flex justify-end">
             <div
               title={t`action.volume`}
-              className="w-8 h-8 text-white cursor-pointer hover:bg-white/20 active:bg-opacity-10 flex justify-center items-center rounded"
+              className="w-8 h-8 text-white cursor-pointer hover:bg-white/20 active:bg-opacity-10 flex justify-center items-center rounded-sm"
               onClick={() => setVolumeSliderShow(true)}
             >
               <VolumeIcon volume={videoPlayerVolume} size={14} />
             </div>
             <div
-              className="ml-1 w-8 h-8 text-white cursor-pointer hover:bg-white/20 active:bg-opacity-10 flex justify-center items-center rounded"
+              className="ml-1 w-8 h-8 text-white cursor-pointer hover:bg-white/20 active:bg-opacity-10 flex justify-center items-center rounded-sm"
               onClick={() => videoEl?.requestFullscreen()}
             >
               <SvgIcon.Fullscreen />

@@ -72,7 +72,7 @@ export default function RootEntryGroups(props: RootEntryGroupsProps) {
           `)}
         >
           <div className="px-4 py-1 text-xs font-bold text-gray-400 dark:text-zinc-400 flex items-center">
-            <span className="-translate-y-[1px]">
+            <span className="-translate-y-px">
               {iconMap[`${key}${key === 'server' ? `.${baseData.serverOS.platform}` : ''}`]}
             </span>
             <span className="ml-1">{t(`title.rootEntryGroup_${key}`)}</span>
@@ -139,7 +139,7 @@ export default function RootEntryGroups(props: RootEntryGroupsProps) {
                   )}
                 </div>
                 {showDiskInfo && (
-                  <div className="mt-[2px] text-xs relative z-0 h-[2px] font-din bg-blue-100 rounded-sm overflow-hidden">
+                  <div className="mt-[2px] text-xs relative z-0 h-[2px] font-din bg-blue-100 rounded-xs overflow-hidden">
                     <div
                       className="h-full bg-blue-500"
                       style={{ width: `${spaceUsed / spaceTotal! * 100}%` }}

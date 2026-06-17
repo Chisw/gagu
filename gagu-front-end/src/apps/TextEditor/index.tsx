@@ -202,7 +202,7 @@ export default function TextEditor(props: AppComponentProps) {
                 style={monoMode ? undefined : { fontFamily: 'unset' }}
               >
                 <textarea
-                  className="p-4 min-w-[200px] w-full h-full outline-none resize-none bg-transparent dark:text-zinc-200"
+                  className="p-4 min-w-[200px] w-full h-full outline-hidden resize-none bg-transparent dark:text-zinc-200"
                   style={{ fontSize: textEditorFontSize }}
                   value={textContent}
                   onChange={e => setTextContent(e.target.value)}
@@ -216,7 +216,7 @@ export default function TextEditor(props: AppComponentProps) {
                     ? 'w-0 overflow-hidden'
                     : markdownView === 'FULL'
                       ? 'w-full overflow-y-auto'
-                      : 'w-1/2 border-l overflow-y-auto dark:border-zinc-600'
+                      : 'w-1/2 border-l border-gray-200 overflow-y-auto dark:border-zinc-600'
                   }
                 `)}
               >

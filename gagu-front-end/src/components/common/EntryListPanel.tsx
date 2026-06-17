@@ -31,7 +31,7 @@ export function EntryListPanel(props: EntryListPanelProps) {
   
   return (
     <>
-      <div className="my-6 backdrop-blur border border-gray-200 dark:border-zinc-600">
+      <div className="my-6 backdrop-blur-sm border border-gray-200 dark:border-zinc-600">
         <div className="px-3 py-2 text-xs bg-white/50 border-b border-gray-200 font-din flex justify-between items-center dark:bg-black/10 dark:border-zinc-600">
           <span>
             <span className="text-gray-600 dark:text-zinc-200">{downloadName || 'Unknown'}</span>

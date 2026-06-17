@@ -103,7 +103,7 @@ export default function Dock() {
           absolute z-20 left-1/2 bottom-0 mb-1 px-1 h-12
           flex items-center
           border border-gray-500 border-opacity-20
-          bg-clip-padding bg-white/40 backdrop-blur
+          bg-clip-padding bg-white/40 backdrop-blur-sm
           rounded-xl
           transition-all duration-500 ease-out
           -translate-x-1/2
@@ -119,7 +119,7 @@ export default function Dock() {
               className="relative mx-1 w-8 h-8"
             >
               <div
-                className="gagu-app-icon filter hover:brightness-110 active:brightness-75 transition-all duration-50 w-full h-full cursor-pointer shadow rounded-lg"
+                className="gagu-app-icon filter hover:brightness-110 active:brightness-75 transition-all duration-50 w-full h-full cursor-pointer shadow-sm rounded-lg"
                 data-app-id={app.id}
                 title={t(`app.${app.id}`)}
                 onClick={() => handleOpenApp(app)}

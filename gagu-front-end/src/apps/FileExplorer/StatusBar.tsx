@@ -93,8 +93,8 @@ export default function StatusBar(props: StatusBarProps) {
           >
             <span className="pointer-events-none">
               {currentRootEntry.isDisk
-                ? <SvgIcon.HardDrive className="-mt-[2px] mr-1 inline-block" size={12} />
-                : <SvgIcon.Folder className="-mt-[2px] mr-1 inline-block" size={12} />
+                ? <SvgIcon.HardDrive className="mt-[-2px] mr-1 inline-block" size={12} />
+                : <SvgIcon.Folder className="mt-[-2px] mr-1 inline-block" size={12} />
               }
               {currentRootEntry.name}
             </span>
@@ -108,7 +108,7 @@ export default function StatusBar(props: StatusBarProps) {
 
             return (
               <span key={encodeURIComponent(fullPath)}>
-                <SvgIcon.ChevronRight size={14} className="inline -mt-[2px] text-gray-300 dark:text-zinc-500" />
+                <SvgIcon.ChevronRight size={14} className="inline mt-[-2px] text-gray-300 dark:text-zinc-500" />
                 <span
                   title={fullPath}
                   {...dragDropProps}
@@ -122,8 +122,8 @@ export default function StatusBar(props: StatusBarProps) {
                 >
                   <span className="pointer-events-none">
                     {showFileIcon
-                      ? <SvgIcon.File className="-mt-[2px] mr-1 inline-block" size={12} />
-                      : <SvgIcon.Folder className="-mt-[2px] mr-1 inline-block" size={12} />
+                      ? <SvgIcon.File className="mt-[-2px] mr-1 inline-block" size={12} />
+                      : <SvgIcon.Folder className="mt-[-2px] mr-1 inline-block" size={12} />
                     }
                     {path}
                   </span>
@@ -143,7 +143,7 @@ export default function StatusBar(props: StatusBarProps) {
               toast.success(t`tip.copied`)
             }}
           >
-            <SvgIcon.Copy size={12} className="inline -mt-[2px]" />
+            <SvgIcon.Copy size={12} className="inline mt-[-2px]" />
           </span>
         </div>
       </div>

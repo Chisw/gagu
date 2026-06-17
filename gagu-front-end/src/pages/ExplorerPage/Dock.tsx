@@ -42,7 +42,7 @@ export default function Dock(props: DockProps) {
         className={line(`
           gagu-dock
           absolute z-0 bottom-0 px-1 w-full h-10 border-t border-gray-300 bg-gray-300
-          bg-gradient-to-b from-gray-200 to-gray-400
+          bg-linear-to-b from-gray-200 to-gray-400
           flex justify-center items-center
           transition-all duration-500 ease-out
           dark:border-zinc-600 dark:from-zinc-700 dark:to-zinc-900
@@ -72,7 +72,7 @@ export default function Dock(props: DockProps) {
               }}
             >
               <div
-                className="gagu-app-icon w-6 h-6 rounded-md shadow"
+                className="gagu-app-icon w-6 h-6 rounded-md shadow-sm"
                 data-app-id={app.id}
               />
               {isRunning && <div className="absolute right-3 bottom-0 left-3 h-[3px] bg-blue-500" />}

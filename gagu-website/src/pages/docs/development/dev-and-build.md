@@ -100,19 +100,22 @@ $ pnpm start
 
 There are also many dependencies used throughout the project:
 
-[@craco/craco](https://npmjs.com/package/@craco/craco)&emsp;
 [axios](https://npmjs.com/package/axios)&emsp;
+[i18next](https://npmjs.com/package/i18next)&emsp;
 [chalk](https://npmjs.com/package/chalk)&emsp;
+[express](https://npmjs.com/package/express)&emsp;
 [express-zip](https://npmjs.com/package/express-zip)&emsp;
 [github-markdown-css](https://npmjs.com/package/github-markdown-css)&emsp;
 [gm](https://npmjs.com/package/gm)&emsp;
-[lodash](https://npmjs.com/package/lodash)&emsp;
+[lodash-es](https://npmjs.com/package/lodash-es)&emsp;
 [luxon](https://npmjs.com/package/luxon)&emsp;
 [md5](https://npmjs.com/package/md5)&emsp;
+[motion](https://npmjs.com/package/motion)&emsp;
 [minimist](https://npmjs.com/package/minimist)&emsp;
 [music-metadata](https://npmjs.com/package/music-metadata)&emsp;
 [node-disk-info](https://npmjs.com/package/node-disk-info)&emsp;
 [piexifjs](https://npmjs.com/package/piexifjs)&emsp;
+[prettier](https://npmjs.com/package/prettier)&emsp;
 [qrcode.react](https://npmjs.com/package/qrcode.react)&emsp;
 [react-hot-toast](https://npmjs.com/package/react-hot-toast)&emsp;
 [react-i18next](https://npmjs.com/package/react-i18next)&emsp;
