@@ -2,13 +2,13 @@ import { Button, Form, Modal } from '@douyinfe/semi-ui'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { FsApi, TunnelApi } from '../api'
 import { useRequest, useTouchMode } from '../hooks'
-import { IEntry, TunnelType } from '../types'
 import { copy, getDownloadInfo, sha256 } from '../utils'
 import { EntryListPanel, SvgIcon } from './common'
 import { QRCodeCanvas } from 'qrcode.react'
 import { Toast } from '@douyinfe/semi-ui'
 import { useTranslation } from 'react-i18next'
 import { semiLocaleMap } from '../i18n'
+import { TunnelType, IEntry } from '@shared'
 
 const newForm = () => ({
   downloadName: '',

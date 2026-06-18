@@ -4,8 +4,9 @@ import { useRequest } from '../../../hooks'
 import { generateNewName, generateTextFile, line, setInputSelection } from '../../../utils'
 import { FsApi } from '../../../api'
 import { INVALID_NAME_CHAR_LIST } from '../../../utils'
-import { EditMode, CreationType, EntryType, IEntry, NameFailType } from '../../../types'
+import { EditMode, CreationType, NameFailType } from '../../../types'
 import { useTranslation } from 'react-i18next'
+import { EntryType, IEntry } from '@shared'
 
 interface EntryNameProps {
   creationType?: CreationType

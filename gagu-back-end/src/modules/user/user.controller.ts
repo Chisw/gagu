@@ -14,16 +14,11 @@ import {
   IUserForm,
   UserPermission,
   UserValidityType,
-  ServerMessage,
   UserPasswordForm,
-} from '../../types'
-import {
-  removeEntry,
-  GAGU_PATH,
   getIsExpired,
-  initUserPaths,
-  respond,
-} from '../../utils'
+  ServerMessage,
+} from '@shared'
+import { removeEntry, GAGU_PATH, initUserPaths, respond } from '../../utils'
 import { FsService } from '../fs/fs.service'
 import { Permission } from '../../common/decorators'
 import { AuthService } from '../auth/auth.service'

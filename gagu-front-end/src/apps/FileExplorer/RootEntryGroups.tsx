@@ -1,12 +1,12 @@
 import { ReactNode, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { groupBy } from 'lodash-es'
-import { IRootEntry, RootEntryGroup } from '../../types'
 import { useDragDrop, useUserConfig } from '../../hooks'
-import { getReadableSize, getEntryPath, line } from '../../utils'
+import { getReadableSize, line } from '../../utils'
 import { IconButton, SvgIcon } from '../../components/common'
 import { useRecoilState } from 'recoil'
 import { baseDataState } from '../../states'
+import { IRootEntry, RootEntryGroup, getEntryPath } from '@shared'
 
 export interface RootEntryGroupsProps {
   currentPath: string
@@ -139,7 +139,7 @@ export default function RootEntryGroups(props: RootEntryGroupsProps) {
                   )}
                 </div>
                 {showDiskInfo && (
-                  <div className="mt-[2px] text-xs relative z-0 h-[2px] font-din bg-blue-100 rounded-xs overflow-hidden">
+                  <div className="mt-0.5 text-xs relative z-0 h-0.5 font-din bg-blue-100 rounded-xs overflow-hidden">
                     <div
                       className="h-full bg-blue-500"
                       style={{ width: `${spaceUsed / spaceTotal! * 100}%` }}

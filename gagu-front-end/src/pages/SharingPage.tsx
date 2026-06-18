@@ -11,7 +11,8 @@ import { useRequest } from '../hooks'
 import { copy, getDateTime, line } from '../utils'
 import { useRecoilState } from 'recoil'
 import { activePageState } from '../states'
-import { Page, ServerMessage } from '../types'
+import { Page } from '../types'
+import { ServerMessage } from '@shared'
 
 const sharingUrl = window.location.href
 

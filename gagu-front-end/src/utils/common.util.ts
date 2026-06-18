@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
-import { IOffsetInfo, ILassoInfo, PublicImageName, ExistingStrategyType } from '../types'
+import { IOffsetInfo, ILassoInfo, PublicImageName } from '../types'
+import { ExistingStrategyType, ACCESS_TOKEN_KEY } from '@shared'
 import { FsApi } from '../api'
-import { ACCESS_TOKEN_KEY } from './constant.util'
 import { UserInfoStore } from './store.util'
 import { SVG_DEFAULT_FAVICON } from './svg.util'
 import SHA256 from 'crypto-js/sha256'
@@ -245,9 +245,4 @@ export const generateTextFile = (text: string, name: string) => {
   return file
 }
 
-// Sync following code to BE & FE
 export const generateRandomCode = () => sha256(Math.random().toString())
-
-export const getIsExpired = (expiredAt?: number) => {
-  return expiredAt && expiredAt < Date.now()
-}

@@ -3,10 +3,9 @@ import { useRecoilState } from 'recoil'
 import { lastChangedDirectoryState } from '../states'
 import { useRequest } from './useRequest'
 import { FsApi } from '../api'
-import { ExistingStrategyType, IEntry } from '../types'
+import { ExistingStrategyType, IEntry, getEntryPath } from '@shared'
 import { useCallback } from 'react'
 import { Confirmor, ExistingConfirmor } from '../components/common'
-import { getEntryPath } from '../utils'
 
 export function useMoveEntries() {
   const { t } = useTranslation()

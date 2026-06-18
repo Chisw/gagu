@@ -1,15 +1,16 @@
 import { Confirmor, Opener, Spinner, SvgIcon } from '../../components/common'
 import { useEffect, useMemo, useRef, useState, useCallback } from 'react'
-import { AppComponentProps, AppId, TunnelType } from '../../types'
+import { AppComponentProps, AppId } from '../../types'
 import { useRunAppEvent, useHotKey, useRequest } from '../../hooks'
 import ThumbnailList from './ThumbnailList'
 import Toolbar from './Toolbar'
 import Viewer from './Viewer'
-import { getBaiduMapPinUrl, getEntryPath, line } from '../../utils'
+import { getBaiduMapPinUrl, line } from '../../utils'
 import { FsApi, TunnelApi } from '../../api'
 import { useTranslation } from 'react-i18next'
 import { useRecoilState } from 'recoil'
 import { lastChangedDirectoryState } from '../../states'
+import { TunnelType, getEntryPath } from '@shared'
 
 const appId = AppId.photoViewer
 

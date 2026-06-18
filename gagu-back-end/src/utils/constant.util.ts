@@ -1,13 +1,12 @@
 import * as chalk from 'chalk'
 import * as os from 'node:os'
-import { IServerOS, ThumbnailType, ThumbnailTypeType } from '../types'
+import { IServerOS } from '@shared'
 
 const platform = os.platform()
 const hostname = os.hostname()
 const homeDir = os.homedir()
 const userInfo = os.userInfo()
 
-export const GAGU_VERSION = '0.0.59'
 export const IS_DEV = process.env.NODE_ENV === 'development'
 
 export const HOST = (() => {
@@ -92,31 +91,3 @@ export const LOGO_TEXT = `
     |    |  |       |    |  |    |  |
     |_______|____|__|_______|_______|
 `
-
-// Sync following code to BE & FE
-export const ACCESS_TOKEN_KEY = 'accessToken'
-export const HEADERS_AUTH_KEY = 'Authorization'
-export const HEADERS_AUTH_PREFIX = 'Bearer '
-
-export const GEN_THUMBNAIL_MAP: { [EXTENSION: string]: ThumbnailTypeType } = {
-  pdf: ThumbnailType.document,
-  jpg: ThumbnailType.image,
-  jpeg: ThumbnailType.image,
-  png: ThumbnailType.image,
-  gif: ThumbnailType.image,
-  bmp: ThumbnailType.image,
-  webp: ThumbnailType.image,
-  ico: ThumbnailType.image,
-  pbm: ThumbnailType.image,
-  svg: ThumbnailType.image,
-  mp3: ThumbnailType.audio,
-  m4a: ThumbnailType.audio,
-  mp4: ThumbnailType.video,
-  mkv: ThumbnailType.video,
-  avi: ThumbnailType.video,
-  rm: ThumbnailType.video,
-  rmvb: ThumbnailType.video,
-  webm: ThumbnailType.video,
-}
-
-export const GEN_THUMBNAIL_LIST = Object.keys(GEN_THUMBNAIL_MAP)

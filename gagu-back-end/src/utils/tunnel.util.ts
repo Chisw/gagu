@@ -1,4 +1,4 @@
-import { ITunnel, ServerMessage } from '../types'
+import { ServerMessage, ITunnel } from '@shared'
 import { GAGU_PATH } from './constant.util'
 import { readJSONData, writeJSONData } from './fs.util'
 import { respond } from './common.util'

@@ -1,4 +1,4 @@
-import { IEntry } from './entry.type'
+import { IEntry } from '@shared'
 
 export interface AppComponentProps {
   isTopWindow: boolean
@@ -21,17 +21,17 @@ export interface IAppComponent {
   (props: AppComponentProps | FileExplorerProps): JSX.Element
 }
 
-export enum AppId {
-  fileExplorer = 'file-explorer',
-  textEditor = 'text-editor',
-  docReader = 'doc-reader',
-  photoViewer = 'photo-viewer',
-  musicPlayer = 'music-player',
-  videoPlayer = 'video-player',
-  webBrowser = 'web-browser',
-  androidController = 'android-controller',
-  settings = 'settings',
-}
+export const AppId = {
+  fileExplorer: 'file-explorer',
+  textEditor: 'text-editor',
+  docReader: 'doc-reader',
+  photoViewer: 'photo-viewer',
+  musicPlayer: 'music-player',
+  videoPlayer: 'video-player',
+  webBrowser: 'web-browser',
+  androidController: 'android-controller',
+  settings: 'settings',
+} as const
 
 export interface IApp {
   id: string
@@ -56,9 +56,9 @@ export interface IRunningApp extends IApp {
   visible: boolean
 }
 
-export enum EventTransaction {
-  run_app = 'run_app',
-}
+export const EventTransaction = {
+  run_app: 'run_app',
+} as const
 
 export type EventTransactionType = keyof typeof EventTransaction
 
@@ -69,10 +69,10 @@ export interface IOpenEvent {
   forceOpen?: boolean
 }
 
-export enum PlayMode {
-  order = 'order',
-  single = 'single',
-  random = 'random',
-}
+export const PlayMode = {
+  order: 'order',
+  single: 'single',
+  random: 'random',
+} as const
 
 export type PlayModeType = keyof typeof PlayMode

@@ -11,13 +11,14 @@ import {
 } from '@nestjs/common'
 import { Public, UserGetter } from '../../common/decorators'
 import { AuthService } from './auth.service'
-import { IUser, ServerMessage, User } from '../../types'
 import {
-  HEADERS_AUTH_KEY,
+  IUser,
+  User,
+  ServerMessage,
   getIsExpired,
-  getAuthorizationToken,
-  respond,
-} from '../../utils'
+  HEADERS_AUTH_KEY,
+} from '@shared'
+import { getAuthorizationToken, respond } from '../../utils'
 import { UserService } from '../user/user.service'
 
 @Controller('auth')

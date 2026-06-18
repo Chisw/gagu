@@ -1,26 +1,28 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   EditModeType,
-  IEntry,
   IEntryPathCache,
-  IRootEntry,
   IScrollerWatcher,
   IVisitHistory,
+  IClipboardData,
+  ClipboardType,
+  ClipboardTypeType,
+} from '../types'
+import {
+  IEntry,
+  IRootEntry,
   Sort,
   SortType,
   TunnelType,
   RootEntryGroup,
-  IClipboardData,
-  ClipboardType,
-  ClipboardTypeType,
   ExistingStrategyType,
-} from '../types'
+  getEntryPath,
+  getParentPath,
+} from '@shared'
 import {
   EntryPathCacheStore,
   UserConfigStore,
   getDownloadInfo,
-  getEntryPath,
-  getParentPath,
   getIsSameEntry,
   safeQuotes,
   sortMethodMap,
@@ -45,7 +47,7 @@ import { useMoveEntries } from './useMoveEntries'
 
 const RefreshTimerCache: {
   [PATH: string]: {
-    timer: NodeJS.Timeout,
+    timer: number,
     timestamp: number,
   }
 } = {}

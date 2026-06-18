@@ -3,9 +3,10 @@ import { languageList, setLanguage } from '../../../i18n'
 import { Button, Divider, Form, Input, Radio, RadioGroup } from '@douyinfe/semi-ui'
 import { SvgIcon } from '../../../components/common'
 import { useTouchMode, useUserConfig } from '../../../hooks'
-import { AppId, ColorScheme, EntryType, HotkeyStyle } from '../../../types'
+import { AppId, ColorScheme, HotkeyStyle } from '../../../types'
 import { EntryPicker } from '../../../components'
 import { useState } from 'react'
+import { EntryType } from '@shared'
 
 export default function GeneralSettings() {
   const { t, i18n: { language } } = useTranslation()

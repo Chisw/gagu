@@ -3,12 +3,13 @@ import { useTranslation } from 'react-i18next'
 import { useRequest, useTouchMode } from '../hooks'
 import { useCallback, useEffect, useState } from 'react'
 import { UserApi } from '../api'
-import { Page, UserPasswordForm } from '../types'
+import { Page } from '../types'
 import { DURATION_PAGE, sha256, UserInfoStore } from '../utils'
 import { Toast } from '@douyinfe/semi-ui'
 import { useRecoilState } from 'recoil'
 import { activePageState } from '../states'
 import { useNavigate } from 'react-router'
+import { UserPasswordForm } from '@shared'
 
 interface ChangePasswordModalProps {
   show: boolean

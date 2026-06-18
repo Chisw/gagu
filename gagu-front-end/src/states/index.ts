@@ -1,10 +1,9 @@
 import { atom } from 'recoil'
 import {
-  IBaseData,
   IOpenEvent,
   IContextMenuState,
-  IUserInfo,
   Page,
+  PageType,
   IEntryPathCache,
   IUploadTask,
   IUserConfig,
@@ -13,6 +12,7 @@ import {
   IRunningApp,
 } from '../types'
 import { EntryPathCacheStore, UserConfigStore } from '../utils/store.util'
+import { IBaseData, IUserInfo } from '@shared'
 
 export const userInfoState = atom<IUserInfo | null>({
   key: 'userInfoState',
@@ -46,7 +46,7 @@ export const baseDataState = atom<IBaseData>({
   },
 })
 
-export const activePageState = atom<Page>({
+export const activePageState = atom<PageType>({
   key: 'activePageState',
   default: Page.PENDING
 })

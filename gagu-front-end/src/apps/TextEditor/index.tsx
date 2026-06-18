@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Confirmor, Opener } from '../../components/common'
-import { ENTRY_ICON_LIST, generateTextBlob, generateTextFile, getEntryPath, line } from '../../utils'
+import { ENTRY_ICON_LIST, generateTextBlob, generateTextFile, line } from '../../utils'
 import { FsApi } from '../../api'
-import { AppComponentProps, AppId, ExistingStrategy, IEntry } from '../../types'
+import { AppComponentProps, AppId } from '../../types'
+import { IEntry, getEntryPath } from '@shared'
+import { ExistingStrategy } from '@shared'
 import { useRunAppEvent, useRequest, useHotKey, useUserConfig } from '../../hooks'
 import { useTranslation } from 'react-i18next'
 import { useRecoilState } from 'recoil'
@@ -202,7 +204,7 @@ export default function TextEditor(props: AppComponentProps) {
                 style={monoMode ? undefined : { fontFamily: 'unset' }}
               >
                 <textarea
-                  className="p-4 min-w-[200px] w-full h-full outline-hidden resize-none bg-transparent dark:text-zinc-200"
+                  className="p-4 min-w-50 w-full h-full outline-hidden resize-none bg-transparent dark:text-zinc-200"
                   style={{ fontSize: textEditorFontSize }}
                   value={textContent}
                   onChange={e => setTextContent(e.target.value)}

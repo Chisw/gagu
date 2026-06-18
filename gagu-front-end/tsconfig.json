@@ -21,7 +21,8 @@
     "jsx": "react-jsx"
   },
   "include": [
+    "../gagu-back-end/src/shared",
     "src",
-    "typing/*"
+    "typing"
   ]
 }

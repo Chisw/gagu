@@ -1,6 +1,7 @@
 import { ReactNode, useMemo, useState } from 'react'
-import { EntryType, IEntry, ThumbnailType, ThumbnailTypeType } from '../../../types'
-import { ENTRY_ICON_LIST, GEN_THUMBNAIL_LIST, GEN_THUMBNAIL_MAP, line } from '../../../utils'
+import { EntryType, IEntry, GEN_THUMBNAIL_LIST, GEN_THUMBNAIL_MAP } from '@shared'
+import { ThumbnailType, ThumbnailTypeType } from '@shared'
+import { ENTRY_ICON_LIST, line } from '../../../utils'
 import { CALLABLE_APP_LIST } from '../..'
 import { FsApi } from '../../../api'
 
@@ -73,7 +74,7 @@ export default function EntryIcon(props: IconProps) {
             gagu-app-icon absolute z-0 right-0 bottom-0 left-1/2 rounded-xs shadow-xs
             transition-opacity duration-200
             ${touchMode ? '' : 'opacity-0 group-hover:opacity-100'}
-            ${isSmall ? 'ml-[4px] w-[8px] h-[8px]' : 'ml-4 w-[12px] h-[12px]'}
+            ${isSmall ? 'ml-1 w-2 h-2' : 'ml-4 w-3 h-3'}
           `)}
         />
       )}
@@ -118,7 +119,7 @@ function ThumbnailWrapper(props: { type: ThumbnailTypeType, loading: boolean, ch
     return (
       <div
         className={line(`
-          px-[2px] w-full aspect-video flex justify-center items-center shadow-lg
+          px-0.5 w-full aspect-video flex justify-center items-center shadow-lg
           ${loading ? 'bg-loading' : 'bg-black'}
         `)}
       >

@@ -1,8 +1,8 @@
 import axios from 'axios'
-import { BASE_URL, ERROR_TIMEOUT, HEADERS_AUTH_KEY, HEADERS_AUTH_PREFIX, UserInfoStore } from '../utils'
+import { BASE_URL, ERROR_TIMEOUT, UserInfoStore } from '../utils'
 import { Toast } from '@douyinfe/semi-ui'
 import { t } from 'i18next'
-import { ServerMessage } from '../types'
+import { ServerMessage, HEADERS_AUTH_KEY, HEADERS_AUTH_PREFIX } from '@shared'
 
 const service = axios.create({
   baseURL: BASE_URL,

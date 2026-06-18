@@ -1,4 +1,4 @@
-import { IUser, UserPermission } from '../types'
+import { IUser, UserPermission } from '@shared'
 import { GAGU_PATH, ServerOS } from './constant.util'
 import { writeAuthData, writeUsersData } from './user.util'
 import { makeNestedDirectory, exists } from './fs.util'

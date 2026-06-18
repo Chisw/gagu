@@ -1,6 +1,6 @@
 import { exec, spawn } from 'node:child_process'
 import { ServerOS } from './constant.util'
-import { ServerMessage } from '../types'
+import { ServerMessage } from '@shared'
 import { createHash } from 'node:crypto'
 import * as chalk from 'chalk'
 
@@ -39,9 +39,4 @@ export const generateRandomToken = () => {
   return Buffer.from(generateRandomCode()).toString('base64')
 }
 
-// Sync following code to BE & FE
 export const generateRandomCode = () => sha256(Math.random().toString())
-
-export const getIsExpired = (expiredAt?: number) => {
-  return expiredAt && expiredAt < Date.now()
-}

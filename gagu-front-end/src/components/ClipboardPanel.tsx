@@ -5,9 +5,10 @@ import { clipboardDataState } from '../states'
 import { line } from '../utils'
 import { Button, SideSheet } from '@douyinfe/semi-ui'
 import { useTranslation } from 'react-i18next'
-import { ClipboardType, IEntry } from '../types'
+import { ClipboardType } from '../types'
 import EntryNode from '../apps/FileExplorer/EntryNode'
 import { useUserConfig } from '../hooks'
+import { IEntry } from '@shared'
 
 export function ClipboardPanel() {
 

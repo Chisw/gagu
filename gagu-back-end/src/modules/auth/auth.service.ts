@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { User, IAuthRecord, IUser } from '../../types'
+import { User, IAuthRecord, IUser } from '@shared'
 import {
   generateRandomToken,
   generateUserInfo,

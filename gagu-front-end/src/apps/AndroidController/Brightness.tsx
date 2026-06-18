@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react'
 import { useRequest } from '../../hooks'
 import { TermuxApi } from '../../api'
 import { Slider, Switch } from '@douyinfe/semi-ui'
-import { BrightnessType } from '../../types'
+import { BrightnessType } from '@shared'
 
 const DEFAULT_VALUE = 10
 

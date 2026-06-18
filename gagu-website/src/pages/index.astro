@@ -27,6 +27,7 @@ import iconAppDocReader from '/assets/icons/app-doc-reader.svg'
 import iconAppVsCoder from '/assets/icons/app-vs-coder.svg'
 import iconAppGameEmulator from '/assets/icons/app-game-emulator.svg'
 import { DOWNLOAD_LIST } from '../utils'
+import { GAGU_VERSION } from '@shared'
 import '../css/home.css'
 
 const featureList = [
@@ -175,7 +176,7 @@ const commandList = [
           </div>
         </div>
         <p class="relative z-10 mt-4 text-xs text-purple-400">
-          <span>v{import.meta.env.PUBLIC_VERSION} (Alpha)</span>
+          <span>v{GAGU_VERSION} (Alpha)</span>
           <a class="ml-2 underline" href="/docs/others/changelog">Changelog</a>
         </p>
       </div>

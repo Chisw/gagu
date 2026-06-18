@@ -1,7 +1,6 @@
-import { ISetting } from './../../types/setting.type'
 import { SettingService } from './setting.service'
 import { Body, Controller, Get, Put } from '@nestjs/common'
-import { UserPermission } from '../../types'
+import { UserPermission, ISetting } from '@shared'
 import { Permission } from '../../common/decorators'
 import { respond } from '../../utils'
 

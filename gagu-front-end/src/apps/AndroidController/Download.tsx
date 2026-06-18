@@ -4,10 +4,10 @@ import { useRequest } from '../../hooks'
 import { TermuxApi } from '../../api'
 import { Toast } from '@douyinfe/semi-ui'
 import { useTranslation } from 'react-i18next'
-import { AppId, EntryType, IDownloadForm } from '../../types'
+import { AppId } from '../../types'
 import { EntryPicker } from '../../components'
 import { SvgIcon } from '../../components/common'
-
+import { EntryType, IDownloadForm } from '@shared'
 
 export default function Download() {
 

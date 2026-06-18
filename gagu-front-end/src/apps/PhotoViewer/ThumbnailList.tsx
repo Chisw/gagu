@@ -1,7 +1,7 @@
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
 import { FsApi } from '../../api'
-import { IEntry } from '../../types'
 import { line } from '../../utils'
+import { IEntry } from '@shared'
 
 interface ThumbnailListProps {
   show: boolean

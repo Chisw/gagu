@@ -2,7 +2,7 @@ import { Button, Modal } from '@douyinfe/semi-ui'
 import { SvgIcon } from './SvgIcon'
 import { t } from 'i18next'
 import { getPopupContainer } from '../../utils'
-import { ExistingStrategy, ExistingStrategyType } from '../../types'
+import { ExistingStrategy, ExistingStrategyType } from '@shared'
 
 interface ExistingConfirmorProps {
   count: number

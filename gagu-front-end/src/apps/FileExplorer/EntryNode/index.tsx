@@ -1,4 +1,5 @@
-import { ClipboardState, CreationType, IEntry, IScrollerWatcher, NameFailType } from '../../../types'
+import { ClipboardState, CreationType, IScrollerWatcher, NameFailType } from '../../../types'
+import { IEntry } from '@shared'
 import { getEntryLabels, line } from '../../../utils'
 import EntryIcon from './EntryIcon'
 import EntryName from './EntryName'
@@ -81,7 +82,7 @@ export default function EntryNode(props: EntryNodeProps) {
         clipboard-${clipboardState}
         ${hidden ? 'opacity-50' : ''}
         ${isSelected ? 'is-selected' : ''}
-        ${gridMode ? 'is-grid-mode m-1 px-1 py-2 w-[112px] h-[116px] rounded-xs' : 'is-list-mode px-3 py-[3px] w-full flex items-center'}
+        ${gridMode ? 'is-grid-mode m-1 px-1 py-2 w-28 h-29 rounded-xs' : 'is-list-mode px-3 py-0.75 w-full flex items-center'}
         ${isSelected && !gridMode ? 'bg-blue-600' : ''}
         ${isSelected && gridMode ? 'bg-black/5 dark:bg-black/20' : ''}
         ${isSelected && requestState?.deleting ? 'bg-loading' : ''}

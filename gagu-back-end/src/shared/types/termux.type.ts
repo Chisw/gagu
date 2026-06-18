@@ -1,4 +1,3 @@
-// Sync following code to BE & FE
 export interface IBatteryStatus {
   health: string
   percentage: number

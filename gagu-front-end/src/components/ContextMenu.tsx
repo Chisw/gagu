@@ -104,7 +104,7 @@ export function ContextMenu() {
                       position="rightTop"
                       className={line(`
                         gagu-context-menu-sub-menu
-                        bg-white/80 backdrop-blur-sm min-w-[160px]
+                        bg-white/80 backdrop-blur-sm min-w-40
                         dark:bg-zinc-700/80
                       `)}
                       menu={

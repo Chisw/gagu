@@ -11,16 +11,10 @@ import {
   Query,
   Res,
 } from '@nestjs/common'
-import {
-  UserPermission,
-  TunnelForm,
-  IUser,
-  ServerMessage,
-  EntryType,
-  ZipResponse,
-  ZipResponseFile,
-} from '../../types'
-import { checkTunnel, getEntryPath, respond } from '../../utils'
+import { ZipResponse, ZipResponseFile } from '../../types'
+import { UserPermission, TunnelForm, IUser, EntryType } from '@shared'
+import { ServerMessage, getEntryPath } from '@shared'
+import { checkTunnel, respond } from '../../utils'
 
 @Controller('tunnel')
 export class TunnelController {

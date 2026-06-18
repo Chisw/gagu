@@ -64,8 +64,7 @@ $ pnpm start
 1. Update following version info:
 
 - `version field` in `./package.json`
-- `GAGU_VERSION` in `./gagu-back-end/src/utils/constant.util.ts`
-- `version field` in `./gagu-website/.env`
+- `GAGU_VERSION` in `./gagu-back-end/src/shared/utils/constant.util.ts`
 
 2. Sync production dependencies in `./gagu-back-end/package.json` to `./package.json`
 

@@ -8,7 +8,8 @@ import { Input } from '@douyinfe/semi-ui'
 import { useRecoilState } from 'recoil'
 import { activePageState, userInfoState } from '../states'
 import { useTranslation } from 'react-i18next'
-import { Page, ServerMessage } from '../types'
+import { Page } from '../types'
+import { ServerMessage } from '@shared'
 import { motion } from 'motion/react'
 
 export default function LoginPage() {

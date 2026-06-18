@@ -1,5 +1,6 @@
 ---
 import '../css/index.css'
+import { GAGU_VERSION } from '@shared'
 
 export interface LayoutProps {
 	title?: string;
@@ -14,7 +15,7 @@ const { title } = Astro.props as LayoutProps
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0" />
 		<link rel="icon" type="image/x-icon" href="/favicon.png" />
-		<meta name="version" content={import.meta.env.PUBLIC_VERSION} />
+		<meta name="version" content={GAGU_VERSION} />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title} - GAGU.JSW.IM</title>
 		<script is:inline>

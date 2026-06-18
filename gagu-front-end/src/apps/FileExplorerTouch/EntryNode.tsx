@@ -1,4 +1,4 @@
-import { EntryType, IEntry } from '../../types'
+import { EntryType, IEntry } from '@shared'
 import { getEntryLabels, line } from '../../utils'
 import EntryIcon from '../../apps/FileExplorer/EntryNode/EntryIcon'
 import { useEffect, useRef, useState } from 'react'

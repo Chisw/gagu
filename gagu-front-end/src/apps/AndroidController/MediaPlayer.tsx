@@ -4,8 +4,9 @@ import { TermuxApi } from '../../api'
 import { useCallback, useState } from 'react'
 import { SvgIcon } from '../../components/common'
 import { EntryPicker } from '../../components'
-import { AppId, EntryType, MediaPlayerStateType } from '../../types'
+import { AppId } from '../../types'
 import { useTranslation } from 'react-i18next'
+import { EntryType, MediaPlayerStateType } from '@shared'
 
 export default function MediaPlayer() {
 

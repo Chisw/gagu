@@ -1,14 +1,15 @@
-// Sync following code to BE & FE
 import { IServerOS } from './common.type'
 
-export enum EntryType {
-  directory = 'directory',
-  file = 'file',
-}
+export const EntryType = {
+  directory: 'directory',
+  file: 'file',
+} as const
+
+export type EntryTypeType = keyof typeof EntryType
 
 export interface IEntry {
   name: string
-  type: keyof typeof EntryType
+  type: EntryTypeType
   hidden: boolean
   lastModified: number
   parentPath: string
@@ -17,16 +18,16 @@ export interface IEntry {
   size?: number
 }
 
-export enum RootEntryGroup {
-  server = 'server',
-  user = 'user',
-  favorite = 'favorite',
-}
+export const RootEntryGroup = {
+  server: 'server',
+  user: 'user',
+  favorite: 'favorite',
+} as const
 
 export type RootEntryGroupType = keyof typeof RootEntryGroup
 
 export interface IRootEntry extends IEntry {
-  type: EntryType.directory
+  type: typeof EntryType.directory
   group: RootEntryGroupType
   isDisk: boolean
   spaceFree?: number
@@ -45,16 +46,16 @@ export interface IBaseData {
   rootEntryList: IRootEntry[]
 }
 
-export enum Sort {
-  default = 'default',
-  extension = 'extension',
-  extensionDesc = 'extensionDesc',
-  name = 'name',
-  nameDesc = 'nameDesc',
-  lastModified = 'lastModified',
-  lastModifiedDesc = 'lastModifiedDesc',
-  size = 'size',
-  sizeDesc = 'sizeDesc',
-}
+export const Sort = {
+  default: 'default',
+  extension: 'extension',
+  extensionDesc: 'extensionDesc',
+  name: 'name',
+  nameDesc: 'nameDesc',
+  lastModified: 'lastModified',
+  lastModifiedDesc: 'lastModifiedDesc',
+  size: 'size',
+  sizeDesc: 'sizeDesc',
+} as const
 
 export type SortType = keyof typeof Sort

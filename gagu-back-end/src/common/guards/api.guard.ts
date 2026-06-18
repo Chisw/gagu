@@ -8,8 +8,14 @@ import { Reflector } from '@nestjs/core'
 import { Request } from 'express'
 import { AuthService } from '../../modules/auth/auth.service'
 import { UserService } from '../../modules/user/user.service'
-import { IEntry, IUser, UserPermission, UserPermissionType } from '../../types'
-import { GAGU_PATH, getEntryPath, getRequestTokens } from '../../utils'
+import {
+  IEntry,
+  IUser,
+  UserPermission,
+  UserPermissionType,
+  getEntryPath,
+} from '@shared'
+import { GAGU_PATH, getRequestTokens } from '../../utils'
 import {
   IPathValidation,
   PUBLIC_DECORATOR_KEY,

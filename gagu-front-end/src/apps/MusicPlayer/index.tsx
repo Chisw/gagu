@@ -1,13 +1,14 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { AppComponentProps, AppId, IEntry, PlayMode, PlayModeType, TunnelType } from '../../types'
+import { AppComponentProps, AppId, PlayMode, PlayModeType } from '../../types'
 import { useRequest, useRunAppEvent, usePlayInfo, useUserConfig, useHotKey } from '../../hooks'
 import { FsApi, TunnelApi } from '../../api'
-import { SVG_DEFAULT_ALBUM_COVER, getEntryPath, getIndexLabel, getReadableSize, line } from '../../utils'
+import { SVG_DEFAULT_ALBUM_COVER, getIndexLabel, getReadableSize, line } from '../../utils'
 import SpectrumCanvas from './SpectrumCanvas'
 import { IconButton, Opener, SvgIcon } from '../../components/common'
 import { useTranslation } from 'react-i18next'
 import { ProgressSlider, VolumeIcon, VolumeIndicator, VolumeSlider } from '../../components/player'
 import ImmersiveTheatre from './ImmersiveTheatre'
+import { TunnelType, IEntry, getEntryPath } from '@shared'
 
 const appId = AppId.musicPlayer
 

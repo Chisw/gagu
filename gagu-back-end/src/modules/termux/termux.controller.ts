@@ -8,9 +8,9 @@ import {
   LocationProviderType,
   LocationRequestType,
   MediaPlayerStateType,
-  ServerMessage,
   UserPermission,
-} from '../../types'
+  ServerMessage,
+} from '@shared'
 import { catchError, respond } from '../../utils'
 
 @Controller('termux')

@@ -1,14 +1,14 @@
-export enum UploadTaskStatus {
-  waiting = 'waiting',
-  uploading = 'uploading',
-  created = 'created',
-  moved = 'moved',
-  copied = 'copied',
-  bothKept = 'bothKept',
-  replaced = 'replaced',
-  skipped = 'skipped',
-  canceled = 'canceled',
-}
+export const UploadTaskStatus = {
+  waiting: 'waiting',
+  uploading: 'uploading',
+  created: 'created',
+  moved: 'moved',
+  copied: 'copied',
+  bothKept: 'bothKept',
+  replaced: 'replaced',
+  skipped: 'skipped',
+  canceled: 'canceled',
+} as const
 
 export type UploadTaskStatusType = keyof typeof UploadTaskStatus
 

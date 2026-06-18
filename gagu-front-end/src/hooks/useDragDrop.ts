@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from 'react'
-import { IEntry } from '../types'
+import { IEntry } from '@shared'
 import { useMoveEntries } from './useMoveEntries'
 import { useAddUploadingTask } from './useAddUploadingTask'
 import { HOVER_OPEN_TIMER, getDataTransferNestedFileList } from '../utils'

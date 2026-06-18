@@ -1,6 +1,5 @@
-import { ITunnel, TunnelType, User } from '../../types'
+import { ITunnel, TunnelForm, TunnelType, User } from '@shared'
 import { Injectable } from '@nestjs/common'
-import { TunnelForm } from '../../types'
 import {
   generateRandomCode,
   readTunnelData,

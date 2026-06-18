@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { User, IUser, IUserForm } from '../../types'
+import { User, IUser, IUserForm } from '@shared'
 import { readUsersData, writeUsersData } from '../../utils'
 
 @Injectable()

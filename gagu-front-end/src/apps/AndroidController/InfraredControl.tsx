@@ -4,7 +4,7 @@ import { useRequest } from '../../hooks'
 import { TermuxApi } from '../../api'
 import { Toast } from '@douyinfe/semi-ui'
 import { SvgIcon } from '../../components/common'
-import { IInfraredTransmitForm } from '../../types'
+import { IInfraredTransmitForm } from '@shared'
 
 const MI_TV_MAP = {
   POWER: [
@@ -81,7 +81,7 @@ export default function InfraredControl() {
 
   return (
     <>
-      <div className="relative h-[520px] overflow-y-auto">
+      <div className="relative h-130 overflow-y-auto">
         <Button
           icon={<SvgIcon.Refresh />}
           className="absolute top-0 right-0"

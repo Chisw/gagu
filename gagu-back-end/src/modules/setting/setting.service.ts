@@ -1,4 +1,4 @@
-import { ISetting, SettingKeys } from '../../types'
+import { ISetting, SettingKeys } from '@shared'
 import { Injectable } from '@nestjs/common'
 import { readSettingsData, writeSettingsData } from '../../utils'
 import { exec } from 'node:child_process'

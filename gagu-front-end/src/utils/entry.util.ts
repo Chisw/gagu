@@ -1,7 +1,8 @@
 import { DateTime } from 'luxon'
 import { FsApi } from '../api'
 import { CALLABLE_APP_LIST } from '../apps'
-import { EntryType, IEntry, INestedFile } from '../types'
+import { INestedFile } from '../types'
+import { EntryType, IEntry } from '@shared'
 import { getReadableSize } from './common.util'
 import { t } from 'i18next'
 
@@ -126,13 +127,3 @@ export const getAbsolutePath = (currentPath: string, relativePath: string) => {
 
 export const safeQuotes = (path: string) =>
   path.replace(/"/g, '\\"').replace(/`/g, '\\`')
-
-// Sync following code to BE & FE
-export const getParentPath = (path: string) =>
-  path.split('/').slice(0, -1).join('/')
-
-export const getEntryPath = (entry: IEntry | null | undefined) => {
-  if (!entry) return ''
-  const { name, parentPath } = entry
-  return `${parentPath ? `${parentPath}/` : ''}${name}`
-}

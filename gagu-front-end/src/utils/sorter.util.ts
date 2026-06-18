@@ -1,4 +1,4 @@
-import { IEntry, Sort } from '../types'
+import { IEntry, Sort } from '@shared'
 
 export const defaultSorter = (a: IEntry, b: IEntry) => {
   const map = { directory: 1, file: 2 }

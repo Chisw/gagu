@@ -1,8 +1,8 @@
 import { PhotoSlider } from 'react-photo-view'
 import { FsApi } from '../../api'
 import { IconButton, SvgIcon } from '../../components/common'
-import { IEntry } from '../../types'
 import { line } from '../../utils'
+import { IEntry } from '@shared'
 
 interface ViewerProps {
   activeIndex: number

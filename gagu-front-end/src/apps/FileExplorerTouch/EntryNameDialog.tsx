@@ -1,5 +1,6 @@
 import { Button, Input, Modal } from '@douyinfe/semi-ui'
-import { EditMode, EditModeType, IEntry } from '../../types'
+import { EditMode, EditModeType } from '../../types'
+import { IEntry } from '@shared'
 import { useTranslation } from 'react-i18next'
 import { useCallback, useEffect, useState } from 'react'
 import { useRequest } from '../../hooks'

@@ -1,6 +1,21 @@
 import { AxiosRequestConfig } from 'axios'
-import { BASE_URL, getEntryPath, getExistingStrategyParam, getPathParam, getAccessTokenParam } from '../utils'
-import { IEntry, IResponse, IBaseData, IRootEntry, IExifInfo, IAudioInfo, ExistingStrategyType, TransferResultType } from '../types'
+import {
+  BASE_URL,
+  getExistingStrategyParam,
+  getPathParam,
+  getAccessTokenParam,
+} from '../utils'
+import { IResponse } from '../types'
+import {
+  IEntry,
+  IBaseData,
+  IRootEntry,
+  IExifInfo,
+  IAudioInfo,
+  ExistingStrategyType,
+  TransferResultType,
+  getEntryPath,
+} from '@shared'
 import service from './service'
 
 export class FsApi {

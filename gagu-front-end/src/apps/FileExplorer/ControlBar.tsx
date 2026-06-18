@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { SvgIcon, ToolButton } from '../../components/common'
 import { Dropdown } from '@douyinfe/semi-ui'
 import { useCallback, useMemo, useState } from 'react'
-import { Sort, SortType } from '../../types'
+import { Sort, SortType } from '@shared'
 import { IFileExplorerDisabledMap } from '../../hooks'
 
 interface ControlBarProps {
@@ -60,7 +60,7 @@ export default function ControlBar(props: ControlBarProps) {
       [Sort.size, Sort.sizeDesc],
       [Sort.extension, Sort.extensionDesc],
       [Sort.lastModified, Sort.lastModifiedDesc],
-    ]
+    ] as SortType[][]
   }, [])
 
   const cancel = useCallback(() => {
@@ -169,7 +169,7 @@ export default function ControlBar(props: ControlBarProps) {
               <Dropdown.Menu className="w-48 select-none">
                 {sortList.map(group => {
                   const isDefault = group.length === 1
-                  const isActive = group.includes(sortType as Sort)
+                  const isActive = group.includes(sortType)
                   const isAsc = isActive && !sortType.endsWith('Desc')
                   const targetType = isDefault
                     ? group[0]

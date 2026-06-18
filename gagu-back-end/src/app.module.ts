@@ -13,7 +13,7 @@ import { UserModule } from './modules/user/user.module'
 import { IS_DEV } from './utils'
 
 // If only starting the backend service, build the front-end code first
-const devPath = join(__dirname, '..', '..', 'gagu-front-end', 'build')
+const devPath = join(__dirname, '..', '..', 'gagu-front-end', 'dist')
 const prodPath = join(__dirname, 'web')
 const rootPath = IS_DEV ? devPath : prodPath
 

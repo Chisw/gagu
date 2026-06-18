@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
-import { EntryType, IEntry, INestedFile } from '../types'
+import { INestedFile } from '../types'
+import { EntryType, IEntry } from '@shared'
 import { HOVER_OPEN_TIMER, SVG_DRAG_FILE, SVG_DRAG_FOLDER, getDataTransferNestedFileList, safeQuotes } from '../utils'
 
 const canvas: any = document.getElementById('gagu-drag-img-canvas')

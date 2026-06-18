@@ -1,4 +1,5 @@
-import { ColorScheme, HotkeyStyle, IUserConfig, PlayMode, UserPermission, UserPermissionType } from '../types'
+import { ColorScheme, HotkeyStyle, IUserConfig, PlayMode } from '../types'
+import { UserPermission, UserPermissionType } from '@shared'
 
 const permissionSortMap = {
   [UserPermission.administer]: 0,

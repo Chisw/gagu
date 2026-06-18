@@ -11,7 +11,8 @@ import { useFileExplorer } from '../../hooks'
 import { EntryPicker, SharingModal } from '../../components'
 import { openEventState } from '../../states'
 import { useRecoilState } from 'recoil'
-import { AppId, EntryType, EventTransaction, ExplorerPickProps, IEntry } from '../../types'
+import { AppId, EventTransaction, ExplorerPickProps } from '../../types'
+import { EntryType, IEntry } from '@shared'
 import EntryNameDialog from './EntryNameDialog'
 import { useNavigate } from 'react-router'
 import { Toast } from '@douyinfe/semi-ui'
@@ -174,7 +175,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
         handleNavBack()
       } else {
         keepPath()
-        Toast.error(t`tip.reachTheEndOfHistory`, { icon: '⚠️' })
+        Toast.error(t`tip.reachTheEndOfHistory`)
       }
     }
   }, [

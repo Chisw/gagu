@@ -2,7 +2,7 @@ import { Button, Descriptions, Radio, RadioGroup } from '@douyinfe/semi-ui'
 import { useRequest } from '../../hooks'
 import { TermuxApi } from '../../api'
 import { useCallback, useState } from 'react'
-import { ILocationForm } from '../../types'
+import { ILocationForm } from '@shared'
 import { SvgIcon } from '../../components/common'
 import { getBaiduMapLocationUrl } from '../../utils'
 

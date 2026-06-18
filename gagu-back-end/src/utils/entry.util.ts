@@ -1,9 +1,4 @@
-import {
-  EntryType,
-  IEntry,
-  IRootEntry,
-  RootEntryGroupType,
-} from '../types/entry.type'
+import { EntryType, IRootEntry, RootEntryGroupType } from '@shared'
 
 export const path2RootEntry = (path: string, group: RootEntryGroupType) => {
   const names = path.split('/')
@@ -21,14 +16,4 @@ export const path2RootEntry = (path: string, group: RootEntryGroupType) => {
     isDisk: false,
   }
   return entry
-}
-
-// Sync following code to BE & FE
-export const getParentPath = (path: string) =>
-  path.split('/').slice(0, -1).join('/')
-
-export const getEntryPath = (entry: IEntry | null | undefined) => {
-  if (!entry) return ''
-  const { name, parentPath } = entry
-  return `${parentPath ? `${parentPath}/` : ''}${name}`
 }

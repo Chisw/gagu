@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { getIsSameEntry, line } from '../../utils'
-import { ClipboardType, EditMode, EditModeType, EventTransaction, IClipboardData, IEntry } from '../../types'
+import { ClipboardType, EditMode, EditModeType, EventTransaction, IClipboardData } from '../../types'
 import { useTranslation } from 'react-i18next'
 import { SvgIcon } from '../../components/common'
 import { CALLABLE_APP_LIST } from '../../apps'
 import { Modal } from '@douyinfe/semi-ui'
 import { useRecoilState } from 'recoil'
 import { openEventState } from '../../states'
+import { IEntry } from '@shared'
 
 interface SelectionMenuProps {
   show: boolean
@@ -221,7 +222,7 @@ export default function SelectionMenu(props: SelectionMenuProps) {
     <>
       <div
         className={line(`
-          fixed z-10 right-[8px] bottom-[8px] left-[8px]
+          fixed z-10 right-2 bottom-2 left-2
           border border-gray-200 rounded-xl shadow-lg overflow-hidden
           bg-white/90 backdrop-blur-sm select-none
           transition-all duration-300

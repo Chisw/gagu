@@ -56,7 +56,7 @@ export default function CameraControl() {
           onClick={queryCameraInfo}
         />
         <div>
-          {activePhotoUrl && <img className="max-w-full max-h-[200px]" src={activePhotoUrl} alt="camera" />}
+          {activePhotoUrl && <img className="max-w-full max-h-50" src={activePhotoUrl} alt="camera" />}
         </div>
         {cameraDataList.map((data, dataIndex) => (
           <div

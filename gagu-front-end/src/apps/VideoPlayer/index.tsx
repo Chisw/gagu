@@ -162,7 +162,7 @@ export default function VideoPlayer(props: AppComponentProps) {
             ${activeEntry ? '' : 'hidden'}
           `)}
         >
-          <div className="absolute top-0 right-0 left-0 mt-[-2px]">
+          <div className="absolute top-0 right-0 left-0 -mt-0.5">
             <ProgressSlider
               duration={videoEl?.duration || 0}
               playPercent={playInfo.playPercent}

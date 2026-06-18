@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { IEntry } from '../../types'
+import { IEntry } from '@shared'
 import { getReadableSize } from '../../utils'
 import { useTranslation } from 'react-i18next'
 import EntryNode from '../../apps/FileExplorer/EntryNode'

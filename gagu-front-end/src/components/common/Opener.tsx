@@ -1,4 +1,4 @@
-import { EntryType, EventTransaction } from '../../types'
+import { EventTransaction } from '../../types'
 import { useTranslation } from 'react-i18next'
 import { SvgIcon } from './SvgIcon'
 import { line } from '../../utils'
@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 import { EntryPicker } from '../EntryPicker'
 import { openEventState } from '../../states'
 import { useRecoilState } from 'recoil'
+import { EntryType } from '@shared'
 
 interface OpenerProps {
   show: boolean

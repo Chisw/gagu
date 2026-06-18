@@ -1,5 +1,5 @@
 import { SetMetadata } from '@nestjs/common'
-import { UserPermissionType } from '../../types'
+import { UserPermissionType } from '@shared'
 
 export const PERMISSION_DECORATOR_KEY = 'PERMISSION_DECORATOR_KEY'
 

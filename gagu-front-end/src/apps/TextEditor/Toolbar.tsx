@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { SvgIcon, ToolButton } from '../../components/common'
-import { IEntry } from '../../types'
+import { IEntry } from '@shared'
 import { copy, line } from '../../utils'
 import { Toast } from '@douyinfe/semi-ui'
 import { MarkdownViewType } from './MarkdownView'

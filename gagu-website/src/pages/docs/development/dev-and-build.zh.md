@@ -64,8 +64,7 @@ $ pnpm start
 1. 更新以下版本信息：
 
 - `version field` 位于 `./package.json`
-- `GAGU_VERSION` 位于 `./gagu-back-end/src/utils/constant.util.ts`
-- `version field` 位于 `./gagu-website/.env`
+- `GAGU_VERSION` 位于 `./gagu-back-end/src/shared/utils/constant.util.ts`
 
 2. 同步 `./gagu-back-end/package.json` 中的生产环境依赖项到 `./package.json` 中
 

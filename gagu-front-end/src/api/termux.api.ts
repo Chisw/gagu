@@ -13,7 +13,7 @@ import {
   ILocationForm,
   ISMS,
   MediaPlayerStateType,
-} from '../types/termux.type'
+} from '@shared'
 import { getPathParam } from '../utils'
 
 export class TermuxApi {

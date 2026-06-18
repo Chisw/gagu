@@ -8,7 +8,7 @@ import {
   ILocationForm,
   ISMSQuery,
   MediaPlayerStateType,
-} from 'src/types'
+} from '@shared'
 
 @Injectable()
 export class TermuxService {

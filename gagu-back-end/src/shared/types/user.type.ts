@@ -1,4 +1,3 @@
-// Sync following code to BE & FE
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export declare namespace User {
   type Token = string
@@ -10,12 +9,12 @@ export declare namespace User {
 
 export type UserValidityType = 'valid' | 'invalid'
 
-export enum UserPermission {
-  administer = 'administer',
-  read = 'read',
-  write = 'write',
-  delete = 'delete',
-}
+export const UserPermission = {
+  administer: 'administer',
+  read: 'read',
+  write: 'write',
+  delete: 'delete',
+} as const
 
 export type UserPermissionType = keyof typeof UserPermission
 

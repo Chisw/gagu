@@ -4,10 +4,10 @@ import { Toast } from '@douyinfe/semi-ui'
 import { useTranslation } from 'react-i18next'
 import { SettingApi } from '../../../api'
 import { useRequest, useTouchMode } from '../../../hooks'
-import { SettingForm } from '../../../types'
 import { Confirmor, Spinner, SvgIcon } from '../../../components/common'
 import { useRecoilState } from 'recoil'
 import { baseDataState } from '../../../states'
+import { SettingForm } from '@shared'
 
 export default function AdvancedSettings() {
 

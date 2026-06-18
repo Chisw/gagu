@@ -5,8 +5,8 @@ import { FormModeType } from '.'
 import { FsApi, UserApi } from '../../../api'
 import { Confirmor, SvgIcon } from '../../../components/common'
 import { useRequest } from '../../../hooks'
-import { IUser, IUserForm, User, UserValidityType, UserForm, UserPermission } from '../../../types'
-import { getDateTime, getIsExpired, getTimestampParam, line } from '../../../utils'
+import { IUser, IUserForm, User, UserValidityType, UserForm, UserPermission, getIsExpired } from '@shared'
+import { getDateTime, getTimestampParam, line } from '../../../utils'
 
 interface UserListProps {
   userList: IUser[]
@@ -179,7 +179,7 @@ export default function UserList(props: UserListProps) {
                     </span>
                   ))}
                 </div>
-                <div className="shrink-0 min-h-[30px] text-xs leading-none font-din text-gray-400 text-center">
+                <div className="shrink-0 min-h-7.5 text-xs leading-none font-din text-gray-400 text-center">
                   <p>{t('tip.createdAt', { time: getDateTime(createdAt) })}</p>
                   {showExpire && (
                     <p className="mt-1">{t('tip.expiredAt', { time: getDateTime(expiredAt) })}</p>

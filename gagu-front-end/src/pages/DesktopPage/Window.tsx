@@ -1,4 +1,5 @@
-import { IRunningApp, IWindowInfo, IEntry } from '../../types'
+import { IRunningApp, IWindowInfo } from '../../types'
+import { IEntry } from '@shared'
 import { Rnd, ResizableDelta, Position } from 'react-rnd'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRecoilState } from 'recoil'

@@ -1,5 +1,6 @@
 import { IEntryPathCache } from './../types/index';
-import { IUserConfig, IUserInfo } from '../types'
+import { IUserConfig } from '../types'
+import { IUserInfo } from '@shared'
 import { GAGU_ENTRY_PATH_CACHE_KEY, GAGU_USER_CONFIG_KEY, GAGU_USER_INFO_KEY } from './constant.util'
 import { getDefaultUserConfig } from './user.util';
 

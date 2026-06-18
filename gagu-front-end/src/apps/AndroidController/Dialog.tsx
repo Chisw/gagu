@@ -3,7 +3,7 @@ import { useCallback, useState } from 'react'
 import { useRequest } from '../../hooks'
 import { TermuxApi } from '../../api'
 import { Toast } from '@douyinfe/semi-ui'
-import { IDialogForm } from '../../types'
+import { IDialogForm } from '@shared'
 
 const widgetList = [
   'confirm',

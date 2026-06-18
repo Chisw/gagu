@@ -1,11 +1,10 @@
-// Sync following code to BE & FE
 import { IEntry } from './entry.type'
 import { User } from './user.type'
 
-export enum TunnelType {
-  download = 'download',
-  share = 'share',
-}
+export const TunnelType = {
+  download: 'download',
+  share: 'share',
+} as const
 
 export type TunnelTypeType = keyof typeof TunnelType
 

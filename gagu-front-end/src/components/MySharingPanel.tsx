@@ -4,7 +4,7 @@ import { Toast } from '@douyinfe/semi-ui'
 import { useTranslation } from 'react-i18next'
 import { TunnelApi } from '../api'
 import { useRequest } from '../hooks'
-import { ITunnel } from '../types'
+import { ITunnel } from '@shared'
 import { getDateTime } from '../utils'
 import { Confirmor, EmptyPanel, SvgIcon } from './common'
 

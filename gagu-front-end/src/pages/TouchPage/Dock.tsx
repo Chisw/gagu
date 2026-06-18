@@ -74,7 +74,7 @@ export default function Dock(props: DockProps) {
           dark:border-zinc-500
           ${show ? 'scale-100 origin-bottom-right' : 'scale-0 origin-center'}
           ${dockExpanded
-            ? 'right-[10px] bottom-[10px] w-48 h-48 rounded-xl bg-linear-to-b from-gray-200 via-gray-100 to-gray-100 dark:from-zinc-800 dark:via-zinc-700 dark:to-zinc-700'
+            ? 'right-2.5 bottom-2.5 w-48 h-48 rounded-xl bg-linear-to-b from-gray-200 via-gray-100 to-gray-100 dark:from-zinc-800 dark:via-zinc-700 dark:to-zinc-700'
             : 'right-4 bottom-4 w-12 h-12 rounded-3xl bg-white dark:bg-zinc-600'
           }
         `)}

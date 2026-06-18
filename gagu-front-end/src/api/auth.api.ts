@@ -1,4 +1,5 @@
-import { IUserInfo, IResponse, IAuthRecord } from '../types'
+import { IResponse } from '../types'
+import { IUserInfo, IAuthRecord } from '@shared'
 import service from './service'
 
 export class AuthApi {

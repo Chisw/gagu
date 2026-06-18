@@ -14,8 +14,8 @@ export function VolumeIndicator({ volume, time }: VolumeIndicatorProps) {
 
   useEffect(() => {
     if (!time) return
-    let timer: NodeJS.Timeout
-    let opacityTimer: NodeJS.Timeout
+    let timer: number
+    let opacityTimer: number
     setShow(true)
     setOpacityShow(true)
     timer = setTimeout(() => {

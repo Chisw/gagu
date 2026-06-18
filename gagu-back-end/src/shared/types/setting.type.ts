@@ -1,9 +1,8 @@
-// Sync following code to BE & FE
-export enum SettingKey {
-  host = 'host',
-  port = 'port',
-  deviceName = 'deviceName',
-}
+export const SettingKey = {
+  host: 'host',
+  port: 'port',
+  deviceName: 'deviceName',
+} as const
 
 export type SettingKeys = keyof typeof SettingKey
 

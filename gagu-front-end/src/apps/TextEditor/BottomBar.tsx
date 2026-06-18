@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
-import { IEntry } from '../../types'
-import { generateTextBlob, getEntryPath, getReadableSize, line } from '../../utils'
+import { IEntry, getEntryPath } from '@shared'
+import { generateTextBlob, getReadableSize, line } from '../../utils'
 
 interface BottomBarProps {
   content: string

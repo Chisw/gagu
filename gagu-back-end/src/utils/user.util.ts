@@ -1,10 +1,13 @@
-import { IAuthRecord, IUser, IUserInfo, User } from '../types'
 import {
-  GAGU_PATH,
+  IAuthRecord,
+  IUser,
+  IUserInfo,
+  User,
   HEADERS_AUTH_KEY,
   HEADERS_AUTH_PREFIX,
   ACCESS_TOKEN_KEY,
-} from './constant.util'
+} from '@shared'
+import { GAGU_PATH } from './constant.util'
 import { Request } from 'express'
 import { makeNestedDirectory, readJSONData, writeJSONData } from './fs.util'
 

@@ -75,7 +75,7 @@ export default function Dock(props: DockProps) {
                 className="gagu-app-icon w-6 h-6 rounded-md shadow-sm"
                 data-app-id={app.id}
               />
-              {isRunning && <div className="absolute right-3 bottom-0 left-3 h-[3px] bg-blue-500" />}
+              {isRunning && <div className="absolute right-3 bottom-0 left-3 h-0.75 bg-blue-500" />}
             </div>
           )
         })}

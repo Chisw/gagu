@@ -1,15 +1,20 @@
 import { Injectable } from '@nestjs/common'
 import {
   EntryType,
-  IAudioInfo,
   IDisk,
   IEntry,
-  IExifInfo,
   IRootEntry,
   RootEntryGroup,
-  ThumbnailType,
   User,
-} from '../../types'
+} from '@shared'
+import {
+  IAudioInfo,
+  IExifInfo,
+  ThumbnailType,
+  GEN_THUMBNAIL_MAP,
+  getEntryPath,
+  getParentPath,
+} from '@shared'
 import {
   createReadStream,
   createWriteStream,
@@ -28,12 +33,9 @@ import {
   exists,
   makeNestedDirectory,
   dataURLtoBuffer,
-  getEntryPath,
   catchError,
   MAC_HIDDEN_ENTRIES,
-  GEN_THUMBNAIL_MAP,
   getIsSamePartition,
-  getParentPath,
   sha256,
 } from '../../utils'
 import * as nodeDiskInfo from 'node-disk-info'

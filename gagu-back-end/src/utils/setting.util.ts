@@ -1,4 +1,4 @@
-import { ISetting } from '../types'
+import { ISetting } from '@shared'
 import { GAGU_PATH } from './constant.util'
 import { readJSONData, writeJSONData } from './fs.util'
 

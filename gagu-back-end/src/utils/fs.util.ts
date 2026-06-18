@@ -9,7 +9,7 @@ import {
 } from 'node:fs'
 import { rm } from 'node:fs/promises'
 import { GAGU_PATH } from './constant.util'
-import { getParentPath } from './entry.util'
+import { getParentPath } from '@shared'
 import { catchError } from './common.util'
 
 export const getExtension = (name: string) => {

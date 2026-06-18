@@ -1,9 +1,9 @@
 import { useMemo, useEffect, useState } from 'react'
 import { IconButton, SvgIcon } from '../../components/common'
 import { useUserConfig } from '../../hooks'
-import { IEntry } from '../../types'
 import { getReadableSize, line } from '../../utils'
 import { useTranslation } from 'react-i18next'
+import { IEntry } from '@shared'
 
 interface ToolbarProps {
   imgEl: HTMLImageElement | null

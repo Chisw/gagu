@@ -4,7 +4,7 @@ import { FormModeType } from '.'
 import { FsApi, UserApi } from '../../../api'
 import { SvgIcon, IconButton } from '../../../components/common'
 import { useRequest, useTouchMode } from '../../../hooks'
-import { AppId, EntryType, IUserForm, UserPermission } from '../../../types'
+import { AppId } from '../../../types'
 import { getImageTypeBase64ByURL, getTimestampParam, line, permissionSorter, sha256 } from '../../../utils'
 import { Button, Form, SideSheet } from '@douyinfe/semi-ui'
 import { useTranslation } from 'react-i18next'
@@ -12,6 +12,7 @@ import { userInfoState } from '../../../states'
 import { useRecoilState } from 'recoil'
 import { semiLocaleMap } from '../../../i18n'
 import { EntryPicker } from '../../../components'
+import { EntryType, IUserForm, UserPermission } from '@shared'
 
 const handleScrollToError = () => {
   const top = document.querySelector('.gagu-app-settings-user-form .semi-form-field-error-message')?.closest('.semi-form-field')?.getBoundingClientRect()?.top

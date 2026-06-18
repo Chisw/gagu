@@ -20,7 +20,7 @@ export default function MarkdownView(props: MarkdownViewProps) {
 
   return (
     <>
-      <div className="markdown-body p-4 min-w-[200px] min-h-full bg-white dark:bg-zinc-800">
+      <div className="markdown-body p-4 min-w-50 min-h-full bg-white dark:bg-zinc-800">
         <PhotoProvider className="gagu-text-editor-photo-slider">
           <ReactMarkdown
             rehypePlugins={[rehypeRaw]}

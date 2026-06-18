@@ -3,10 +3,10 @@ import { useTranslation } from 'react-i18next'
 import { UserApi } from '../../../api'
 import { SvgIcon } from '../../../components/common'
 import { useRequest } from '../../../hooks'
-import { IUserForm, UserForm } from '../../../types'
 import UserFormSheet from './UserFormSheet'
 import UserList from './UserList'
 import { Button } from '@douyinfe/semi-ui'
+import { IUserForm, UserForm } from '@shared'
 
 export type FormModeType = 'CLOSE' | 'CREATE' | 'EDIT'
 

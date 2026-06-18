@@ -4,7 +4,6 @@ import { AppModule } from './app.module'
 import {
   HELP_INFO,
   initialize,
-  GAGU_VERSION,
   openInBrowser,
   GAGU_PATH,
   removeEntry,
@@ -12,6 +11,7 @@ import {
 import * as minimist from 'minimist'
 import * as chalk from 'chalk'
 import { json } from 'express'
+import { GAGU_VERSION } from '@shared'
 
 const argv = minimist(process.argv.slice(2), {
   alias: {

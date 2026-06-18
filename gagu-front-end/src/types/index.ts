@@ -1,30 +1,24 @@
-import { ServerMessage } from './common.type'
-import { IEntry, SortType } from './entry.type'
+import { ServerMessage, IEntry, SortType } from '@shared'
 
 export * from './app.type'
-export * from './common.type'
-export * from './entry.type'
-export * from './setting.type'
-export * from './termux.type'
-export * from './tunnel.type'
 export * from './upload.type'
 export * from './user.type'
 
-export enum Page {
-  PENDING = 'PENDING',
-  login = 'login',
-  desktop = 'desktop',
-  explorer = 'explorer',
-  touch = 'touch',
-  sharing = 'sharing',
-}
+export const Page = {
+  PENDING: 'PENDING',
+  login: 'login',
+  desktop: 'desktop',
+  explorer: 'explorer',
+  touch: 'touch',
+  sharing: 'sharing',
+} as const
 
 export type PageType = keyof typeof Page
 
-export enum ClipboardType {
-  copy = 'copy',
-  cut = 'cut',
-}
+export const ClipboardType = {
+  copy: 'copy',
+  cut: 'cut',
+} as const
 
 export type ClipboardTypeType = keyof typeof ClipboardType
 
@@ -35,22 +29,22 @@ export interface IClipboardData {
 
 export type ClipboardState = ClipboardTypeType | undefined
 
-export enum EditMode {
-  createFolder = 'createFolder',
-  createText = 'createText',
-  rename = 'rename',
-}
+export const EditMode = {
+  createFolder: 'createFolder',
+  createText: 'createText',
+  rename: 'rename',
+} as const
 
 export type EditModeType = keyof typeof EditMode
 
-export type CreationType = EditMode.createFolder | EditMode.createText
+export type CreationType = typeof EditMode.createFolder | typeof EditMode.createText
 
-export enum NameFail {
-  cancel = 'cancel',
-  empty = 'empty',
-  existed = 'existed',
-  invalid = 'invalid',
-}
+export const NameFail = {
+  cancel: 'cancel',
+  empty: 'empty',
+  existed: 'existed',
+  invalid: 'invalid',
+} as const
 
 export type NameFailType = keyof typeof NameFail
 

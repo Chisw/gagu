@@ -5,7 +5,6 @@ import {
   removeEntry,
   ServerOS,
   exists,
-  GAGU_VERSION,
   path2RootEntry,
   respond,
   catchError,
@@ -35,12 +34,15 @@ import {
   SettingKey,
   User,
   UserPermission,
-  ServerMessage,
   RootEntryGroup,
+  GAGU_VERSION,
+} from '@shared'
+import {
+  ServerMessage,
   ExistingStrategyType,
   ExistingStrategy,
   TransferResult,
-} from '../../types'
+} from '@shared'
 import { mkdirSync, renameSync } from 'node:fs'
 import {
   PathValidation,

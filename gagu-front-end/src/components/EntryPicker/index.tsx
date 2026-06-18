@@ -1,12 +1,13 @@
 import { Modal, SideSheet } from '@douyinfe/semi-ui'
 import { useCallback, useMemo, useState } from 'react'
-import { EntryPickerMode, EntryType, IEntry } from '../../types'
+import { EntryPickerMode } from '../../types'
 import { useTranslation } from 'react-i18next'
 import FileExplorer from '../../apps/FileExplorer'
 import { APP_LIST } from '../../apps'
 import { useTouchMode } from '../../hooks'
 import FileExplorerTouch from '../../apps/FileExplorerTouch'
 import Form, { FormProps } from './Form'
+import { EntryType, EntryTypeType, IEntry } from '@shared'
 
 interface EntryPickerResult {
   pickedEntryList: IEntry[]
@@ -17,7 +18,7 @@ interface EntryPickerProps {
   show: boolean
   appId: string
   mode: EntryPickerMode
-  type: EntryType.directory | EntryType.file
+  type: EntryTypeType
   title?: string
   multiple?: boolean
   onConfirm: (result: EntryPickerResult) => void
@@ -172,7 +173,7 @@ export function EntryPicker(props: EntryPickerProps) {
               ))}
             </div>
           </div>
-          <div className="mt-3 relative h-[540px] overflow-y-auto border border-gray-200 bg-gray-100/50 dark:bg-black dark:border-zinc-600">
+          <div className="mt-3 relative h-135 overflow-y-auto border border-gray-200 bg-gray-100/50 dark:bg-black dark:border-zinc-600">
             <FileExplorer
               asEntryPicker
               isTopWindow={show}
