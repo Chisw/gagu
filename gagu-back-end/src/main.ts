@@ -1,4 +1,4 @@
-import { HOST, IS_DEV, LOGO_TEXT, readSettingsData } from './utils'
+import { HOST, IS_DEV, LOGO_TEXT, DataManager } from './utils'
 import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
 import {
@@ -63,7 +63,7 @@ async function bootstrap() {
 
   const httpsOptions = await initialize(argv.security)
 
-  const settings = readSettingsData()
+  const settings = DataManager.settings.read()
   const protocol = httpsOptions ? 'https' : 'http'
   const host = argv.Host || settings.host || undefined
   const port = argv.port || settings.port || 9293

@@ -1,5 +1,4 @@
 import { IEntry } from './entry.type'
-import { User } from './user.type'
 
 export const TunnelType = {
   download: 'download',
@@ -19,7 +18,7 @@ export interface TunnelForm {
 
 export interface ITunnel extends TunnelForm {
   code: string
-  username: User.Username
-  nickname: User.Nickname
+  username: string
+  nickname: string
   createdAt: number
 }

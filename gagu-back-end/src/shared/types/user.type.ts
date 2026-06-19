@@ -1,12 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-namespace
-export declare namespace User {
-  type Token = string
-  type AccessToken = string
-  type Nickname = string
-  type Username = string
-  type Password = string
-}
-
 export type UserValidityType = 'valid' | 'invalid'
 
 export const UserPermission = {
@@ -19,9 +10,9 @@ export const UserPermission = {
 export type UserPermissionType = keyof typeof UserPermission
 
 export interface IUser {
-  nickname: User.Nickname
-  username: User.Username
-  password: User.Password
+  nickname: string
+  username: string
+  password: string
   invalid: boolean
   createdAt: number
   expiredAt?: number
@@ -42,10 +33,10 @@ export interface IUserForm
 
 export class UserForm implements IUserForm {
   avatar = ''
-  nickname: User.Nickname = ''
-  username: User.Username = ''
-  password: User.Password = ''
-  password2: User.Password = ''
+  nickname = ''
+  username = ''
+  password = ''
+  password2 = ''
   invalid = false
   createdAt = 0
   expiredAt?: number
@@ -68,15 +59,15 @@ export class UserForm implements IUserForm {
 }
 
 export class UserPasswordForm {
-  password: User.Password = ''
-  newPassword: User.Password = ''
-  newPassword2: User.Password = ''
+  password = ''
+  newPassword = ''
+  newPassword2 = ''
 }
 
 export interface IAuthRecord {
-  token: User.Token
-  accessToken: User.AccessToken
-  username: User.Username
+  token: string
+  accessToken: string
+  username: string
   loginAt: number
   pulsedAt: number
   ip: string
@@ -84,10 +75,10 @@ export interface IAuthRecord {
 }
 
 export interface IUserInfo {
-  token: User.Token
-  accessToken: User.AccessToken
-  nickname: User.Nickname
-  username: User.Username
+  token: string
+  accessToken: string
+  nickname: string
+  username: string
   expiredAt?: number
   passwordLocked?: boolean
   permissions: UserPermissionType[]

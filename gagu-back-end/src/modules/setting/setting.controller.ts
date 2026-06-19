@@ -2,7 +2,7 @@ import { SettingService } from './setting.service'
 import { Body, Controller, Get, Put } from '@nestjs/common'
 import { UserPermission, ISetting } from '@shared'
 import { Permission } from '../../common/decorators'
-import { respond } from '../../utils'
+import { respond } from '@/utils'
 
 @Controller('setting')
 export class SettingController {

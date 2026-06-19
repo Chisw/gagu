@@ -1,5 +1,4 @@
-import { IEntry, ITunnel, TunnelForm } from '@shared'
-import { IResponse } from '../types'
+import { IEntry, ITunnel, TunnelForm, IResponse } from '@shared'
 import { BASE_URL, getPasswordParam } from '../utils'
 import service from './service'
 

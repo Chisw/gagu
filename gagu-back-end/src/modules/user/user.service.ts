@@ -1,17 +1,17 @@
 import { Injectable } from '@nestjs/common'
-import { User, IUser, IUserForm } from '@shared'
-import { readUsersData, writeUsersData } from '../../utils'
+import { IUser, IUserForm } from '@shared'
+import { DataManager } from '@/utils'
 
 @Injectable()
 export class UserService {
   private userList: IUser[] = []
 
   constructor() {
-    this.userList = readUsersData()
+    this.userList = DataManager.users.read()
   }
 
   sync() {
-    writeUsersData(this.userList)
+    DataManager.users.write(this.userList)
   }
 
   findAll() {
@@ -20,7 +20,7 @@ export class UserService {
     return list
   }
 
-  findOne(username: User.Username) {
+  findOne(username: string) {
     return this.userList.find((user) => user.username === username)
   }
 
@@ -78,12 +78,12 @@ export class UserService {
     }
   }
 
-  remove(username: User.Username) {
+  remove(username: string) {
     this.userList = this.userList.filter((u) => u.username !== username)
     this.sync()
   }
 
-  updatePassword(username: User.Username, password: User.Password) {
+  updatePassword(username: string, password: string) {
     const user = this.userList.find((user) => user.username === username)
     if (user) {
       user.password = password
@@ -91,7 +91,7 @@ export class UserService {
     }
   }
 
-  updateValidity(username: User.Username, isValid: boolean) {
+  updateValidity(username: string, isValid: boolean) {
     const user = this.userList.find((user) => user.username === username)
     if (user) {
       user.invalid = !isValid
@@ -99,12 +99,12 @@ export class UserService {
     }
   }
 
-  queryFavorite(username: User.Username) {
+  queryFavorite(username: string) {
     const user = this.userList.find((user) => user.username === username)
     return user?.favoritePathList || []
   }
 
-  createFavorite(username: User.Username, path: string) {
+  createFavorite(username: string, path: string) {
     const user = this.userList.find((user) => user.username === username)
     if (user) {
       const pathList = Array.from(
@@ -118,7 +118,7 @@ export class UserService {
     }
   }
 
-  removeFavorite(username: User.Username, path: string) {
+  removeFavorite(username: string, path: string) {
     const user = this.userList.find((user) => user.username === username)
     if (user) {
       const pathList = user.favoritePathList?.filter((p) => p !== path) || []

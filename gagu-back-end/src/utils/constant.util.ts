@@ -46,21 +46,13 @@ const PATH_MAP: { [PLATFORM: string]: string } = {
 
 const ROOT_PATH = `${PATH_MAP[ServerOS.platform] || ''}${IS_DEV ? '.dev' : ''}`
 
-export const MAC_HIDDEN_ENTRIES = [
-  '.Trash',
-  '.Trashes',
-  '.Spotlight-V100',
-  '.VolumeIcon.icns',
-  '.TemporaryItems',
-]
-
 export const GAGU_PATH = {
   ROOT: ROOT_PATH,
   DATA: `${ROOT_PATH}/data`,
-  DATA_USERS: `${ROOT_PATH}/data/users.json`,
   DATA_AUTH: `${ROOT_PATH}/data/auth.json`,
-  DATA_TUNNELS: `${ROOT_PATH}/data/tunnels.json`,
   DATA_SETTINGS: `${ROOT_PATH}/data/settings.json`,
+  DATA_TUNNELS: `${ROOT_PATH}/data/tunnels.json`,
+  DATA_USERS: `${ROOT_PATH}/data/users.json`,
   LOG: `${ROOT_PATH}/log`,
   PUBLIC: `${ROOT_PATH}/public`,
   PUBLIC_AVATAR: `${ROOT_PATH}/public/avatar`,
@@ -70,6 +62,14 @@ export const GAGU_PATH = {
   THUMBNAIL: `${ROOT_PATH}/thumbnail`,
   USERS: `${ROOT_PATH}/users`,
 }
+
+export const MAC_HIDDEN_ENTRIES = [
+  '.Trash',
+  '.Trashes',
+  '.Spotlight-V100',
+  '.VolumeIcon.icns',
+  '.TemporaryItems',
+]
 
 export const HELP_INFO = `
   Usage:

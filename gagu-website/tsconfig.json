@@ -14,7 +14,7 @@
     "noEmit": true,
     "paths": {
       "@shared": ["../gagu-back-end/src/shared"]
-    },
+    }
   },
   "include": [
     "../gagu-back-end/src/shared",

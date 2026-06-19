@@ -1,5 +1,4 @@
 import service from './service'
-import { IResponse } from '../types'
 import {
   BrightnessType,
   IBatteryStatus,
@@ -13,6 +12,7 @@ import {
   ILocationForm,
   ISMS,
   MediaPlayerStateType,
+  IResponse,
 } from '@shared'
 import { getPathParam } from '../utils'
 

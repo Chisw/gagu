@@ -11,14 +11,8 @@ import {
 } from '@nestjs/common'
 import { Public, UserGetter } from '../../common/decorators'
 import { AuthService } from './auth.service'
-import {
-  IUser,
-  User,
-  ServerMessage,
-  getIsExpired,
-  HEADERS_AUTH_KEY,
-} from '@shared'
-import { getAuthorizationToken, respond } from '../../utils'
+import { IUser, ServerMessage, getIsExpired, HEADERS_AUTH_KEY } from '@shared'
+import { getAuthorizationToken, respond } from '@/utils'
 import { UserService } from '../user/user.service'
 
 @Controller('auth')
@@ -31,8 +25,8 @@ export class AuthController {
   @Public()
   @Post('token')
   login(
-    @Body('username') username: User.Username,
-    @Body('password') password: User.Password,
+    @Body('username') username: string,
+    @Body('password') password: string,
     @Request() request: any,
   ) {
     const user = this.userService.findOne(username)

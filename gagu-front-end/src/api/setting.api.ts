@@ -1,5 +1,4 @@
-import { IResponse } from '../types'
-import { ISetting } from '@shared'
+import { ISetting, IResponse } from '@shared'
 import service from './service'
 
 export class SettingApi {

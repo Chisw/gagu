@@ -1,29 +1,24 @@
 import { Injectable } from '@nestjs/common'
-import { User, IAuthRecord, IUser } from '@shared'
-import {
-  generateRandomToken,
-  generateUserInfo,
-  readAuthData,
-  writeAuthData,
-} from '../../utils'
+import { IAuthRecord, IUser } from '@shared'
+import { generateRandomToken, generateUserInfo, DataManager } from '@/utils'
 
 @Injectable()
 export class AuthService {
   private authRecordList: IAuthRecord[] = []
 
   constructor() {
-    this.authRecordList = readAuthData()
+    this.authRecordList = DataManager.auth.read()
   }
 
   sync() {
-    writeAuthData(this.authRecordList)
+    DataManager.auth.write(this.authRecordList)
   }
 
   findAll() {
     return this.authRecordList
   }
 
-  getUsername(token: User.Token, accessToken: User.AccessToken) {
+  getUsername(token: string, accessToken: string) {
     const record = this.authRecordList.find((record) => {
       return record.token === token || record.accessToken === accessToken
     })
@@ -53,7 +48,7 @@ export class AuthService {
     return generateUserInfo(user, token, accessToken)
   }
 
-  updatePulseTime(token: User.Token, accessToken: User.AccessToken) {
+  updatePulseTime(token: string, accessToken: string) {
     const record = this.authRecordList.find((record) => {
       return record.token === token || record.accessToken === accessToken
     })
@@ -64,14 +59,14 @@ export class AuthService {
     this.sync()
   }
 
-  remove(token: User.Token) {
+  remove(token: string) {
     this.authRecordList = this.authRecordList.filter(
       (record) => record.token !== token,
     )
     this.sync()
   }
 
-  removeUserAllRecords(username: User.Username) {
+  removeUserAllRecords(username: string) {
     this.authRecordList
       .filter((r) => r.username === username)
       .map((r) => r.token)
@@ -83,7 +78,7 @@ export class AuthService {
     this.sync()
   }
 
-  updateAccessToken(token: User.Token) {
+  updateAccessToken(token: string) {
     const newAccessToken = generateRandomToken()
     const record = this.authRecordList.find((record) => record.token === token)
 

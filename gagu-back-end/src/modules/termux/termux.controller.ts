@@ -11,7 +11,7 @@ import {
   UserPermission,
   ServerMessage,
 } from '@shared'
-import { catchError, respond } from '../../utils'
+import { catchError, respond } from '@/utils'
 
 @Controller('termux')
 export class TermuxController {

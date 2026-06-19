@@ -9,7 +9,12 @@ import {
 } from 'node:fs'
 import { rm } from 'node:fs/promises'
 import { GAGU_PATH } from './constant.util'
-import { getParentPath } from '@shared'
+import {
+  EntryType,
+  getParentPath,
+  IRootEntry,
+  RootEntryGroupType,
+} from '@shared'
 import { catchError } from './common.util'
 
 export const getExtension = (name: string) => {
@@ -63,6 +68,24 @@ export const getDuplicatedPath: (path: string) => string = (path) => {
   }
 }
 
+export const path2RootEntry = (path: string, group: RootEntryGroupType) => {
+  const names = path.split('/')
+  const lastName = names.pop()
+
+  const entry: IRootEntry = {
+    name: lastName || '',
+    type: EntryType.directory,
+    hidden: false,
+    lastModified: 0,
+    parentPath: names.join('/'),
+    hasChildren: true,
+    extension: '_dir',
+    group,
+    isDisk: false,
+  }
+  return entry
+}
+
 export const removeEntry = async (path: string) => {
   return new Promise(async (resolve) => {
     try {
@@ -81,6 +104,10 @@ export const makeNestedDirectory = (...paths: string[]) => {
     if (exists(path)) continue
     mkdirSync(path, { recursive: true })
   }
+}
+
+export const initUserPaths = (username: string) => {
+  makeNestedDirectory(`${GAGU_PATH.USERS}/${username}/desktop`)
 }
 
 export const dataURLtoBlob = (base64: string) => {
@@ -177,11 +204,13 @@ export const JSONFormat = (data: any) => {
   return out
 }
 
-export const readJSONData = <T>(path: string) => {
-  const str = readFileSync(path).toString('utf-8')
-  return JSON.parse(str) as T
-}
+export const JSONFile = {
+  read<T>(path: string) {
+    const str = readFileSync(path).toString('utf-8')
+    return JSON.parse(str) as T
+  },
 
-export const writeJSONData = (path: string, data: any) => {
-  writeFileSync(path, JSONFormat(data))
+  write(path: string, data: any) {
+    writeFileSync(path, JSONFormat(data))
+  },
 }

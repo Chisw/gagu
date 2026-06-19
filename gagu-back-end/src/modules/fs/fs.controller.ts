@@ -10,7 +10,7 @@ import {
   catchError,
   GAGU_PATH,
   getDuplicatedPath,
-} from '../../utils'
+} from '@/utils'
 import { FsService } from './fs.service'
 import {
   Body,
@@ -32,7 +32,6 @@ import {
   IBaseData,
   IUser,
   SettingKey,
-  User,
   UserPermission,
   RootEntryGroup,
   GAGU_VERSION,
@@ -409,7 +408,7 @@ export class FsController {
   @Get('public/avatar/:username')
   @Header('Content-Type', 'image/jpg')
   getPublicAvatarStreamUrl(
-    @Param('username') username: User.Username,
+    @Param('username') username: string,
     @Res() response: Response,
   ) {
     const avatarPath = this.fsService.getAvatarPath(username)
@@ -426,7 +425,7 @@ export class FsController {
   @Get('public/image/:name')
   @Header('Content-Type', 'image/jpg')
   getPublicImageStreamUrl(
-    @Param('name') name: User.Username,
+    @Param('name') name: string,
     @Res() response: Response,
   ) {
     const path = this.fsService.getImagePath(name)

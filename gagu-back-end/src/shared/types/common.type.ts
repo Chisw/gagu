@@ -24,6 +24,12 @@ export const ServerMessage = {
   ERROR_403_PERMISSION_DELETE: 'ERROR_403_PERMISSION_DELETE',
 } as const
 
+export interface IResponse<T = undefined> {
+  success: boolean
+  message: keyof typeof ServerMessage
+  data: T
+}
+
 export const ExistingStrategy = {
   keepBoth: 'keepBoth',
   replace: 'replace',

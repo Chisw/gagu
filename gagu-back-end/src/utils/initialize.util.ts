@@ -1,13 +1,11 @@
 import { IUser, UserPermission } from '@shared'
 import { GAGU_PATH, ServerOS } from './constant.util'
-import { writeAuthData, writeUsersData } from './user.util'
 import { makeNestedDirectory, exists } from './fs.util'
-import { writeTunnelData } from './tunnel.util'
-import { writeSettingsData } from './setting.util'
 import { exec } from 'node:child_process'
 import { readFileSync } from 'node:fs'
 import { HttpsOptions } from '@nestjs/common/interfaces/external/https-options.interface'
 import { sha256 } from './common.util'
+import { DataManager } from './data.util'
 
 export const initialize = async (withSecurity: boolean) => {
   makeNestedDirectory(
@@ -21,6 +19,18 @@ export const initialize = async (withSecurity: boolean) => {
     `${GAGU_PATH.ROOT}/thumbnail`,
     `${GAGU_PATH.ROOT}/users`,
   )
+
+  if (!exists(GAGU_PATH.DATA_AUTH)) {
+    DataManager.auth.write([])
+  }
+
+  if (!exists(GAGU_PATH.DATA_SETTINGS)) {
+    DataManager.settings.write({})
+  }
+
+  if (!exists(GAGU_PATH.DATA_TUNNELS)) {
+    DataManager.tunnels.write([])
+  }
 
   if (!exists(GAGU_PATH.DATA_USERS)) {
     const administrator: IUser = {
@@ -39,19 +49,7 @@ export const initialize = async (withSecurity: boolean) => {
       assignedRootPathList: [],
       favoritePathList: [],
     }
-    writeUsersData([administrator])
-  }
-
-  if (!exists(GAGU_PATH.DATA_AUTH)) {
-    writeAuthData([])
-  }
-
-  if (!exists(GAGU_PATH.DATA_TUNNELS)) {
-    writeTunnelData([])
-  }
-
-  if (!exists(GAGU_PATH.DATA_SETTINGS)) {
-    writeSettingsData({})
+    DataManager.users.write([administrator])
   }
 
   const libMap: { [LIB_KEY: string]: boolean } = {

@@ -2,7 +2,7 @@ import { Injectable, NestMiddleware } from '@nestjs/common'
 import { Request, Response, NextFunction } from 'express'
 import { DateTime } from 'luxon'
 import { AuthService } from '../../modules/auth/auth.service'
-import { getRequestTokens, writeLog } from '../../utils'
+import { getRequestTokens, writeLog } from '@/utils'
 import * as chalk from 'chalk'
 
 const LOG_SKIPPABLE_API_LIST = [

@@ -1,12 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import {
-  EntryType,
-  IDisk,
-  IEntry,
-  IRootEntry,
-  RootEntryGroup,
-  User,
-} from '@shared'
+import { EntryType, IDisk, IEntry, IRootEntry, RootEntryGroup } from '@shared'
 import {
   IAudioInfo,
   IExifInfo,
@@ -37,7 +30,7 @@ import {
   MAC_HIDDEN_ENTRIES,
   getIsSamePartition,
   sha256,
-} from '../../utils'
+} from '@/utils'
 import * as nodeDiskInfo from 'node-disk-info'
 import * as piexifjs from 'piexifjs'
 import { parseFile } from 'music-metadata'
@@ -416,7 +409,7 @@ export class FsService {
     return thumbnailPath
   }
 
-  uploadAvatar(username: User.Username, avatar: string) {
+  uploadAvatar(username: string, avatar: string) {
     if (avatar) {
       const avatarBuffer = dataURLtoBuffer(avatar)
       const avatarPath = `${GAGU_PATH.PUBLIC_AVATAR}/${username}`
@@ -428,7 +421,7 @@ export class FsService {
     writeFileSync(`${GAGU_PATH.PUBLIC_IMAGE}/${name}`, buffer)
   }
 
-  getAvatarPath(username: User.Username) {
+  getAvatarPath(username: string) {
     return `${GAGU_PATH.PUBLIC_AVATAR}/${username}`
   }
 

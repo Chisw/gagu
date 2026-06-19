@@ -1,5 +1,4 @@
-import { IResponse } from '../types'
-import { IUser, IUserForm, UserPasswordForm, UserValidityType } from '@shared'
+import { IUser, IUserForm, UserPasswordForm, UserValidityType, IResponse } from '@shared'
 import { UserInfoStore } from '../utils'
 import service from './service'
 

@@ -15,7 +15,7 @@ import {
   UserPermissionType,
   getEntryPath,
 } from '@shared'
-import { GAGU_PATH, getRequestTokens } from '../../utils'
+import { GAGU_PATH, getRequestTokens } from '@/utils'
 import {
   IPathValidation,
   PUBLIC_DECORATOR_KEY,

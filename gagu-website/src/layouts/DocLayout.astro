@@ -25,19 +25,19 @@ const nextDoc = docList[activeIndex + 1]
       {prevDoc ? (
         <a
           href={prevDoc.path}
-          class="border px-4 py-2 w-40 rounded-lg text-xs group hover:border-blue-700"
+          class="border px-4 py-2 w-40 rounded-lg text-xs group hover:border-purple-700"
         >
           <p class="text-gray-400">← Previous</p>
-          <p class="font-bold group-hover:text-blue-700">{prevDoc.title}</p>
+          <p class="font-bold group-hover:text-purple-700">{prevDoc.title}</p>
         </a>
       ) : <span />}
       {nextDoc ? (
         <a
           href={nextDoc.path}
-          class="border px-4 py-2 w-40 rounded-lg text-xs group hover:border-blue-700 text-right"
+          class="border px-4 py-2 w-40 rounded-lg text-xs group hover:border-purple-700 text-right"
         >
           <p class="text-gray-400">Next →</p>
-          <p class="font-bold group-hover:text-blue-700">{nextDoc.title}</p>
+          <p class="font-bold group-hover:text-purple-700">{nextDoc.title}</p>
         </a>
       ) : <span />}
     </div>

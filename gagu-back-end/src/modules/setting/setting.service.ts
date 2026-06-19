@@ -1,6 +1,6 @@
 import { ISetting, SettingKeys } from '@shared'
 import { Injectable } from '@nestjs/common'
-import { readSettingsData, writeSettingsData } from '../../utils'
+import { DataManager } from '@/utils'
 import { exec } from 'node:child_process'
 
 @Injectable()
@@ -8,11 +8,11 @@ export class SettingService {
   private settings: ISetting = {}
 
   constructor() {
-    this.settings = readSettingsData()
+    this.settings = DataManager.settings.read()
   }
 
   sync() {
-    writeSettingsData(this.settings)
+    DataManager.settings.write(this.settings)
   }
 
   findAll() {

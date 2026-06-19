@@ -1,21 +1,17 @@
-import { ITunnel, TunnelForm, TunnelType, User } from '@shared'
+import { ITunnel, TunnelForm, TunnelType } from '@shared'
 import { Injectable } from '@nestjs/common'
-import {
-  generateRandomCode,
-  readTunnelData,
-  writeTunnelData,
-} from '../../utils'
+import { generateRandomCode, DataManager } from '@/utils'
 
 @Injectable()
 export class TunnelService {
   private tunnelList: ITunnel[] = []
 
   constructor() {
-    this.tunnelList = readTunnelData()
+    this.tunnelList = DataManager.tunnels.read()
   }
 
   sync() {
-    writeTunnelData(
+    DataManager.tunnels.write(
       this.tunnelList.filter((t) => t.type !== TunnelType.download),
     )
   }
@@ -32,11 +28,7 @@ export class TunnelService {
     }
   }
 
-  create(
-    username: User.Username,
-    nickname: User.Nickname,
-    tunnelForm: TunnelForm,
-  ) {
+  create(username: string, nickname: string, tunnelForm: TunnelForm) {
     const code = generateRandomCode()
     const { type, leftTimes, expiredAt } = tunnelForm
     const isDownload = type === TunnelType.download
@@ -60,7 +52,7 @@ export class TunnelService {
     this.sync()
   }
 
-  findUserTunnels(username: User.Username) {
+  findUserTunnels(username: string) {
     return this.tunnelList.filter(
       (t) => t.username === username && t.type === 'share',
     )

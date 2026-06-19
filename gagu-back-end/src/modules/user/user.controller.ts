@@ -10,7 +10,6 @@ import {
 } from '@nestjs/common'
 import { UserService } from './user.service'
 import {
-  User,
   IUserForm,
   UserPermission,
   UserValidityType,
@@ -18,7 +17,7 @@ import {
   getIsExpired,
   ServerMessage,
 } from '@shared'
-import { removeEntry, GAGU_PATH, initUserPaths, respond } from '../../utils'
+import { removeEntry, GAGU_PATH, initUserPaths, respond } from '@/utils'
 import { FsService } from '../fs/fs.service'
 import { Permission } from '../../common/decorators'
 import { AuthService } from '../auth/auth.service'
@@ -85,7 +84,7 @@ export class UserController {
 
   @Delete(':username')
   @Permission(UserPermission.administer)
-  async deleteUser(@Param('username') username: User.Username) {
+  async deleteUser(@Param('username') username: string) {
     this.userService.remove(username)
     this.authService.removeUserAllRecords(username)
     await removeEntry(`${GAGU_PATH.PUBLIC_AVATAR}/${username}`)
@@ -96,7 +95,7 @@ export class UserController {
   @Put(':username/password')
   @Permission(UserPermission.read)
   updateUserPassword(
-    @Param('username') username: User.Username,
+    @Param('username') username: string,
     @Body() userPasswordForm: UserPasswordForm,
   ) {
     const user = this.userService.findOne(username)
@@ -120,7 +119,7 @@ export class UserController {
   @Patch(':username/validity/:validity')
   @Permission(UserPermission.administer)
   updateUserValidity(
-    @Param('username') username: User.Username,
+    @Param('username') username: string,
     @Param('validity') validity: UserValidityType,
   ) {
     const isValid = validity === 'valid'
