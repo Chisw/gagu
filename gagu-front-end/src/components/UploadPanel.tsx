@@ -41,7 +41,7 @@ export function UploadPanel() {
   const { request: createFile, loading: uploading } = useRequest(FsApi.createFile)
   const { request: queryExistsCount } = useRequest(FsApi.queryExistsCount)
 
-  const count = useMemo(() => {
+  const uploadingCount = useMemo(() => {
     return uploadTaskList.length
   }, [uploadTaskList])
 
@@ -131,7 +131,7 @@ export function UploadPanel() {
           transition-width duration-200
           items-center cursor-pointer
           hover:bg-white/30 active:bg-black/10
-          ${count ? 'flex' : 'hidden'}
+          ${uploadingCount ? 'flex' : 'hidden'}
           ${uploading ? 'w-28 bg-white/40' : ''}
         `)}
         onClick={() => setVisible(true)}
@@ -151,10 +151,10 @@ export function UploadPanel() {
         <span className="font-din text-center grow">
           {uploading && uploadInfo.speed}
         </span>
-        <span className={`ml-1 font-din ${count ? '' : 'hidden'}`}>
+        <span className={`ml-1 font-din ${uploadingCount ? '' : 'hidden'}`}>
           {uploadTaskList.filter(t => ['created', 'bothKept', 'replaced', 'canceled', 'skipped'].includes(t.status)).length}
           &nbsp;/&nbsp;
-          {count}
+          {uploadingCount}
         </span>
       </div>
 
@@ -164,9 +164,9 @@ export function UploadPanel() {
         title={(
           <div className="flex items-center">
             <SvgIcon.Upload size={24} />
-            <span className="ml-2 font-din text-base">{count}</span>
+            <span className="ml-2 font-din text-base">{uploadingCount}</span>
             <div className="grow flex justify-end">
-              {count > 0 && (
+              {uploadingCount > 0 && (
                 <Button
                   size="small"
                   icon={<SvgIcon.Brush />}
@@ -198,7 +198,7 @@ export function UploadPanel() {
         onCancel={() => setVisible(false)}
       >
         <div className="relative w-full h-full overflow-auto">
-          <EmptyPanel dark visible={!count} />
+          <EmptyPanel dark visible={!uploadingCount} />
 
           {uploadTaskList.map((task, taskIndex) => {
             const { id, file, status, path } = task

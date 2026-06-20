@@ -21,7 +21,7 @@ export default function SpectrumCanvas(props: SpectrumCanvasProps) {
     const context = canvas!.getContext('2d')
 
     const arrData = new Uint8Array(analyserNode.frequencyBinCount)
-    const count = Math.min(200, arrData.length)
+    const count = Math.min(500, arrData.length)
     const step = Math.floor(arrData.length * .5 / count)
     const height = canvas.height = window.innerHeight
     const width = canvas.width = window.innerWidth

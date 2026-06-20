@@ -8,6 +8,7 @@ import { Confirmor, Spinner, SvgIcon } from '../../../components/common'
 import { useRecoilState } from 'recoil'
 import { baseDataState } from '../../../states'
 import { SettingForm } from '@shared'
+import { GAGU_WEBSITE_CHANGELOG, GAGU_WEBSITE_FEEDBACK } from '../../../utils'
 
 export default function AdvancedSettings() {
 
@@ -45,9 +46,31 @@ export default function AdvancedSettings() {
   const handleVersionCheck = useCallback(async () => {
     const { data: version } = await queryLatestVersion()
     const isNewest = baseData.version === version
+
+    const ChangeLog = () => (
+      <a
+        target="_blank"
+        rel="noreferrer"
+        className="flex-center-center mt-2 text-blue-600 text-sm"
+        href={GAGU_WEBSITE_CHANGELOG}
+      >
+        <span>v{version} Changelog</span>
+        &nbsp;
+        <SvgIcon.ExternalLink size={12} />
+      </a>
+    )
+
+
     const content = isNewest
       ? t`tip.currentlyLatestVersion`
-      : t('tip.currentlyNeedsUpdating', { version })
+      : (
+        <div>
+          <div>
+            {t`tip.currentlyNeedsUpdating`}
+          </div>
+          <ChangeLog />
+        </div>
+      )
 
     Confirmor({
       type: isNewest ? 'tip' : 'upgrade',
@@ -64,18 +87,19 @@ export default function AdvancedSettings() {
             width: 480,
             icon: undefined,
             content: (
-              <div className="relative pt-6 flex flex-col justify-center items-center">
+              <div className="relative pt-6 flex flex-col justify-center items-center select-none">
                 <SvgIcon.Upgrade
                   size={240}
                   className="absolute z-0 top-0 left-0 -translate-x-1/3 -translate-y-1/3 text-gray-100 dark:text-zinc-600"
                 />
-                <p className="relative z-10 mt-4 text-center font-bold">
+                <div className="relative z-10 text-center font-bold text-lg">
                   {t`tip.upgrading`}
-                </p>
-                <p className="relative z-10 mt-6 px-3 py-1 text-center text-gray-400 border-2 border-gray-900 rounded-sm flex items-center">
+                </div>
+                <ChangeLog />
+                <div className="relative z-10 mt-6 px-2 py-1 md:px-4 md:py-2 text-center text-gray-400 bg-gray-900 rounded-sm flex items-center">
                   <code>npm i -g gagu</code>
-                  <Spinner className="ml-12" />
-                </p>
+                  <Spinner className="ml-12 lg:ml-16" />
+                </div>
               </div>
             ),
             footer: <></>,
@@ -125,7 +149,7 @@ export default function AdvancedSettings() {
                   type="tertiary"
                   title={t`action.feedback`}
                   className="shrink-0"
-                  onClick={() => window.open('https://github.com/Chisw/gagu/issues')}
+                  onClick={() => window.open(GAGU_WEBSITE_FEEDBACK)}
                 >
                   <SvgIcon.Feedback />
                 </Button>

@@ -15,8 +15,8 @@ export function EmptyPanel(props: EmptyPanelProps) {
   return visible ? (
     <div
       className={line(`
-        absolute inset-0
         flex-center-center
+        absolute inset-0
         ${dark ? 'text-black/10' : 'text-gray-100 dark:text-zinc-700'}
       `)}
     >

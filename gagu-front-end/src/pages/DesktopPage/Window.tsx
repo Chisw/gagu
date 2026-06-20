@@ -275,7 +275,8 @@ export default function Window(props: WindowProps) {
                 prevent-move-to-front="true"
                 className={line(`
                   gagu-hidden-switch-trigger
-                  w-8 h-8 flex-center-center cursor-pointer transition-all duration-200
+                  flex-center-center 
+                  w-8 h-8 cursor-pointer transition-all duration-200
                 hover:bg-gray-200 hover:text-black active:bg-gray-400
                   ${headerClassName ? 'text-gray-200' : 'text-gray-400'}
                 `)}
@@ -293,8 +294,9 @@ export default function Window(props: WindowProps) {
                 <div
                   title={isFullScreen ? t`action.fullScreenExit` : t`action.fullScreenEnter`}
                   className={line(`
+                    flex-center-center 
                   hover:bg-gray-200 hover:text-black active:bg-gray-400
-                    w-8 h-8 flex-center-center cursor-pointer transition-all duration-200
+                    w-8 h-8 cursor-pointer transition-all duration-200
                     ${headerClassName ? 'text-gray-200' : 'text-gray-400'}
                   `)}
                   onClick={() => handleFullScreen()}
@@ -307,7 +309,8 @@ export default function Window(props: WindowProps) {
                 prevent-move-to-front="true"
                 className={line(`
                   gagu-app-close-trigger
-                  w-8 h-8 flex-center-center cursor-pointer transition-all duration-200
+                  flex-center-center 
+                  w-8 h-8 cursor-pointer transition-all duration-200
                   text-red-500 hover:bg-red-500 hover:text-white active:bg-red-700
                 `)}
                 onClick={handleClose}

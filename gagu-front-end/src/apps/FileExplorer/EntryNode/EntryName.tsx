@@ -150,7 +150,7 @@ export default function EntryName(props: EntryNameProps) {
   return (
     <div
       className={line(`
-        w-full leading-none
+        grow overflow-hidden leading-none
         ${gridMode ? 'mt-1 text-center' : 'ml-4 flex justify-start items-center'}
         ${inputMode ? '' : 'pointer-events-none'}
       `)}
@@ -182,36 +182,18 @@ export default function EntryName(props: EntryNameProps) {
           />
         </div>
       ) : (
-        <NameLabel {...{ entryName, gridMode, isSelected }} />
+        <span
+          className={line(`
+            gagu-entry-node-name
+            px-1 rounded text-xs
+            ${gridMode ? 'max-w-full line-clamp-2' : 'w-full truncate'}
+            ${isSelected ? 'text-white' : 'text-gray-700 dark:text-zinc-200'}
+            ${isSelected && gridMode ? 'bg-blue-600' : ''}
+          `)}
+        >
+          {entryName}
+        </span>
       )}
     </div>
-  )
-}
-
-interface NameLabelProps {
-  entryName?: string
-  isSelected?: boolean
-  gridMode: boolean
-}
-
-export function NameLabel(props: NameLabelProps) {
-  const {
-    entryName,
-    gridMode,
-    isSelected,
-  } = props
-
-  return (
-    <span
-      className={line(`
-        gagu-entry-node-name
-        px-1 rounded text-xs
-        ${gridMode ? 'max-w-full line-clamp-2' : 'w-full truncate'}
-        ${isSelected ? 'text-white' : 'text-gray-700 dark:text-zinc-200'}
-        ${isSelected && gridMode ? 'bg-blue-600' : ''}
-      `)}
-    >
-      {entryName}
-    </span>
   )
 }

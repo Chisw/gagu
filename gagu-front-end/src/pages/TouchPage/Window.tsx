@@ -87,7 +87,8 @@ export default function Window(props: WindowProps) {
               prevent-move-to-front="true"
               className={line(`
                 gagu-hidden-switch-trigger
-                w-8 h-8 flex-center-center cursor-pointer transition-all duration-200
+                flex-center-center
+                w-8 h-8 cursor-pointer transition-all duration-200
                 bg-black/20 active:bg-opacity-30
                 ${headerClassName ? 'text-gray-200' : 'text-gray-400'}
               `)}
@@ -100,7 +101,8 @@ export default function Window(props: WindowProps) {
               prevent-move-to-front="true"
               className={line(`
                 gagu-app-close-trigger
-                w-8 h-8 flex-center-center cursor-pointer transition-all duration-200
+                flex-center-center
+                w-8 h-8 cursor-pointer transition-all duration-200
                 text-white bg-red-600 hover:bg-red-500 active:bg-red-700
               `)}
               onClick={handleClose}

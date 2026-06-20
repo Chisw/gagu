@@ -65,7 +65,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
     kiloSize,
     disabledMap, supportThumbnail,
     currentPath, currentRootEntry,
-    querying, sizeQuerying, deleting,
+    apiState,
     entryList, rootEntryList, favoriteRootEntryList, sharingEntryList,
     isEntryListEmpty, visitHistory,
     folderCount, fileCount,
@@ -345,7 +345,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
             currentPath={currentPath}
             currentRootEntry={currentRootEntry}
             selectedEntryList={selectedEntryList}
-            loading={querying}
+            loading={apiState.listQuerying}
             onDirClick={handleGoFullPath}
             onRootEntryClick={(entry) => handleDirectoryOpen(entry, true)}
           />
@@ -380,7 +380,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
                       isSelected={isSelected}
                       isFavorited={isFavorited}
                       supportThumbnail={supportThumbnail}
-                      requestState={{ deleting, sizeQuerying }}
+                      apiState={apiState}
                       onClick={handleEntryClick}
                     />
                   )
@@ -390,7 +390,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
           })}
         </div>
 
-        <EmptyPanel visible={!querying && isEntryListEmpty} />
+        <EmptyPanel visible={!apiState.listQuerying && isEntryListEmpty} />
 
       </div>
 

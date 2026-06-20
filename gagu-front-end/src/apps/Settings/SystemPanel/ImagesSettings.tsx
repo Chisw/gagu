@@ -47,13 +47,14 @@ export default function ImageSettings() {
           <Form.Slot label={t`label.favicon`}>
             <div
               className={line(`
+                flex-center-center
                 relative z-0 w-12 h-12
                 border-2 border-dashed border-gray-300 hover:border-blue-500 hover:border-solid
-                text-gray-500 rounded flex-center-center
+                text-gray-500 rounded
                 dark:border-zinc-600 dark:hover:border-blue-600
               `)}
             >
-              <div className="absolute z-0 inset-0 flex-center-center">
+              <div className="flex-center-center absolute z-0 inset-0">
                 <SvgIcon.ImageAdd size={24} className="text-gray-200" />
               </div>
               <div
@@ -71,13 +72,14 @@ export default function ImageSettings() {
           <Form.Slot label={t`label.desktopWallpaper`}>
             <div
               className={line(`
+                flex-center-center
                 relative w-48 h-32
                 border-2 border-dashed border-gray-300 hover:border-blue-500 hover:border-solid
-                text-gray-500 rounded flex-center-center
+                text-gray-500 rounded
                 dark:border-zinc-600 dark:hover:border-blue-600
               `)}
             >
-              <div className="absolute z-0 inset-0 flex-center-center">
+              <div className="flex-center-center absolute z-0 inset-0">
                 <SvgIcon.ImageAdd size={48} className="text-gray-200" />
               </div>
               <div
@@ -95,13 +97,14 @@ export default function ImageSettings() {
           <Form.Slot label={t`label.sharingPageWallpaper`}>
             <div
               className={line(`
+                flex-center-center
                 relative w-48 h-32
                 border-2 border-dashed border-gray-300 hover:border-blue-500 hover:border-solid
-                text-gray-500 rounded flex-center-center
+                text-gray-500 rounded
                 dark:border-zinc-600 dark:hover:border-blue-600
               `)}
             >
-              <div className="absolute z-0 inset-0 flex-center-center">
+              <div className="flex-center-center absolute z-0 inset-0">
                 <SvgIcon.ImageAdd size={48} className="text-gray-200" />
               </div>
               <div

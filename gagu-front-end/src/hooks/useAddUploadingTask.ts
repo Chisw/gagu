@@ -8,7 +8,7 @@ import { uploadSignalState, uploadTaskListState } from '../states'
 
 export function useAddUploadingTask () {
   const { t } = useTranslation()
-  const [uploadTaskList, setUploadTaskList] = useRecoilState(uploadTaskListState)
+  const [, setUploadTaskList] = useRecoilState(uploadTaskListState)
   const [uploadSignal, setTransferSignal] = useRecoilState(uploadSignalState)
 
   const handleUploadTaskAdd = useCallback((nestedFileList: INestedFile[], basePath: string, targetDirName?: string) => {
@@ -29,9 +29,9 @@ export function useAddUploadingTask () {
         path,
       }
     })
-    setUploadTaskList([...uploadTaskList, ...newTaskList])
+    setUploadTaskList((list) => [...list, ...newTaskList])
     setTransferSignal(uploadSignal + 1)
-  }, [uploadTaskList, setUploadTaskList, uploadSignal, setTransferSignal, t])
+  }, [setUploadTaskList, uploadSignal, setTransferSignal, t])
 
   return { handleUploadTaskAdd }
 }

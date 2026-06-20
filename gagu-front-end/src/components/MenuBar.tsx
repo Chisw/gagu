@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { AuthApi, FsApi, SettingApi } from '../api'
 import { SvgIcon } from './common'
 import { useRequest, useUserConfig } from '../hooks'
-import { DOCUMENT_TITLE, DURATION_PAGE, EntryPathCacheStore, getDefaultUserConfig, line, UserInfoStore } from '../utils'
+import { GAGU_DOCUMENT_TITLE, DURATION_PAGE, EntryPathCacheStore, getDefaultUserConfig, line, UserInfoStore } from '../utils'
 import { QRCodeCanvas } from 'qrcode.react'
 import { useTranslation } from 'react-i18next'
 import { Page } from '../types'
@@ -90,7 +90,7 @@ export function MenuBar() {
   }, [userInfo, setUserInfo, navigate])
 
   useEffect(() => {
-    document.title = `${baseData ? `${baseData.deviceName} - ` : ''}${DOCUMENT_TITLE}`
+    document.title = `${baseData ? `${baseData.deviceName} - ` : ''}${GAGU_DOCUMENT_TITLE}`
   }, [baseData])
 
   useEffect(() => {

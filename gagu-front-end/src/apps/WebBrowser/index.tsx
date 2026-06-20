@@ -3,6 +3,7 @@ import { SvgIcon, ToolButton } from '../../components/common'
 import { line } from '../../utils'
 import { Button, Input } from '@douyinfe/semi-ui'
 import { useHotKey } from '../../hooks'
+import { GAGU_WEBSITE } from '@shared'
 
 const websiteList = [
   { group: '', url: 'https://edit.photo' },
@@ -20,7 +21,7 @@ const websiteList = [
   { group: '', url: 'https://img.ops-coffee.com' },
   { group: '', url: 'https://www.compumuseum.com' },
   { group: '', url: 'https://citycreator.com' },
-  { group: '', url: 'https://gagu.jsw.im' },
+  { group: '', url: GAGU_WEBSITE },
   { group: '', url: 'https://mxwy.jsw.im' },
 ]
 

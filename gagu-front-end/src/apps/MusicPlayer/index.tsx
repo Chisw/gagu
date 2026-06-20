@@ -316,7 +316,7 @@ export default function MusicPlayer(props: AppComponentProps) {
                     p-2 text-xs text-white hover:bg-black/10
                     ${isEven ? 'bg-black/5' : ''}
                   `)}
-                  style={getBoundStyle(entry.bound)}
+                  style={getBoundStyle(entry.bound, true)}
                   onDoubleClick={onClick}
                 >
                   <div
@@ -328,8 +328,8 @@ export default function MusicPlayer(props: AppComponentProps) {
                       style={{ backgroundImage: `url("${FsApi.getThumbnailStreamUrl(entry)}")` }}
                     />
                   </div>
-                  <div className="grow">
-                    <div>
+                  <div className="grow overflow-hidden">
+                    <div className="truncate" style={{ width: 'calc(100% - 56px)' }}>
                       <span className="font-din opacity-60">{indexNo}. </span>{name}
                     </div>
                     <div>
@@ -350,8 +350,8 @@ export default function MusicPlayer(props: AppComponentProps) {
                       px-4 cursor-pointer opacity-80
                       hover:opacity-100 hover:bg-white/10 active:opacity-70
                       backdrop-blur-sm
-                      flex-center-center
-                      ${isActive ? '' : 'hidden group-hover:flex'}
+                      justify-center items-center
+                      ${isActive ? 'flex' : 'hidden group-hover:flex'}
                     `)}
                     onClick={onClick}
                   >

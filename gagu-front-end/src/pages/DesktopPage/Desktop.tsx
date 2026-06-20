@@ -46,7 +46,7 @@ export default function Desktop() {
     currentPath,
     entryList, selectedEntryList,
     favoriteRootEntryList, sharingEntryList,
-    querying, sizeQuerying, deleting,
+    apiState,
     sharingModalShow, setSharingModalShow,
     movementEntryPickerShow, setMovementEntryPickerShow,
     editMode, handleNameSuccess, handleNameFail,
@@ -97,7 +97,7 @@ export default function Desktop() {
             w-full h-full p-3 flex flex-col flex-wrap content-start
             transition-opacity duration-500
             ${visible ? 'opacity-100' : 'opacity-0'}
-            ${querying ? 'opacity-50 pointer-events-none' : ''}
+            ${apiState.listQuerying ? 'opacity-50 pointer-events-none' : ''}
           `)}
           onMouseDownCapture={handleSetDesktopActive}
           onContextMenu={handleContextMenu}
@@ -128,7 +128,7 @@ export default function Desktop() {
                 supportThumbnail={supportThumbnail}
                 clipboardState={clipboardState}
                 draggable={!inputMode}
-                requestState={{ deleting, sizeQuerying }}
+                apiState={apiState}
                 onClick={handleEntryClick}
                 onDoubleClick={handleEntryDoubleClick}
                 onNameSuccess={handleNameSuccess}

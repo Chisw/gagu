@@ -1,5 +1,5 @@
 import { CSSProperties } from 'react'
-import { ClipboardState, CreationType, NameFailType } from '../../../types'
+import { ClipboardState, CreationType, IApiState, NameFailType } from '../../../types'
 import { IEntry } from '@shared'
 import { getEntryLabels, line } from '../../../utils'
 import EntryIcon from './EntryIcon'
@@ -19,10 +19,7 @@ interface EntryNodeProps {
   hideAppIcon?: boolean
   supportThumbnail?: boolean
   creationType?: CreationType
-  requestState?: {
-    sizeQuerying: boolean
-    deleting: boolean
-  }
+  apiState?: IApiState
   clipboardState?: ClipboardState
   onClick?: (e: any, entry: IEntry) => void
   onDoubleClick?: (entry: IEntry) => void
@@ -45,7 +42,7 @@ export default function EntryNode(props: EntryNodeProps) {
     hideAppIcon = false,
     supportThumbnail = false,
     creationType,
-    requestState,
+    apiState,
     clipboardState,
     onClick = () => {},
     onDoubleClick = () => {},
@@ -74,7 +71,7 @@ export default function EntryNode(props: EntryNodeProps) {
         ${gridMode ? 'is-grid-mode px-1 py-2 w-28 h-29 rounded-xs' : 'is-list-mode px-3 flex items-center'}
         ${isSelected && !gridMode ? 'bg-blue-600' : ''}
         ${isSelected && gridMode ? 'bg-black/5 dark:bg-black/20' : ''}
-        ${isSelected && requestState?.deleting ? 'bg-loading' : ''}
+        ${isSelected && apiState?.entryDeleting ? 'bg-loading' : ''}
         ${!isSelected && !gridMode && isEven ? 'bg-black/2 dark:bg-white/2' : ''}
         ${!isSelected && !hideAppIcon ? 'hover:bg-black/5 dark:hover:bg-white/5' : ''}
         ${className}
@@ -112,7 +109,7 @@ export default function EntryNode(props: EntryNodeProps) {
           text-xs whitespace-nowrap font-din min-w-16 pointer-events-none
           ${isSelected && !gridMode ? 'text-white' : 'text-gray-400'}
           ${gridMode ? 'w-full text-center' : 'pl-2 w-24 text-right'}
-          ${(isSelected && requestState?.sizeQuerying) ? 'bg-loading' : ''}
+          ${(isSelected && apiState?.sizeQuerying) ? 'bg-loading' : ''}
           ${inputMode ? 'hidden' : ''}
         `)}
       >

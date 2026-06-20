@@ -89,12 +89,12 @@ export default function ImmersiveTheatre(props: ImmersiveTheatreProps) {
 
           <div className="p-4 md:p-12 lg:p-20 flex grow flex-wrap lg:flex-nowrap">
 
-            <div className="shrink-0 w-full h-1/2 lg:w-1/2 lg:h-full flex-center-center">
+            <div className="flex-center-center shrink-0 w-full h-1/2 lg:w-1/2 lg:h-full">
               <div
                 className={line(`
+                  flex-center-center
                   w-full max-w-[60%] lg:max-w-[75%] aspect-square cursor-pointer
                   bg-center bg-cover bg-no-repeat
-                  flex-center-center
                   ${musicPlayerCoverDisk
                     ? `rounded-full ${isPlaying ? 'animate-[spin_12s_linear_infinite]' : ''}`
                     : 'border-4 border-white bg-white/10'
@@ -115,7 +115,7 @@ export default function ImmersiveTheatre(props: ImmersiveTheatreProps) {
               </div>
             </div>
 
-            <div className="shrink-0 w-full h-1/2 lg:w-1/2 lg:h-full flex-center-center">
+            <div className="flex-center-center shrink-0 w-full h-1/2 lg:w-1/2 lg:h-full">
               <div className="relative w-full max-w-[75%] max-h-[75%] aspect-square text-white text-center">
                 <div className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl opacity-90">{title}</div>
                 <div className="mt-2 md:mt-4 lg:mt-6 text-lg md:text-xl lg:text-2xl xl:text-3xl opacity-60">{album} - {artist}</div>

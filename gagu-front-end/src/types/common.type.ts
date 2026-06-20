@@ -11,6 +11,12 @@ export const Page = {
 
 export type PageType = keyof typeof Page
 
+export interface IApiState {
+  listQuerying: boolean
+  sizeQuerying: boolean
+  entryDeleting: boolean
+}
+
 export const ClipboardType = {
   copy: 'copy',
   cut: 'cut',

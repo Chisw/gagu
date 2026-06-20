@@ -7,6 +7,7 @@ import { AppId, ColorScheme, HotkeyStyle } from '../../../types'
 import { EntryPicker } from '../../../components'
 import { useState } from 'react'
 import { EntryType } from '@shared'
+import { GAGU_WEBSITE_HOTKEYS } from '../../../utils'
 
 export default function GeneralSettings() {
   const { t, i18n: { language } } = useTranslation()
@@ -55,7 +56,7 @@ export default function GeneralSettings() {
               </div>
               <Button
                 type="tertiary"
-                onClick={() => window.open('https://gagu.jsw.im/docs/getting-started/hotkeys')}
+                onClick={() => window.open(GAGU_WEBSITE_HOTKEYS)}
               >
                 <SvgIcon.Keyboard />
               </Button>

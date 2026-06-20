@@ -38,7 +38,7 @@ export default function FileExplorer(props: FileExplorerProps) {
     favoriteRootEntryList, rootEntryList, sharingEntryList,
     isEntryListEmpty, disabledMap,
     folderCount, fileCount,
-    querying, sizeQuerying, deleting,
+    apiState,
     filterMode, setFilterMode,
     filterText, setFilterText,
     sideCollapse, handleSideCollapseChange,
@@ -123,7 +123,7 @@ export default function FileExplorer(props: FileExplorerProps) {
               className="gagu-work-area-lasso"
             />
 
-            <EmptyPanel visible={!querying && isEntryListEmpty} />
+            <EmptyPanel visible={!apiState.listQuerying && isEntryListEmpty} />
 
             <div
               ref={containerInnerRef}
@@ -170,7 +170,7 @@ export default function FileExplorer(props: FileExplorerProps) {
                           supportThumbnail={supportThumbnail}
                           clipboardState={clipboardState}
                           draggable={!inputMode && !asEntryPicker}
-                          requestState={{ deleting, sizeQuerying }}
+                          apiState={apiState}
                           onClick={handleEntryClick}
                           onDoubleClick={handleEntryDoubleClick}
                           onNameSuccess={handleNameSuccess}
@@ -211,7 +211,7 @@ export default function FileExplorer(props: FileExplorerProps) {
             currentPath={currentPath}
             currentRootEntry={currentRootEntry}
             selectedEntryList={selectedEntryList}
-            loading={querying}
+            loading={apiState.listQuerying}
             onDirClick={handleGoFullPath}
             onRootEntryClick={(entry) => handleDirectoryOpen(entry, true)}
           />

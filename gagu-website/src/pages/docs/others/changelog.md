@@ -26,6 +26,7 @@ Clear data directory means that all users, download tunnels and other data will 
   - feat: added motion animation
   - feat: use virtual scrolling for all long lists (remove thumbScrollWatcher)
   - fix: replace `md5` with `sha256`
+  - fix: in some scenarios, filenames are not truncated
 
 - v0.0.59 (2025-07-04)
   - feat: TextEditor change status is displayed in the title instead of toast prompt

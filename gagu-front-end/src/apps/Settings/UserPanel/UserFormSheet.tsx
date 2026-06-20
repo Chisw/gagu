@@ -138,9 +138,10 @@ export default function UserFormModal(props: UserFormModalProps) {
             <Form.Slot label={t`label.avatar`}>
               <div
                 className={line(`
+                  flex-center-center
                   relative p-1 w-24 h-24
                   border-2 border-dashed border-gray-300 hover:border-blue-500 hover:border-solid
-                  text-gray-500 rounded-lg flex-center-center
+                  text-gray-500 rounded-lg
                 `)}
               >
                 <input

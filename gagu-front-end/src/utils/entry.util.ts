@@ -144,12 +144,12 @@ export const getEntryBound = (
   return { top, left, width, height } as IBound
 }
 
-export const getBoundStyle = ({ top, left, width, height }: IBound) => {
+export const getBoundStyle = ({ top, left, width, height }: IBound, full?: boolean) => {
   return {
     position: 'absolute',
     zIndex: 0,
     transform: `translateX(${left}px) translateY(${top}px)`,
-    width,
+    width: full ? '100%' : width,
     height,
   } as CSSProperties
 }

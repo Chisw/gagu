@@ -6,6 +6,7 @@ import {
   IClipboardData,
   ClipboardType,
   ClipboardTypeType,
+  IApiState,
 } from '../types'
 import {
   IEntry,
@@ -49,6 +50,37 @@ const RefreshTimerCache: {
     timestamp: number,
   }
 } = {}
+
+const getIsMatched = (
+  entryName: string,
+  filterText: string,
+  pureText: string,
+  hasAster: boolean,
+  asterStart: boolean,
+  asterEnd: boolean,
+  start: string,
+  end: string
+) => {
+  if (!filterText) return true
+
+  if (hasAster) {
+    if (asterStart) {
+      if (asterEnd) {
+        return entryName.includes(pureText)
+          && !entryName.startsWith(pureText)
+          && !entryName.endsWith(pureText)
+      } else {
+        return entryName.endsWith(pureText)
+      }
+    } else if (asterEnd) {
+      return entryName.startsWith(pureText)
+    } else {
+      return entryName.startsWith(start) && entryName.endsWith(end)
+    }
+  } else {
+    return entryName.includes(pureText)
+  }
+}
 
 export interface IFileExplorerDisabledMap {
   navBack: boolean
@@ -119,10 +151,10 @@ export function useFileExplorer(props: Props) {
   const [movementEntryPickerShow, setMovementEntryPickerShow] = useState(false)
   const [goToPathDialogShow, setGoToPathDialogShow] = useState(false)
 
-  const { request: queryEntryList, loading: querying } = useRequest(FsApi.queryEntryList)
+  const { request: queryEntryList, loading: listQuerying } = useRequest(FsApi.queryEntryList)
   const { request: queryDirectorySize, loading: sizeQuerying } = useRequest(FsApi.queryDirectorySize)
   const { request: queryExistsCount } = useRequest(FsApi.queryExistsCount)
-  const { request: deleteEntry, loading: deleting } = useRequest(FsApi.deleteEntry)
+  const { request: deleteEntry, loading: entryDeleting } = useRequest(FsApi.deleteEntry)
   const { request: createTunnel } = useRequest(TunnelApi.createTunnel)
   const { request: createFavorite } = useRequest(FsApi.createFavorite)
   const { request: removeFavorite } = useRequest(FsApi.removeFavorite)
@@ -157,40 +189,42 @@ export function useFileExplorer(props: Props) {
       sortType = Sort.default,
     } = entryPathCache[currentPath] || {}
 
-    const allEntryList = [...list].sort(sortMethodMap[sortType])
-    const text = filterText.toLowerCase()
-    const asteriskExist = text.includes('*')
-    const asteriskStart = text.startsWith('*')
-    const asteriskEnd = text.endsWith('*')
-
-    const entryList = allEntryList
-      .filter(entry => hiddenVisible ? true : !entry.hidden)
-      .filter((entry: IEntry) => {
-        if (!text) return true
-        const name = entry.name.toLowerCase()
-        const key = text.replaceAll('*', '')
-        if (asteriskExist) {
-          if (asteriskStart) {
-            if (asteriskEnd) {
-              return name.includes(key) && !name.startsWith(key) && !name.endsWith(key)
-            } else {
-              return name.endsWith(key)
-            }
-          } else if (asteriskEnd) {
-            return name.startsWith(key)
-          } else {
-            const [start, end] = text.split('*')
-            return name.startsWith(start) && name.endsWith(end)
-          }
-        } else {
-          return name.startsWith(key)
-        }
-      })
+    const _filterText = filterText.toLowerCase()
+    const hasAster = _filterText.includes('*')
+    const asterStart = _filterText.startsWith('*')
+    const asterEnd = _filterText.endsWith('*')
+    const pureText = _filterText.replaceAll('*', '')
+    const [start, end] = _filterText.split('*')
 
     let folderCount = 0
     let fileCount = 0
 
-    entryList.forEach(({ type }) => type === 'directory' ? folderCount++ : fileCount++)
+    const entryList = list.filter((entry: IEntry) => {
+      const { name, hidden } = entry
+
+      if (!hiddenVisible && hidden) {
+        return false
+      }
+
+      const isMatched = getIsMatched(
+        name.toLowerCase(),
+        _filterText,
+        pureText,
+        hasAster,
+        asterStart,
+        asterEnd,
+        start,
+        end,
+      )
+
+      if (isMatched) {
+        entry.type === 'directory' ? folderCount++ : fileCount++
+      }
+
+      return isMatched
+    })
+
+    entryList.sort(sortMethodMap[sortType])
 
     const isEntryListEmpty = entryList.length === 0
 
@@ -205,7 +239,7 @@ export function useFileExplorer(props: Props) {
     const disabledMap: IFileExplorerDisabledMap = {
       navBack: position <= 0 || isUserDesktop,
       navForward: list.length === position + 1 || isUserDesktop,
-      navRefresh: querying || !currentPath,
+      navRefresh: listQuerying || !currentPath,
       navToParent: !currentPath || canNotBackToParent || isUserDesktop,
       goTo: isUserDesktop,
       createFolder: touchMode ? false : !!editMode,
@@ -226,7 +260,7 @@ export function useFileExplorer(props: Props) {
     return disabledMap
   }, [
     visitHistory,
-    querying,
+    listQuerying,
     currentPath,
     canNotBackToParent,
     isUserDesktop,
@@ -496,9 +530,12 @@ export function useFileExplorer(props: Props) {
           const path = getEntryPath(entry)
           const { success } = await deleteEntry(path)
           if (success) {
-            containerRef?.current
+            const entryNode: HTMLDivElement | undefined = containerRef?.current
               ?.querySelector(`.gagu-entry-node[data-entry-name="${safeQuotes(name)}"]`)
-              ?.setAttribute('style', 'opacity:0;')
+
+            if (entryNode) {
+              entryNode.style.opacity = '0'
+            }
             deletedPaths.push(path)
           }
         }
@@ -625,7 +662,7 @@ export function useFileExplorer(props: Props) {
     kiloSize,
     disabledMap, supportThumbnail,
     currentPath, currentRootEntry,
-    querying, sizeQuerying, deleting,
+    apiState: { listQuerying, sizeQuerying, entryDeleting } as IApiState,
     entryList, rootEntryList, favoriteRootEntryList, sharingEntryList,
     isEntryListEmpty, visitHistory,
     folderCount, fileCount,

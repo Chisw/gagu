@@ -3,6 +3,7 @@ import { EntryType, IEntry } from '@shared'
 import { getEntryLabels, line } from '../../utils'
 import EntryIcon from '../FileExplorer/EntryNode/EntryIcon'
 import { SvgIcon } from '../../components/common'
+import { IApiState } from '../../types'
 
 interface EntryNodeProps {
   entry: IEntry
@@ -15,10 +16,7 @@ interface EntryNodeProps {
   isSelectionMode: boolean
   hideAppIcon?: boolean
   supportThumbnail?: boolean
-  requestState?: {
-    sizeQuerying: boolean
-    deleting: boolean
-  }
+  apiState?: IApiState
   onClick?: (entry: IEntry) => void
 }
 
@@ -34,7 +32,7 @@ export default function EntryNode(props: EntryNodeProps) {
     isSelectionMode,
     hideAppIcon = false,
     supportThumbnail = false,
-    requestState,
+    apiState,
     onClick = () => {},
   } = props
 
@@ -52,7 +50,7 @@ export default function EntryNode(props: EntryNodeProps) {
         relative overflow-hidden
         transition-transform duration-200
         ${hidden ? 'opacity-50' : ''}
-        ${isSelected && requestState?.deleting ? 'bg-loading' : ''}
+        ${isSelected && apiState?.entryDeleting ? 'bg-loading' : ''}
         ${gridMode
           ? 'px-1 py-2 active:scale-90'
           : 'px-2 py-2 flex-start-center active:scale-95'
@@ -81,7 +79,7 @@ export default function EntryNode(props: EntryNodeProps) {
             className={line(`
               w-full min-w-16
               text-center text-xs whitespace-nowrap font-din text-gray-400
-              ${(isSelected && requestState?.sizeQuerying) ? 'bg-loading' : ''}
+              ${(isSelected && apiState?.sizeQuerying) ? 'bg-loading' : ''}
             `)}
           >
             {sizeLabel}
@@ -110,7 +108,7 @@ export default function EntryNode(props: EntryNodeProps) {
                 className={line(`
                   w-full min-w-16
                   text-xs whitespace-nowrap font-din text-gray-400
-                  ${(isSelected && requestState?.sizeQuerying) ? 'bg-loading' : ''}
+                  ${(isSelected && apiState?.sizeQuerying) ? 'bg-loading' : ''}
                 `)}
               >
                 {dateLabel} &nbsp;|&nbsp; {sizeLabel}

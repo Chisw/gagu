@@ -12,7 +12,7 @@ interface UserListProps {
   userList: IUser[]
   setForm: (form: IUserForm) => void
   setFormMode: (mode: FormModeType) => void
-  refreshedTimestap: number
+  refreshedTimestamp: number
   onRefresh: () => void
 }
 
@@ -22,7 +22,7 @@ export default function UserList(props: UserListProps) {
     userList,
     setForm,
     setFormMode,
-    refreshedTimestap,
+    refreshedTimestamp,
     onRefresh,
   } = props
 
@@ -110,7 +110,7 @@ export default function UserList(props: UserListProps) {
           const isActive = pulsedAt && (Date.now() - pulsedAt < 5 * 60 * 1000)
           const showExpire = !!expiredAt
           const isExpired = getIsExpired(expiredAt)
-          const avatarStyle = { backgroundImage: `url("${FsApi.getPublicAvatarStreamUrl(username)}?${getTimestampParam(refreshedTimestap)}")` }
+          const avatarStyle = { backgroundImage: `url("${FsApi.getPublicAvatarStreamUrl(username)}?${getTimestampParam(refreshedTimestamp)}")` }
 
           return (
             <div
@@ -191,7 +191,7 @@ export default function UserList(props: UserListProps) {
                   <div
                     key={label}
                     title={label}
-                    className="mx-1 w-6 h-6 cursor-pointer hover:opacity-70 flex-center-center rounded-sm"
+                    className="flex-center-center mx-1 w-6 h-6 cursor-pointer hover:opacity-70 rounded-sm"
                     onClick={onClick}
                   >
                     {icon}

@@ -35,9 +35,8 @@ export function VolumeIndicator({ volume, time }: VolumeIndicatorProps) {
         -translate-x-1/2 -translate-y-1/2
         w-24 h-24 bg-black/30 rounded-lg
         font-din text-base text-white backdrop-blur-sm
-        flex-center-center
         transition-opacity duration-300
-        ${visible ? 'block' : 'hidden'}
+        ${visible ? 'flex-center-center' : 'hidden'}
         ${opacityShow ? 'opacity-100' : 'opacity-0'}
       `)}
     >

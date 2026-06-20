@@ -1,12 +1,20 @@
+import { GAGU_WEBSITE } from "@shared"
+
 const { protocol, host } = window.location
 
 export const BASE_URL = import.meta.env.VITE_APP_BASE_URL || `${protocol}//${host}`
 
-export const DOCUMENT_TITLE = 'GAGU'
+export const GAGU_DOCUMENT_TITLE = 'GAGU'
+
+export const GAGU_WEBSITE_HOTKEYS = `${GAGU_WEBSITE}/docs/getting-started/hotkeys`
+export const GAGU_WEBSITE_CHANGELOG = `${GAGU_WEBSITE}/docs/others/changelog`
+export const GAGU_WEBSITE_FEEDBACK = 'https://github.com/Chisw/gagu/issues'
+
 export const GAGU_I18N_LANGUAGE_KEY = 'GAGU_I18N_LANGUAGE_KEY'
 export const GAGU_USER_INFO_KEY = 'GAGU_USER_INFO_KEY'
 export const GAGU_USER_CONFIG_KEY = 'GAGU_USER_CONFIG_KEY'
 export const GAGU_ENTRY_PATH_CACHE_KEY = 'GAGU_ENTRY_PATH_CACHE_KEY'
+
 export const INVALID_NAME_CHAR_LIST = ['/', '|', '\\', '?', ':', '<', '>', '*']
 export const ERROR_TIMEOUT = 'ERROR_TIMEOUT'
 export const HOVER_OPEN_TIMER: { value: number | undefined } = { value: undefined }

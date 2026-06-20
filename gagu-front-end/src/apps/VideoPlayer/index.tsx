@@ -182,12 +182,12 @@ export default function VideoPlayer(props: AppComponentProps) {
           <div className="w-24">
             <p className="opacity-50 font-din">{playInfo.currentTimeLabel} / {playInfo.durationLabel}</p>
           </div>
-          <div className="relative flex-center-center">
+          <div className="flex-center-center relative">
             {buttonList.map(({ title, icon, onClick }) => (
               <div
                 key={title}
                 title={title}
-                className="w-8 h-8 text-white cursor-pointer hover:bg-white/20 active:bg-opacity-10 flex-center-center rounded-sm"
+                className="flex-center-center w-8 h-8 text-white cursor-pointer hover:bg-white/20 active:bg-opacity-10 rounded-sm"
                 onClick={onClick}
               >
                 {icon}
@@ -197,13 +197,13 @@ export default function VideoPlayer(props: AppComponentProps) {
           <div className="w-24 flex justify-end">
             <div
               title={t`action.volume`}
-              className="w-8 h-8 text-white cursor-pointer hover:bg-white/20 active:bg-opacity-10 flex-center-center rounded-sm"
+              className="flex-center-center w-8 h-8 text-white cursor-pointer hover:bg-white/20 active:bg-opacity-10 rounded-sm"
               onClick={() => setVolumeSliderShow(true)}
             >
               <VolumeIcon volume={videoPlayerVolume} size={14} />
             </div>
             <div
-              className="ml-1 w-8 h-8 text-white cursor-pointer hover:bg-white/20 active:bg-opacity-10 flex-center-center rounded-sm"
+              className="flex-center-center ml-1 w-8 h-8 text-white cursor-pointer hover:bg-white/20 active:bg-opacity-10 rounded-sm"
               onClick={() => videoEl?.requestFullscreen()}
             >
               <SvgIcon.Fullscreen />

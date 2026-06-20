@@ -16,7 +16,7 @@ export default function UserPanel() {
 
   const [formMode, setFormMode] = useState<FormModeType>('CLOSE')
   const [form, setForm] = useState<IUserForm>(new UserForm())
-  const [refreshedTimestap, setRefreshedTimestamp] = useState(Date.now())
+  const [refreshedTimestamp, setRefreshedTimestamp] = useState(Date.now())
 
   const { request: queryUserList, loading, response } = useRequest(UserApi.queryUserList)
 
@@ -60,12 +60,10 @@ export default function UserPanel() {
 
         <div className="mt-2">
           <UserList
-            {...{
-              userList,
-              setForm,
-              setFormMode,
-              refreshedTimestap,
-            }}
+            userList={userList}
+            setForm={setForm}
+            setFormMode={setFormMode}
+            refreshedTimestamp={refreshedTimestamp}
             onRefresh={handleRefreshList}
           />
         </div>
@@ -73,12 +71,10 @@ export default function UserPanel() {
       </div>
 
       <UserFormSheet
-        {...{
-          formMode,
-          form,
-          setForm,
-          setFormMode,
-        }}
+        formMode={formMode}
+        form={form}
+        setForm={setForm}
+        setFormMode={setFormMode}
         onRefresh={handleRefreshList}
       />
     </>

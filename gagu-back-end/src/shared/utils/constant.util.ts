@@ -1,6 +1,7 @@
 import { ThumbnailType, ThumbnailTypeType } from '../types'
 
 export const GAGU_VERSION = '0.0.59'
+export const GAGU_WEBSITE = 'https://gagu.jsw.im'
 
 export const ACCESS_TOKEN_KEY = 'accessToken'
 export const HEADERS_AUTH_KEY = 'Authorization'

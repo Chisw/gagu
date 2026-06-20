@@ -53,7 +53,7 @@ export function useWorkArea(props: useWorkAreaProps) {
     kiloSize,
     disabledMap, supportThumbnail,
     currentPath, currentRootEntry,
-    querying, sizeQuerying, deleting,
+    apiState,
     entryList, rootEntryList, favoriteRootEntryList, sharingEntryList,
     isEntryListEmpty,
     folderCount, fileCount,
@@ -493,14 +493,14 @@ export function useWorkArea(props: useWorkAreaProps) {
 
   useEffect(() => {
     const container: any = containerRef.current
-    if (container && locationScrollWatcher.wait && !querying) {
+    if (container && locationScrollWatcher.wait && !apiState.listQuerying) {
       const target: any = document.querySelector('.gagu-entry-node[data-selected="true"]')
       const top = target ? target.offsetTop - 10 : 0
       container!.scrollTo({ top, behavior: locationScrollWatcher.smooth ? 'smooth' : undefined })
       setLocationScrollWatcher({ wait: false })
       setLastVisitedPath('')
     }
-  }, [locationScrollWatcher, querying, setLastVisitedPath])
+  }, [locationScrollWatcher, apiState.listQuerying, setLastVisitedPath])
 
   useEffect(() => {
     setEditMode(null)
@@ -542,7 +542,7 @@ export function useWorkArea(props: useWorkAreaProps) {
     favoriteRootEntryList, rootEntryList, sharingEntryList,
     isEntryListEmpty, disabledMap,
     folderCount, fileCount,
-    querying, sizeQuerying, deleting,
+    apiState,
     filterMode, setFilterMode,
     filterText, setFilterText,
     sideCollapse, handleSideCollapseChange,
