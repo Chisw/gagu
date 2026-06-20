@@ -24,6 +24,7 @@ Clear data directory means that all users, download tunnels and other data will 
   - feat: MusicPlayer supports .m4a
   - feat: Web Browser
   - feat: added motion animation
+  - feat: use virtual scrolling for all long lists (remove thumbScrollWatcher)
   - fix: replace `md5` with `sha256`
 
 - v0.0.59 (2025-07-04)

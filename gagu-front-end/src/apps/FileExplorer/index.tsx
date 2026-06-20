@@ -1,22 +1,23 @@
-import { useEffect } from 'react'
+import { Fragment, useEffect, useMemo } from 'react'
 import { EntryPicker, SharingModal } from '../../components'
 import { useWorkArea } from '../../hooks'
 import StatusBar from './StatusBar'
 import ControlBar from './ControlBar'
 import Side from './Side'
 import { EmptyPanel } from '../../components/common'
-import { getIsSameEntry, line } from '../../utils'
+import { getBoundStyle, getIsSameEntry, line, getEntryBound } from '../../utils'
 import { FileExplorerProps, EditMode, CreationType, AppId, ClipboardState } from '../../types'
 import { EntryType, getEntryPath } from '@shared'
 import EntryNode from './EntryNode'
 import GoToPathDialog from './GoToPathDialog'
 import { useTranslation } from 'react-i18next'
+import { useVirtualizer } from '@tanstack/react-virtual'
 
 export default function FileExplorer(props: FileExplorerProps) {
 
   const {
     isTopWindow,
-    windowSize: { width: windowWidth },
+    appWindowSize: { width: appWindowWidth },
     setWindowTitle,
     additionalEntryList,
     asEntryPicker = false,
@@ -30,9 +31,10 @@ export default function FileExplorer(props: FileExplorerProps) {
   const {
     kiloSize, clipboardData,
     lassoRef, containerRef, containerInnerRef,
-    supportThumbnail, thumbScrollWatcher,
+    virtualContainer, virtualBox,
+    supportThumbnail,
     currentPath, currentRootEntry,
-    entryList, selectedEntryList,
+    boundedEntryList, selectedEntryList,
     favoriteRootEntryList, rootEntryList, sharingEntryList,
     isEntryListEmpty, disabledMap,
     folderCount, fileCount,
@@ -40,7 +42,7 @@ export default function FileExplorer(props: FileExplorerProps) {
     filterMode, setFilterMode,
     filterText, setFilterText,
     sideCollapse, handleSideCollapseChange,
-    hiddenShow, handleHiddenShowChange,
+    hiddenVisible, handleHiddenShowChange,
     gridMode, handleGridModeChange,
     sortType, handleSortChange,
     sharingModalShow, setSharingModalShow,
@@ -56,12 +58,24 @@ export default function FileExplorer(props: FileExplorerProps) {
   } = useWorkArea({
     isUserDesktop: false,
     isTopWindow,
+    appWindowWidth,
     asEntryPicker,
     specifiedPath: additionalEntryList?.length ? getEntryPath(additionalEntryList[0]) : '',
     onCurrentPathChange,
     onPick,
     onPickDoubleConfirm,
     onOpenDesktopDirectory: () => {},
+  })
+
+  const isCreating = useMemo(() => {
+    return [EditMode.createFolder, EditMode.createText].includes(editMode as CreationType)
+  }, [editMode])
+
+  const virtualizer = useVirtualizer({
+    count: virtualContainer.rows + (isCreating ? 1 : 0),
+    getScrollElement: () => containerRef.current,
+    estimateSize: () => virtualBox.height + virtualBox.marginY,
+    overscan: 3,
   })
 
   useEffect(() => {
@@ -72,23 +86,23 @@ export default function FileExplorer(props: FileExplorerProps) {
     <>
       <div className={`absolute inset-0 flex ${asEntryPicker ? '' : 'border-t border-gray-100 dark:border-zinc-700'}`}>
         <Side
-          {...{ sideCollapse, currentPath, rootEntryList }}
+          sideCollapse={sideCollapse}
+          currentPath={currentPath}
+          rootEntryList={rootEntryList}
           onRootEntryClick={(entry) => handleDirectoryOpen(entry, true)}
           onFavoriteCancel={handleFavoriteClick}
         />
         <div className="relative grow h-full bg-white dark:bg-zinc-800 flex flex-col">
           <ControlBar
-            {...{
-              windowWidth,
-              disabledMap,
-              gridMode,
-              filterMode,
-              filterText,
-              hiddenShow,
-              sortType,
-              setFilterMode,
-              setFilterText,
-            }}
+            appWindowWidth={appWindowWidth}
+            disabledMap={disabledMap}
+            gridMode={gridMode}
+            filterMode={filterMode}
+            filterText={filterText}
+            hiddenVisible={hiddenVisible}
+            sortType={sortType}
+            setFilterMode={setFilterMode}
+            setFilterText={setFilterText}
             onHiddenShowChange={handleHiddenShowChange}
             onGridModeChange={handleGridModeChange}
             onSortTypeChange={handleSortChange}
@@ -109,22 +123,71 @@ export default function FileExplorer(props: FileExplorerProps) {
               className="gagu-work-area-lasso"
             />
 
-            <EmptyPanel show={!querying && isEntryListEmpty} />
+            <EmptyPanel visible={!querying && isEntryListEmpty} />
 
             <div
               ref={containerInnerRef}
               className={line(`
                 gagu-entry-list-container-inner
-                relative min-h-full flex flex-wrap content-start
-                ${gridMode ? 'p-2' : 'p-4'}
+                relative z-0 min-h-full
               `)}
+              style={{ height: virtualizer.getTotalSize() + virtualBox.marginY + virtualContainer.padding * 2 }}
               onContextMenu={handleContextMenu}
             >
+              {/* entry list */}
+              {virtualizer.getVirtualItems().map(({ key: rowKey, index: rowIndex }) => {
+                const isEven = rowIndex % 2 === 0
+                const { cols } = virtualContainer
+                const startIndex = rowIndex * cols
+                const endIndex = startIndex + cols
+                const rowEntries = boundedEntryList.slice(startIndex, endIndex)
+
+                return (
+                  <Fragment key={rowKey}>
+                    {rowEntries.map((entry) => {
+                      const isSelected = selectedEntryList.some(o => getIsSameEntry(o, entry))
+                      const isFavorited = favoriteRootEntryList.some(o => getIsSameEntry(o, entry))
+                      const inputMode = editMode === EditMode.rename && isSelected
+
+                      const isInClipboard = clipboardData?.entryList.length &&
+                        clipboardData.entryList.some((o) => getIsSameEntry(o, entry))
+
+                      const clipboardState: ClipboardState = isInClipboard
+                        ? clipboardData.type
+                        : undefined
+
+                      return (
+                        <EntryNode
+                          key={encodeURIComponent(`${entry.name}-${entry.type}`)}
+                          entry={entry}
+                          kiloSize={kiloSize}
+                          gridMode={gridMode}
+                          style={getBoundStyle(entry.bound)}
+                          inputMode={inputMode}
+                          isSelected={isSelected}
+                          isFavorited={isFavorited}
+                          isEven={isEven}
+                          supportThumbnail={supportThumbnail}
+                          clipboardState={clipboardState}
+                          draggable={!inputMode && !asEntryPicker}
+                          requestState={{ deleting, sizeQuerying }}
+                          onClick={handleEntryClick}
+                          onDoubleClick={handleEntryDoubleClick}
+                          onNameSuccess={handleNameSuccess}
+                          onNameFail={handleNameFail}
+                        />
+                      )
+                    })}
+                  </Fragment>
+                )
+              })}
+
               {/* create */}
-              {[EditMode.createFolder, EditMode.createText].includes(editMode as CreationType) && (
+              {isCreating && (
                 <EntryNode
                   inputMode
                   gridMode={gridMode}
+                  style={getBoundStyle(getEntryBound(boundedEntryList.length, virtualContainer, virtualBox))}
                   entry={{
                     name: '',
                     type: editMode === EditMode.createFolder ? 'directory' : 'file',
@@ -140,53 +203,14 @@ export default function FileExplorer(props: FileExplorerProps) {
                   onNameFail={handleNameFail}
                 />
               )}
-
-              {/* entry list */}
-              {entryList.map(entry => {
-                const isSelected = selectedEntryList.some(o => getIsSameEntry(o, entry))
-                const isFavorited = favoriteRootEntryList.some(o => getIsSameEntry(o, entry))
-                const inputMode = editMode === EditMode.rename && isSelected
-
-                const isInClipboard = clipboardData?.entryList.length &&
-                  clipboardData.entryList.some((o) => getIsSameEntry(o, entry))
-
-                const clipboardState: ClipboardState = isInClipboard
-                  ? clipboardData.type
-                  : undefined
-
-                return (
-                  <EntryNode
-                    key={encodeURIComponent(`${entry.name}-${entry.type}`)}
-                    {...{
-                      entry,
-                      kiloSize,
-                      gridMode,
-                      inputMode,
-                      isSelected,
-                      isFavorited,
-                      supportThumbnail,
-                      thumbScrollWatcher,
-                      clipboardState,
-                    }}
-                    draggable={!inputMode && !asEntryPicker}
-                    requestState={{ deleting, sizeQuerying }}
-                    onClick={handleEntryClick}
-                    onDoubleClick={handleEntryDoubleClick}
-                    onNameSuccess={handleNameSuccess}
-                    onNameFail={handleNameFail}
-                  />
-                )
-              })}
             </div>
           </div>
           <StatusBar
-            {...{
-              folderCount,
-              fileCount,
-              currentPath,
-              currentRootEntry,
-              selectedEntryList,
-            }}
+            folderCount={folderCount}
+            fileCount={fileCount}
+            currentPath={currentPath}
+            currentRootEntry={currentRootEntry}
+            selectedEntryList={selectedEntryList}
             loading={querying}
             onDirClick={handleGoFullPath}
             onRootEntryClick={(entry) => handleDirectoryOpen(entry, true)}
@@ -195,13 +219,13 @@ export default function FileExplorer(props: FileExplorerProps) {
       </div>
 
       <SharingModal
-        show={sharingModalShow}
+        visible={sharingModalShow}
         entryList={sharingEntryList}
         onClose={() => setSharingModalShow(false)}
       />
 
       <GoToPathDialog
-        show={goToPathDialogShow}
+        visible={goToPathDialogShow}
         currentPath={currentPath}
         onGo={(path) => {
           handleGoFullPath(path, true)
@@ -211,7 +235,7 @@ export default function FileExplorer(props: FileExplorerProps) {
       />
 
       <EntryPicker
-        show={movementEntryPickerShow}
+        visible={movementEntryPickerShow}
         appId={AppId.fileExplorer}
         mode="open"
         type={EntryType.directory}

@@ -2,21 +2,22 @@ import { line } from '../../utils'
 import { SvgIcon } from './SvgIcon'
 
 interface EmptyPanelProps {
-  show: boolean
+  visible: boolean
   dark?: boolean
 }
 
 export function EmptyPanel(props: EmptyPanelProps) {
   const {
-    show,
+    visible,
     dark = false,
   } = props
 
-  return show ? (
+  return visible ? (
     <div
       className={line(`
-        absolute inset-0 flex justify-center items-center
-        ${dark ? 'text-black text-opacity-10' : 'text-gray-100 dark:text-zinc-700'}
+        absolute inset-0
+        flex-center-center
+        ${dark ? 'text-black/10' : 'text-gray-100 dark:text-zinc-700'}
       `)}
     >
       <SvgIcon.G size={64} />

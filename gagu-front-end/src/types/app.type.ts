@@ -1,8 +1,9 @@
 import { IEntry } from '@shared'
+import { IAppWindowSize } from './common.type'
 
 export interface AppComponentProps {
   isTopWindow: boolean
-  windowSize: { width: number, height: number }
+  appWindowSize: IAppWindowSize
   setWindowTitle: (title: string) => void
   closeWindow: () => void
   additionalEntryList?: IEntry[]

@@ -1,22 +1,24 @@
-import { ClipboardState, CreationType, IScrollerWatcher, NameFailType } from '../../../types'
+import { CSSProperties } from 'react'
+import { ClipboardState, CreationType, NameFailType } from '../../../types'
 import { IEntry } from '@shared'
 import { getEntryLabels, line } from '../../../utils'
 import EntryIcon from './EntryIcon'
 import EntryName from './EntryName'
-import { useEffect, useRef, useState } from 'react'
 
 interface EntryNodeProps {
   entry: IEntry
   kiloSize: 1000 | 1024
   gridMode: boolean
+  className?: string
+  style?: CSSProperties
   isSelected?: boolean
   isFavorited?: boolean
+  isEven?: boolean
   inputMode?: boolean
   draggable?: boolean
   hideAppIcon?: boolean
   supportThumbnail?: boolean
   creationType?: CreationType
-  thumbScrollWatcher?: IScrollerWatcher
   requestState?: {
     sizeQuerying: boolean
     deleting: boolean
@@ -33,14 +35,16 @@ export default function EntryNode(props: EntryNodeProps) {
     entry,
     kiloSize,
     gridMode,
+    className,
+    style,
     isSelected = false,
     isFavorited = false,
+    isEven = false,
     inputMode = false,
     draggable = false,
     hideAppIcon = false,
     supportThumbnail = false,
     creationType,
-    thumbScrollWatcher,
     requestState,
     clipboardState,
     onClick = () => {},
@@ -52,24 +56,9 @@ export default function EntryNode(props: EntryNodeProps) {
   const { name, type, parentPath, extension, hidden } = entry
   const { sizeLabel, dateLabel } = getEntryLabels(entry, kiloSize)
 
-  const [isViewable, setIsViewable] = useState(false)
-
-  const nodeRef = useRef<any>(null)
-
-  useEffect(() => {
-    const icon: any = nodeRef.current
-    if (!icon || !thumbScrollWatcher) return
-    const { top, height } = thumbScrollWatcher
-    const { top: iconTop } = icon.getBoundingClientRect()
-    if ((top - 20) <= iconTop && iconTop <= (top + height)) {
-      setIsViewable(true)
-    }
-  }, [thumbScrollWatcher])
-
   return (
     <div
       draggable={draggable}
-      ref={nodeRef}
       title={name}
       data-entry-name={name}
       data-entry-type={type}
@@ -82,13 +71,15 @@ export default function EntryNode(props: EntryNodeProps) {
         clipboard-${clipboardState}
         ${hidden ? 'opacity-50' : ''}
         ${isSelected ? 'is-selected' : ''}
-        ${gridMode ? 'is-grid-mode m-1 px-1 py-2 w-28 h-29 rounded-xs' : 'is-list-mode px-3 py-0.75 w-full flex items-center'}
+        ${gridMode ? 'is-grid-mode px-1 py-2 w-28 h-29 rounded-xs' : 'is-list-mode px-3 flex items-center'}
         ${isSelected && !gridMode ? 'bg-blue-600' : ''}
         ${isSelected && gridMode ? 'bg-black/5 dark:bg-black/20' : ''}
         ${isSelected && requestState?.deleting ? 'bg-loading' : ''}
-        ${!isSelected && !gridMode ? 'even:bg-black even:bg-opacity-[2%]' : ''}
-        ${!isSelected && !hideAppIcon ? 'hover:bg-black/5 dark:hover:bg-opacity-20' : ''}
+        ${!isSelected && !gridMode && isEven ? 'bg-black/2 dark:bg-white/2' : ''}
+        ${!isSelected && !hideAppIcon ? 'hover:bg-black/5 dark:hover:bg-white/5' : ''}
+        ${className}
       `)}
+      style={style}
       onClick={e => onClick(e, entry)}
       onDoubleClick={() => onDoubleClick(entry)}
     >
@@ -96,7 +87,6 @@ export default function EntryNode(props: EntryNodeProps) {
         {...{
           isSmall: !gridMode,
           isFavorited,
-          isViewable,
           entry,
           hideAppIcon,
           supportThumbnail,
@@ -117,6 +107,7 @@ export default function EntryNode(props: EntryNodeProps) {
       />
       <div
         className={line(`
+          shrink-0
           gagu-entry-node-size
           text-xs whitespace-nowrap font-din min-w-16 pointer-events-none
           ${isSelected && !gridMode ? 'text-white' : 'text-gray-400'}
@@ -129,6 +120,7 @@ export default function EntryNode(props: EntryNodeProps) {
       </div>
       <div
         className={line(`
+          shrink-0
           text-xs whitespace-nowrap font-din pointer-events-none
           ${isSelected && !gridMode ? 'text-white' : 'text-gray-400'}
           ${gridMode ? 'hidden' : 'w-36 pl-2 text-right'}

@@ -1,10 +1,11 @@
 import { DateTime } from 'luxon'
 import { FsApi } from '../api'
 import { CALLABLE_APP_LIST } from '../apps'
-import { INestedFile } from '../types'
+import { IBound, IVirtualBox, INestedFile, IVirtualContainer } from '../types'
 import { EntryType, IEntry } from '@shared'
 import { getReadableSize } from './common.util'
 import { t } from 'i18next'
+import { CSSProperties } from 'react'
 
 export const getIsSameEntry = (a: IEntry, b: IEntry) => {
   return a.name === b.name && a.parentPath === b.parentPath
@@ -125,5 +126,30 @@ export const getAbsolutePath = (currentPath: string, relativePath: string) => {
   return nameList.join('/')
 }
 
-export const safeQuotes = (path: string) =>
-  path.replace(/"/g, '\\"').replace(/`/g, '\\`')
+export const safeQuotes = (path: string) => {
+  return path.replace(/"/g, '\\"').replace(/`/g, '\\`')
+}
+
+export const getEntryBound = (
+  entryIndex: number,
+  virtualContainer: IVirtualContainer,
+  virtualBox: IVirtualBox,
+) => {
+  const { padding, cols } = virtualContainer
+  const rowIndex = Math.floor(entryIndex / cols)
+  const colIndex = entryIndex % cols
+  const { marginX, marginY, width, height } = virtualBox
+  const top = rowIndex * (height + marginY) + marginY + padding
+  const left = colIndex * (width + marginX) + marginX + padding
+  return { top, left, width, height } as IBound
+}
+
+export const getBoundStyle = ({ top, left, width, height }: IBound) => {
+  return {
+    position: 'absolute',
+    zIndex: 0,
+    transform: `translateX(${left}px) translateY(${top}px)`,
+    width,
+    height,
+  } as CSSProperties
+}

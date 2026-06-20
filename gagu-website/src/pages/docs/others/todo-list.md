@@ -12,7 +12,6 @@ Many unrealized ideas will be recorded here, waiting for development
 - Show transfer percentage on Favicon
 - Sound Recorder, Calendar, Calculator, Weather, Relative calculator and other gadgets
 - When running on Termux, add user login vibration reminder and pop-up notification
-- Use virtual scrolling for all long lists (remove thumbScrollWatcher)
 - Single-window mode for the App
 - External App (npm install/cdn)
 - Responsive container query style

@@ -1,11 +1,12 @@
-import ReactDOM from 'react-dom'
-import App from './App'
+import ReactDOM from 'react-dom/client'
 import { RecoilRoot } from 'recoil'
+import App from './App'
 import './i18n'
 
-ReactDOM.render(
+ReactDOM.createRoot(
+  document.getElementById('root')!
+).render(
   <RecoilRoot>
       <App />
-  </RecoilRoot>,
-  document.getElementById('root')
+  </RecoilRoot>
 )

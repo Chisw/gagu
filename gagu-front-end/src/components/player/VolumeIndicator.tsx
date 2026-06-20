@@ -9,18 +9,18 @@ interface VolumeIndicatorProps {
 
 export function VolumeIndicator({ volume, time }: VolumeIndicatorProps) {
 
-  const [show, setShow] = useState(false)
+  const [visible, setVisible] = useState(false)
   const [opacityShow, setOpacityShow] = useState(false)
 
   useEffect(() => {
     if (!time) return
     let timer: number
     let opacityTimer: number
-    setShow(true)
+    setVisible(true)
     setOpacityShow(true)
     timer = setTimeout(() => {
       setOpacityShow(false)
-      opacityTimer = setTimeout(() => setShow(false), 300)
+      opacityTimer = setTimeout(() => setVisible(false), 300)
     }, 500)
     return () => {
       clearTimeout(timer)
@@ -35,9 +35,9 @@ export function VolumeIndicator({ volume, time }: VolumeIndicatorProps) {
         -translate-x-1/2 -translate-y-1/2
         w-24 h-24 bg-black/30 rounded-lg
         font-din text-base text-white backdrop-blur-sm
-        flex justify-center items-center
+        flex-center-center
         transition-opacity duration-300
-        ${show ? 'block' : 'hidden'}
+        ${visible ? 'block' : 'hidden'}
         ${opacityShow ? 'opacity-100' : 'opacity-0'}
       `)}
     >

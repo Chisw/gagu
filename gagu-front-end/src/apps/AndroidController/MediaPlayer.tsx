@@ -75,7 +75,7 @@ export default function MediaPlayer() {
 
 
       <EntryPicker
-        show={pickerShow}
+        visible={pickerShow}
         appId={AppId.androidController}
         mode="open"
         type={EntryType.file}

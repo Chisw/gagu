@@ -10,13 +10,13 @@ import { openEventState } from '../../states'
 import { IEntry } from '@shared'
 
 interface SelectionMenuProps {
-  show: boolean
+  visible: boolean
   asEntryPicker?: boolean
   favoriteRootEntryList: IEntry[]
   selectedEntryList: IEntry[]
   clipboardData: IClipboardData | null
-  setMovementEntryPickerShow: (show: boolean) => void
-  setGoToPathDialogShow: (show: boolean) => void
+  setMovementEntryPickerShow: (visible: boolean) => void
+  setGoToPathDialogShow: (visible: boolean) => void
   onClipboardAdd: (data: IClipboardData) => void
   onClipboardPaste: () => void
   onEdit: (mode: EditModeType, entry?: IEntry) => void
@@ -32,7 +32,7 @@ interface SelectionMenuProps {
 
 export default function SelectionMenu(props: SelectionMenuProps) {
   const {
-    show,
+    visible,
     asEntryPicker = false,
     favoriteRootEntryList,
     selectedEntryList,
@@ -215,8 +215,8 @@ export default function SelectionMenu(props: SelectionMenuProps) {
   }, [selectedEntryList, setOpenEvent])
 
   useEffect(() => {
-    !show && setAppsModalShow(false)
-  }, [show])
+    !visible && setAppsModalShow(false)
+  }, [visible])
 
   return (
     <>
@@ -227,7 +227,7 @@ export default function SelectionMenu(props: SelectionMenuProps) {
           bg-white/90 backdrop-blur-sm select-none
           transition-all duration-300
           dark:bg-zinc-700/90 dark:border-zinc-600
-          ${show ? 'h-28 scale-100' : 'h-0 scale-0'}
+          ${visible ? 'h-28 scale-100' : 'h-0 scale-0'}
         `)}
       >
         <div className="absolute z-0 inset-0 p-2 overflow-y-auto flex flex-wrap">

@@ -18,7 +18,7 @@ const newForm = () => ({
 })
 
 interface SharingModalProps {
-  show: boolean
+  visible: boolean
   entryList: IEntry[]
   onClose: () => void
 }
@@ -26,7 +26,7 @@ interface SharingModalProps {
 export function SharingModal(props: SharingModalProps) {
 
   const {
-    show,
+    visible,
     entryList,
     onClose,
   } = props
@@ -48,11 +48,11 @@ export function SharingModal(props: SharingModalProps) {
   const { request: createTunnel, loading: creating } = useRequest(TunnelApi.createTunnel)
 
   useEffect(() => {
-    if (!show) {
+    if (!visible) {
       setTunnelLink('')
       setForm(newForm())
     }
-  }, [show])
+  }, [visible])
 
   useEffect(() => {
     if (entryList.length) {
@@ -98,7 +98,7 @@ export function SharingModal(props: SharingModalProps) {
         fullScreen={touchMode}
         bodyStyle={{ maxHeight: '80%', overflowY: 'auto' }}
         width={isCreating ? 640 : 480}
-        visible={show}
+        visible={visible}
         footer={isCreating ? (
           <div className="relative z-10 flex justify-end">
             <Button

@@ -1,4 +1,4 @@
-import { IWindowInfoMap, PlayModeType } from '.'
+import { IAppWindowInfoMap, PlayModeType } from '.'
 
 export const HotkeyStyle = {
   mac: 'mac',
@@ -23,5 +23,5 @@ export interface IUserConfig {
   musicPlayerCoverDisk: boolean
   musicPlayerPlayMode: PlayModeType
   videoPlayerVolume: number
-  windowInfoMap: IWindowInfoMap
+  windowInfoMap: IAppWindowInfoMap
 }

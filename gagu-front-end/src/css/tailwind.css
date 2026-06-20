@@ -3,5 +3,10 @@
 @custom-variant dark (&:is(.dark *));
 
 .flex-center-center {
-  @apply flex items-center justify-center;
+  @apply flex justify-center items-center;
 }
+
+.flex-start-center {
+  @apply flex justify-start items-center;
+}
+

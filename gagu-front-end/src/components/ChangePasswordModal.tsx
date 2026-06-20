@@ -12,13 +12,13 @@ import { useNavigate } from 'react-router'
 import { UserPasswordForm } from '@shared'
 
 interface ChangePasswordModalProps {
-  show: boolean
+  visible: boolean
   onClose: () => void
 }
 
 export function ChangePasswordModal(props: ChangePasswordModalProps) {
 
-  const { show, onClose } = props
+  const { visible, onClose } = props
 
   const navigate = useNavigate()
   const { t } = useTranslation()
@@ -51,10 +51,10 @@ export function ChangePasswordModal(props: ChangePasswordModalProps) {
   }, [form, updateUserPassword, onClose, setActivePage, navigate])
 
   useEffect(() => {
-    if (!show) {
+    if (!visible) {
       setForm(new UserPasswordForm())
     }
-  }, [show])
+  }, [visible])
 
   return (
     <>
@@ -65,7 +65,7 @@ export function ChangePasswordModal(props: ChangePasswordModalProps) {
         title={t`title.changePassword`}
         fullScreen={touchMode}
         width={400}
-        visible={show}
+        visible={visible}
         footer={null}
         onCancel={onClose}
       >

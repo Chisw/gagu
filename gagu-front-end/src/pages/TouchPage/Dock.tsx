@@ -10,7 +10,7 @@ import { useClickAway } from '../../hooks'
 import { genRunningApp } from '../../utils/app.util'
 
 interface DockProps {
-  show: boolean
+  visible: boolean
   activeAppId: string
   setActiveAppId: (id: string) => void
   dockExpanded: boolean
@@ -19,7 +19,7 @@ interface DockProps {
 
 export default function Dock(props: DockProps) {
   const {
-    show,
+    visible,
     activeAppId,
     setActiveAppId,
     dockExpanded,
@@ -72,7 +72,7 @@ export default function Dock(props: DockProps) {
           border border-gray-200 shadow-lg overflow-hidden
           transition-all duration-200 select-none
           dark:border-zinc-500
-          ${show ? 'scale-100 origin-bottom-right' : 'scale-0 origin-center'}
+          ${visible ? 'scale-100 origin-bottom-right' : 'scale-0 origin-center'}
           ${dockExpanded
             ? 'right-2.5 bottom-2.5 w-48 h-48 rounded-xl bg-linear-to-b from-gray-200 via-gray-100 to-gray-100 dark:from-zinc-800 dark:via-zinc-700 dark:to-zinc-700'
             : 'right-4 bottom-4 w-12 h-12 rounded-3xl bg-white dark:bg-zinc-600'
@@ -113,7 +113,7 @@ export default function Dock(props: DockProps) {
           <div
             className={line(`
               aspect-square border border-gray-200 rounded-lg
-              flex justify-center items-center
+              flex-center-center
               transition-all duration-200 active:scale-90
               dark:border-zinc-600 dark:text-zinc-200
             `)}
@@ -125,7 +125,8 @@ export default function Dock(props: DockProps) {
 
         <div
           className={line(`
-            absolute w-full h-full flex justify-center items-center text-gray-800
+            absolute w-full h-full
+            flex-center-center text-gray-800
             transition-opacity duration-200
             dark:text-zinc-200
             ${dockExpanded ? 'z-0 opacity-0' : 'z-10 opacity-100'}

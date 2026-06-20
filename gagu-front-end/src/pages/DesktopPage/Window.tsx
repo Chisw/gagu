@@ -1,4 +1,4 @@
-import { IRunningApp, IWindowInfo } from '../../types'
+import { IRunningApp, IAppWindowInfo } from '../../types'
 import { IEntry } from '@shared'
 import { Rnd, ResizableDelta, Position } from 'react-rnd'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -12,19 +12,10 @@ import {
 import { SvgIcon } from '../../components/common'
 import { useTranslation } from 'react-i18next'
 import { throttle } from 'lodash-es'
-import { useUserConfig } from '../../hooks'
+import { useBrowserWindowSize, useUserConfig } from '../../hooks'
 import { Dropdown } from '@douyinfe/semi-ui'
 import RatioList from './RatioList'
-import { getMenuBarHeight } from '../../components'
-import { DOCK_HEIGHT_AND_MARGIN } from './Dock'
 import { motion } from 'motion/react'
-
-export const getAppWindowSize = () => {
-  const { innerWidth, innerHeight } = window
-  const menuBarHeight = getMenuBarHeight()
-  const maxHeight = innerHeight - menuBarHeight - DOCK_HEIGHT_AND_MARGIN
-  return { maxWidth: innerWidth, maxHeight, menuBarHeight }
-}
 
 interface WindowProps {
   app: IRunningApp
@@ -56,6 +47,8 @@ export default function Window(props: WindowProps) {
     },
   } = useUserConfig()
 
+  const browserWindowSize = useBrowserWindowSize()
+
   const [topWindowIndex, setTopWindowIndex] = useRecoilState(topWindowIndexState)
   const [runningAppList, setRunningAppList] = useRecoilState(runningAppListState)
 
@@ -72,13 +65,18 @@ export default function Window(props: WindowProps) {
 
   const defaultInfo = useMemo(() => {
     const offset = (sameAppCount - 1) * SAME_APP_WINDOW_OFFSET
-    const storedWindowInfo: IWindowInfo | undefined = windowInfoMap[appId]
+    const storedWindowInfo: IAppWindowInfo | undefined = windowInfoMap[appId]
 
     if (storedWindowInfo) {
-      const { innerWidth, innerHeight } = window
+      const {
+        MENU_BAR_HEIGHT,
+        width: innerWidth,
+        height: innerHeight,
+      } = browserWindowSize
+      
       const { x, y, width, height } = storedWindowInfo
       const computedX = Math.max(x, 0) + offset
-      const computedY = Math.max(y, getMenuBarHeight()) + offset
+      const computedY = Math.max(y, MENU_BAR_HEIGHT) + offset
       const maxX = computedX > innerWidth ? innerWidth - 40 : computedX
       const maxY = computedY > innerHeight ? innerHeight - 40 : computedY
 
@@ -93,14 +91,14 @@ export default function Window(props: WindowProps) {
       const y = Math.max((window.innerHeight - height - 50) / 2, WINDOW_OPEN_MIN_MARGIN) + offset
       return { x, y, width, height }
     }
-  }, [windowInfoMap, appId, sameAppCount, width, height])
+  }, [windowInfoMap, appId, sameAppCount, width, height, browserWindowSize])
 
   // for inner app
-  const [windowSize, setWindowSize] = useState({ width: defaultInfo.width, height: defaultInfo.height })
+  const [appWindowSize, setAppWindowSize] = useState({ width: defaultInfo.width, height: defaultInfo.height })
   // for restore: no change when window fulling screen
-  const [defaultInfoCache, setDefaultInfoCache] = useState<IWindowInfo>(defaultInfo)
+  const [defaultInfoCache, setDefaultInfoCache] = useState<IAppWindowInfo>(defaultInfo)
 
-  const handleStoreWindowInfo = useCallback((info: IWindowInfo) => {
+  const handleStoreWindowInfo = useCallback((info: IAppWindowInfo) => {
     setUserConfig({
       ...userConfig,
       windowInfoMap: {
@@ -124,12 +122,12 @@ export default function Window(props: WindowProps) {
 
   const handleFullScreen = useCallback((force?: boolean) => {
     const full = () => {
-      const { maxWidth: width, maxHeight: height, menuBarHeight } = getAppWindowSize()
+      const { MENU_BAR_HEIGHT, width, safeHeight } = browserWindowSize
 
-      rndInstance.updatePosition({ x: 0, y: menuBarHeight })
-      rndInstance.updateSize({ width, height })
+      rndInstance.updatePosition({ x: 0, y: MENU_BAR_HEIGHT })
+      rndInstance.updateSize({ width, height: safeHeight })
 
-      setWindowSize({ width, height })
+      setAppWindowSize({ width, height: safeHeight })
       setIsFullScreen(true)
     }
 
@@ -137,7 +135,7 @@ export default function Window(props: WindowProps) {
       const { x, y, width, height } = defaultInfoCache
       rndInstance.updatePosition({ x, y })
       rndInstance.updateSize({ width, height })
-      setWindowSize({ width, height })
+      setAppWindowSize({ width, height })
       setIsFullScreen(false)
     }
 
@@ -146,15 +144,15 @@ export default function Window(props: WindowProps) {
     } else {
       isFullScreen ? restore() : full()
     }
-  }, [defaultInfoCache, isFullScreen, rndInstance])
+  }, [defaultInfoCache, isFullScreen, rndInstance, browserWindowSize])
 
-  const handleRatioClick = useCallback((info: IWindowInfo) => {
+  const handleRatioClick = useCallback((info: IAppWindowInfo) => {
     const { x, y, width, height } = info
 
     rndInstance.updatePosition({ x, y })
     rndInstance.updateSize({ width, height })
 
-    setWindowSize({ width, height })
+    setAppWindowSize({ width, height })
     setDefaultInfoCache(info)
     handleStoreWindowInfo(info)
     setIsFullScreen(false)
@@ -186,7 +184,7 @@ export default function Window(props: WindowProps) {
     const width = defaultInfoCache.width + deltaWidth
     const height = defaultInfoCache.height + deltaHeight
     const info = { x, y, width, height }
-    setWindowSize({ width, height })
+    setAppWindowSize({ width, height })
     setDefaultInfoCache(info)
     handleStoreWindowInfo(info)
     setIsDraggingOrResizing(false)
@@ -277,7 +275,7 @@ export default function Window(props: WindowProps) {
                 prevent-move-to-front="true"
                 className={line(`
                   gagu-hidden-switch-trigger
-                  w-8 h-8 flex justify-center items-center cursor-pointer transition-all duration-200
+                  w-8 h-8 flex-center-center cursor-pointer transition-all duration-200
                 hover:bg-gray-200 hover:text-black active:bg-gray-400
                   ${headerClassName ? 'text-gray-200' : 'text-gray-400'}
                 `)}
@@ -289,13 +287,14 @@ export default function Window(props: WindowProps) {
                 trigger="hover"
                 position="bottomRight"
                 mouseEnterDelay={500}
+                mouseLeaveDelay={500}
                 content={<RatioList onClick={handleRatioClick} />}
               >
                 <div
                   title={isFullScreen ? t`action.fullScreenExit` : t`action.fullScreenEnter`}
                   className={line(`
                   hover:bg-gray-200 hover:text-black active:bg-gray-400
-                    w-8 h-8 flex justify-center items-center cursor-pointer transition-all duration-200
+                    w-8 h-8 flex-center-center cursor-pointer transition-all duration-200
                     ${headerClassName ? 'text-gray-200' : 'text-gray-400'}
                   `)}
                   onClick={() => handleFullScreen()}
@@ -308,7 +307,7 @@ export default function Window(props: WindowProps) {
                 prevent-move-to-front="true"
                 className={line(`
                   gagu-app-close-trigger
-                  w-8 h-8 flex justify-center items-center cursor-pointer transition-all duration-200
+                  w-8 h-8 flex-center-center cursor-pointer transition-all duration-200
                   text-red-500 hover:bg-red-500 hover:text-white active:bg-red-700
                 `)}
                 onClick={handleClose}
@@ -321,7 +320,7 @@ export default function Window(props: WindowProps) {
           <div className="relative grow overflow-hidden">
             <AppComponent
               isTopWindow={isTopWindow}
-              windowSize={windowSize}
+              appWindowSize={appWindowSize}
               setWindowTitle={setWindowTitle}
               closeWindow={handleClose}
               additionalEntryList={additionalEntryList}

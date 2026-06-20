@@ -99,10 +99,12 @@ $ pnpm start
 
 There are also many dependencies used throughout the project:
 
+[@tanstack/react-virtual](https://npmjs.com/package/@tanstack/react-virtual)&emsp;
 [axios](https://npmjs.com/package/axios)&emsp;
 [i18next](https://npmjs.com/package/i18next)&emsp;
 [chalk](https://npmjs.com/package/chalk)&emsp;
 [crypto-js](https://npmjs.com/package/crypto-js)&emsp;
+[eslint](https://npmjs.com/package/eslint)&emsp;
 [express](https://npmjs.com/package/express)&emsp;
 [express-zip](https://npmjs.com/package/express-zip)&emsp;
 [github-markdown-css](https://npmjs.com/package/github-markdown-css)&emsp;

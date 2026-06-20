@@ -2,18 +2,18 @@ const { protocol, host } = window.location
 
 export const BASE_URL = import.meta.env.VITE_APP_BASE_URL || `${protocol}//${host}`
 
+export const DOCUMENT_TITLE = 'GAGU'
 export const GAGU_I18N_LANGUAGE_KEY = 'GAGU_I18N_LANGUAGE_KEY'
 export const GAGU_USER_INFO_KEY = 'GAGU_USER_INFO_KEY'
 export const GAGU_USER_CONFIG_KEY = 'GAGU_USER_CONFIG_KEY'
 export const GAGU_ENTRY_PATH_CACHE_KEY = 'GAGU_ENTRY_PATH_CACHE_KEY'
-export const DOCUMENT_TITLE = 'GAGU'
 export const INVALID_NAME_CHAR_LIST = ['/', '|', '\\', '?', ':', '<', '>', '*']
 export const ERROR_TIMEOUT = 'ERROR_TIMEOUT'
-export const SAME_APP_WINDOW_OFFSET = 24
-export const WINDOW_OPEN_MIN_MARGIN = 10
 export const HOVER_OPEN_TIMER: { value: number | undefined } = { value: undefined }
 
 export const DURATION_PAGE = 400
+export const SAME_APP_WINDOW_OFFSET = 24
+export const WINDOW_OPEN_MIN_MARGIN = 10
 
 export const ENTRY_ICON_LIST = [
   { type: 'folder', matchList: ['_dir'] },

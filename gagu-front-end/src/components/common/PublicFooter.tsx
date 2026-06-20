@@ -9,7 +9,7 @@ export function PublicFooter() {
 
   return (
     <>
-      <div className="absolute bottom-0 py-4 w-full text-xs text-white flex justify-center items-center">
+      <div className="absolute bottom-0 py-4 w-full text-xs text-white flex-center-center">
         <a
           rel="noreferrer"
           href="https://gagu.jsw.im"

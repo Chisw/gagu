@@ -4,7 +4,7 @@ import { line } from '../../utils'
 import { IEntry } from '@shared'
 
 interface ThumbnailListProps {
-  show: boolean
+  visible: boolean
   activeIndex: number
   matchedEntryList: IEntry[]
   windowWidth: number
@@ -16,7 +16,7 @@ const ITEM_WIDTH = 48  // width 40 + margin 4 * 2
 export default function ThumbnailList(props: ThumbnailListProps) {
 
   const {
-    show,
+    visible,
     activeIndex,
     matchedEntryList,
     windowWidth,
@@ -67,18 +67,18 @@ export default function ThumbnailList(props: ThumbnailListProps) {
       className={line(`
         relative z-0 bg-gray-900 shrink-0
         transition-height duration-200 overflow-hidden
-        ${show ? 'h-12' : 'h-0'}
+        ${visible ? 'h-12' : 'h-0'}
       `)}
       onWheel={handleMouseWheel}
     >
       <div
-        className="absolute h-full flex justify-center items-center transition-spacing duration-300 bg-white/10"
+        className="absolute h-full flex-center-center"
         style={{
           left,
           width: totalScrollWidth,
         }}
       >
-        {show && matchedEntryList.map((entry, entryIndex) => {
+        {visible && matchedEntryList.map((entry, entryIndex) => {
           const src = FsApi.getThumbnailStreamUrl(entry)
           const entryName = entry.name
           const isActive = entryIndex === activeIndex

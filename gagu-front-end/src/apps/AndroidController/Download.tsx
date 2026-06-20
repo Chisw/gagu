@@ -73,7 +73,7 @@ export default function Download() {
       </div>
 
       <EntryPicker
-        show={pickerShow}
+        visible={pickerShow}
         appId={AppId.androidController}
         mode="open"
         type={EntryType.directory}

@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.flex-center-center {
+  @apply flex justify-center items-center;
+}
+
 @font-face {
   font-family: "g-sans";
   src: url("./g-sans.woff") format("woff");

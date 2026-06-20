@@ -5,7 +5,7 @@ import { activePageState, userInfoState, runningAppListState, topWindowIndexStat
 import EntryNode from '../../apps/FileExplorer/EntryNode'
 import { AppId, ClipboardState, CreationType, EditMode, Page } from '../../types'
 import { EntryType, IEntry } from '@shared'
-import { useWorkArea } from '../../hooks'
+import { useBrowserWindowSize, useWorkArea } from '../../hooks'
 import { EntryPicker, SharingModal } from '../../components'
 import { APP_LIST } from '../../apps'
 import { useTranslation } from 'react-i18next'
@@ -15,12 +15,14 @@ export default function Desktop() {
 
   const { t } = useTranslation()
 
+  const { width: browserWindowWidth } = useBrowserWindowSize()
+
   const [activePage] = useRecoilState(activePageState)
   const [userInfo] = useRecoilState(userInfoState)
   const [topWindowIndex, setTopWindowIndex] = useRecoilState(topWindowIndexState)
   const [, setRunningAppList] = useRecoilState(runningAppListState)
 
-  const [show, setShow] = useState(false)
+  const [visible, setVisible] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(0)
 
   const isTopWindow = useMemo(() => currentIndex === topWindowIndex, [currentIndex, topWindowIndex])
@@ -40,7 +42,7 @@ export default function Desktop() {
   const {
     kiloSize, clipboardData,
     lassoRef, containerRef, containerInnerRef,
-    supportThumbnail, thumbScrollWatcher,
+    supportThumbnail,
     currentPath,
     entryList, selectedEntryList,
     favoriteRootEntryList, sharingEntryList,
@@ -55,6 +57,7 @@ export default function Desktop() {
   } = useWorkArea({
     isUserDesktop: true,
     isTopWindow,
+    appWindowWidth: browserWindowWidth,
     asEntryPicker: false,
     specifiedPath: userInfo?.userPath ? `${userInfo?.userPath}/desktop` : '',
     onCurrentPathChange: () => {},
@@ -65,9 +68,9 @@ export default function Desktop() {
 
   useEffect(() => {
     if (activePage === Page.desktop) {
-      setTimeout(() => setShow(true), 800)
+      setTimeout(() => setVisible(true), 800)
     } else {
-      setShow(false)
+      setVisible(false)
     }
   }, [activePage])
 
@@ -93,33 +96,12 @@ export default function Desktop() {
             gagu-entry-list-container-inner
             w-full h-full p-3 flex flex-col flex-wrap content-start
             transition-opacity duration-500
-            ${show ? 'opacity-100' : 'opacity-0'}
+            ${visible ? 'opacity-100' : 'opacity-0'}
             ${querying ? 'opacity-50 pointer-events-none' : ''}
           `)}
           onMouseDownCapture={handleSetDesktopActive}
           onContextMenu={handleContextMenu}
         >
-          {/* create */}
-          {[EditMode.createFolder, EditMode.createText].includes(editMode as CreationType) && (
-            <EntryNode
-              inputMode
-              gridMode
-              entry={{
-                name: '',
-                type: editMode === EditMode.createFolder ? 'directory' : 'file',
-                lastModified: 0,
-                hidden: false,
-                hasChildren: false,
-                parentPath: currentPath,
-                extension: editMode === EditMode.createFolder ? '_dir_new' : '_txt_new',
-              }}
-              kiloSize={kiloSize}
-              creationType={editMode as CreationType}
-              onNameSuccess={handleNameSuccess}
-              onNameFail={handleNameFail}
-            />
-          )}
-
           {/* entry list */}
           {entryList.map(entry => {
             const isSelected = selectedEntryList.some(o => getIsSameEntry(o, entry))
@@ -136,17 +118,15 @@ export default function Desktop() {
             return (
               <EntryNode
                 key={encodeURIComponent(`${entry.name}-${entry.type}`)}
-                {...{
-                  kiloSize,
-                  entry,
-                  gridMode: true,
-                  inputMode,
-                  isSelected,
-                  isFavorited,
-                  supportThumbnail,
-                  thumbScrollWatcher,
-                  clipboardState,
-                }}
+                kiloSize={kiloSize}
+                entry={entry}
+                gridMode
+                className="m-1"
+                inputMode={inputMode}
+                isSelected={isSelected}
+                isFavorited={isFavorited}
+                supportThumbnail={supportThumbnail}
+                clipboardState={clipboardState}
                 draggable={!inputMode}
                 requestState={{ deleting, sizeQuerying }}
                 onClick={handleEntryClick}
@@ -156,17 +136,39 @@ export default function Desktop() {
               />
             )
           })}
+
+          {/* create */}
+          {[EditMode.createFolder, EditMode.createText].includes(editMode as CreationType) && (
+            <EntryNode
+              inputMode
+              gridMode
+              className="m-1"
+              entry={{
+                name: '',
+                type: editMode === EditMode.createFolder ? 'directory' : 'file',
+                lastModified: 0,
+                hidden: false,
+                hasChildren: false,
+                parentPath: currentPath,
+                extension: editMode === EditMode.createFolder ? '_dir_new' : '_txt_new',
+              }}
+              kiloSize={kiloSize}
+              creationType={editMode as CreationType}
+              onNameSuccess={handleNameSuccess}
+              onNameFail={handleNameFail}
+            />
+          )}
         </div>
       </div>
 
       <SharingModal
-        show={sharingModalShow}
+        visible={sharingModalShow}
         entryList={sharingEntryList}
         onClose={() => setSharingModalShow(false)}
       />
 
       <EntryPicker
-        show={movementEntryPickerShow}
+        visible={movementEntryPickerShow}
         appId={AppId.fileExplorer}
         mode="open"
         type={EntryType.directory}

@@ -9,13 +9,13 @@ import { useRecoilState } from 'recoil'
 import { EntryType } from '@shared'
 
 interface OpenerProps {
-  show: boolean
+  visible: boolean
   appId: string
 }
 
 export function Opener(props: OpenerProps) {
   const {
-    show,
+    visible,
     appId,
   } = props
 
@@ -36,7 +36,7 @@ export function Opener(props: OpenerProps) {
         className={line(`
           absolute z-50 inset-0
           justify-center items-center
-          ${show ? 'flex' : 'hidden'}
+          ${visible ? 'flex' : 'hidden'}
         `)}
       >
         <div className="pb-4">
@@ -50,7 +50,7 @@ export function Opener(props: OpenerProps) {
           />
           <div
             className={line(`
-              flex justify-center items-center
+              flex-center-center
               mt-12 p-2 w-36 border border-gray-200 select-none
               cursor-pointer rounded bg-white/90 dark:bg-white/10
               text-xs text-gray-600
@@ -68,7 +68,7 @@ export function Opener(props: OpenerProps) {
       </div>
 
       <EntryPicker
-        show={openerEntryPickerShow}
+        visible={openerEntryPickerShow}
         appId={appId}
         mode="open"
         type={EntryType.file}

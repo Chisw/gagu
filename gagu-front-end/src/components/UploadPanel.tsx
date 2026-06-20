@@ -33,7 +33,7 @@ export function UploadPanel() {
 
   const { userConfig: { kiloSize } } = useUserConfig()
 
-  const [show, setShow] = useState(false)
+  const [visible, setVisible] = useState(false)
   const [uploadInfo, setUploadInfo] = useState({ ratio: 0, speed: '' })
   const [uploadSignalCache, setTransferSignalCache] = useState(0)
   const [activeId, setActiveId] = useState('')
@@ -134,7 +134,7 @@ export function UploadPanel() {
           ${count ? 'flex' : 'hidden'}
           ${uploading ? 'w-28 bg-white/40' : ''}
         `)}
-        onClick={() => setShow(true)}
+        onClick={() => setVisible(true)}
       >
         <div
           className={line(`
@@ -172,7 +172,7 @@ export function UploadPanel() {
                   icon={<SvgIcon.Brush />}
                   onClick={() => {
                     setUploadTaskList([])
-                    setTimeout(() => setShow(false), 300)
+                    setTimeout(() => setVisible(false), 300)
                   }}
                 >
                   {t`action.clear`}
@@ -184,7 +184,7 @@ export function UploadPanel() {
                 size="small"
                 icon={<SvgIcon.Close />}
                 className="gagu-sync-popstate-overlay-close-button"
-                onClick={() => setShow(false)}
+                onClick={() => setVisible(false)}
               />
             </div>
           </div>
@@ -194,11 +194,11 @@ export function UploadPanel() {
         bodyStyle={{ padding: 0 }}
         maskStyle={{ background: 'rgba(0, 0, 0, .1)' }}
         width={400}
-        visible={show}
-        onCancel={() => setShow(false)}
+        visible={visible}
+        onCancel={() => setVisible(false)}
       >
         <div className="relative w-full h-full overflow-auto">
-          <EmptyPanel dark show={!count} />
+          <EmptyPanel dark visible={!count} />
 
           {uploadTaskList.map((task, taskIndex) => {
             const { id, file, status, path } = task

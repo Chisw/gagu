@@ -1,12 +1,12 @@
 import { useEffect } from 'react'
-import { ILassoInfo } from '../types'
+import { ILasso } from '../types'
 
 interface useDragSelectProps {
   binding: boolean
   lassoRef: any
   containerRef: any
   containerInnerRef: any
-  onDragging: (info: ILassoInfo) => void
+  onDragging: (info: ILasso) => void
 }
 
 export function useLassoSelect(props: useDragSelectProps) {

@@ -7,7 +7,7 @@ import { line } from '../../utils'
 import { ProgressSlider, VolumeIndicator, VolumeSlider } from '../../components/player'
 
 interface ImmersiveTheatreProps {
-  show: boolean
+  visible: boolean
   onClose: () => void
   title: string
   artist: string
@@ -33,7 +33,7 @@ interface ImmersiveTheatreProps {
 
 export default function ImmersiveTheatre(props: ImmersiveTheatreProps) {
   const {
-    show,
+    visible,
     onClose,
     title,
     artist,
@@ -67,7 +67,7 @@ export default function ImmersiveTheatre(props: ImmersiveTheatreProps) {
         fullScreen
         header={null}
         footer={null}
-        visible={show}
+        visible={visible}
         className="gagu-sync-popstate-overlay gagu-app-music-player-immersive-theatre bg-red-500"
         onCancel={onClose}
       >
@@ -83,18 +83,18 @@ export default function ImmersiveTheatre(props: ImmersiveTheatreProps) {
             <IconButton
               icon={<SvgIcon.Close size={24} />}
               onClick={onClose}
-              className="gagu-sync-popstate-overlay-close-button text-white text-opacity-40"
+              className="gagu-sync-popstate-overlay-close-button text-white/40"
             />
           </div>
 
           <div className="p-4 md:p-12 lg:p-20 flex grow flex-wrap lg:flex-nowrap">
 
-            <div className="shrink-0 w-full h-1/2 lg:w-1/2 lg:h-full flex justify-center items-center">
+            <div className="shrink-0 w-full h-1/2 lg:w-1/2 lg:h-full flex-center-center">
               <div
                 className={line(`
                   w-full max-w-[60%] lg:max-w-[75%] aspect-square cursor-pointer
                   bg-center bg-cover bg-no-repeat
-                  flex justify-center items-center
+                  flex-center-center
                   ${musicPlayerCoverDisk
                     ? `rounded-full ${isPlaying ? 'animate-[spin_12s_linear_infinite]' : ''}`
                     : 'border-4 border-white bg-white/10'
@@ -115,7 +115,7 @@ export default function ImmersiveTheatre(props: ImmersiveTheatreProps) {
               </div>
             </div>
 
-            <div className="shrink-0 w-full h-1/2 lg:w-1/2 lg:h-full flex justify-center items-center">
+            <div className="shrink-0 w-full h-1/2 lg:w-1/2 lg:h-full flex-center-center">
               <div className="relative w-full max-w-[75%] max-h-[75%] aspect-square text-white text-center">
                 <div className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl opacity-90">{title}</div>
                 <div className="mt-2 md:mt-4 lg:mt-6 text-lg md:text-xl lg:text-2xl xl:text-3xl opacity-60">{album} - {artist}</div>
@@ -140,7 +140,7 @@ export default function ImmersiveTheatre(props: ImmersiveTheatreProps) {
                       <div>{playInfo.currentTimeLabel}/{playInfo.durationLabel}</div>
                     </div>
                   </div>
-                  <div className="flex justify-center items-center">
+                  <div className="flex-center-center">
                     <div className="relative flex items-center">
                       {buttonList.map(({ title, icon, onClick }) => (
                         <IconButton
@@ -152,7 +152,7 @@ export default function ImmersiveTheatre(props: ImmersiveTheatreProps) {
                         />
                       ))}
                       <VolumeSlider
-                        show={volumeSliderShow}
+                        visible={volumeSliderShow}
                         volume={volume}
                         right={8}
                         bottom={50}

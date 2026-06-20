@@ -14,7 +14,7 @@ export default function TouchPage() {
   const [activePage, setActivePage] = useRecoilState(activePageState)
   const [runningAppList] = useRecoilState(runningAppListState)
 
-  const [show, setShow] = useState(false)
+  const [visible, setVisible] = useState(false)
   const [isSideOrSelectionMenuShow, setIsSideOrSelectionMenuShow] = useState(false)
   const [activeAppId, setActiveAppId] = useState<string>(AppId.fileExplorer)
   const [dockExpanded, setDockExpanded] = useState(false)
@@ -25,9 +25,9 @@ export default function TouchPage() {
 
   useEffect(() => {
     if (activePage === Page.touch) {
-      setTimeout(() => setShow(true), 300)
+      setTimeout(() => setVisible(true), 300)
     } else {
-      setShow(false)
+      setVisible(false)
     }
   }, [activePage])
 
@@ -69,7 +69,7 @@ export default function TouchPage() {
         {/* z-0 */}
         <FileExplorerTouch
           {...{
-            show,
+            visible,
             activeAppId,
             setIsSideOrSelectionMenuShow,
           }}
@@ -78,7 +78,7 @@ export default function TouchPage() {
       </div>
 
       <Dock
-        show={activeAppId === AppId.fileExplorer && !isSideOrSelectionMenuShow}
+        visible={activeAppId === AppId.fileExplorer && !isSideOrSelectionMenuShow}
         {...{
           activeAppId,
           setActiveAppId,

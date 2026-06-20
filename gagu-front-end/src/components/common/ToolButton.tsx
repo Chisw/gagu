@@ -29,7 +29,7 @@ export function ToolButton(props: ToolButtonProps) {
       title={title}
       className={line(`
         w-10 md:w-8 h-full
-        flex justify-center items-center shrink-0
+        flex-center-center shrink-0
         transition-all duration-50
         ${disabled
           ? 'cursor-not-allowed text-gray-200 dark:text-zinc-600'

@@ -2,9 +2,9 @@ import { useRecoilState } from 'recoil'
 import { contextMenuDataState, openEventState } from '../states'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useDragTransfer, useFileExplorer, useHotKey, useLassoSelect } from '.'
-import { ClipboardType, EditMode, EditModeType, EventTransaction, IContextMenuItem, ILassoInfo, NameFailType } from '../types'
+import { ClipboardType, EditMode, EditModeType, EventTransaction, IContextMenuItem, ILasso, IBoundedEntry, NameFailType, IVirtualBox, IVirtualContainer } from '../types'
 import { EntryType, IEntry, getEntryPath } from '@shared'
-import { BG_EXTENSION_LIST, getIsCovered, getMatchedApp, getIsSameEntry, openInIINA } from '../utils'
+import { BG_EXTENSION_LIST, getIsIntersected, getMatchedApp, getIsSameEntry, openInIINA, getIsCovered, getEntryBound } from '../utils'
 import { pick, throttle } from 'lodash-es'
 import { SvgIcon } from '../components/common'
 import { useTranslation } from 'react-i18next'
@@ -15,6 +15,7 @@ import { getContextMenuDelay } from '../components'
 interface useWorkAreaProps {
   isUserDesktop: boolean
   isTopWindow: boolean
+  appWindowWidth: number
   asEntryPicker: boolean
   specifiedPath: string
   onCurrentPathChange: (path: string) => void
@@ -27,6 +28,7 @@ export function useWorkArea(props: useWorkAreaProps) {
   const {
     isUserDesktop,
     isTopWindow,
+    appWindowWidth,
     asEntryPicker,
     specifiedPath,
     onCurrentPathChange,
@@ -49,7 +51,7 @@ export function useWorkArea(props: useWorkAreaProps) {
 
   const {
     kiloSize,
-    disabledMap, supportThumbnail, thumbScrollWatcher,
+    disabledMap, supportThumbnail,
     currentPath, currentRootEntry,
     querying, sizeQuerying, deleting,
     entryList, rootEntryList, favoriteRootEntryList, sharingEntryList,
@@ -59,7 +61,7 @@ export function useWorkArea(props: useWorkAreaProps) {
     filterMode, setFilterMode,
     filterText, setFilterText,
     sideCollapse, handleSideCollapseChange,
-    hiddenShow, handleHiddenShowChange,
+    hiddenVisible, handleHiddenShowChange,
     gridMode, handleGridModeChange,
     sortType, handleSortChange,
     lastVisitedPath, setLastVisitedPath,
@@ -74,6 +76,42 @@ export function useWorkArea(props: useWorkAreaProps) {
     handleUploadClick, handleDownloadClick,
     handleShareClick, handleFavoriteClick, handleMove, handleDeleteClick,
   } = useFileExplorer({ containerRef, specifiedPath, isUserDesktop })
+
+  const {
+    virtualContainer,
+    virtualBox,
+  } = useMemo(() => {
+    const padding = gridMode ? 6 : 4
+    const marginX = gridMode ? 8 : 6
+    const marginY = gridMode ? 8 : 0
+    const leftSideWidth = sideCollapse ? 0 : 224
+    const safeContainerWidth = appWindowWidth - leftSideWidth - marginX * 2 - padding * 2
+    const width = gridMode ? 112 : safeContainerWidth - marginX
+    const height = gridMode ? 116 : 30
+
+    const cols = gridMode
+      ? Math.floor(safeContainerWidth / (width + marginX))
+      : 1
+
+    const rows = gridMode
+      ? Math.ceil(entryList.length / cols)
+      : entryList.length
+
+    const virtualContainer: IVirtualContainer = { padding, rows, cols }
+    const virtualBox: IVirtualBox = { width, height, marginX, marginY }
+
+    return {
+      virtualContainer,
+      virtualBox,
+    }
+  }, [appWindowWidth, sideCollapse, gridMode, entryList])
+
+  const boundedEntryList = useMemo(() => {
+    return entryList.map((entry, entryIndex) => {
+      const bound = getEntryBound(entryIndex, virtualContainer, virtualBox)
+      return { ...entry, bound } as IBoundedEntry
+    })
+  }, [entryList, virtualContainer, virtualBox])
 
   const handleEdit = useCallback((editModeType: EditModeType) => {
     if (editModeType !== EditMode.rename) {
@@ -158,22 +196,29 @@ export function useWorkArea(props: useWorkAreaProps) {
     }
   }, [editMode, isUserDesktop, onOpenDesktopDirectory, handleDirectoryOpen, asEntryPicker, onPickDoubleConfirm, setOpenEvent, handleDownloadClick])
 
-  const handleLassoSelect = useCallback((info: ILassoInfo) => {
+  const handleDesktopLassoSelect = useCallback((lasso: ILasso) => {
     const entryElements: Element[] = (containerInnerRef.current as any)?.querySelectorAll('.gagu-entry-node')
     if (!entryElements.length) return
     const indexList: number[] = []
     entryElements.forEach((el: any, elIndex) => {
-      const isContained = getIsCovered({
-        ...info,
+      const isCovered = getIsCovered({
+        ...lasso,
         ...pick(el, 'offsetTop', 'offsetLeft', 'offsetWidth', 'offsetHeight'),
       })
-      isContained && indexList.push(elIndex)
+      isCovered && indexList.push(elIndex)
     })
-    const entries = entryList.filter((entry, entryIndex) => indexList.includes(entryIndex))
+    const entries = entryList.filter((e, entryIndex) => indexList.includes(entryIndex))
     setSelectedEntryList(entries)
   }, [setSelectedEntryList, entryList])
 
-  const throttledLassoSelectHandler = useMemo(() => throttle(handleLassoSelect, 60), [handleLassoSelect])
+  const handleLassoSelect = useCallback((lasso: ILasso) => {
+    const entries = boundedEntryList.filter((entry) => getIsIntersected(lasso, entry.bound))
+    setSelectedEntryList(entries)
+  }, [boundedEntryList, setSelectedEntryList])
+
+  const throttledLassoSelectHandler = useMemo(() => {
+    return throttle(isUserDesktop ? handleDesktopLassoSelect : handleLassoSelect, 30)
+  }, [isUserDesktop, handleDesktopLassoSelect, handleLassoSelect])
 
   useLassoSelect({
     binding: !asEntryPicker,
@@ -211,7 +256,7 @@ export function useWorkArea(props: useWorkAreaProps) {
       'Enter, F2': disabledMap.rename ? null : () => handleEdit(EditMode.rename),
       'Meta+KeyF, Ctrl+KeyF': disabledMap.filter ? null : () => setFilterMode(true),
       'Meta+KeyG, Ctrl+KeyG': disabledMap.gridView ? null : () => handleGridModeChange(true),
-      'Meta+KeyH, Ctrl+KeyH': () => handleHiddenShowChange(!hiddenShow),
+      'Meta+KeyH, Ctrl+KeyH': () => handleHiddenShowChange(!hiddenVisible),
       'Meta+KeyL, Ctrl+KeyL': disabledMap.listView ? null : () => handleGridModeChange(false),
       'Meta+Alt+KeyN, Ctrl+Alt+KeyN': disabledMap.createFolder ? null : () => handleEdit(EditMode.createFolder),
       'Meta+KeyR, Ctrl+KeyR': disabledMap.navRefresh ? null : handleNavRefresh,
@@ -483,12 +528,17 @@ export function useWorkArea(props: useWorkAreaProps) {
     onCurrentPathChange(currentPath)
   }, [onCurrentPathChange, currentPath])
 
+  useEffect(() => {
+    return () => throttledLassoSelectHandler.cancel()
+  }, [throttledLassoSelectHandler])
+
   return {
     kiloSize, clipboardData,
     lassoRef, containerRef, containerInnerRef,
-    supportThumbnail, thumbScrollWatcher,
+    virtualContainer, virtualBox,
+    supportThumbnail,
     currentPath, currentRootEntry,
-    entryList, selectedEntryList,
+    entryList, boundedEntryList, selectedEntryList,
     favoriteRootEntryList, rootEntryList, sharingEntryList,
     isEntryListEmpty, disabledMap,
     folderCount, fileCount,
@@ -496,7 +546,7 @@ export function useWorkArea(props: useWorkAreaProps) {
     filterMode, setFilterMode,
     filterText, setFilterText,
     sideCollapse, handleSideCollapseChange,
-    hiddenShow, handleHiddenShowChange,
+    hiddenVisible, handleHiddenShowChange,
     gridMode, handleGridModeChange,
     sortType, handleSortChange,
     sharingModalShow, setSharingModalShow,

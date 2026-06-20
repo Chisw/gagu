@@ -37,7 +37,7 @@ export default function PhoneControl() {
               key={contactIndex}
               className="mb-3 flex items-center"
             >
-              <div className="shrink-0 w-10 h-10 rounded-full bg-blue-500 text-white flex justify-center items-center text-lg">
+              <div className="shrink-0 w-10 h-10 rounded-full bg-blue-500 text-white flex-center-center text-lg">
                 {name[0]}
               </div>
               <div className="grow ml-2">

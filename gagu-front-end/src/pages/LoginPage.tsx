@@ -123,7 +123,7 @@ export default function LoginPage() {
                   disabled={!username || !password}
                   className={line(`
                     mr-0.5 w-8 h-8 rounded cursor-pointer
-                    flex justify-center items-center
+                    flex-center-center
                   hover:bg-white/10 active:bg-opacity-20 text-white
                     ${!username || !password ? 'hidden' : ''}
                   `)}

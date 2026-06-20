@@ -1,11 +1,11 @@
-import { useEffect } from 'react'
-import { IWindowInfo, IWindowRatio } from '../../types'
+import { useCallback, useEffect } from 'react'
+import { IAppWindowInfo, IAppWindowRatio } from '../../types'
 import { line } from '../../utils'
-import { getAppWindowSize } from './Window'
 import { useRecoilState } from 'recoil'
 import { demoWindowInfoState } from '../../states'
+import { useBrowserWindowSize } from '../../hooks'
 
-const ratioListList: IWindowRatio[][] = [
+const ratioListList: IAppWindowRatio[][] = [
   [
     { xRatio: 0, yRatio: 0, widthRatio: 0.5, heightRatio: 0.5 },
     { xRatio: 0, yRatio: 0, widthRatio: 1, heightRatio: 0.5 },
@@ -33,24 +33,26 @@ const ratioListList: IWindowRatio[][] = [
   ],
 ]
 
-const getComputedWindowInfo = (ratio: IWindowRatio) => {
-  const { xRatio, yRatio, widthRatio, heightRatio } = ratio
-  const { maxWidth, maxHeight, menuBarHeight } = getAppWindowSize()
-  const x = Math.ceil(maxWidth * xRatio)
-  const y = Math.ceil(maxHeight * yRatio) + menuBarHeight
-  const width = Math.ceil(maxWidth * widthRatio)
-  const height = Math.ceil(maxHeight * heightRatio)
-  const info: IWindowInfo = { x, y, width, height }
-  return info
-}
-
 interface RatioListProps {
-  onClick: (info: IWindowInfo) => void
+  onClick: (info: IAppWindowInfo) => void
 }
 
 export default function RatioList({ onClick }: RatioListProps) {
 
+  const browserWindowSize = useBrowserWindowSize()
+
   const [, setDemoWindowInfo] = useRecoilState(demoWindowInfoState)
+
+  const getComputedWindowInfo = useCallback((ratio: IAppWindowRatio) => {
+    const { xRatio, yRatio, widthRatio, heightRatio } = ratio
+    const { MENU_BAR_HEIGHT, width: maxWidth, safeHeight: maxHeight } = browserWindowSize
+    const x = Math.ceil(maxWidth * xRatio)
+    const y = Math.ceil(maxHeight * yRatio) + MENU_BAR_HEIGHT
+    const width = Math.ceil(maxWidth * widthRatio)
+    const height = Math.ceil(maxHeight * heightRatio)
+    const info: IAppWindowInfo = { x, y, width, height }
+    return info
+  }, [browserWindowSize])
 
   useEffect(() => {
     return () => setDemoWindowInfo(null)

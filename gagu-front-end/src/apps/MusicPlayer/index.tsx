@@ -1,14 +1,15 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { AppComponentProps, AppId, PlayMode, PlayModeType } from '../../types'
+import { AppComponentProps, AppId, IBoundedEntry, IVirtualBox, PlayMode, PlayModeType } from '../../types'
 import { useRequest, useRunAppEvent, usePlayInfo, useUserConfig, useHotKey } from '../../hooks'
 import { FsApi, TunnelApi } from '../../api'
-import { SVG_DEFAULT_ALBUM_COVER, getIndexLabel, getReadableSize, line } from '../../utils'
+import { SVG_DEFAULT_ALBUM_COVER, getBoundStyle, getEntryBound, getIndexLabel, getReadableSize, line } from '../../utils'
 import SpectrumCanvas from './SpectrumCanvas'
 import { IconButton, Opener, SvgIcon } from '../../components/common'
 import { useTranslation } from 'react-i18next'
 import { ProgressSlider, VolumeIcon, VolumeIndicator, VolumeSlider } from '../../components/player'
 import ImmersiveTheatre from './ImmersiveTheatre'
 import { TunnelType, IEntry, getEntryPath } from '@shared'
+import { useVirtualizer } from '@tanstack/react-virtual'
 
 const appId = AppId.musicPlayer
 
@@ -22,6 +23,7 @@ export default function MusicPlayer(props: AppComponentProps) {
 
   const {
     isTopWindow,
+    appWindowSize: { width: appWindowWidth},
     setWindowTitle,
   } = props
 
@@ -55,6 +57,8 @@ export default function MusicPlayer(props: AppComponentProps) {
   const { request: createTunnel } = useRequest(TunnelApi.createTunnel)
 
   const audioRef = useRef<HTMLAudioElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+
   const audioNode = useMemo(() => {
     return audioRef.current || null as HTMLAudioElement | null
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -77,6 +81,30 @@ export default function MusicPlayer(props: AppComponentProps) {
   }, [response, activeEntry, t])
 
   const playInfo = usePlayInfo({ el: audioNode, isPlaying })
+
+  const virtualBox = useMemo(() => {
+    const marginX = 0
+    const marginY = 0
+    const width = appWindowWidth - 10
+    const height = 56
+    const virtualBox: IVirtualBox = { width, height, marginX, marginY }
+    return virtualBox
+  }, [appWindowWidth])
+
+  const boundedEntryList = useMemo(() => {
+    const rows = matchedEntryList.length
+    return matchedEntryList.map((entry, entryIndex) => {
+      const bound = getEntryBound(entryIndex, { padding: 0, rows, cols: 1 }, virtualBox)
+      return { ...entry, bound } as IBoundedEntry
+    })
+  }, [virtualBox, matchedEntryList])
+
+  const virtualizer = useVirtualizer({
+    count: boundedEntryList.length,
+    getScrollElement: () => containerRef.current,
+    estimateSize: () => virtualBox.height,
+    overscan: 3,
+  })
 
   const handlePlayOrPause = useCallback(() => {
     if (!audioNode) return
@@ -262,72 +290,85 @@ export default function MusicPlayer(props: AppComponentProps) {
   return (
     <>
       <div className="absolute inset-0 flex flex-col bg-linear-to-br from-pink-700 to-pink-900 select-none">
-        <Opener show={!activeEntry} appId={appId} />
+        <Opener visible={!activeEntry} appId={appId} />
 
         <VolumeIndicator volume={musicPlayerVolume} time={volumeChangedTime} />
 
         {/* list */}
-        <div className="relative z-0 grow pb-3 overflow-y-auto">
-          {matchedEntryList.map((entry, entryIndex) => {
-            const { name, size } = entry
-            const isActive = entryIndex === activeIndex
-            const indexNo = getIndexLabel(entryIndex, matchedEntryList.length, { minWidth: 2, hideTotal: true })
-            const onClick = isActive ? handlePlayOrPause : () => setActiveIndex(entryIndex)
-            return (
-              <div
-                key={name}
-                className="relative p-2 text-xs text-white even:bg-black/5 hover:bg-black/10 flex items-center group"
-                onDoubleClick={onClick}
-              >
+        <div
+          ref={containerRef}
+          className="relative z-0 grow pb-3 overflow-y-auto"
+        >
+          <div style={{ height: virtualizer.getTotalSize() }}>
+            {virtualizer.getVirtualItems().map(({ key: rowKey, index: rowIndex }) => {
+              const isEven = rowIndex % 2 === 0
+              const entry = boundedEntryList[rowIndex]
+              const { name, size } = entry
+              const isActive = rowIndex === activeIndex
+              const indexNo = getIndexLabel(rowIndex, matchedEntryList.length, { minWidth: 2, hideTotal: true })
+              const onClick = isActive ? handlePlayOrPause : () => setActiveIndex(rowIndex)
+
+              return (
                 <div
-                  className="shrink-0 mr-2 w-10 h-10 shadow-lg overflow-hidden bg-center bg-cover bg-no-repeat"
-                  style={{ backgroundImage: `url("${SVG_DEFAULT_ALBUM_COVER}")` }}
+                  key={rowKey}
+                  className={line(`
+                    flex items-center group
+                    p-2 text-xs text-white hover:bg-black/10
+                    ${isEven ? 'bg-black/5' : ''}
+                  `)}
+                  style={getBoundStyle(entry.bound)}
+                  onDoubleClick={onClick}
                 >
                   <div
-                    className="w-full h-full bg-cover bg-center"                    
-                    style={{ backgroundImage: `url("${FsApi.getThumbnailStreamUrl(entry)}")` }}
-                  />
-                </div>
-                <div className="grow">
-                  <div>
-                    <span className="font-din opacity-60">{indexNo}. </span>{name}
+                    className="shrink-0 mr-2 w-10 h-10 shadow-lg overflow-hidden bg-center bg-cover bg-no-repeat"
+                    style={{ backgroundImage: `url("${SVG_DEFAULT_ALBUM_COVER}")` }}
+                  >
+                    <div
+                      className="w-full h-full bg-cover bg-center"                    
+                      style={{ backgroundImage: `url("${FsApi.getThumbnailStreamUrl(entry)}")` }}
+                    />
                   </div>
-                  <div>
-                    <span
-                      className="inline-flex items-center text-white text-opacity-50 hover:text-opacity-80 active:text-opacity-60 cursor-pointer"
-                      onClick={() => handleDownload(entry)}
-                    >
-                      <span className="mr-1">
-                        <SvgIcon.Download size={12} />
+                  <div className="grow">
+                    <div>
+                      <span className="font-din opacity-60">{indexNo}. </span>{name}
+                    </div>
+                    <div>
+                      <span
+                        className="inline-flex items-center text-white/50 hover:text-white/80 active:text-white/60 cursor-pointer"
+                        onClick={() => handleDownload(entry)}
+                      >
+                        <span className="mr-1">
+                          <SvgIcon.Download size={12} />
+                        </span>
+                        <span className="font-din">{getReadableSize(size!, kiloSize)}</span>
                       </span>
-                      <span className="font-din">{getReadableSize(size!, kiloSize)}</span>
-                    </span>
+                    </div>
+                  </div>
+                  <div
+                    className={line(`
+                      absolute top-0 right-0 bottom-0
+                      px-4 cursor-pointer opacity-80
+                      hover:opacity-100 hover:bg-white/10 active:opacity-70
+                      backdrop-blur-sm
+                      flex-center-center
+                      ${isActive ? '' : 'hidden group-hover:flex'}
+                    `)}
+                    onClick={onClick}
+                  >
+                    {activeIndex === rowIndex && isPlaying
+                      ? <SvgIcon.Pause size={24} />
+                      : <SvgIcon.Play size={24} />
+                    }
                   </div>
                 </div>
-                <div
-                  className={line(`
-                    absolute top-0 right-0 bottom-0
-                    px-4 cursor-pointer opacity-80
-                    hover:opacity-100 hover:bg-white/10 active:opacity-70
-                    backdrop-blur-sm
-                    flex justify-center items-center
-                    ${isActive ? '' : 'hidden group-hover:flex'}
-                  `)}
-                  onClick={onClick}
-                >
-                  {activeIndex === entryIndex && isPlaying
-                    ? <SvgIcon.Pause size={24} />
-                    : <SvgIcon.Play size={24} />
-                  }
-                </div>
-              </div>
-            )
-          })}
+              )
+            })}
+          </div>
         </div>
 
         {!theatreShow && (
           <VolumeSlider
-            show={volumeSliderShow}
+            visible={volumeSliderShow}
             volume={musicPlayerVolume}
             right={8}
             bottom={50}
@@ -392,7 +433,7 @@ export default function MusicPlayer(props: AppComponentProps) {
       </div>
 
       <ImmersiveTheatre
-        show={theatreShow}
+        visible={theatreShow}
         onClose={() => setTheatreShow(false)}
         {...{
           title,

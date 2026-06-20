@@ -62,6 +62,7 @@ export function EntryListPanel(props: EntryListPanelProps) {
                 key={entry.parentPath + entry.name}
                 hideAppIcon
                 gridMode
+                className="m-1"
                 entry={entry}
                 kiloSize={kiloSize}
               />

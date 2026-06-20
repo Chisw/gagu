@@ -212,7 +212,7 @@ You need to restart GAGU service after you have installed ffmpeg and GraphicsMag
 
 The default port number of the GAGU service is `9293`. After the service is started, it can be accessed locally through `http://127.0.0.1:9293`. When accessing other devices in the LAN, replace the IP in it with the intranet IP of the server device.
 
-> I assigned a fixed IP `192.168.31.13` to the 13-inch Mac in my home router, and pointed the domain `mac.io` in the hosts of the router to `192.168.31.13`, and started the GAGU service on the Mac with port `80` , now, every device in the LAN can access `http://mac.io` through a browser to use the GAGU service on the Mac. I also specified the shorter domain `i.io` for my mobile phone.
+> I assigned a fixed IP `192.168.31.13` to the 13-inch Mac in my home router, and pointed the domain `mac.lan` in the hosts of the router to `192.168.31.13`, and started the GAGU service on the Mac with port `80` , now, every device in the LAN can access `http://mac.lan` through a browser to use the GAGU service on the Mac. I also specified the shorter domain `i.lan` for my mobile phone.
 
 There are two ways to modify the port number:
 

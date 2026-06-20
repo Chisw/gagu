@@ -123,7 +123,7 @@ export default function GeneralSettings() {
       </div>
 
       <EntryPicker
-        show={defaultPathEntryPickerShow}
+        visible={defaultPathEntryPickerShow}
         appId={AppId.settings}
         mode="open"
         type={EntryType.directory}

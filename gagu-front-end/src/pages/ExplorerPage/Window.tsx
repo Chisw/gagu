@@ -5,7 +5,7 @@ import { runningAppListState } from '../../states'
 import { line } from '../../utils'
 import { SvgIcon } from '../../components/common'
 import { useTranslation } from 'react-i18next'
-import { useWindowSize } from '../../hooks'
+import { useBrowserWindowSize } from '../../hooks'
 
 interface WindowProps {
   app: IRunningApp
@@ -31,7 +31,7 @@ export default function Window(props: WindowProps) {
   const [runningAppList, setRunningAppList] = useRecoilState(runningAppListState)
   const [windowTitle, setWindowTitle] = useState('')
 
-  const windowSize = useWindowSize(false)
+  const browserWindowSize = useBrowserWindowSize()
 
   const handleClose = useCallback(() => {
     const list = runningAppList.filter(a => a.runningId !== runningId)
@@ -75,7 +75,7 @@ export default function Window(props: WindowProps) {
               prevent-move-to-front="true"
               className={line(`
                 gagu-app-close-trigger
-                w-8 h-8 flex justify-center items-center cursor-pointer transition-all duration-200
+                w-8 h-8 flex-center-center cursor-pointer transition-all duration-200
                 text-white bg-red-600 hover:bg-red-500 active:bg-red-700
               `)}
               onClick={handleClose}
@@ -88,7 +88,7 @@ export default function Window(props: WindowProps) {
         <div className="relative grow overflow-hidden bg-black/5">
           <AppComponent
             isTopWindow={isTopWindow}
-            windowSize={windowSize}
+            appWindowSize={browserWindowSize}
             setWindowTitle={setWindowTitle}
             closeWindow={handleClose}
           />

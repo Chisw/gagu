@@ -19,8 +19,6 @@ const pageList = [
   { key: Page.touch, icon: <SvgIcon.Phone /> },
 ]
 
-export const getMenuBarHeight = () => document.querySelector('.gagu-menu-bar')?.scrollHeight || 24
-
 export function MenuBar() {
 
   const navigate = useNavigate()
@@ -129,7 +127,7 @@ export function MenuBar() {
           px-1 h-8
            bg-black text-white
           transition-all duration-500 ease-out
-          ${[Page.desktop, Page.explorer, Page.touch].includes(activePage) ? 'translate-y-0' : '-translate-y-20'}
+          ${([Page.desktop, Page.explorer, Page.touch] as string[]).includes(activePage) ? 'translate-y-0' : '-translate-y-20'}
         `)}
       >
         <div className="h-full flex items-center text-xs">
@@ -340,17 +338,17 @@ export function MenuBar() {
       </div>
 
       <MySharingPanel
-        show={sharingPanelShow}
+        visible={sharingPanelShow}
         onClose={() => setSharingPanelShow(false)}
       />
 
       <LoginManagementPanel
-        show={loginManagementPanelShow}
+        visible={loginManagementPanelShow}
         onClose={() => setLoginManagementPanelShow(false)}
       />
 
       <ChangePasswordModal
-        show={changePasswordModalShow}
+        visible={changePasswordModalShow}
         onClose={() => setChangePasswordModalShow(false)}
       />
     </>

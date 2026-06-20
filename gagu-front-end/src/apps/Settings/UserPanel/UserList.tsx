@@ -5,7 +5,7 @@ import { FormModeType } from '.'
 import { FsApi, UserApi } from '../../../api'
 import { Confirmor, SvgIcon } from '../../../components/common'
 import { useRequest } from '../../../hooks'
-import { IUser, IUserForm, User, UserValidityType, UserForm, UserPermission, getIsExpired } from '@shared'
+import { IUser, IUserForm, UserValidityType, UserForm, UserPermission, getIsExpired } from '@shared'
 import { getDateTime, getTimestampParam, line } from '../../../utils'
 
 interface UserListProps {
@@ -31,7 +31,7 @@ export default function UserList(props: UserListProps) {
   const { request: updateUserValidity } = useRequest(UserApi.updateUserValidity)
   const { request: deleteUser } = useRequest(UserApi.deleteUser)
 
-  const handleUpdateAbility = useCallback(async (username: User.Username, ability: UserValidityType) => {
+  const handleUpdateAbility = useCallback(async (username: string, ability: UserValidityType) => {
     const { success } = await updateUserValidity(username, ability)
     if (success) {
       onRefresh()
@@ -51,7 +51,7 @@ export default function UserList(props: UserListProps) {
       {
         label: t`action.edit`,
         icon: <SvgIcon.Edit className="text-gray-500 dark:text-zinc-300" />,
-        show: true,
+        visible: true,
         onClick: () => {
           const avatarPath = FsApi.getPublicAvatarStreamUrl(user.username) + '?' + getTimestampParam()
           setForm(new UserForm(user, avatarPath))
@@ -61,19 +61,19 @@ export default function UserList(props: UserListProps) {
       {
         label: t`action.disable`,
         icon: <SvgIcon.Forbid className="text-yellow-500" />,
-        show: !isAdmin && !user.invalid && !getIsExpired(user.expiredAt),
+        visible: !isAdmin && !user.invalid && !getIsExpired(user.expiredAt),
         onClick: () => handleUpdateAbility(user.username, 'invalid'),
       },
       {
         label: t`action.enable`,
         icon: <SvgIcon.CheckCircle className="text-green-500" />,
-        show: !isAdmin && user.invalid && !getIsExpired(user.expiredAt),
+        visible: !isAdmin && user.invalid && !getIsExpired(user.expiredAt),
         onClick: () => handleUpdateAbility(user.username, 'valid'),
       },
       {
         label: t`action.delete`,
         icon: <SvgIcon.Delete className="text-red-500" />,
-        show: true,
+        visible: true,
         onClick: () => {
           Confirmor({
             type: 'delete',
@@ -98,7 +98,7 @@ export default function UserList(props: UserListProps) {
 
         },
       },
-    ].filter(b => b.show)
+    ].filter(b => b.visible)
     return buttonList
   }, [setForm, setFormMode, handleUpdateAbility, handleRemove, userList, t])
 
@@ -151,7 +151,7 @@ export default function UserList(props: UserListProps) {
                 style={avatarStyle}
               />
               <div className="relative z-10 -mt-20">
-                <div className="flex justify-center items-center">
+                <div className="flex-center-center">
                   <div
                     className="relative w-12 h-12 shrink-0 rounded-full bg-cover bg-center bg-no-repeat bg-gray-300 border-2 border-white shadow-sm dark:border-zinc-500"
                     style={avatarStyle}
@@ -191,7 +191,7 @@ export default function UserList(props: UserListProps) {
                   <div
                     key={label}
                     title={label}
-                    className="mx-1 w-6 h-6 cursor-pointer hover:opacity-70 flex justify-center items-center rounded-sm"
+                    className="mx-1 w-6 h-6 cursor-pointer hover:opacity-70 flex-center-center rounded-sm"
                     onClick={onClick}
                   >
                     {icon}

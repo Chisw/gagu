@@ -140,7 +140,7 @@ export default function UserFormModal(props: UserFormModalProps) {
                 className={line(`
                   relative p-1 w-24 h-24
                   border-2 border-dashed border-gray-300 hover:border-blue-500 hover:border-solid
-                  text-gray-500 rounded-lg flex justify-center items-center
+                  text-gray-500 rounded-lg flex-center-center
                 `)}
               >
                 <input
@@ -351,7 +351,7 @@ export default function UserFormModal(props: UserFormModalProps) {
       </SideSheet>
 
       <EntryPicker
-        show={assignedPathEntryPickerShow}
+        visible={assignedPathEntryPickerShow}
         appId={AppId.settings}
         mode="open"
         type={EntryType.directory}

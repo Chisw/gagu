@@ -9,8 +9,6 @@ import { useTranslation } from 'react-i18next'
 import { getContextMenuDelay } from '../../components'
 import { genRunningApp } from '../../utils/app.util'
 
-export const DOCK_HEIGHT_AND_MARGIN =  48 + 4
-
 export default function Dock() {
 
   const { t } = useTranslation()

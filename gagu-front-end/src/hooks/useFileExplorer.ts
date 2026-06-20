@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   EditModeType,
   IEntryPathCache,
-  IScrollerWatcher,
   IVisitHistory,
   IClipboardData,
   ClipboardType,
@@ -39,7 +38,6 @@ import { FsApi, TunnelApi } from '../api'
 import { useTranslation } from 'react-i18next'
 import { Confirmor, ExistingConfirmor } from '../components/common'
 import { Toast } from '@douyinfe/semi-ui'
-import { throttle } from 'lodash-es'
 import { useTouchMode } from './useTouchMode'
 import { useAddUploadingTask } from './useAddUploadingTask'
 import { useUserConfig } from './useUserConfig'
@@ -120,7 +118,6 @@ export function useFileExplorer(props: Props) {
   const [sharingEntryList, setSharingEntryList] = useState<IEntry[]>([])
   const [movementEntryPickerShow, setMovementEntryPickerShow] = useState(false)
   const [goToPathDialogShow, setGoToPathDialogShow] = useState(false)
-  const [thumbScrollWatcher, setThumbScrollWatcher] = useState<IScrollerWatcher>({ top: 0, height: 0 })
 
   const { request: queryEntryList, loading: querying } = useRequest(FsApi.queryEntryList)
   const { request: queryDirectorySize, loading: sizeQuerying } = useRequest(FsApi.queryDirectorySize)
@@ -152,10 +149,10 @@ export function useFileExplorer(props: Props) {
     return canNotBackToParentPathList.includes(currentPath)
   }, [canNotBackToParentPathList, currentPath])
 
-  const { entryList, isEntryListEmpty, folderCount, fileCount, hiddenShow, gridMode, sortType } = useMemo(() => {
+  const { entryList, isEntryListEmpty, folderCount, fileCount, hiddenVisible, gridMode, sortType } = useMemo(() => {
     const {
       list = [],
-      hiddenShow = false,
+      hiddenVisible = false,
       gridMode = !touchMode,
       sortType = Sort.default,
     } = entryPathCache[currentPath] || {}
@@ -167,7 +164,7 @@ export function useFileExplorer(props: Props) {
     const asteriskEnd = text.endsWith('*')
 
     const entryList = allEntryList
-      .filter(entry => hiddenShow ? true : !entry.hidden)
+      .filter(entry => hiddenVisible ? true : !entry.hidden)
       .filter((entry: IEntry) => {
         if (!text) return true
         const name = entry.name.toLowerCase()
@@ -197,7 +194,7 @@ export function useFileExplorer(props: Props) {
 
     const isEntryListEmpty = entryList.length === 0
 
-    return { entryList, isEntryListEmpty, folderCount, fileCount, hiddenShow, gridMode, sortType }
+    return { entryList, isEntryListEmpty, folderCount, fileCount, hiddenVisible, gridMode, sortType }
   }, [currentPath, entryPathCache, filterText, touchMode])
 
   const disabledMap = useMemo(() => {
@@ -520,10 +517,10 @@ export function useFileExplorer(props: Props) {
     setUserConfig({ ...userConfig, fileExplorerSideCollapse: isCollapsed })
   }, [setUserConfig, sideCollapse, userConfig])
 
-  const handleHiddenShowChange = useCallback((show: boolean) => {
+  const handleHiddenShowChange = useCallback((visible: boolean) => {
     const res = {
       ...(entryPathCache[currentPath] || {}),
-      hiddenShow: show,
+      hiddenVisible: visible,
     }
     setEntryPathCache({ ...entryPathCache, [currentPath]: res })
   }, [currentPath, entryPathCache, setEntryPathCache])
@@ -543,19 +540,6 @@ export function useFileExplorer(props: Props) {
     }
     setEntryPathCache({ ...entryPathCache, [currentPath]: res })
   }, [currentPath, entryPathCache, setEntryPathCache])
-
-  useEffect(() => {
-    const container: any = containerRef.current
-    if (!container) return
-    const listener = () => {
-      const { top, height } = container.getBoundingClientRect()
-      setThumbScrollWatcher({ top, height })
-    }
-    setTimeout(listener)
-    const throttleListener = throttle(listener, 500)
-    container.addEventListener('scroll', throttleListener)
-    return () => container.removeEventListener('scroll', throttleListener)
-  }, [containerRef])
 
   useEffect(() => {
     const { path, otherPaths = [] } = lastChangedDirectory
@@ -603,8 +587,8 @@ export function useFileExplorer(props: Props) {
       Object.entries(entryPathCache)
         .map(([path, data]) => {
           const newData = {...data}
-          if (newData?.hiddenShow === false) {
-            delete newData.hiddenShow
+          if (newData?.hiddenVisible === false) {
+            delete newData.hiddenVisible
           }
           if (newData?.gridMode === !touchMode) {
             delete newData.gridMode
@@ -639,7 +623,7 @@ export function useFileExplorer(props: Props) {
 
   return {
     kiloSize,
-    disabledMap, supportThumbnail, thumbScrollWatcher,
+    disabledMap, supportThumbnail,
     currentPath, currentRootEntry,
     querying, sizeQuerying, deleting,
     entryList, rootEntryList, favoriteRootEntryList, sharingEntryList,
@@ -649,7 +633,7 @@ export function useFileExplorer(props: Props) {
     filterMode, setFilterMode,
     filterText, setFilterText,
     sideCollapse, handleSideCollapseChange,
-    hiddenShow, handleHiddenShowChange,
+    hiddenVisible, handleHiddenShowChange,
     gridMode, handleGridModeChange,
     sortType, handleSortChange,
     lastVisitedPath, setLastVisitedPath,

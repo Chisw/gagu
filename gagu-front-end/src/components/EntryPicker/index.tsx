@@ -15,7 +15,7 @@ interface EntryPickerResult {
 }
 
 interface EntryPickerProps {
-  show: boolean
+  visible: boolean
   appId: string
   mode: EntryPickerMode
   type: EntryTypeType
@@ -28,7 +28,7 @@ interface EntryPickerProps {
 export function EntryPicker(props: EntryPickerProps) {
 
   const {
-    show,
+    visible,
     mode,
     appId,
     type,
@@ -118,7 +118,7 @@ export function EntryPicker(props: EntryPickerProps) {
           closable={false}
           headerStyle={{ padding: '4px 6px' }}
           bodyStyle={{ position: 'relative', padding: 0 }}
-          visible={show}
+          visible={visible}
           height="calc(100% - 1rem)"
           className="gagu-entry-picker-touch gagu-sync-popstate-overlay"
           style={{ borderTopRightRadius: 10, borderTopLeftRadius: 10 }}
@@ -135,7 +135,7 @@ export function EntryPicker(props: EntryPickerProps) {
         >
           <div className="absolute inset-0 border-t border-gray-200 overflow-hidden">
             <FileExplorerTouch
-              show
+              visible
               asEntryPicker
               onCurrentPathChange={setCurrentPath}
               onPick={setPickedEntryList}
@@ -152,7 +152,7 @@ export function EntryPicker(props: EntryPickerProps) {
         centered
         closable={false}
         width={1020}
-        visible={show}
+        visible={visible}
         className="gagu-entry-picker"
         footer={<Form {...formProps} />}
       >
@@ -176,8 +176,8 @@ export function EntryPicker(props: EntryPickerProps) {
           <div className="mt-3 relative h-135 overflow-y-auto border border-gray-200 bg-gray-100/50 dark:bg-black dark:border-zinc-600">
             <FileExplorer
               asEntryPicker
-              isTopWindow={show}
-              windowSize={{ width: 1020, height: 540 }}
+              isTopWindow={visible}
+              appWindowSize={{ width: 1020, height: 540 }}
               setWindowTitle={() => {}}
               closeWindow={() => {}}
               onCurrentPathChange={setCurrentPath}

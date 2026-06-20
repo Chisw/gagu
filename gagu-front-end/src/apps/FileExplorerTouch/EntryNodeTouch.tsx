@@ -1,7 +1,7 @@
+import { CSSProperties } from 'react'
 import { EntryType, IEntry } from '@shared'
 import { getEntryLabels, line } from '../../utils'
-import EntryIcon from '../../apps/FileExplorer/EntryNode/EntryIcon'
-import { useEffect, useRef, useState } from 'react'
+import EntryIcon from '../FileExplorer/EntryNode/EntryIcon'
 import { SvgIcon } from '../../components/common'
 
 interface EntryNodeProps {
@@ -10,10 +10,11 @@ interface EntryNodeProps {
   isSelected?: boolean
   isFavorited?: boolean
   gridMode: boolean
+  className?: string
+  style?: CSSProperties
   isSelectionMode: boolean
   hideAppIcon?: boolean
   supportThumbnail?: boolean
-  thumbScrollWatcher?: { top: number, height: number }
   requestState?: {
     sizeQuerying: boolean
     deleting: boolean
@@ -28,10 +29,11 @@ export default function EntryNode(props: EntryNodeProps) {
     isSelected = false,
     isFavorited = false,
     gridMode,
+    className,
+    style,
     isSelectionMode,
     hideAppIcon = false,
     supportThumbnail = false,
-    thumbScrollWatcher,
     requestState,
     onClick = () => {},
   } = props
@@ -39,23 +41,8 @@ export default function EntryNode(props: EntryNodeProps) {
   const { name, type, extension, hidden } = entry
   const { sizeLabel, dateLabel } = getEntryLabels(entry, kiloSize)
 
-  const [isViewable, setIsViewable] = useState(false)
-
-  const nodeRef = useRef<any>(null)
-
-  useEffect(() => {
-    const icon: any = nodeRef.current
-    if (!icon || !thumbScrollWatcher) return
-    const { top, height } = thumbScrollWatcher
-    const { top: iconTop } = icon.getBoundingClientRect()
-    if ((top - 20) <= iconTop && iconTop <= (top + height)) {
-      setIsViewable(true)
-    }
-  }, [thumbScrollWatcher])
-
   return (
     <div
-      ref={nodeRef}
       data-entry-name={name}
       data-entry-type={type}
       data-entry-extension={extension}
@@ -67,10 +54,12 @@ export default function EntryNode(props: EntryNodeProps) {
         ${hidden ? 'opacity-50' : ''}
         ${isSelected && requestState?.deleting ? 'bg-loading' : ''}
         ${gridMode
-          ? 'py-2 w-1/4 md:w-[12.5%] lg:w-1/12 active:scale-90'
-          : 'px-2 py-2 w-full flex justify-start items-center active:scale-95'
+          ? 'px-1 py-2 active:scale-90'
+          : 'px-2 py-2 flex-start-center active:scale-95'
         }
+        ${className}
       `)}
+      style={style}
       onClick={() => onClick(entry)}
     >
       {gridMode ? (
@@ -80,7 +69,6 @@ export default function EntryNode(props: EntryNodeProps) {
               touchMode: true,
               isSmall: false,
               isFavorited,
-              isViewable,
               entry,
               hideAppIcon,
               supportThumbnail,
@@ -107,7 +95,6 @@ export default function EntryNode(props: EntryNodeProps) {
                 touchMode: true,
                 isSmall: false,
                 isFavorited,
-                isViewable,
                 entry,
                 hideAppIcon,
                 supportThumbnail,
@@ -138,7 +125,7 @@ export default function EntryNode(props: EntryNodeProps) {
           className={line(`
             absolute z-10 pointer-events-none
             rounded-full text-gray-300
-            flex justify-center items-center
+            flex-center-center
             right-0 w-5 h-5 -translate-x-4 top-1/2 -translate-y-1/2
           `)}
         >
@@ -151,7 +138,7 @@ export default function EntryNode(props: EntryNodeProps) {
           className={line(`
             absolute z-10 pointer-events-none
             rounded-full text-white
-            flex justify-center items-center
+            flex-center-center
             ${isSelected ? 'bg-blue-500' : 'bg-black/20 border border-gray-200'}
             ${gridMode
                 ? 'top-0 left-1/2 w-4 h-4 translate-x-4 translate-y-2'

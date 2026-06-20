@@ -3,7 +3,7 @@ import { useClickAway } from '../../hooks'
 import { line } from '../../utils'
 
 interface VolumeSliderProps {
-  show: boolean
+  visible: boolean
   volume: number
   right?: number
   bottom?: number,
@@ -14,7 +14,7 @@ interface VolumeSliderProps {
 export function VolumeSlider(props: VolumeSliderProps) {
 
   const {
-    show,
+    visible,
     volume,
     right = 0,
     bottom = 0,
@@ -33,7 +33,7 @@ export function VolumeSlider(props: VolumeSliderProps) {
         className={line(`
           absolute z-20
           w-8 h-32 rounded bg-black shadow-lg border border-white/20
-          ${show ? 'block' : 'hidden'}
+          ${visible ? 'block' : 'hidden'}
         `)}
         style={{ right, bottom }}
       >

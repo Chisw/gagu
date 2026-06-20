@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { IOffsetInfo, ILassoInfo, PublicImageName } from '../types'
+import { ILasso, IBound, PublicImageName, IOffset } from '../types'
 import { ExistingStrategyType, ACCESS_TOKEN_KEY } from '@shared'
 import { FsApi } from '../api'
 import { UserInfoStore } from './store.util'
@@ -60,7 +60,7 @@ export const getReadableSize = (size: number, kiloSize: 1000 | 1024, options?: g
   return `${readableSize}${separator}${unit}`
 }
 
-export const getIsCovered = (props: ILassoInfo & IOffsetInfo) => {
+export const getIsCovered = (props: ILasso & IOffset) => {
   const {
     startX,
     startY,
@@ -72,10 +72,25 @@ export const getIsCovered = (props: ILassoInfo & IOffsetInfo) => {
     offsetHeight,
   } = props
 
-  return offsetLeft + offsetWidth > startX &&
-    offsetTop + offsetHeight > startY &&
-    offsetLeft < endX &&
-    offsetTop < endY
+  return offsetLeft + offsetWidth > startX
+    && offsetTop + offsetHeight > startY
+    && offsetLeft < endX
+    && offsetTop < endY
+}
+
+export const getIsIntersected = (
+  lasso: ILasso,
+  bound: IBound,
+) => {
+  const { startX, startY, endX, endY } = lasso
+  const { top: boundTop, left: boundLeft, width, height } = bound
+  const boundRight = boundLeft + width
+  const boundBottom = boundTop + height
+
+  return boundRight >= startX
+    && boundLeft <= endX
+    && boundBottom >= startY
+    && boundTop <= endY
 }
 
 export const getImageTypeBase64ByURL = async (url: string, options?: { width?: number, height?: number, bgColor?: string, usePNG?: boolean }) => {

@@ -2,16 +2,16 @@ import RootEntryGroups, { RootEntryGroupsProps } from '../FileExplorer/RootEntry
 import { line } from '../../utils'
 
 interface SideProps extends RootEntryGroupsProps {
-  sideShow: boolean
-  setSideShow: (show: boolean) => void
+  sideVisible: boolean
+  setSideVisible: (visible: boolean) => void
   asEntryPicker?: boolean
 }
 
 export default function Side(props: SideProps) {
 
   const {
-    sideShow,
-    setSideShow,
+    sideVisible,
+    setSideVisible,
     currentPath,
     rootEntryList,
     onRootEntryClick,
@@ -29,7 +29,7 @@ export default function Side(props: SideProps) {
           overflow-x-hidden overflow-y-auto border-r border-gray-200
           duration-transform duration-300 ease-in-out
           dark:bg-zinc-900 dark:border-zinc-600
-          ${sideShow ? 'translate-x-0' : '-translate-x-64'}
+          ${sideVisible ? 'translate-x-0' : '-translate-x-64'}
           ${asEntryPicker ? 'top-0' : 'top-8'}
         `)}
       >
@@ -41,8 +41,8 @@ export default function Side(props: SideProps) {
         />
       </div>
       <div
-        className={`absolute z-10 top-8 right-0 bottom-0 left-64 ${sideShow ? '' : 'hidden'}`}
-        onClick={() => setSideShow(false)}
+        className={`absolute z-10 top-8 right-0 bottom-0 left-64 ${sideVisible ? '' : 'hidden'}`}
+        onClick={() => setSideVisible(false)}
       />
     </>
   )

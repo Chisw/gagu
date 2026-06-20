@@ -18,7 +18,7 @@ export function ClipboardPanel() {
 
   const [clipboardData, setClipboardData] = useRecoilState(clipboardDataState)
 
-  const [show, setShow] = useState(false)
+  const [visible, setVisible] = useState(false)
 
   const { type, entryList, count } = useMemo(() => {
     const { type, entryList = [] } = clipboardData || {}
@@ -37,7 +37,7 @@ export function ClipboardPanel() {
           hover:bg-white/30 active:bg-black/10
           ${count ? 'flex' : 'hidden'}
         `)}
-        onClick={() => setShow(true)}
+        onClick={() => setVisible(true)}
       >
         {type === ClipboardType.copy && (
           <>
@@ -71,7 +71,7 @@ export function ClipboardPanel() {
                   icon={<SvgIcon.Brush />}
                   onClick={() => {
                     setClipboardData(null)
-                    setTimeout(() => setShow(false), 300)
+                    setTimeout(() => setVisible(false), 300)
                   }}
                 >
                   {t`action.clear`}
@@ -83,7 +83,7 @@ export function ClipboardPanel() {
                 size="small"
                 icon={<SvgIcon.Close />}
                 className="gagu-sync-popstate-overlay-close-button"
-                onClick={() => setShow(false)}
+                onClick={() => setVisible(false)}
               />
             </div>
           </div>
@@ -93,11 +93,11 @@ export function ClipboardPanel() {
         bodyStyle={{ padding: 0 }}
         maskStyle={{ background: 'rgba(0, 0, 0, .1)' }}
         width={400}
-        visible={show}
-        onCancel={() => setShow(false)}
+        visible={visible}
+        onCancel={() => setVisible(false)}
       >
         <div className="relative w-full h-full overflow-auto">
-          <EmptyPanel dark show={!clipboardData} />
+          <EmptyPanel dark visible={!clipboardData} />
           <div
             className={line(`
               py-2 bg-white/70
@@ -110,6 +110,7 @@ export function ClipboardPanel() {
                 key={entry.parentPath + entry.name}
                 hideAppIcon
                 gridMode={false}
+                className="m-1"
                 entry={entry}
                 kiloSize={kiloSize}
               />

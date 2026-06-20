@@ -3,7 +3,7 @@ import { useRecoilState } from 'recoil'
 import Window from './Window'
 import { line } from '../../utils'
 import { useEffect, useState } from 'react'
-import { IWindowInfo } from '../../types'
+import { IAppWindowInfo } from '../../types'
 import { AnimatePresence } from 'motion/react'
 
 export default function WindowContainer() {
@@ -11,7 +11,7 @@ export default function WindowContainer() {
   const [runningAppList] = useRecoilState(runningAppListState)
   const [demoWindowInfo] = useRecoilState(demoWindowInfoState)
 
-  const [infoCache, setInfoCache] = useState<IWindowInfo>({ x: 0, y: 0, width: 0, height: 0 })
+  const [infoCache, setInfoCache] = useState<IAppWindowInfo>({ x: 0, y: 0, width: 0, height: 0 })
 
   useEffect(() => {
     if (demoWindowInfo) {

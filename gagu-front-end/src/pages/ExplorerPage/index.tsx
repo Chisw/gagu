@@ -7,13 +7,16 @@ import { AppId, Page } from '../../types'
 import { line } from '../../utils'
 import Dock from './Dock'
 import Window from './Window'
+import { useBrowserWindowSize } from '../../hooks'
 
 export default function ExplorePage() {
 
   const [activePage, setActivePage] = useRecoilState(activePageState)
   const [runningAppList] = useRecoilState(runningAppListState)
 
-  const [show, setShow] = useState(false)
+  const browserWindowSize = useBrowserWindowSize()
+
+  const [visible, setVisible] = useState(false)
   const [activeAppId, setActiveAppId] = useState<string>(AppId.fileExplorer)
   
   useEffect(() => {
@@ -22,9 +25,9 @@ export default function ExplorePage() {
 
   useEffect(() => {
     if (activePage === Page.explorer) {
-      setTimeout(() => setShow(true), 300)
+      setTimeout(() => setVisible(true), 300)
     } else {
-      setShow(false)
+      setVisible(false)
     }
   }, [activePage])
 
@@ -54,12 +57,12 @@ export default function ExplorePage() {
             absolute z-0 inset-0 top-8 bottom-10
             transition-all duration-500 bg-gray-200
             dark:bg-black/60
-            ${show ? 'opacity-100' : 'opacity-0'}
+            ${visible ? 'opacity-100' : 'opacity-0'}
           `)}
         >
           <FileExplorer
             isTopWindow={AppId.fileExplorer === activeAppId}
-            windowSize={{ width: 1080, height: 1920 }}
+            appWindowSize={browserWindowSize}
             setWindowTitle={() => {}}
             closeWindow={() => {}}
           />

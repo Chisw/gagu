@@ -9,7 +9,6 @@ interface IconProps {
   entry: IEntry
   isSmall?: boolean
   isFavorited?: boolean
-  isViewable?: boolean
   hideAppIcon?: boolean
   supportThumbnail?: boolean
   touchMode?: boolean
@@ -20,7 +19,6 @@ export default function EntryIcon(props: IconProps) {
     entry,
     isSmall = false,
     isFavorited = false,
-    isViewable = false,
     hideAppIcon = false,
     supportThumbnail = false,
     touchMode = false,
@@ -48,8 +46,8 @@ export default function EntryIcon(props: IconProps) {
   }, [entry])
 
   const showThumbnail = useMemo(() => {
-    return supportThumbnail && useThumbnail && isViewable && !thumbnailErr
-  }, [supportThumbnail, useThumbnail, isViewable, thumbnailErr])
+    return supportThumbnail && useThumbnail && !thumbnailErr
+  }, [supportThumbnail, useThumbnail, thumbnailErr])
 
   return (
     <div
@@ -59,7 +57,7 @@ export default function EntryIcon(props: IconProps) {
       className={line(`
         gagu-entry-icon
         relative mx-auto pointer-events-none
-        flex justify-center items-center shrink-0
+        flex-center-center shrink-0
         bg-no-repeat bg-contain bg-center
         ${isSmall ? 'w-6 h-6 --small-icon' : 'w-14 h-12'}
         ${isFolder ? '--folder' : '--file'}
@@ -119,7 +117,7 @@ function ThumbnailWrapper(props: { type: ThumbnailTypeType, loading: boolean, ch
     return (
       <div
         className={line(`
-          px-0.5 w-full aspect-video flex justify-center items-center shadow-lg
+          px-0.5 w-full aspect-video flex-center-center shadow-lg
           ${loading ? 'bg-loading' : 'bg-black'}
         `)}
       >
@@ -130,7 +128,7 @@ function ThumbnailWrapper(props: { type: ThumbnailTypeType, loading: boolean, ch
     return (
       <div
         className={line(`
-          relative w-4/5 aspect-square flex justify-center items-center shadow-lg overflow-hidden
+          relative w-4/5 aspect-square flex-center-center shadow-lg overflow-hidden
           after:content-[''] after:block after:absolute after:z-0 after:left-0
           after:ml-[-60%] after:mt-[-70%] after:w-full after:h-[300%]
           after:bg-white/30 after:rotate-60

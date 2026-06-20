@@ -7,7 +7,7 @@ import { Toast } from '@douyinfe/semi-ui'
 import { getPopupContainer } from '../../utils'
 
 interface GoToPathDialogProps {
-  show: boolean
+  visible: boolean
   currentPath: string
   onGo: (path: string) => void
   onCancel: () => void
@@ -15,7 +15,7 @@ interface GoToPathDialogProps {
 
 export default function GoToPathDialog(props: GoToPathDialogProps) {
   const {
-    show,
+    visible,
     currentPath,
     onGo,
     onCancel,
@@ -39,11 +39,11 @@ export default function GoToPathDialog(props: GoToPathDialogProps) {
   }, [onGo, path, queryExists, t])
 
   useEffect(() => {
-    if (show && currentPath) {
+    if (visible && currentPath) {
       setPath(currentPath)
       setTimeout(() => document.getElementById('gagu-go-to-path-input')?.focus())
     }
-  }, [currentPath, show])
+  }, [currentPath, visible])
 
   return (
     <>
@@ -51,7 +51,7 @@ export default function GoToPathDialog(props: GoToPathDialogProps) {
         centered={!isTouchMode}
         closable={false}
         maskClosable={false}
-        visible={show}
+        visible={visible}
         width={520}
         bodyStyle={{ position: 'relative', padding: 0 }}
         maskStyle={{ borderRadius: 4 }}

@@ -1,35 +1,45 @@
 
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { EmptyPanel } from '../../components/common'
-import { getMatchedApp, getIsSameEntry, line } from '../../utils'
+import { getMatchedApp, getIsSameEntry, line, getEntryBound, getBoundStyle } from '../../utils'
 import ControlBar from '../FileExplorer/ControlBar'
 import StatusBar from '../FileExplorer/StatusBar'
-import EntryNode from './EntryNode'
+import EntryNodeTouch from './EntryNodeTouch'
 import SelectionMenu from './SelectionMenu'
 import Side from './Side'
-import { useFileExplorer } from '../../hooks'
+import { useBrowserWindowSize, useFileExplorer } from '../../hooks'
 import { EntryPicker, SharingModal } from '../../components'
 import { openEventState } from '../../states'
 import { useRecoilState } from 'recoil'
-import { AppId, EventTransaction, ExplorerPickProps } from '../../types'
+import { AppId, EventTransaction, ExplorerPickProps, IBoundedEntry, IVirtualBox, IVirtualContainer } from '../../types'
 import { EntryType, IEntry } from '@shared'
 import EntryNameDialog from './EntryNameDialog'
 import { useNavigate } from 'react-router'
 import { Toast } from '@douyinfe/semi-ui'
 import { useTranslation } from 'react-i18next'
 import GoToPathDialog from '../FileExplorer/GoToPathDialog'
+import { useVirtualizer } from '@tanstack/react-virtual'
+import { findIndex } from 'lodash-es'
+
+const BOTTOM_MENU_PADDING = 144
+
+const getColCount = (containerWidth: number) => {
+  const ranges = [0, 640, 768, 1024, 1280, 1536, 1792, 2048, 2304, 2560, 2816, Infinity]
+  const rangeIndex = findIndex(ranges, (val, i) => containerWidth >= val && containerWidth < ranges[i + 1])
+  return [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14][rangeIndex]
+}
 
 interface FileExplorerTouchProps extends ExplorerPickProps {
-  show: boolean
+  visible: boolean
   activeAppId?: string
-  setIsSideOrSelectionMenuShow?: (show: boolean) => void
+  setIsSideOrSelectionMenuShow?: (visible: boolean) => void
   onPopState?: () => void
 }
 
 export default function FileExplorerTouch(props: FileExplorerTouchProps) {
 
   const {
-    show,
+    visible,
     asEntryPicker = false,
     onCurrentPathChange = () => {},
     onPick = () => {},
@@ -41,9 +51,11 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
   const navigate = useNavigate()
   const { t } = useTranslation()
 
+  const { width: browserWindowWidth } = useBrowserWindowSize()
+
   const [, setOpenEvent] = useRecoilState(openEventState)
 
-  const [sideShow, setSideShow] = useState(false)
+  const [sideVisible, setSideVisible] = useState(false)
   const [isSelectionMode, setIsSelectionMode] = useState(false)
   const [activeEntry, setActiveEntry] = useState<IEntry | null>(null)
 
@@ -51,7 +63,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
 
   const {
     kiloSize,
-    disabledMap, supportThumbnail, thumbScrollWatcher,
+    disabledMap, supportThumbnail,
     currentPath, currentRootEntry,
     querying, sizeQuerying, deleting,
     entryList, rootEntryList, favoriteRootEntryList, sharingEntryList,
@@ -60,7 +72,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
     editMode, setEditMode,
     filterMode, setFilterMode,
     filterText, setFilterText,
-    hiddenShow, handleHiddenShowChange,
+    hiddenVisible, handleHiddenShowChange,
     gridMode, handleGridModeChange,
     sortType, handleSortChange,
     selectedEntryList, setSelectedEntryList,
@@ -74,6 +86,49 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
     handleUploadClick, handleDownloadClick,
     handleShareClick, handleFavoriteClick, handleMove, handleDeleteClick,
   } = useFileExplorer({ containerRef })
+
+  const {
+    virtualContainer,
+    virtualBox,
+  } = useMemo(() => {
+    const padding = 4
+    const marginX = gridMode ? 4 : 0
+    const marginY = gridMode ? 4 : 0
+    const safeContainerWidth = browserWindowWidth - marginX * 2 - padding * 2
+
+    const cols = gridMode
+      ? getColCount(browserWindowWidth)
+      : 1
+
+    const width = safeContainerWidth / cols - marginX
+    const height = gridMode ? 120 : 80
+
+    const rows = gridMode
+      ? Math.ceil(entryList.length / cols)
+      : entryList.length
+
+    const virtualContainer: IVirtualContainer = { padding, rows, cols }
+    const virtualBox: IVirtualBox = { width, height, marginX, marginY }
+
+    return {
+      virtualContainer,
+      virtualBox,
+    }
+  }, [browserWindowWidth, gridMode, entryList])
+
+  const boundedEntryList = useMemo(() => {
+    return entryList.map((entry, entryIndex) => {
+      const bound = getEntryBound(entryIndex, virtualContainer, virtualBox)
+      return { ...entry, bound } as IBoundedEntry
+    })
+  }, [entryList, virtualContainer, virtualBox])
+
+  const virtualizer = useVirtualizer({
+    count: virtualContainer.rows,
+    getScrollElement: () => containerRef.current,
+    estimateSize: () => virtualBox.height + virtualBox.marginY,
+    overscan: 3,
+  })
 
   const handleEntryClick = useCallback((entry: IEntry) => {
     if (isSelectionMode) {
@@ -118,7 +173,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
   ])
 
   const handleContextMenu = useCallback((event: any) => {
-    if (sideShow) return
+    if (sideVisible) return
 
     const { target } = event
     const selectedCount = selectedEntryList.length
@@ -137,7 +192,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
 
     setIsSelectionMode(true)
 
-  }, [sideShow, selectedEntryList, entryList, setSelectedEntryList, setIsSelectionMode])
+  }, [sideVisible, selectedEntryList, entryList, setSelectedEntryList, setIsSelectionMode])
 
   const handleSelectionCancel = useCallback(() => {
     setIsSelectionMode(false)
@@ -148,9 +203,9 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
     const keepPath = () => navigate(`/touch?path=${currentPath}`)
     onPopState()
 
-    if (sideShow) {
+    if (sideVisible) {
       keepPath()
-      setSideShow(false)
+      setSideVisible(false)
     } else if (document.querySelector('.gagu-sync-popstate-overlay')) {
       keepPath()
       ;(document.querySelector('.gagu-sync-popstate-overlay-close-button') as any)?.click()
@@ -191,8 +246,8 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
     setSharingModalShow,
     isSelectionMode,
     setIsSelectionMode,
-    setSideShow,
-    sideShow,
+    setSideVisible,
+    sideVisible,
     visitHistory,
     goToPathDialogShow,
     setGoToPathDialogShow,
@@ -207,11 +262,11 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
 
   useEffect(() => {
     setIsSelectionMode(false)
-  }, [setIsSelectionMode, sideShow])
+  }, [setIsSelectionMode, sideVisible])
 
   useEffect(() => {
-    setIsSideOrSelectionMenuShow(sideShow || isSelectionMode)
-  }, [sideShow, isSelectionMode, setIsSideOrSelectionMenuShow])
+    setIsSideOrSelectionMenuShow(sideVisible || isSelectionMode)
+  }, [sideVisible, isSelectionMode, setIsSideOrSelectionMenuShow])
 
   useEffect(() => {
     onCurrentPathChange(currentPath)
@@ -234,14 +289,14 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
     <>
       <Side
         {...{
-          sideShow,
-          setSideShow,
+          sideVisible,
+          setSideVisible,
           currentPath,
           rootEntryList,
           asEntryPicker,
         }}
         onRootEntryClick={(rootEntry) => {
-          setSideShow(false)
+          setSideVisible(false)
           handleDirectoryOpen(rootEntry, true)
         }}
         onFavoriteCancel={handleFavoriteClick}
@@ -253,29 +308,31 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
         className={line(`
           absolute z-0 inset-0 bg-white transition-all duration-300
           dark:bg-zinc-800
-          ${show ? 'opacity-100' : 'opacity-0'}
-          ${sideShow ? 'ease-in-out translate-x-64 opacity-20 overflow-y-hidden pointer-events-none' : 'overflow-y-auto'}
+          ${visible
+            ? sideVisible
+              ? 'ease-in-out translate-x-64 opacity-20 overflow-y-hidden pointer-events-none'
+              : 'opacity-100 overflow-y-auto'
+            : 'opacity-0'
+          }
           ${asEntryPicker ? 'top-0' : 'top-8'}
         `)}
         onContextMenu={handleContextMenu}
       >
         <div className="sticky z-20 top-0 bg-white select-none overflow-hidden dark:bg-zinc-800">
           <ControlBar
-            {...{
-              windowWidth: 360,
-              disabledMap,
-              gridMode,
-              filterMode,
-              filterText,
-              hiddenShow,
-              sortType,
-              setFilterMode,
-              setFilterText,
-            }}
+            appWindowWidth={360}
+            disabledMap={disabledMap}
+            gridMode={gridMode}
+            filterMode={filterMode}
+            filterText={filterText}
+            hiddenVisible={hiddenVisible}
+            sortType={sortType}
+            setFilterMode={setFilterMode}
+            setFilterText={setFilterText}
             onHiddenShowChange={handleHiddenShowChange}
             onGridModeChange={handleGridModeChange}
             onSortTypeChange={handleSortChange}
-            onSideBarClick={() => setSideShow(!sideShow)}
+            onSideBarClick={() => setSideVisible(!sideVisible)}
             onNavBack={handleNavBack}
             onNavForward={handleNavForward}
             onNavRefresh={handleNavRefresh}
@@ -283,13 +340,11 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
             onNavToParent={handleNavToParent}
           />
           <StatusBar
-            {...{
-              folderCount,
-              fileCount,
-              currentPath,
-              currentRootEntry,
-              selectedEntryList,
-            }}
+            folderCount={folderCount}
+            fileCount={fileCount}
+            currentPath={currentPath}
+            currentRootEntry={currentRootEntry}
+            selectedEntryList={selectedEntryList}
             loading={querying}
             onDirClick={handleGoFullPath}
             onRootEntryClick={(entry) => handleDirectoryOpen(entry, true)}
@@ -297,45 +352,56 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
         </div>
         <div
           data-vibrate-disabled="true"
-          className="flex flex-wrap px-1 py-2 pb-36 select-none"
+          className="relative z-0 select-none"
+          style={{
+            height: virtualizer.getTotalSize() + virtualBox.marginY + virtualContainer.padding * 2 + BOTTOM_MENU_PADDING
+          }}
         >
-          {entryList.map(entry => {
-            const isSelected = selectedEntryList.some(o => getIsSameEntry(o, entry))
-            const isFavorited = favoriteRootEntryList.some(o => getIsSameEntry(o, entry))
+          {virtualizer.getVirtualItems().map(({ key: rowKey, index: rowIndex }) => {
+            const { cols } = virtualContainer
+            const startIndex = rowIndex * cols
+            const endIndex = startIndex + cols
+            const rowEntries = boundedEntryList.slice(startIndex, endIndex)
+
             return (
-              <EntryNode
-                key={encodeURIComponent(`${entry.name}-${entry.type}`)}
-                {...{
-                  entry,
-                  kiloSize,
-                  gridMode,
-                  isSelectionMode,
-                  isSelected,
-                  isFavorited,
-                  supportThumbnail,
-                  thumbScrollWatcher,
-                }}
-                requestState={{ deleting, sizeQuerying }}
-                onClick={handleEntryClick}
-              />
+              <Fragment key={rowKey}>
+                {rowEntries.map((entry) => {
+                  const isSelected = selectedEntryList.some(o => getIsSameEntry(o, entry))
+                  const isFavorited = favoriteRootEntryList.some(o => getIsSameEntry(o, entry))
+
+                  return (
+                    <EntryNodeTouch
+                      key={encodeURIComponent(`${entry.name}-${entry.type}`)}
+                      entry={entry}
+                      kiloSize={kiloSize}
+                      gridMode={gridMode}
+                      style={getBoundStyle(entry.bound)}
+                      isSelectionMode={isSelectionMode}
+                      isSelected={isSelected}
+                      isFavorited={isFavorited}
+                      supportThumbnail={supportThumbnail}
+                      requestState={{ deleting, sizeQuerying }}
+                      onClick={handleEntryClick}
+                    />
+                  )
+                })}
+              </Fragment>
             )
           })}
         </div>
 
-        <EmptyPanel show={!querying && isEntryListEmpty} />
+        <EmptyPanel visible={!querying && isEntryListEmpty} />
 
       </div>
 
       <SelectionMenu
-        show={isSelectionMode}
-        {...{
-          asEntryPicker,
-          favoriteRootEntryList,
-          selectedEntryList,
-          setMovementEntryPickerShow,
-          setGoToPathDialogShow,
-          clipboardData,
-        }}
+        visible={isSelectionMode}
+        asEntryPicker={asEntryPicker}
+        favoriteRootEntryList={favoriteRootEntryList}
+        selectedEntryList={selectedEntryList}
+        setMovementEntryPickerShow={setMovementEntryPickerShow}
+        setGoToPathDialogShow={setGoToPathDialogShow}
+        clipboardData={clipboardData}
         onClipboardAdd={handleClipboardAdd}
         onClipboardPaste={handleClipboardPaste}
         onEdit={(mode, entry) => {
@@ -353,13 +419,13 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
       />
 
       <SharingModal
-        show={sharingModalShow}
+        visible={sharingModalShow}
         entryList={sharingEntryList}
         onClose={() => setSharingModalShow(false)}
       />
 
       <GoToPathDialog
-        show={goToPathDialogShow}
+        visible={goToPathDialogShow}
         currentPath={currentPath}
         onGo={(path) => {
           handleGoFullPath(path, true)
@@ -369,7 +435,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
       />
 
       <EntryPicker
-        show={movementEntryPickerShow}
+        visible={movementEntryPickerShow}
         appId={AppId.fileExplorer}
         mode="open"
         type={EntryType.directory}
@@ -386,12 +452,10 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
       />
 
       <EntryNameDialog
-        {...{
-          editMode,
-          setEditMode,
-          currentPath,
-          activeEntry,
-        }}
+        editMode={editMode}
+        setEditMode={setEditMode}
+        currentPath={currentPath}
+        activeEntry={activeEntry}
         onSuccess={() => {
           setEditMode(null)
           handleNavRefresh()

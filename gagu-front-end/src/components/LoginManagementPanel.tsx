@@ -9,13 +9,13 @@ import { getDateTime, UserInfoStore } from '../utils'
 import { Confirmor, EmptyPanel, SvgIcon } from './common'
 
 interface LoginManagementPanelProps {
-  show: boolean
+  visible: boolean
   onClose: () => void
 }
 
 export function LoginManagementPanel(props: LoginManagementPanelProps) {
 
-  const { show, onClose } = props
+  const { visible, onClose } = props
 
   const { t } = useTranslation()
 
@@ -29,8 +29,8 @@ export function LoginManagementPanel(props: LoginManagementPanelProps) {
   }, [response])
 
   useEffect(() => {
-    show && queryRecordList()
-  }, [show, queryRecordList])
+    visible && queryRecordList()
+  }, [visible, queryRecordList])
 
   const handleDeleteClick = useCallback((token: string) => {
     Confirmor({
@@ -69,11 +69,11 @@ export function LoginManagementPanel(props: LoginManagementPanelProps) {
         bodyStyle={{ padding: 0 }}
         maskStyle={{ background: 'rgba(0, 0, 0, .1)' }}
         width={600}
-        visible={show}
+        visible={visible}
         onCancel={onClose}
       >
         <div className="relative w-full h-full overflow-y-auto">
-          <EmptyPanel dark show={!recordList.length} />
+          <EmptyPanel dark visible={!recordList.length} />
 
           <div>
             {recordList.map((record: IAuthRecord) => {

@@ -18,7 +18,7 @@ export default function PhotoViewer(props: AppComponentProps) {
 
   const {
     isTopWindow,
-    windowSize: { width: windowWidth },
+    appWindowSize,
     setWindowTitle,
     closeWindow,
   } = props
@@ -149,10 +149,10 @@ export default function PhotoViewer(props: AppComponentProps) {
           {loading && <Spinner />}
 
           <div
-            className={`absolute z-0 inset-0 ${activeEntry ? 'flex justify-center items-center' : ''}`}
+            className={`absolute z-0 inset-0 ${activeEntry ? 'flex-center-center' : ''}`}
             onClick={() => activeEntry && setViewerShow(true)}
           >
-            <Opener show={!activeEntry} appId={appId} />
+            <Opener visible={!activeEntry} appId={appId} />
 
             {activeEntry && (
               <img
@@ -170,10 +170,10 @@ export default function PhotoViewer(props: AppComponentProps) {
             <>
               <div
                 className={line(`
-                  md:opacity-0 group-hover:opacity-100 flex justify-center items-center
+                  md:opacity-0 group-hover:opacity-100 flex-center-center
                   absolute z-10 top-1/2 left-4 md:left-8 -translate-y-1/2
                   w-12 h-12 rounded-full bg-black/40 backdrop-blur-sm
-                  text-white md:text-opacity-60 hover:text-opacity-100 active:text-opacity-20
+                  text-white md:text-white/60 hover:text-white active:text-white/20
                   transition-all duration-200 cursor-pointer
                   active:scale-90
                 `)}
@@ -183,10 +183,10 @@ export default function PhotoViewer(props: AppComponentProps) {
               </div>
               <div
                 className={line(`
-                  md:opacity-0 group-hover:opacity-100 flex justify-center items-center
+                  md:opacity-0 group-hover:opacity-100 flex-center-center
                   absolute z-10 top-1/2 right-4 md:right-8 -translate-y-1/2
                   w-12 h-12 rounded-full bg-black/40 backdrop-blur-sm
-                  text-white md:text-opacity-60 hover:text-opacity-100 active:text-opacity-20
+                  text-white md:text-white/60 hover:text-white active:text-white/20
                   transition-all duration-200 cursor-pointer
                   active:scale-90
                 `)}
@@ -198,20 +198,18 @@ export default function PhotoViewer(props: AppComponentProps) {
           )}
 
           <Toolbar
-            {...{
-              imgEl,
-              activeIndex,
-              activeEntry,
-              matchedEntryList,
-              isLight,
-              thumbnailListShow,
-              setIsLight,
-              setThumbnailListShow,
-              mapPinUrl,
-              exifResponse,
-              setExifResponse,
-              queryingExifData,
-            }}
+            imgEl={imgEl}
+            activeIndex={activeIndex}
+            activeEntry={activeEntry}
+            matchedEntryList={matchedEntryList}
+            isLight={isLight}
+            thumbnailListShow={thumbnailListShow}
+            setIsLight={setIsLight}
+            setThumbnailListShow={setThumbnailListShow}
+            mapPinUrl={mapPinUrl}
+            exifResponse={exifResponse}
+            setExifResponse={setExifResponse}
+            queryingExifData={queryingExifData}
             onDownloadClick={handleDownloadClick}
             onGetExifData={handleGetExifData}
             onDeleteClick={handleDeleteClick}
@@ -220,26 +218,22 @@ export default function PhotoViewer(props: AppComponentProps) {
         </div>
 
         <ThumbnailList
-          show={thumbnailListShow}
-          {...{
-            activeIndex,
-            matchedEntryList,
-            windowWidth,
-          }}
+          visible={thumbnailListShow}
+          activeIndex={activeIndex}
+          matchedEntryList={matchedEntryList}
+          windowWidth={appWindowSize.width}
           onClick={setActiveIndex}
         />
 
       </div>
 
       <Viewer
-        {...{
-          indexLabel,
-          activeIndex,
-          setActiveIndex,
-          matchedEntryList,
-          viewerShow,
-          setViewerShow,
-        }}
+        indexLabel={indexLabel}
+        activeIndex={activeIndex}
+        setActiveIndex={setActiveIndex}
+        matchedEntryList={matchedEntryList}
+        viewerShow={viewerShow}
+        setViewerShow={setViewerShow}
       />
 
     </>

@@ -43,7 +43,7 @@ export default function Dock(props: DockProps) {
           gagu-dock
           absolute z-0 bottom-0 px-1 w-full h-10 border-t border-gray-300 bg-gray-300
           bg-linear-to-b from-gray-200 to-gray-400
-          flex justify-center items-center
+          flex-center-center
           transition-all duration-500 ease-out
           dark:border-zinc-600 dark:from-zinc-700 dark:to-zinc-900
           ${activePage === Page.explorer ? 'translate-y-0' : 'translate-y-20'}
@@ -58,7 +58,8 @@ export default function Dock(props: DockProps) {
             <div
               key={appId}
               className={line(`
-                relative w-10 h-10 flex justify-center items-center
+                relative w-10 h-10
+                flex-center-center
                 transition-all duration-50
                 ${isActive
                   ? 'bg-gray-100 dark:bg-zinc-500'

@@ -146,7 +146,7 @@ export default function SharePage() {
 
   return (
     <>
-      <div className="absolute z-0 inset-0 bg-linear-to-b from-black to-zinc-600 flex justify-center items-center overflow-hidden">
+      <div className="absolute z-0 inset-0 bg-linear-to-b from-black to-zinc-600 flex-center-center overflow-hidden">
         <div
           className={line(`
             absolute z-0 inset-0 bg-cover bg-center
@@ -187,7 +187,7 @@ export default function SharePage() {
                     position="bottomRight"
                     content={(
                       <div className="p-4">
-                        <div className="w-56 h-40 flex justify-center items-center">
+                        <div className="w-56 h-40 flex-center-center">
                           <QRCodeCanvas value={sharingUrl} className="border-2 border-white" />
                         </div>
                         <p className="mt-2 w-56 break-all text-xs text-gray-400">
@@ -287,7 +287,7 @@ export default function SharePage() {
             </div>
           )}
           {loading && (
-            <div className="flex justify-center items-center">
+            <div className="flex-center-center">
               <Spinner size={30} />
             </div>
           )}

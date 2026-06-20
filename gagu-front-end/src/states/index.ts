@@ -8,7 +8,7 @@ import {
   IUploadTask,
   IUserConfig,
   IClipboardData,
-  IWindowInfo,
+  IAppWindowInfo,
   IRunningApp,
 } from '../types'
 import { EntryPathCacheStore, UserConfigStore } from '../utils/store.util'
@@ -99,7 +99,7 @@ export const lastChangedDirectoryState = atom<{ path: string, timestamp: number,
   },
 })
 
-export const demoWindowInfoState = atom<IWindowInfo | null>({
+export const demoWindowInfoState = atom<IAppWindowInfo | null>({
   key: 'demoWindowInfoState',
   default: null,
 })

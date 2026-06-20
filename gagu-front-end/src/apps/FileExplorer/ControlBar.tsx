@@ -6,16 +6,16 @@ import { Sort, SortType } from '@shared'
 import { IFileExplorerDisabledMap } from '../../hooks'
 
 interface ControlBarProps {
-  windowWidth: number
+  appWindowWidth: number
   disabledMap: IFileExplorerDisabledMap
   gridMode: boolean
   filterMode: boolean
   filterText: string
-  hiddenShow: boolean
+  hiddenVisible: boolean
   sortType: SortType
   setFilterMode: (open: boolean) => void
   setFilterText: (text: string) => void
-  onHiddenShowChange: (show: boolean) => void
+  onHiddenShowChange: (visible: boolean) => void
   onGridModeChange: (mode: boolean) => void
   onSortTypeChange: (sortType: SortType) => void
   onSideBarClick: () => void
@@ -31,12 +31,12 @@ export default function ControlBar(props: ControlBarProps) {
   const { t } = useTranslation()
 
   const {
-    windowWidth,
+    appWindowWidth,
     disabledMap,
     gridMode,
     filterMode,
     filterText,
-    hiddenShow,
+    hiddenVisible,
     sortType,
     setFilterMode,
     setFilterText,
@@ -139,11 +139,11 @@ export default function ControlBar(props: ControlBarProps) {
           )}
         </div>
 
-        <div className={`h-full flex items-center ${(windowWidth < 720 && filterMode) ? 'hidden' : ''}`}>
+        <div className={`h-full flex items-center ${(appWindowWidth < 720 && filterMode) ? 'hidden' : ''}`}>
           <ToolButton
-            title={hiddenShow ? t`action.hideHiddenItems` : t`action.showHiddenItems`}
-            icon={hiddenShow ? <SvgIcon.EyeOff /> : <SvgIcon.Eye />}
-            onClick={() => onHiddenShowChange(!hiddenShow)}
+            title={hiddenVisible ? t`action.hideHiddenItems` : t`action.showHiddenItems`}
+            icon={hiddenVisible ? <SvgIcon.EyeOff /> : <SvgIcon.Eye />}
+            onClick={() => onHiddenShowChange(!hiddenVisible)}
           />
           <ToolButton
             title={gridMode ? t`action.listView` : t`action.gridView`}

@@ -12,7 +12,6 @@ layout: ../../../layouts/DocLayout.astro
 - Favicon 显示传输百分比
 - 录音机、日历、天气、计算器、亲戚计算器等小工具
 - Termux 上运行时，添加用户登录震动提醒和弹窗通知
-- 所有的长列表使用虚拟滚动（移除 thumbScrollWatcher）
 - App 单窗口模式
 - 外部 App（npm install/cdn）
 - 响应式容器查询样式

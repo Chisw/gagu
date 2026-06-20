@@ -51,7 +51,7 @@ export default function DocReader(props: AppComponentProps) {
     <>
       <div className="absolute z-0 inset-0 bg-orange-950">
 
-        <Opener show={!activeEntry} appId={appId} />
+        <Opener visible={!activeEntry} appId={appId} />
 
         {!!activeEntry && (
           <iframe
