@@ -91,7 +91,7 @@ $ pnpm start
 
 3. Run build script `npm run build:npm`, refer to [./build-npm.sh](./build-npm.sh).
 
-4. Dry run publish, update package size info, publish to NPM.
+4. Dry run publish, update package size info and Changelog date, publish to NPM.
 
 ## ⭐️ Star History
 

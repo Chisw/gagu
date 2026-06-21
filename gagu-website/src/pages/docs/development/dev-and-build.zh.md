@@ -70,7 +70,7 @@ $ pnpm start
 
 3. 执行构建脚本 `npm run build:npm`，参考 [./build-npm.sh](https://github.com/Chisw/gagu/blob/main/build-npm.sh)
 
-4. 预发布检查，更新包体积信息，发布到 NPM
+4. 预发布检查，更新包体积信息和更新日志日期，发布到 NPM
 
 ## 构建二进制版
 
