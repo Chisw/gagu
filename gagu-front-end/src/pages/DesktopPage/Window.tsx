@@ -11,7 +11,6 @@ import {
 } from '../../utils'
 import { SvgIcon } from '../../components/common'
 import { useTranslation } from 'react-i18next'
-import { throttle } from 'lodash-es'
 import { useBrowserWindowSize, useUserConfig } from '../../hooks'
 import { Dropdown } from '@douyinfe/semi-ui'
 import RatioList from './RatioList'
@@ -55,8 +54,8 @@ export default function Window(props: WindowProps) {
   const [initIndex] = useState(topWindowIndex)
   const [currentIndex, setCurrentIndex] = useState(initIndex)
   const [windowTitle, setWindowTitle] = useState('')
-  const [hidden, setHidden] = useState(false)
-  const [isFullScreen, setIsFullScreen] = useState(false)
+  const [minimized, setMinimized] = useState(false)
+  const [maximized, setMaximized] = useState(false)
   const [rndInstance, setRndInstance] = useState<any>(null)
   const [isDraggingOrResizing, setIsDraggingOrResizing] = useState(false)
 
@@ -119,18 +118,16 @@ export default function Window(props: WindowProps) {
   }, [isTopWindow, runningId, setTopWindowIndex])
 
   const handleMinimizeClick = useCallback(() => {
-    setHidden(h => !h)
+    setMinimized(m => !m)
   }, [])
 
-  const handleFullScreen = useCallback((force?: boolean) => {
-    const full = () => {
+  const handleResize = useCallback((force?: boolean) => {
+    const maximize = () => {
       const { MENU_BAR_HEIGHT, width, safeHeight } = browserWindowSize
-
       rndInstance.updatePosition({ x: 0, y: MENU_BAR_HEIGHT })
       rndInstance.updateSize({ width, height: safeHeight })
-
       setAppWindowSize({ width, height: safeHeight })
-      setIsFullScreen(true)
+      setMaximized(true)
     }
 
     const restore = () => {
@@ -138,15 +135,15 @@ export default function Window(props: WindowProps) {
       rndInstance.updatePosition({ x, y })
       rndInstance.updateSize({ width, height })
       setAppWindowSize({ width, height })
-      setIsFullScreen(false)
+      setMaximized(false)
     }
 
     if (force) {
-      full()
+      maximize()
     } else {
-      isFullScreen ? restore() : full()
+      maximized ? restore() : maximize()
     }
-  }, [defaultInfoCache, isFullScreen, rndInstance, browserWindowSize])
+  }, [defaultInfoCache, maximized, rndInstance, browserWindowSize])
 
   const handleRatioClick = useCallback((info: IAppWindowInfo) => {
     const { x, y, width, height } = info
@@ -157,7 +154,7 @@ export default function Window(props: WindowProps) {
     setAppWindowSize({ width, height })
     setDefaultInfoCache(info)
     handleStoreWindowInfo(info)
-    setIsFullScreen(false)
+    setMaximized(false)
   }, [handleStoreWindowInfo, rndInstance])
 
   const handleClose = useCallback(() => {
@@ -188,13 +185,9 @@ export default function Window(props: WindowProps) {
   }, [defaultInfoCache, handleStoreWindowInfo])
 
   useEffect(() => {
-    const listener = throttle(() => {
-      if (!isFullScreen) return
-      handleFullScreen(true)
-    }, 500)
-    window.addEventListener('resize', listener)
-    return () => window.removeEventListener('resize', listener)
-  }, [handleFullScreen, isFullScreen])
+    if (!maximized) return
+    handleResize(true)
+  }, [handleResize, maximized, browserWindowSize])
 
   return (
     <>
@@ -202,7 +195,7 @@ export default function Window(props: WindowProps) {
         ref={setRndInstance}
         id={`gagu-app-window-${runningId}`}
         dragHandleClassName="gagu-window-drag-handler"
-        data-hidden={hidden}
+        data-minimized={minimized}
         className={`gagu-app-window ${isTopWindow ? 'is-top-window' : ''}`}
         default={defaultInfo}
         style={{
@@ -222,13 +215,13 @@ export default function Window(props: WindowProps) {
             ease-in-out flex flex-col
             dark:bg-black/80
             ${isTopWindow ? 'shadow-xl' : 'shadow-sm'}
-            ${isFullScreen
+            ${maximized
               ? ''
               : 'rounded-sm border border-black/10 bg-clip-padding dark:border-white/5'
             }
           `)}
           initial={{ scale: 0.8, opacity: 0 }}
-          animate={hidden ? { y: '20vh', scale: 1, opacity: 0, display: 'none', transition: { display: { delay: 0.2 } } } : { y: 0, scale: 1, opacity: 1 }}
+          animate={minimized ? { y: '20vh', scale: 1, opacity: 0, display: 'none', transition: { display: { delay: 0.2 } } } : { y: 0, scale: 1, opacity: 1 }}
           exit={{ scale: 0.8, opacity: 0 }}
           onMouseDownCapture={handleMoveToFront}  // click is too late
           onDragEnterCapture={handleMoveToFront}
@@ -246,9 +239,9 @@ export default function Window(props: WindowProps) {
             <div
               className={line(`
                 flex items-center grow px-2 h-full truncate
-                ${isFullScreen ? '' : 'gagu-window-drag-handler'}
+                ${maximized ? '' : 'gagu-window-drag-handler'}
               `)}
-              onDoubleClick={() => handleFullScreen()}
+              onDoubleClick={() => handleResize()}
             >
               <div
                 className="gagu-app-icon shrink-0 w-4 h-4 bg-center bg-no-repeat bg-contain"
@@ -289,16 +282,16 @@ export default function Window(props: WindowProps) {
                 content={<RatioList onClick={handleRatioClick} />}
               >
                 <div
-                  title={isFullScreen ? t`action.fullScreenExit` : t`action.fullScreenEnter`}
+                  title={maximized ? t`action.fullScreenExit` : t`action.fullScreenEnter`}
                   className={line(`
                     flex-center-center 
                   hover:bg-gray-200 hover:text-black active:bg-gray-400
                     w-8 h-8 cursor-pointer transition-all duration-200
                     ${headerClassName ? 'text-gray-200' : 'text-gray-400'}
                   `)}
-                  onClick={() => handleFullScreen()}
+                  onClick={() => handleResize()}
                 >
-                  {isFullScreen ? <SvgIcon.FullscreenExit size={12} /> : <SvgIcon.Fullscreen size={12} />}
+                  {maximized ? <SvgIcon.FullscreenExit size={12} /> : <SvgIcon.Fullscreen size={12} />}
                 </div>
               </Dropdown>
               <div

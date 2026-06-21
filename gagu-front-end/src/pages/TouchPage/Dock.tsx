@@ -45,7 +45,7 @@ export default function Dock(props: DockProps) {
       // switch from hiding to showing
       sameRunningAppList.forEach(app => {
         const windowId = `gagu-app-window-${app.runningId}`
-        if (document.getElementById(windowId)!.getAttribute('data-hidden') === 'true') {
+        if (document.getElementById(windowId)!.getAttribute('data-minimized') === 'true') {
           const hiddenSwitchTrigger = document.querySelector(`#${windowId} .gagu-hidden-switch-trigger`) as any
           hiddenSwitchTrigger.click()
         }

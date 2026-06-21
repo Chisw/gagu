@@ -19,12 +19,16 @@ export function useBrowserWindowSize() {
       const { innerWidth: width, innerHeight: height } = window
       const safeHeight = height - MENU_BAR_HEIGHT - DOC_OFFSET
       setSize((size) => ({ ...size, width, height, safeHeight }))
-    })
+    }, 50)
+
     listener()
 
     window.addEventListener('resize', listener)
 
-    return () => window.removeEventListener('resize', listener)
+    return () => {
+      listener.cancel?.()
+      window.removeEventListener('resize', listener)
+    }
   }, [])
 
   return size

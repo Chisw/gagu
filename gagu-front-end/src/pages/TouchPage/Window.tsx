@@ -33,14 +33,14 @@ export default function Window(props: WindowProps) {
 
   const [, setRunningAppList] = useRecoilState(runningAppListState)
   const [windowTitle, setWindowTitle] = useState('')
-  const [hidden, setHidden] = useState(false)
+  const [minimized, setMinimized] = useState(false)
 
   const browserWindowSize = useBrowserWindowSize()
 
   const handleHide = useCallback(() => {
-    setHidden(h => !h)
-    !hidden && onHide()
-  }, [hidden, onHide])
+    setMinimized(m => !m)
+    !minimized && onHide()
+  }, [minimized, onHide])
 
   const handleClose = useCallback(() => {
     setRunningAppList((list) => list.filter(a => a.runningId !== runningId))
@@ -57,9 +57,9 @@ export default function Window(props: WindowProps) {
           dark:bg-black/80
           ${isTopWindow ? 'gagu-is-top-window' : 'hidden'}
         `)}
-        data-hidden={hidden}
+        data-minimized={minimized}
         initial={{ scale: 0.8, opacity: 0 }}
-        animate={hidden ? { y: '20vh', scale: 1, opacity: 0, display: 'none', transition: { display: { delay: 0.2 } } } : { y: 0, scale: 1, opacity: 1 }}
+        animate={minimized ? { y: '20vh', scale: 1, opacity: 0, display: 'none', transition: { display: { delay: 0.2 } } } : { y: 0, scale: 1, opacity: 1 }}
         exit={{ scale: 0.8, opacity: 0 }}
       >
         {/* header */}

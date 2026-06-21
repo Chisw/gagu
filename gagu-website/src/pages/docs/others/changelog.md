@@ -20,7 +20,7 @@ Clear data directory means that all users, download tunnels and other data will 
 ## v0.0.*
 
 - v0.0.60 (Coming soon)
-  - This update **requires** executing `gagu --reset` to reset all historical data, or manually deleting the `~/.gagu/data` directory
+  - This update **requires** executing `gagu --reset` to reset all historical data, or manually deleting the `WORKSPACE/.gagu/data` directory
   - feat: MusicPlayer supports .m4a
   - feat: Web Browser
   - feat: added motion animation
