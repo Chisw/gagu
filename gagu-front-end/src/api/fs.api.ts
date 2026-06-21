@@ -102,6 +102,11 @@ export class FsApi {
     return data
   }
 
+  static deleteEntries = async (formData: { paths: string[] }) => {
+    const { data } = await service.delete<IResponse>(`/api/fs/entries`, { data: formData })
+    return data
+  }
+
   static createFavorite = async (path: string) => {
     const { data } = await service.post<IResponse<IRootEntry[]>>(`/api/fs/favorite?${getPathParam(path)}`)
     return data

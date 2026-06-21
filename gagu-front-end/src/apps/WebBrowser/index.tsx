@@ -125,7 +125,7 @@ export default function WebBrowser() {
               <iframe
                 key={activeUrl}
                 title="web-browser"
-                className="w-full h-full"
+                className="w-full h-full bg-white"
                 src={activeUrl}
                 onLoad={() => setLoading(false)}
               />

@@ -39,7 +39,7 @@ $ pnpm start
 
 ### Back-end
 
-After comparing several common frameworks during model selection, the reason for finally choosing [NestJS](https://nestjs.com) is very simple, because it adopts the module syntax of ES6 and has good support for TS.
+After comparing several common frameworks during model selection, the reason for finally choosing [NestJS](https://nestjs.com) is very simple, because it adopts the module syntax of ES and has good support for TS.
 
 In addition, considering that the front-end and back-end codes will be placed in the same repository, when switching contexts, a unified code style can more or less reduce switching costs.
 

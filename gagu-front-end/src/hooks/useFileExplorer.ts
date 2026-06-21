@@ -24,7 +24,6 @@ import {
   UserConfigStore,
   getDownloadInfo,
   getIsSameEntry,
-  safeQuotes,
   sortMethodMap,
 } from '../utils'
 import { useRecoilState } from 'recoil'
@@ -105,14 +104,12 @@ export interface IFileExplorerDisabledMap {
 }
 
 interface Props {
-  containerRef: any
   specifiedPath?: string
   isUserDesktop?: boolean
 }
 
 export function useFileExplorer(props: Props) {
   const {
-    containerRef,
     specifiedPath = '',
     isUserDesktop = false,
   } = props
@@ -154,7 +151,7 @@ export function useFileExplorer(props: Props) {
   const { request: queryEntryList, loading: listQuerying } = useRequest(FsApi.queryEntryList)
   const { request: queryDirectorySize, loading: sizeQuerying } = useRequest(FsApi.queryDirectorySize)
   const { request: queryExistsCount } = useRequest(FsApi.queryExistsCount)
-  const { request: deleteEntry, loading: entryDeleting } = useRequest(FsApi.deleteEntry)
+  const { request: deleteEntries, loading: entryDeleting } = useRequest(FsApi.deleteEntries)
   const { request: createTunnel } = useRequest(TunnelApi.createTunnel)
   const { request: createFavorite } = useRequest(FsApi.createFavorite)
   const { request: removeFavorite } = useRequest(FsApi.removeFavorite)
@@ -513,40 +510,32 @@ export function useFileExplorer(props: Props) {
   }, [createFavorite, removeFavorite, t, baseData, setBaseData])
 
   const handleDeleteClick = useCallback(async (contextEntryList?: IEntry[]) => {
-    const processList = contextEntryList || selectedEntryList
-    const count = processList.length
+    const deletingEntries = contextEntryList || selectedEntryList
+    const count = deletingEntries.length
     if (!count) return
     const message = count === 1
-      ? t('tip.deleteItem', { name: processList[0].name })
+      ? t('tip.deleteItem', { name: deletingEntries[0].name })
       : t('tip.deleteItems', { count })
 
     Confirmor({
       type: 'delete',
       content: message,
       onConfirm: async (close) => {
-        const deletedPaths: string[] = []
-        for (const entry of processList) {
-          const { name } = entry
-          const path = getEntryPath(entry)
-          const { success } = await deleteEntry(path)
-          if (success) {
-            const entryNode: HTMLDivElement | undefined = containerRef?.current
-              ?.querySelector(`.gagu-entry-node[data-entry-name="${safeQuotes(name)}"]`)
-
-            if (entryNode) {
-              entryNode.style.opacity = '0'
-            }
-            deletedPaths.push(path)
-          }
+        const paths = deletingEntries.map(getEntryPath)
+        const { success } = await deleteEntries({ paths })
+        if (success) {
+          // clear favorites
+          setBaseData((baseData) => {
+            const { rootEntryList: list } = baseData
+            const rootEntryList = list.filter((entry) => !paths.includes(getEntryPath(entry)))
+            return { ...baseData, rootEntryList }
+          })
+          handleNavRefresh({ refreshParent: true })
+          close()
         }
-        const { rootEntryList: list } = baseData
-        const rootEntryList = list.filter((entry) => !deletedPaths.includes(getEntryPath(entry)))
-        setBaseData({ ...baseData, rootEntryList })
-        handleNavRefresh({ refreshParent: true })
-        close()
       },
     })
-  }, [deleteEntry, selectedEntryList, handleNavRefresh, t, setBaseData, baseData, containerRef])
+  }, [deleteEntries, selectedEntryList, handleNavRefresh, t, setBaseData])
 
   const handleSideCollapseChange = useCallback(() => {
     const isCollapsed = !sideCollapse

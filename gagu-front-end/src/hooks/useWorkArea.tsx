@@ -75,7 +75,7 @@ export function useWorkArea(props: useWorkAreaProps) {
     handleNavBack, handleNavForward, handleNavRefresh, handleNavAbort, handleNavToParent,
     handleUploadClick, handleDownloadClick,
     handleShareClick, handleFavoriteClick, handleMove, handleDeleteClick,
-  } = useFileExplorer({ containerRef, specifiedPath, isUserDesktop })
+  } = useFileExplorer({ specifiedPath, isUserDesktop })
 
   const {
     virtualContainer,

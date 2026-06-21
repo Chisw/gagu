@@ -85,7 +85,7 @@ export default function FileExplorerTouch(props: FileExplorerTouchProps) {
     handleNavBack, handleNavForward, handleNavRefresh, handleNavAbort, handleNavToParent,
     handleUploadClick, handleDownloadClick,
     handleShareClick, handleFavoriteClick, handleMove, handleDeleteClick,
-  } = useFileExplorer({ containerRef })
+  } = useFileExplorer({})
 
   const {
     virtualContainer,

@@ -28,16 +28,18 @@ export default function Desktop() {
   const isTopWindow = useMemo(() => currentIndex === topWindowIndex, [currentIndex, topWindowIndex])
 
   const handleSetDesktopActive = useCallback(() => {
-    const newTopIndex = topWindowIndex + 1
-    setCurrentIndex(newTopIndex)
-    setTopWindowIndex(newTopIndex)
-  }, [topWindowIndex, setTopWindowIndex])
+    setTopWindowIndex(i => {
+      const index = i + 1
+      setCurrentIndex(index)
+      return index
+    })
+  }, [setTopWindowIndex])
 
   const handleOpenDesktopDirectory = useCallback((entry: IEntry) => {
-      setTopWindowIndex(topWindowIndex + 1)
+      setTopWindowIndex(i => i + 1)
       const app = APP_LIST.find(app => app.id === AppId.fileExplorer)!
       setRunningAppList((list) => [...list, {...genRunningApp(app), additionalEntryList: [entry] }])
-  }, [setRunningAppList, setTopWindowIndex, topWindowIndex])
+  }, [setRunningAppList, setTopWindowIndex])
 
   const {
     kiloSize, clipboardData,

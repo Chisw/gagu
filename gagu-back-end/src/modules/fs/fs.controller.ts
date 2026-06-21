@@ -328,6 +328,31 @@ export class FsController {
     }
   }
 
+  @Delete('entries')
+  @Permission(UserPermission.delete)
+  @PathValidation({ bodyFields: ['paths'] })
+  async deleteEntries(@Body('paths') paths: string[]) {
+    let deletedCount = 0
+
+    for (const path of paths) {
+      if (!exists(path)) {
+        continue
+      }
+      await removeEntry(path)
+      const deleted = !exists(path)
+      if (deleted) {
+        this.userService.removeFavoriteOfAllUsers(path)
+        deletedCount++
+      }
+    }
+
+    if (deletedCount === paths.length) {
+      return respond()
+    } else {
+      return respond(null, ServerMessage.ERROR_FILE_DELETE_FAIL)
+    }
+  }
+
   @Post('favorite')
   @Permission(UserPermission.read)
   @PathValidation({ queryFields: ['path'] })

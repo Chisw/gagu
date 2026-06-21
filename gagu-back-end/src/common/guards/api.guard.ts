@@ -91,18 +91,21 @@ export class ApiGuard implements CanActivate {
       const userPath = `${GAGU_PATH.USERS}/${username}`
       const userPathList = [userPath, ...assignedRootPathList]
 
+      // request.query
       if (queryFields?.length) {
         queryFields.forEach((field) => {
           valueList.push(request.query[field])
         })
       }
 
+      // request.body
       if (bodyFields?.length) {
         bodyFields.forEach((field) => {
           valueList.push(request.body[field])
         })
       }
 
+      // request.body only contains entry info and needs to be converted to paths
       if (bodyEntryListField) {
         const entryList = request.body[bodyEntryListField] as IEntry[]
         entryList.forEach((entry) => {

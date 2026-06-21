@@ -28,16 +28,15 @@ export default function Window(props: WindowProps) {
 
   const { t } = useTranslation()
 
-  const [runningAppList, setRunningAppList] = useRecoilState(runningAppListState)
+  const [, setRunningAppList] = useRecoilState(runningAppListState)
   const [windowTitle, setWindowTitle] = useState('')
 
   const browserWindowSize = useBrowserWindowSize()
 
   const handleClose = useCallback(() => {
-    const list = runningAppList.filter(a => a.runningId !== runningId)
-    setRunningAppList(list)
+    setRunningAppList((list) => list.filter(a => a.runningId !== runningId))
     onClose()
-  }, [runningAppList, setRunningAppList, runningId, onClose])
+  }, [setRunningAppList, runningId, onClose])
 
   return (
     <>

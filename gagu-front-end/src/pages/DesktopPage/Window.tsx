@@ -110,11 +110,13 @@ export default function Window(props: WindowProps) {
 
   const handleMoveToFront = useCallback((e: any) => {
     if (isTopWindow || e.target.closest('[prevent-move-to-front]')) return
-    const newTopIndex = topWindowIndex + 1
-    setCurrentIndex(newTopIndex)
-    setTopWindowIndex(newTopIndex)
-    document.getElementById(`gagu-app-window-${runningId}`)!.style.zIndex = String(newTopIndex)
-  }, [isTopWindow, runningId, topWindowIndex, setTopWindowIndex])
+    setTopWindowIndex(i => {
+      const index = i + 1
+      setCurrentIndex(index)
+      document.getElementById(`gagu-app-window-${runningId}`)!.style.zIndex = String(index)
+      return index
+    })
+  }, [isTopWindow, runningId, setTopWindowIndex])
 
   const handleMinimizeClick = useCallback(() => {
     setHidden(h => !h)
@@ -159,17 +161,12 @@ export default function Window(props: WindowProps) {
   }, [handleStoreWindowInfo, rndInstance])
 
   const handleClose = useCallback(() => {
+    if (isTopWindow) {
+      setTopWindowIndex(currentIndex - 1)
+    }
     setRunningAppList((list) => list.filter(a => a.runningId !== runningId))
-    setTopWindowIndex(currentIndex - 1)
     handleStoreWindowInfo(defaultInfoCache)
-  }, [
-    handleStoreWindowInfo,
-    defaultInfoCache,
-    setRunningAppList,
-    setTopWindowIndex,
-    currentIndex,
-    runningId,
-  ])
+  }, [isTopWindow, setRunningAppList, handleStoreWindowInfo, defaultInfoCache, setTopWindowIndex, currentIndex, runningId])
 
   const handleDragStop = useCallback(({ x, y }: { x: number, y: number }) => {
     const info = { ...defaultInfoCache, x, y }
