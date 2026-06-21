@@ -64,7 +64,7 @@ export default function EntryNode(props: EntryNodeProps) {
       className={line(`
         gagu-entry-node
         relative overflow-hidden group
-        transition-opacity duration-300
+        transition-all duration-200
         clipboard-${clipboardState}
         ${hidden ? 'opacity-50' : ''}
         ${isSelected ? 'is-selected' : ''}

@@ -158,7 +158,7 @@ export default function FileExplorer(props: FileExplorerProps) {
 
                       return (
                         <EntryNode
-                          key={encodeURIComponent(`${entry.name}-${entry.type}`)}
+                          key={encodeURIComponent(`${entry.name}-${entry.type}-${gridMode}`)}
                           entry={entry}
                           kiloSize={kiloSize}
                           gridMode={gridMode}
