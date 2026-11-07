@@ -7,6 +7,7 @@ export const Page = {
   explorer: 'explorer',
   touch: 'touch',
   sharing: 'sharing',
+  app: 'app',
 } as const
 
 export type PageType = keyof typeof Page

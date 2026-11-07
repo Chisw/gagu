@@ -5,6 +5,7 @@ import DesktopPage from './pages/DesktopPage'
 import ExplorerPage from './pages/ExplorerPage'
 import TouchPage from './pages/TouchPage'
 import SharingPage from './pages/SharingPage'
+import AppPage from './pages/AppPage'
 import { FsApi } from './api'
 import { setFavicon } from './utils'
 import { useColorScheme } from './hooks'
@@ -33,6 +34,7 @@ export default function App() {
         <Route path="/touch" element={<TouchPage />} />
         <Route path="/sharing" element={<DesktopPage />} />
         <Route path="/sharing/:code" element={<SharingPage />} />
+        <Route path="/app/:appId" element={<AppPage />} />
         <Route path="*" element={<DesktopPage />} />
       </Routes>
     </BrowserRouter>
