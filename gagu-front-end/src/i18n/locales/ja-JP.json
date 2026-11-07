@@ -98,6 +98,7 @@
     },
     "app": {
       "android-controller": "アンドロイドコントローラー ⏳",
+      "calculator": "計算機",
       "doc-reader": "ドキュメントリーダー",
       "file-explorer": "ファイルマネージャー",
       "music-player": "音楽プレーヤー",

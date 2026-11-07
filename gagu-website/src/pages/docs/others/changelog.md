@@ -20,7 +20,7 @@ Clear data directory means that all users, download tunnels and other data will 
 ## v0.0.*
 
 - v0.0.61 (Coming soon)
-  - feat: concurrent file upload
+  - feat: Calculator
 
 - v0.0.60 (2026-06-21)
   - This update **requires** executing `gagu --reset` to reset all historical data, or manually deleting the `WORKSPACE/.gagu/data` directory

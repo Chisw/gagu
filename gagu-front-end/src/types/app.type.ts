@@ -31,6 +31,7 @@ export const AppId = {
   videoPlayer: 'video-player',
   webBrowser: 'web-browser',
   androidController: 'android-controller',
+  calculator: 'calculator',
   settings: 'settings',
 } as const
 

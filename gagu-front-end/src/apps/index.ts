@@ -7,6 +7,7 @@ import MusicPlayer from './MusicPlayer'
 import VideoPlayer from './VideoPlayer'
 import WebBrowser from './WebBrowser'
 import AndroidController from './AndroidController'
+import Calculator from './Calculator'
 import Settings from './Settings'
 
 export const APP_LIST: IApp[] = [
@@ -112,6 +113,15 @@ export const APP_LIST: IApp[] = [
       minHeight: 300,
     },
     headerClassName: 'bg-emerald-800 text-emerald-100',
+    touchModeShow: true,
+  },
+  {
+    id: AppId.calculator,
+    AppComponent: Calculator,
+    width: 340,
+    height: 510,
+    resizeRange: { minWidth: 300, minHeight: 450 },
+    headerClassName: 'bg-zinc-800 text-zinc-100',
     touchModeShow: true,
   },
   {

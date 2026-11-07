@@ -98,6 +98,7 @@
     },
     "app": {
       "android-controller": "安卓控制器 ⏳",
+      "calculator": "计算器",
       "doc-reader": "文档阅读器",
       "file-explorer": "文件管理器",
       "music-player": "音乐播放器",
