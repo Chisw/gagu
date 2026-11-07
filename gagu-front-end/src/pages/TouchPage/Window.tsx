@@ -59,7 +59,7 @@ export default function Window(props: WindowProps) {
         `)}
         data-minimized={minimized}
         initial={{ scale: 0.8, opacity: 0 }}
-        animate={minimized ? { y: '20vh', scale: 1, opacity: 0, display: 'none', transition: { display: { delay: 0.2 } } } : { y: 0, scale: 1, opacity: 1 }}
+        animate={minimized ? { y: '20vh', scale: 1, opacity: 0 } : { y: 0, scale: 1, opacity: 1 }}
         exit={{ scale: 0.8, opacity: 0 }}
       >
         {/* header */}
