@@ -1,15 +1,11 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useRecoilState } from 'recoil'
-import { FsApi } from '../api'
-import { EmptyPanel, ExistingConfirmor, SvgIcon } from './common'
-import { useRequest, useUserConfig } from '../hooks'
-import { IUploadTask, UploadTaskStatusType } from '../types'
-import { ExistingStrategyType } from '@shared'
-import { getReadableSize, line } from '../utils'
-import { lastChangedDirectoryState, uploadSignalState, uploadTaskListState } from '../states'
+import { useState } from 'react'
+import { useRecoilValue } from 'recoil'
+import { EmptyPanel, SvgIcon } from './common'
+import { line } from '../utils'
+import { uploadTaskListState } from '../states'
 import { Button, SideSheet } from '@douyinfe/semi-ui'
 import { useTranslation } from 'react-i18next'
-import { cloneDeep } from 'lodash-es'
+import { useUploadStatus } from '../system/services/upload/useUploadStatus'
 
 const statusIconMap = {
   waiting: { icon: <SvgIcon.Time />, bg: 'bg-yellow-400' },
@@ -27,100 +23,10 @@ export function UploadPanel() {
 
   const { t } = useTranslation()
 
-  const [uploadTaskList, setUploadTaskList] = useRecoilState(uploadTaskListState)
-  const [uploadSignal] = useRecoilState(uploadSignalState)
-  const [, setLastChangedDirectory] = useRecoilState(lastChangedDirectoryState)
-
-  const { userConfig: { kiloSize } } = useUserConfig()
-
+  const uploadTaskList = useRecoilValue(uploadTaskListState)
   const [visible, setVisible] = useState(false)
-  const [uploadInfo, setUploadInfo] = useState({ ratio: 0, speed: '' })
-  const [uploadSignalCache, setTransferSignalCache] = useState(0)
-  const [activeId, setActiveId] = useState('')
-
-  const { request: createFile, loading: uploading } = useRequest(FsApi.createFile)
-  const { request: queryExistsCount } = useRequest(FsApi.queryExistsCount)
-
-  const uploadingCount = useMemo(() => {
-    return uploadTaskList.length
-  }, [uploadTaskList])
-
-  useEffect(() => {
-    if (uploading) {
-      setUploadInfo({ ratio: 0, speed: '' })
-    }
-  }, [uploading])
-
-  const handleUploadStart = useCallback(async (uploadingTaskList: IUploadTask[], strategy?: ExistingStrategyType) => {
-    const statusMap: { [PATH: string]: UploadTaskStatusType } = {}
-    for (const task of uploadingTaskList) {
-      const { id, path, file } = task
-      setActiveId(id)
-
-      let lastUpload = { time: Date.now(), size: 0 }
-
-      const onUploadProgress = (e: ProgressEvent) => {
-        const { loaded, total } = e
-        const { time, size } = lastUpload
-        const now = Date.now()
-        const interval = (now - time) / 1000
-        const delta = loaded - size
-        const speed = getReadableSize(delta / interval, kiloSize, { keepFloat: true }) + '/s'
-        setUploadInfo({ ratio: loaded / total, speed })
-        lastUpload = { time: now, size: loaded }
-      }
-
-      const { success, data: status } = await createFile(path, file, strategy, { onUploadProgress })
-      if (success) {
-        statusMap[path] = status
-        setUploadInfo({ ratio: 0, speed: '' })
-        const match = file.fullPath || `/${file.name}`
-        setLastChangedDirectory({ path: path.replace(match, ''), timestamp: Date.now() })
-      }
-    }
-
-    const list = cloneDeep(uploadTaskList)
-    list.forEach(task => {
-      const status = statusMap[task.path]
-      if (status) {
-        task.status = status
-      }
-    })
-    setUploadTaskList(list)
-    setActiveId('')
-  }, [uploadTaskList, setUploadTaskList, createFile, kiloSize, setLastChangedDirectory])
-
-  const handleUploadCheck = useCallback(async (uploadingTaskList: IUploadTask[]) => {
-    const pathList = uploadingTaskList.map(t => t.path)
-    const { data: count } = await queryExistsCount({ pathList })
-    if (count) {
-      ExistingConfirmor({
-        count,
-        onConfirm: (strategy) => handleUploadStart(uploadingTaskList, strategy),
-        onCancel: () => {
-          const list = cloneDeep(uploadTaskList)
-          list.forEach(task => {
-            if (pathList.includes(task.path)) {
-              task.status = 'canceled'
-            }
-          })
-          setUploadTaskList(list)
-        },
-      })
-    } else {
-      handleUploadStart(uploadingTaskList)
-    }
-  }, [handleUploadStart, queryExistsCount, setUploadTaskList, uploadTaskList])
-
-  useEffect(() => {
-    if (uploadSignal !== uploadSignalCache) {
-      const uploadingTaskList = uploadTaskList.filter(t => t.status === 'waiting') as IUploadTask[]
-      if (uploadingTaskList.length) {
-        handleUploadCheck(uploadingTaskList)
-      }
-      setTransferSignalCache(uploadSignal)
-    }
-  }, [uploadSignal, uploadTaskList, handleUploadCheck, uploadSignalCache])
+  const uploadingCount = uploadTaskList.length
+  const { uploading, uploadInfo, activeId, clearCompleted } = useUploadStatus()
 
   return (
     <>
@@ -171,7 +77,7 @@ export function UploadPanel() {
                   size="small"
                   icon={<SvgIcon.Brush />}
                   onClick={() => {
-                    setUploadTaskList([])
+                    clearCompleted()
                     setTimeout(() => setVisible(false), 300)
                   }}
                 >

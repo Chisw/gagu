@@ -15,6 +15,7 @@ export const APP_LIST: IApp[] = [
   {
     id: AppId.fileExplorer,
     AppComponent: FileExplorer,
+    requiresSession: true,
     width: 980,
     height: 540,
     resizeRange: {
@@ -26,6 +27,7 @@ export const APP_LIST: IApp[] = [
   {
     id: AppId.textEditor,
     AppComponent: TextEditor,
+    requiresSession: true,
     width: 600,
     height: 500,
     resizeRange: {
@@ -40,6 +42,7 @@ export const APP_LIST: IApp[] = [
   {
     id: AppId.docReader,
     AppComponent: DocReader,
+    requiresSession: true,
     width: 960,
     height: 720,
     resizeRange: {
@@ -54,6 +57,7 @@ export const APP_LIST: IApp[] = [
   {
     id: AppId.photoViewer,
     AppComponent: PhotoViewer,
+    requiresSession: true,
     width: 800,
     height: 400,
     resizeRange: {
@@ -68,6 +72,7 @@ export const APP_LIST: IApp[] = [
   {
     id: AppId.musicPlayer,
     AppComponent: MusicPlayer,
+    requiresSession: true,
     width: 480,
     height: 520,
     resizeRange: {
@@ -81,6 +86,7 @@ export const APP_LIST: IApp[] = [
   {
     id: AppId.videoPlayer,
     AppComponent: VideoPlayer,
+    requiresSession: true,
     width: 720,
     height: 450,
     resizeRange: {
@@ -107,6 +113,7 @@ export const APP_LIST: IApp[] = [
   {
     id: AppId.androidController,
     AppComponent: AndroidController,
+    requiresSession: true,
     width: 400,
     height: 600,
     resizeRange: {
@@ -128,6 +135,7 @@ export const APP_LIST: IApp[] = [
   {
     id: AppId.miRemoteControl,
     AppComponent: MiRemoteControl,
+    requiresSession: true,
     width: 360,
     height: 680,
     resizeRange: { minWidth: 240, minHeight: 480 },
@@ -137,6 +145,7 @@ export const APP_LIST: IApp[] = [
   {
     id: AppId.settings,
     AppComponent: Settings,
+    requiresSession: true,
     width: 800,
     height: 600,
     resizeRange: {

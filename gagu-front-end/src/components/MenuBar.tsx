@@ -1,3 +1,4 @@
+import { useSystemRuntime } from '../system/SystemRuntime'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { UploadPanel, MySharingPanel, ChangePasswordModal, ClipboardPanel, LoginManagementPanel } from '.'
 import { Dropdown } from '@douyinfe/semi-ui'
@@ -6,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { AuthApi, FsApi, SettingApi } from '../api'
 import { SvgIcon } from './common'
 import { useRequest, useUserConfig } from '../hooks'
-import { GAGU_DOCUMENT_TITLE, DURATION_PAGE, EntryPathCacheStore, getDefaultUserConfig, line, UserInfoStore } from '../utils'
+import { DURATION_PAGE, EntryPathCacheStore, getDefaultUserConfig, line, UserInfoStore } from '../utils'
 import { QRCodeCanvas } from 'qrcode.react'
 import { useTranslation } from 'react-i18next'
 import { Page } from '../types'
@@ -25,8 +26,8 @@ export function MenuBar() {
   const { t } = useTranslation()
 
   const [activePage, setActivePage] = useRecoilState(activePageState)
-  const [baseData, setBaseData] = useRecoilState(baseDataState)
-  const [userInfo, setUserInfo] = useRecoilState(userInfoState)
+  const [baseData] = useRecoilState(baseDataState)
+  const [userInfo] = useRecoilState(userInfoState)
   const [, setRunningAppList] = useRecoilState(runningAppListState)
   const [, setContextMenuData] = useRecoilState(contextMenuDataState)
 
@@ -41,7 +42,7 @@ export function MenuBar() {
   const [changePasswordModalShow, setChangePasswordModalShow] = useState(false)
 
   const { request: logout } = useRequest(AuthApi.logout)
-  const { request: queryBaseData, loading } = useRequest(FsApi.queryBaseData)
+  const { refresh: handleQueryBaseData, loading } = useSystemRuntime()
   const { request: shutdown } = useRequest(SettingApi.shutdown)
 
   const avatarStyle = useMemo(() => {
@@ -79,21 +80,6 @@ export function MenuBar() {
   }, [navigate, setActivePage, setContextMenuData, setRunningAppList])
 
   useEffect(() => {
-    if (!userInfo) {
-      const info = UserInfoStore.get()
-      if (info) {
-        setUserInfo(info)
-      } else {
-        navigate('/login')
-      }
-    }
-  }, [userInfo, setUserInfo, navigate])
-
-  useEffect(() => {
-    document.title = `${baseData ? `${baseData.deviceName} - ` : ''}${GAGU_DOCUMENT_TITLE}`
-  }, [baseData])
-
-  useEffect(() => {
     if (systemPopoverShow) {
       setIsFullScreen(document.fullscreen)
     }
@@ -106,16 +92,6 @@ export function MenuBar() {
     return () => clearInterval(timer)
   }, [])
 
-  const handleQueryBaseData = useCallback(async () => {
-    const { success, data } = await queryBaseData()
-    if (success) {
-      setBaseData(data)
-    }
-  }, [queryBaseData, setBaseData])
-
-  useEffect(() => {
-    handleQueryBaseData()
-  }, [handleQueryBaseData])
 
   return (
     <>

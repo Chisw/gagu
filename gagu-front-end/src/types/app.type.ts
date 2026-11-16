@@ -39,6 +39,7 @@ export const AppId = {
 export interface IApp {
   id: string
   AppComponent: IAppComponent
+  requiresSession?: boolean
   width: number
   height: number
   resizeRange: {

@@ -9,6 +9,7 @@ import AppPage from './pages/AppPage'
 import { FsApi } from './api'
 import { setFavicon } from './utils'
 import { useColorScheme } from './hooks'
+import { SystemRuntime } from './system/SystemRuntime'
 import './css/index.css'
 
 export default function App() {
@@ -28,14 +29,16 @@ export default function App() {
     >
       <Routes>
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/" element={<DesktopPage />} />
-        <Route path="/desktop" element={<DesktopPage />} />
-        <Route path="/explorer" element={<ExplorerPage />} />
-        <Route path="/touch" element={<TouchPage />} />
-        <Route path="/sharing" element={<DesktopPage />} />
+        <Route element={<SystemRuntime />}>
+          <Route path="/" element={<DesktopPage />} />
+          <Route path="/desktop" element={<DesktopPage />} />
+          <Route path="/explorer" element={<ExplorerPage />} />
+          <Route path="/touch" element={<TouchPage />} />
+          <Route path="/sharing" element={<DesktopPage />} />
+          <Route path="/app/:appId" element={<AppPage />} />
+          <Route path="*" element={<DesktopPage />} />
+        </Route>
         <Route path="/sharing/:code" element={<SharingPage />} />
-        <Route path="/app/:appId" element={<AppPage />} />
-        <Route path="*" element={<DesktopPage />} />
       </Routes>
     </BrowserRouter>
   )

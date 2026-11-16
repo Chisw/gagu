@@ -66,12 +66,8 @@ export const initialize = async (withSecurity: boolean) => {
   await Promise.all(
     Object.keys(libMap).map((libKey) => {
       return new Promise((resolve) => {
-        exec(`${cmd} ${libKey}`, (err, out) => {
-          if (ServerOS.isWindows) {
-            libMap[libKey] = out === '' ? false : true
-          } else {
-            libMap[libKey] = !out.includes('not found')
-          }
+        exec(`${cmd} ${libKey}`, (err) => {
+          libMap[libKey] = !err
           resolve(true)
         })
       })

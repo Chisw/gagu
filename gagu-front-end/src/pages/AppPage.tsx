@@ -6,6 +6,7 @@ import { useRecoilState } from 'recoil'
 import { activePageState } from '../states'
 import { Page } from '../types'
 import DesktopPage from './DesktopPage'
+import { ContextMenu } from '../components'
 
 export default function AppPage() {
   const { appId } = useParams<{ appId: string }>()
@@ -21,7 +22,11 @@ export default function AppPage() {
   if (!app) return <DesktopPage />
 
   return (
-    <main className="fixed inset-0 overflow-hidden bg-white dark:bg-black">
+    <div
+      className="fixed inset-0 overflow-hidden bg-white dark:bg-black"
+      onContextMenuCapture={e => e.preventDefault()}
+    >
+      <ContextMenu />
       <app.AppComponent
         isTopWindow
         appWindowSize={appWindowSize}
@@ -29,6 +34,6 @@ export default function AppPage() {
         closeWindow={() => {}}
         additionalEntryList={app.additionalEntryList}
       />
-    </main>
+    </div>
   )
 }

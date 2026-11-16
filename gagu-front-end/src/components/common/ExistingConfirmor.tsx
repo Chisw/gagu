@@ -27,6 +27,7 @@ export function ExistingConfirmor(props: ExistingConfirmorProps) {
     className: 'gagu-confirmor gagu-sync-popstate-overlay gagu-prevent-hotkeys-overlay',
     icon: undefined,
     getPopupContainer,
+    onCancel: () => onCancel?.(),
     content: (
       <>
         <div className="p-4 flex justify-center">
@@ -85,4 +86,6 @@ export function ExistingConfirmor(props: ExistingConfirmorProps) {
     cancelButtonProps: { theme: 'borderless' },
     okButtonProps: { theme: 'solid' },
   })
+
+  return confirmor
 }
