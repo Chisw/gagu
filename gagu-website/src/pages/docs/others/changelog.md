@@ -21,6 +21,7 @@ Clear data directory means that all users, download tunnels and other data will 
 
 - v0.0.61 (Coming soon)
   - feat: Calculator
+  - feat: MiRemoteControl(Supports gesture operation)
   - feat: Single App mode [Labs]
   - fix: the window cannot be opened when minimized in Touch Mode
 

@@ -101,6 +101,7 @@
       "calculator": "計算機",
       "doc-reader": "文件閱讀器",
       "file-explorer": "檔案管理器",
+      "mi-remote-control": "小米遙控器",
       "music-player": "音樂播放器",
       "photo-viewer": "圖片瀏覽器",
       "settings": "設定",
@@ -220,6 +221,16 @@
       "illegalCharacters": "包含無效字元：{{characters}}",
       "lastAdminCannotDelete": "最後一個管理員無法刪除",
       "loading": "載入中…",
+      "miRemoteControl": {
+        "miTV": [
+          "滑動方向",
+          "單擊確定",
+          "雙擊返回",
+          "長按選單",
+          "雙指長按返回主頁",
+          "雙指上下滑動調整音量"
+        ]
+      },
       "moveEntriesTo_one": "要將 {{count}} 個項目移至「{{target}}」嗎？",
       "moveEntriesTo_other": "要將 {{count}} 個項目移至「{{target}}」嗎？",
       "notImage": "請選擇圖片",

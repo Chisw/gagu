@@ -101,6 +101,7 @@
       "calculator": "計算機",
       "doc-reader": "ドキュメントリーダー",
       "file-explorer": "ファイルマネージャー",
+      "mi-remote-control": "Xiaomiリモコン",
       "music-player": "音楽プレーヤー",
       "photo-viewer": "画像ビューアー",
       "settings": "設定",
@@ -220,6 +221,16 @@
       "illegalCharacters": "不正な文字があります：{{characters}}",
       "lastAdminCannotDelete": "最後の管理者は削除できません",
       "loading": "読み込み中…",
+      "miRemoteControl": {
+        "miTV": [
+          "スワイプして方向を選択",
+          "タップして決定",
+          "ダブルタップして戻る",
+          "長押ししてメニューを開く",
+          "2本指で長押ししてホームに戻る",
+          "2本指で上下にスワイプして音量を調整"
+        ]
+      },
       "moveEntriesTo_one": "{{count}} 件の項目を「{{target}}」に移動しますか？",
       "moveEntriesTo_other": "{{count}} 件の項目を「{{target}}」に移動しますか？",
       "notImage": "画像ファイルを選択してください",

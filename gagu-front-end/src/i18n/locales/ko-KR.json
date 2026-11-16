@@ -101,6 +101,7 @@
       "calculator": "계산기",
       "doc-reader": "문서 뷰어",
       "file-explorer": "파일 관리자",
+      "mi-remote-control": "샤오미 리모컨",
       "music-player": "음악 플레이어",
       "photo-viewer": "이미지 뷰어",
       "settings": "설정",
@@ -220,6 +221,16 @@
       "illegalCharacters": "허용되지 않는 문자: {{characters}}",
       "lastAdminCannotDelete": "마지막 관리자는 삭제할 수 없습니다",
       "loading": "불러오는 중…",
+      "miRemoteControl": {
+        "miTV": [
+          "밀어서 방향 선택",
+          "탭하여 확인",
+          "두 번 탭하여 뒤로 가기",
+          "길게 눌러 메뉴 열기",
+          "두 손가락으로 길게 눌러 홈으로 이동",
+          "두 손가락으로 위아래로 밀어 음량 조절"
+        ]
+      },
       "moveEntriesTo_one": "항목 {{count}}개를 “{{target}}”(으)로 이동하시겠습니까?",
       "moveEntriesTo_other": "항목 {{count}}개를 “{{target}}”(으)로 이동하시겠습니까?",
       "notImage": "이미지를 선택하세요",

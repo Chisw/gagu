@@ -51,16 +51,16 @@ export default function AndroidController() {
 
   return (
     <>
-      <div className="absolute z-0 inset-0 p-2 bg-white dark:bg-zinc-900 overflow-x-hidden overflow-y-auto">
+      <div className="absolute z-0 inset-0 bg-white dark:bg-zinc-900 overflow-x-hidden overflow-y-auto">
         {!baseData.serverOS.isAndroid && (
           <div className="p-2 font-din bg-yellow-300 text-yellow-700 flex">
             <SvgIcon.Warning size={32} className="shrink-0" />
             <div className="ml-2">
-              This application is only available when GAGU is running on Termux and Termux:API has been installed, otherwise it will cause a crash.
+              This application requires GAGU to run in Termux with Termux:API installed. Running it in an unsupported environment may cause errors.
             </div>
           </div>
         )}
-        <Collapse accordion>
+        <Collapse accordion className="m-2">
           {panelList.map(({ key, title, icon, component }) => (
             <Collapse.Panel
               key={key}

@@ -8,6 +8,7 @@ import VideoPlayer from './VideoPlayer'
 import WebBrowser from './WebBrowser'
 import AndroidController from './AndroidController'
 import Calculator from './Calculator'
+import MiRemoteControl from './MiRemoteControl'
 import Settings from './Settings'
 
 export const APP_LIST: IApp[] = [
@@ -121,6 +122,15 @@ export const APP_LIST: IApp[] = [
     width: 340,
     height: 510,
     resizeRange: { minWidth: 300, minHeight: 450 },
+    headerClassName: 'bg-zinc-800 text-zinc-100',
+    touchModeShow: true,
+  },
+  {
+    id: AppId.miRemoteControl,
+    AppComponent: MiRemoteControl,
+    width: 360,
+    height: 680,
+    resizeRange: { minWidth: 240, minHeight: 480 },
     headerClassName: 'bg-zinc-800 text-zinc-100',
     touchModeShow: true,
   },

@@ -32,6 +32,7 @@ export const AppId = {
   webBrowser: 'web-browser',
   androidController: 'android-controller',
   calculator: 'calculator',
+  miRemoteControl: 'mi-remote-control',
   settings: 'settings',
 } as const
 

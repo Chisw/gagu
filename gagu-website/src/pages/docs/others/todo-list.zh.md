@@ -10,7 +10,7 @@ layout: ../../../layouts/DocLayout.astro
 ## 全局
 
 - Favicon 显示传输百分比
-- 录音机、日历、天气、计算器、亲戚计算器等小工具
+- 录音机、日历、天气、亲戚计算器等小工具
 - Termux 上运行时，添加用户登录震动提醒和弹窗通知
 - App 单窗口模式
 - 外部 App（npm install/cdn）
@@ -94,7 +94,6 @@ layout: ../../../layouts/DocLayout.astro
 
 ### 安卓控制器
 
-- 小米手势红外遥控器 + 单页使用
 - 安卓控制器 Mobile 化
 
 ### 设置

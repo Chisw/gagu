@@ -101,6 +101,7 @@
       "calculator": "Calculadora",
       "doc-reader": "Leitor de documentos",
       "file-explorer": "Gerenciador de arquivos",
+      "mi-remote-control": "Controle remoto Xiaomi",
       "music-player": "Reprodutor de música",
       "photo-viewer": "Visualizador de imagens",
       "settings": "Configurações",
@@ -220,6 +221,16 @@
       "illegalCharacters": "Caracteres não permitidos: {{characters}}",
       "lastAdminCannotDelete": "Não é possível excluir o último administrador",
       "loading": "Carregando…",
+      "miRemoteControl": {
+        "miTV": [
+          "Deslize para escolher a direção",
+          "Toque para confirmar",
+          "Toque duas vezes para voltar",
+          "Mantenha pressionado para abrir o menu",
+          "Mantenha dois dedos pressionados para ir ao início",
+          "Deslize dois dedos para cima/baixo para ajustar o volume"
+        ]
+      },
       "moveEntriesTo_one": "Mover {{count}} item para “{{target}}”?",
       "moveEntriesTo_other": "Mover {{count}} itens para “{{target}}”?",
       "notImage": "Selecione uma imagem",

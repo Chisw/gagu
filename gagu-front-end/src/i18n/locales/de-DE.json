@@ -101,6 +101,7 @@
       "calculator": "Rechner",
       "doc-reader": "Dokumentenbetrachter",
       "file-explorer": "Dateimanager",
+      "mi-remote-control": "Xiaomi-Fernbedienung",
       "music-player": "Musikplayer",
       "photo-viewer": "Bildbetrachter",
       "settings": "Einstellungen",
@@ -220,6 +221,16 @@
       "illegalCharacters": "Unzulässige Zeichen: {{characters}}",
       "lastAdminCannotDelete": "Der letzte Administrator kann nicht gelöscht werden",
       "loading": "Wird geladen…",
+      "miRemoteControl": {
+        "miTV": [
+          "Wischen, um die Richtung zu wählen",
+          "Tippen zum Bestätigen",
+          "Doppelt tippen, um zurückzugehen",
+          "Gedrückt halten, um das Menü zu öffnen",
+          "Zwei Finger gedrückt halten für die Startseite",
+          "Mit zwei Fingern auf/ab wischen für die Lautstärke"
+        ]
+      },
       "moveEntriesTo_one": "{{count}} Element nach „{{target}}“ verschieben?",
       "moveEntriesTo_other": "{{count}} Elemente nach „{{target}}“ verschieben?",
       "notImage": "Bitte ein Bild auswählen",

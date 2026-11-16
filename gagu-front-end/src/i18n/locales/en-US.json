@@ -101,6 +101,7 @@
       "calculator": "Calculator",
       "doc-reader": "Document Reader",
       "file-explorer": "File Explorer",
+      "mi-remote-control": "Mi Remote Control",
       "music-player": "Music Player",
       "photo-viewer": "Photo Viewer",
       "settings": "Settings",
@@ -220,6 +221,16 @@
       "illegalCharacters": "Invalid characters: {{characters}}",
       "lastAdminCannotDelete": "The last administrator cannot be deleted",
       "loading": "Loading…",
+      "miRemoteControl": {
+        "miTV": [
+          "Swipe to choose a direction",
+          "Tap to confirm",
+          "Double-tap to go back",
+          "Hold to open the menu",
+          "Hold two fingers to go home",
+          "Swipe up/down with two fingers for volume"
+        ]
+      },
       "moveEntriesTo_one": "Move {{count}} item to \"{{target}}\"?",
       "moveEntriesTo_other": "Move {{count}} items to \"{{target}}\"?",
       "notImage": "Please select an image",

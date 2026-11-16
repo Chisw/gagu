@@ -10,7 +10,7 @@ Many unrealized ideas will be recorded here, waiting for development
 ## Global
 
 - Show transfer percentage on Favicon
-- Sound Recorder, Calendar, Calculator, Weather, Relative calculator and other gadgets
+- Sound Recorder, Calendar, Weather, Relative calculator and other gadgets
 - When running on Termux, add user login vibration reminder and pop-up notification
 - Single-window mode for the App
 - External App (npm install/cdn)
@@ -94,7 +94,6 @@ Many unrealized ideas will be recorded here, waiting for development
 
 ### Android Controller
 
-- Xiaomi Gesture Infrared Remote Control + Single-Page Use
 - Mobile Version of Android Controller
 
 ### Settings
